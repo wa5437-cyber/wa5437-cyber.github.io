@@ -150,6 +150,15 @@
   .startbtn.go{ background:linear-gradient(180deg,#4a90ff, var(--blue)); color:#fff; box-shadow:0 8px 24px rgba(58,134,255,0.35); }
   .startbtn.stop{ background:rgba(239,91,91,0.14); color:#ff8080; border:1px solid rgba(239,91,91,0.4); }
 
+  /* ---- 다른 도구 바로가기 링크 ---- */
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
+
   /* ==================================================================
      모바일 전용 레이아웃 (~700px 이하 폰 화면)
      - 데스크톱용 "가로로 꽉 채우기"(aspect-ratio) 대신, 화면 높이에 맞는
@@ -268,6 +277,12 @@
   </div>
 
   <button id="startBtn" class="startbtn go">▸ 훈련 시작</button>
+
+  <div class="tool-links">
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+  </div>
 </div>
 
 <script>
