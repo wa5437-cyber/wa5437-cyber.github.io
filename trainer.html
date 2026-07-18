@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>31-Band Ear Trainer — Web</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
+    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ✅ 세로로 길게 늘어나는 대신, 화면 비율(가로 폭)에 맞춰 좌우로 넓게 쓰도록 max-width를 크게 잡는다 */
+  .app{ width:100%; max-width:1180px; padding:20px 24px 32px; display:flex; flex-direction:column; gap:16px; }
+
+  /* ---- top bar ---- */
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px;
+    font-size:12px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line);
+    text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#1b2226,#0d1113); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:14.5px; letter-spacing:0.01em; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--text-tertiary); font-weight:400; margin-top:2px; }
+
+  /* ---- scoreboard ---- */
+  .scoreboard{ display:flex; background:#05070800; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .scoreitem{ flex:1; text-align:center; padding:12px 6px; }
+  .scoreitem + .scoreitem{ border-left:1px solid var(--line); }
+  .scoreitem .val{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:17px; color:var(--teal); }
+  .scoreitem .lbl{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-tertiary); letter-spacing:0.08em; margin-top:3px; }
+
+  /* ---- mode picker ---- */
+  .modepicker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
+  .modepicker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:12.5px; font-weight:600; padding:10px 6px; border-radius:9px; transition:background .15s, color .15s; white-space:nowrap; }
+  .modepicker button .short{ display:none; }
+  .modepicker button.active{ background:#232b2f; color:var(--text-primary); }
+  .modepicker button:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  /* ---- status ---- */
+  .status{ text-align:center; }
+  .status h2{ font-size:15px; font-weight:700; }
+  .status p{ margin:4px 0 0; font-size:12.5px; color:var(--text-secondary); }
+  .status .sub{ font-size:11.5px; color:var(--text-tertiary); margin-top:3px; }
+
+  /* ---- feedback banner ---- */
+  /* ✅ 배너 유무와 상관없이 항상 같은 높이를 차지하게 해서, 정답/오답 텍스트가
+     나타나거나 사라질 때 그 아래 콘솔(그래픽 이퀄라이저)이 위아래로 밀리지 않게 한다. */
+  .feedback{ min-height:64px; }
+  .feedback .banner{
+    display:flex; gap:8px; align-items:flex-start; font-size:13px; font-weight:500;
+    padding:12px 14px; border-radius:12px; line-height:1.5; animation:popin .25s ease;
+  }
+  .feedback .banner.ok{ background:rgba(61,220,151,0.12); color:var(--teal); border:1px solid rgba(61,220,151,0.3); }
+  .feedback .banner.no{ background:rgba(242,169,59,0.12); color:var(--amber); border:1px solid rgba(242,169,59,0.3); }
+  @keyframes popin{ from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:translateY(0);} }
+
+  /* ---- fader grid (the answer surface) ---- */
+  .console{
+    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113);
+    padding:16px 8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden;
+    /* ✅ 세로를 억지로 채우는 대신, 가로 폭에 비례한 넓은 배너 형태로 — 화면이 넓을수록 옆으로 커진다 */
+    aspect-ratio:2.6 / 1; max-height:60vh; min-height:220px;
+  }
+  .consolebody{ display:flex; align-items:stretch; gap:10px; flex:1; min-height:0; }
+  /* ✅ +12dB/0dB/-12dB를 위(그래프 상단)~중간~아래(그래프 하단)에 세로로 나란히 배치해서
+     실제 트랙의 높이(부스트/컷 위치)와 눈으로 바로 대응되게 한다. */
+  .vscale{
+    display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-secondary);
+    flex-shrink:0; width:44px; padding:2px 0;
+  }
+  .grid{ display:flex; align-items:stretch; gap:2px; flex:1; min-height:0; }
+  .band .lbl{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--text-primary); margin-top:9px; writing-mode:vertical-rl; transform:rotate(180deg); height:50px; flex-shrink:0; overflow:hidden; width:100%; }
+  .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
+  .track{
+    position:relative; width:100%; flex:1; min-height:60px; background:#1a2124; border-radius:4px; border:1px solid rgba(255,255,255,0.04);
+    overflow:hidden; cursor:ns-resize;
+    /* ✅ pan-x: 가로 스와이프는 브라우저가 그리드를 가로 스크롤하도록 허용하고,
+       세로 방향 움직임은 우리 JS(포인터 이벤트)가 그대로 받아 페이더 드래그로 처리한다.
+       (모바일에서 "밴드 탐색을 위한 가로 스크롤"과 "답을 고르는 세로 드래그"가 공존해야 하기 때문) */
+    touch-action:pan-x;
+  }
+  .track.disabled{ cursor:default; }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(255,255,255,0.12); pointer-events:none; }
+  /* ✅ cap은 절대 위치(bottom %)로 두고, 평소엔 transition 없이 포인터를 1:1로 즉시 따라간다.
+     (transition을 항상 걸어두면 드래그할 때 손가락보다 한 박자 늦게 따라오는 "밀림" 현상이 생긴다) */
+  .band button.cap{
+    all:unset; width:100%; height:12px; border-radius:3px; background:#4a565a;
+    position:absolute; left:0; right:0; bottom:50%; pointer-events:none; /* 드래그는 트랙 전체가 받는다 */
+  }
+  .band button.cap.settle{ transition:bottom .35s cubic-bezier(.22,.85,.32,1); }
+  /* ✅ 정답 공개 시 색상만 바뀌고 위치는 그대로 유지한다 (요청에 따라 위치 이동 애니메이션 제거) */
+  .band button.cap{ transition:background .15s, box-shadow .15s; }
+  .band.dragging button.cap{ background:var(--blue); box-shadow:0 0 10px rgba(58,134,255,0.5); }
+  .band.correct button.cap{ background:var(--teal) !important; box-shadow:0 0 12px rgba(61,220,151,0.6); }
+  .band.wrong button.cap{ background:var(--red) !important; box-shadow:0 0 12px rgba(239,91,91,0.6); }
+  /* ✅ 밴드는 맞았지만 부스트/컷 방향이 반대인 "부분 정답" 상태 — 완전 오답(빨강)과 구분되게 주황으로 표시 */
+  .band.partial button.cap{ background:var(--amber) !important; box-shadow:0 0 12px rgba(242,169,59,0.6); }
+
+  /* ---- start button ---- */
+  .startbtn{
+    border:none; border-radius:14px; padding:16px; font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .startbtn.go{ background:linear-gradient(180deg,#4a90ff, var(--blue)); color:#fff; box-shadow:0 8px 24px rgba(58,134,255,0.35); }
+  .startbtn.stop{ background:rgba(239,91,91,0.14); color:#ff8080; border:1px solid rgba(239,91,91,0.4); }
+
+  /* ==================================================================
+     모바일 전용 레이아웃 (~700px 이하 폰 화면)
+     - 데스크톱용 "가로로 꽉 채우기"(aspect-ratio) 대신, 화면 높이에 맞는
+       적당한 콘솔 높이를 고정으로 준다.
+     - ✅ 요청 반영: 가로 스크롤 없이 31개 밴드가 화면 폭에 균등하게 맞춰지도록 한다
+       (터치 폭은 좁아지지만, 스크롤 없이 한 화면에 다 보이는 걸 우선한다).
+     ================================================================== */
+  @media (max-width:700px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar .title{ font-size:13px; }
+    .topbar .title small{ font-size:9.5px; }
+    .topbar .home-link{ font-size:11px; padding:7px 10px; }
+    .scoreitem{ padding:10px 4px; }
+    .scoreitem .val{ font-size:15px; }
+    .modepicker button{ font-size:12.5px; padding:9px 4px; }
+    .modepicker button .full{ display:none; }
+    .modepicker button .short{ display:inline; }
+    .status h2{ font-size:13.5px; }
+    .status p{ font-size:12px; }
+
+    .console{
+      aspect-ratio:auto; height:min(48vh, 320px); max-height:none; min-height:200px;
+      padding:14px 4px 10px;
+    }
+    .consolebody{ gap:4px; }
+    .vscale{ width:30px; font-size:8.5px; }
+
+    /* ✅ 스크롤 없이 31개가 화면 폭에 균등하게 맞춰지도록 desktop과 동일한 flex 배분 사용 */
+    .grid{ overflow-x:visible; gap:1px; }
+    .band{ flex:1 1 0; min-width:0; min-height:0; }
+    .band .lbl{ font-size:7px; height:26px; margin-top:5px; }
+    .track{ min-height:0; }
+
+    .startbtn{ font-size:14px; padding:14px; }
+  }
+  @media (max-width:360px){
+    .vscale{ width:26px; font-size:7.5px; }
+    .band .lbl{ font-size:6.5px; }
+  }
+  /* ✅ 화면이 넓어 밴드 한 칸의 폭이 충분히 확보되면, 세로로 돌린 글자 대신 가로로 바로 읽히게 전환한다 */
+  @media (min-width:820px){
+    .band .lbl{
+      writing-mode:horizontal-tb; transform:none; height:auto; margin-top:8px;
+      font-size:11px; white-space:nowrap; letter-spacing:-0.02em;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">31-BAND EAR TRAINER<small>ISO 266 · 1/3-octave · Web Edition</small></div>
+    <a class="home-link" href="index.html">← 홈으로</a>
+  </div>
+
+  <div class="modepicker" id="chapterPicker">
+    <button id="chapterTraining" class="active">훈련</button>
+    <button id="chapterListen">청음</button>
+  </div>
+
+  <div class="scoreboard" id="scoreboard">
+    <div class="scoreitem"><div class="val" id="scRound">0/10</div><div class="lbl">ROUND</div></div>
+    <div class="scoreitem"><div class="val" id="scHit">0</div><div class="lbl">HIT</div></div>
+    <div class="scoreitem"><div class="val" id="scAcc">--</div><div class="lbl">ACC</div></div>
+  </div>
+
+  <div class="modepicker">
+    <button id="modeEQ" class="active">
+      <span class="full">Pink Noise EQ Boost/Cut</span>
+      <span class="short">EQ Boost/Cut</span>
+    </button>
+    <button id="modeSine">
+      <span class="full">Sine Wave Overlay</span>
+      <span class="short">Sine Overlay</span>
+    </button>
+  </div>
+
+  <div class="modepicker" id="listenDirPicker" style="display:none;">
+    <button id="listenBoostBtn" class="active">부스트로 듣기</button>
+    <button id="listenCutBtn">컷으로 듣기</button>
+  </div>
+
+  <div class="status">
+    <h2 id="statusTitle">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
+    <p id="statusSub"></p>
+    <p id="debugTimer" class="mono" style="font-size:10px;color:#3ddc97;margin-top:4px;"></p>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="console">
+    <div class="consolebody">
+      <div class="vscale"><span>+12dB</span><span>0dB</span><span>−12dB</span></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <button id="startBtn" class="startbtn go">▸ 훈련 시작</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------------------------------------------------------------
+  // ISO 266 표준 31밴드 (Swift 앱과 동일한 데이터)
+  // ---------------------------------------------------------------
+  const BANDS = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+  const LABELS = ["20","25","31.5","40","50","63","80","100","125","160","200","250","315","400","500","630","800","1k","1.25k","1.6k","2k","2.5k","3.15k","4k","5k","6.3k","8k","10k","12.5k","16k","20k"];
+
+  const QUESTIONS_PER_CHAPTER = 10;
+  const WARMUP_DELAY = 900;        // ms
+  const ROUND_END_HOLD = 1800;     // ms — 정답/오답 화면을 보여주는 시간 (기존 600 → 1800으로 늘림)
+  const CHIME_TO_NEXT_DELAY = 250; // ms
+  const ROUND_WARMUP_DELAY = 900;  // ms — 첫 문제 이후에도 핑크노이즈만 들려주는 워밍업 구간
+  const BOOST_RANGE = [6, 12];     // dB
+  const EQ_BANDWIDTH_OCTAVES = 0.5;
+
+  function octaveBandwidthToQ(bw){
+    return 1 / (2 * Math.sinh(Math.log(2) / 2 * bw));
+  }
+
+  // ---------------------------------------------------------------
+  // 오디오 엔진: 핑크노이즈 + 피킹 EQ + 사인파 오버레이
+  // ---------------------------------------------------------------
+  class Engine {
+    constructor(){
+      this.ctx = null;
+      this.isPlaying = false;
+      this.currentMode = 'eq';
+      this.targetIndex = null;
+      this.isBoost = true;
+    }
+
+    ensureContext(){
+      if (!this.ctx){
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // 핑크노이즈: ScriptProcessorNode에서 Paul Kellet의 정제된 알고리즘으로 실시간 생성.
+        const bufferSize = 4096;
+        this.pinkNode = this.ctx.createScriptProcessor(bufferSize, 1, 1);
+        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+        this.pinkNode.onaudioprocess = (e) => {
+          const out = e.outputBuffer.getChannelData(0);
+          for (let i=0;i<out.length;i++){
+            const white = Math.random()*2-1;
+            b0=0.99886*b0+white*0.0555179;
+            b1=0.99332*b1+white*0.0750759;
+            b2=0.96900*b2+white*0.1538520;
+            b3=0.86650*b3+white*0.3104856;
+            b4=0.55000*b4+white*0.5329522;
+            b5=-0.7616*b5-white*0.0168980;
+            const pink = b0+b1+b2+b3+b4+b5+b6+white*0.5362;
+            b6 = white*0.115926;
+            out[i] = pink*0.11;
+          }
+        };
+
+        // 신호 흐름: PinkNoise -> EQ(Peaking) -> pinkGain -> masterGain -> destination
+        this.eqFilter = this.ctx.createBiquadFilter();
+        this.eqFilter.type = 'peaking';
+        this.eqFilter.frequency.value = 1000;
+        this.eqFilter.Q.value = octaveBandwidthToQ(EQ_BANDWIDTH_OCTAVES);
+        this.eqFilter.gain.value = 0;
+
+        this.pinkGain = this.ctx.createGain();
+        this.pinkGain.gain.value = 0;
+
+        this.pinkNode.connect(this.eqFilter);
+        this.eqFilter.connect(this.pinkGain);
+
+        // 사인파 오버레이: OscillatorNode -> sineGain -> masterGain
+        this.sineOsc = this.ctx.createOscillator();
+        this.sineOsc.type = 'sine';
+        this.sineOsc.frequency.value = 1000;
+        this.sineGain = this.ctx.createGain();
+        this.sineGain.gain.value = 0;
+        this.sineOsc.connect(this.sineGain);
+        this.sineOsc.start();
+
+        this.masterGain = this.ctx.createGain();
+        this.masterGain.gain.value = 0;
+
+        this.pinkGain.connect(this.masterGain);
+        this.sineGain.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+      }
+    }
+
+    // AudioParam의 네이티브 자동화(linearRampToValueAtTime)를 사용하므로, Swift 버전에서
+    // 필요했던 수동 Timer 램프 + 세대 토큰 취소 로직이 여기서는 필요 없다 — Web Audio가
+    // 파라미터 자동화를 스케줄링/취소(cancelScheduledValues)까지 전부 지원해준다.
+    rampParam(param, target, duration){
+      const now = this.ctx.currentTime;
+      param.cancelScheduledValues(now);
+      param.setValueAtTime(param.value, now);
+      param.linearRampToValueAtTime(target, now + duration);
+    }
+
+    start(mode){
+      this.ensureContext();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      this.currentMode = mode;
+      this.isPlaying = true;
+      this.eqFilter.gain.value = 0;
+      this.sineGain.gain.value = 0;
+      this.pinkGain.gain.value = (mode === 'eq') ? 0 : 0;
+      this.rampParam(this.masterGain.gain, 1.0, 0.3);
+      // 모드에 따라 배경 핑크노이즈 레벨을 켠다 (사인파 모드는 순수 톤만 들려주기 위해 무음 유지)
+      if (mode === 'eq'){
+        this.rampParam(this.pinkGain.gain, 1.0, 0.3);
+      } else {
+        this.pinkGain.gain.value = 0;
+      }
+    }
+
+    stop(fadeDuration){
+      if (!this.isPlaying) return;
+      this.rampParam(this.masterGain.gain, 0, fadeDuration || 0.3);
+      this.isPlaying = false;
+    }
+
+    generateQuestion(mode){
+      const targetIndex = Math.floor(Math.random()*BANDS.length);
+      this.targetIndex = targetIndex;
+      const targetFreq = BANDS[targetIndex];
+
+      if (mode === 'eq'){
+        this.isBoost = Math.random() < 0.5;
+        const magnitude = BOOST_RANGE[0] + Math.random()*(BOOST_RANGE[1]-BOOST_RANGE[0]);
+        const gainDB = this.isBoost ? magnitude : -magnitude;
+        this.eqFilter.frequency.value = targetFreq;
+        this.eqFilter.gain.value = 0;
+        this.rampParam(this.eqFilter.gain, gainDB, 0.2);
+      } else {
+        this.isBoost = true;
+        this.sineOsc.frequency.value = targetFreq;
+        this.sineGain.gain.value = 0;
+        this.rampParam(this.sineGain.gain, 0.5, 0.2);
+      }
+      return targetIndex;
+    }
+
+    checkAnswer(selectedIndex, guessedBoost){
+      if (this.targetIndex === null) return null;
+      const target = this.targetIndex;
+      const bandCorrect = selectedIndex === target;
+      // ✅ 요청 반영: 사인파 모드는 방향 개념이 없으니 밴드만 맞으면 정답,
+      // EQ 부스트/컷 모드는 밴드 + 방향(위=부스트/아래=컷)이 둘 다 맞아야 정답이다.
+      const directionCorrect = this.currentMode === 'sine' ? true : (guessedBoost === this.isBoost);
+      const isCorrect = bandCorrect && directionCorrect;
+      const bandOffset = selectedIndex - target;
+
+      // 정답 공개 후 부스트/사인파를 서서히 원복
+      if (this.currentMode === 'eq'){
+        this.rampParam(this.eqFilter.gain, 0, 0.25);
+      } else {
+        this.rampParam(this.sineGain.gain, 0, 0.25);
+      }
+
+      return { isCorrect, bandCorrect, directionCorrect, target, selected: selectedIndex, bandOffset, wasBoost: this.isBoost, guessedBoost };
+    }
+
+    // ---- 청음(Audition) 전용: 퀴즈 판정과 무관하게 특정 밴드를 직접 켜고 끈다 ----
+    // targetIndex/isBoost 등 퀴즈 상태는 전혀 건드리지 않으므로, 훈련 로직과 완전히 독립적이다.
+    auditionBand(index, mode, boost){
+      if (!this.isPlaying) return;
+      const freq = BANDS[index];
+      if (mode === 'eq'){
+        this.eqFilter.frequency.value = freq;
+        // ✅ 수정: 지금까지 항상 +12dB 부스트로 고정되어 있어서 컷 미리듣기가 아예 불가능했다.
+        // boost 파라미터에 따라 +12dB(부스트) 또는 -12dB(컷)를 적용한다.
+        const gainDB = boost ? 12 : -12;
+        this.rampParam(this.eqFilter.gain, gainDB, 0.15);
+      } else {
+        this.sineOsc.frequency.value = freq;
+        this.rampParam(this.sineGain.gain, 0.5, 0.15);
+      }
+    }
+    stopAudition(mode){
+      if (mode === 'eq'){
+        this.rampParam(this.eqFilter.gain, 0, 0.15);
+      } else {
+        this.rampParam(this.sineGain.gain, 0, 0.15);
+      }
+    }
+
+    // 정답을 맞혔을 때: 전체 출력을 짧게 무음 처리했다가 다시 재생.
+    // isPlaying을 재확인해, 정적 구간 도중 stop()이 호출됐다면 뒤늦게 다시 소리를
+    // 켜버리지 않도록 방어한다 (Swift 버전의 chapterToken 가드와 같은 목적).
+    pauseBrieflyThenResume(muteDuration, fadeDuration, cb){
+      if (!this.isPlaying){ cb && cb(); return; }
+      this.rampParam(this.masterGain.gain, 0, fadeDuration);
+      setTimeout(() => {
+        if (!this.isPlaying){ return; }
+        this.rampParam(this.masterGain.gain, 1.0, fadeDuration);
+        setTimeout(() => { if (this.isPlaying) cb && cb(); }, fadeDuration*1000);
+      }, fadeDuration*1000 + muteDuration*1000);
+    }
+
+    // 다음 문제 전환 차임: 사인파 오버레이 노드를 순간적으로 빌려서 2음 상승 차임을 재생
+    playNextQuestionChime(){
+      if (!this.isPlaying) return;
+      const now = this.ctx.currentTime;
+      this.sineGain.gain.cancelScheduledValues(now);
+      this.sineOsc.frequency.setValueAtTime(880, now);
+      this.sineGain.gain.setValueAtTime(0, now);
+      this.sineGain.gain.linearRampToValueAtTime(0.5, now+0.02);
+      this.sineOsc.frequency.setValueAtTime(1174.66, now+0.09);
+      this.sineGain.gain.setValueAtTime(0.5, now+0.18);
+      this.sineGain.gain.linearRampToValueAtTime(0, now+0.23);
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // UI / 퀴즈 상태 관리
+  // ---------------------------------------------------------------
+  const engine = new Engine();
+
+  const grid = document.getElementById('grid');
+
+  // ✅ 일부 모바일 브라우저(특히 사파리)는 화면 회전 후 flex 레이아웃 너비를
+  // 제대로 다시 계산하지 못하고 예전 값을 그대로 들고 있는 버그가 있다.
+  // 회전/리사이즈가 끝난 직후 grid를 강제로 한 번 리플로우시켜 이를 방지한다.
+  function forceReflow(){
+    const prevDisplay = grid.style.display;
+    grid.style.display = 'none';
+    void grid.offsetHeight; // 리플로우를 강제로 발생시키는 트릭
+    grid.style.display = prevDisplay || '';
+  }
+  let reflowTimer = null;
+  window.addEventListener('orientationchange', () => {
+    // 회전 애니메이션이 끝나고 실제 뷰포트 크기가 안정된 뒤에 다시 계산하도록 약간 지연한다.
+    clearTimeout(reflowTimer);
+    reflowTimer = setTimeout(forceReflow, 150);
+  });
+  window.addEventListener('resize', () => {
+    clearTimeout(reflowTimer);
+    reflowTimer = setTimeout(forceReflow, 150);
+  });
+  const startBtn = document.getElementById('startBtn');
+  const statusTitle = document.getElementById('statusTitle');
+  const statusSub = document.getElementById('statusSub');
+  const debugTimerEl = document.getElementById('debugTimer');
+  let debugInterval = null;
+
+  // ✅ 디버그용: 워밍업 시작부터 경과 시간을 화면에 실시간으로 보여준다.
+  // 이 숫자가 안 올라가면 "타이머 자체가 안 도는 것"(탭이 백그라운드로 갔거나 브라우저가 멈춘 상태)이고,
+  // 숫자는 올라가는데 문제가 안 넘어가면 "전환 로직 자체의 버그"라는 뜻이라 원인을 정확히 구분할 수 있다.
+  function startDebugTimer(label){
+    const startedAt = performance.now();
+    console.log(`[디버그] ${label} 타이머 시작`);
+    if (debugInterval) clearInterval(debugInterval);
+    debugInterval = setInterval(() => {
+      const elapsed = Math.round(performance.now() - startedAt);
+      // 문제가 해결됐으므로 화면에는 더 이상 표시하지 않고, 콘솔 로그만 남긴다.
+      // debugTimerEl.textContent = `⏱ ${label} 경과: ${elapsed}ms`;
+    }, 100);
+  }
+  function stopDebugTimer(reason){
+    if (debugInterval){ clearInterval(debugInterval); debugInterval = null; }
+    console.log(`[디버그] 타이머 정지: ${reason}`);
+    debugTimerEl.textContent = '';
+  }
+  const feedbackEl = document.getElementById('feedback');
+  const scRound = document.getElementById('scRound');
+  const scHit = document.getElementById('scHit');
+  const scAcc = document.getElementById('scAcc');
+  const modeEQBtn = document.getElementById('modeEQ');
+  const modeSineBtn = document.getElementById('modeSine');
+  const chapterTrainingBtn = document.getElementById('chapterTraining');
+  const chapterListenBtn = document.getElementById('chapterListen');
+  const scoreboardEl = document.getElementById('scoreboard');
+  const listenDirPicker = document.getElementById('listenDirPicker');
+  const listenBoostBtn = document.getElementById('listenBoostBtn');
+  const listenCutBtn = document.getElementById('listenCutBtn');
+
+  let phase = 'idle'; // idle | warmingUp | active | roundEnding
+  let mode = 'eq';
+  let chapter = 'training'; // training | listen
+  let isListening = false;
+  let listeningIndex = null;
+  let listenBoost = true; // 청음 챕터에서 부스트로 들을지 컷으로 들을지
+  let questionIndex = 0;
+  let roundCount = 0;
+  let correctCount = 0;
+  let chapterToken = 0; // Swift 버전과 동일한 목적: 언제든 종료 시 예약된 콜백을 무효화
+  let bandButtons = [];
+
+  // ✅ 방어 코드: 어디서 에러가 나든(오디오 API, 타이머 콜백 등) 화면이 조용히 멈추는 대신
+  // 상태 텍스트에 바로 표시한다. 콘솔(F12)에도 상세 내용이 남는다.
+  window.addEventListener('error', (e) => {
+    console.error('Trainer error:', e.error || e.message);
+    setStatus('⚠️ 오류가 발생했습니다', (e.error && e.error.message) || String(e.message) || '콘솔(F12)에서 자세한 내용을 확인해주세요');
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    console.error('Trainer unhandled rejection:', e.reason);
+    setStatus('⚠️ 오류가 발생했습니다', (e.reason && e.reason.message) || '콘솔(F12)에서 자세한 내용을 확인해주세요');
+  });
+
+  // 31개 밴드 트랙을 그려 넣는다.
+  // ✅ 각 트랙 전체가 드래그 표면이다: 포인터(마우스/터치)를 누른 채 위아래로 끌면
+  // 캡이 손가락/마우스를 1:1로 실시간으로 따라오고, 손을 떼는 순간 그 밴드를 정답으로 제출한다.
+  BANDS.forEach((freq, i) => {
+    const band = document.createElement('div');
+    band.className = 'band';
+    band.innerHTML = `
+      <div class="track"><div class="zero"></div>
+        <button class="cap" data-i="${i}"></button>
+      </div>
+      <div class="lbl">${LABELS[i]}</div>`;
+    const track = band.querySelector('.track');
+    const btn = band.querySelector('button.cap');
+    grid.appendChild(band);
+
+    const entry = { wrap: band, track, btn, dragging: false };
+    bandButtons.push(entry);
+
+    function clampPercent(clientY){
+      const rect = track.getBoundingClientRect();
+      const relY = clientY - rect.top;
+      let pct = 100 - (relY / rect.height * 100); // 트랙 위쪽일수록 큰 값(=+dB 쪽)
+      return Math.max(4, Math.min(96, pct));
+    }
+    function moveCapTo(clientY){
+      btn.style.bottom = clampPercent(clientY) + '%';
+    }
+
+    track.addEventListener('pointerdown', (e) => {
+      if (chapter === 'listen'){
+        if (!isListening) return;
+        e.preventDefault();
+        toggleAudition(i);
+        return;
+      }
+      if (phase !== 'active') return;
+      entry.dragging = true;
+      band.classList.add('dragging');
+      btn.classList.remove('settle'); // 드래그 중엔 손가락을 지연 없이 즉시 따라가야 한다
+      track.setPointerCapture(e.pointerId);
+      moveCapTo(e.clientY);
+      e.preventDefault();
+    });
+    track.addEventListener('pointermove', (e) => {
+      if (chapter === 'listen') return; // 청음은 드래그가 아니라 탭으로만 토글한다
+      if (!entry.dragging) return;
+      moveCapTo(e.clientY);
+    });
+    function release(e){
+      if (!entry.dragging) return;
+      entry.dragging = false;
+      band.classList.remove('dragging');
+      // ✅ 요청 반영: 페이더를 놓은 위치(0dB 기준 위/아래)로 "부스트인지 컷인지"까지 함께 판정한다.
+      const currentBottom = parseFloat(btn.style.bottom) || 50;
+      const guessedBoost = currentBottom > 50;
+      handleBandTapped(i, guessedBoost);
+    }
+    track.addEventListener('pointerup', release);
+    track.addEventListener('pointercancel', release);
+  });
+
+  function setModeButtons(){
+    modeEQBtn.classList.toggle('active', mode === 'eq');
+    modeSineBtn.classList.toggle('active', mode === 'sine');
+    const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
+    modeEQBtn.disabled = busy;
+    modeSineBtn.disabled = busy;
+    updateListenDirVisibility();
+  }
+  modeEQBtn.addEventListener('click', () => {
+    const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
+    if (!busy){ mode='eq'; setModeButtons(); }
+  });
+  modeSineBtn.addEventListener('click', () => {
+    const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
+    if (!busy){ mode='sine'; setModeButtons(); }
+  });
+
+  // ✅ 청음 챕터 + EQ 모드일 때만 "부스트로 듣기 / 컷으로 듣기" 토글을 보여준다
+  // (사인파 모드는 방향 개념이 없고, 훈련 챕터에서는 정답을 미리 알려주면 안 되므로 숨긴다)
+  function updateListenDirVisibility(){
+    const show = chapter === 'listen' && mode === 'eq';
+    listenDirPicker.style.display = show ? 'flex' : 'none';
+  }
+  function setListenDirButtons(){
+    listenBoostBtn.classList.toggle('active', listenBoost);
+    listenCutBtn.classList.toggle('active', !listenBoost);
+  }
+  listenBoostBtn.addEventListener('click', () => {
+    if (listenBoost) return;
+    listenBoost = true;
+    setListenDirButtons();
+    // 지금 재생 중인 밴드가 있다면 새 방향으로 즉시 다시 들려준다
+    if (listeningIndex !== null){
+      engine.auditionBand(listeningIndex, mode, listenBoost);
+      setStatus(`${LABELS[listeningIndex]}Hz 부스트 재생 중`);
+    }
+  });
+  listenCutBtn.addEventListener('click', () => {
+    if (!listenBoost) return;
+    listenBoost = false;
+    setListenDirButtons();
+    if (listeningIndex !== null){
+      engine.auditionBand(listeningIndex, mode, listenBoost);
+      setStatus(`${LABELS[listeningIndex]}Hz 컷 재생 중`);
+    }
+  });
+
+  function resetBandStyles(){
+    bandButtons.forEach(b => {
+      b.wrap.classList.remove('correct','wrong','partial','dragging');
+      const interactive = chapter === 'training' ? (phase === 'active') : isListening;
+      b.track.classList.toggle('disabled', !interactive);
+      // ✅ 요청 반영: 다음 라운드로 넘어갈 때 캡이 슬라이딩(내려가는 모습)해서 움직이지 않도록,
+      // transition 없이 즉시 중앙(0dB)으로 스냅시킨다.
+      b.btn.classList.remove('settle');
+      b.btn.style.bottom = '50%';
+    });
+    listeningIndex = null;
+  }
+
+  // ---- 청음(Audition) 챕터: 판정 없이 탭 한 번으로 특정 밴드를 켜고 끈다 ----
+  function toggleAudition(index){
+    if (!isListening) return;
+    if (listeningIndex === index){
+      engine.stopAudition(mode);
+      bandButtons[index].wrap.classList.remove('correct');
+      bandButtons[index].btn.style.bottom = '50%';
+      listeningIndex = null;
+      setStatus('밴드를 탭하면 바로 들려드려요');
+      return;
+    }
+    if (listeningIndex !== null){
+      bandButtons[listeningIndex].wrap.classList.remove('correct');
+      bandButtons[listeningIndex].btn.style.bottom = '50%';
+    }
+    engine.auditionBand(index, mode, listenBoost);
+    bandButtons[index].wrap.classList.add('correct');
+    // ✅ 방향에 맞춰 캡 위치도 위/아래로 표시해준다 (사인파 모드는 항상 위쪽에 고정)
+    // ✅ 드래그 가능 범위(4%~96%)의 끝까지 정확히 가야 진짜 ±12dB로 보인다.
+    // (기존 80%/20%는 어중간해서 마치 6dB 정도만 준 것처럼 보였다)
+    bandButtons[index].btn.style.bottom = (mode === 'eq' && !listenBoost) ? '4%' : '96%';
+    listeningIndex = index;
+    const dirLabel = mode === 'eq' ? (listenBoost ? '부스트' : '컷') : '사인파';
+    setStatus(`${LABELS[index]}Hz ${dirLabel} 재생 중`);
+  }
+
+  function startListening(){
+    isListening = true;
+    listeningIndex = null;
+    startBtn.textContent = '■ 청음 종료';
+    startBtn.classList.remove('go'); startBtn.classList.add('stop');
+    engine.start(mode);
+    resetBandStyles();
+    setStatus('밴드를 탭하면 바로 들려드려요');
+  }
+  function stopListening(){
+    if (listeningIndex !== null) engine.stopAudition(mode);
+    isListening = false;
+    engine.stop(0.3);
+    startBtn.textContent = '▸ 청음 시작';
+    startBtn.classList.remove('stop'); startBtn.classList.add('go');
+    resetBandStyles();
+    setStatus('밴드를 탭하면 바로 들려드려요');
+  }
+
+  function setChapterButtons(){
+    chapterTrainingBtn.classList.toggle('active', chapter === 'training');
+    chapterListenBtn.classList.toggle('active', chapter === 'listen');
+    const busy = (phase !== 'idle') || isListening;
+    chapterTrainingBtn.disabled = busy;
+    chapterListenBtn.disabled = busy;
+    scoreboardEl.style.display = chapter === 'training' ? 'flex' : 'none';
+  }
+  function switchChapter(next){
+    if (chapter === next) return;
+    const busy = (phase !== 'idle') || isListening;
+    if (busy) return; // 진행 중일 때는 챕터 전환 자체를 막는다 (챕터 버튼도 disabled 처리되어 있음)
+    chapter = next;
+    clearFeedback();
+    setChapterButtons();
+    setModeButtons();
+    resetBandStyles();
+    if (chapter === 'training'){
+      setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
+      startBtn.textContent = '▸ 훈련 시작';
+    } else {
+      setStatus('밴드를 탭하면 바로 들려드려요');
+      startBtn.textContent = '▸ 청음 시작';
+    }
+    startBtn.classList.remove('stop'); startBtn.classList.add('go');
+  }
+  chapterTrainingBtn.addEventListener('click', () => switchChapter('training'));
+  chapterListenBtn.addEventListener('click', () => switchChapter('listen'));
+
+
+  function updateScoreboard(){
+    scRound.textContent = `${Math.min(roundCount, QUESTIONS_PER_CHAPTER)}/${QUESTIONS_PER_CHAPTER}`;
+    scHit.textContent = `${correctCount}`;
+    scAcc.textContent = roundCount === 0 ? '--' : `${Math.round(correctCount/roundCount*100)}%`;
+  }
+
+  function setStatus(title, sub){
+    statusTitle.textContent = title;
+    statusSub.textContent = sub || '';
+  }
+
+  function clearFeedback(){ feedbackEl.innerHTML = ''; }
+
+  function showFeedback(result){
+    const dir = result.wasBoost ? '부스트' : '컷';
+    const banner = document.createElement('div');
+    if (result.isCorrect){
+      banner.className = 'banner ok';
+      banner.textContent = `✓ 정답! ${LABELS[result.target]}Hz ${dir}였습니다.`;
+    } else if (result.bandCorrect && !result.directionCorrect){
+      // ✅ 요청 반영: 밴드(주파수)는 맞았지만 부스트/컷 방향을 반대로 짚은 경우를 구분해서 안내한다.
+      banner.className = 'banner no';
+      banner.textContent = `△ 대역은 맞았지만 방향이 반대예요 — ${LABELS[result.target]}Hz는 ${dir}였습니다. (부스트는 위로, 컷은 아래로 끌어야 정답이에요)`;
+    } else {
+      const direction = result.bandOffset > 0 ? '낮은' : '높은';
+      banner.className = 'banner no';
+      banner.textContent = `✕ 오답 — 정답은 ${LABELS[result.target]}Hz ${dir}였습니다 (선택: ${LABELS[result.selected]}Hz, 정답이 더 ${direction} 대역)`;
+    }
+    feedbackEl.innerHTML = '';
+    feedbackEl.appendChild(banner);
+  }
+
+  function startChapter(){
+    chapterToken++;
+    const myToken = chapterToken;
+
+    questionIndex = 1; roundCount = 0; correctCount = 0;
+    clearFeedback();
+    updateScoreboard();
+
+    phase = 'warmingUp';
+    setModeButtons();
+    resetBandStyles();
+    startBtn.textContent = '■ 종료';
+    startBtn.classList.remove('go'); startBtn.classList.add('stop');
+
+    engine.start(mode);
+    setStatus('배경음 청취 중… 곧 문제가 출제됩니다', `(${questionIndex}/${QUESTIONS_PER_CHAPTER})`);
+    startDebugTimer('워밍업(1번째 문제)');
+
+    setTimeout(() => {
+      console.log('[디버그] 1번째 문제 워밍업 타이머 콜백 실행됨. chapterToken 일치:', chapterToken === myToken, '| phase:', phase);
+      if (chapterToken !== myToken || phase !== 'warmingUp') {
+        console.log('[디버그] 가드 조건에 걸려 리턴됨 (중단됨)');
+        return;
+      }
+      engine.generateQuestion(mode);
+      phase = 'active';
+      stopDebugTimer('첫 문제 active로 전환');
+      resetBandStyles();
+      const instruction = mode === 'eq'
+        ? '부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요'
+        : '사인파와 같은 음고의 대역을 짚어주세요';
+      setStatus(`${questionIndex}/${QUESTIONS_PER_CHAPTER} — ${instruction}`);
+    }, WARMUP_DELAY);
+  }
+
+  function stopChapterEarly(){
+    chapterToken++;
+    engine.stop(0.3);
+    phase = 'idle';
+    setModeButtons();
+    resetBandStyles();
+    startBtn.textContent = '▸ 훈련 시작';
+    startBtn.classList.remove('stop'); startBtn.classList.add('go');
+    setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
+    clearFeedback();
+    stopDebugTimer('사용자가 종료를 눌러 중단됨');
+  }
+
+  function handleBandTapped(index, guessedBoost){
+    if (phase !== 'active') return;
+    const result = engine.checkAnswer(index, guessedBoost);
+    if (!result) return;
+    const myToken = chapterToken;
+
+    roundCount++;
+    if (result.isCorrect) correctCount++;
+    updateScoreboard();
+    showFeedback(result);
+
+    bandButtons.forEach(b => { b.track.classList.add('disabled'); });
+
+    // ✅ 요청 반영: 정답 공개 시 페이더 위치는 그대로 두고 색상만 바뀐다 (움직이지 않음).
+    if (result.isCorrect){
+      bandButtons[result.target].wrap.classList.add('correct');
+    } else if (result.bandCorrect && !result.directionCorrect){
+      // 밴드는 맞았지만 방향(부스트/컷)이 반대인 경우 — 완전 오답과 구분되게 주황으로 표시
+      bandButtons[result.target].wrap.classList.add('partial');
+    } else {
+      bandButtons[result.target].wrap.classList.add('correct');
+      bandButtons[result.selected].wrap.classList.add('wrong');
+    }
+
+    phase = 'roundEnding';
+    const wasCorrect = result.isCorrect;
+    setStatus(wasCorrect ? '정답입니다!' : '오답입니다.',
+      questionIndex >= QUESTIONS_PER_CHAPTER ? '챕터를 마무리하는 중…' : '다음 문제로 이동합니다…');
+
+    setTimeout(() => {
+      if (chapterToken !== myToken) return;
+
+      if (questionIndex >= QUESTIONS_PER_CHAPTER){
+        engine.stop(0.3);
+        phase = 'idle';
+        setModeButtons();
+        startBtn.textContent = '▸ 훈련 시작';
+        startBtn.classList.remove('stop'); startBtn.classList.add('go');
+        const pct = Math.round(correctCount/QUESTIONS_PER_CHAPTER*100);
+        setStatus(`챕터 완료! ${QUESTIONS_PER_CHAPTER}문제 중 ${correctCount}개 정답 (${pct}%)`);
+        return;
+      }
+
+      function advance(){
+        if (chapterToken !== myToken) return;
+        questionIndex++;
+        resetBandStyles();
+        clearFeedback();
+        engine.playNextQuestionChime();
+
+        // ✅ 요청 반영: 다음 문제도 첫 문제처럼 핑크노이즈만 먼저 들려주는 워밍업 구간을 둔다.
+        phase = 'warmingUp';
+        resetBandStyles(); // phase가 바뀌었으므로 트랙을 다시 비활성화 상태로 갱신
+        setStatus('배경음 청취 중… 곧 문제가 출제됩니다', `(${questionIndex}/${QUESTIONS_PER_CHAPTER})`);
+        startDebugTimer(`워밍업(${questionIndex}번째 문제)`);
+
+        setTimeout(() => {
+          console.log(`[디버그] ${questionIndex}번째 문제 워밍업 타이머 콜백 실행됨. chapterToken 일치:`, chapterToken === myToken, '| phase:', phase);
+          if (chapterToken !== myToken || phase !== 'warmingUp') {
+            console.log('[디버그] 가드 조건에 걸려 리턴됨 (중단됨)');
+            return;
+          }
+          engine.generateQuestion(mode);
+          phase = 'active';
+          stopDebugTimer(`${questionIndex}번째 문제 active로 전환`);
+          resetBandStyles();
+          const instruction = mode === 'eq'
+            ? '부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요'
+            : '사인파와 같은 음고의 대역을 짚어주세요';
+          setStatus(`${questionIndex}/${QUESTIONS_PER_CHAPTER} — ${instruction}`);
+        }, CHIME_TO_NEXT_DELAY + ROUND_WARMUP_DELAY);
+      }
+
+      if (wasCorrect){
+        engine.pauseBrieflyThenResume(0.35, 0.12, advance);
+      } else {
+        advance();
+      }
+    }, ROUND_END_HOLD);
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (chapter === 'training'){
+      if (phase === 'idle') startChapter();
+      else stopChapterEarly();
+    } else {
+      if (!isListening) startListening();
+      else stopListening();
+    }
+  });
+
+  setModeButtons();
+  setChapterButtons();
+  setListenDirButtons();
+  updateScoreboard();
+})();
+</script>
+</body>
+</html>
