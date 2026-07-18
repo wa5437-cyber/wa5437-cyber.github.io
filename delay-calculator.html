@@ -44,6 +44,15 @@
   }
   .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
 
+  /* ✅ 모바일에서 제목/부제 글자가 커서 줄바꿈되며 상단바가 어긋나 보이던 것을 수정 */
+  @media (max-width:480px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar{ align-items:flex-start; }
+    .topbar .title{ font-size:14.5px; }
+    .topbar .title small{ font-size:10px; }
+    .topbar .home-link{ font-size:11.5px; padding:7px 10px; margin-top:1px; }
+  }
+
   .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113); padding:20px; }
   .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:14px; }
 
