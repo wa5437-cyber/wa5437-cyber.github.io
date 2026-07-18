@@ -48,7 +48,7 @@
   .status h2{ font-size:19px; font-weight:700; }
   .status p{ margin:4px 0 0; font-size:16px; color:var(--text-secondary); }
   .level-readout{
-    margin-top:10px; display:inline-flex; align-items:baseline; gap:6px;
+    margin:0 auto; display:flex; align-items:baseline; justify-content:center; gap:6px; width:fit-content;
     background:var(--bg-panel); border:1px solid var(--line); border-radius:100px; padding:8px 16px;
   }
   .level-val{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:var(--teal); }
@@ -179,10 +179,6 @@
   <div class="status">
     <h2 id="statusTitle">시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요</h2>
     <p id="statusSub">기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다</p>
-    <div class="level-readout" id="levelReadout" style="display:none;">
-      <span class="level-val" id="levelVal">−∞</span><span class="level-unit">dB</span>
-      <span class="level-lbl">현재 레벨(피크)</span>
-    </div>
   </div>
 
   <div class="mic-denied" id="micDenied">
@@ -214,7 +210,20 @@
         <span class="unit">dB</span>
       </div>
     </div>
+    <div class="range-field">
+      <label>보정 오프셋 (dBFS→SPL 근사)</label>
+      <div class="range-input-row">
+        <input type="number" id="calibInput" value="0" step="1">
+        <span class="unit">dB</span>
+      </div>
+    </div>
     <button class="toolbar-btn" id="boostQuietBtn">🔉 작은 소리 더 잘 보이게</button>
+  </div>
+
+  <!-- ✅ 요청 반영: 현재 레벨(dB) 표시를 그래프 바로 위로 이동 -->
+  <div class="level-readout" id="levelReadout" style="display:none;">
+    <span class="level-val" id="levelVal">−∞</span><span class="level-unit">dB</span>
+    <span class="level-lbl">현재 레벨(피크)</span>
   </div>
 
   <div class="console" id="consoleBar">
@@ -265,6 +274,7 @@
   const floorInput = document.getElementById('floorInput');
   const ceilingInput = document.getElementById('ceilingInput');
   const boostQuietBtn = document.getElementById('boostQuietBtn');
+  const calibInput = document.getElementById('calibInput');
   const vscaleTop = document.getElementById('vscaleTop');
   const vscaleMid = document.getElementById('vscaleMid');
   const vscaleBottom = document.getElementById('vscaleBottom');
@@ -310,6 +320,9 @@
   }
 
   // ✅ 요청 반영: 그래프뿐 아니라 현재 전체 레벨(가청 대역 내 최대치)을 숫자로도 보여준다.
+  // ✅ 요청 반영: 값이 매 프레임 그대로 튀지 않고 조금 천천히 반응하도록 스무딩(지수 평활화)을 추가.
+  // 값이 올라갈 땐 비교적 빠르게, 내려갈 땐 느리게 — 실제 레벨미터의 자연스러운 움직임과 비슷하다.
+  let levelSmoothed = -Infinity;
   function updateLevelReadout(data){
     const binHz = audioCtx.sampleRate / analyser.fftSize;
     let peak = -Infinity;
@@ -318,7 +331,15 @@
       if (freq < 20 || freq > 20000) continue;
       if (isFinite(data[b]) && data[b] > peak) peak = data[b];
     }
-    levelValEl.textContent = isFinite(peak) ? Math.round(peak) : '−∞';
+    if (isFinite(peak)) {
+      if (!isFinite(levelSmoothed) || peak > levelSmoothed) {
+        levelSmoothed = levelSmoothed === -Infinity ? peak : levelSmoothed * 0.5 + peak * 0.5; // 올라갈 때는 빠르게
+      } else {
+        levelSmoothed = levelSmoothed * 0.9 + peak * 0.1; // 내려갈 때는 천천히
+      }
+    }
+    const calibOffset = parseFloat(calibInput.value) || 0;
+    levelValEl.textContent = isFinite(levelSmoothed) ? Math.round(levelSmoothed + calibOffset) : '−∞';
   }
 
   function setStatus(title, sub){
@@ -396,7 +417,7 @@
     lastFrameTime = performance.now();
     startBtn.textContent = '■ 정지';
     startBtn.classList.add('active');
-    levelReadoutEl.style.display = 'inline-flex';
+    levelReadoutEl.style.display = 'flex';
     setStatus('실시간 분석 중', '마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다');
     renderLoop();
   }
@@ -411,6 +432,7 @@
     startBtn.textContent = '▸ 마이크 시작';
     startBtn.classList.remove('active');
     levelReadoutEl.style.display = 'none';
+    levelSmoothed = -Infinity;
     setStatus('시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요', '기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다');
 
     bars.forEach(b => {
@@ -522,13 +544,20 @@
       lineCtx.stroke();
       lineCtx.fillText(Math.round(db) + 'dB', 4, Math.min(Math.max(y + 4, marginTop + 12), h - 6));
     }
-    [100, 1000, 10000].forEach(f => {
+    // ✅ 요청 반영: 100/1k/10k 세 개짜리 옥타브 라인 대신, 10밴드 표준 주파수
+    // (31.5/63/125/250/500/1k/2k/4k/8k/16k) 기준으로 그리드를 그린다.
+    const TEN_BAND_FREQS = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+    lineCtx.font = `${Math.max(9, h*0.024)}px 'IBM Plex Mono', monospace`;
+    TEN_BAND_FREQS.forEach((f, i) => {
       const x = freqToX(f, plotW, plotX0);
       lineCtx.beginPath();
       lineCtx.moveTo(x, plotY0);
       lineCtx.lineTo(x, plotY0 + plotH);
       lineCtx.stroke();
-      lineCtx.fillText((f >= 1000 ? (f/1000)+'k' : f) + 'Hz', Math.min(x + 4, w - 40), h - 8);
+      const label = (f >= 1000 ? (f/1000)+'k' : f) + 'Hz';
+      // 라벨이 촘촘해서 겹치지 않도록, 짝/홀 순서로 위아래(높이)를 번갈아 배치한다
+      const labelY = (i % 2 === 0) ? h - 8 : h - 8 - h * 0.045;
+      lineCtx.fillText(label, Math.min(Math.max(x - 14, 2), w - 34), labelY);
     });
 
     // ✅ 프레임 간 지수 평활화 — 매 프레임 값이 그대로 튀지 않고 부드럽게 이어지게 한다
