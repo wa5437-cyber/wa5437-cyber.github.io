@@ -107,6 +107,19 @@
     background:rgba(242,169,59,0.06); border:1px solid rgba(242,169,59,0.2); border-radius:10px; padding:12px 14px;
   }
   .warn-note b{ color:var(--amber); }
+
+  /* ---- Time ↔ Distance ↔ Phase 패널 ---- */
+  .phase-desc{ font-size:13px; color:var(--text-tertiary); line-height:1.6; margin:0 0 16px; }
+  .phase-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media (max-width:640px){ .phase-grid{ grid-template-columns:1fr 1fr; } }
+  .phase-canvas-wrap{
+    margin-top:18px; border:1px solid var(--line); border-radius:12px; background:#0d1113;
+    height:180px; overflow:hidden;
+  }
+  #phaseCanvas{ width:100%; height:100%; display:block; }
+  .phase-legend{ display:flex; gap:20px; margin-top:10px; font-size:12.5px; color:var(--text-secondary); flex-wrap:wrap; }
+  .phase-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  .phase-legend .dot.dashed{ background:transparent; border:2px dashed var(--amber); }
 </style>
 </head>
 <body>
@@ -168,6 +181,38 @@
       <b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋.
       값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장).
       프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Time ↔ Distance ↔ Phase</div>
+    <p class="phase-desc">딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.</p>
+
+    <div class="phase-grid">
+      <div class="field">
+        <label>Time</label>
+        <div class="input-row"><input type="number" id="phTimeInput" value="1.0" step="0.001"><span class="unit">ms</span></div>
+      </div>
+      <div class="field">
+        <label>Distance</label>
+        <div class="input-row"><input type="number" id="phDistInput" value="0.34" step="0.001"><span class="unit" id="phDistUnit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Frequency</label>
+        <div class="input-row"><input type="number" id="phFreqInput" value="1000" step="1"><span class="unit">Hz</span></div>
+      </div>
+      <div class="field">
+        <label>Phase</label>
+        <div class="input-row"><input type="number" id="phPhaseInput" value="360" step="0.1"><span class="unit">°</span></div>
+      </div>
+    </div>
+
+    <div class="phase-canvas-wrap">
+      <canvas id="phaseCanvas"></canvas>
+    </div>
+    <div class="phase-legend">
+      <span><i class="dot" style="background:var(--blue);"></i>원음(0°)</span>
+      <span><i class="dot dashed"></i>딜레이 신호 (<span id="phaseWrapLabel">0°</span>)</span>
     </div>
   </div>
 
@@ -286,6 +331,8 @@
         z.distInput.value = convert(parseFloat(z.distInput.value) || 0).toFixed(1);
         z.zoneUnitEl.textContent = newUnit;
       });
+      phDistInput.value = convert(parseFloat(phDistInput.value) || 0).toFixed(3);
+      phDistUnit.textContent = newUnit;
 
       unit = newUnit;
       mainDistUnit.textContent = unit;
@@ -298,10 +345,116 @@
   precedenceInput.addEventListener('input', recalcAll);
   mainDistInput.addEventListener('input', recalcAll);
 
+  // -----------------------------------------------------------------
+  // ✅ 요청 반영: Time ↔ Distance ↔ Frequency ↔ Phase 상호 연동 계산기
+  // 네 값 중 무엇을 바꾸든 나머지가 자동으로 맞춰진다.
+  //   - Time ↔ Distance: 음속(현재 온도 기준, 위 설정과 공유)으로 연결
+  //   - Time × Frequency → Phase(도), 반대로 Phase × Frequency → Time
+  // -----------------------------------------------------------------
+  const phTimeInput = document.getElementById('phTimeInput');
+  const phDistInput = document.getElementById('phDistInput');
+  const phFreqInput = document.getElementById('phFreqInput');
+  const phPhaseInput = document.getElementById('phPhaseInput');
+  const phaseCanvas = document.getElementById('phaseCanvas');
+  const phaseCtx = phaseCanvas.getContext('2d');
+  const phaseWrapLabel = document.getElementById('phaseWrapLabel');
+
+  function timeMsToDistM(ms, tempC){
+    return (ms / 1000) * speedOfSoundMps(tempC);
+  }
+  function distMToTimeMs(distM, tempC){
+    return (distM / speedOfSoundMps(tempC)) * 1000;
+  }
+  function timeMsToPhaseDeg(ms, freqHz){
+    return (ms / 1000) * freqHz * 360;
+  }
+  function phaseDegToTimeMs(deg, freqHz){
+    if (!freqHz) return 0;
+    return (deg / 360 / freqHz) * 1000;
+  }
+
+  function drawPhaseWave(phaseDeg){
+    const dpr = window.devicePixelRatio || 1;
+    const rect = phaseCanvas.getBoundingClientRect();
+    phaseCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    phaseCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+    const w = phaseCanvas.width, h = phaseCanvas.height;
+    phaseCtx.clearRect(0, 0, w, h);
+
+    const cycles = 2;
+    const amp = h * 0.32;
+    const midY = h / 2;
+    const phaseRad = (phaseDeg * Math.PI) / 180;
+
+    // 기준(원음) 파형
+    phaseCtx.beginPath();
+    for (let x = 0; x <= w; x++) {
+      const t = (x / w) * cycles * Math.PI * 2;
+      const y = midY - Math.sin(t) * amp;
+      if (x === 0) phaseCtx.moveTo(x, y); else phaseCtx.lineTo(x, y);
+    }
+    phaseCtx.strokeStyle = '#3a86ff';
+    phaseCtx.lineWidth = Math.max(1.5, h * 0.012);
+    phaseCtx.stroke();
+
+    // 딜레이(위상 이동)된 파형 — 점선
+    phaseCtx.beginPath();
+    phaseCtx.setLineDash([h * 0.03, h * 0.025]);
+    for (let x = 0; x <= w; x++) {
+      const t = (x / w) * cycles * Math.PI * 2;
+      const y = midY - Math.sin(t - phaseRad) * amp;
+      if (x === 0) phaseCtx.moveTo(x, y); else phaseCtx.lineTo(x, y);
+    }
+    phaseCtx.strokeStyle = '#f2a93b';
+    phaseCtx.stroke();
+    phaseCtx.setLineDash([]);
+  }
+
+  function recalcPhaseFrom(source){
+    const tempC = parseFloat(tempInput.value) || 0;
+    let timeMs = parseFloat(phTimeInput.value) || 0;
+    let distM = toMeters(parseFloat(phDistInput.value) || 0);
+    let freqHz = parseFloat(phFreqInput.value) || 0;
+    let phaseDeg = parseFloat(phPhaseInput.value) || 0;
+
+    if (source === 'time') {
+      distM = timeMsToDistM(timeMs, tempC);
+      phaseDeg = timeMsToPhaseDeg(timeMs, freqHz);
+    } else if (source === 'distance') {
+      timeMs = distMToTimeMs(distM, tempC);
+      phaseDeg = timeMsToPhaseDeg(timeMs, freqHz);
+    } else if (source === 'frequency') {
+      phaseDeg = timeMsToPhaseDeg(timeMs, freqHz);
+    } else if (source === 'phase') {
+      timeMs = phaseDegToTimeMs(phaseDeg, freqHz);
+      distM = timeMsToDistM(timeMs, tempC);
+    }
+
+    phTimeInput.value = timeMs.toFixed(4);
+    phDistInput.value = (unit === 'ft' ? distM * FT_PER_M : distM).toFixed(3);
+    phPhaseInput.value = phaseDeg.toFixed(1);
+
+    const wrapped = ((phaseDeg % 360) + 360) % 360;
+    const cycles = Math.floor(phaseDeg / 360);
+    phaseWrapLabel.textContent = cycles > 0
+      ? `${wrapped.toFixed(0)}° (총 ${cycles}사이클 + ${wrapped.toFixed(0)}°)`
+      : `${wrapped.toFixed(0)}°`;
+
+    drawPhaseWave(phaseDeg);
+  }
+
+  phTimeInput.addEventListener('input', () => recalcPhaseFrom('time'));
+  phDistInput.addEventListener('input', () => recalcPhaseFrom('distance'));
+  phFreqInput.addEventListener('input', () => recalcPhaseFrom('frequency'));
+  phPhaseInput.addEventListener('input', () => recalcPhaseFrom('phase'));
+  tempInput.addEventListener('input', () => recalcPhaseFrom('time'));
+  window.addEventListener('resize', () => drawPhaseWave(parseFloat(phPhaseInput.value) || 0));
+
   // 초기 예시 존 2개
   createZoneRow('Delay Tower 1', 45);
   createZoneRow('Delay Tower 2', 65);
   recalcAll();
+  recalcPhaseFrom('time');
 })();
 </script>
 </body>
