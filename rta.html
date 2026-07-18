@@ -47,6 +47,13 @@
   .status{ text-align:center; }
   .status h2{ font-size:19px; font-weight:700; }
   .status p{ margin:4px 0 0; font-size:16px; color:var(--text-secondary); }
+  .level-readout{
+    margin-top:10px; display:inline-flex; align-items:baseline; gap:6px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:100px; padding:8px 16px;
+  }
+  .level-val{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:var(--teal); }
+  .level-unit{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-tertiary); }
+  .level-lbl{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-tertiary); margin-left:6px; text-transform:uppercase; letter-spacing:0.05em; }
 
   .toolbar{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
   .toolbar-btn{
@@ -156,6 +163,10 @@
   <div class="status">
     <h2 id="statusTitle">시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요</h2>
     <p id="statusSub">기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다</p>
+    <div class="level-readout" id="levelReadout" style="display:none;">
+      <span class="level-val" id="levelVal">−∞</span><span class="level-unit">dB</span>
+      <span class="level-lbl">현재 레벨(피크)</span>
+    </div>
   </div>
 
   <div class="mic-denied" id="micDenied">
@@ -227,6 +238,8 @@
   const statusTitle = document.getElementById('statusTitle');
   const statusSub = document.getElementById('statusSub');
   const micDeniedEl = document.getElementById('micDenied');
+  const levelReadoutEl = document.getElementById('levelReadout');
+  const levelValEl = document.getElementById('levelVal');
   const floorInput = document.getElementById('floorInput');
   const ceilingInput = document.getElementById('ceilingInput');
   const boostQuietBtn = document.getElementById('boostQuietBtn');
@@ -272,6 +285,18 @@
   function dbToPct(db){
     const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
     return (clamped - DB_MIN) / (DB_MAX - DB_MIN) * 100;
+  }
+
+  // ✅ 요청 반영: 그래프뿐 아니라 현재 전체 레벨(가청 대역 내 최대치)을 숫자로도 보여준다.
+  function updateLevelReadout(data){
+    const binHz = audioCtx.sampleRate / analyser.fftSize;
+    let peak = -Infinity;
+    for (let b = 1; b < data.length; b++) {
+      const freq = b * binHz;
+      if (freq < 20 || freq > 20000) continue;
+      if (isFinite(data[b]) && data[b] > peak) peak = data[b];
+    }
+    levelValEl.textContent = isFinite(peak) ? Math.round(peak) : '−∞';
   }
 
   function setStatus(title, sub){
@@ -332,7 +357,9 @@
     const source = audioCtx.createMediaStreamSource(micStream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 8192;
-    analyser.smoothingTimeConstant = 0.35;
+    // ✅ 요청 반영: 값이 너무 빠르게 왔다갔다 하는 것을 줄이기 위해 analyser 자체의
+    // 시간축 스무딩을 0.35 → 0.75로 높였다 (여기에 더해 라인 뷰는 별도로 프레임 간 평활화도 적용한다)
+    analyser.smoothingTimeConstant = 0.75;
     analyser.minDecibels = DB_MIN - 10;
     analyser.maxDecibels = DB_MAX;
 
@@ -341,11 +368,13 @@
     source.connect(analyser);
 
     freqData = new Float32Array(analyser.frequencyBinCount);
+    lineSmoothed = null; // 새로 시작할 때는 이전 세션의 평활화 값을 초기화한다
 
     isRunning = true;
     lastFrameTime = performance.now();
     startBtn.textContent = '■ 정지';
     startBtn.classList.add('active');
+    levelReadoutEl.style.display = 'inline-flex';
     setStatus('실시간 분석 중', '마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다');
     renderLoop();
   }
@@ -359,6 +388,7 @@
 
     startBtn.textContent = '▸ 마이크 시작';
     startBtn.classList.remove('active');
+    levelReadoutEl.style.display = 'none';
     setStatus('시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요', '기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다');
 
     bars.forEach(b => {
@@ -375,6 +405,8 @@
     lastFrameTime = now;
 
     analyser.getFloatFrequencyData(freqData);
+    updateLevelReadout(freqData);
+
     const binHz = audioCtx.sampleRate / analyser.fftSize;
 
     if (viewMode === 'bar') {
@@ -416,17 +448,25 @@
   // 31밴드로 뭉개지 않아서 화면 캡처처럼 훨씬 촘촘하고 디테일한 곡선이 나온다.
   // ---------------------------------------------------------------
   const LINE_FREQ_MIN = 20, LINE_FREQ_MAX = 20000;
+  let lineSmoothed = null; // 프레임 간 지수 평활화용 버퍼 (너무 빠르게 흔들리는 것을 완화)
+  const LINE_SMOOTHING = 0.75; // 0(스무딩 없음)~1(거의 안 움직임) 사이
 
+  // ✅ ResizeObserver로 실제 렌더링 크기 변화를 정확히 추적한다 (레이아웃이
+  // 아직 안정되기 전에 한 번만 측정해서 잘려 보이던 문제를 근본적으로 해결).
   function resizeCanvas(){
     const rect = lineCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
     const dpr = window.devicePixelRatio || 1;
     lineCanvas.width = Math.max(1, Math.round(rect.width * dpr));
     lineCanvas.height = Math.max(1, Math.round(rect.height * dpr));
   }
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => { if (viewMode === 'line') resizeCanvas(); }).observe(lineCanvas);
+  }
 
-  function freqToX(f, width){
+  function freqToX(f, plotW, plotX0){
     const t = Math.log(f / LINE_FREQ_MIN) / Math.log(LINE_FREQ_MAX / LINE_FREQ_MIN);
-    return Math.max(0, Math.min(1, t)) * width;
+    return plotX0 + Math.max(0, Math.min(1, t)) * plotW;
   }
 
   function drawLineView(data, binHz){
@@ -434,72 +474,94 @@
     if (w === 0 || h === 0) return;
     lineCtx.clearRect(0, 0, w, h);
 
+    // ✅ 요청 반영: 그래프가 둥근 모서리/화면 끝에 바짝 붙어 "잘린" 것처럼 보이던 것을
+    // 막기 위해, 그리는 영역 자체에 여백(margin)을 넉넉히 둔다.
+    const marginLeft = w * 0.09, marginRight = w * 0.03, marginTop = h * 0.06, marginBottom = h * 0.1;
+    const plotX0 = marginLeft, plotW = w - marginLeft - marginRight;
+    const plotY0 = marginTop, plotH = h - marginTop - marginBottom;
+
+    function dbToY(db){
+      const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
+      return plotY0 + plotH - ((clamped - DB_MIN) / (DB_MAX - DB_MIN)) * plotH;
+    }
+
     // 그리드: dB 가로선 (Floor~Ceiling 사이 4등분) + 옥타브 세로선
     lineCtx.strokeStyle = 'rgba(255,255,255,0.08)';
-    lineCtx.lineWidth = 1;
-    lineCtx.font = `${Math.max(10, h*0.028)}px 'IBM Plex Mono', monospace`;
-    lineCtx.fillStyle = 'rgba(147,163,163,0.8)';
+    lineCtx.lineWidth = Math.max(1, w * 0.0012);
+    lineCtx.font = `${Math.max(11, h*0.032)}px 'IBM Plex Mono', monospace`;
+    lineCtx.fillStyle = 'rgba(147,163,163,0.85)';
     const gridSteps = 4;
     for (let i = 0; i <= gridSteps; i++) {
       const db = DB_MAX - (DB_MAX - DB_MIN) * (i / gridSteps);
-      const y = (i / gridSteps) * h;
+      const y = dbToY(db);
       lineCtx.beginPath();
-      lineCtx.moveTo(0, y);
-      lineCtx.lineTo(w, y);
+      lineCtx.moveTo(plotX0, y);
+      lineCtx.lineTo(plotX0 + plotW, y);
       lineCtx.stroke();
-      lineCtx.fillText(Math.round(db) + 'dB', 6, y - 4 < 12 ? y + 14 : y - 4);
+      lineCtx.fillText(Math.round(db) + 'dB', 4, Math.min(Math.max(y + 4, marginTop + 12), h - 6));
     }
     [100, 1000, 10000].forEach(f => {
-      const x = freqToX(f, w);
+      const x = freqToX(f, plotW, plotX0);
       lineCtx.beginPath();
-      lineCtx.moveTo(x, 0);
-      lineCtx.lineTo(x, h);
+      lineCtx.moveTo(x, plotY0);
+      lineCtx.lineTo(x, plotY0 + plotH);
       lineCtx.stroke();
-      lineCtx.fillText((f >= 1000 ? (f/1000)+'k' : f) + 'Hz', x + 4, h - 6);
+      lineCtx.fillText((f >= 1000 ? (f/1000)+'k' : f) + 'Hz', Math.min(x + 4, w - 40), h - 8);
     });
 
+    // ✅ 프레임 간 지수 평활화 — 매 프레임 값이 그대로 튀지 않고 부드럽게 이어지게 한다
+    if (!lineSmoothed || lineSmoothed.length !== data.length) {
+      lineSmoothed = Float32Array.from(data);
+    }
+
     // 진폭(레벨)에 따라 파랑→초록→노랑으로 바뀌는 세로 방향 그라데이션
-    const gradient = lineCtx.createLinearGradient(0, h, 0, 0);
+    const gradient = lineCtx.createLinearGradient(0, plotY0 + plotH, 0, plotY0);
     gradient.addColorStop(0, '#3a86ff');
     gradient.addColorStop(0.55, '#3ddc97');
     gradient.addColorStop(1, '#f2e93b');
 
-    // FFT 빈을 그대로 로그 주파수축 위에 점 찍어 연결
+    // FFT 빈을 그대로 로그 주파수축 위에 점 찍어 연결 (평활화된 값 사용)
     lineCtx.beginPath();
     let started = false;
     for (let b = 1; b < data.length; b++) {
       const freq = b * binHz;
       if (freq < LINE_FREQ_MIN) continue;
       if (freq > LINE_FREQ_MAX) break;
-      const v = isFinite(data[b]) ? data[b] : DB_MIN;
-      const x = freqToX(freq, w);
-      const y = h - (dbToPct(v) / 100) * h;
+      const raw = isFinite(data[b]) ? data[b] : DB_MIN;
+      const prev = isFinite(lineSmoothed[b]) ? lineSmoothed[b] : raw;
+      const v = prev * LINE_SMOOTHING + raw * (1 - LINE_SMOOTHING);
+      lineSmoothed[b] = v;
+      const x = freqToX(freq, plotW, plotX0);
+      const y = dbToY(v);
       if (!started) { lineCtx.moveTo(x, y); started = true; }
       else lineCtx.lineTo(x, y);
     }
     lineCtx.strokeStyle = gradient;
-    lineCtx.lineWidth = Math.max(1.5, h * 0.006);
+    // ✅ 요청 반영: 선이 너무 두꺼워 보이던 것을 절반 이하로 줄임 (화면 크기와 무관하게 일정하게 얇음)
+    lineCtx.lineWidth = Math.max(1, Math.min(2.2, w * 0.0022));
     lineCtx.lineJoin = 'round';
     lineCtx.stroke();
 
-    // 피크 홀드가 켜져 있으면, 두드러진 로컬 피크 지점에 흰 점 + 주파수 라벨 표시
+    // 피크 홀드가 켜져 있으면, 두드러진 로컬 피크 지점에 흰 점 + 주파수 라벨 표시 (평활화된 값 기준)
     if (peakHoldOn) {
-      const peaks = findPeaks(data, binHz, w);
+      const peaks = findPeaks(lineSmoothed, binHz, plotW, plotX0);
       peaks.forEach(p => {
+        const y = dbToY(p.db);
         lineCtx.beginPath();
-        lineCtx.arc(p.x, p.y, Math.max(2.5, h*0.008), 0, Math.PI*2);
+        lineCtx.arc(p.x, y, Math.max(2.5, w*0.005), 0, Math.PI*2);
         lineCtx.fillStyle = '#fff';
         lineCtx.fill();
         lineCtx.fillStyle = 'rgba(244,247,246,0.9)';
-        lineCtx.font = `${Math.max(10, h*0.026)}px 'IBM Plex Mono', monospace`;
+        lineCtx.font = `${Math.max(11, h*0.03)}px 'IBM Plex Mono', monospace`;
         const label = p.freq >= 1000 ? (p.freq/1000).toFixed(p.freq>=10000?1:2)+'k' : Math.round(p.freq);
-        lineCtx.fillText(label, p.x + 6, p.y - 6);
+        const labelX = Math.min(p.x + 6, w - 44);
+        lineCtx.fillText(label, labelX, Math.max(y - 8, marginTop + 12));
       });
     }
   }
 
   // 로컬 최댓값 중, 최소 간격(주파수축 기준 약 5%) 이상 떨어진 두드러진 피크만 골라낸다
-  function findPeaks(data, binHz, canvasWidth){
+  function findPeaks(data, binHz, plotW, plotX0){
     const candidates = [];
     for (let b = 2; b < data.length - 2; b++) {
       const freq = b * binHz;
@@ -507,16 +569,13 @@
       const v = isFinite(data[b]) ? data[b] : DB_MIN;
       if (v < DB_MIN + (DB_MAX - DB_MIN) * 0.15) continue; // 너무 작은 잡음성 피크는 제외
       const isLocalMax = v >= data[b-1] && v >= data[b-2] && v >= data[b+1] && v >= data[b+2];
-      if (isLocalMax) candidates.push({ freq, x: freqToX(freq, canvasWidth), y: 0, db: v });
+      if (isLocalMax) candidates.push({ freq, x: freqToX(freq, plotW, plotX0), db: v });
     }
-    // y좌표 계산 (canvasHeight가 필요하므로 별도 계산)
-    const h = lineCanvas.height;
-    candidates.forEach(c => { c.y = h - (dbToPct(c.db) / 100) * h; });
 
     // x축 기준 최소 간격보다 가까운 후보끼리는 더 큰 값만 남긴다
     candidates.sort((a, b) => b.db - a.db);
     const kept = [];
-    const minGap = canvasWidth * 0.06;
+    const minGap = plotW * 0.06;
     candidates.forEach(c => {
       if (kept.every(k => Math.abs(k.x - c.x) > minGap)) kept.push(c);
     });
