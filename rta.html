@@ -96,6 +96,20 @@
 
   /* ---- 라인(연속 스펙트럼) 뷰 ---- */
   .line-console{ padding:14px; }
+
+  /* ---- SPL 미터 뷰 ---- */
+  .spl-console{ align-items:center; justify-content:center; gap:14px; padding:24px 16px; }
+  .spl-big-row{ display:flex; align-items:baseline; gap:8px; }
+  .spl-big-val{ font-family:'IBM Plex Mono',monospace; font-size:76px; font-weight:700; color:var(--teal); line-height:1; }
+  .spl-big-unit{ font-family:'IBM Plex Mono',monospace; font-size:22px; color:var(--text-tertiary); }
+  .spl-stats-row{ display:flex; gap:14px; }
+  .spl-stat{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:10px 20px;
+  }
+  .spl-stat-lbl{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-tertiary); letter-spacing:0.08em; }
+  .spl-stat-val{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:700; color:var(--text-primary); }
+  #splHistoryCanvas{ width:100%; height:120px; flex-shrink:0; border-radius:8px; }
   #lineCanvas{ width:100%; height:100%; display:block; border-radius:8px; }
 
   /* ✅ 요청 반영: 세로(portrait) 모바일 화면에서는 라인 뷰가 화면을 꽉 채우도록
@@ -193,6 +207,7 @@
   <div class="view-toggle" id="viewToggle">
     <button data-view="bar" class="active">▤ 막대(Bar)</button>
     <button data-view="line">∿ 라인(Line)</button>
+    <button data-view="spl">📟 SPL 미터</button>
   </div>
 
   <div class="range-panel">
@@ -245,6 +260,19 @@
     <canvas id="lineCanvas"></canvas>
   </div>
 
+  <div class="console spl-console" id="consoleSpl" style="display:none;">
+    <div class="spl-big-row">
+      <span class="spl-big-val" id="splBigVal">--</span><span class="spl-big-unit">dB</span>
+    </div>
+    <div class="spl-stats-row">
+      <div class="spl-stat"><span class="spl-stat-lbl">MIN</span><span class="spl-stat-val" id="splMinVal">--</span></div>
+      <div class="spl-stat"><span class="spl-stat-lbl">AVG</span><span class="spl-stat-val" id="splAvgVal">--</span></div>
+      <div class="spl-stat"><span class="spl-stat-lbl">MAX</span><span class="spl-stat-val" id="splMaxVal">--</span></div>
+    </div>
+    <canvas id="splHistoryCanvas"></canvas>
+    <button class="toolbar-btn" id="splResetBtn">↺ Min/Max/Avg 초기화</button>
+  </div>
+
   <p class="hint">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
 
   <div class="tool-links">
@@ -293,8 +321,22 @@
   const consoleLine = document.getElementById('consoleLine');
   const lineCanvas = document.getElementById('lineCanvas');
   const lineCtx = lineCanvas.getContext('2d');
+  const consoleSpl = document.getElementById('consoleSpl');
+  const splBigVal = document.getElementById('splBigVal');
+  const splMinVal = document.getElementById('splMinVal');
+  const splAvgVal = document.getElementById('splAvgVal');
+  const splMaxVal = document.getElementById('splMaxVal');
+  const splHistoryCanvas = document.getElementById('splHistoryCanvas');
+  const splHistoryCtx = splHistoryCanvas.getContext('2d');
+  const splResetBtn = document.getElementById('splResetBtn');
 
-  let viewMode = 'bar'; // 'bar' | 'line'
+  let viewMode = 'bar'; // 'bar' | 'line' | 'spl'
+
+  // ---- SPL 미터 상태 ----
+  let splSmoothed = null;
+  let splMin = Infinity, splMax = -Infinity, splSum = 0, splCount = 0;
+  let splHistory = []; // 최근 값들 (스크롤되는 히스토리 그래프용)
+  const SPL_HISTORY_MAX_POINTS = 240; // 대략 최근 몇 분 분량
 
   let audioCtx = null;
   let analyser = null;
@@ -496,6 +538,7 @@
 
       freqData = new Float32Array(analyser.frequencyBinCount);
       lineSmoothed = null; // 새로 시작할 때는 이전 세션의 평활화 값을 초기화한다
+      splSmoothed = null; splMin = Infinity; splMax = -Infinity; splSum = 0; splCount = 0; splHistory = [];
 
       isRunning = true;
       lastFrameTime = performance.now();
@@ -541,6 +584,7 @@
     captureRawPeak(freqData); // ✅ "지금 소리로 자동 보정" 버튼이 쓸 보정 전 원본 피크값을 기록해둔다
     applyCalibration(freqData); // ✅ 요청 반영: 보정 오프셋을 막대/라인/레벨 표시 전부에 동일하게 적용
     updateLevelReadout(freqData);
+    updateSplMeter(); // ✅ SPL 미터 뷰(큰 숫자 + Min/Max/Avg + 히스토리)도 매 프레임 갱신
 
     const binHz = audioCtx.sampleRate / analyser.fftSize;
 
@@ -597,7 +641,89 @@
   }
   if (window.ResizeObserver) {
     new ResizeObserver(() => { if (viewMode === 'line') resizeCanvas(); }).observe(lineCanvas);
+    new ResizeObserver(() => { if (viewMode === 'spl') resizeSplCanvas(); }).observe(splHistoryCanvas);
   }
+
+  // ---------------------------------------------------------------
+  // SPL 미터 뷰 — 큰 숫자 + Min/Max/Avg + 시간에 따른 히스토리 그래프
+  // ---------------------------------------------------------------
+  function resizeSplCanvas(){
+    const rect = splHistoryCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    splHistoryCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    splHistoryCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawSplHistory(){
+    const w = splHistoryCanvas.width, h = splHistoryCanvas.height;
+    if (w === 0 || h === 0) return;
+    splHistoryCtx.clearRect(0, 0, w, h);
+
+    // 배경 그리드(가로선 3개)
+    splHistoryCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+    splHistoryCtx.lineWidth = 1;
+    for (let i = 0; i <= 2; i++) {
+      const y = (i / 2) * h;
+      splHistoryCtx.beginPath();
+      splHistoryCtx.moveTo(0, y);
+      splHistoryCtx.lineTo(w, y);
+      splHistoryCtx.stroke();
+    }
+
+    if (splHistory.length < 2) return;
+
+    // Floor/Ceiling(DB_MIN/DB_MAX) 기준으로 y축 스케일 (다른 뷰들과 일관되게)
+    const toY = (v) => {
+      const t = (v - DB_MIN) / (DB_MAX - DB_MIN);
+      return h - Math.max(0, Math.min(1, t)) * h;
+    };
+
+    splHistoryCtx.beginPath();
+    splHistory.forEach((v, i) => {
+      const x = (i / (SPL_HISTORY_MAX_POINTS - 1)) * w;
+      const y = toY(v);
+      if (i === 0) splHistoryCtx.moveTo(x, y); else splHistoryCtx.lineTo(x, y);
+    });
+    splHistoryCtx.strokeStyle = '#3ddc97';
+    splHistoryCtx.lineWidth = Math.max(1.5, w * 0.003);
+    splHistoryCtx.lineJoin = 'round';
+    splHistoryCtx.stroke();
+  }
+
+  function updateSplMeter(){
+    if (!isFinite(lastRawAverageDb)) return;
+    const calibOffset = parseFloat(calibInput.value) || 0;
+    const raw = lastRawAverageDb + calibOffset;
+    splSmoothed = (splSmoothed === null) ? raw : splSmoothed * 0.85 + raw * 0.15;
+
+    splMin = Math.min(splMin, splSmoothed);
+    splMax = Math.max(splMax, splSmoothed);
+    splSum += splSmoothed;
+    splCount++;
+
+    splHistory.push(splSmoothed);
+    if (splHistory.length > SPL_HISTORY_MAX_POINTS) splHistory.shift();
+
+    if (viewMode === 'spl') {
+      splBigVal.textContent = Math.round(splSmoothed);
+      splMinVal.textContent = isFinite(splMin) ? Math.round(splMin) : '--';
+      splMaxVal.textContent = isFinite(splMax) ? Math.round(splMax) : '--';
+      splAvgVal.textContent = splCount > 0 ? Math.round(splSum / splCount) : '--';
+      drawSplHistory();
+    }
+  }
+
+  function resetSplStats(){
+    splMin = Infinity; splMax = -Infinity; splSum = 0; splCount = 0;
+    splHistory = [];
+    splBigVal.textContent = '--';
+    splMinVal.textContent = '--';
+    splMaxVal.textContent = '--';
+    splAvgVal.textContent = '--';
+    drawSplHistory();
+  }
+  splResetBtn.addEventListener('click', resetSplStats);
 
   function freqToX(f, plotW, plotX0){
     const t = Math.log(f / LINE_FREQ_MIN) / Math.log(LINE_FREQ_MAX / LINE_FREQ_MIN);
@@ -733,7 +859,8 @@
     });
     consoleBar.style.display = mode === 'bar' ? 'flex' : 'none';
     consoleLine.style.display = mode === 'line' ? 'flex' : 'none';
-    document.body.classList.toggle('line-view', mode === 'line');
+    consoleSpl.style.display = mode === 'spl' ? 'flex' : 'none';
+    document.body.classList.toggle('line-view', mode === 'line' || mode === 'spl');
     if (mode === 'line') {
       // 레이아웃이 실제로 반영된 다음 프레임에 리사이즈해야 정확한 크기를 잡는다
       requestAnimationFrame(() => {
@@ -747,12 +874,19 @@
         }
       });
     }
+    if (mode === 'spl') {
+      requestAnimationFrame(() => {
+        resizeSplCanvas();
+        drawSplHistory();
+      });
+    }
   }
   viewToggle.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => setViewMode(btn.dataset.view));
   });
   window.addEventListener('resize', () => {
     if (viewMode === 'line') resizeCanvas();
+    if (viewMode === 'spl') resizeSplCanvas();
   });
 
   startBtn.addEventListener('click', () => {
