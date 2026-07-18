@@ -217,6 +217,14 @@
         <span class="unit">dB</span>
       </div>
     </div>
+    <div class="range-field">
+      <label>기준 SPL (다른 SPL미터 값)</label>
+      <div class="range-input-row">
+        <input type="number" id="targetSplInput" value="70" step="1">
+        <span class="unit">dB SPL</span>
+      </div>
+    </div>
+    <button class="toolbar-btn" id="calibrateNowBtn">🎯 지금 소리로 자동 보정</button>
     <button class="toolbar-btn" id="boostQuietBtn">🔉 작은 소리 더 잘 보이게</button>
   </div>
 
@@ -275,6 +283,8 @@
   const ceilingInput = document.getElementById('ceilingInput');
   const boostQuietBtn = document.getElementById('boostQuietBtn');
   const calibInput = document.getElementById('calibInput');
+  const targetSplInput = document.getElementById('targetSplInput');
+  const calibrateNowBtn = document.getElementById('calibrateNowBtn');
   const vscaleTop = document.getElementById('vscaleTop');
   const vscaleMid = document.getElementById('vscaleMid');
   const vscaleBottom = document.getElementById('vscaleBottom');
@@ -319,6 +329,43 @@
     return (clamped - DB_MIN) / (DB_MAX - DB_MIN) * 100;
   }
 
+  // ✅ FFT 원본 dB 배열 전체에 보정 오프셋을 한 번에 적용한다.
+  // 이후 이 데이터를 쓰는 막대/라인/피크/레벨 표시가 전부 자동으로 보정된 값을 쓰게 된다.
+  function applyCalibration(data){
+    const offset = parseFloat(calibInput.value) || 0;
+    if (offset === 0) return data;
+    for (let i = 0; i < data.length; i++) {
+      if (isFinite(data[i])) data[i] += offset;
+    }
+    return data;
+  }
+
+  // ✅ 요청 반영: 보정 전(raw) 피크값을 매 프레임 기록해둔다.
+  // "지금 소리로 자동 보정" 버튼을 누르면, 이 값과 사용자가 입력한 "기준 SPL"의 차이를
+  // 오프셋으로 계산해서 자동으로 채워준다 — 감으로 오프셋 숫자를 맞출 필요가 없어진다.
+  let lastRawPeakDb = -Infinity;
+  function captureRawPeak(data){
+    const binHz = audioCtx.sampleRate / analyser.fftSize;
+    let peak = -Infinity;
+    for (let b = 1; b < data.length; b++) {
+      const freq = b * binHz;
+      if (freq < 20 || freq > 20000) continue;
+      if (isFinite(data[b]) && data[b] > peak) peak = data[b];
+    }
+    if (isFinite(peak)) lastRawPeakDb = peak;
+  }
+
+  calibrateNowBtn.addEventListener('click', () => {
+    if (!isRunning || !isFinite(lastRawPeakDb)) {
+      setStatus('먼저 마이크를 켜고 소리를 들려주세요', '보정하려면 실시간으로 소리가 들어오고 있어야 합니다');
+      return;
+    }
+    const targetSpl = parseFloat(targetSplInput.value) || 0;
+    const offset = targetSpl - lastRawPeakDb;
+    calibInput.value = Math.round(offset);
+    setStatus('보정 완료', `기준 SPL ${targetSpl}dB에 맞춰 오프셋을 ${Math.round(offset)}dB로 설정했습니다`);
+  });
+
   // ✅ 요청 반영: 그래프뿐 아니라 현재 전체 레벨(가청 대역 내 최대치)을 숫자로도 보여준다.
   // ✅ 요청 반영: 값이 매 프레임 그대로 튀지 않고 조금 천천히 반응하도록 스무딩(지수 평활화)을 추가.
   // 값이 올라갈 땐 비교적 빠르게, 내려갈 땐 느리게 — 실제 레벨미터의 자연스러운 움직임과 비슷하다.
@@ -338,8 +385,8 @@
         levelSmoothed = levelSmoothed * 0.9 + peak * 0.1; // 내려갈 때는 천천히
       }
     }
-    const calibOffset = parseFloat(calibInput.value) || 0;
-    levelValEl.textContent = isFinite(levelSmoothed) ? Math.round(levelSmoothed + calibOffset) : '−∞';
+    // data가 이미 applyCalibration()을 거쳤으므로 여기서 오프셋을 또 더하지 않는다.
+    levelValEl.textContent = isFinite(levelSmoothed) ? Math.round(levelSmoothed) : '−∞';
   }
 
   function setStatus(title, sub){
@@ -449,6 +496,8 @@
     lastFrameTime = now;
 
     analyser.getFloatFrequencyData(freqData);
+    captureRawPeak(freqData); // ✅ "지금 소리로 자동 보정" 버튼이 쓸 보정 전 원본 피크값을 기록해둔다
+    applyCalibration(freqData); // ✅ 요청 반영: 보정 오프셋을 막대/라인/레벨 표시 전부에 동일하게 적용
     updateLevelReadout(freqData);
 
     const binHz = audioCtx.sampleRate / analyser.fftSize;
