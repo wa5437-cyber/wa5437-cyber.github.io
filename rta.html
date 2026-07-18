@@ -153,6 +153,14 @@
   }
 
   .hint{ text-align:center; font-size:14.5px; color:var(--text-tertiary); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
   .mic-denied{
     text-align:center; font-size:16px; color:var(--red); background:rgba(239,91,91,0.08);
     border:1px solid rgba(239,91,91,0.25); border-radius:10px; padding:12px 16px; display:none;
@@ -221,6 +229,12 @@
   </div>
 
   <p class="hint">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+  </div>
 </div>
 
 <script>

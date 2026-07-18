@@ -121,6 +121,14 @@
   .phase-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
   .phase-legend .dot.dashed{ background:transparent; border:2px dashed var(--amber); }
 
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
+
   /* ---- 0~360도 위상 게이지 ---- */
   .phase-gauge-wrap{ margin-top:18px; }
   .phase-gauge-track{
@@ -241,6 +249,12 @@
       <span><i class="dot" style="background:var(--blue);"></i>원음(0°)</span>
       <span><i class="dot dashed"></i>딜레이 신호 (<span id="phaseWrapLabel">0°</span>)</span>
     </div>
+  </div>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
   </div>
 
 </div>

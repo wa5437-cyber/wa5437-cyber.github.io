@@ -135,6 +135,14 @@
   .startbtn.stop{ background:rgba(239,91,91,0.14); color:#ff8080; border:1px solid rgba(239,91,91,0.4); }
 
   .hint{ text-align:center; font-size:11.5px; color:var(--text-tertiary); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
 </style>
 </head>
 <body>
@@ -185,6 +193,12 @@
 
   <button id="startBtn" class="startbtn go">▸ 시작</button>
   <p class="hint">주파수 노브는 위/아래로 드래그하거나, 아래 숫자 입력칸에 직접 입력할 수 있습니다.</p>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+  </div>
 </div>
 
 <script>
