@@ -55,12 +55,49 @@
   }
   .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#232b2f; }
 
+  /* ---- dB 범위(민감도) 조절 패널 ---- */
+  .range-panel{
+    display:flex; align-items:flex-end; justify-content:center; gap:16px; flex-wrap:wrap;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px;
+  }
+  .range-field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-tertiary);
+    text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;
+  }
+  .range-input-row{ display:flex; align-items:center; gap:6px; }
+  .range-input-row input[type=number]{
+    width:76px; background:#171d21; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:14px; padding:8px 9px;
+  }
+  .range-input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-tertiary); }
+  @media (max-width:560px){ .range-panel{ padding:12px; } }
+
   .console{
     border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113);
     padding:16px 8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden;
     aspect-ratio:2.2 / 1; max-height:60vh; min-height:260px;
   }
   .consolebody{ display:flex; align-items:stretch; gap:10px; flex:1; min-height:0; }
+
+  /* ---- 막대/라인 보기 전환 토글 ---- */
+  .view-toggle{ display:flex; justify-content:center; gap:8px; }
+  .view-toggle button{
+    border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
+    font-size:12.5px; font-weight:600; padding:8px 16px; border-radius:10px;
+  }
+  .view-toggle button.active{ color:var(--text-primary); border-color:var(--line-strong); background:#232b2f; }
+
+  /* ---- 라인(연속 스펙트럼) 뷰 ---- */
+  .line-console{ padding:14px; }
+  #lineCanvas{ width:100%; height:100%; display:block; border-radius:8px; }
+
+  /* ✅ 요청 반영: 세로(portrait) 모바일 화면에서는 라인 뷰가 화면을 꽉 채우도록
+     화면 높이 기준으로 훨씬 크게 잡는다 (가로 aspect-ratio 대신 vh 기반 높이 사용) */
+  @media (max-width:700px) and (orientation:portrait){
+    body.line-view .console{
+      aspect-ratio:auto; height:70vh; max-height:none; min-height:420px;
+    }
+  }
   .vscale{
     display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
     font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-secondary);
@@ -130,11 +167,38 @@
     <button class="toolbar-btn active" id="peakToggle">Peak Hold: ON</button>
   </div>
 
-  <div class="console">
+  <div class="view-toggle" id="viewToggle">
+    <button data-view="bar" class="active">▤ 막대(Bar)</button>
+    <button data-view="line">∿ 라인(Line)</button>
+  </div>
+
+  <div class="range-panel">
+    <div class="range-field">
+      <label>Floor (조용한 소리 기준)</label>
+      <div class="range-input-row">
+        <input type="number" id="floorInput" value="-70" step="1">
+        <span class="unit">dB</span>
+      </div>
+    </div>
+    <div class="range-field">
+      <label>Ceiling (큰 소리 기준)</label>
+      <div class="range-input-row">
+        <input type="number" id="ceilingInput" value="0" step="1">
+        <span class="unit">dB</span>
+      </div>
+    </div>
+    <button class="toolbar-btn" id="boostQuietBtn">🔉 작은 소리 더 잘 보이게</button>
+  </div>
+
+  <div class="console" id="consoleBar">
     <div class="consolebody">
-      <div class="vscale"><span>0dB</span><span>−35dB</span><span>−70dB</span></div>
+      <div class="vscale" id="vscale"><span id="vscaleTop">0dB</span><span id="vscaleMid">−35dB</span><span id="vscaleBottom">−70dB</span></div>
       <div class="grid" id="grid"></div>
     </div>
+  </div>
+
+  <div class="console line-console" id="consoleLine" style="display:none;">
+    <canvas id="lineCanvas"></canvas>
   </div>
 
   <p class="hint">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
@@ -152,7 +216,9 @@
   const OCTAVE_RATIO = Math.pow(2, 1/6);
   const BAND_EDGES = BANDS.map(f => [f / OCTAVE_RATIO, f * OCTAVE_RATIO]);
 
-  const DB_MIN = -70, DB_MAX = 0; // 화면 표시 범위 (dBFS 근사)
+  // ✅ 요청 반영: 고정 상수가 아니라 사용자가 직접 조절할 수 있는 값으로 변경
+  // (작은 소리가 잘 안 보인다는 피드백 → Floor를 더 높여서 조용한 구간을 넓게 펼쳐볼 수 있게 함)
+  let DB_MIN = -70, DB_MAX = 0; // 화면 표시 범위 (dBFS 근사)
   const PEAK_DECAY_PER_SEC = 18;  // dB/s — 피크 홀드가 서서히 내려오는 속도
 
   const grid = document.getElementById('grid');
@@ -161,6 +227,19 @@
   const statusTitle = document.getElementById('statusTitle');
   const statusSub = document.getElementById('statusSub');
   const micDeniedEl = document.getElementById('micDenied');
+  const floorInput = document.getElementById('floorInput');
+  const ceilingInput = document.getElementById('ceilingInput');
+  const boostQuietBtn = document.getElementById('boostQuietBtn');
+  const vscaleTop = document.getElementById('vscaleTop');
+  const vscaleMid = document.getElementById('vscaleMid');
+  const vscaleBottom = document.getElementById('vscaleBottom');
+  const viewToggle = document.getElementById('viewToggle');
+  const consoleBar = document.getElementById('consoleBar');
+  const consoleLine = document.getElementById('consoleLine');
+  const lineCanvas = document.getElementById('lineCanvas');
+  const lineCtx = lineCanvas.getContext('2d');
+
+  let viewMode = 'bar'; // 'bar' | 'line'
 
   let audioCtx = null;
   let analyser = null;
@@ -199,6 +278,37 @@
     statusTitle.textContent = title;
     statusSub.textContent = sub || '';
   }
+
+  // ✅ Floor/Ceiling 값이 바뀌면 왼쪽 dB 눈금과 analyser의 표시 범위를 함께 갱신한다.
+  function updateVScaleLabels(){
+    const mid = Math.round((DB_MIN + DB_MAX) / 2);
+    vscaleTop.textContent = DB_MAX + 'dB';
+    vscaleMid.textContent = mid + 'dB';
+    vscaleBottom.textContent = DB_MIN + 'dB';
+  }
+  function applyRangeToAnalyser(){
+    if (analyser){
+      analyser.minDecibels = DB_MIN - 10;
+      analyser.maxDecibels = DB_MAX;
+    }
+  }
+  function commitRange(){
+    const newMin = parseFloat(floorInput.value);
+    const newMax = parseFloat(ceilingInput.value);
+    if (isNaN(newMin) || isNaN(newMax) || newMin >= newMax) return; // 잘못된 값이면 무시
+    DB_MIN = newMin;
+    DB_MAX = newMax;
+    updateVScaleLabels();
+    applyRangeToAnalyser();
+  }
+  floorInput.addEventListener('change', commitRange);
+  ceilingInput.addEventListener('change', commitRange);
+  boostQuietBtn.addEventListener('click', () => {
+    // 조용한 소리를 화면에 더 크게 펼쳐 보여주는 프리셋 (Floor를 -45dB까지만 내림)
+    floorInput.value = '-45';
+    ceilingInput.value = '0';
+    commitRange();
+  });
 
   async function startRTA(){
     micDeniedEl.style.display = 'none';
@@ -267,35 +377,173 @@
     analyser.getFloatFrequencyData(freqData);
     const binHz = audioCtx.sampleRate / analyser.fftSize;
 
-    BAND_EDGES.forEach(([lo, hi], i) => {
-      const loBin = Math.max(1, Math.floor(lo / binHz));
-      const hiBin = Math.min(freqData.length - 1, Math.ceil(hi / binHz));
-      let sum = 0, count = 0;
-      for (let b = loBin; b <= hiBin; b++) {
-        // getFloatFrequencyData가 -Infinity를 반환할 수 있으므로(무음 구간) 방어적으로 처리
-        const v = freqData[b];
-        if (isFinite(v)) { sum += v; count++; }
-      }
-      const avgDb = count > 0 ? sum / count : DB_MIN;
-
-      const entry = bars[i];
-      entry.bar.style.height = dbToPct(avgDb) + '%';
-
-      if (peakHoldOn) {
-        if (avgDb > entry.peakDb) {
-          entry.peakDb = avgDb;
-        } else {
-          entry.peakDb = Math.max(DB_MIN, entry.peakDb - PEAK_DECAY_PER_SEC * dt);
+    if (viewMode === 'bar') {
+      BAND_EDGES.forEach(([lo, hi], i) => {
+        const loBin = Math.max(1, Math.floor(lo / binHz));
+        const hiBin = Math.min(freqData.length - 1, Math.ceil(hi / binHz));
+        let sum = 0, count = 0;
+        for (let b = loBin; b <= hiBin; b++) {
+          // getFloatFrequencyData가 -Infinity를 반환할 수 있으므로(무음 구간) 방어적으로 처리
+          const v = freqData[b];
+          if (isFinite(v)) { sum += v; count++; }
         }
-        entry.peakEl.style.bottom = dbToPct(entry.peakDb) + '%';
-        entry.peakEl.style.display = '';
-      } else {
-        entry.peakEl.style.display = 'none';
-      }
-    });
+        const avgDb = count > 0 ? sum / count : DB_MIN;
+
+        const entry = bars[i];
+        entry.bar.style.height = dbToPct(avgDb) + '%';
+
+        if (peakHoldOn) {
+          if (avgDb > entry.peakDb) {
+            entry.peakDb = avgDb;
+          } else {
+            entry.peakDb = Math.max(DB_MIN, entry.peakDb - PEAK_DECAY_PER_SEC * dt);
+          }
+          entry.peakEl.style.bottom = dbToPct(entry.peakDb) + '%';
+          entry.peakEl.style.display = '';
+        } else {
+          entry.peakEl.style.display = 'none';
+        }
+      });
+    } else {
+      drawLineView(freqData, binHz);
+    }
 
     rafId = requestAnimationFrame(renderLoop);
   }
+
+  // ---------------------------------------------------------------
+  // 라인(연속 스펙트럼) 뷰 — FFT 빈(bin)을 있는 그대로, 로그 주파수축 위에 그린다.
+  // 31밴드로 뭉개지 않아서 화면 캡처처럼 훨씬 촘촘하고 디테일한 곡선이 나온다.
+  // ---------------------------------------------------------------
+  const LINE_FREQ_MIN = 20, LINE_FREQ_MAX = 20000;
+
+  function resizeCanvas(){
+    const rect = lineCanvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    lineCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    lineCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function freqToX(f, width){
+    const t = Math.log(f / LINE_FREQ_MIN) / Math.log(LINE_FREQ_MAX / LINE_FREQ_MIN);
+    return Math.max(0, Math.min(1, t)) * width;
+  }
+
+  function drawLineView(data, binHz){
+    const w = lineCanvas.width, h = lineCanvas.height;
+    if (w === 0 || h === 0) return;
+    lineCtx.clearRect(0, 0, w, h);
+
+    // 그리드: dB 가로선 (Floor~Ceiling 사이 4등분) + 옥타브 세로선
+    lineCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+    lineCtx.lineWidth = 1;
+    lineCtx.font = `${Math.max(10, h*0.028)}px 'IBM Plex Mono', monospace`;
+    lineCtx.fillStyle = 'rgba(147,163,163,0.8)';
+    const gridSteps = 4;
+    for (let i = 0; i <= gridSteps; i++) {
+      const db = DB_MAX - (DB_MAX - DB_MIN) * (i / gridSteps);
+      const y = (i / gridSteps) * h;
+      lineCtx.beginPath();
+      lineCtx.moveTo(0, y);
+      lineCtx.lineTo(w, y);
+      lineCtx.stroke();
+      lineCtx.fillText(Math.round(db) + 'dB', 6, y - 4 < 12 ? y + 14 : y - 4);
+    }
+    [100, 1000, 10000].forEach(f => {
+      const x = freqToX(f, w);
+      lineCtx.beginPath();
+      lineCtx.moveTo(x, 0);
+      lineCtx.lineTo(x, h);
+      lineCtx.stroke();
+      lineCtx.fillText((f >= 1000 ? (f/1000)+'k' : f) + 'Hz', x + 4, h - 6);
+    });
+
+    // 진폭(레벨)에 따라 파랑→초록→노랑으로 바뀌는 세로 방향 그라데이션
+    const gradient = lineCtx.createLinearGradient(0, h, 0, 0);
+    gradient.addColorStop(0, '#3a86ff');
+    gradient.addColorStop(0.55, '#3ddc97');
+    gradient.addColorStop(1, '#f2e93b');
+
+    // FFT 빈을 그대로 로그 주파수축 위에 점 찍어 연결
+    lineCtx.beginPath();
+    let started = false;
+    for (let b = 1; b < data.length; b++) {
+      const freq = b * binHz;
+      if (freq < LINE_FREQ_MIN) continue;
+      if (freq > LINE_FREQ_MAX) break;
+      const v = isFinite(data[b]) ? data[b] : DB_MIN;
+      const x = freqToX(freq, w);
+      const y = h - (dbToPct(v) / 100) * h;
+      if (!started) { lineCtx.moveTo(x, y); started = true; }
+      else lineCtx.lineTo(x, y);
+    }
+    lineCtx.strokeStyle = gradient;
+    lineCtx.lineWidth = Math.max(1.5, h * 0.006);
+    lineCtx.lineJoin = 'round';
+    lineCtx.stroke();
+
+    // 피크 홀드가 켜져 있으면, 두드러진 로컬 피크 지점에 흰 점 + 주파수 라벨 표시
+    if (peakHoldOn) {
+      const peaks = findPeaks(data, binHz, w);
+      peaks.forEach(p => {
+        lineCtx.beginPath();
+        lineCtx.arc(p.x, p.y, Math.max(2.5, h*0.008), 0, Math.PI*2);
+        lineCtx.fillStyle = '#fff';
+        lineCtx.fill();
+        lineCtx.fillStyle = 'rgba(244,247,246,0.9)';
+        lineCtx.font = `${Math.max(10, h*0.026)}px 'IBM Plex Mono', monospace`;
+        const label = p.freq >= 1000 ? (p.freq/1000).toFixed(p.freq>=10000?1:2)+'k' : Math.round(p.freq);
+        lineCtx.fillText(label, p.x + 6, p.y - 6);
+      });
+    }
+  }
+
+  // 로컬 최댓값 중, 최소 간격(주파수축 기준 약 5%) 이상 떨어진 두드러진 피크만 골라낸다
+  function findPeaks(data, binHz, canvasWidth){
+    const candidates = [];
+    for (let b = 2; b < data.length - 2; b++) {
+      const freq = b * binHz;
+      if (freq < LINE_FREQ_MIN || freq > LINE_FREQ_MAX) continue;
+      const v = isFinite(data[b]) ? data[b] : DB_MIN;
+      if (v < DB_MIN + (DB_MAX - DB_MIN) * 0.15) continue; // 너무 작은 잡음성 피크는 제외
+      const isLocalMax = v >= data[b-1] && v >= data[b-2] && v >= data[b+1] && v >= data[b+2];
+      if (isLocalMax) candidates.push({ freq, x: freqToX(freq, canvasWidth), y: 0, db: v });
+    }
+    // y좌표 계산 (canvasHeight가 필요하므로 별도 계산)
+    const h = lineCanvas.height;
+    candidates.forEach(c => { c.y = h - (dbToPct(c.db) / 100) * h; });
+
+    // x축 기준 최소 간격보다 가까운 후보끼리는 더 큰 값만 남긴다
+    candidates.sort((a, b) => b.db - a.db);
+    const kept = [];
+    const minGap = canvasWidth * 0.06;
+    candidates.forEach(c => {
+      if (kept.every(k => Math.abs(k.x - c.x) > minGap)) kept.push(c);
+    });
+    return kept.slice(0, 8); // 너무 많으면 라벨이 뒤엉키므로 최대 8개까지만
+  }
+
+  // ---- 막대(Bar) / 라인(Line) 보기 전환 ----
+  function setViewMode(mode){
+    if (viewMode === mode) return;
+    viewMode = mode;
+    viewToggle.querySelectorAll('button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === mode);
+    });
+    consoleBar.style.display = mode === 'bar' ? 'flex' : 'none';
+    consoleLine.style.display = mode === 'line' ? 'flex' : 'none';
+    document.body.classList.toggle('line-view', mode === 'line');
+    if (mode === 'line') {
+      // 레이아웃이 실제로 반영된 다음 프레임에 리사이즈해야 정확한 크기를 잡는다
+      requestAnimationFrame(resizeCanvas);
+    }
+  }
+  viewToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => setViewMode(btn.dataset.view));
+  });
+  window.addEventListener('resize', () => {
+    if (viewMode === 'line') resizeCanvas();
+  });
 
   startBtn.addEventListener('click', () => {
     if (!isRunning) startRTA();
@@ -307,6 +555,8 @@
     peakToggle.textContent = 'Peak Hold: ' + (peakHoldOn ? 'ON' : 'OFF');
     peakToggle.classList.toggle('active', peakHoldOn);
   });
+
+  updateVScaleLabels();
 })();
 </script>
 </body>
