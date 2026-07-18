@@ -67,6 +67,16 @@
   .status h2{ font-size:15px; font-weight:700; }
   .status p{ margin:4px 0 0; font-size:12.5px; color:var(--text-secondary); }
   .status .sub{ font-size:11.5px; color:var(--text-tertiary); margin-top:3px; }
+  .ab-badge{
+    display:inline-flex; align-items:center; gap:5px; margin-top:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
+    padding:5px 12px; border-radius:100px; letter-spacing:0.02em;
+    background:rgba(61,220,151,0.12); color:var(--teal); border:1px solid rgba(61,220,151,0.3);
+    transition:background .2s, color .2s, border-color .2s;
+  }
+  .ab-badge.modified{
+    background:rgba(242,169,59,0.14); color:var(--amber); border-color:rgba(242,169,59,0.35);
+  }
 
   /* ---- feedback banner ---- */
   /* ✅ 배너 유무와 상관없이 항상 같은 높이를 차지하게 해서, 정답/오답 텍스트가
@@ -220,8 +230,8 @@
   </div>
 
   <div class="modepicker" id="listenDirPicker" style="display:none;">
-    <button id="listenBoostBtn" class="active">부스트로 듣기</button>
-    <button id="listenCutBtn">컷으로 듣기</button>
+    <button id="listenBoostBtn" class="active">Boost</button>
+    <button id="listenCutBtn">Cut</button>
   </div>
 
   <div class="modepicker" id="bandCountPicker">
@@ -236,14 +246,15 @@
   </div>
 
   <div class="modepicker" id="directionModePicker" style="display:none;">
-    <button id="dirBoostOnly">부스트만</button>
-    <button id="dirCutOnly">컷만</button>
-    <button id="dirBoth" class="active">부스트+컷</button>
+    <button id="dirBoostOnly">Boost</button>
+    <button id="dirCutOnly">Cut</button>
+    <button id="dirBoth" class="active">Boost + Cut</button>
   </div>
 
   <div class="status">
     <h2 id="statusTitle">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
     <p id="statusSub"></p>
+    <span id="abBadge" class="ab-badge" style="display:none;">● 기본</span>
     <p id="debugTimer" class="mono" style="font-size:10px;color:#3ddc97;margin-top:4px;"></p>
   </div>
 
@@ -271,9 +282,9 @@
 
   const QUESTIONS_PER_CHAPTER = 10;
   const WARMUP_DELAY = 900;        // ms
-  const ROUND_END_HOLD = 1800;     // ms — 정답/오답 화면을 보여주는 시간 (기존 600 → 1800으로 늘림)
-  const CHIME_TO_NEXT_DELAY = 250; // ms
-  const ROUND_WARMUP_DELAY = 900;  // ms — 첫 문제 이후에도 핑크노이즈만 들려주는 워밍업 구간
+  const ROUND_END_HOLD = 600;      // ms — 정답/오답 화면을 보여주는 시간 (1000 → 600으로 추가 단축)
+  const CHIME_TO_NEXT_DELAY = 150; // ms
+  const ROUND_WARMUP_DELAY = 300;  // ms — 첫 문제 이후 워밍업 구간 (500 → 300으로 추가 단축)
   const BOOST_RANGE = [6, 12];     // dB
   const EQ_BANDWIDTH_OCTAVES = 0.5;
 
@@ -381,6 +392,17 @@
       this.isPlaying = false;
     }
 
+    // ✅ 요청 반영: 정답/오답 판정 순간 핑크노이즈(배경음)만 멈춘다.
+    // (사인파 모드는 원래 핑크노이즈가 꺼져있으므로 이 호출은 자연스럽게 아무 효과가 없다)
+    pauseBackgroundNoise(duration){
+      this.rampParam(this.pinkGain.gain, 0, duration);
+    }
+    // 다음 문제 워밍업이 시작될 때 다시 켠다. EQ 모드일 때만 배경음이 필요하다.
+    resumeBackgroundNoise(duration){
+      const target = this.currentMode === 'eq' ? 1.0 : 0;
+      this.rampParam(this.pinkGain.gain, target, duration);
+    }
+
     // ✅ forceBoost: undefined/null이면 부스트/컷 랜덤(기존 동작), true면 항상 부스트,
     // false면 항상 컷만 출제한다. 10밴드 모드의 "부스트만/컷만/부스트+컷" 훈련에 사용된다.
     generateQuestion(mode, indices, forceBoost){
@@ -393,9 +415,9 @@
         this.isBoost = (forceBoost === true || forceBoost === false) ? forceBoost : (Math.random() < 0.5);
         const magnitude = BOOST_RANGE[0] + Math.random()*(BOOST_RANGE[1]-BOOST_RANGE[0]);
         const gainDB = this.isBoost ? magnitude : -magnitude;
+        this.currentGainDB = gainDB; // ✅ A/B 사이클(기본↔변형 전환)에서 재사용하기 위해 저장
         this.eqFilter.frequency.value = targetFreq;
-        this.eqFilter.gain.value = 0;
-        this.rampParam(this.eqFilter.gain, gainDB, 0.2);
+        this.eqFilter.gain.value = 0; // 기본(무변형) 상태로 시작 — A/B 사이클이 알아서 전환한다
       } else {
         this.isBoost = true;
         this.sineOsc.frequency.value = targetFreq;
@@ -403,6 +425,14 @@
         this.rampParam(this.sineGain.gain, 0.5, 0.2);
       }
       return targetIndex;
+    }
+
+    // ✅ A/B 비교 청음: 기본(0dB) ↔ 변형(부스트/컷) 상태를 전환한다.
+    // generateQuestion에서 저장해둔 currentGainDB를 목표값으로 사용한다.
+    setEQPhase(showModified){
+      if (this.currentMode !== 'eq' || this.targetIndex === null) return;
+      const target = showModified ? (this.currentGainDB || 0) : 0;
+      this.rampParam(this.eqFilter.gain, target, 0.2);
     }
 
     checkAnswer(selectedIndex, guessedBoost){
@@ -506,6 +536,9 @@
   const statusTitle = document.getElementById('statusTitle');
   const statusSub = document.getElementById('statusSub');
   const debugTimerEl = document.getElementById('debugTimer');
+  const abBadgeEl = document.getElementById('abBadge');
+  const AB_PHASE_MS = 3000; // ✅ 요청 반영: 기본/변형을 각각 3초씩 유지하며 반복
+  let abCycleToken = 0;
   let debugInterval = null;
 
   // ✅ 디버그용: 워밍업 시작부터 경과 시간을 화면에 실시간으로 보여준다.
@@ -526,6 +559,36 @@
     console.log(`[디버그] 타이머 정지: ${reason}`);
     debugTimerEl.textContent = '';
   }
+
+  // ✅ 요청 반영: 핑크노이즈 EQ 훈련에서 "기본(무변형) 3초 → 변형(부스트/컷) 3초"를
+  // 답을 맞힐 때까지 계속 반복하며, 지금 어느 상태인지 배지로 보여준다.
+  // (사인파 모드는 애초에 방향 개념이 없어 A/B 비교가 의미 없으므로 적용하지 않는다)
+  function updateABLabel(showModified){
+    if (showModified === null){
+      abBadgeEl.style.display = 'none';
+      return;
+    }
+    abBadgeEl.style.display = 'inline-flex';
+    abBadgeEl.textContent = showModified ? '● 변형(부스트/컷) 재생 중' : '● 기본(무변형) 재생 중';
+    abBadgeEl.classList.toggle('modified', showModified);
+  }
+  function startABCycle(){
+    if (mode !== 'eq'){ updateABLabel(null); return; }
+    abCycleToken++;
+    const myToken = abCycleToken;
+    function loop(showModified){
+      if (myToken !== abCycleToken || phase !== 'active') return;
+      engine.setEQPhase(showModified);
+      updateABLabel(showModified);
+      setTimeout(() => loop(!showModified), AB_PHASE_MS);
+    }
+    loop(false); // 기본(무변형)부터 시작
+  }
+  function stopABCycle(){
+    abCycleToken++; // 예약된 다음 loop 콜백을 전부 무효화
+    updateABLabel(null);
+  }
+
   const feedbackEl = document.getElementById('feedback');
   const scRound = document.getElementById('scRound');
   const scHit = document.getElementById('scHit');
@@ -919,6 +982,7 @@
       phase = 'active';
       stopDebugTimer('첫 문제 active로 전환');
       resetBandStyles();
+      startABCycle();
       const instruction = mode === 'eq'
         ? '부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요'
         : '사인파와 같은 음고의 대역을 짚어주세요';
@@ -939,6 +1003,7 @@
     setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
     clearFeedback();
     stopDebugTimer('사용자가 종료를 눌러 중단됨');
+    stopABCycle();
   }
 
   function handleBandTapped(index, guessedBoost){
@@ -946,6 +1011,8 @@
     const result = engine.checkAnswer(index, guessedBoost);
     if (!result) return;
     const myToken = chapterToken;
+    stopABCycle(); // ✅ 답을 고른 순간 A/B 사이클을 멈춘다
+    engine.pauseBackgroundNoise(0.15); // ✅ 요청 반영: 정답/오답 판정 순간 핑크노이즈도 멈춘다
 
     roundCount++;
     if (result.isCorrect) correctCount++;
@@ -993,6 +1060,7 @@
 
         // ✅ 요청 반영: 다음 문제도 첫 문제처럼 핑크노이즈만 먼저 들려주는 워밍업 구간을 둔다.
         phase = 'warmingUp';
+        engine.resumeBackgroundNoise(0.3); // 판정 때 멈췄던 핑크노이즈를 다시 켠다
         resetBandStyles(); // phase가 바뀌었으므로 트랙을 다시 비활성화 상태로 갱신
         setStatus('배경음 청취 중… 곧 문제가 출제됩니다', `(${questionIndex}/${QUESTIONS_PER_CHAPTER})`);
         startDebugTimer(`워밍업(${questionIndex}번째 문제)`);
@@ -1007,6 +1075,7 @@
           phase = 'active';
           stopDebugTimer(`${questionIndex}번째 문제 active로 전환`);
           resetBandStyles();
+          startABCycle();
           const instruction = mode === 'eq'
             ? '부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요'
             : '사인파와 같은 음고의 대역을 짚어주세요';
