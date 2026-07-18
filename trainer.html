@@ -215,6 +215,23 @@
     <button id="listenCutBtn">컷으로 듣기</button>
   </div>
 
+  <div class="modepicker" id="bandCountPicker">
+    <button id="bandCount31" class="active">
+      <span class="full">31밴드 (실전형)</span>
+      <span class="short">31밴드</span>
+    </button>
+    <button id="bandCount10">
+      <span class="full">10밴드 (입문형)</span>
+      <span class="short">10밴드</span>
+    </button>
+  </div>
+
+  <div class="modepicker" id="directionModePicker" style="display:none;">
+    <button id="dirBoostOnly">부스트만</button>
+    <button id="dirCutOnly">컷만</button>
+    <button id="dirBoth" class="active">부스트+컷</button>
+  </div>
+
   <div class="status">
     <h2 id="statusTitle">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
     <p id="statusSub"></p>
@@ -355,13 +372,16 @@
       this.isPlaying = false;
     }
 
-    generateQuestion(mode){
-      const targetIndex = Math.floor(Math.random()*BANDS.length);
+    // ✅ forceBoost: undefined/null이면 부스트/컷 랜덤(기존 동작), true면 항상 부스트,
+    // false면 항상 컷만 출제한다. 10밴드 모드의 "부스트만/컷만/부스트+컷" 훈련에 사용된다.
+    generateQuestion(mode, indices, forceBoost){
+      const pool = (indices && indices.length) ? indices : BANDS.map((_, i) => i);
+      const targetIndex = pool[Math.floor(Math.random() * pool.length)];
       this.targetIndex = targetIndex;
       const targetFreq = BANDS[targetIndex];
 
       if (mode === 'eq'){
-        this.isBoost = Math.random() < 0.5;
+        this.isBoost = (forceBoost === true || forceBoost === false) ? forceBoost : (Math.random() < 0.5);
         const magnitude = BOOST_RANGE[0] + Math.random()*(BOOST_RANGE[1]-BOOST_RANGE[0]);
         const gainDB = this.isBoost ? magnitude : -magnitude;
         this.eqFilter.frequency.value = targetFreq;
@@ -509,6 +529,16 @@
   const listenDirPicker = document.getElementById('listenDirPicker');
   const listenBoostBtn = document.getElementById('listenBoostBtn');
   const listenCutBtn = document.getElementById('listenCutBtn');
+  const bandCount31Btn = document.getElementById('bandCount31');
+  const bandCount10Btn = document.getElementById('bandCount10');
+  const directionModePicker = document.getElementById('directionModePicker');
+  const dirBoostOnlyBtn = document.getElementById('dirBoostOnly');
+  const dirCutOnlyBtn = document.getElementById('dirCutOnly');
+  const dirBothBtn = document.getElementById('dirBoth');
+
+  // ✅ 10밴드 이지 모드: 시중 그래픽 이퀄라이저에서 흔히 쓰는 표준 옥타브 간격 10개
+  const EASY10_FREQS = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+  const EASY10_INDICES = EASY10_FREQS.map(f => BANDS.indexOf(f));
 
   let phase = 'idle'; // idle | warmingUp | active | roundEnding
   let mode = 'eq';
@@ -516,11 +546,26 @@
   let isListening = false;
   let listeningIndex = null;
   let listenBoost = true; // 청음 챕터에서 부스트로 들을지 컷으로 들을지
+  let bandCountMode = 'full31'; // full31 | easy10
+  let directionMode = 'both'; // both | boostOnly | cutOnly — 10밴드 훈련 전용
   let questionIndex = 0;
   let roundCount = 0;
   let correctCount = 0;
   let chapterToken = 0; // Swift 버전과 동일한 목적: 언제든 종료 시 예약된 콜백을 무효화
   let bandButtons = [];
+
+  function activeIndices(){
+    return bandCountMode === 'easy10' ? EASY10_INDICES : BANDS.map((_, i) => i);
+  }
+
+  // ✅ generateQuestion에 넘길 forceBoost 값을 계산한다.
+  // 10밴드 + EQ 모드일 때만 방향 강제가 의미 있고, 그 외에는 항상 랜덤(undefined)이다.
+  function currentForceBoost(){
+    if (bandCountMode !== 'easy10' || mode !== 'eq') return undefined;
+    if (directionMode === 'boostOnly') return true;
+    if (directionMode === 'cutOnly') return false;
+    return undefined; // 'both' -> 랜덤
+  }
 
   // ✅ 방어 코드: 어디서 에러가 나든(오디오 API, 타이머 콜백 등) 화면이 조용히 멈추는 대신
   // 상태 텍스트에 바로 표시한다. 콘솔(F12)에도 상세 내용이 남는다.
@@ -601,6 +646,7 @@
     modeEQBtn.disabled = busy;
     modeSineBtn.disabled = busy;
     updateListenDirVisibility();
+    updateDirectionModeVisibility();
   }
   modeEQBtn.addEventListener('click', () => {
     const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
@@ -639,6 +685,66 @@
       engine.auditionBand(listeningIndex, mode, listenBoost);
       setStatus(`${LABELS[listeningIndex]}Hz 컷 재생 중`);
     }
+  });
+
+  // ✅ 밴드 구성(31/10) 피커 — 훈련·청음 어느 챕터에서든 재생 중이 아닐 때만 바꿀 수 있다
+  function setBandCountButtons(){
+    bandCount31Btn.classList.toggle('active', bandCountMode === 'full31');
+    bandCount10Btn.classList.toggle('active', bandCountMode === 'easy10');
+    const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
+    bandCount31Btn.disabled = busy;
+    bandCount10Btn.disabled = busy;
+    updateDirectionModeVisibility();
+  }
+  function updateBandVisibility(){
+    const active = new Set(activeIndices());
+    bandButtons.forEach((b, i) => {
+      b.wrap.style.display = active.has(i) ? '' : 'none';
+    });
+  }
+  bandCount31Btn.addEventListener('click', () => {
+    const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
+    if (busy || bandCountMode === 'full31') return;
+    bandCountMode = 'full31';
+    setBandCountButtons();
+    setDirectionModeButtons();
+    updateBandVisibility();
+  });
+  bandCount10Btn.addEventListener('click', () => {
+    const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
+    if (busy || bandCountMode === 'easy10') return;
+    bandCountMode = 'easy10';
+    setBandCountButtons();
+    setDirectionModeButtons();
+    updateBandVisibility();
+  });
+
+  // ✅ 10밴드 + EQ 모드 + 훈련 챕터일 때만 "부스트만/컷만/부스트+컷" 훈련 방향 피커를 보여준다.
+  // (청음 챕터는 auditionBand에서 방향을 직접 골라 듣는 방식이라 이 피커가 필요 없다)
+  function updateDirectionModeVisibility(){
+    const show = chapter === 'training' && bandCountMode === 'easy10' && mode === 'eq';
+    directionModePicker.style.display = show ? 'flex' : 'none';
+  }
+  function setDirectionModeButtons(){
+    dirBoostOnlyBtn.classList.toggle('active', directionMode === 'boostOnly');
+    dirCutOnlyBtn.classList.toggle('active', directionMode === 'cutOnly');
+    dirBothBtn.classList.toggle('active', directionMode === 'both');
+    const busy = phase !== 'idle';
+    dirBoostOnlyBtn.disabled = busy;
+    dirCutOnlyBtn.disabled = busy;
+    dirBothBtn.disabled = busy;
+  }
+  dirBoostOnlyBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || directionMode === 'boostOnly') return;
+    directionMode = 'boostOnly'; setDirectionModeButtons();
+  });
+  dirCutOnlyBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || directionMode === 'cutOnly') return;
+    directionMode = 'cutOnly'; setDirectionModeButtons();
+  });
+  dirBothBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || directionMode === 'both') return;
+    directionMode = 'both'; setDirectionModeButtons();
   });
 
   function resetBandStyles(){
@@ -687,6 +793,10 @@
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
     engine.start(mode);
     resetBandStyles();
+    setModeButtons();
+    setBandCountButtons();
+    setDirectionModeButtons();
+    setChapterButtons();
     setStatus('밴드를 탭하면 바로 들려드려요');
   }
   function stopListening(){
@@ -696,6 +806,10 @@
     startBtn.textContent = '▸ 청음 시작';
     startBtn.classList.remove('stop'); startBtn.classList.add('go');
     resetBandStyles();
+    setModeButtons();
+    setBandCountButtons();
+    setDirectionModeButtons();
+    setChapterButtons();
     setStatus('밴드를 탭하면 바로 들려드려요');
   }
 
@@ -715,6 +829,8 @@
     clearFeedback();
     setChapterButtons();
     setModeButtons();
+    setBandCountButtons();
+    setDirectionModeButtons();
     resetBandStyles();
     if (chapter === 'training'){
       setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
@@ -771,6 +887,8 @@
 
     phase = 'warmingUp';
     setModeButtons();
+    setBandCountButtons();
+    setDirectionModeButtons();
     resetBandStyles();
     startBtn.textContent = '■ 종료';
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
@@ -785,7 +903,7 @@
         console.log('[디버그] 가드 조건에 걸려 리턴됨 (중단됨)');
         return;
       }
-      engine.generateQuestion(mode);
+      engine.generateQuestion(mode, activeIndices(), currentForceBoost());
       phase = 'active';
       stopDebugTimer('첫 문제 active로 전환');
       resetBandStyles();
@@ -801,6 +919,8 @@
     engine.stop(0.3);
     phase = 'idle';
     setModeButtons();
+    setBandCountButtons();
+    setDirectionModeButtons();
     resetBandStyles();
     startBtn.textContent = '▸ 훈련 시작';
     startBtn.classList.remove('stop'); startBtn.classList.add('go');
@@ -871,7 +991,7 @@
             console.log('[디버그] 가드 조건에 걸려 리턴됨 (중단됨)');
             return;
           }
-          engine.generateQuestion(mode);
+          engine.generateQuestion(mode, activeIndices(), currentForceBoost());
           phase = 'active';
           stopDebugTimer(`${questionIndex}번째 문제 active로 전환`);
           resetBandStyles();
@@ -903,6 +1023,9 @@
   setModeButtons();
   setChapterButtons();
   setListenDirButtons();
+  setBandCountButtons();
+  setDirectionModeButtons();
+  updateBandVisibility();
   updateScoreboard();
 })();
 </script>
