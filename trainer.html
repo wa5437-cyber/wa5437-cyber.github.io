@@ -180,7 +180,7 @@
     .status p{ font-size:12px; }
 
     .console{
-      aspect-ratio:auto; height:min(48vh, 320px); max-height:none; min-height:200px;
+      aspect-ratio:auto; height:70vh; max-height:none; min-height:420px;
       padding:14px 4px 10px;
     }
     .consolebody{ gap:4px; }
@@ -197,6 +197,21 @@
   @media (max-width:360px){
     .vscale{ width:26px; font-size:7.5px; }
     .band .lbl{ font-size:6.5px; }
+  }
+
+  /* ==================================================================
+     ✅ 요청 반영: 휴대폰을 가로로 돌렸을 때 전용 규칙.
+     가로 모드에서는 화면 폭이 700px를 넘는 경우가 많아 위 모바일 규칙이
+     적용되지 않고, 데스크톱용 aspect-ratio(2.6:1) 규칙이 적용된다.
+     그런데 이 aspect-ratio가 "높이 기준으로 폭을 계산"하다 보니, 실제
+     가로 모드의 넓은 화면 폭을 다 못 채우고 옆에 여백이 남았다.
+     → aspect-ratio를 없애고 화면 폭을 그대로 다 쓰도록 한다.
+     ================================================================== */
+  @media (orientation:landscape) and (max-height:500px){
+    .app{ padding:8px 6px 14px; gap:8px; }
+    .console{
+      aspect-ratio:auto; width:100%; height:min(80vh, 360px); max-height:none; min-height:180px;
+    }
   }
   /* ✅ 화면이 넓어 밴드 한 칸의 폭이 충분히 확보되면, 세로로 돌린 글자 대신 가로로 바로 읽히게 전환한다 */
   @media (min-width:820px){

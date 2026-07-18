@@ -138,11 +138,18 @@
     .app{ padding:14px 14px 26px; gap:12px; }
     .topbar .title{ font-size:16.5px; }
     .topbar .title small{ font-size:12px; }
-    .console{ aspect-ratio:auto; height:min(48vh, 320px); max-height:none; min-height:200px; padding:14px 4px 10px; }
+    .console{ aspect-ratio:auto; height:70vh; max-height:none; min-height:420px; padding:14px 4px 10px; }
     .consolebody{ gap:4px; }
     .vscale{ width:30px; font-size:11px; }
     .band .lbl{ font-size:9px; height:26px; margin-top:5px; }
     .track{ min-height:0; }
+  }
+
+  /* ✅ 요청 반영: 휴대폰 가로 모드에서는 aspect-ratio 대신 화면 폭을 그대로 채운다
+     (가로 모드는 폭이 700px를 넘는 경우가 많아 위 규칙이 적용되지 않기 때문에 별도 처리) */
+  @media (orientation:landscape) and (max-height:500px){
+    .app{ padding:8px 6px 14px; gap:8px; }
+    .console{ aspect-ratio:auto; width:100%; height:min(80vh, 360px); max-height:none; min-height:180px; }
   }
 
   .hint{ text-align:center; font-size:14.5px; color:var(--text-tertiary); }
