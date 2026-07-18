@@ -120,6 +120,24 @@
   .phase-legend{ display:flex; gap:20px; margin-top:10px; font-size:12.5px; color:var(--text-secondary); flex-wrap:wrap; }
   .phase-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
   .phase-legend .dot.dashed{ background:transparent; border:2px dashed var(--amber); }
+
+  /* ---- 0~360도 위상 게이지 ---- */
+  .phase-gauge-wrap{ margin-top:18px; }
+  .phase-gauge-track{
+    position:relative; height:8px; border-radius:100px;
+    background:linear-gradient(90deg, var(--blue), var(--teal) 50%, var(--amber));
+    opacity:0.85;
+  }
+  .phase-gauge-marker{
+    position:absolute; top:50%; left:0%; width:16px; height:16px; margin-left:-8px; margin-top:-8px;
+    border-radius:50%; background:#fff; border:2px solid var(--bg-deep);
+    box-shadow:0 0 0 2px rgba(255,255,255,0.4), 0 2px 6px rgba(0,0,0,0.4);
+    transition:left 0.1s linear;
+  }
+  .phase-gauge-ticks{
+    display:flex; justify-content:space-between; margin-top:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-tertiary);
+  }
 </style>
 </head>
 <body>
@@ -137,7 +155,7 @@
       <div class="field">
         <label>Temperature</label>
         <div class="input-row">
-          <input type="number" id="tempInput" value="20" step="1">
+          <input type="number" id="tempInput" value="15" step="1">
           <span class="unit">°C</span>
         </div>
       </div>
@@ -203,7 +221,16 @@
       </div>
       <div class="field">
         <label>Phase</label>
-        <div class="input-row"><input type="number" id="phPhaseInput" value="360" step="0.1"><span class="unit">°</span></div>
+        <div class="input-row"><input type="number" id="phPhaseInput" value="0" step="0.1"><span class="unit">°</span></div>
+      </div>
+    </div>
+
+    <div class="phase-gauge-wrap">
+      <div class="phase-gauge-track" id="phaseGaugeTrack">
+        <div class="phase-gauge-marker" id="phaseGaugeMarker"></div>
+      </div>
+      <div class="phase-gauge-ticks">
+        <span>0°</span><span>90°</span><span>180°</span><span>270°</span><span>360°</span>
       </div>
     </div>
 
@@ -430,9 +457,12 @@
       distM = timeMsToDistM(timeMs, tempC);
     }
 
-    phTimeInput.value = timeMs.toFixed(4);
-    phDistInput.value = (unit === 'ft' ? distM * FT_PER_M : distM).toFixed(3);
-    phPhaseInput.value = phaseDeg.toFixed(1);
+    // ✅ 요청 반영: 지금 사용자가 타이핑하고 있는 칸(source) 자체는 절대 덮어쓰지 않는다.
+    // (이전에는 키 하나 누를 때마다 그 칸의 값을 다시 포맷해서 다시 넣어버려서,
+    //  특히 모바일에서 커서가 튀며 사실상 입력이 안 되는 것처럼 느껴졌다)
+    if (source !== 'time') phTimeInput.value = timeMs.toFixed(4);
+    if (source !== 'distance') phDistInput.value = (unit === 'ft' ? distM * FT_PER_M : distM).toFixed(3);
+    if (source !== 'phase') phPhaseInput.value = phaseDeg.toFixed(1);
 
     const wrapped = ((phaseDeg % 360) + 360) % 360;
     const cycles = Math.floor(phaseDeg / 360);
@@ -440,8 +470,13 @@
       ? `${wrapped.toFixed(0)}° (총 ${cycles}사이클 + ${wrapped.toFixed(0)}°)`
       : `${wrapped.toFixed(0)}°`;
 
+    // 0~360도 게이지에 현재 위상(감긴 값) 위치 표시
+    phaseGaugeMarker.style.left = (wrapped / 360 * 100) + '%';
+
     drawPhaseWave(phaseDeg);
   }
+
+  const phaseGaugeMarker = document.getElementById('phaseGaugeMarker');
 
   phTimeInput.addEventListener('input', () => recalcPhaseFrom('time'));
   phDistInput.addEventListener('input', () => recalcPhaseFrom('distance'));
@@ -450,11 +485,16 @@
   tempInput.addEventListener('input', () => recalcPhaseFrom('time'));
   window.addEventListener('resize', () => drawPhaseWave(parseFloat(phPhaseInput.value) || 0));
 
+  // ✅ 입력을 마치고 칸에서 벗어나면(blur/change), 그때는 그 칸 자신도 깔끔하게 정리된 값으로 맞춰준다
+  phTimeInput.addEventListener('change', () => { phTimeInput.value = parseFloat(phTimeInput.value || 0).toFixed(4); });
+  phDistInput.addEventListener('change', () => { phDistInput.value = parseFloat(phDistInput.value || 0).toFixed(3); });
+  phPhaseInput.addEventListener('change', () => { phPhaseInput.value = parseFloat(phPhaseInput.value || 0).toFixed(1); });
+
   // 초기 예시 존 2개
   createZoneRow('Delay Tower 1', 45);
   createZoneRow('Delay Tower 2', 65);
   recalcAll();
-  recalcPhaseFrom('time');
+  recalcPhaseFrom('phase'); // ✅ 기본값이 Phase(15°) 기준이므로 여기서부터 계산 시작
 })();
 </script>
 </body>
