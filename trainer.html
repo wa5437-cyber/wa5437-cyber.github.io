@@ -97,6 +97,15 @@
   }
   .grid{ display:flex; align-items:stretch; gap:2px; flex:1; min-height:0; }
   .band .lbl{ font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--text-primary); margin-top:9px; writing-mode:vertical-rl; transform:rotate(180deg); height:50px; flex-shrink:0; overflow:hidden; width:100%; }
+  /* ✅ 10밴드 모드는 한 칸이 훨씬 넓으니, 화면 크기와 무관하게 항상 회전 없이
+     가로로, 훨씬 크게 보여준다 (선택자 우선순위를 높여 위/아래 미디어쿼리보다 항상 이긴다) */
+  body.easy10-mode .band .lbl{
+    writing-mode:horizontal-tb; transform:none; height:auto;
+    font-size:13.5px; font-weight:700; margin-top:10px; overflow:visible;
+  }
+  @media (max-width:480px){
+    body.easy10-mode .band .lbl{ font-size:11px; margin-top:8px; }
+  }
   .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
   .track{
     position:relative; width:100%; flex:1; min-height:60px; background:#1a2124; border-radius:4px; border:1px solid rgba(255,255,255,0.04);
@@ -701,6 +710,9 @@
     bandButtons.forEach((b, i) => {
       b.wrap.style.display = active.has(i) ? '' : 'none';
     });
+    // ✅ 10밴드일 때는 한 칸이 훨씬 넓어지므로, body에 클래스를 달아 CSS에서
+    // 라벨을 더 크고(가로 회전 없이) 잘 보이게 스타일링할 수 있게 한다.
+    document.body.classList.toggle('easy10-mode', bandCountMode === 'easy10');
   }
   bandCount31Btn.addEventListener('click', () => {
     const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
