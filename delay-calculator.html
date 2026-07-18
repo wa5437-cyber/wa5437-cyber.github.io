@@ -462,10 +462,14 @@
     //  특히 모바일에서 커서가 튀며 사실상 입력이 안 되는 것처럼 느껴졌다)
     if (source !== 'time') phTimeInput.value = timeMs.toFixed(4);
     if (source !== 'distance') phDistInput.value = (unit === 'ft' ? distM * FT_PER_M : distM).toFixed(3);
-    if (source !== 'phase') phPhaseInput.value = phaseDeg.toFixed(1);
 
     const wrapped = ((phaseDeg % 360) + 360) % 360;
     const cycles = Math.floor(phaseDeg / 360);
+
+    // ✅ 요청 반영: Phase 칸에는 1057.6°처럼 여러 바퀴 돈 값을 그대로 보여주면 헷갈리므로,
+    // 항상 감긴 값(0~360°)만 보여준다. 몇 바퀴 돌았는지는 아래 보조 라벨로만 알려준다.
+    if (source !== 'phase') phPhaseInput.value = wrapped.toFixed(1);
+
     phaseWrapLabel.textContent = cycles > 0
       ? `${wrapped.toFixed(0)}° (총 ${cycles}사이클 + ${wrapped.toFixed(0)}°)`
       : `${wrapped.toFixed(0)}°`;
@@ -488,7 +492,11 @@
   // ✅ 입력을 마치고 칸에서 벗어나면(blur/change), 그때는 그 칸 자신도 깔끔하게 정리된 값으로 맞춰준다
   phTimeInput.addEventListener('change', () => { phTimeInput.value = parseFloat(phTimeInput.value || 0).toFixed(4); });
   phDistInput.addEventListener('change', () => { phDistInput.value = parseFloat(phDistInput.value || 0).toFixed(3); });
-  phPhaseInput.addEventListener('change', () => { phPhaseInput.value = parseFloat(phPhaseInput.value || 0).toFixed(1); });
+  phPhaseInput.addEventListener('change', () => {
+    const v = parseFloat(phPhaseInput.value) || 0;
+    const wrapped = ((v % 360) + 360) % 360;
+    phPhaseInput.value = wrapped.toFixed(1);
+  });
 
   // 초기 예시 존 2개
   createZoneRow('Delay Tower 1', 45);
