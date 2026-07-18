@@ -1044,6 +1044,10 @@
         engine.stop(0.3);
         phase = 'idle';
         setModeButtons();
+        setBandCountButtons();
+        setDirectionModeButtons();
+        setChapterButtons();
+        resetBandStyles();
         startBtn.textContent = '▸ 훈련 시작';
         startBtn.classList.remove('stop'); startBtn.classList.add('go');
         const pct = Math.round(correctCount/QUESTIONS_PER_CHAPTER*100);
