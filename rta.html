@@ -427,10 +427,9 @@
     vscaleBottom.textContent = DB_MIN + 'dB';
   }
   function applyRangeToAnalyser(){
-    if (analyser){
-      analyser.minDecibels = DB_MIN - 10;
-      analyser.maxDecibels = DB_MAX;
-    }
+    // ✅ 고친 것: getFloatFrequencyData()는 minDecibels/maxDecibels의 영향을 받지 않으므로
+    // (그 값들은 getByteFrequencyData 전용) 화면 표시 범위(Floor/Ceiling)를 analyser에
+    // 다시 넣어줄 필요가 원래 없었다. 안전하게 아무 것도 하지 않도록 비워둔다.
   }
   function commitRange(){
     const newMin = parseFloat(floorInput.value);
@@ -475,8 +474,12 @@
     // ✅ 요청 반영: 값이 너무 빠르게 왔다갔다 하는 것을 줄이기 위해 analyser 자체의
     // 시간축 스무딩을 0.35 → 0.75로 높였다 (여기에 더해 라인 뷰는 별도로 프레임 간 평활화도 적용한다)
     analyser.smoothingTimeConstant = 0.75;
-    analyser.minDecibels = DB_MIN - 10;
-    analyser.maxDecibels = DB_MAX;
+    // ✅ 고친 것: minDecibels/maxDecibels는 마이크 분석기 자체의 내부 설정이라 항상
+    // 음수(dBFS) 값이어야 하는데, 화면 표시용 DB_MIN/DB_MAX(이제는 SPL 스케일이라 양수)를
+    // 그대로 넣고 있어서 분석기가 제대로 시작되지 않는 원인이 됐다. 화면 표시 범위와
+    // 완전히 분리해서 항상 안전한 고정값을 쓴다.
+    analyser.minDecibels = -100;
+    analyser.maxDecibels = -10;
 
     // ⚠️ 중요: analyser를 절대 destination(스피커)에 연결하지 않는다.
     // 연결하면 마이크 소리가 스피커로 그대로 나가 하울링(피드백)이 발생한다.
