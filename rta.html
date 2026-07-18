@@ -443,9 +443,11 @@
   floorInput.addEventListener('change', commitRange);
   ceilingInput.addEventListener('change', commitRange);
   boostQuietBtn.addEventListener('click', () => {
-    // 조용한 소리를 화면에 더 크게 펼쳐 보여주는 프리셋 (Floor를 -45dB까지만 내림)
-    floorInput.value = '-45';
-    ceilingInput.value = '0';
+    // ✅ 고친 것: 예전 dBFS 스케일(-45~0)이 그대로 남아있어서, SPL 스케일(30~120)로 바뀐
+    // 지금은 완전히 범위가 안 맞아 화면이 다 천장에 눌려붙는 문제가 있었다.
+    // Ceiling을 Floor 쪽으로 좁혀서, 조용한 소리 구간이 화면에 더 크게 펼쳐지게 한다.
+    floorInput.value = '30';
+    ceilingInput.value = '75';
     commitRange();
   });
 
