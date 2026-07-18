@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>RTA — Real-Time Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
+    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:1180px; padding:20px 24px 32px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#1b2226,#0d1113); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-tertiary); font-weight:400; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
+
+  .status{ text-align:center; }
+  .status h2{ font-size:19px; font-weight:700; }
+  .status p{ margin:4px 0 0; font-size:16px; color:var(--text-secondary); }
+
+  .toolbar{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .toolbar-btn{
+    border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
+    font-size:16px; font-weight:600; padding:9px 16px; border-radius:10px;
+  }
+  .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#232b2f; }
+
+  .console{
+    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113);
+    padding:16px 8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden;
+    aspect-ratio:2.2 / 1; max-height:60vh; min-height:260px;
+  }
+  .consolebody{ display:flex; align-items:stretch; gap:10px; flex:1; min-height:0; }
+  .vscale{
+    display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-secondary);
+    flex-shrink:0; width:44px; padding:2px 0;
+  }
+  .grid{ display:flex; align-items:stretch; gap:2px; flex:1; min-height:0; }
+  .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
+  .track{
+    position:relative; width:100%; flex:1; min-height:60px; background:#1a2124; border-radius:4px; border:1px solid rgba(255,255,255,0.04);
+    overflow:hidden;
+  }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(255,255,255,0.08); pointer-events:none; }
+  .band .bar{
+    position:absolute; left:1px; right:1px; bottom:0; border-radius:2px 2px 0 0;
+    background:linear-gradient(180deg, var(--teal), #1f8f63);
+    height:0%;
+  }
+  .band .peak{
+    position:absolute; left:1px; right:1px; height:2px; background:var(--amber);
+    box-shadow:0 0 4px rgba(242,169,59,0.7); bottom:0%;
+  }
+  .band .lbl{
+    font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--text-primary);
+    margin-top:9px; writing-mode:vertical-rl; transform:rotate(180deg); height:44px; flex-shrink:0; overflow:hidden; width:100%;
+  }
+  @media (min-width:820px){
+    .band .lbl{ writing-mode:horizontal-tb; transform:none; height:auto; margin-top:8px; font-size:13.5px; white-space:nowrap; }
+  }
+  @media (max-width:700px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar .title{ font-size:16.5px; }
+    .topbar .title small{ font-size:12px; }
+    .console{ aspect-ratio:auto; height:min(48vh, 320px); max-height:none; min-height:200px; padding:14px 4px 10px; }
+    .consolebody{ gap:4px; }
+    .vscale{ width:30px; font-size:11px; }
+    .band .lbl{ font-size:9px; height:26px; margin-top:5px; }
+    .track{ min-height:0; }
+  }
+
+  .hint{ text-align:center; font-size:14.5px; color:var(--text-tertiary); }
+  .mic-denied{
+    text-align:center; font-size:16px; color:var(--red); background:rgba(239,91,91,0.08);
+    border:1px solid rgba(239,91,91,0.25); border-radius:10px; padding:12px 16px; display:none;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">RTA<small>Real-Time Analyzer · Mic Input</small></div>
+    <a class="home-link" href="index.html">← 홈으로</a>
+  </div>
+
+  <div class="status">
+    <h2 id="statusTitle">시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요</h2>
+    <p id="statusSub">기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다</p>
+  </div>
+
+  <div class="mic-denied" id="micDenied">
+    마이크 접근이 거부되었습니다. 브라우저 주소창 옆 자물쇠(또는 사이트 설정)에서 마이크 권한을 허용한 뒤 다시 시도해주세요.
+  </div>
+
+  <div class="toolbar">
+    <button class="toolbar-btn" id="startBtn">▸ 마이크 시작</button>
+    <button class="toolbar-btn active" id="peakToggle">Peak Hold: ON</button>
+  </div>
+
+  <div class="console">
+    <div class="consolebody">
+      <div class="vscale"><span>0dB</span><span>−35dB</span><span>−70dB</span></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <p class="hint">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ISO 266 표준 31밴드 (다른 페이지들과 동일한 데이터)
+  const BANDS = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+  const LABELS = ["20","25","31.5","40","50","63","80","100","125","160","200","250","315","400","500","630","800","1k","1.25k","1.6k","2k","2.5k","3.15k","4k","5k","6.3k","8k","10k","12.5k","16k","20k"];
+
+  // 1/3 옥타브 밴드 경계 (센터 주파수 기준 상하 1/6 옥타브)
+  const OCTAVE_RATIO = Math.pow(2, 1/6);
+  const BAND_EDGES = BANDS.map(f => [f / OCTAVE_RATIO, f * OCTAVE_RATIO]);
+
+  const DB_MIN = -70, DB_MAX = 0; // 화면 표시 범위 (dBFS 근사)
+  const PEAK_DECAY_PER_SEC = 18;  // dB/s — 피크 홀드가 서서히 내려오는 속도
+
+  const grid = document.getElementById('grid');
+  const startBtn = document.getElementById('startBtn');
+  const peakToggle = document.getElementById('peakToggle');
+  const statusTitle = document.getElementById('statusTitle');
+  const statusSub = document.getElementById('statusSub');
+  const micDeniedEl = document.getElementById('micDenied');
+
+  let audioCtx = null;
+  let analyser = null;
+  let micStream = null;
+  let freqData = null;
+  let isRunning = false;
+  let rafId = null;
+  let peakHoldOn = true;
+  let lastFrameTime = 0;
+
+  const bars = []; // { wrap, bar, peakEl, peakDb }
+
+  BANDS.forEach((freq, i) => {
+    const band = document.createElement('div');
+    band.className = 'band';
+    band.innerHTML = `
+      <div class="track"><div class="zero"></div>
+        <div class="bar"></div>
+        <div class="peak"></div>
+      </div>
+      <div class="lbl">${LABELS[i]}</div>`;
+    grid.appendChild(band);
+    bars.push({
+      bar: band.querySelector('.bar'),
+      peakEl: band.querySelector('.peak'),
+      peakDb: DB_MIN
+    });
+  });
+
+  function dbToPct(db){
+    const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
+    return (clamped - DB_MIN) / (DB_MAX - DB_MIN) * 100;
+  }
+
+  function setStatus(title, sub){
+    statusTitle.textContent = title;
+    statusSub.textContent = sub || '';
+  }
+
+  async function startRTA(){
+    micDeniedEl.style.display = 'none';
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        }
+      });
+    } catch (err) {
+      console.error('마이크 접근 실패:', err);
+      micDeniedEl.style.display = 'block';
+      setStatus('마이크 접근이 필요합니다', '브라우저에서 마이크 권한을 허용해주세요');
+      return;
+    }
+
+    const source = audioCtx.createMediaStreamSource(micStream);
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 8192;
+    analyser.smoothingTimeConstant = 0.35;
+    analyser.minDecibels = DB_MIN - 10;
+    analyser.maxDecibels = DB_MAX;
+
+    // ⚠️ 중요: analyser를 절대 destination(스피커)에 연결하지 않는다.
+    // 연결하면 마이크 소리가 스피커로 그대로 나가 하울링(피드백)이 발생한다.
+    source.connect(analyser);
+
+    freqData = new Float32Array(analyser.frequencyBinCount);
+
+    isRunning = true;
+    lastFrameTime = performance.now();
+    startBtn.textContent = '■ 정지';
+    startBtn.classList.add('active');
+    setStatus('실시간 분석 중', '마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다');
+    renderLoop();
+  }
+
+  function stopRTA(){
+    isRunning = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    if (micStream) micStream.getTracks().forEach(track => track.stop());
+    if (audioCtx) audioCtx.close();
+    audioCtx = null; analyser = null; micStream = null;
+
+    startBtn.textContent = '▸ 마이크 시작';
+    startBtn.classList.remove('active');
+    setStatus('시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요', '기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다');
+
+    bars.forEach(b => {
+      b.bar.style.height = '0%';
+      b.peakEl.style.bottom = '0%';
+      b.peakDb = DB_MIN;
+    });
+  }
+
+  function renderLoop(){
+    if (!isRunning) return;
+    const now = performance.now();
+    const dt = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
+
+    analyser.getFloatFrequencyData(freqData);
+    const binHz = audioCtx.sampleRate / analyser.fftSize;
+
+    BAND_EDGES.forEach(([lo, hi], i) => {
+      const loBin = Math.max(1, Math.floor(lo / binHz));
+      const hiBin = Math.min(freqData.length - 1, Math.ceil(hi / binHz));
+      let sum = 0, count = 0;
+      for (let b = loBin; b <= hiBin; b++) {
+        // getFloatFrequencyData가 -Infinity를 반환할 수 있으므로(무음 구간) 방어적으로 처리
+        const v = freqData[b];
+        if (isFinite(v)) { sum += v; count++; }
+      }
+      const avgDb = count > 0 ? sum / count : DB_MIN;
+
+      const entry = bars[i];
+      entry.bar.style.height = dbToPct(avgDb) + '%';
+
+      if (peakHoldOn) {
+        if (avgDb > entry.peakDb) {
+          entry.peakDb = avgDb;
+        } else {
+          entry.peakDb = Math.max(DB_MIN, entry.peakDb - PEAK_DECAY_PER_SEC * dt);
+        }
+        entry.peakEl.style.bottom = dbToPct(entry.peakDb) + '%';
+        entry.peakEl.style.display = '';
+      } else {
+        entry.peakEl.style.display = 'none';
+      }
+    });
+
+    rafId = requestAnimationFrame(renderLoop);
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (!isRunning) startRTA();
+    else stopRTA();
+  });
+
+  peakToggle.addEventListener('click', () => {
+    peakHoldOn = !peakHoldOn;
+    peakToggle.textContent = 'Peak Hold: ' + (peakHoldOn ? 'ON' : 'OFF');
+    peakToggle.classList.toggle('active', peakHoldOn);
+  });
+})();
+</script>
+</body>
+</html>
