@@ -48,7 +48,7 @@
   .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
 
   /* ---- signal type picker ---- */
-  .sigpicker{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px; }
+  .sigpicker{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px; }
   .sigpicker button{
     border:none; background:transparent; color:var(--text-secondary); font-size:12.5px; font-weight:600;
     padding:12px 4px; border-radius:9px; transition:background .15s, color .15s;
@@ -58,7 +58,7 @@
   .sigpicker button.active{ background:#232b2f; color:var(--text-primary); }
   .sigpicker button.active .ic{ color:var(--teal); }
   @media (max-width:560px){
-    .sigpicker{ grid-template-columns:repeat(5,1fr); }
+    .sigpicker{ grid-template-columns:repeat(4,1fr); }
     .sigpicker button{ font-size:10px; padding:10px 2px; }
   }
 
@@ -160,6 +160,9 @@
     <button data-type="sine"><span class="ic">∿</span>사인</button>
     <button data-type="square"><span class="ic">⊓</span>사각</button>
     <button data-type="triangle"><span class="ic">△</span>삼각</button>
+    <button data-type="hum"><span class="ic">〰</span>험</button>
+    <button data-type="buzz"><span class="ic">⚡</span>버즈</button>
+    <button data-type="hiss"><span class="ic">〜</span>히스</button>
   </div>
 
   <div class="status">
@@ -206,7 +209,8 @@
   "use strict";
 
   const FREQ_MIN = 10, FREQ_MAX = 22000;
-  const WAVEFORM_TYPES = new Set(['sine','square','triangle']);
+  const OSC_TYPES = new Set(['sine','square','triangle']); // this.osc.type으로 직접 설정 가능한 것들
+  const WAVEFORM_TYPES = new Set(['sine','square','triangle','buzz','hum']); // 주파수 노브가 활성화되는 것들
 
   // ---------------------------------------------------------------
   // 오디오 엔진: 핑크/화이트 노이즈 + 사인/사각/삼각 오실레이터
@@ -256,13 +260,50 @@
       this.osc.type = 'sine';
       this.osc.frequency.value = 1000;
 
+      // ✅ 험(Hum) — 전원 잡음 특유의 낮은 웅웅거림. 기본 주파수(60Hz) + 배음 2개를
+      // 함께 섞어서 실제 험 노이즈와 비슷한 울림을 만든다 (순수 사인 하나보다 훨씬 자연스럽다).
+      this.humOsc1 = this.ctx.createOscillator(); this.humOsc1.type='sine'; this.humOsc1.frequency.value=60;
+      this.humOsc2 = this.ctx.createOscillator(); this.humOsc2.type='sine'; this.humOsc2.frequency.value=120;
+      this.humOsc3 = this.ctx.createOscillator(); this.humOsc3.type='sine'; this.humOsc3.frequency.value=180;
+      this.humMix1 = this.ctx.createGain(); this.humMix1.gain.value = 1.0;
+      this.humMix2 = this.ctx.createGain(); this.humMix2.gain.value = 0.45;
+      this.humMix3 = this.ctx.createGain(); this.humMix3.gain.value = 0.2;
+
+      // ✅ 버즈(Buzz) — 톱니파는 모든 배음을 다 갖고 있어서, 험보다 훨씬 거칠고
+      // "지지직"거리는 버즈 특유의 질감이 자연스럽게 난다.
+      this.buzzOsc = this.ctx.createOscillator(); this.buzzOsc.type = 'sawtooth'; this.buzzOsc.frequency.value = 60;
+
+      // ✅ 히스(Hiss) — 화이트노이즈를 하이패스 필터에 통과시켜 고음 위주로 걸러내면
+      // 테이프 히스/에어컨 바람 소리 같은 "쉬익" 하는 질감이 된다.
+      this.hissNode = this.ctx.createScriptProcessor(4096, 1, 1);
+      this.hissNode.onaudioprocess = (e) => {
+        const out = e.outputBuffer.getChannelData(0);
+        for (let i=0;i<out.length;i++) out[i] = (Math.random()*2-1) * 0.35;
+      };
+      this.hissFilter = this.ctx.createBiquadFilter();
+      this.hissFilter.type = 'highpass';
+      this.hissFilter.frequency.value = 3000;
+      this.hissFilter.Q.value = 0.7;
+
       this.pinkGain = this.ctx.createGain(); this.pinkGain.gain.value = 0;
       this.whiteGain = this.ctx.createGain(); this.whiteGain.gain.value = 0;
       this.oscGain = this.ctx.createGain(); this.oscGain.gain.value = 0;
+      this.humGain = this.ctx.createGain(); this.humGain.gain.value = 0;
+      this.buzzGain = this.ctx.createGain(); this.buzzGain.gain.value = 0;
+      this.hissGain = this.ctx.createGain(); this.hissGain.gain.value = 0;
 
       this.pinkNode.connect(this.pinkGain);
       this.whiteNode.connect(this.whiteGain);
       this.osc.connect(this.oscGain);
+
+      this.humOsc1.connect(this.humMix1); this.humMix1.connect(this.humGain);
+      this.humOsc2.connect(this.humMix2); this.humMix2.connect(this.humGain);
+      this.humOsc3.connect(this.humMix3); this.humMix3.connect(this.humGain);
+
+      this.buzzOsc.connect(this.buzzGain);
+
+      this.hissNode.connect(this.hissFilter);
+      this.hissFilter.connect(this.hissGain);
 
       this.masterGain = this.ctx.createGain();
       this.masterGain.gain.value = 0;
@@ -270,9 +311,14 @@
       this.pinkGain.connect(this.masterGain);
       this.whiteGain.connect(this.masterGain);
       this.oscGain.connect(this.masterGain);
+      this.humGain.connect(this.masterGain);
+      this.buzzGain.connect(this.masterGain);
+      this.hissGain.connect(this.masterGain);
       this.masterGain.connect(this.ctx.destination);
 
       this.osc.start();
+      this.humOsc1.start(); this.humOsc2.start(); this.humOsc3.start();
+      this.buzzOsc.start();
     }
 
     rampParam(param, target, duration){
@@ -300,20 +346,30 @@
     // 사각파/삼각파처럼 배음이 많은 파형도 귀나 스피커에 부담 없게 한다.
     _volumeToGain(vol){ return vol * 0.55; }
 
+    // ✅ 요청 반영: 험/버즈는 다른 신호들보다 체감 음량이 커서, 시작할 때 약 3dB(≈0.708배)
+    // 더 작게 나오도록 타입별 배율을 둔다. (-3dB ≈ 진폭 기준 70.8%)
+    _typeGainMultiplier(type){
+      if (type === 'hum' || type === 'buzz') return 0.708;
+      return 1.0;
+    }
+
     _applyActiveGain(){
       if (!this.isPlaying) return;
-      const g = this._volumeToGain(this.volume);
+      const g = this._volumeToGain(this.volume) * this._typeGainMultiplier(this.currentType);
       const activeNode = this.currentType === 'pink' ? this.pinkGain
         : this.currentType === 'white' ? this.whiteGain
+        : this.currentType === 'hum' ? this.humGain
+        : this.currentType === 'buzz' ? this.buzzGain
+        : this.currentType === 'hiss' ? this.hissGain
         : this.oscGain;
-      [this.pinkGain, this.whiteGain, this.oscGain].forEach(node => {
+      [this.pinkGain, this.whiteGain, this.oscGain, this.humGain, this.buzzGain, this.hissGain].forEach(node => {
         this.rampParam(node.gain, node === activeNode ? g : 0, 0.12);
       });
     }
 
     setType(type){
       this.currentType = type;
-      if (WAVEFORM_TYPES.has(type) && this.osc){
+      if (OSC_TYPES.has(type) && this.osc){
         this.osc.type = type;
       }
       this._applyActiveGain();
@@ -321,6 +377,14 @@
 
     setFrequency(freq){
       if (this.osc) this.osc.frequency.value = freq;
+      // ✅ 버즈는 사각/사인처럼 노브로 주파수를 바꿀 수 있다 (기본 60Hz에서 자유롭게 탐색 가능)
+      if (this.buzzOsc) this.buzzOsc.frequency.value = freq;
+      // ✅ 험은 기본음:2배음:3배음 비율(예: 60:120:180)을 유지한 채 함께 움직인다
+      if (this.humOsc1 && this.humOsc2 && this.humOsc3) {
+        this.humOsc1.frequency.value = freq;
+        this.humOsc2.frequency.value = freq * 2;
+        this.humOsc3.frequency.value = freq * 3;
+      }
     }
 
     setVolume(vol){
@@ -461,7 +525,10 @@
     white: ['화이트노이즈 재생 중', '모든 주파수를 동일한 세기로 담은 노이즈입니다'],
     sine: ['사인파 재생 중', '가장 깨끗한 순음입니다 — 노브로 음높이를 바꿔보세요'],
     square: ['사각파 재생 중', '배음이 풍부한 각진 파형입니다 — 노브로 음높이를 바꿔보세요'],
-    triangle: ['삼각파 재생 중', '사인파보다 살짝 날카로운 부드러운 파형입니다']
+    triangle: ['삼각파 재생 중', '사인파보다 살짝 날카로운 부드러운 파형입니다'],
+    hum: ['험(Hum) 노이즈 재생 중', '전원 잡음 특유의 낮은 웅웅거림입니다 — 그라운드 루프 문제를 들어볼 때 유용해요'],
+    buzz: ['버즈(Buzz) 노이즈 재생 중', '배음이 풍부해 험보다 거칠고 지지직거리는 질감입니다'],
+    hiss: ['히스(Hiss) 노이즈 재생 중', '고음 위주로 걸러낸 노이즈입니다 — 테이프 히스, 프리앰프 노이즈와 비슷해요']
   };
 
   function setSignalType(type){
