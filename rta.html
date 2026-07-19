@@ -123,7 +123,14 @@
   .line-console{ padding:14px; }
 
   /* ---- SPL 미터 뷰 ---- */
-  .spl-console{ align-items:center; justify-content:center; gap:14px; padding:24px 16px; }
+  .spl-console{
+    align-items:center; justify-content:flex-start; gap:14px; padding:24px 16px;
+    /* ✅ 고친 것: 예전 가로세로 비율 기준 높이 계산식을 그대로 쓰다 보니, 게이지·토글이 추가되며
+       내용이 훨씬 많아진 지금은 박스보다 내용이 더 길어서 위쪽(Weighting/Response)이
+       박스 밖으로 밀려나 잘려 있었다. 내용 길이에 맞춰 박스가 자동으로 늘어나게 한다. */
+    aspect-ratio:auto !important; height:auto !important; max-height:none !important; min-height:0 !important;
+    overflow-y:auto;
+  }
   .spl-big-row{ display:flex; align-items:baseline; gap:8px; }
   .spl-fs-row{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--text-secondary); margin-top:-2px; }
   .vu-bar-wrap{
@@ -171,6 +178,8 @@
     body.line-view .console{
       aspect-ratio:auto; height:44vh; max-height:none; min-height:240px;
     }
+    /* ✅ SPL 미터는 .spl-console 자체에서 height:auto !important로 항상 내용에 맞게
+       늘어나도록 처리했으므로, 여기서 별도 높이를 강제하지 않는다. */
   }
   .vscale{
     display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
