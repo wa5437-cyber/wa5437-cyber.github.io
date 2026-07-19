@@ -909,10 +909,13 @@
   }
 
   function updateVuGauge(currentVal, maxVal){
-    vuNeedle.setAttribute('transform', `rotate(${vuAngleForValue(currentVal)} 150 160)`);
+    // ✅ 고친 것: SVG의 transform "속성"(setAttribute)과 CSS transition을 함께 쓰면
+    // 특히 사파리에서 애니메이션이 아예 안 먹는 경우가 있었다. CSS의 style.transform으로
+    // 직접 설정하는 방식으로 바꿔서 확실하게 동작하도록 했다.
+    vuNeedle.style.transform = `rotate(${vuAngleForValue(currentVal)}deg)`;
     if (isFinite(maxVal)) {
       vuMaxNeedle.style.display = '';
-      vuMaxNeedle.setAttribute('transform', `rotate(${vuAngleForValue(maxVal)} 150 160)`);
+      vuMaxNeedle.style.transform = `rotate(${vuAngleForValue(maxVal)}deg)`;
     } else {
       vuMaxNeedle.style.display = 'none';
     }
