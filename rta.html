@@ -366,6 +366,13 @@
           <button data-r="fast">Fast</button>
         </div>
       </div>
+      <div class="vu-control-group">
+        <span class="vu-control-lbl">DISPLAY</span>
+        <div class="vu-toggle" id="splDisplayToggle">
+          <button data-d="peak" class="active">Peak</button>
+          <button data-d="avg">Avg</button>
+        </div>
+      </div>
     </div>
 
     <div class="vu-gauge-wrap">
@@ -381,7 +388,7 @@
     <div class="spl-big-row">
       <span class="spl-big-val" id="splBigVal">--</span><span class="spl-big-unit">dB SPL</span>
     </div>
-    <div class="spl-avg-lbl">BAND AVG (대역 평균)</div>
+    <div class="spl-avg-lbl" id="splModeLbl">PEAK (피크)</div>
     <div class="spl-fs-row" id="splFsRow">(-- dBFS)</div>
     <div class="vu-bar-wrap">
       <div class="vu-bar-fill" id="vuBarFill"></div>
@@ -462,6 +469,8 @@
   const splResetBtn = document.getElementById('splResetBtn');
   const weightingToggle = document.getElementById('weightingToggle');
   const responseToggle = document.getElementById('responseToggle');
+  const splDisplayToggle = document.getElementById('splDisplayToggle');
+  const splModeLbl = document.getElementById('splModeLbl');
   const rangeInput = document.getElementById('rangeInput');
   const rangeValueLabel = document.getElementById('rangeValueLabel');
   const vuNeedle = document.getElementById('vuNeedle');
@@ -533,20 +542,17 @@
   let lastRawAverageDb = -Infinity;
   let weightingMode = 'Z'; // 'Z'(무보정) | 'A' | 'C'
   let responseMode = 'slow'; // 'slow' | 'fast' — 반응 속도(시간 가중치)
+  let splDisplayMode = 'peak'; // ✅ 요청 반영: 'peak' | 'avg' — SPL 미터 메인 표시 기준 (기본값 Peak)
 
   function captureRawPeak(data){
     const binHz = audioCtx.sampleRate / analyser.fftSize;
-    let peak = -Infinity;
-    for (let b = 1; b < data.length; b++) {
-      const freq = b * binHz;
-      if (freq < 20 || freq > 20000) continue;
-      if (isFinite(data[b]) && data[b] > peak) peak = data[b];
-    }
-    if (isFinite(peak)) lastRawPeakDb = peak;
 
-    // 막대와 동일한 31개 옥타브 대역 평균 계산 (+ 선택된 가중치 보정 적용)
+    // ✅ 요청 반영: Peak과 Avg를 "같은 31개 가중치 적용 대역값"에서 함께 계산한다.
+    // (전에는 Peak이 가중치 없는 단일 FFT bin 기준이라 Avg와 기준 자체가 달랐다.
+    //  이제 Peak = 31개 대역 중 가장 큰 값, Avg = 31개 대역의 평균 — 막대가 보여주는
+    //  값과 완전히 같은 기준이라 서로 비교하기도 훨씬 자연스럽다.)
     const weightTable = weightingMode === 'A' ? A_WEIGHTING : weightingMode === 'C' ? C_WEIGHTING : null;
-    let bandSum = 0, bandCount = 0;
+    let bandSum = 0, bandCount = 0, bandPeak = -Infinity;
     BAND_EDGES.forEach(([lo, hi], bandIdx) => {
       const loBin = Math.max(1, Math.floor(lo / binHz));
       const hiBin = Math.min(data.length - 1, Math.ceil(hi / binHz));
@@ -559,9 +565,11 @@
         const weighted = weightTable ? avg + weightTable[bandIdx] : avg;
         bandSum += weighted;
         bandCount++;
+        if (weighted > bandPeak) bandPeak = weighted;
       }
     });
     if (bandCount > 0) lastRawAverageDb = bandSum / bandCount;
+    if (isFinite(bandPeak)) lastRawPeakDb = bandPeak;
   }
 
   calibrateNowBtn.addEventListener('click', () => {
@@ -882,9 +890,11 @@
   }
 
   function updateSplMeter(){
-    if (!isFinite(lastRawAverageDb)) return;
+    if (!isFinite(lastRawAverageDb) || !isFinite(lastRawPeakDb)) return;
     const calibOffset = parseFloat(calibInput.value) || 0;
-    const raw = lastRawAverageDb + calibOffset;
+    // ✅ 요청 반영: Peak/Avg 중 선택된 쪽을 메인 표시(큰 숫자·게이지·바)의 소스로 쓴다.
+    const rawSource = splDisplayMode === 'peak' ? lastRawPeakDb : lastRawAverageDb;
+    const raw = rawSource + calibOffset;
     // ✅ 요청 반영: Slow/Fast 응답속도 — 실제 SPL 미터의 IEC 시간가중치(Fast=125ms, Slow=1000ms) 개념을
     // 근사한 스무딩 계수. Fast는 훨씬 빠르게 따라가고, Slow는 천천히 안정적으로 움직인다.
     const smoothingFactor = responseMode === 'fast' ? 0.35 : 0.85;
@@ -978,6 +988,17 @@
       if (responseMode === r) return;
       responseMode = r;
       responseToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  // ✅ 요청 반영: SPL 미터 메인 표시(큰 숫자+게이지+바)를 Peak/Avg 중 골라서 볼 수 있게 한다
+  splDisplayToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const d = btn.dataset.d;
+      if (splDisplayMode === d) return;
+      splDisplayMode = d;
+      splDisplayToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      splModeLbl.textContent = d === 'peak' ? 'PEAK (피크)' : 'BAND AVG (대역 평균)';
     });
   });
 
