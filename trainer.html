@@ -275,6 +275,13 @@
     <button id="dirBoth" class="active">Boost + Cut</button>
   </div>
 
+  <div class="modepicker" id="magnitudePicker">
+    <button id="mag12" class="active">12dB</button>
+    <button id="mag6">6dB</button>
+    <button id="mag3">3dB</button>
+    <button id="magMixed">복합(랜덤)</button>
+  </div>
+
   <div class="status">
     <h2 id="statusTitle">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
     <p id="statusSub"></p>
@@ -316,7 +323,6 @@
   const ROUND_END_HOLD = 1400;     // ms — 정답/오답 화면을 보여주는 시간 (너무 빨라 보기 힘들다는 피드백으로 600 → 1400으로 늘림)
   const CHIME_TO_NEXT_DELAY = 150; // ms
   const ROUND_WARMUP_DELAY = 300;  // ms — 첫 문제 이후 워밍업 구간 (500 → 300으로 추가 단축)
-  const BOOST_RANGE = [12, 12];    // dB — 요청 반영: 항상 정확히 12dB로 고정
   const EQ_BANDWIDTH_OCTAVES = 0.5;
 
   function octaveBandwidthToQ(bw){
@@ -436,7 +442,8 @@
 
     // ✅ forceBoost: undefined/null이면 부스트/컷 랜덤(기존 동작), true면 항상 부스트,
     // false면 항상 컷만 출제한다. 10밴드 모드의 "부스트만/컷만/부스트+컷" 훈련에 사용된다.
-    generateQuestion(mode, indices, forceBoost){
+    // ✅ magnitudeOption: 12 | 6 | 3 | 'mixed' — 부스트/컷 크기. 'mixed'면 세 값 중 매번 무작위로 고른다.
+    generateQuestion(mode, indices, forceBoost, magnitudeOption){
       const pool = (indices && indices.length) ? indices : BANDS.map((_, i) => i);
       const targetIndex = pool[Math.floor(Math.random() * pool.length)];
       this.targetIndex = targetIndex;
@@ -444,7 +451,10 @@
 
       if (mode === 'eq'){
         this.isBoost = (forceBoost === true || forceBoost === false) ? forceBoost : (Math.random() < 0.5);
-        const magnitude = BOOST_RANGE[0] + Math.random()*(BOOST_RANGE[1]-BOOST_RANGE[0]);
+        const MAGNITUDE_OPTIONS = [12, 6, 3];
+        const magnitude = magnitudeOption === 'mixed'
+          ? MAGNITUDE_OPTIONS[Math.floor(Math.random() * MAGNITUDE_OPTIONS.length)]
+          : (magnitudeOption || 12);
         const gainDB = this.isBoost ? magnitude : -magnitude;
         this.currentGainDB = gainDB; // ✅ A/B 사이클(기본↔변형 전환)에서 재사용하기 위해 저장
         this.eqFilter.frequency.value = targetFreq;
@@ -638,6 +648,11 @@
   const dirBoostOnlyBtn = document.getElementById('dirBoostOnly');
   const dirCutOnlyBtn = document.getElementById('dirCutOnly');
   const dirBothBtn = document.getElementById('dirBoth');
+  const magnitudePicker = document.getElementById('magnitudePicker');
+  const mag12Btn = document.getElementById('mag12');
+  const mag6Btn = document.getElementById('mag6');
+  const mag3Btn = document.getElementById('mag3');
+  const magMixedBtn = document.getElementById('magMixed');
 
   // ✅ 10밴드 이지 모드: 시중 그래픽 이퀄라이저에서 흔히 쓰는 표준 옥타브 간격 10개
   const EASY10_FREQS = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
@@ -651,6 +666,7 @@
   let listenBoost = true; // 청음 챕터에서 부스트로 들을지 컷으로 들을지
   let bandCountMode = 'full31'; // full31 | easy10
   let directionMode = 'both'; // both | boostOnly | cutOnly — 10밴드 훈련 전용
+  let magnitudeMode = 12; // 12 | 6 | 3 | 'mixed' — 부스트/컷 크기
   let questionIndex = 0;
   let roundCount = 0;
   let correctCount = 0;
@@ -750,6 +766,7 @@
     modeSineBtn.disabled = busy;
     updateListenDirVisibility();
     updateDirectionModeVisibility();
+    updateMagnitudeVisibility();
   }
   modeEQBtn.addEventListener('click', () => {
     const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
@@ -814,6 +831,7 @@
     bandCountMode = 'full31';
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     updateBandVisibility();
   });
   bandCount10Btn.addEventListener('click', () => {
@@ -822,6 +840,7 @@
     bandCountMode = 'easy10';
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     updateBandVisibility();
   });
 
@@ -851,6 +870,40 @@
   dirBothBtn.addEventListener('click', () => {
     if (phase !== 'idle' || directionMode === 'both') return;
     directionMode = 'both'; setDirectionModeButtons();
+  });
+
+  // ✅ 부스트/컷 크기(12/6/3/복합) 피커 — EQ 모드일 때만 의미가 있다 (사인파는 dB 크기 개념이 없음)
+  function updateMagnitudeVisibility(){
+    const show = chapter === 'training' && mode === 'eq';
+    magnitudePicker.style.display = show ? 'flex' : 'none';
+  }
+  function setMagnitudeButtons(){
+    mag12Btn.classList.toggle('active', magnitudeMode === 12);
+    mag6Btn.classList.toggle('active', magnitudeMode === 6);
+    mag3Btn.classList.toggle('active', magnitudeMode === 3);
+    magMixedBtn.classList.toggle('active', magnitudeMode === 'mixed');
+    const busy = phase !== 'idle';
+    mag12Btn.disabled = busy;
+    mag6Btn.disabled = busy;
+    mag3Btn.disabled = busy;
+    magMixedBtn.disabled = busy;
+    updateMagnitudeVisibility();
+  }
+  mag12Btn.addEventListener('click', () => {
+    if (phase !== 'idle' || magnitudeMode === 12) return;
+    magnitudeMode = 12; setMagnitudeButtons();
+  });
+  mag6Btn.addEventListener('click', () => {
+    if (phase !== 'idle' || magnitudeMode === 6) return;
+    magnitudeMode = 6; setMagnitudeButtons();
+  });
+  mag3Btn.addEventListener('click', () => {
+    if (phase !== 'idle' || magnitudeMode === 3) return;
+    magnitudeMode = 3; setMagnitudeButtons();
+  });
+  magMixedBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || magnitudeMode === 'mixed') return;
+    magnitudeMode = 'mixed'; setMagnitudeButtons();
   });
 
   function resetBandStyles(){
@@ -902,6 +955,7 @@
     setModeButtons();
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     setChapterButtons();
     setStatus('밴드를 탭하면 바로 들려드려요');
   }
@@ -915,6 +969,7 @@
     setModeButtons();
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     setChapterButtons();
     setStatus('밴드를 탭하면 바로 들려드려요');
   }
@@ -937,6 +992,7 @@
     setModeButtons();
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     resetBandStyles();
     if (chapter === 'training'){
       setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
@@ -995,6 +1051,7 @@
     setModeButtons();
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     resetBandStyles();
     startBtn.textContent = '■ 종료';
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
@@ -1009,7 +1066,7 @@
         console.log('[디버그] 가드 조건에 걸려 리턴됨 (중단됨)');
         return;
       }
-      engine.generateQuestion(mode, activeIndices(), currentForceBoost());
+      engine.generateQuestion(mode, activeIndices(), currentForceBoost(), magnitudeMode);
       phase = 'active';
       stopDebugTimer('첫 문제 active로 전환');
       resetBandStyles();
@@ -1028,6 +1085,7 @@
     setModeButtons();
     setBandCountButtons();
     setDirectionModeButtons();
+    setMagnitudeButtons();
     resetBandStyles();
     startBtn.textContent = '▸ 훈련 시작';
     startBtn.classList.remove('stop'); startBtn.classList.add('go');
@@ -1077,6 +1135,7 @@
         setModeButtons();
         setBandCountButtons();
         setDirectionModeButtons();
+        setMagnitudeButtons();
         setChapterButtons();
         resetBandStyles();
         startBtn.textContent = '▸ 훈련 시작';
@@ -1106,7 +1165,7 @@
             console.log('[디버그] 가드 조건에 걸려 리턴됨 (중단됨)');
             return;
           }
-          engine.generateQuestion(mode, activeIndices(), currentForceBoost());
+          engine.generateQuestion(mode, activeIndices(), currentForceBoost(), magnitudeMode);
           phase = 'active';
           stopDebugTimer(`${questionIndex}번째 문제 active로 전환`);
           resetBandStyles();
@@ -1141,6 +1200,7 @@
   setListenDirButtons();
   setBandCountButtons();
   setDirectionModeButtons();
+  setMagnitudeButtons();
   updateBandVisibility();
   updateScoreboard();
 })();
