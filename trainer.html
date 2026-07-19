@@ -316,7 +316,7 @@
   const ROUND_END_HOLD = 1400;     // ms — 정답/오답 화면을 보여주는 시간 (너무 빨라 보기 힘들다는 피드백으로 600 → 1400으로 늘림)
   const CHIME_TO_NEXT_DELAY = 150; // ms
   const ROUND_WARMUP_DELAY = 300;  // ms — 첫 문제 이후 워밍업 구간 (500 → 300으로 추가 단축)
-  const BOOST_RANGE = [6, 12];     // dB
+  const BOOST_RANGE = [12, 12];    // dB — 요청 반영: 항상 정확히 12dB로 고정
   const EQ_BANDWIDTH_OCTAVES = 0.5;
 
   function octaveBandwidthToQ(bw){
