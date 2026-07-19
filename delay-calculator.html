@@ -55,6 +55,7 @@
 
   .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113); padding:20px; }
   .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:14px; }
+  .panel-subtitle{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-tertiary); margin:22px 0 12px; padding-top:18px; border-top:1px solid var(--line); }
 
   /* ---- 전역 설정(온도/단위/프리시던스) ---- */
   .settings-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
@@ -121,6 +122,24 @@
   .phase-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
   .phase-legend .dot.dashed{ background:transparent; border:2px dashed var(--amber); }
 
+  /* ---- Tempo ↔ Delay 표 ---- */
+  .tempo-table{ margin-top:18px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .tempo-row{
+    display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0;
+    border-bottom:1px solid var(--line);
+  }
+  .tempo-row:last-child{ border-bottom:none; }
+  .tempo-row.tempo-header{ background:var(--bg-panel-2); }
+  .tempo-cell{ padding:12px 10px; text-align:center; font-family:'IBM Plex Mono',monospace; }
+  .tempo-header .tempo-cell{ font-size:11px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
+  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; text-align:left; padding-left:16px; font-size:17px; font-family:'Noto Music','Segoe UI Symbol',serif,'IBM Plex Mono',monospace; }
+  .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ color:var(--teal); font-size:15px; font-weight:600; }
+  @media (max-width:480px){
+    .tempo-cell{ padding:10px 4px; font-size:12.5px; }
+    .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ font-size:13px; }
+  }
+
+
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
@@ -186,31 +205,6 @@
   </div>
 
   <div class="panel">
-    <div class="panel-title">Reference (Main Speaker)</div>
-    <div class="main-dist-row">
-      <div class="field">
-        <label>메인 스피커 → 기준 지점 거리</label>
-        <div class="input-row">
-          <input type="number" id="mainDistInput" value="30" step="0.1">
-          <span class="unit" id="mainDistUnit">m</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel">
-    <div class="panel-title">Delay Zones</div>
-    <div id="zoneList"></div>
-    <button class="add-zone-btn" id="addZoneBtn">+ 존 추가</button>
-
-    <div class="warn-note">
-      <b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋.
-      값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장).
-      프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.
-    </div>
-  </div>
-
-  <div class="panel">
     <div class="panel-title">Time ↔ Distance ↔ Phase</div>
     <p class="phase-desc">딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.</p>
 
@@ -248,6 +242,44 @@
     <div class="phase-legend">
       <span><i class="dot" style="background:var(--blue);"></i>원음(0°)</span>
       <span><i class="dot dashed"></i>딜레이 신호 (<span id="phaseWrapLabel">0°</span>)</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Tempo ↔ Delay (박자 동기화)</div>
+    <p class="phase-desc">곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.</p>
+
+    <div class="field" style="max-width:200px;">
+      <label>BPM</label>
+      <div class="input-row">
+        <input type="number" id="bpmInput" value="120" step="1" min="1">
+        <span class="unit">bpm</span>
+      </div>
+    </div>
+
+    <div class="tempo-table" id="tempoTable"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Speaker Delay (스피커 딜레이 계산)</div>
+    <div class="main-dist-row">
+      <div class="field">
+        <label>메인 스피커 → 기준 지점 거리</label>
+        <div class="input-row">
+          <input type="number" id="mainDistInput" value="30" step="0.1">
+          <span class="unit" id="mainDistUnit">m</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-subtitle">Delay Zones</div>
+    <div id="zoneList"></div>
+    <button class="add-zone-btn" id="addZoneBtn">+ 존 추가</button>
+
+    <div class="warn-note">
+      <b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋.
+      값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장).
+      프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.
     </div>
   </div>
 
@@ -512,6 +544,57 @@
     const wrapped = ((v % 360) + 360) % 360;
     phPhaseInput.value = wrapped.toFixed(1);
   });
+
+  // -----------------------------------------------------------------
+  // ✅ 요청 반영: Tempo(BPM) ↔ Delay — 곡 박자에 맞는 딜레이 타임 계산
+  // -----------------------------------------------------------------
+  const bpmInput = document.getElementById('bpmInput');
+  const tempoTable = document.getElementById('tempoTable');
+
+  // 4분음표를 기준(1배)으로 한 각 음표의 상대 길이
+  const NOTE_DIVISIONS = [
+    { label: '𝅝 1/1', mult: 4 },
+    { label: '𝅗𝅥 1/2', mult: 2 },
+    { label: '𝅘𝅥 1/4', mult: 1 },
+    { label: '𝅘𝅥𝅮 1/8', mult: 0.5 },
+    { label: '𝅘𝅥𝅯 1/16', mult: 0.25 },
+    { label: '𝅘𝅥𝅰 1/32', mult: 0.125 },
+  ];
+
+  function formatMs(ms){
+    return ms >= 1000 ? (ms/1000).toFixed(2) + 's' : Math.round(ms) + 'ms';
+  }
+
+  function renderTempoTable(){
+    const bpm = parseFloat(bpmInput.value) || 120;
+    const quarterMs = 60000 / bpm;
+
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">음표</div>
+        <div class="tempo-cell">일반</div>
+        <div class="tempo-cell">붙임(●)</div>
+        <div class="tempo-cell">셋잇단(3)</div>
+      </div>`;
+
+    NOTE_DIVISIONS.forEach(({ label, mult }) => {
+      const normalMs = quarterMs * mult;
+      const dottedMs = normalMs * 1.5;
+      const tripletMs = normalMs * (2 / 3);
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell">${label}</div>
+          <div class="tempo-cell">${formatMs(normalMs)}</div>
+          <div class="tempo-cell">${formatMs(dottedMs)}</div>
+          <div class="tempo-cell">${formatMs(tripletMs)}</div>
+        </div>`;
+    });
+
+    tempoTable.innerHTML = html;
+  }
+
+  bpmInput.addEventListener('input', renderTempoTable);
+  renderTempoTable();
 
   // 초기 예시 존 2개
   createZoneRow('Delay Tower 1', 45);
