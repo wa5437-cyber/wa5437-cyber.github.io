@@ -263,6 +263,20 @@
   </div>
 
   <div class="panel">
+    <div class="panel-title">Reverb Time (리버브 타임)</div>
+    <p class="phase-desc">
+      위의 BPM을 그대로 사용합니다. <b style="color:var(--text-secondary)">프리딜레이 + 디케이 타임의 합이 박자 단위(마디/half/quarter/eighth)로 딱 떨어지게</b> 잡으면,
+      리버브 꼬리가 다음 박이 오기 직전에 자연스럽게 사라져서 믹스가 지저분해지지 않습니다
+      (믹싱 엔지니어 Bobby Owsinski가 저서 《The Mixing Engineer's Handbook》에서 소개한 방법입니다).
+    </p>
+    <div class="tempo-table" id="reverbTable"></div>
+    <div class="warn-note">
+      <b>참고:</b> 프리딜레이는 짧게(1/64~1/128 음표)만 잡고, 나머지 길이를 디케이 타임으로 채우는 방식입니다.
+      이건 실전에서 바로 쓸 수 있는 "시작점"이고, 곡의 느낌에 따라 취향껏 조절해서 쓰시면 됩니다.
+    </div>
+  </div>
+
+  <div class="panel">
     <div class="panel-title">Speaker Delay (스피커 딜레이 계산)</div>
     <div class="main-dist-row">
       <div class="field">
@@ -613,8 +627,57 @@
     tempoTable.innerHTML = html;
   }
 
+  // -----------------------------------------------------------------
+  // ✅ 요청 반영: Reverb Time — Bobby Owsinski 방식(프리딜레이+디케이 = 박자 단위)
+  // reverbcalculator.com을 참고해 같은 4가지 사이즈(Hall/Big Room/Small Room/Tight Ambience)로 구성했다.
+  // -----------------------------------------------------------------
+  const reverbTable = document.getElementById('reverbTable');
+
+  // barFraction: 1마디(4/4 기준) 대비 몇 분의 1을 총 리버브 길이(프리딜레이+디케이)로 쓸지
+  // preDelayDiv: 프리딜레이로 쓸 음표 분할값 (예: 64 → 1/64음표)
+  const REVERB_PRESETS = [
+    { name: 'Hall',           desc: '크고 풍성하게 — 한 마디를 꽉 채움', barFraction: 1,    preDelayDiv: 64 },
+    { name: 'Big Room',       desc: '중간 크기 — 반 마디',              barFraction: 1/2,  preDelayDiv: 64 },
+    { name: 'Small Room',     desc: '작은 방 — 4분의 1마디',            barFraction: 1/4,  preDelayDiv: 128 },
+    { name: 'Tight Ambience', desc: '아주 짧은 잔향 — 8분의 1마디',      barFraction: 1/8,  preDelayDiv: 128 },
+  ];
+
+  function renderReverbTable(){
+    const bpm = parseFloat(bpmInput.value) || 120;
+    const quarterMs = 60000 / bpm;
+    const barMs = quarterMs * 4; // 4/4 기준 한 마디 길이
+
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">Reverb Size</div>
+        <div class="tempo-cell">Pre-Delay</div>
+        <div class="tempo-cell">Decay Time</div>
+        <div class="tempo-cell">Total Reverb</div>
+      </div>`;
+
+    REVERB_PRESETS.forEach(({ name, desc, barFraction, preDelayDiv }) => {
+      const totalMs = barMs * barFraction;
+      const preDelayMs = quarterMs * (4 / preDelayDiv); // 예: 1/64음표 = 4분음표 길이 ÷ 16
+      const decayMs = Math.max(0, totalMs - preDelayMs);
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell tempo-note-cell" style="display:block;">
+            <div>${name}</div>
+            <div style="font-size:10.5px; color:var(--text-tertiary); font-weight:400; margin-top:2px;">${desc}</div>
+          </div>
+          <div class="tempo-cell">${formatMs(preDelayMs)}</div>
+          <div class="tempo-cell">${formatMs(decayMs)}</div>
+          <div class="tempo-cell">${formatMs(totalMs)}</div>
+        </div>`;
+    });
+
+    reverbTable.innerHTML = html;
+  }
+
   bpmInput.addEventListener('input', renderTempoTable);
+  bpmInput.addEventListener('input', renderReverbTable);
   renderTempoTable();
+  renderReverbTable();
 
   // 초기 예시 존 2개
   createZoneRow('Delay Tower 1', 45);
