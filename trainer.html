@@ -440,12 +440,32 @@
       this.rampParam(this.pinkGain.gain, target, duration);
     }
 
+    // ✅ 요청 반영: 초저역(20~31.5Hz 근처)과 초고역(16k~20Hz 근처)은 다른 대역보다
+    // 덜 자주 출제되도록 가중치를 낮춘다. 완전히 안 나오게 하는 게 아니라 "덜" 나오게만 한다.
+    _bandWeight(index){
+      const freq = BANDS[index];
+      if (freq <= 31.5 || freq >= 16000) return 0.35; // 가장 극단적인 대역: 크게 줄임
+      if (freq <= 50 || freq >= 10000) return 0.6;    // 그 다음 대역: 살짝 줄임
+      return 1.0; // 그 외(63Hz~8kHz)는 그대로
+    }
+
+    _pickWeightedIndex(pool){
+      const weights = pool.map(i => this._bandWeight(i));
+      const total = weights.reduce((a, b) => a + b, 0);
+      let r = Math.random() * total;
+      for (let i = 0; i < pool.length; i++) {
+        r -= weights[i];
+        if (r <= 0) return pool[i];
+      }
+      return pool[pool.length - 1]; // 부동소수점 오차 대비 안전장치
+    }
+
     // ✅ forceBoost: undefined/null이면 부스트/컷 랜덤(기존 동작), true면 항상 부스트,
     // false면 항상 컷만 출제한다. 10밴드 모드의 "부스트만/컷만/부스트+컷" 훈련에 사용된다.
     // ✅ magnitudeOption: 12 | 6 | 3 | 'mixed' — 부스트/컷 크기. 'mixed'면 세 값 중 매번 무작위로 고른다.
     generateQuestion(mode, indices, forceBoost, magnitudeOption){
       const pool = (indices && indices.length) ? indices : BANDS.map((_, i) => i);
-      const targetIndex = pool[Math.floor(Math.random() * pool.length)];
+      const targetIndex = this._pickWeightedIndex(pool);
       this.targetIndex = targetIndex;
       const targetFreq = BANDS[targetIndex];
 
