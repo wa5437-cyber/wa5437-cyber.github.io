@@ -132,7 +132,9 @@
   .tempo-row.tempo-header{ background:var(--bg-panel-2); }
   .tempo-cell{ padding:12px 10px; text-align:center; font-family:'IBM Plex Mono',monospace; }
   .tempo-header .tempo-cell{ font-size:11px; color:var(--text-tertiary); text-transform:uppercase; letter-spacing:0.05em; font-weight:600; }
-  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; text-align:left; padding-left:16px; font-size:17px; font-family:'Noto Music','Segoe UI Symbol',serif,'IBM Plex Mono',monospace; }
+  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; text-align:left; padding-left:16px; }
+  .tempo-note-cell{ display:flex; align-items:center; gap:8px; }
+  .note-icon{ color:var(--teal); flex-shrink:0; }
   .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ color:var(--teal); font-size:15px; font-weight:600; }
   @media (max-width:480px){
     .tempo-cell{ padding:10px 4px; font-size:12.5px; }
@@ -552,13 +554,31 @@
   const tempoTable = document.getElementById('tempoTable');
 
   // 4분음표를 기준(1배)으로 한 각 음표의 상대 길이
+  // ✅ 요청 반영: 유니코드 음표 문자는 기기/폰트에 따라 깨져 보여서, 직접 그린 SVG로 대체한다.
+  // (어떤 폰이든 똑같이 나온다)
+  function noteIconSVG({ hollow, stem, flags }){
+    const headFill = hollow ? 'none' : 'currentColor';
+    let extra = '';
+    if (stem) {
+      extra += `<line x1="13" y1="21.5" x2="13" y2="4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`;
+      for (let i = 0; i < flags; i++) {
+        const y0 = 4 + i * 6;
+        extra += `<path d="M13 ${y0} C 19 ${y0 + 2}, 19 ${y0 + 7}, 13 ${y0 + 9}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`;
+      }
+    }
+    return `<svg viewBox="0 0 22 26" width="20" height="24" class="note-icon">
+      <ellipse cx="7" cy="21.5" rx="5.2" ry="3.6" transform="rotate(-18 7 21.5)" fill="${headFill}" stroke="currentColor" stroke-width="1.7"/>
+      ${extra}
+    </svg>`;
+  }
+
   const NOTE_DIVISIONS = [
-    { label: '𝅝 1/1', mult: 4 },
-    { label: '𝅗𝅥 1/2', mult: 2 },
-    { label: '𝅘𝅥 1/4', mult: 1 },
-    { label: '𝅘𝅥𝅮 1/8', mult: 0.5 },
-    { label: '𝅘𝅥𝅯 1/16', mult: 0.25 },
-    { label: '𝅘𝅥𝅰 1/32', mult: 0.125 },
+    { icon: noteIconSVG({ hollow: true,  stem: false, flags: 0 }), frac: '1/1',  mult: 4 },
+    { icon: noteIconSVG({ hollow: true,  stem: true,  flags: 0 }), frac: '1/2',  mult: 2 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 0 }), frac: '1/4',  mult: 1 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 1 }), frac: '1/8',  mult: 0.5 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 2 }), frac: '1/16', mult: 0.25 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 3 }), frac: '1/32', mult: 0.125 },
   ];
 
   function formatMs(ms){
@@ -577,13 +597,13 @@
         <div class="tempo-cell">셋잇단(3)</div>
       </div>`;
 
-    NOTE_DIVISIONS.forEach(({ label, mult }) => {
+    NOTE_DIVISIONS.forEach(({ icon, frac, mult }) => {
       const normalMs = quarterMs * mult;
       const dottedMs = normalMs * 1.5;
       const tripletMs = normalMs * (2 / 3);
       html += `
         <div class="tempo-row">
-          <div class="tempo-cell">${label}</div>
+          <div class="tempo-cell tempo-note-cell">${icon}<span>${frac}</span></div>
           <div class="tempo-cell">${formatMs(normalMs)}</div>
           <div class="tempo-cell">${formatMs(dottedMs)}</div>
           <div class="tempo-cell">${formatMs(tripletMs)}</div>
