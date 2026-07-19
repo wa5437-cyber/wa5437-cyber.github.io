@@ -80,6 +80,20 @@
   .range-input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-tertiary); }
   @media (max-width:560px){ .range-panel{ padding:12px; } }
 
+  /* ---- Range 슬라이더 ---- */
+  .range-slider{
+    -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:100px;
+    background:linear-gradient(90deg, var(--blue), var(--teal)); outline:none; cursor:pointer;
+  }
+  .range-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:2px solid var(--bg-deep); box-shadow:0 2px 6px rgba(0,0,0,0.4); cursor:pointer;
+  }
+  .range-slider::-moz-range-thumb{
+    width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--bg-deep);
+    box-shadow:0 2px 6px rgba(0,0,0,0.4); cursor:pointer;
+  }
+
   /* ---- 보정(선택사항) 접이식 섹션 ---- */
   .calib-details{ width:100%; margin-top:6px; }
   .calib-details summary{
@@ -111,7 +125,7 @@
   /* ---- SPL 미터 뷰 ---- */
   .spl-console{ align-items:center; justify-content:center; gap:14px; padding:24px 16px; }
   .spl-big-row{ display:flex; align-items:baseline; gap:8px; }
-  .spl-fs-row{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-tertiary); margin-top:-6px; }
+  .spl-fs-row{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--text-secondary); margin-top:-2px; }
   .vu-bar-wrap{
     width:100%; max-width:340px; height:24px; background:#1a2124; border-radius:7px;
     overflow:hidden; border:1px solid rgba(255,255,255,0.04);
@@ -123,6 +137,24 @@
   }
   .spl-big-val{ font-family:'IBM Plex Mono',monospace; font-size:76px; font-weight:700; color:var(--teal); line-height:1; }
   .spl-big-unit{ font-family:'IBM Plex Mono',monospace; font-size:22px; color:var(--text-tertiary); }
+
+  /* ---- Weighting / Response 컨트롤 ---- */
+  .vu-controls-row{ display:flex; gap:24px; flex-wrap:wrap; justify-content:center; margin-bottom:4px; }
+  .vu-control-group{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .vu-control-lbl{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--text-tertiary); letter-spacing:0.08em; }
+  .vu-toggle{ display:flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; }
+  .vu-toggle button{
+    border:none; background:var(--bg-panel-2); color:var(--text-secondary); font-size:12.5px; font-weight:600;
+    padding:7px 14px;
+  }
+  .vu-toggle button.active{ background:#232b2f; color:var(--text-primary); }
+
+  /* ---- 아날로그 VU 니들 게이지 ---- */
+  .vu-gauge-wrap{ width:100%; max-width:320px; }
+  .vu-gauge-svg{ width:100%; height:auto; display:block; }
+  #vuNeedle, #vuMaxNeedle{ transition:transform 0.08s linear; transform-origin:150px 160px; }
+  .vu-gauge-tick{ stroke:rgba(255,255,255,0.25); stroke-width:1.5; }
+  .vu-gauge-ticklabel{ font-family:'IBM Plex Mono',monospace; font-size:9px; fill:var(--text-tertiary); text-anchor:middle; }
   .spl-stats-row{ display:flex; gap:14px; }
   .spl-stat{
     display:flex; flex-direction:column; align-items:center; gap:4px;
@@ -182,11 +214,14 @@
     /* ✅ 요청 반영: 모바일에서 SPL 미터 글씨/여백이 너무 커서 위아래가 잘리던 것을 줄임 */
     .spl-console{ padding:16px 12px; gap:8px; }
     .spl-big-val{ font-size:52px; }
-    .spl-fs-row{ font-size:11px; }
+    .spl-fs-row{ font-size:14px; }
     .spl-stats-row{ gap:8px; }
     .spl-stat{ padding:8px 12px; }
     .spl-stat-val{ font-size:16px; }
     #splHistoryCanvas{ height:80px; }
+    .vu-gauge-wrap{ max-width:230px; }
+    .vu-controls-row{ gap:14px; }
+    .vu-toggle button{ font-size:11px; padding:6px 10px; }
   }
 
   /* ✅ 요청 반영: 휴대폰 가로 모드에서는 aspect-ratio 대신 화면 폭을 그대로 채운다
@@ -255,6 +290,10 @@
         <span class="unit">dB</span>
       </div>
     </div>
+    <div class="range-field">
+      <label>Range (Floor 기준 폭) · <span id="rangeValueLabel">90</span>dB</label>
+      <input type="range" id="rangeInput" min="20" max="140" step="1" value="90" class="range-slider">
+    </div>
     <button class="toolbar-btn" id="boostQuietBtn">🔉 작은 소리 더 잘 보이게</button>
     <button class="toolbar-btn" id="resetRangeBtn">↺ 기본값으로 초기화</button>
 
@@ -298,6 +337,34 @@
   </div>
 
   <div class="console spl-console" id="consoleSpl" style="display:none;">
+    <div class="vu-controls-row">
+      <div class="vu-control-group">
+        <span class="vu-control-lbl">WEIGHTING</span>
+        <div class="vu-toggle" id="weightingToggle">
+          <button data-w="Z" class="active">Z</button>
+          <button data-w="A">A</button>
+          <button data-w="C">C</button>
+        </div>
+      </div>
+      <div class="vu-control-group">
+        <span class="vu-control-lbl">RESPONSE</span>
+        <div class="vu-toggle" id="responseToggle">
+          <button data-r="slow" class="active">Slow</button>
+          <button data-r="fast">Fast</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vu-gauge-wrap">
+      <svg viewBox="0 0 300 175" class="vu-gauge-svg">
+        <path d="M 30 160 A 120 120 0 0 1 270 160" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <g id="vuGaugeTicks"></g>
+        <line id="vuMaxNeedle" x1="150" y1="160" x2="150" y2="48" stroke="var(--amber)" stroke-width="1.5" opacity="0.85"/>
+        <line id="vuNeedle" x1="150" y1="160" x2="150" y2="42" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="150" cy="160" r="7" fill="var(--text-primary)"/>
+      </svg>
+    </div>
+
     <div class="spl-big-row">
       <span class="spl-big-val" id="splBigVal">--</span><span class="spl-big-unit">dB SPL</span>
     </div>
@@ -329,6 +396,12 @@
 
   // ISO 266 표준 31밴드 (다른 페이지들과 동일한 데이터)
   const BANDS = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+
+  // ✅ IEC 61672-1 표준 A/C 가중치 보정값(dB). BANDS 배열과 순서가 1:1로 대응한다.
+  // A가중치: 사람 귀가 실제로 느끼는 크기에 가깝게(저음/초고음을 깎는다) — 소음 측정에서 가장 흔히 쓰임.
+  // C가중치: A보다 훨씬 평탄해서, 저음이 많은 큰 소리(피크 측정 등)에 주로 쓰임.
+  const A_WEIGHTING = [-50.5,-44.7,-39.4,-34.6,-30.2,-26.2,-22.5,-19.1,-16.1,-13.4,-10.9,-8.6,-6.6,-4.8,-3.2,-1.9,-0.8,0.0,0.6,1.0,1.2,1.3,1.2,1.0,0.5,-0.1,-1.1,-2.5,-4.3,-6.6,-9.3];
+  const C_WEIGHTING = [-6.2,-4.4,-3.0,-2.0,-1.3,-0.8,-0.5,-0.3,-0.2,-0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.1,-0.2,-0.3,-0.5,-0.8,-1.3,-2.0,-3.0,-4.4,-6.2,-8.5,-11.2];
   const LABELS = ["20","25","31.5","40","50","63","80","100","125","160","200","250","315","400","500","630","800","1k","1.25k","1.6k","2k","2.5k","3.15k","4k","5k","6.3k","8k","10k","12.5k","16k","20k"];
 
   // 1/3 옥타브 밴드 경계 (센터 주파수 기준 상하 1/6 옥타브)
@@ -373,6 +446,13 @@
   const splHistoryCanvas = document.getElementById('splHistoryCanvas');
   const splHistoryCtx = splHistoryCanvas.getContext('2d');
   const splResetBtn = document.getElementById('splResetBtn');
+  const weightingToggle = document.getElementById('weightingToggle');
+  const responseToggle = document.getElementById('responseToggle');
+  const rangeInput = document.getElementById('rangeInput');
+  const rangeValueLabel = document.getElementById('rangeValueLabel');
+  const vuNeedle = document.getElementById('vuNeedle');
+  const vuMaxNeedle = document.getElementById('vuMaxNeedle');
+  const vuGaugeTicks = document.getElementById('vuGaugeTicks');
 
   let viewMode = 'bar'; // 'bar' | 'line' | 'spl'
 
@@ -437,6 +517,9 @@
   //  막대와 똑같이 "31개 옥타브 대역을 각각 평균 낸 뒤, 그 대역들을 다시 평균"내는
   //  방식으로 바꿔서 실제 막대 눈높이와 정확히 일치하게 한다.)
   let lastRawAverageDb = -Infinity;
+  let weightingMode = 'Z'; // 'Z'(무보정) | 'A' | 'C'
+  let responseMode = 'slow'; // 'slow' | 'fast' — 반응 속도(시간 가중치)
+
   function captureRawPeak(data){
     const binHz = audioCtx.sampleRate / analyser.fftSize;
     let peak = -Infinity;
@@ -447,16 +530,22 @@
     }
     if (isFinite(peak)) lastRawPeakDb = peak;
 
-    // 막대와 동일한 31개 옥타브 대역 평균 계산
+    // 막대와 동일한 31개 옥타브 대역 평균 계산 (+ 선택된 가중치 보정 적용)
+    const weightTable = weightingMode === 'A' ? A_WEIGHTING : weightingMode === 'C' ? C_WEIGHTING : null;
     let bandSum = 0, bandCount = 0;
-    BAND_EDGES.forEach(([lo, hi]) => {
+    BAND_EDGES.forEach(([lo, hi], bandIdx) => {
       const loBin = Math.max(1, Math.floor(lo / binHz));
       const hiBin = Math.min(data.length - 1, Math.ceil(hi / binHz));
       let sum = 0, count = 0;
       for (let b = loBin; b <= hiBin; b++) {
         if (isFinite(data[b])) { sum += data[b]; count++; }
       }
-      if (count > 0) { bandSum += sum / count; bandCount++; }
+      if (count > 0) {
+        const avg = sum / count;
+        const weighted = weightTable ? avg + weightTable[bandIdx] : avg;
+        bandSum += weighted;
+        bandCount++;
+      }
     });
     if (bandCount > 0) lastRawAverageDb = bandSum / bandCount;
   }
@@ -557,6 +646,7 @@
     DB_MAX = newMax;
     updateVScaleLabels();
     applyRangeToAnalyser();
+    buildVuGaugeTicks();
   }
   floorInput.addEventListener('change', commitRange);
   ceilingInput.addEventListener('change', commitRange);
@@ -781,7 +871,10 @@
     if (!isFinite(lastRawAverageDb)) return;
     const calibOffset = parseFloat(calibInput.value) || 0;
     const raw = lastRawAverageDb + calibOffset;
-    splSmoothed = (splSmoothed === null) ? raw : splSmoothed * 0.85 + raw * 0.15;
+    // ✅ 요청 반영: Slow/Fast 응답속도 — 실제 SPL 미터의 IEC 시간가중치(Fast=125ms, Slow=1000ms) 개념을
+    // 근사한 스무딩 계수. Fast는 훨씬 빠르게 따라가고, Slow는 천천히 안정적으로 움직인다.
+    const smoothingFactor = responseMode === 'fast' ? 0.35 : 0.85;
+    splSmoothed = (splSmoothed === null) ? raw : splSmoothed * smoothingFactor + raw * (1 - smoothingFactor);
 
     splMin = Math.min(splMin, splSmoothed);
     splMax = Math.max(splMax, splSmoothed);
@@ -800,9 +893,89 @@
       // ✅ 요청 반영: VU 바 — Floor~Ceiling 범위 기준으로 현재 레벨 위치를 막대로 표시
       const vuPct = Math.max(0, Math.min(100, ((splSmoothed - DB_MIN) / (DB_MAX - DB_MIN)) * 100));
       vuBarFill.style.width = vuPct + '%';
+      updateVuGauge(splSmoothed, splMax);
       drawSplHistory();
     }
   }
+
+  // ---------------------------------------------------------------
+  // 아날로그 VU 니들 게이지 — Floor~Ceiling을 -60°~+60° 부채꼴에 매핑한다.
+  // ---------------------------------------------------------------
+  const VU_GAUGE_MIN_ANGLE = -60, VU_GAUGE_MAX_ANGLE = 60;
+
+  function vuAngleForValue(v){
+    const pct = Math.max(0, Math.min(1, (v - DB_MIN) / (DB_MAX - DB_MIN)));
+    return VU_GAUGE_MIN_ANGLE + pct * (VU_GAUGE_MAX_ANGLE - VU_GAUGE_MIN_ANGLE);
+  }
+
+  function updateVuGauge(currentVal, maxVal){
+    vuNeedle.setAttribute('transform', `rotate(${vuAngleForValue(currentVal)} 150 160)`);
+    if (isFinite(maxVal)) {
+      vuMaxNeedle.style.display = '';
+      vuMaxNeedle.setAttribute('transform', `rotate(${vuAngleForValue(maxVal)} 150 160)`);
+    } else {
+      vuMaxNeedle.style.display = 'none';
+    }
+  }
+
+  function buildVuGaugeTicks(){
+    vuGaugeTicks.innerHTML = '';
+    const steps = 6; // Floor~Ceiling 사이 6칸(7개 눈금)
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const angleDeg = VU_GAUGE_MIN_ANGLE + t * (VU_GAUGE_MAX_ANGLE - VU_GAUGE_MIN_ANGLE);
+      const angleRad = (angleDeg - 90) * Math.PI / 180; // SVG 기준 위쪽이 -90°
+      const cx = 150, cy = 160, rOuter = 120, rInner = 106, rLabel = 92;
+      const x1 = cx + rOuter * Math.cos(angleRad), y1 = cy + rOuter * Math.sin(angleRad);
+      const x2 = cx + rInner * Math.cos(angleRad), y2 = cy + rInner * Math.sin(angleRad);
+      const xL = cx + rLabel * Math.cos(angleRad), yL = cy + rLabel * Math.sin(angleRad);
+      const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      tick.setAttribute('x1', x1); tick.setAttribute('y1', y1);
+      tick.setAttribute('x2', x2); tick.setAttribute('y2', y2);
+      tick.setAttribute('class', 'vu-gauge-tick');
+      vuGaugeTicks.appendChild(tick);
+
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      const val = Math.round(DB_MIN + t * (DB_MAX - DB_MIN));
+      label.textContent = val;
+      label.setAttribute('x', xL); label.setAttribute('y', yL);
+      label.setAttribute('class', 'vu-gauge-ticklabel');
+      vuGaugeTicks.appendChild(label);
+    }
+  }
+
+  // ✅ Weighting(Z/A/C) 토글
+  weightingToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const w = btn.dataset.w;
+      if (weightingMode === w) return;
+      weightingMode = w;
+      weightingToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  // ✅ Response(Slow/Fast) 토글
+  responseToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r = btn.dataset.r;
+      if (responseMode === r) return;
+      responseMode = r;
+      responseToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  // ✅ Range — Floor 기준으로 폭(Range)만큼 Ceiling을 자동 계산해준다
+  function applyRangeFromInput(){
+    const floor = parseFloat(floorInput.value) || 0;
+    const range = parseFloat(rangeInput.value) || 90;
+    rangeValueLabel.textContent = range;
+    ceilingInput.value = Math.round(floor + range);
+    commitRange();
+    buildVuGaugeTicks();
+  }
+  // ✅ 요청 반영: 슬라이더를 드래그하는 동안 실시간으로 반영되도록 'input' 이벤트 사용
+  // ('change'는 손을 뗀 뒤에야 발생해서 드래그 중엔 반응이 없었다)
+  rangeInput.addEventListener('input', applyRangeFromInput);
 
   function resetSplStats(){
     splMin = Infinity; splMax = -Infinity; splSum = 0; splCount = 0;
@@ -813,6 +986,7 @@
     splMaxVal.textContent = '--';
     splAvgVal.textContent = '--';
     vuBarFill.style.width = '0%';
+    updateVuGauge(DB_MIN, null);
     drawSplHistory();
   }
   splResetBtn.addEventListener('click', resetSplStats);
@@ -993,6 +1167,8 @@
   });
 
   updateVScaleLabels();
+  buildVuGaugeTicks();
+  updateVuGauge(DB_MIN, null);
 
   // ✅ 요청 반영: index.html에서 "rta.html?view=spl" 같은 링크로 들어오면
   // 바로 해당 뷰(막대/라인/SPL 미터)로 전환해준다.
