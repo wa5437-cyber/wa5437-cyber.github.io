@@ -102,7 +102,8 @@
   .wave-canvas-wrap{ width:100%; }
   #waveCanvas{ width:100%; height:220px; display:block; border-radius:12px; }
   #bandCanvas{ width:100%; height:340px; display:block; border-radius:12px; }
-  @media (max-width:480px){ #waveCanvas{ height:170px; } #bandCanvas{ height:260px; } }
+  #delayCanvas{ width:100%; height:200px; display:block; border-radius:12px; }
+  @media (max-width:480px){ #waveCanvas{ height:170px; } #bandCanvas{ height:260px; } #delayCanvas{ height:160px; } }
 
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
@@ -125,7 +126,7 @@
   <div class="tab-picker" id="tabPicker">
     <button data-tab="frequency" class="active">Frequency</button>
     <button data-tab="band">Band</button>
-    <button data-tab="delay" disabled>Delay</button>
+    <button data-tab="delay">Delay</button>
     <button data-tab="volume" disabled>Volume</button>
     <button data-tab="roommodes" disabled>Room Modes</button>
   </div>
@@ -232,10 +233,50 @@
     </div>
   </div>
 
+  <div id="delayTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Delay</div>
+      <p class="phase-desc">거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Temperature</label>
+        <div class="input-row">
+          <input type="number" id="delayTempInput" value="15" step="1">
+          <span class="unit">°C</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Distance</label>
+        <div class="input-row">
+          <input type="number" id="delayDistInput" value="10" step="0.1" min="0">
+          <span class="unit">m</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Delay Time</label>
+        <div class="input-row">
+          <input type="number" id="delayTimeInput" value="29.15" step="0.01" min="0">
+          <span class="unit">ms</span>
+        </div>
+      </div>
+
+      <p class="speed-readout">현재 음속(Frequency 탭 온도 기준): <span id="delaySpeedReadout">340.4</span> m/s</p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Direct vs Delayed Sound (Timeline)</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="delayCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
   <div id="placeholderTab" class="panel" style="display:none;">
     <div class="coming-soon">
       <b>🚧 준비 중이에요</b>
-      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency · Band 탭만 사용할 수 있어요.
+      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency · Band · Delay 탭만 사용할 수 있어요.
     </div>
   </div>
 
@@ -272,6 +313,13 @@
   const bandQVal = document.getElementById('bandQVal');
   const bandCanvas = document.getElementById('bandCanvas');
   const bandCtx = bandCanvas.getContext('2d');
+  const delayTab = document.getElementById('delayTab');
+  const delayDistInput = document.getElementById('delayDistInput');
+  const delayTimeInput = document.getElementById('delayTimeInput');
+  const delaySpeedReadout = document.getElementById('delaySpeedReadout');
+  const delayCanvas = document.getElementById('delayCanvas');
+  const delayCtx = delayCanvas.getContext('2d');
+  const delayTempInput = document.getElementById('delayTempInput');
   const qFactorInput = document.getElementById('qFactorInput');
   const qOctaveReadout = document.getElementById('qOctaveReadout');
   // ✅ 요청 반영: Q를 직접 입력할 수 있게, N(옥타브 분수) 대신 Q 자체를 상태로 둔다.
@@ -599,6 +647,108 @@
     if (bandTab.style.display !== 'none') { resizeBandCanvas(); drawBand(); }
   });
 
+  // -----------------------------------------------------------------
+  // Delay 탭 — 거리 ↔ 시간 양방향 변환 (Frequency 탭의 온도/음속 재사용)
+  // -----------------------------------------------------------------
+  function resizeDelayCanvas(){
+    const rect = delayCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    delayCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    delayCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawDelay(){
+    const w = delayCanvas.width, h = delayCanvas.height;
+    if (w === 0 || h === 0) return;
+    delayCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.08, marginR = w * 0.08, marginT = h * 0.28, marginB = h * 0.28;
+    const plotW = w - marginL - marginR;
+    const midY = h / 2;
+
+    const timeMs = parseFloat(delayTimeInput.value) || 0;
+    // 화면에는 지연시간의 2.4배 정도까지 보이도록, 너무 작거나 크면 적당히 스케일한다
+    const windowMs = Math.max(timeMs * 2.4, 5);
+
+    // 시간 축
+    delayCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+    delayCtx.lineWidth = Math.max(1, w * 0.0015);
+    delayCtx.beginPath();
+    delayCtx.moveTo(marginL, midY);
+    delayCtx.lineTo(marginL + plotW, midY);
+    delayCtx.stroke();
+
+    function tToX(t){ return marginL + (t / windowMs) * plotW; }
+
+    // 직접음(Direct Sound) — t=0
+    const x0 = tToX(0);
+    delayCtx.strokeStyle = '#3a86ff';
+    delayCtx.lineWidth = Math.max(2.5, w * 0.007);
+    delayCtx.beginPath();
+    delayCtx.moveTo(x0, midY - h * 0.22);
+    delayCtx.lineTo(x0, midY + h * 0.22);
+    delayCtx.stroke();
+    delayCtx.fillStyle = '#3a86ff';
+    delayCtx.font = `600 ${Math.max(11, h * 0.075)}px 'IBM Plex Mono', monospace`;
+    delayCtx.textAlign = 'center';
+    delayCtx.fillText('Direct', x0, midY - h * 0.29);
+
+    // 지연음(Delayed Sound) — t=timeMs
+    const x1 = tToX(timeMs);
+    delayCtx.strokeStyle = '#f2a93b';
+    delayCtx.beginPath();
+    delayCtx.moveTo(x1, midY - h * 0.22);
+    delayCtx.lineTo(x1, midY + h * 0.22);
+    delayCtx.stroke();
+    delayCtx.fillStyle = '#f2a93b';
+    delayCtx.fillText('Delayed', x1, midY - h * 0.29);
+
+    // 두 펄스 사이 간격 표시(화살표 느낌의 얇은 가로선 + 시간 라벨)
+    delayCtx.strokeStyle = 'rgba(255,255,255,0.4)';
+    delayCtx.lineWidth = Math.max(1, w * 0.0013);
+    delayCtx.beginPath();
+    delayCtx.moveTo(x0, midY + h * 0.32);
+    delayCtx.lineTo(x1, midY + h * 0.32);
+    delayCtx.stroke();
+    delayCtx.fillStyle = 'rgba(147,163,163,0.9)';
+    delayCtx.font = `${Math.max(10, h * 0.065)}px 'IBM Plex Mono', monospace`;
+    delayCtx.fillText(`${timeMs.toFixed(2)}ms`, (x0 + x1) / 2, midY + h * 0.42);
+    delayCtx.textAlign = 'left';
+  }
+
+  // source: 'distance' | 'time' — 방금 사용자가 수정한 칸은 그대로 두고 나머지만 갱신한다
+  function recalcDelay(source){
+    const speed = currentSpeedOfSound();
+    delaySpeedReadout.textContent = speed.toFixed(1);
+
+    if (source === 'distance') {
+      const dist = parseFloat(delayDistInput.value) || 0;
+      delayTimeInput.value = (dist / speed * 1000).toFixed(2);
+    } else {
+      const timeMs = parseFloat(delayTimeInput.value) || 0;
+      delayDistInput.value = (timeMs / 1000 * speed).toFixed(3);
+    }
+    drawDelay();
+  }
+
+  delayDistInput.addEventListener('input', () => recalcDelay('distance'));
+  delayTimeInput.addEventListener('input', () => recalcDelay('time'));
+  // ✅ 요청 반영: Delay 탭에도 온도 입력칸을 따로 두되, Frequency 탭 온도와 서로 값이 동기화되게 한다
+  // (둘이 따로 놀면 두 탭이 다른 음속을 쓰는 것처럼 헷갈릴 수 있어서)
+  tempInput.addEventListener('input', () => {
+    delayTempInput.value = tempInput.value;
+    recalcDelay('distance');
+  });
+  delayTempInput.addEventListener('input', () => {
+    tempInput.value = delayTempInput.value;
+    recalc();
+    recalcDelay('distance');
+  });
+  window.addEventListener('resize', () => {
+    if (delayTab.style.display !== 'none') { resizeDelayCanvas(); drawDelay(); }
+  });
+
   freqInput.addEventListener('input', recalc);
   tempInput.addEventListener('input', recalc);
   window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
@@ -611,13 +761,16 @@
       const tab = btn.dataset.tab;
       frequencyTab.style.display = tab === 'frequency' ? 'block' : 'none';
       bandTab.style.display = tab === 'band' ? 'block' : 'none';
-      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band') ? 'block' : 'none';
+      delayTab.style.display = tab === 'delay' ? 'block' : 'none';
+      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay') ? 'block' : 'none';
       if (tab === 'band') { resizeBandCanvas(); drawBand(); }
+      if (tab === 'delay') { resizeDelayCanvas(); drawDelay(); }
     });
   });
 
   recalc();
   recalcBand();
+  recalcDelay('distance');
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
 })();
 </script>
