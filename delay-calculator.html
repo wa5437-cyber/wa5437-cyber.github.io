@@ -633,13 +633,13 @@
   // -----------------------------------------------------------------
   const reverbTable = document.getElementById('reverbTable');
 
-  // barFraction: 1마디(4/4 기준) 대비 몇 분의 1을 총 리버브 길이(프리딜레이+디케이)로 쓸지
-  // preDelayDiv: 프리딜레이로 쓸 음표 분할값 (예: 64 → 1/64음표)
+  // barFraction: 1마디(4/4 기준) 대비 몇 배(또는 몇 분의 1)를 총 리버브 길이(프리딜레이+디케이)로 쓸지
+  // ✅ 요청 반영: Hall을 2마디로 키우고, 그 아래로 절반씩 taper되게 정리했다(2 → 1 → 1/2 → 1/4마디).
   const REVERB_PRESETS = [
-    { name: 'Hall',           desc: '크고 풍성하게 — 한 마디를 꽉 채움', barFraction: 1,    preDelayDiv: 64 },
-    { name: 'Big Room',       desc: '중간 크기 — 반 마디',              barFraction: 1/2,  preDelayDiv: 64 },
-    { name: 'Small Room',     desc: '작은 방 — 4분의 1마디',            barFraction: 1/4,  preDelayDiv: 128 },
-    { name: 'Tight Ambience', desc: '아주 짧은 잔향 — 8분의 1마디',      barFraction: 1/8,  preDelayDiv: 128 },
+    { name: 'Hall',           desc: '크고 웅장하게 — 두 마디를 꽉 채움',   barFraction: 2 },
+    { name: 'Big Room',       desc: '중간 크기 — 한 마디',               barFraction: 1 },
+    { name: 'Small Room',     desc: '작은 방 — 반 마디',                 barFraction: 1/2 },
+    { name: 'Tight Ambience', desc: '아주 짧은 잔향 — 4분의 1마디',       barFraction: 1/4 },
   ];
 
   function renderReverbTable(){
@@ -655,9 +655,13 @@
         <div class="tempo-cell">Total Reverb</div>
       </div>`;
 
-    REVERB_PRESETS.forEach(({ name, desc, barFraction, preDelayDiv }) => {
+    REVERB_PRESETS.forEach(({ name, desc, barFraction }) => {
       const totalMs = barMs * barFraction;
-      const preDelayMs = quarterMs * (4 / preDelayDiv); // 예: 1/64음표 = 4분음표 길이 ÷ 16
+      // ✅ 고친 것: 프리딜레이를 "4분음표 기준 1/64"로 고정하면 Hall과 Big Room처럼
+      // 총 길이가 다른 프리셋끼리 우연히 같은 값이 나올 수 있었다. 대신 "이 프리셋
+      // 자신의 총 길이 대비 1/64"로 바꿔서, 공간이 작아질수록 프리딜레이도 자연스럽게
+      // 비례해서 짧아지게 했다.
+      const preDelayMs = totalMs / 64;
       const decayMs = Math.max(0, totalMs - preDelayMs);
       html += `
         <div class="tempo-row">
