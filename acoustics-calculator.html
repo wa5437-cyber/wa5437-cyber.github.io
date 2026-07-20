@@ -100,11 +100,8 @@
 
   /* ---- 파형 그래프 ---- */
   .wave-canvas-wrap{ width:100%; }
-  #waveCanvas{ width:100%; height:220px; display:block; border-radius:12px; }
-  #bandCanvas{ width:100%; height:340px; display:block; border-radius:12px; }
-  #delayCanvas{ width:100%; height:200px; display:block; border-radius:12px; }
-  #volumeCanvas{ width:100%; height:260px; display:block; border-radius:12px; }
-  @media (max-width:480px){ #waveCanvas{ height:170px; } #bandCanvas{ height:260px; } #delayCanvas{ height:160px; } #volumeCanvas{ height:200px; } }
+  #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ width:100%; height:300px; display:block; border-radius:12px; }
+  @media (max-width:480px){ #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ height:230px; } }
 
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
