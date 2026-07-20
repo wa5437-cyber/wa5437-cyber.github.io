@@ -62,6 +62,21 @@
   .modepicker button.active{ background:#232b2f; color:var(--text-primary); }
   .modepicker button:disabled{ opacity:0.5; cursor:not-allowed; }
 
+  /* ---- 음악 업로드 패널 ---- */
+  .music-upload-panel{
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:14px;
+  }
+  .upload-btn{
+    border:1px dashed var(--line); background:rgba(255,255,255,0.02); color:var(--text-secondary);
+    font-size:13px; font-weight:600; padding:10px 18px; border-radius:10px; width:100%;
+  }
+  .upload-btn:hover{ background:rgba(255,255,255,0.06); color:var(--text-primary); }
+  .music-filename{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--teal); text-align:center;
+    word-break:break-all;
+  }
+
   /* ---- status ---- */
   .status{ text-align:center; }
   .status h2{ font-size:15px; font-weight:700; }
@@ -282,6 +297,16 @@
     <button id="magMixed">복합(랜덤)</button>
   </div>
 
+  <div class="music-upload-panel" id="musicUploadPanel">
+    <div class="modepicker" id="sourcePicker">
+      <button id="sourceNoiseBtn" class="active">🌫️ 핑크노이즈</button>
+      <button id="sourceMusicBtn" disabled>🎵 내 음악</button>
+    </div>
+    <input type="file" id="musicFileInput" accept="audio/*" style="display:none;">
+    <button class="upload-btn" id="uploadMusicBtn">📂 음악 파일 업로드</button>
+    <div class="music-filename" id="musicFileName"></div>
+  </div>
+
   <div class="status">
     <h2 id="statusTitle">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
     <p id="statusSub"></p>
@@ -339,6 +364,10 @@
       this.currentMode = 'eq';
       this.targetIndex = null;
       this.isBoost = true;
+      // ✅ 요청 반영: 업로드한 음악을 청음 소스로 쓰기 위한 상태
+      this.usingMusic = false;
+      this.musicBuffer = null;      // decodeAudioData로 디코딩된 AudioBuffer
+      this.musicSourceNode = null;  // 현재 재생 중인 AudioBufferSourceNode (1회용이라 매번 새로 만든다)
     }
 
     ensureContext(){
@@ -365,7 +394,11 @@
           }
         };
 
-        // 신호 흐름: PinkNoise -> EQ(Peaking) -> pinkGain -> masterGain -> destination
+        // ✅ 고친 것(중요): 신호 흐름을 "PinkNoise/Music -> 각자의 게인(음소거 제어) -> 공유 EQ 필터
+        // -> masterGain" 순서로 바꿨다. 예전엔 게인이 필터 *뒤*에 있어서, 게인을 0으로 낮춰도
+        // 이미 필터 입력 단계에서 핑크노이즈와 음악이 섞여버린 뒤였다 — 그래서 음악 재생 중에도
+        // 핑크노이즈가 살짝 새어 들리는 문제가 있었다. 게인을 필터 *앞*으로 옮기면, 꺼진 쪽은
+        // 애초에 필터에 들어가지도 않으니 완전히 분리된다.
         this.eqFilter = this.ctx.createBiquadFilter();
         this.eqFilter.type = 'peaking';
         this.eqFilter.frequency.value = 1000;
@@ -374,9 +407,14 @@
 
         this.pinkGain = this.ctx.createGain();
         this.pinkGain.gain.value = 0;
+        this.pinkNode.connect(this.pinkGain);
+        this.pinkGain.connect(this.eqFilter);
 
-        this.pinkNode.connect(this.eqFilter);
-        this.eqFilter.connect(this.pinkGain);
+        // ✅ 요청 반영: 업로드한 음악도 같은 EQ 필터를 통과시킨다.
+        // (AudioBufferSourceNode는 1회용이라 매번 새로 만들어서 이 게인 노드에 연결한다)
+        this.musicGain = this.ctx.createGain();
+        this.musicGain.gain.value = 0;
+        this.musicGain.connect(this.eqFilter);
 
         // 사인파 오버레이: OscillatorNode -> sineGain -> masterGain
         this.sineOsc = this.ctx.createOscillator();
@@ -390,9 +428,47 @@
         this.masterGain = this.ctx.createGain();
         this.masterGain.gain.value = 0;
 
-        this.pinkGain.connect(this.masterGain);
+        this.eqFilter.connect(this.masterGain);
         this.sineGain.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
+      }
+    }
+
+    // ✅ 요청 반영: 업로드된 음악 파일(ArrayBuffer)을 디코딩해서 재생 가능한 AudioBuffer로 저장한다.
+    async loadMusicBuffer(arrayBuffer){
+      this.ensureContext();
+      this.musicBuffer = await this.ctx.decodeAudioData(arrayBuffer);
+      return this.musicBuffer;
+    }
+
+    // ✅ 요청 반영: 음악을 "완전히 무작위 위치"에서 재생 시작한다.
+    // 매번 새 AudioBufferSourceNode를 만들어야 하는 이유: Web Audio의 BufferSourceNode는
+    // 한 번 start()하면 재사용이 안 되는 1회용 노드라서, 새로 재생할 때마다 새로 만든다.
+    // 짧은 구간을 반복 재생(loop)하게 해서, 문제 하나 푸는 동안 음악이 끊기지 않게 한다.
+    _startMusicSource(){
+      if (!this.musicBuffer) return;
+      this._stopMusicSource();
+
+      const duration = this.musicBuffer.duration;
+      const loopWindow = Math.min(15, duration); // 최대 15초 구간을 반복 재생
+      const maxOffset = Math.max(0, duration - loopWindow);
+      const offset = Math.random() * maxOffset; // ✅ 요청 반영: 재생 위치를 랜덤으로
+
+      const src = this.ctx.createBufferSource();
+      src.buffer = this.musicBuffer;
+      src.loop = true;
+      src.loopStart = offset;
+      src.loopEnd = Math.min(duration, offset + loopWindow);
+      src.connect(this.musicGain);
+      src.start(0, offset);
+      this.musicSourceNode = src;
+    }
+
+    _stopMusicSource(){
+      if (this.musicSourceNode) {
+        try { this.musicSourceNode.stop(); } catch(e) { /* 이미 멈춘 경우 무시 */ }
+        this.musicSourceNode.disconnect();
+        this.musicSourceNode = null;
       }
     }
 
@@ -413,31 +489,45 @@
       this.isPlaying = true;
       this.eqFilter.gain.value = 0;
       this.sineGain.gain.value = 0;
-      this.pinkGain.gain.value = (mode === 'eq') ? 0 : 0;
-      this.rampParam(this.masterGain.gain, 1.0, 0.3);
-      // 모드에 따라 배경 핑크노이즈 레벨을 켠다 (사인파 모드는 순수 톤만 들려주기 위해 무음 유지)
+      this.pinkGain.gain.value = 0;
+      this.musicGain.gain.value = 0;
+      // 모드에 따라 배경 소리(핑크노이즈 또는 업로드한 음악) 레벨을 켠다
+      // (사인파 모드는 순수 톤만 들려주기 위해 배경 소리를 무음 유지)
       if (mode === 'eq'){
-        this.rampParam(this.pinkGain.gain, 1.0, 0.3);
-      } else {
-        this.pinkGain.gain.value = 0;
+        if (this.usingMusic && this.musicBuffer) {
+          this._startMusicSource();
+          this.rampParam(this.musicGain.gain, 1.0, 0.3);
+        } else {
+          this.rampParam(this.pinkGain.gain, 1.0, 0.3);
+        }
       }
+      this.rampParam(this.masterGain.gain, 1.0, 0.3);
     }
 
     stop(fadeDuration){
       if (!this.isPlaying) return;
       this.rampParam(this.masterGain.gain, 0, fadeDuration || 0.3);
       this.isPlaying = false;
+      // ✅ 요청 반영: 정지할 때 재생 중이던 음악도 페이드아웃이 끝난 뒤 함께 멈춘다
+      if (this.musicSourceNode) {
+        setTimeout(() => { this._stopMusicSource(); }, ((fadeDuration || 0.3) + 0.05) * 1000);
+      }
     }
 
-    // ✅ 요청 반영: 정답/오답 판정 순간 핑크노이즈(배경음)만 멈춘다.
-    // (사인파 모드는 원래 핑크노이즈가 꺼져있으므로 이 호출은 자연스럽게 아무 효과가 없다)
+    // ✅ 요청 반영: 정답/오답 판정 순간 배경음(핑크노이즈 또는 업로드한 음악)만 멈춘다.
+    // (사인파 모드는 원래 배경음이 꺼져있으므로 이 호출은 자연스럽게 아무 효과가 없다)
     pauseBackgroundNoise(duration){
       this.rampParam(this.pinkGain.gain, 0, duration);
+      this.rampParam(this.musicGain.gain, 0, duration);
     }
     // 다음 문제 워밍업이 시작될 때 다시 켠다. EQ 모드일 때만 배경음이 필요하다.
     resumeBackgroundNoise(duration){
-      const target = this.currentMode === 'eq' ? 1.0 : 0;
-      this.rampParam(this.pinkGain.gain, target, duration);
+      if (this.currentMode !== 'eq') return;
+      if (this.usingMusic && this.musicBuffer) {
+        this.rampParam(this.musicGain.gain, 1.0, duration);
+      } else {
+        this.rampParam(this.pinkGain.gain, 1.0, duration);
+      }
     }
 
     // ✅ 요청 반영: 초저역(20~31.5Hz 근처)과 초고역(16k~20Hz 근처)은 다른 대역보다
@@ -479,6 +569,10 @@
         this.currentGainDB = gainDB; // ✅ A/B 사이클(기본↔변형 전환)에서 재사용하기 위해 저장
         this.eqFilter.frequency.value = targetFreq;
         this.eqFilter.gain.value = 0; // 기본(무변형) 상태로 시작 — A/B 사이클이 알아서 전환한다
+        // ✅ 요청 반영: 문제가 바뀔 때마다 음악도 새로운 랜덤 위치에서 다시 시작한다
+        if (this.usingMusic && this.musicBuffer && this.isPlaying) {
+          this._startMusicSource();
+        }
       } else {
         this.isBoost = true;
         this.sineOsc.frequency.value = targetFreq;
@@ -673,6 +767,12 @@
   const mag6Btn = document.getElementById('mag6');
   const mag3Btn = document.getElementById('mag3');
   const magMixedBtn = document.getElementById('magMixed');
+  const musicUploadPanel = document.getElementById('musicUploadPanel');
+  const sourceNoiseBtn = document.getElementById('sourceNoiseBtn');
+  const sourceMusicBtn = document.getElementById('sourceMusicBtn');
+  const musicFileInput = document.getElementById('musicFileInput');
+  const uploadMusicBtn = document.getElementById('uploadMusicBtn');
+  const musicFileName = document.getElementById('musicFileName');
 
   // ✅ 10밴드 이지 모드: 시중 그래픽 이퀄라이저에서 흔히 쓰는 표준 옥타브 간격 10개
   const EASY10_FREQS = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
@@ -787,6 +887,7 @@
     updateListenDirVisibility();
     updateDirectionModeVisibility();
     updateMagnitudeVisibility();
+    updateMusicPanelVisibility();
   }
   modeEQBtn.addEventListener('click', () => {
     const busy = chapter === 'training' ? (phase !== 'idle') : isListening;
@@ -897,17 +998,28 @@
     const show = chapter === 'training' && mode === 'eq';
     magnitudePicker.style.display = show ? 'flex' : 'none';
   }
+  // ✅ 요청 반영: 음악 업로드 패널은 EQ 모드일 때만 의미가 있다 (사인파는 배경음이 없음)
+  function updateMusicPanelVisibility(){
+    musicUploadPanel.style.display = (mode === 'eq') ? 'flex' : 'none';
+  }
   function setMagnitudeButtons(){
     mag12Btn.classList.toggle('active', magnitudeMode === 12);
     mag6Btn.classList.toggle('active', magnitudeMode === 6);
     mag3Btn.classList.toggle('active', magnitudeMode === 3);
     magMixedBtn.classList.toggle('active', magnitudeMode === 'mixed');
-    const busy = phase !== 'idle';
+    // ✅ 고친 것: busy 판정이 훈련(phase)만 보고 청음(isListening) 상태는 놓치고 있었다.
+    // 그래서 청음 중에 음악 업로드/소스 전환 버튼이 안 잠기는 버그가 있었다.
+    const busy = phase !== 'idle' || isListening;
     mag12Btn.disabled = busy;
     mag6Btn.disabled = busy;
     mag3Btn.disabled = busy;
     magMixedBtn.disabled = busy;
     updateMagnitudeVisibility();
+    updateMusicPanelVisibility();
+    // ✅ 요청 반영: 재생 중일 때는 소스(핑크노이즈/내 음악) 전환·업로드를 막는다
+    sourceNoiseBtn.disabled = busy;
+    sourceMusicBtn.disabled = busy || !engine.musicBuffer;
+    uploadMusicBtn.disabled = busy;
   }
   mag12Btn.addEventListener('click', () => {
     if (phase !== 'idle' || magnitudeMode === 12) return;
@@ -924,6 +1036,45 @@
   magMixedBtn.addEventListener('click', () => {
     if (phase !== 'idle' || magnitudeMode === 'mixed') return;
     magnitudeMode = 'mixed'; setMagnitudeButtons();
+  });
+
+  // ✅ 요청 반영: 음악 파일 업로드 → 디코딩 → "내 음악"을 청음 소스로 선택 가능하게 함
+  uploadMusicBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || isListening) return; // 재생/청음 중엔 파일 교체 방지
+    musicFileInput.click();
+  });
+
+  musicFileInput.addEventListener('change', async () => {
+    const file = musicFileInput.files && musicFileInput.files[0];
+    if (!file) return;
+    musicFileName.textContent = `⏳ "${file.name}" 불러오는 중...`;
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      await engine.loadMusicBuffer(arrayBuffer);
+      musicFileName.textContent = `✅ "${file.name}" (${Math.round(engine.musicBuffer.duration)}초)`;
+      sourceMusicBtn.disabled = false;
+      // 업로드하면 바로 "내 음악"을 소스로 선택해준다
+      engine.usingMusic = true;
+      sourceNoiseBtn.classList.remove('active');
+      sourceMusicBtn.classList.add('active');
+    } catch (err) {
+      console.error('음악 파일 디코딩 실패:', err);
+      musicFileName.textContent = `⚠️ "${file.name}" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다`;
+      sourceMusicBtn.disabled = true;
+    }
+  });
+
+  sourceNoiseBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || isListening || !engine.usingMusic) return;
+    engine.usingMusic = false;
+    sourceNoiseBtn.classList.add('active');
+    sourceMusicBtn.classList.remove('active');
+  });
+  sourceMusicBtn.addEventListener('click', () => {
+    if (phase !== 'idle' || isListening || engine.usingMusic || !engine.musicBuffer) return;
+    engine.usingMusic = true;
+    sourceNoiseBtn.classList.remove('active');
+    sourceMusicBtn.classList.add('active');
   });
 
   function resetBandStyles(){
@@ -1221,6 +1372,7 @@
   setBandCountButtons();
   setDirectionModeButtons();
   setMagnitudeButtons();
+  updateMusicPanelVisibility();
   updateBandVisibility();
   updateScoreboard();
 })();
