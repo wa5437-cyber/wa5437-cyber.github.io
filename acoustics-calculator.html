@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Acoustics Calculator — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
+    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:780px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#1b2226,#0d1113); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-tertiary); font-weight:400; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
+
+  @media (max-width:480px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar{ align-items:flex-start; }
+    .topbar .title{ font-size:14.5px; }
+    .topbar .title small{ font-size:10px; }
+    .topbar .home-link{ font-size:11.5px; padding:7px 10px; margin-top:1px; }
+  }
+
+  /* ---- 탭 피커 (Frequency / Band / Delay / Volume / Room Modes) ---- */
+  .tab-picker{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px;
+  }
+  .tab-picker button{
+    border:none; background:transparent; color:var(--text-secondary); font-size:12px; font-weight:600;
+    padding:11px 4px; border-radius:9px; transition:background .15s, color .15s;
+  }
+  .tab-picker button.active{ background:#232b2f; color:var(--teal); }
+  .tab-picker button:disabled{ opacity:0.35; cursor:default; }
+  @media (max-width:480px){ .tab-picker button{ font-size:10.5px; padding:9px 2px; } }
+
+  .coming-soon{
+    text-align:center; padding:40px 20px; color:var(--text-tertiary); font-size:14px; line-height:1.7;
+  }
+  .coming-soon b{ color:var(--text-secondary); display:block; font-size:16px; margin-bottom:6px; }
+
+  .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113); padding:20px; }
+  .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:14px; }
+
+  .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-tertiary);
+    text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;
+  }
+  .input-row{ display:flex; align-items:center; gap:8px; }
+  .input-row input[type=number]{
+    flex:1; background:#171d21; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
+  }
+  .input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--text-tertiary); flex-shrink:0; }
+
+  /* ---- 결과 리스트 (스크린샷의 Frequency/Period/Wave length 줄들과 동일한 느낌) ---- */
+  .result-list{ margin-top:18px; }
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline; padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .result-row:last-child{ border-bottom:none; }
+  .result-lbl{ font-size:15px; color:var(--text-secondary); }
+  .result-val{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:700; color:var(--amber); }
+  .result-val .unit{ font-size:13px; font-weight:500; color:var(--text-tertiary); margin-left:6px; }
+
+  /* ---- 파형 그래프 ---- */
+  .wave-canvas-wrap{ width:100%; }
+  #waveCanvas{ width:100%; height:220px; display:block; border-radius:12px; }
+  @media (max-width:480px){ #waveCanvas{ height:170px; } }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">ACOUSTICS CALCULATOR<small>Frequency · Wavelength · Period</small></div>
+    <a class="home-link" href="index.html">← 홈으로</a>
+  </div>
+
+  <div class="tab-picker" id="tabPicker">
+    <button data-tab="frequency" class="active">Frequency</button>
+    <button data-tab="band" disabled>Band</button>
+    <button data-tab="delay" disabled>Delay</button>
+    <button data-tab="volume" disabled>Volume</button>
+    <button data-tab="roommodes" disabled>Room Modes</button>
+  </div>
+
+  <div id="frequencyTab">
+    <div class="panel">
+      <div class="panel-title">Frequency</div>
+      <div class="field">
+        <label>Frequency</label>
+        <div class="input-row">
+          <input type="number" id="freqInput" value="250" step="1" min="1">
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">Period</span>
+          <span class="result-val"><span id="periodVal">--</span><span class="unit">ms</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Wave length (λ)</span>
+          <span class="result-val"><span id="wavelengthVal">--</span><span class="unit">m</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">1/4 wave length</span>
+          <span class="result-val"><span id="quarterWaveVal">--</span><span class="unit">m</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Waveform</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="waveCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div id="placeholderTab" class="panel" style="display:none;">
+    <div class="coming-soon">
+      <b>🚧 준비 중이에요</b>
+      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency 탭만 사용할 수 있어요.
+    </div>
+  </div>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // 음속(m/s) — 상온(약 20°C) 기준 표준값. 스크린샷 참고 앱과 동일하게 고정값 343을 사용한다.
+  const SPEED_OF_SOUND = 343;
+
+  const tabPicker = document.getElementById('tabPicker');
+  const frequencyTab = document.getElementById('frequencyTab');
+  const placeholderTab = document.getElementById('placeholderTab');
+  const freqInput = document.getElementById('freqInput');
+  const periodVal = document.getElementById('periodVal');
+  const wavelengthVal = document.getElementById('wavelengthVal');
+  const quarterWaveVal = document.getElementById('quarterWaveVal');
+  const waveCanvas = document.getElementById('waveCanvas');
+  const waveCtx = waveCanvas.getContext('2d');
+
+  function resizeCanvas(){
+    const rect = waveCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    waveCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    waveCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawWave(){
+    const w = waveCanvas.width, h = waveCanvas.height;
+    if (w === 0 || h === 0) return;
+    waveCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.06, marginR = w * 0.04, marginT = h * 0.12, marginB = h * 0.12;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const midY = marginT + plotH / 2;
+
+    // 축
+    waveCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+    waveCtx.lineWidth = Math.max(1, w * 0.0015);
+    waveCtx.beginPath();
+    waveCtx.moveTo(marginL, marginT - h * 0.03);
+    waveCtx.lineTo(marginL, marginT + plotH + h * 0.02);
+    waveCtx.stroke();
+    waveCtx.beginPath();
+    waveCtx.moveTo(marginL, midY);
+    waveCtx.lineTo(marginL + plotW + w * 0.02, midY);
+    waveCtx.stroke();
+
+    // 사인파: 화면에 정확히 3주기가 보이도록 스케일
+    const cycles = 3;
+    const amp = plotH * 0.42;
+    waveCtx.beginPath();
+    const steps = 400;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const x = marginL + t * plotW;
+      const y = midY - Math.sin(t * cycles * Math.PI * 2) * amp;
+      if (i === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
+    }
+    waveCtx.strokeStyle = '#f2a93b';
+    waveCtx.lineWidth = Math.max(2, w * 0.006);
+    waveCtx.lineJoin = 'round';
+    waveCtx.lineCap = 'round';
+    waveCtx.stroke();
+
+    // 축 라벨
+    waveCtx.fillStyle = 'rgba(147,163,163,0.8)';
+    waveCtx.font = `${Math.max(11, h * 0.055)}px 'IBM Plex Mono', monospace`;
+    waveCtx.fillText('a', marginL - w * 0.01, marginT - h * 0.04);
+    waveCtx.fillText('t', marginL + plotW + w * 0.03, midY + h * 0.05);
+  }
+
+  function recalc(){
+    const freq = parseFloat(freqInput.value) || 0;
+    if (freq <= 0) {
+      periodVal.textContent = '--';
+      wavelengthVal.textContent = '--';
+      quarterWaveVal.textContent = '--';
+      return;
+    }
+    const periodMs = 1000 / freq;
+    const wavelengthM = SPEED_OF_SOUND / freq;
+    const quarterWaveM = wavelengthM / 4;
+
+    periodVal.textContent = periodMs.toFixed(2);
+    wavelengthVal.textContent = wavelengthM.toFixed(5);
+    quarterWaveVal.textContent = quarterWaveM.toFixed(5);
+  }
+
+  freqInput.addEventListener('input', recalc);
+  window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
+
+  // 탭 전환 (Frequency 외에는 아직 준비 중)
+  tabPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      tabPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      const isFreq = btn.dataset.tab === 'frequency';
+      frequencyTab.style.display = isFreq ? 'block' : 'none';
+      placeholderTab.style.display = isFreq ? 'none' : 'block';
+    });
+  });
+
+  recalc();
+  requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
+})();
+</script>
+</body>
+</html>
