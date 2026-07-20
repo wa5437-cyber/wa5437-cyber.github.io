@@ -73,6 +73,7 @@
   .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113); padding:20px; }
   .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:14px; }
 
+  .phase-desc{ font-size:13px; color:var(--text-tertiary); line-height:1.6; margin:0; }
   .field label{
     display:block; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-tertiary);
     text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;
@@ -100,7 +101,8 @@
   /* ---- 파형 그래프 ---- */
   .wave-canvas-wrap{ width:100%; }
   #waveCanvas{ width:100%; height:220px; display:block; border-radius:12px; }
-  @media (max-width:480px){ #waveCanvas{ height:170px; } }
+  #bandCanvas{ width:100%; height:340px; display:block; border-radius:12px; }
+  @media (max-width:480px){ #waveCanvas{ height:170px; } #bandCanvas{ height:260px; } }
 
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
@@ -122,7 +124,7 @@
 
   <div class="tab-picker" id="tabPicker">
     <button data-tab="frequency" class="active">Frequency</button>
-    <button data-tab="band" disabled>Band</button>
+    <button data-tab="band">Band</button>
     <button data-tab="delay" disabled>Delay</button>
     <button data-tab="volume" disabled>Volume</button>
     <button data-tab="roommodes" disabled>Room Modes</button>
@@ -171,10 +173,69 @@
     </div>
   </div>
 
+  <div id="bandTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Band</div>
+      <div class="field">
+        <label>Center Frequency (F0)</label>
+        <div class="input-row">
+          <input type="number" id="bandFreqInput" value="1000" step="1" min="1">
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Bandwidth</label>
+        <div class="tab-picker" id="bandwidthPicker" style="grid-template-columns:repeat(4,1fr); margin-top:6px;">
+          <button data-oct="1">1/1 Oct</button>
+          <button data-oct="3" class="active">1/3 Oct</button>
+          <button data-oct="6">1/6 Oct</button>
+          <button data-oct="12">1/12 Oct</button>
+        </div>
+        <p class="phase-desc" style="margin-top:10px;">F1(하한)·F2(상한)는 중심 주파수(F0) 대비 반전력점(<b style="color:var(--text-secondary);">−3dB 지점</b>)을 기준으로 계산합니다 — 필터 설계에서 흔히 쓰는 표준 정의입니다.</p>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Q factor (직접 입력 가능)</label>
+        <div class="input-row">
+          <input type="number" id="qFactorInput" value="4.32" step="0.01" min="0.01">
+        </div>
+        <p class="speed-readout">≈ <span id="qOctaveReadout">1/3</span> 옥타브에 해당</p>
+        <p class="phase-desc" style="margin-top:6px;">위 프리셋 버튼을 누르면 이 값이 자동으로 채워지고, 직접 숫자를 입력하면 그 Q값 기준으로 다시 계산됩니다.</p>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">F1 · Lower band edge</span>
+          <span class="result-val"><span id="bandLowVal">--</span><span class="unit">Hz</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">F2 · Upper band edge</span>
+          <span class="result-val"><span id="bandHighVal">--</span><span class="unit">Hz</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Bandwidth (−3dB 기준)</span>
+          <span class="result-val"><span id="bandWidthVal">--</span><span class="unit">Hz</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Q factor</span>
+          <span class="result-val"><span id="bandQVal">--</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Band on Spectrum (20Hz – 20kHz)</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="bandCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
   <div id="placeholderTab" class="panel" style="display:none;">
     <div class="coming-soon">
       <b>🚧 준비 중이에요</b>
-      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency 탭만 사용할 수 있어요.
+      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency · Band 탭만 사용할 수 있어요.
     </div>
   </div>
 
@@ -202,6 +263,45 @@
   const tabPicker = document.getElementById('tabPicker');
   const frequencyTab = document.getElementById('frequencyTab');
   const placeholderTab = document.getElementById('placeholderTab');
+  const bandTab = document.getElementById('bandTab');
+  const bandFreqInput = document.getElementById('bandFreqInput');
+  const bandwidthPicker = document.getElementById('bandwidthPicker');
+  const bandLowVal = document.getElementById('bandLowVal');
+  const bandHighVal = document.getElementById('bandHighVal');
+  const bandWidthVal = document.getElementById('bandWidthVal');
+  const bandQVal = document.getElementById('bandQVal');
+  const bandCanvas = document.getElementById('bandCanvas');
+  const bandCtx = bandCanvas.getContext('2d');
+  const qFactorInput = document.getElementById('qFactorInput');
+  const qOctaveReadout = document.getElementById('qOctaveReadout');
+  // ✅ 요청 반영: Q를 직접 입력할 수 있게, N(옥타브 분수) 대신 Q 자체를 상태로 둔다.
+  // N → Q 변환: Q = 1 / (2^(1/(2N)) - 2^(-1/(2N)))
+  function qFromOctaveN(N){
+    const ratio = Math.pow(2, 1 / (2 * N));
+    return 1 / (ratio - 1 / ratio);
+  }
+  // ✅ 요청 반영: Q값에서 거꾸로 "대략 몇 분의 1 옥타브에 해당하는지"를 계산한다.
+  function octaveNFromQ(Q){
+    const ratio = (1 + Math.sqrt(1 + 4 * Q * Q)) / (2 * Q); // Q = 1/(r - 1/r)의 역산
+    return 1 / (2 * Math.log2(ratio));
+  }
+  function formatApproxOctave(Q){
+    const N = octaveNFromQ(Q);
+    // 흔히 쓰는 표준 분수(1, 2, 3, 6, 12, 24)에 가까우면 그 숫자로, 아니면 소수 한 자리로 표시
+    const common = [1, 2, 3, 6, 12, 24];
+    const nearest = common.reduce((a, b) => Math.abs(b - N) < Math.abs(a - N) ? b : a);
+    return Math.abs(nearest - N) < 0.15 ? `1/${nearest}` : `1/${N.toFixed(1)}`;
+  }
+  let currentQ = qFromOctaveN(3); // 기본값: 1/3 옥타브에 해당하는 Q
+
+  // ✅ Q와 중심주파수(F0)만으로 F1·F2를 계산한다 (F1×F2=F0², F2−F1=F0/Q를 만족하는 해).
+  // 옥타브 비율 방식과 수학적으로 동일하지만, 임의의 Q값(프리셋에 없는 값)도 지원한다.
+  function computeBandEdges(fc, Q){
+    const bw = fc / Q;
+    const fLow = (-bw + Math.sqrt(bw * bw + 4 * fc * fc)) / 2;
+    const fHigh = fLow + bw;
+    return { fLow, fHigh };
+  }
   const tempInput = document.getElementById('tempInput');
   const speedReadout = document.getElementById('speedReadout');
   const freqInput = document.getElementById('freqInput');
@@ -309,6 +409,196 @@
     drawWave(); // ✅ 요청 반영: 주파수가 바뀔 때마다 그래프도 다시 그린다
   }
 
+  // -----------------------------------------------------------------
+  // Band 탭 — 중심 주파수 + 1/N 옥타브 대역폭 → 상/하한 경계, 대역폭, Q값
+  // -----------------------------------------------------------------
+  function resizeBandCanvas(){
+    const rect = bandCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    bandCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    bandCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  const BAND_FREQ_MIN = 20, BAND_FREQ_MAX = 20000;
+  function bandFreqToX(f, plotW, plotX0){
+    const t = Math.log(f / BAND_FREQ_MIN) / Math.log(BAND_FREQ_MAX / BAND_FREQ_MIN);
+    return plotX0 + Math.max(0, Math.min(1, t)) * plotW;
+  }
+
+  function drawBand(){
+    const w = bandCanvas.width, h = bandCanvas.height;
+    if (w === 0 || h === 0) return;
+    bandCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.1, marginR = w * 0.05, marginT = h * 0.28, marginB = h * 0.22;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const axisY = marginT + plotH;
+
+    const fc = parseFloat(bandFreqInput.value) || 1000;
+    // ✅ 요청 반영: 실제 대역통과 필터 응답(dB)을 그려서 -3dB 지점이 어디인지 눈으로 보여준다.
+    // Q는 이제 프리셋(1/N 옥타브) 또는 사용자가 직접 입력한 값 중 현재 선택된 것을 그대로 쓴다.
+    const Q = currentQ;
+    const { fLow, fHigh } = computeBandEdges(fc, Q);
+
+    // dB 축 범위: 0dB(피크) ~ -24dB(바닥)
+    const DB_MAX = 0, DB_MIN = -24;
+    function dbToY(db){
+      const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
+      return axisY - ((clamped - DB_MIN) / (DB_MAX - DB_MIN)) * plotH;
+    }
+    function responseDb(f){
+      const x = f / fc;
+      return -10 * Math.log10(1 + Q * Q * Math.pow(x - 1 / x, 2));
+    }
+
+    // dB 축 눈금(0 / -3 / -6 / -12 / -24) + 가로선
+    bandCtx.font = `${Math.max(10, h * 0.04)}px 'IBM Plex Mono', monospace`;
+    bandCtx.textAlign = 'right';
+    [0, -3, -6, -12, -24].forEach(db => {
+      const y = dbToY(db);
+      bandCtx.strokeStyle = db === -3 ? 'rgba(242,169,59,0.5)' : 'rgba(255,255,255,0.08)';
+      bandCtx.setLineDash(db === -3 ? [5, 4] : []);
+      bandCtx.lineWidth = Math.max(1, w * 0.0013);
+      bandCtx.beginPath();
+      bandCtx.moveTo(marginL, y);
+      bandCtx.lineTo(marginL + plotW, y);
+      bandCtx.stroke();
+      bandCtx.setLineDash([]);
+      bandCtx.fillStyle = db === -3 ? '#f2a93b' : 'rgba(147,163,163,0.75)';
+      bandCtx.fillText(db + 'dB', marginL - w * 0.015, y + h * 0.015);
+    });
+    bandCtx.textAlign = 'left';
+
+    // 주파수 세로 기준선 + 라벨 (20/100/1k/10k/20k)
+    bandCtx.font = `${Math.max(10, h * 0.042)}px 'IBM Plex Mono', monospace`;
+    const gridFreqs = [20, 100, 1000, 10000, 20000];
+    gridFreqs.forEach((f, i) => {
+      const x = bandFreqToX(f, plotW, marginL);
+      bandCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+      bandCtx.beginPath();
+      bandCtx.moveTo(x, marginT);
+      bandCtx.lineTo(x, axisY);
+      bandCtx.stroke();
+      const label = f >= 1000 ? (f/1000)+'k' : f;
+      // ✅ 로그축 특성상 10kHz·20kHz처럼 오른쪽으로 갈수록 라벨끼리 가까워져 겹치므로,
+      // 홀/짝 순서로 위아래를 번갈아 배치했다.
+      bandCtx.textAlign = (i === 0) ? 'left' : (i === gridFreqs.length - 1) ? 'right' : 'center';
+      const labelYOffset = (i % 2 === 0) ? h * 0.09 : h * 0.16;
+      bandCtx.fillText(label + 'Hz', x, axisY + labelYOffset);
+    });
+    bandCtx.textAlign = 'center';
+
+    // 밴드 구간 하이라이트(배경)
+    const xLow = bandFreqToX(fLow, plotW, marginL);
+    const xHigh = bandFreqToX(fHigh, plotW, marginL);
+    const xCenter = bandFreqToX(fc, plotW, marginL);
+    bandCtx.fillStyle = 'rgba(61,220,151,0.12)';
+    bandCtx.fillRect(xLow, marginT, xHigh - xLow, plotH);
+
+    // ✅ 필터 응답 곡선 그리기
+    bandCtx.beginPath();
+    const steps = 300;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const freq = BAND_FREQ_MIN * Math.pow(BAND_FREQ_MAX / BAND_FREQ_MIN, t);
+      const x = marginL + t * plotW;
+      const y = dbToY(responseDb(freq));
+      if (i === 0) bandCtx.moveTo(x, y); else bandCtx.lineTo(x, y);
+    }
+    bandCtx.strokeStyle = '#3ddc97';
+    bandCtx.lineWidth = Math.max(2, w * 0.005);
+    bandCtx.lineJoin = 'round';
+    bandCtx.stroke();
+
+    // F1·F2 지점에서 곡선까지 내려오는 점선 + 교차점 표시
+    bandCtx.strokeStyle = 'rgba(61,220,151,0.6)';
+    bandCtx.setLineDash([4, 3]);
+    bandCtx.lineWidth = Math.max(1, w * 0.0016);
+    [xLow, xHigh].forEach(x => {
+      bandCtx.beginPath();
+      bandCtx.moveTo(x, dbToY(-3));
+      bandCtx.lineTo(x, axisY);
+      bandCtx.stroke();
+    });
+    bandCtx.setLineDash([]);
+    [xLow, xHigh].forEach(x => {
+      bandCtx.beginPath();
+      bandCtx.arc(x, dbToY(-3), Math.max(2.5, w * 0.006), 0, Math.PI * 2);
+      bandCtx.fillStyle = '#3ddc97';
+      bandCtx.fill();
+    });
+
+    // 중심 주파수(F0) 점 — 곡선의 정점(0dB)
+    bandCtx.beginPath();
+    bandCtx.arc(xCenter, dbToY(0), Math.max(3, w * 0.008), 0, Math.PI * 2);
+    bandCtx.fillStyle = '#f2a93b';
+    bandCtx.fill();
+
+    // ✅ 요청 반영: F0/F1/F2를 아예 3개의 서로 다른 줄에 그려서 겹칠 수 없게 했다.
+    // 또한 실제 글자 폭(measureText)을 재서, 캔버스 좌우 경계 안으로 위치를 클램프해
+    // 가장자리에서도 잘리지 않게 했다.
+    bandCtx.font = `600 ${Math.max(11, h * 0.05)}px 'IBM Plex Mono', monospace`;
+    const rowGap = h * 0.052;
+    const f0LabelY = marginT - rowGap * 3;
+    const f1LabelY = marginT - rowGap * 2;
+    const f2LabelY = marginT - rowGap * 1;
+
+    function drawClampedLabel(text, x, y, color){
+      bandCtx.fillStyle = color;
+      bandCtx.textAlign = 'center';
+      const halfW = bandCtx.measureText(text).width / 2 + w * 0.008;
+      const clampedX = Math.max(marginL + halfW, Math.min(marginL + plotW - halfW, x));
+      bandCtx.fillText(text, clampedX, y);
+    }
+
+    drawClampedLabel(`F0 = ${Math.round(fc)}Hz`, xCenter, f0LabelY, '#f2a93b');
+    drawClampedLabel(`F1 = ${fLow.toFixed(fLow < 100 ? 1 : 0)}Hz`, xLow, f1LabelY, '#3ddc97');
+    drawClampedLabel(`F2 = ${fHigh.toFixed(fHigh < 100 ? 1 : 0)}Hz`, xHigh, f2LabelY, '#3ddc97');
+    bandCtx.textAlign = 'left';
+  }
+
+  function recalcBand(){
+    const fc = parseFloat(bandFreqInput.value) || 0;
+    if (fc <= 0) {
+      bandLowVal.textContent = '--'; bandHighVal.textContent = '--';
+      bandWidthVal.textContent = '--'; bandQVal.textContent = '--';
+      return;
+    }
+    const { fLow, fHigh } = computeBandEdges(fc, currentQ);
+    const bw = fHigh - fLow;
+
+    bandLowVal.textContent = fLow.toFixed(fLow < 100 ? 2 : 1);
+    bandHighVal.textContent = fHigh.toFixed(fHigh < 100 ? 2 : 1);
+    bandWidthVal.textContent = bw.toFixed(bw < 100 ? 2 : 1);
+    bandQVal.textContent = currentQ.toFixed(2);
+    qOctaveReadout.textContent = formatApproxOctave(currentQ);
+    drawBand();
+  }
+
+  bandFreqInput.addEventListener('input', recalcBand);
+  bandwidthPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const N = parseInt(btn.dataset.oct, 10);
+      currentQ = qFromOctaveN(N);
+      qFactorInput.value = currentQ.toFixed(2);
+      bandwidthPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcBand();
+    });
+  });
+  // ✅ 요청 반영: Q를 직접 입력하면 그 값 기준으로 다시 계산하고, 프리셋 버튼 선택은 해제한다
+  // (임의의 Q값은 보통 깔끔한 1/N 옥타브와 정확히 일치하지 않기 때문)
+  qFactorInput.addEventListener('input', () => {
+    const q = parseFloat(qFactorInput.value);
+    if (!isFinite(q) || q <= 0) return;
+    currentQ = q;
+    bandwidthPicker.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    recalcBand();
+  });
+  window.addEventListener('resize', () => {
+    if (bandTab.style.display !== 'none') { resizeBandCanvas(); drawBand(); }
+  });
+
   freqInput.addEventListener('input', recalc);
   tempInput.addEventListener('input', recalc);
   window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
@@ -318,13 +608,16 @@
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
       tabPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-      const isFreq = btn.dataset.tab === 'frequency';
-      frequencyTab.style.display = isFreq ? 'block' : 'none';
-      placeholderTab.style.display = isFreq ? 'none' : 'block';
+      const tab = btn.dataset.tab;
+      frequencyTab.style.display = tab === 'frequency' ? 'block' : 'none';
+      bandTab.style.display = tab === 'band' ? 'block' : 'none';
+      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band') ? 'block' : 'none';
+      if (tab === 'band') { resizeBandCanvas(); drawBand(); }
     });
   });
 
   recalc();
+  recalcBand();
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
 })();
 </script>
