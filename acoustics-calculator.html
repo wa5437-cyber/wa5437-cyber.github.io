@@ -83,6 +83,8 @@
     font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
   }
   .input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--text-tertiary); flex-shrink:0; }
+  .speed-readout{ margin:6px 0 0; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-tertiary); }
+  .speed-readout span{ color:var(--teal); font-weight:600; }
 
   /* ---- 결과 리스트 (스크린샷의 Frequency/Period/Wave length 줄들과 동일한 느낌) ---- */
   .result-list{ margin-top:18px; }
@@ -130,9 +132,17 @@
     <div class="panel">
       <div class="panel-title">Frequency</div>
       <div class="field">
+        <label>Temperature (음속 계산용)</label>
+        <div class="input-row">
+          <input type="number" id="tempInput" value="15" step="1">
+          <span class="unit">°C</span>
+        </div>
+        <p class="speed-readout">현재 음속: <span id="speedReadout">343.0</span> m/s</p>
+      </div>
+      <div class="field" style="margin-top:14px;">
         <label>Frequency</label>
         <div class="input-row">
-          <input type="number" id="freqInput" value="250" step="1" min="1">
+          <input type="number" id="freqInput" value="1000" step="1" min="1">
           <span class="unit">Hz</span>
         </div>
       </div>
@@ -182,12 +192,18 @@
 (function(){
   "use strict";
 
-  // 음속(m/s) — 상온(약 20°C) 기준 표준값. 스크린샷 참고 앱과 동일하게 고정값 343을 사용한다.
-  const SPEED_OF_SOUND = 343;
+  // ✅ 요청 반영: 음속을 고정값(343) 대신 온도에 따라 계산한다.
+  // 표준 근사식: v(m/s) = 331.3 + 0.606 × 온도(°C)
+  function currentSpeedOfSound(){
+    const tempC = parseFloat(tempInput.value) || 20;
+    return 331.3 + 0.606 * tempC;
+  }
 
   const tabPicker = document.getElementById('tabPicker');
   const frequencyTab = document.getElementById('frequencyTab');
   const placeholderTab = document.getElementById('placeholderTab');
+  const tempInput = document.getElementById('tempInput');
+  const speedReadout = document.getElementById('speedReadout');
   const freqInput = document.getElementById('freqInput');
   const periodVal = document.getElementById('periodVal');
   const wavelengthVal = document.getElementById('wavelengthVal');
@@ -208,7 +224,7 @@
     if (w === 0 || h === 0) return;
     waveCtx.clearRect(0, 0, w, h);
 
-    const marginL = w * 0.06, marginR = w * 0.04, marginT = h * 0.12, marginB = h * 0.12;
+    const marginL = w * 0.06, marginR = w * 0.04, marginT = h * 0.12, marginB = h * 0.24;
     const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
     const midY = marginT + plotH / 2;
 
@@ -224,8 +240,10 @@
     waveCtx.lineTo(marginL + plotW + w * 0.02, midY);
     waveCtx.stroke();
 
-    // 사인파: 화면에 정확히 3주기가 보이도록 스케일
-    const cycles = 3;
+    // ✅ 요청 반영: 사이클 개수를 주파수에 따라 다르게 보여준다.
+    // 저음(20Hz)은 느긋하게 2사이클, 고음(20kHz)은 촘촘하게 8사이클 — 로그 스케일로 부드럽게 늘어난다.
+    const freq = parseFloat(freqInput.value) || 250;
+    const cycles = Math.max(2, Math.min(8, 2 + Math.log10(Math.max(freq, 20) / 20) * 2));
     const amp = plotH * 0.42;
     waveCtx.beginPath();
     const steps = 400;
@@ -241,6 +259,27 @@
     waveCtx.lineCap = 'round';
     waveCtx.stroke();
 
+    // ✅ 요청 반영: 첫 번째 사이클 구간에 "1λ(한 파장)"임을 표시하는 괄호 모양 주석
+    const oneCycleX0 = marginL;
+    const oneCycleX1 = marginL + plotW / cycles;
+    const bracketY = marginT + plotH + h * 0.11;
+    const tickH = h * 0.025;
+    waveCtx.strokeStyle = 'rgba(61,220,151,0.85)';
+    waveCtx.lineWidth = Math.max(1.2, w * 0.0018);
+    waveCtx.beginPath();
+    waveCtx.moveTo(oneCycleX0, bracketY - tickH);
+    waveCtx.lineTo(oneCycleX0, bracketY);
+    waveCtx.lineTo(oneCycleX1, bracketY);
+    waveCtx.lineTo(oneCycleX1, bracketY - tickH);
+    waveCtx.stroke();
+    waveCtx.fillStyle = '#3ddc97';
+    waveCtx.font = `600 ${Math.max(12, h * 0.06)}px 'IBM Plex Mono', monospace`;
+    waveCtx.textAlign = 'center';
+    // ✅ 요청 반영: "1λ" 라벨 옆에 실제 파장 길이(m) 값도 같이 보여준다
+    const wavelengthForLabel = currentSpeedOfSound() / freq;
+    waveCtx.fillText(`1λ ≈ ${wavelengthForLabel.toFixed(3)}m`, (oneCycleX0 + oneCycleX1) / 2, bracketY + h * 0.065);
+    waveCtx.textAlign = 'left';
+
     // 축 라벨
     waveCtx.fillStyle = 'rgba(147,163,163,0.8)';
     waveCtx.font = `${Math.max(11, h * 0.055)}px 'IBM Plex Mono', monospace`;
@@ -249,23 +288,29 @@
   }
 
   function recalc(){
+    const speed = currentSpeedOfSound();
+    speedReadout.textContent = speed.toFixed(1);
+
     const freq = parseFloat(freqInput.value) || 0;
     if (freq <= 0) {
       periodVal.textContent = '--';
       wavelengthVal.textContent = '--';
       quarterWaveVal.textContent = '--';
+      drawWave();
       return;
     }
     const periodMs = 1000 / freq;
-    const wavelengthM = SPEED_OF_SOUND / freq;
+    const wavelengthM = speed / freq;
     const quarterWaveM = wavelengthM / 4;
 
     periodVal.textContent = periodMs.toFixed(2);
     wavelengthVal.textContent = wavelengthM.toFixed(5);
     quarterWaveVal.textContent = quarterWaveM.toFixed(5);
+    drawWave(); // ✅ 요청 반영: 주파수가 바뀔 때마다 그래프도 다시 그린다
   }
 
   freqInput.addEventListener('input', recalc);
+  tempInput.addEventListener('input', recalc);
   window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
 
   // 탭 전환 (Frequency 외에는 아직 준비 중)
