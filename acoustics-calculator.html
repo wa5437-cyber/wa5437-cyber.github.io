@@ -319,6 +319,40 @@
         <canvas id="volumeCanvas"></canvas>
       </div>
     </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Required Power (스피커 센시티비티 기준)</div>
+      <p class="phase-desc">스피커 센시티비티(보통 "1W/1m 기준 dB"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Speaker Sensitivity (@ 1W/1m)</label>
+        <div class="input-row">
+          <input type="number" id="volSensitivityInput" value="98" step="0.1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Distance</label>
+        <div class="input-row">
+          <input type="number" id="volPowerDistInput" value="10" step="0.1" min="0.01">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Desired SPL at that Distance</label>
+        <div class="input-row">
+          <input type="number" id="volDesiredSplInput" value="100" step="0.1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">Required Power</span>
+          <span class="result-val"><span id="volRequiredWattsVal">--</span><span class="unit">W</span></span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="placeholderTab" class="panel" style="display:none;">
@@ -376,6 +410,10 @@
   const volLossVal = document.getElementById('volLossVal');
   const volumeCanvas = document.getElementById('volumeCanvas');
   const volumeCtx = volumeCanvas.getContext('2d');
+  const volSensitivityInput = document.getElementById('volSensitivityInput');
+  const volPowerDistInput = document.getElementById('volPowerDistInput');
+  const volDesiredSplInput = document.getElementById('volDesiredSplInput');
+  const volRequiredWattsVal = document.getElementById('volRequiredWattsVal');
   const qFactorInput = document.getElementById('qFactorInput');
   const qOctaveReadout = document.getElementById('qOctaveReadout');
   // ✅ 요청 반영: Q를 직접 입력할 수 있게, N(옥타브 분수) 대신 Q 자체를 상태로 둔다.
@@ -932,6 +970,26 @@
   [volRefSplInput, volRefDistInput, volTargetDistInput].forEach(el => {
     el.addEventListener('input', recalcVolume);
   });
+
+  // ✅ 요청 반영: 스피커 센시티비티(1W/1m 기준) + 거리 + 목표 SPL → 필요 와트(W)
+  // 공식: 목표SPL = 센시티비티 - 20·log10(거리) + 10·log10(P)
+  // → P = 10^((목표SPL - 센시티비티 + 20·log10(거리)) / 10)
+  function recalcPower(){
+    const sensitivity = parseFloat(volSensitivityInput.value);
+    const dist = parseFloat(volPowerDistInput.value);
+    const desiredSpl = parseFloat(volDesiredSplInput.value);
+    if (!isFinite(sensitivity) || !isFinite(dist) || !isFinite(desiredSpl) || dist <= 0) {
+      volRequiredWattsVal.textContent = '--';
+      return;
+    }
+    const watts = Math.pow(10, (desiredSpl - sensitivity + 20 * Math.log10(dist)) / 10);
+    // ✅ 와트 값이 아주 작거나 아주 크게 나올 수 있어(예: 0.003W ~ 5000W), 크기에 맞게 자릿수를 조정한다
+    volRequiredWattsVal.textContent = watts < 1 ? watts.toFixed(3) : watts < 100 ? watts.toFixed(1) : Math.round(watts).toLocaleString();
+  }
+  [volSensitivityInput, volPowerDistInput, volDesiredSplInput].forEach(el => {
+    el.addEventListener('input', recalcPower);
+  });
+
   window.addEventListener('resize', () => {
     if (volumeTab.style.display !== 'none') { resizeVolumeCanvas(); drawVolume(); }
   });
@@ -961,6 +1019,7 @@
   recalcBand();
   recalcDelay('distance');
   recalcVolume();
+  recalcPower();
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
 })();
 </script>
