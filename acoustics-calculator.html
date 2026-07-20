@@ -103,7 +103,8 @@
   #waveCanvas{ width:100%; height:220px; display:block; border-radius:12px; }
   #bandCanvas{ width:100%; height:340px; display:block; border-radius:12px; }
   #delayCanvas{ width:100%; height:200px; display:block; border-radius:12px; }
-  @media (max-width:480px){ #waveCanvas{ height:170px; } #bandCanvas{ height:260px; } #delayCanvas{ height:160px; } }
+  #volumeCanvas{ width:100%; height:260px; display:block; border-radius:12px; }
+  @media (max-width:480px){ #waveCanvas{ height:170px; } #bandCanvas{ height:260px; } #delayCanvas{ height:160px; } #volumeCanvas{ height:200px; } }
 
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
@@ -127,7 +128,7 @@
     <button data-tab="frequency" class="active">Frequency</button>
     <button data-tab="band">Band</button>
     <button data-tab="delay">Delay</button>
-    <button data-tab="volume" disabled>Volume</button>
+    <button data-tab="volume">Volume</button>
     <button data-tab="roommodes" disabled>Room Modes</button>
   </div>
 
@@ -273,10 +274,57 @@
     </div>
   </div>
 
+  <div id="volumeTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Volume (거리에 따른 SPL 감쇠)</div>
+      <p class="phase-desc">점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Reference SPL</label>
+        <div class="input-row">
+          <input type="number" id="volRefSplInput" value="100" step="0.1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Reference Distance</label>
+        <div class="input-row">
+          <input type="number" id="volRefDistInput" value="1" step="0.1" min="0.01">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Target Distance</label>
+        <div class="input-row">
+          <input type="number" id="volTargetDistInput" value="10" step="0.1" min="0.01">
+          <span class="unit">m</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">SPL at Target Distance</span>
+          <span class="result-val"><span id="volTargetSplVal">--</span><span class="unit">dB SPL</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">감쇠량</span>
+          <span class="result-val"><span id="volLossVal">--</span><span class="unit">dB</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">SPL vs Distance</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="volumeCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
   <div id="placeholderTab" class="panel" style="display:none;">
     <div class="coming-soon">
       <b>🚧 준비 중이에요</b>
-      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency · Band · Delay 탭만 사용할 수 있어요.
+      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency · Band · Delay · Volume 탭만 사용할 수 있어요.
     </div>
   </div>
 
@@ -320,6 +368,14 @@
   const delayCanvas = document.getElementById('delayCanvas');
   const delayCtx = delayCanvas.getContext('2d');
   const delayTempInput = document.getElementById('delayTempInput');
+  const volumeTab = document.getElementById('volumeTab');
+  const volRefSplInput = document.getElementById('volRefSplInput');
+  const volRefDistInput = document.getElementById('volRefDistInput');
+  const volTargetDistInput = document.getElementById('volTargetDistInput');
+  const volTargetSplVal = document.getElementById('volTargetSplVal');
+  const volLossVal = document.getElementById('volLossVal');
+  const volumeCanvas = document.getElementById('volumeCanvas');
+  const volumeCtx = volumeCanvas.getContext('2d');
   const qFactorInput = document.getElementById('qFactorInput');
   const qOctaveReadout = document.getElementById('qOctaveReadout');
   // ✅ 요청 반영: Q를 직접 입력할 수 있게, N(옥타브 분수) 대신 Q 자체를 상태로 둔다.
@@ -749,6 +805,137 @@
     if (delayTab.style.display !== 'none') { resizeDelayCanvas(); drawDelay(); }
   });
 
+  // -----------------------------------------------------------------
+  // Volume 탭 — 역제곱 법칙(Inverse Square Law) 기반 거리별 SPL 감쇠
+  // -----------------------------------------------------------------
+  function resizeVolumeCanvas(){
+    const rect = volumeCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    volumeCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    volumeCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  // SPL2 = SPL1 - 20·log10(d2/d1)  — 점음원, 자유음장 기준
+  function splAtDistance(splRef, distRef, dist){
+    return splRef - 20 * Math.log10(dist / distRef);
+  }
+
+  function drawVolume(){
+    const w = volumeCanvas.width, h = volumeCanvas.height;
+    if (w === 0 || h === 0) return;
+    volumeCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.1, marginR = w * 0.05, marginT = h * 0.12, marginB = h * 0.16;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const axisY = marginT + plotH;
+
+    const splRef = parseFloat(volRefSplInput.value) || 100;
+    const distRef = Math.max(0.01, parseFloat(volRefDistInput.value) || 1);
+    const distTarget = Math.max(0.01, parseFloat(volTargetDistInput.value) || 10);
+
+    // x축(거리) 범위: 기준/목표 거리를 모두 포함하도록 로그스케일로 넉넉히 잡는다
+    const distMin = Math.min(distRef, distTarget) / 3;
+    const distMax = Math.max(distRef, distTarget) * 3;
+    function distToX(d){
+      const t = Math.log(d / distMin) / Math.log(distMax / distMin);
+      return marginL + Math.max(0, Math.min(1, t)) * plotW;
+    }
+
+    // y축(SPL) 범위: 곡선의 최댓값(기준점)부터 최솟값(가장 먼 거리)까지 여유 있게
+    const splAtMin = splAtDistance(splRef, distRef, distMin);
+    const splAtMax = splAtDistance(splRef, distRef, distMax);
+    const dbTop = Math.ceil(Math.max(splRef, splAtMin) / 5) * 5 + 5;
+    const dbBottom = Math.floor(Math.min(splAtMax, splAtDistance(splRef, distRef, distTarget)) / 5) * 5 - 5;
+    function dbToY(db){
+      const t = (db - dbBottom) / (dbTop - dbBottom);
+      return axisY - Math.max(0, Math.min(1, t)) * plotH;
+    }
+
+    // 세로 그리드(거리) + 라벨
+    volumeCtx.font = `${Math.max(10, h * 0.045)}px 'IBM Plex Mono', monospace`;
+    volumeCtx.fillStyle = 'rgba(147,163,163,0.75)';
+    [distRef, distTarget].forEach((d, i) => {
+      const x = distToX(d);
+      volumeCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+      volumeCtx.beginPath();
+      volumeCtx.moveTo(x, marginT);
+      volumeCtx.lineTo(x, axisY);
+      volumeCtx.stroke();
+    });
+
+    // 가로 그리드(dB) + 라벨
+    const dbStep = (dbTop - dbBottom) / 4;
+    for (let i = 0; i <= 4; i++) {
+      const db = dbBottom + i * dbStep;
+      const y = dbToY(db);
+      volumeCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+      volumeCtx.beginPath();
+      volumeCtx.moveTo(marginL, y);
+      volumeCtx.lineTo(marginL + plotW, y);
+      volumeCtx.stroke();
+      volumeCtx.textAlign = 'right';
+      volumeCtx.fillText(Math.round(db) + 'dB', marginL - w * 0.015, y + h * 0.015);
+    }
+    volumeCtx.textAlign = 'left';
+
+    // 감쇠 곡선
+    volumeCtx.beginPath();
+    const steps = 200;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const d = distMin * Math.pow(distMax / distMin, t);
+      const x = marginL + t * plotW;
+      const y = dbToY(splAtDistance(splRef, distRef, d));
+      if (i === 0) volumeCtx.moveTo(x, y); else volumeCtx.lineTo(x, y);
+    }
+    volumeCtx.strokeStyle = '#3ddc97';
+    volumeCtx.lineWidth = Math.max(2, w * 0.005);
+    volumeCtx.lineJoin = 'round';
+    volumeCtx.stroke();
+
+    // 기준점(주황) / 목표점(초록) 마커 + 라벨
+    const xRef = distToX(distRef), yRef = dbToY(splRef);
+    const xTarget = distToX(distTarget), yTarget = dbToY(splAtDistance(splRef, distRef, distTarget));
+
+    volumeCtx.beginPath();
+    volumeCtx.arc(xRef, yRef, Math.max(3, w * 0.008), 0, Math.PI * 2);
+    volumeCtx.fillStyle = '#f2a93b';
+    volumeCtx.fill();
+    volumeCtx.textAlign = 'center';
+    volumeCtx.font = `600 ${Math.max(11, h * 0.045)}px 'IBM Plex Mono', monospace`;
+    volumeCtx.fillText(`${distRef}m, ${splRef.toFixed(0)}dB`, Math.max(marginL + w*0.06, Math.min(marginL+plotW-w*0.06, xRef)), yRef - h * 0.05);
+
+    volumeCtx.beginPath();
+    volumeCtx.arc(xTarget, yTarget, Math.max(3, w * 0.008), 0, Math.PI * 2);
+    volumeCtx.fillStyle = '#3ddc97';
+    volumeCtx.fill();
+    volumeCtx.fillText(`${distTarget}m, ${splAtDistance(splRef, distRef, distTarget).toFixed(1)}dB`, Math.max(marginL + w*0.08, Math.min(marginL+plotW-w*0.08, xTarget)), yTarget - h * 0.05);
+    volumeCtx.textAlign = 'left';
+  }
+
+  function recalcVolume(){
+    const splRef = parseFloat(volRefSplInput.value) || 0;
+    const distRef = parseFloat(volRefDistInput.value) || 0;
+    const distTarget = parseFloat(volTargetDistInput.value) || 0;
+    if (distRef <= 0 || distTarget <= 0) {
+      volTargetSplVal.textContent = '--'; volLossVal.textContent = '--';
+      return;
+    }
+    const splTarget = splAtDistance(splRef, distRef, distTarget);
+    const loss = splRef - splTarget;
+    volTargetSplVal.textContent = splTarget.toFixed(1);
+    volLossVal.textContent = (loss >= 0 ? '−' : '+') + Math.abs(loss).toFixed(1);
+    drawVolume();
+  }
+
+  [volRefSplInput, volRefDistInput, volTargetDistInput].forEach(el => {
+    el.addEventListener('input', recalcVolume);
+  });
+  window.addEventListener('resize', () => {
+    if (volumeTab.style.display !== 'none') { resizeVolumeCanvas(); drawVolume(); }
+  });
+
   freqInput.addEventListener('input', recalc);
   tempInput.addEventListener('input', recalc);
   window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
@@ -762,15 +949,18 @@
       frequencyTab.style.display = tab === 'frequency' ? 'block' : 'none';
       bandTab.style.display = tab === 'band' ? 'block' : 'none';
       delayTab.style.display = tab === 'delay' ? 'block' : 'none';
-      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay') ? 'block' : 'none';
+      volumeTab.style.display = tab === 'volume' ? 'block' : 'none';
+      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay' && tab !== 'volume') ? 'block' : 'none';
       if (tab === 'band') { resizeBandCanvas(); drawBand(); }
       if (tab === 'delay') { resizeDelayCanvas(); drawDelay(); }
+      if (tab === 'volume') { resizeVolumeCanvas(); drawVolume(); }
     });
   });
 
   recalc();
   recalcBand();
   recalcDelay('distance');
+  recalcVolume();
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
 })();
 </script>
