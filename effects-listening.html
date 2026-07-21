@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Effects Listening — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
+    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
+    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:640px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#1b2226,#0d1113); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); font-weight:400; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
+
+  .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113); padding:20px; }
+  .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-secondary); margin-bottom:14px; }
+  .phase-desc{ font-size:14px; color:var(--text-secondary); line-height:1.6; margin:0; }
+
+  /* ---- 이펙트 피커 (3열 x 2행) ---- */
+  .fx-picker{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+  .fx-picker button{
+    border:1px solid var(--line); background:var(--bg-panel-2); color:var(--text-secondary);
+    font-size:14.5px; font-weight:700; padding:14px 4px; border-radius:11px; transition:background .15s, color .15s, border-color .15s;
+    min-width:0; white-space:normal; word-break:keep-all;
+  }
+  .fx-picker button.active{ background:#232b2f; color:var(--teal); border-color:var(--teal); }
+  .fx-picker button:disabled{ opacity:0.4; cursor:not-allowed; }
+  @media (max-width:420px){ .fx-picker button{ font-size:12.5px; padding:12px 3px; } }
+
+  /* ---- 소스 피커(핑크노이즈/내 음악) ---- */
+  .source-picker{ display:flex; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:3px; margin-top:14px; }
+  .source-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:14.5px; font-weight:600; padding:11px 8px; border-radius:9px; }
+  .source-picker button.active{ background:#232b2f; color:var(--text-primary); }
+  .source-picker button:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  .upload-btn{
+    border:1px dashed var(--line); background:rgba(255,255,255,0.02); color:var(--text-secondary);
+    font-size:13.5px; font-weight:600; padding:11px 18px; border-radius:10px; width:100%; margin-top:10px;
+  }
+  .upload-btn:hover{ background:rgba(255,255,255,0.06); color:var(--text-primary); }
+  .upload-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+  .music-filename{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--teal); text-align:center; margin-top:8px; word-break:break-all; }
+
+  /* ---- 시각화 ---- */
+  #vizCanvas{ width:100%; height:140px; display:block; border-radius:12px; margin-top:14px; }
+
+  /* ---- 상태 ---- */
+  .status{ text-align:center; }
+  .status h2{ font-size:16px; font-weight:700; margin:0; }
+  .status p{ margin:6px 0 0; font-size:13px; color:var(--text-secondary); }
+
+  .startbtn{
+    width:100%; padding:16px; border-radius:14px; border:none; font-size:16px; font-weight:700;
+    color:#04120c; background:linear-gradient(160deg, var(--teal), #2bb883);
+  }
+  .startbtn.stop{ color:#fff; background:linear-gradient(160deg, var(--red), #c23f3f); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
+
+  /* ---- 챕터 피커(자유 청음 / 청음 문제) ---- */
+  .chapter-picker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
+  .chapter-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:15px; font-weight:600; padding:12px 8px; border-radius:9px; }
+  .chapter-picker button.active{ background:#232b2f; color:var(--text-primary); }
+  .chapter-picker button:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  /* ---- 스코어보드 ---- */
+  .scoreboard{ display:flex; background:transparent; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .scoreitem{ flex:1; text-align:center; padding:12px 6px; }
+  .scoreitem + .scoreitem{ border-left:1px solid var(--line); }
+  .scoreitem .val{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:17px; color:var(--teal); }
+  .scoreitem .lbl{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-tertiary); letter-spacing:0.08em; margin-top:3px; }
+
+  /* ---- 정답/오답 피드백 ---- */
+  .feedback{ min-height:22px; text-align:center; font-weight:700; font-size:15px; margin-top:12px; }
+  .feedback.correct{ color:var(--teal); }
+  .feedback.wrong{ color:var(--red); }
+
+  /* ---- 원음/체인지 배지 ---- */
+  .ab-badge{
+    display:inline-flex; align-items:center; gap:5px; margin-top:12px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    padding:6px 14px; border-radius:100px; letter-spacing:0.02em;
+    background:rgba(61,220,151,0.12); color:var(--teal); border:1px solid rgba(61,220,151,0.3);
+    transition:background .2s, color .2s, border-color .2s;
+  }
+  .ab-badge.changed{
+    background:rgba(242,169,59,0.14); color:var(--amber); border-color:rgba(242,169,59,0.35);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">EFFECTS LISTENING<small>Reverb · Delay · Chorus · Flanger · Distortion</small></div>
+    <a class="home-link" href="index.html">← 홈으로</a>
+  </div>
+
+  <div class="chapter-picker" id="chapterPicker">
+    <button id="chapterFreeBtn" class="active">자유 청음</button>
+    <button id="chapterQuizBtn">청음 문제</button>
+  </div>
+
+  <div class="scoreboard" id="scoreboard" style="display:none;">
+    <div class="scoreitem"><div class="val" id="scRound">0/10</div><div class="lbl">ROUND</div></div>
+    <div class="scoreitem"><div class="val" id="scHit">0</div><div class="lbl">HIT</div></div>
+    <div class="scoreitem"><div class="val" id="scAcc">--</div><div class="lbl">ACC</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Source (소리 원본)</div>
+    <div class="source-picker" id="sourcePicker">
+      <button id="sourceNoiseBtn" class="active">🌫️ 핑크노이즈</button>
+      <button id="sourceMusicBtn" disabled>🎵 내 음악</button>
+    </div>
+    <input type="file" id="musicFileInput" accept="audio/*,.mp3,.m4a,.aac,.wav,.aiff,.caf,.flac,.ogg" style="display:none;">
+    <button class="upload-btn" id="uploadMusicBtn">📂 음악 파일 업로드</button>
+    <div class="music-filename" id="musicFileName"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Effect</div>
+    <p class="phase-desc" id="fxDesc">이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.</p>
+    <div class="fx-picker" id="fxPicker">
+      <button data-fx="dry" class="active">Dry <span style="font-weight:400;font-size:11px;">(원음)</span></button>
+      <button data-fx="reverb">Reverb</button>
+      <button data-fx="delay">Delay</button>
+      <button data-fx="chorus">Chorus</button>
+      <button data-fx="flanger">Flanger</button>
+      <button data-fx="phaser">Phaser</button>
+      <button data-fx="distortion">Distortion</button>
+      <button data-fx="tremolo">Tremolo</button>
+      <button data-fx="wow">Wow</button>
+      <button data-fx="autopan">Auto-Pan</button>
+    </div>
+    <div class="ab-badge" id="abBadge" style="display:none;">● 원음</div>
+    <div class="feedback" id="feedback"></div>
+    <canvas id="vizCanvas"></canvas>
+  </div>
+
+  <div class="status">
+    <h2 id="statusTitle">이펙트를 골라서 시작해보세요</h2>
+    <p id="statusSub"></p>
+  </div>
+
+  <button id="startBtn" class="startbtn">▸ 이펙트 청음 시작</button>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+    <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  class Engine {
+    constructor(){
+      this.ctx = null;
+      this.isPlaying = false;
+      this.usingMusic = false;
+      this.musicBuffer = null;
+      this.musicSourceNode = null;
+      this.musicWaveformPeaks = null;
+      this.currentFxEffect = 'dry';
+      this._musicStartCtxTime = 0;
+      this._musicStartOffset = 0;
+      this._musicLoopStart = 0;
+      this._musicLoopEnd = 0;
+    }
+
+    ensureContext(){
+      if (!this.ctx) {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+        // ---- 핑크노이즈 생성 (ScriptProcessor 기반, Paul Kellet 알고리즘) ----
+        this.pinkNode = this.ctx.createScriptProcessor(4096, 1, 1);
+        let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+        this.pinkNode.onaudioprocess = (e) => {
+          const out = e.outputBuffer.getChannelData(0);
+          for (let i = 0; i < out.length; i++){
+            const white = Math.random() * 2 - 1;
+            b0 = 0.99886*b0 + white*0.0555179;
+            b1 = 0.99332*b1 + white*0.0750759;
+            b2 = 0.96900*b2 + white*0.1538520;
+            b3 = 0.86650*b3 + white*0.3104856;
+            b4 = 0.55000*b4 + white*0.5329522;
+            b5 = -0.7616*b5 - white*0.0168980;
+            out[i] = (b0+b1+b2+b3+b4+b5+b6+white*0.5362) * 0.11;
+            b6 = white*0.115926;
+          }
+        };
+        this.pinkGain = this.ctx.createGain(); this.pinkGain.gain.value = 0;
+        this.musicGain = this.ctx.createGain(); this.musicGain.gain.value = 0;
+
+        this.fxInputGain = this.ctx.createGain(); this.fxInputGain.gain.value = 1;
+        this.pinkNode.connect(this.pinkGain);
+        this.pinkGain.connect(this.fxInputGain);
+        this.musicGain.connect(this.fxInputGain);
+
+        this.masterGain = this.ctx.createGain(); this.masterGain.gain.value = 0;
+        this.fxOutputGain = this.ctx.createGain(); this.fxOutputGain.gain.value = 1;
+        this.fxOutputGain.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+
+        // Dry
+        this.fxDryGain = this.ctx.createGain(); this.fxDryGain.gain.value = 1;
+        this.fxInputGain.connect(this.fxDryGain);
+        this.fxDryGain.connect(this.fxOutputGain);
+
+        // Reverb
+        this.fxReverbConvolver = this.ctx.createConvolver();
+        this.fxReverbConvolver.buffer = this._createReverbImpulse();
+        this.fxReverbGain = this.ctx.createGain(); this.fxReverbGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxReverbConvolver);
+        this.fxReverbConvolver.connect(this.fxReverbGain);
+        this.fxReverbGain.connect(this.fxOutputGain);
+
+        // Delay/Echo
+        this.fxDelayNode = this.ctx.createDelay(2.0);
+        this.fxDelayNode.delayTime.value = 0.32;
+        this.fxDelayFeedback = this.ctx.createGain(); this.fxDelayFeedback.gain.value = 0.4;
+        this.fxDelayNode.connect(this.fxDelayFeedback);
+        this.fxDelayFeedback.connect(this.fxDelayNode);
+        this.fxDelayGain = this.ctx.createGain(); this.fxDelayGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxDelayNode);
+        this.fxDelayNode.connect(this.fxDelayGain);
+        this.fxInputGain.connect(this.fxDelayGain);
+        this.fxDelayGain.connect(this.fxOutputGain);
+
+        // Chorus
+        this.fxChorusDelay = this.ctx.createDelay(0.05);
+        this.fxChorusDelay.delayTime.value = 0.02;
+        this.fxChorusLFO = this.ctx.createOscillator();
+        this.fxChorusLFO.type = 'sine'; this.fxChorusLFO.frequency.value = 0.6;
+        this.fxChorusLFOGain = this.ctx.createGain(); this.fxChorusLFOGain.gain.value = 0.006;
+        this.fxChorusLFO.connect(this.fxChorusLFOGain);
+        this.fxChorusLFOGain.connect(this.fxChorusDelay.delayTime);
+        this.fxChorusLFO.start();
+        this.fxChorusGain = this.ctx.createGain(); this.fxChorusGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxChorusDelay);
+        this.fxChorusDelay.connect(this.fxChorusGain);
+        this.fxInputGain.connect(this.fxChorusGain);
+        this.fxChorusGain.connect(this.fxOutputGain);
+
+        // Flanger
+        this.fxFlangerDelay = this.ctx.createDelay(0.02);
+        this.fxFlangerDelay.delayTime.value = 0.003;
+        this.fxFlangerLFO = this.ctx.createOscillator();
+        this.fxFlangerLFO.type = 'sine'; this.fxFlangerLFO.frequency.value = 0.22;
+        this.fxFlangerLFOGain = this.ctx.createGain(); this.fxFlangerLFOGain.gain.value = 0.0022;
+        this.fxFlangerLFO.connect(this.fxFlangerLFOGain);
+        this.fxFlangerLFOGain.connect(this.fxFlangerDelay.delayTime);
+        this.fxFlangerLFO.start();
+        this.fxFlangerFeedback = this.ctx.createGain(); this.fxFlangerFeedback.gain.value = 0.5;
+        this.fxFlangerDelay.connect(this.fxFlangerFeedback);
+        this.fxFlangerFeedback.connect(this.fxFlangerDelay);
+        this.fxFlangerGain = this.ctx.createGain(); this.fxFlangerGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxFlangerDelay);
+        this.fxFlangerDelay.connect(this.fxFlangerGain);
+        this.fxInputGain.connect(this.fxFlangerGain);
+        this.fxFlangerGain.connect(this.fxOutputGain);
+
+        // Distortion
+        this.fxDistortionShaper = this.ctx.createWaveShaper();
+        this.fxDistortionShaper.curve = this._createDistortionCurve(35);
+        this.fxDistortionShaper.oversample = '2x';
+        this.fxDistortionGain = this.ctx.createGain(); this.fxDistortionGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxDistortionShaper);
+        this.fxDistortionShaper.connect(this.fxDistortionGain);
+        this.fxDistortionGain.connect(this.fxOutputGain);
+
+        // Phaser — 올패스 필터 여러 개를 LFO로 흔들어서 "쉭쉭" 위상 변화음을 만든다
+        this.fxPhaserStages = [];
+        let phaserPrev = this.fxInputGain;
+        const phaserBaseFreqs = [600, 900, 1300, 1800];
+        phaserBaseFreqs.forEach(freq => {
+          const stage = this.ctx.createBiquadFilter();
+          stage.type = 'allpass';
+          stage.frequency.value = freq;
+          phaserPrev.connect(stage);
+          this.fxPhaserStages.push(stage);
+          phaserPrev = stage;
+        });
+        this.fxPhaserLFO = this.ctx.createOscillator();
+        this.fxPhaserLFO.type = 'sine'; this.fxPhaserLFO.frequency.value = 0.4;
+        this.fxPhaserLFOGain = this.ctx.createGain(); this.fxPhaserLFOGain.gain.value = 500;
+        this.fxPhaserLFO.connect(this.fxPhaserLFOGain);
+        this.fxPhaserStages.forEach(stage => this.fxPhaserLFOGain.connect(stage.frequency));
+        this.fxPhaserLFO.start();
+        this.fxPhaserGain = this.ctx.createGain(); this.fxPhaserGain.gain.value = 0;
+        phaserPrev.connect(this.fxPhaserGain); // 마지막 단 출력(위상이 흔들린 신호)
+        this.fxInputGain.connect(this.fxPhaserGain); // 원음과 섞여야 노치(notch) 효과가 들린다
+        this.fxPhaserGain.connect(this.fxOutputGain);
+
+        // Tremolo — LFO로 볼륨(진폭) 자체를 규칙적으로 흔든다
+        this.fxTremoloAmpGain = this.ctx.createGain(); this.fxTremoloAmpGain.gain.value = 0.5;
+        this.fxTremoloLFO = this.ctx.createOscillator();
+        this.fxTremoloLFO.type = 'sine'; this.fxTremoloLFO.frequency.value = 5;
+        this.fxTremoloLFODepth = this.ctx.createGain(); this.fxTremoloLFODepth.gain.value = 0.5;
+        this.fxTremoloLFO.connect(this.fxTremoloLFODepth);
+        this.fxTremoloLFODepth.connect(this.fxTremoloAmpGain.gain);
+        this.fxTremoloLFO.start();
+        this.fxTremoloGain = this.ctx.createGain(); this.fxTremoloGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxTremoloAmpGain);
+        this.fxTremoloAmpGain.connect(this.fxTremoloGain);
+        this.fxTremoloGain.connect(this.fxOutputGain);
+
+        // Wow — 테이프가 늘어진 것처럼 아주 느린 속도로 피치가 출렁이는 효과
+        // (코러스와 원리는 비슷하지만 LFO가 훨씬 느리고 흔들림 폭이 커서 "출렁"거리게 들린다)
+        this.fxWowDelay = this.ctx.createDelay(0.05);
+        this.fxWowDelay.delayTime.value = 0.015;
+        this.fxWowLFO = this.ctx.createOscillator();
+        this.fxWowLFO.type = 'sine'; this.fxWowLFO.frequency.value = 0.8;
+        this.fxWowLFOGain = this.ctx.createGain(); this.fxWowLFOGain.gain.value = 0.008;
+        this.fxWowLFO.connect(this.fxWowLFOGain);
+        this.fxWowLFOGain.connect(this.fxWowDelay.delayTime);
+        this.fxWowLFO.start();
+        this.fxWowGain = this.ctx.createGain(); this.fxWowGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxWowDelay);
+        this.fxWowDelay.connect(this.fxWowGain);
+        this.fxWowGain.connect(this.fxOutputGain);
+
+        // Auto-Pan — LFO로 좌우 스테레오 위치를 규칙적으로 오가게 한다
+        this.fxPanner = this.ctx.createStereoPanner();
+        this.fxPanLFO = this.ctx.createOscillator();
+        this.fxPanLFO.type = 'sine'; this.fxPanLFO.frequency.value = 0.5;
+        this.fxPanLFODepth = this.ctx.createGain(); this.fxPanLFODepth.gain.value = 0.9; // 좌우 -0.9~+0.9 범위
+        this.fxPanLFO.connect(this.fxPanLFODepth);
+        this.fxPanLFODepth.connect(this.fxPanner.pan);
+        this.fxPanLFO.start();
+        this.fxAutopanGain = this.ctx.createGain(); this.fxAutopanGain.gain.value = 0;
+        this.fxInputGain.connect(this.fxPanner);
+        this.fxPanner.connect(this.fxAutopanGain);
+        this.fxAutopanGain.connect(this.fxOutputGain);
+
+        // 시각화용 분석기(오디오 경로에 영향 없는 탭)
+        this.analyser = this.ctx.createAnalyser();
+        this.analyser.fftSize = 1024;
+        this.masterGain.connect(this.analyser);
+      }
+    }
+
+    _createReverbImpulse(){
+      const duration = 2.2, decay = 3.2;
+      const rate = this.ctx.sampleRate;
+      const length = Math.floor(rate * duration);
+      const impulse = this.ctx.createBuffer(2, length, rate);
+      for (let ch = 0; ch < 2; ch++) {
+        const data = impulse.getChannelData(ch);
+        for (let i = 0; i < length; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+        }
+      }
+      return impulse;
+    }
+
+    _createDistortionCurve(amount){
+      const k = amount, samples = 44100;
+      const curve = new Float32Array(samples);
+      for (let i = 0; i < samples; i++) {
+        const x = (i * 2) / samples - 1;
+        curve[i] = ((3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x));
+      }
+      return curve;
+    }
+
+    rampParam(param, target, duration){
+      const now = this.ctx.currentTime;
+      param.cancelScheduledValues(now);
+      param.setValueAtTime(param.value, now);
+      param.linearRampToValueAtTime(target, now + duration);
+    }
+
+    async loadMusicBuffer(arrayBuffer){
+      this.ensureContext();
+      this.musicBuffer = await this.ctx.decodeAudioData(arrayBuffer);
+      this._computeWaveformPeaks();
+      return this.musicBuffer;
+    }
+
+    _computeWaveformPeaks(){
+      const NUM_BUCKETS = 600;
+      const channelData = this.musicBuffer.getChannelData(0);
+      const samplesPerBucket = Math.max(1, Math.floor(channelData.length / NUM_BUCKETS));
+      const peaks = new Float32Array(NUM_BUCKETS);
+      for (let i = 0; i < NUM_BUCKETS; i++) {
+        let max = 0;
+        const start = i * samplesPerBucket;
+        const end = Math.min(channelData.length, start + samplesPerBucket);
+        for (let j = start; j < end; j++) {
+          const abs = Math.abs(channelData[j]);
+          if (abs > max) max = abs;
+        }
+        peaks[i] = max;
+      }
+      this.musicWaveformPeaks = peaks;
+    }
+
+    // ✅ 요청 반영: 자유 청음은 처음부터 쭉, 청음 문제는 매번 랜덤 위치에서 재생한다.
+    _startMusicSource(fromBeginning){
+      if (!this.musicBuffer) return;
+      this._stopMusicSource();
+      const duration = this.musicBuffer.duration;
+      const src = this.ctx.createBufferSource();
+      src.buffer = this.musicBuffer;
+      src.connect(this.fxInputGain);
+
+      if (fromBeginning === false) {
+        // 청음 문제: 짧은 구간(최대 15초)을 랜덤 위치에서 반복 재생
+        const loopWindow = Math.min(15, duration);
+        const maxOffset = Math.max(0, duration - loopWindow);
+        const offset = Math.random() * maxOffset;
+        src.loop = true;
+        src.loopStart = offset;
+        src.loopEnd = Math.min(duration, offset + loopWindow);
+        src.start(0, offset);
+        this._musicLoopStart = offset;
+        this._musicLoopEnd = Math.min(duration, offset + loopWindow);
+        this._musicStartOffset = offset;
+      } else {
+        // 자유 청음: 처음부터 곡 전체를 그대로 쭉 재생 (끝까지 가면 처음부터 반복)
+        src.loop = true;
+        src.start(0, 0);
+        this._musicLoopStart = 0;
+        this._musicLoopEnd = duration;
+        this._musicStartOffset = 0;
+      }
+      this._musicStartCtxTime = this.ctx.currentTime;
+      this.musicSourceNode = src;
+    }
+
+    _stopMusicSource(){
+      if (this.musicSourceNode) {
+        try { this.musicSourceNode.stop(); } catch(e) {}
+        this.musicSourceNode.disconnect();
+        this.musicSourceNode = null;
+      }
+    }
+
+    getMusicPlaybackPosition(){
+      if (!this.musicSourceNode || !this.isPlaying) return 0;
+      const elapsed = this.ctx.currentTime - this._musicStartCtxTime;
+      const loopLen = this._musicLoopEnd - this._musicLoopStart;
+      if (loopLen <= 0) return this._musicStartOffset;
+      return this._musicLoopStart + (elapsed % loopLen);
+    }
+
+    setFxEffect(effectName){
+      this.currentFxEffect = effectName;
+      const gainByEffect = {
+        dry: this.fxDryGain, reverb: this.fxReverbGain, delay: this.fxDelayGain,
+        chorus: this.fxChorusGain, flanger: this.fxFlangerGain, distortion: this.fxDistortionGain,
+        phaser: this.fxPhaserGain, tremolo: this.fxTremoloGain, wow: this.fxWowGain,
+        autopan: this.fxAutopanGain,
+      };
+      Object.entries(gainByEffect).forEach(([name, gainNode]) => {
+        this.rampParam(gainNode.gain, name === effectName ? 1.0 : 0, 0.25);
+      });
+    }
+
+    start(fromBeginning){
+      this.ensureContext();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      this.isPlaying = true;
+      this.pinkGain.gain.value = 0;
+      this.musicGain.gain.value = 0;
+
+      if (this.usingMusic && this.musicBuffer) {
+        this._startMusicSource(fromBeginning !== false);
+        this.rampParam(this.musicGain.gain, 1.0, 0.3);
+      } else {
+        this.rampParam(this.pinkGain.gain, 1.0, 0.3);
+      }
+      this.setFxEffect(this.currentFxEffect);
+      this.rampParam(this.masterGain.gain, 1.0, 0.3);
+    }
+
+    stop(){
+      this.rampParam(this.masterGain.gain, 0, 0.3);
+      this.isPlaying = false;
+      if (this.musicSourceNode) {
+        setTimeout(() => { this._stopMusicSource(); }, 350);
+      }
+    }
+  }
+
+  const engine = new Engine();
+
+  const chapterPicker = document.getElementById('chapterPicker');
+  const chapterFreeBtn = document.getElementById('chapterFreeBtn');
+  const chapterQuizBtn = document.getElementById('chapterQuizBtn');
+  const scoreboardEl = document.getElementById('scoreboard');
+  const scRoundEl = document.getElementById('scRound');
+  const scHitEl = document.getElementById('scHit');
+  const scAccEl = document.getElementById('scAcc');
+  const feedbackEl = document.getElementById('feedback');
+  const fxDescEl = document.getElementById('fxDesc');
+  const abBadgeEl = document.getElementById('abBadge');
+
+  const sourceNoiseBtn = document.getElementById('sourceNoiseBtn');
+  const sourceMusicBtn = document.getElementById('sourceMusicBtn');
+  const musicFileInput = document.getElementById('musicFileInput');
+  const uploadMusicBtn = document.getElementById('uploadMusicBtn');
+  const musicFileName = document.getElementById('musicFileName');
+  const fxPicker = document.getElementById('fxPicker');
+  const fxButtons = Array.from(fxPicker.querySelectorAll('button'));
+  const startBtn = document.getElementById('startBtn');
+  const statusTitle = document.getElementById('statusTitle');
+  const statusSub = document.getElementById('statusSub');
+  const vizCanvas = document.getElementById('vizCanvas');
+  const vizCtx = vizCanvas.getContext('2d');
+
+  function setStatus(title, sub){
+    statusTitle.textContent = title;
+    statusSub.textContent = sub || '';
+  }
+
+  // ---- 소스 업로드/전환 ----
+  uploadMusicBtn.addEventListener('click', () => {
+    if (engine.isPlaying) return;
+    musicFileInput.click();
+  });
+  musicFileInput.addEventListener('change', async () => {
+    const file = musicFileInput.files && musicFileInput.files[0];
+    if (!file) return;
+    musicFileName.textContent = `⏳ "${file.name}" 불러오는 중...`;
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      await engine.loadMusicBuffer(arrayBuffer);
+      musicFileName.textContent = `✅ "${file.name}" (${Math.round(engine.musicBuffer.duration)}초)`;
+      sourceMusicBtn.disabled = false;
+      engine.usingMusic = true;
+      sourceNoiseBtn.classList.remove('active');
+      sourceMusicBtn.classList.add('active');
+    } catch (err) {
+      console.error('음악 파일 디코딩 실패:', err);
+      musicFileName.textContent = `⚠️ "${file.name}" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다`;
+      sourceMusicBtn.disabled = true;
+    }
+  });
+  sourceNoiseBtn.addEventListener('click', () => {
+    if (engine.isPlaying || !engine.usingMusic) return;
+    engine.usingMusic = false;
+    sourceNoiseBtn.classList.add('active');
+    sourceMusicBtn.classList.remove('active');
+  });
+  sourceMusicBtn.addEventListener('click', () => {
+    if (engine.isPlaying || engine.usingMusic || !engine.musicBuffer) return;
+    engine.usingMusic = true;
+    sourceNoiseBtn.classList.remove('active');
+    sourceMusicBtn.classList.add('active');
+  });
+
+  // ---- 챕터(자유 청음 / 청음 문제) ----
+  const QUESTIONS_PER_QUIZ = 10;
+  const FX_NAMES = fxButtons.map(b => b.dataset.fx);
+  let chapter = 'free'; // free | quiz
+  let quizPhase = 'idle'; // idle | playing | answered
+  let questionIndex = 0;
+  let hitCount = 0;
+  let currentAnswer = null;
+
+  function updateScoreboard(){
+    scRoundEl.textContent = `${questionIndex}/${QUESTIONS_PER_QUIZ}`;
+    scHitEl.textContent = hitCount;
+    scAccEl.textContent = questionIndex > 0 ? Math.round((hitCount / questionIndex) * 100) + '%' : '--';
+  }
+
+  function clearFeedback(){
+    feedbackEl.textContent = '';
+    feedbackEl.className = 'feedback';
+  }
+
+  function switchChapter(next){
+    if (chapter === next || engine.isPlaying) return; // 재생 중엔 챕터 전환 막기
+    chapter = next;
+    chapterFreeBtn.classList.toggle('active', chapter === 'free');
+    chapterQuizBtn.classList.toggle('active', chapter === 'quiz');
+    scoreboardEl.style.display = chapter === 'quiz' ? 'flex' : 'none';
+    abBadgeEl.style.display = 'none';
+    clearFeedback();
+    fxButtons.forEach(b => b.classList.remove('active'));
+    if (chapter === 'free') {
+      fxDescEl.textContent = '이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.';
+      setStatus('이펙트를 골라서 시작해보세요');
+      startBtn.textContent = '▸ 이펙트 청음 시작';
+      const dryBtn = fxButtons.find(b => b.dataset.fx === 'dry');
+      dryBtn.classList.add('active');
+      engine.setFxEffect('dry');
+    } else {
+      fxDescEl.textContent = '재생되는 이펙트가 뭔지 맞춰보세요. 정답을 고르기 전까지는 어떤 버튼도 표시되지 않아요.';
+      setStatus('시작 버튼을 눌러 문제를 시작하세요');
+      startBtn.textContent = '▸ 청음 문제 시작';
+      questionIndex = 0; hitCount = 0;
+      updateScoreboard();
+    }
+  }
+  chapterFreeBtn.addEventListener('click', () => switchChapter('free'));
+  chapterQuizBtn.addEventListener('click', () => switchChapter('quiz'));
+
+  // ---- 청음 문제(퀴즈) 진행 ----
+  // ---- 원음/체인지 A/B 사이클 (3초씩 번갈아 재생) ----
+  const AB_PHASE_MS = 3000;
+  let abCycleToken = 0;
+
+  function setAbBadge(isDry){
+    abBadgeEl.style.display = 'inline-flex';
+    abBadgeEl.textContent = isDry ? '● 원음' : '● 체인지';
+    abBadgeEl.classList.toggle('changed', !isDry);
+  }
+
+  function startAbCycle(){
+    abCycleToken++;
+    const myToken = abCycleToken;
+    function playPhase(isDry){
+      if (myToken !== abCycleToken || quizPhase !== 'playing') return;
+      engine.setFxEffect(isDry ? 'dry' : currentAnswer);
+      setAbBadge(isDry);
+      setTimeout(() => playPhase(!isDry), AB_PHASE_MS);
+    }
+    playPhase(true); // ✅ 요청 반영: 원음(3초) → 체인지(3초) → 원음(3초) ... 반복
+  }
+
+  function stopAbCycle(){
+    abCycleToken++; // 예약된 다음 단계 콜백을 전부 무효화
+    abBadgeEl.style.display = 'none';
+  }
+
+  function generateQuizQuestion(){
+    questionIndex++;
+    let next;
+    do { next = FX_NAMES[Math.floor(Math.random() * FX_NAMES.length)]; }
+    while (next === currentAnswer && FX_NAMES.length > 1);
+    currentAnswer = next;
+    // ✅ 요청 반영: 음악을 쓸 때는 문제마다 새로운 랜덤 위치에서 재생한다.
+    // 단, 첫 문제는 start()가 이미 랜덤 위치를 골라뒀으므로 다시 재시작하지 않는다
+    // (안 그러면 퀴즈 시작하자마자 소리가 한 번 튀는 문제가 있었다).
+    if (engine.usingMusic && engine.musicBuffer && questionIndex > 1) {
+      engine._startMusicSource(false);
+    }
+    fxButtons.forEach(b => b.classList.remove('active')); // ✅ 정답을 숨긴다
+    clearFeedback();
+    quizPhase = 'playing';
+    setStatus(`문제 ${questionIndex}/${QUESTIONS_PER_QUIZ}`, '재생되는 이펙트를 맞춰보세요');
+    updateScoreboard();
+    startAbCycle();
+  }
+
+  function submitGuess(btn){
+    if (quizPhase !== 'playing') return;
+    quizPhase = 'answered';
+    stopAbCycle(); // ✅ 정답을 골랐으니 원음/체인지 번갈아 재생을 멈춘다
+    engine.setFxEffect(currentAnswer); // 정답 이펙트로 고정해서 들려준다
+    const guess = btn.dataset.fx;
+    const isCorrect = guess === currentAnswer;
+    if (isCorrect) hitCount++;
+    // 정답 공개
+    fxButtons.forEach(b => b.classList.toggle('active', b.dataset.fx === currentAnswer));
+    feedbackEl.textContent = isCorrect ? '✅ 정답이에요!' : `❌ 오답이에요 — 정답은 ${currentAnswer.toUpperCase()}였어요`;
+    feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+    updateScoreboard();
+
+    setTimeout(() => {
+      if (quizPhase !== 'answered') return; // 그 사이에 중단됐으면 무시
+      if (questionIndex >= QUESTIONS_PER_QUIZ) {
+        finishQuiz();
+      } else {
+        generateQuizQuestion();
+      }
+    }, 1800);
+  }
+
+  function finishQuiz(){
+    quizPhase = 'idle';
+    stopAbCycle();
+    engine.stop();
+    stopViz();
+    startBtn.textContent = '▸ 청음 문제 시작';
+    startBtn.classList.remove('stop');
+    setStatus(`퀴즈 종료! ${hitCount}/${QUESTIONS_PER_QUIZ} 정답`, '다시 시작하려면 시작 버튼을 눌러주세요');
+    fxButtons.forEach(b => b.classList.remove('active'));
+    updateLockState();
+  }
+
+  // ---- 이펙트 선택 (자유 청음: 즉시 전환 / 퀴즈: 정답 제출) ----
+  fxButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (chapter === 'quiz') {
+        submitGuess(btn);
+        return;
+      }
+      engine.setFxEffect(btn.dataset.fx);
+      fxButtons.forEach(b => b.classList.toggle('active', b === btn));
+      if (engine.isPlaying) {
+        setStatus(`${btn.dataset.fx.toUpperCase()} 재생 중`, '다른 이펙트를 눌러 비교해보세요');
+      }
+    });
+  });
+
+  // ---- 시작/정지 ----
+  function updateLockState(){
+    const busy = engine.isPlaying;
+    sourceNoiseBtn.disabled = busy;
+    sourceMusicBtn.disabled = busy || !engine.musicBuffer;
+    uploadMusicBtn.disabled = busy;
+    chapterFreeBtn.disabled = busy;
+    chapterQuizBtn.disabled = busy;
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (chapter === 'free') {
+      if (!engine.isPlaying) {
+        engine.start();
+        startBtn.textContent = '■ 이펙트 청음 종료';
+        startBtn.classList.add('stop');
+        const activeBtn = fxButtons.find(b => b.dataset.fx === engine.currentFxEffect);
+        setStatus(`${activeBtn.dataset.fx.toUpperCase()} 재생 중`, '다른 이펙트를 눌러 비교해보세요');
+        requestAnimationFrame(startViz);
+      } else {
+        engine.stop();
+        stopViz();
+        startBtn.textContent = '▸ 이펙트 청음 시작';
+        startBtn.classList.remove('stop');
+        setStatus('이펙트를 골라서 시작해보세요');
+      }
+    } else {
+      if (!engine.isPlaying) {
+        questionIndex = 0; hitCount = 0;
+        engine.start(false); // ✅ 요청 반영: 청음 문제는 음악을 랜덤 위치에서 재생
+        startBtn.textContent = '■ 청음 문제 중단';
+        startBtn.classList.add('stop');
+        requestAnimationFrame(startViz);
+        generateQuizQuestion();
+      } else {
+        quizPhase = 'idle';
+        stopAbCycle();
+        engine.stop();
+        stopViz();
+        startBtn.textContent = '▸ 청음 문제 시작';
+        startBtn.classList.remove('stop');
+        fxButtons.forEach(b => b.classList.remove('active'));
+        clearFeedback();
+        setStatus('시작 버튼을 눌러 문제를 시작하세요');
+      }
+    }
+    updateLockState();
+  });
+
+  // ---- 시각화: 곡 전체 파형 + 플레이헤드 (음악 사용 시), 핑크노이즈는 안내 문구 ----
+  let vizRafId = null;
+  function resizeViz(){
+    const rect = vizCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    vizCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    vizCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+  function drawViz(){
+    if (!engine.isPlaying) { vizRafId = null; return; }
+    const w = vizCanvas.width, h = vizCanvas.height;
+    if (w > 0 && h > 0) {
+      vizCtx.clearRect(0, 0, w, h);
+      if (engine.usingMusic && engine.musicWaveformPeaks && engine.musicBuffer) {
+        const peaks = engine.musicWaveformPeaks;
+        const n = peaks.length;
+        const midY = h / 2;
+        const barW = w / n;
+        const position = engine.getMusicPlaybackPosition();
+        const duration = engine.musicBuffer.duration;
+        const playedRatio = duration > 0 ? Math.max(0, Math.min(1, position / duration)) : 0;
+        const playheadX = playedRatio * w;
+        for (let i = 0; i < n; i++) {
+          const x = i * barW;
+          const amp = Math.max(0.02, peaks[i]);
+          const barHeight = amp * h * 0.9;
+          vizCtx.fillStyle = (x < playheadX) ? '#3ddc97' : 'rgba(147,163,163,0.35)';
+          vizCtx.fillRect(x, midY - barHeight / 2, Math.max(1, barW - 0.5), barHeight);
+        }
+        vizCtx.strokeStyle = '#f2a93b';
+        vizCtx.lineWidth = Math.max(2, w * 0.004);
+        vizCtx.beginPath();
+        vizCtx.moveTo(playheadX, 0);
+        vizCtx.lineTo(playheadX, h);
+        vizCtx.stroke();
+      } else {
+        vizCtx.fillStyle = 'rgba(147,163,163,0.7)';
+        vizCtx.font = `${Math.max(11, h * 0.13)}px 'IBM Plex Mono', monospace`;
+        vizCtx.textAlign = 'center';
+        vizCtx.fillText('🎵 음악을 업로드하면 파형이 여기에 표시돼요', w / 2, h / 2);
+        vizCtx.textAlign = 'left';
+      }
+    }
+    vizRafId = requestAnimationFrame(drawViz);
+  }
+  function startViz(){
+    resizeViz();
+    if (!vizRafId) vizRafId = requestAnimationFrame(drawViz);
+  }
+  function stopViz(){
+    if (vizRafId) cancelAnimationFrame(vizRafId);
+    vizRafId = null;
+  }
+  window.addEventListener('resize', () => { if (engine.isPlaying) resizeViz(); });
+
+  updateLockState();
+  updateScoreboard();
+
+})();
+</script>
+</body>
+</html>
