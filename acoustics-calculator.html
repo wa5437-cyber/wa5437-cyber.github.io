@@ -148,6 +148,7 @@
     <button data-tab="delay">Delay</button>
     <button data-tab="volume">Volume</button>
     <button data-tab="roommodes">Room Modes</button>
+    <button data-tab="rt60">Reverb (RT60)</button>
   </div>
 
   <div id="frequencyTab">
@@ -460,10 +461,79 @@
     </div>
   </div>
 
+  <div id="rt60Tab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Reverb Time (RT60, Sabine 공식)</div>
+      <p class="phase-desc">RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.</p>
+
+      <div class="field">
+        <label>Length (L)</label>
+        <div class="input-row"><input type="number" id="rt60LengthInput" value="6" step="0.1" min="0.1"><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Width (W)</label>
+        <div class="input-row"><input type="number" id="rt60WidthInput" value="4" step="0.1" min="0.1"><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Height (H)</label>
+        <div class="input-row"><input type="number" id="rt60HeightInput" value="2.7" step="0.1" min="0.1"><span class="unit">m</span></div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>표면 처리 (평균 흡음계수 α)</label>
+        <div class="tab-picker" id="absorptionPresetPicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
+          <button data-alpha="0.05">매우 단단함<br><span style="font-weight:400;font-size:10.5px;">(콘크리트·유리)</span></button>
+          <button data-alpha="0.15" class="active">보통<br><span style="font-weight:400;font-size:10.5px;">(벽지·바닥재)</span></button>
+          <button data-alpha="0.35">흡음 처리<br><span style="font-weight:400;font-size:10.5px;">(카펫·커튼)</span></button>
+        </div>
+        <div class="input-row" style="margin-top:10px;">
+          <input type="number" id="absorptionAlphaInput" value="0.15" step="0.01" min="0.01" max="1">
+          <span class="unit">α (0~1)</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">방 부피 (V)</span>
+          <span class="result-val"><span id="rt60VolumeVal">--</span><span class="unit">m³</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">총 표면적 (S)</span>
+          <span class="result-val"><span id="rt60SurfaceVal">--</span><span class="unit">m²</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">총 흡음력 (A = S×α)</span>
+          <span class="result-val"><span id="rt60AbsorptionVal">--</span><span class="unit">sabins</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">RT60 (잔향시간)</span>
+          <span class="result-val"><span id="rt60ResultVal">--</span><span class="unit">초</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="rt60Guideline"></p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Critical Distance (임계거리)</div>
+      <p class="phase-desc">직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.</p>
+      <div class="field">
+        <label>스피커 지향성 계수 (Q)</label>
+        <div class="input-row"><input type="number" id="directivityQInput" value="2" step="0.1" min="0.1"><span class="unit">Q</span></div>
+        <p class="phase-desc" style="margin-top:8px; font-size:12.5px;">참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.</p>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">임계거리 (Dc)</span>
+          <span class="result-val"><span id="criticalDistVal">--</span><span class="unit">m</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="placeholderTab" class="panel" style="display:none;">
     <div class="coming-soon">
       <b>🎉 모든 탭이 준비됐어요</b>
-      Frequency · Band · Delay · Volume · Room Modes — 전부 사용할 수 있습니다.
+      Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.
     </div>
   </div>
 
@@ -554,6 +624,19 @@
   const roomModeWarning = document.getElementById('roomModeWarning');
   const tangentialModeTable = document.getElementById('tangentialModeTable');
   const obliqueModeTable = document.getElementById('obliqueModeTable');
+  const rt60Tab = document.getElementById('rt60Tab');
+  const rt60LengthInput = document.getElementById('rt60LengthInput');
+  const rt60WidthInput = document.getElementById('rt60WidthInput');
+  const rt60HeightInput = document.getElementById('rt60HeightInput');
+  const absorptionPresetPicker = document.getElementById('absorptionPresetPicker');
+  const absorptionAlphaInput = document.getElementById('absorptionAlphaInput');
+  const rt60VolumeVal = document.getElementById('rt60VolumeVal');
+  const rt60SurfaceVal = document.getElementById('rt60SurfaceVal');
+  const rt60AbsorptionVal = document.getElementById('rt60AbsorptionVal');
+  const rt60ResultVal = document.getElementById('rt60ResultVal');
+  const rt60Guideline = document.getElementById('rt60Guideline');
+  const directivityQInput = document.getElementById('directivityQInput');
+  const criticalDistVal = document.getElementById('criticalDistVal');
   const roomModeCanvas = document.getElementById('roomModeCanvas');
   const roomModeCtx = roomModeCanvas.getContext('2d');
   const volSensitivityInput = document.getElementById('volSensitivityInput');
@@ -1417,6 +1500,67 @@
     }
   });
 
+  // -----------------------------------------------------------------
+  // Reverb Time (RT60, Sabine 공식) + Critical Distance
+  // -----------------------------------------------------------------
+  // RT60 = 0.161 × V / A  (V: 부피 m³, A: 총 흡음력 sabins = 표면적 × 평균 흡음계수)
+  function computeRT60(V, S, alpha){
+    const A = S * alpha;
+    const rt60 = A > 0 ? (0.161 * V) / A : Infinity;
+    return { A, rt60 };
+  }
+  // 임계거리(반사음=직접음이 되는 거리): Dc = 0.057 × √(Q×V / RT60)
+  function computeCriticalDistance(Q, V, rt60){
+    if (!(rt60 > 0)) return NaN;
+    return 0.057 * Math.sqrt((Q * V) / rt60);
+  }
+  function rt60Guidelines(rt60){
+    if (rt60 < 0.4) return '📀 아주 건조한 편이에요 — 방송 부스, 보컬 부스 같은 데드(dead)한 공간에 어울려요.';
+    if (rt60 < 0.8) return '🎙️ 스튜디오 컨트롤룸이나 회의실 정도의 표준적인 잔향이에요.';
+    if (rt60 < 1.5) return '🏠 일반 거실/사무 공간 수준의 잔향이에요.';
+    if (rt60 < 3.0) return '🎭 작은 공연장·강당 정도의 울림이에요.';
+    return '⛪ 성당·대형 홀처럼 아주 많이 울리는 공간이에요.';
+  }
+
+  function recalcRT60(){
+    const L = parseFloat(rt60LengthInput.value) || 0;
+    const W = parseFloat(rt60WidthInput.value) || 0;
+    const H = parseFloat(rt60HeightInput.value) || 0;
+    const alpha = Math.min(1, Math.max(0.001, parseFloat(absorptionAlphaInput.value) || 0.15));
+    if (L <= 0 || W <= 0 || H <= 0) return;
+
+    const V = L * W * H;
+    const S = 2 * (L * W + L * H + W * H);
+    const { A, rt60 } = computeRT60(V, S, alpha);
+
+    rt60VolumeVal.textContent = V.toFixed(1);
+    rt60SurfaceVal.textContent = S.toFixed(1);
+    rt60AbsorptionVal.textContent = A.toFixed(2);
+    rt60ResultVal.textContent = isFinite(rt60) ? rt60.toFixed(2) : '--';
+    rt60Guideline.textContent = isFinite(rt60) ? rt60Guidelines(rt60) : '';
+
+    const Q = parseFloat(directivityQInput.value) || 1;
+    const dc = computeCriticalDistance(Q, V, rt60);
+    criticalDistVal.textContent = isFinite(dc) ? dc.toFixed(2) : '--';
+  }
+
+  [rt60LengthInput, rt60WidthInput, rt60HeightInput, absorptionAlphaInput, directivityQInput].forEach(el => {
+    el.addEventListener('input', recalcRT60);
+  });
+  absorptionPresetPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      absorptionAlphaInput.value = btn.dataset.alpha;
+      absorptionPresetPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcRT60();
+    });
+  });
+  // ✅ 직접 α를 입력하면 프리셋 버튼 선택은 해제한다 (임의의 값도 지원)
+  absorptionAlphaInput.addEventListener('input', () => {
+    const val = parseFloat(absorptionAlphaInput.value);
+    const matched = Array.from(absorptionPresetPicker.querySelectorAll('button')).find(b => parseFloat(b.dataset.alpha) === val);
+    absorptionPresetPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === matched));
+  });
+
   freqInput.addEventListener('input', recalc);
 
   // ✅ 요청 반영: 음정을 입력하면 실시간으로 몇 Hz인지 힌트로 보여주고,
@@ -1451,11 +1595,13 @@
       delayTab.style.display = tab === 'delay' ? 'block' : 'none';
       volumeTab.style.display = tab === 'volume' ? 'block' : 'none';
       roomModesTab.style.display = tab === 'roommodes' ? 'block' : 'none';
-      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay' && tab !== 'volume' && tab !== 'roommodes') ? 'block' : 'none';
+      rt60Tab.style.display = tab === 'rt60' ? 'block' : 'none';
+      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay' && tab !== 'volume' && tab !== 'roommodes' && tab !== 'rt60') ? 'block' : 'none';
       if (tab === 'band') { resizeBandCanvas(); drawBand(); }
       if (tab === 'delay') { resizeDelayCanvas(); drawDelay(); }
       if (tab === 'volume') { resizeVolumeCanvas(); drawVolume(); }
       if (tab === 'roommodes') { resizeRoomModeCanvas(); recalcRoomModes(); }
+      if (tab === 'rt60') { recalcRT60(); }
     });
   });
 
@@ -1465,6 +1611,7 @@
   recalcVolume();
   recalcPower();
   recalcRoomModes();
+  recalcRT60();
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
 })();
 </script>
