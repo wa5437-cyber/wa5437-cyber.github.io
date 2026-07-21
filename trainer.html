@@ -77,6 +77,13 @@
     word-break:break-all;
   }
 
+  /* ---- 청음 시각화(파형 + 흘러가는 레벨 막대) ---- */
+  .listen-auto-panel{
+    display:flex; flex-direction:column; gap:10px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:14px;
+  }
+  #listenVizCanvas{ width:100%; height:120px; display:block; border-radius:10px; }
+
   /* ---- status ---- */
   .status{ text-align:center; }
   .status h2{ font-size:15px; font-weight:700; }
@@ -273,6 +280,10 @@
     <button id="listenCutBtn">Cut</button>
   </div>
 
+  <div class="listen-auto-panel" id="listenAutoPanel" style="display:none;">
+    <canvas id="listenVizCanvas"></canvas>
+  </div>
+
   <div class="modepicker" id="bandCountPicker">
     <button id="bandCount31" class="active">
       <span class="full">31밴드 (실전형)</span>
@@ -369,6 +380,7 @@
       this.usingMusic = false;
       this.musicBuffer = null;      // decodeAudioData로 디코딩된 AudioBuffer
       this.musicSourceNode = null;  // 현재 재생 중인 AudioBufferSourceNode (1회용이라 매번 새로 만든다)
+      this._musicJustStarted = false;
     }
 
     ensureContext(){
@@ -432,6 +444,13 @@
         this.eqFilter.connect(this.masterGain);
         this.sineGain.connect(this.masterGain);
         this.masterGain.connect(this.ctx.destination);
+
+        // ✅ 요청 반영: 청음 중 파형/레벨 시각화를 위한 분석기. 오디오 신호 경로에는
+        // 영향을 주지 않는 "탭"으로만 연결한다 (destination으로는 안 보냄).
+        this.analyser = this.ctx.createAnalyser();
+        this.analyser.fftSize = 1024;
+        this.analyser.smoothingTimeConstant = 0.6;
+        this.masterGain.connect(this.analyser);
       }
     }
 
@@ -439,30 +458,76 @@
     async loadMusicBuffer(arrayBuffer){
       this.ensureContext();
       this.musicBuffer = await this.ctx.decodeAudioData(arrayBuffer);
+      this._computeWaveformPeaks(); // ✅ 요청 반영: 곡 전체 파형을 미리 계산해둔다
       return this.musicBuffer;
     }
 
-    // ✅ 요청 반영: 음악을 "완전히 무작위 위치"에서 재생 시작한다.
+    // ✅ 요청 반영: 재생 중 실시간으로 그리는 대신, 곡 전체를 미리 훑어서
+    // 구간별 최대 진폭(피크)을 계산해둔다. 이걸로 "곡 전체 파형"을 한 번에 그릴 수 있다.
+    _computeWaveformPeaks(){
+      const NUM_BUCKETS = 600; // 파형 해상도(가로로 몇 개의 막대로 표현할지)
+      const channelData = this.musicBuffer.getChannelData(0); // 첫 채널만 사용
+      const samplesPerBucket = Math.max(1, Math.floor(channelData.length / NUM_BUCKETS));
+      const peaks = new Float32Array(NUM_BUCKETS);
+      for (let i = 0; i < NUM_BUCKETS; i++) {
+        let max = 0;
+        const start = i * samplesPerBucket;
+        const end = Math.min(channelData.length, start + samplesPerBucket);
+        for (let j = start; j < end; j++) {
+          const abs = Math.abs(channelData[j]);
+          if (abs > max) max = abs;
+        }
+        peaks[i] = max;
+      }
+      this.musicWaveformPeaks = peaks;
+    }
+
+    // ✅ 요청 반영: 훈련은 매번 "완전히 무작위 위치"에서, 청음은 "처음부터 쭉 이어서" 재생한다.
     // 매번 새 AudioBufferSourceNode를 만들어야 하는 이유: Web Audio의 BufferSourceNode는
     // 한 번 start()하면 재사용이 안 되는 1회용 노드라서, 새로 재생할 때마다 새로 만든다.
-    // 짧은 구간을 반복 재생(loop)하게 해서, 문제 하나 푸는 동안 음악이 끊기지 않게 한다.
-    _startMusicSource(){
+    _startMusicSource(fromBeginning){
       if (!this.musicBuffer) return;
       this._stopMusicSource();
 
       const duration = this.musicBuffer.duration;
-      const loopWindow = Math.min(15, duration); // 최대 15초 구간을 반복 재생
-      const maxOffset = Math.max(0, duration - loopWindow);
-      const offset = Math.random() * maxOffset; // ✅ 요청 반영: 재생 위치를 랜덤으로
-
       const src = this.ctx.createBufferSource();
       src.buffer = this.musicBuffer;
-      src.loop = true;
-      src.loopStart = offset;
-      src.loopEnd = Math.min(duration, offset + loopWindow);
       src.connect(this.musicGain);
-      src.start(0, offset);
+
+      // ✅ 요청 반영: 시각화에서 "지금 재생 중인 위치"를 계산하기 위해 시작 시각/오프셋을 기록해둔다
+      this._musicStartCtxTime = this.ctx.currentTime;
+
+      if (fromBeginning) {
+        // ✅ 청음: 처음(0초)부터 곡 전체를 그대로 쭉 재생한다. 끝까지 가면 처음부터 다시 반복한다.
+        src.loop = true;
+        src.start(0, 0);
+        this._musicLoopStart = 0;
+        this._musicLoopEnd = duration;
+        this._musicStartOffset = 0;
+      } else {
+        // ✅ 훈련: 매번 무작위 위치에서 짧은 구간(최대 15초)을 반복 재생해서,
+        // 문제 하나 푸는 동안 음악이 끊기지 않게 한다.
+        const loopWindow = Math.min(15, duration);
+        const maxOffset = Math.max(0, duration - loopWindow);
+        const offset = Math.random() * maxOffset;
+        src.loop = true;
+        src.loopStart = offset;
+        src.loopEnd = Math.min(duration, offset + loopWindow);
+        src.start(0, offset);
+        this._musicLoopStart = offset;
+        this._musicLoopEnd = Math.min(duration, offset + loopWindow);
+        this._musicStartOffset = offset;
+      }
       this.musicSourceNode = src;
+    }
+
+    // ✅ 요청 반영: 지금 이 순간 곡의 몇 초 지점을 재생 중인지 계산한다 (플레이헤드 위치 계산용)
+    getMusicPlaybackPosition(){
+      if (!this.musicSourceNode || !this.isPlaying) return 0;
+      const elapsed = this.ctx.currentTime - this._musicStartCtxTime;
+      const loopLen = this._musicLoopEnd - this._musicLoopStart;
+      if (loopLen <= 0) return this._musicStartOffset;
+      return this._musicLoopStart + (elapsed % loopLen);
     }
 
     _stopMusicSource(){
@@ -483,7 +548,7 @@
       param.linearRampToValueAtTime(target, now + duration);
     }
 
-    start(mode){
+    start(mode, fromBeginning){
       this.ensureContext();
       if (this.ctx.state === 'suspended') this.ctx.resume();
       this.currentMode = mode;
@@ -496,7 +561,15 @@
       // (사인파 모드는 순수 톤만 들려주기 위해 배경 소리를 무음 유지)
       if (mode === 'eq'){
         if (this.usingMusic && this.musicBuffer) {
-          this._startMusicSource();
+          // ✅ 요청 반영: 훈련(fromBeginning=false)은 랜덤 위치, 청음(fromBeginning=true)은
+          // 처음(0초)부터 곡을 그대로 쭉 이어서 재생한다.
+          this._startMusicSource(fromBeginning === true);
+          // ✅ start() 직후 곧바로 generateQuestion()이 호출되면서 음악이 또 새로운 랜덤
+          // 위치로 재시작되어, 시작하자마자 소리가 살짝 튀는 문제가 있었다. 이 플래그로
+          // "방금 막 시작한 직후"임을 표시해서, 바로 다음 generateQuestion()에서는
+          // 음악을 다시 재시작하지 않고 그대로 이어가게 한다. (청음은 애초에 generateQuestion을
+          // 호출하지 않으므로 이 플래그가 청음에서는 아무 영향이 없다)
+          this._musicJustStarted = true;
           this.rampParam(this.musicGain.gain, 1.0, 0.3);
         } else {
           this.rampParam(this.pinkGain.gain, 1.0, 0.3);
@@ -570,9 +643,15 @@
         this.currentGainDB = gainDB; // ✅ A/B 사이클(기본↔변형 전환)에서 재사용하기 위해 저장
         this.eqFilter.frequency.value = targetFreq;
         this.eqFilter.gain.value = 0; // 기본(무변형) 상태로 시작 — A/B 사이클이 알아서 전환한다
-        // ✅ 요청 반영: 문제가 바뀔 때마다 음악도 새로운 랜덤 위치에서 다시 시작한다
+        // ✅ 요청 반영: 문제가 바뀔 때마다 음악도 새로운 랜덤 위치에서 다시 시작한다.
+        // 단, start() 직후 첫 문제에서는 이미 방금 재생을 시작했으므로 또 재시작하지 않는다
+        // (안 그러면 시작하자마자 소리가 한 번 튀는 문제가 있었다).
         if (this.usingMusic && this.musicBuffer && this.isPlaying) {
-          this._startMusicSource();
+          if (this._musicJustStarted) {
+            this._musicJustStarted = false;
+          } else {
+            this._startMusicSource();
+          }
         }
       } else {
         this.isBoost = true;
@@ -755,6 +834,9 @@
   const chapterListenBtn = document.getElementById('chapterListen');
   const scoreboardEl = document.getElementById('scoreboard');
   const listenDirPicker = document.getElementById('listenDirPicker');
+  const listenAutoPanel = document.getElementById('listenAutoPanel');
+  const listenVizCanvas = document.getElementById('listenVizCanvas');
+  const listenVizCtx = listenVizCanvas.getContext('2d');
   const listenBoostBtn = document.getElementById('listenBoostBtn');
   const listenCutBtn = document.getElementById('listenCutBtn');
   const bandCount31Btn = document.getElementById('bandCount31');
@@ -886,6 +968,7 @@
     modeEQBtn.disabled = busy;
     modeSineBtn.disabled = busy;
     updateListenDirVisibility();
+    updateListenAutoVisibility();
     updateDirectionModeVisibility();
     updateMagnitudeVisibility();
     updateMusicPanelVisibility();
@@ -904,6 +987,13 @@
   function updateListenDirVisibility(){
     const show = chapter === 'listen' && mode === 'eq';
     listenDirPicker.style.display = show ? 'flex' : 'none';
+  }
+  // ✅ 요청 반영: 시각화 패널은 청음 챕터일 때(모드 무관) 항상 보인다
+  // ✅ 요청 반영: 시각화 패널을 청음뿐 아니라 훈련에서도 보여준다.
+  // (핑크노이즈일 땐 어차피 "업로드하면 표시돼요" 안내만 나오니, 음악 사용 중일 때만 보이게 한다)
+  function updateListenAutoVisibility(){
+    const show = (chapter === 'listen') || (chapter === 'training' && mode === 'eq' && engine.usingMusic);
+    listenAutoPanel.style.display = show ? 'flex' : 'none';
   }
   function setListenDirButtons(){
     listenBoostBtn.classList.toggle('active', listenBoost);
@@ -1058,6 +1148,7 @@
       engine.usingMusic = true;
       sourceNoiseBtn.classList.remove('active');
       sourceMusicBtn.classList.add('active');
+      updateListenAutoVisibility();
     } catch (err) {
       console.error('음악 파일 디코딩 실패:', err);
       musicFileName.textContent = `⚠️ "${file.name}" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다`;
@@ -1070,12 +1161,14 @@
     engine.usingMusic = false;
     sourceNoiseBtn.classList.add('active');
     sourceMusicBtn.classList.remove('active');
+    updateListenAutoVisibility();
   });
   sourceMusicBtn.addEventListener('click', () => {
     if (phase !== 'idle' || isListening || engine.usingMusic || !engine.musicBuffer) return;
     engine.usingMusic = true;
     sourceNoiseBtn.classList.remove('active');
     sourceMusicBtn.classList.add('active');
+    updateListenAutoVisibility();
   });
 
   function resetBandStyles(){
@@ -1117,12 +1210,81 @@
     setStatus(`${LABELS[index]}Hz ${dirLabel} 재생 중`);
   }
 
+  // ---- 청음 중 파형 + 흘러가는 레벨 막대 시각화 ----
+  let listenVizRafId = null;
+
+  function resizeListenViz(){
+    const rect = listenVizCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    listenVizCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    listenVizCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawListenViz(){
+    // ✅ 고친 것: isListening만 체크하면 훈련 중엔 항상 false라서 시각화가 첫 프레임에 바로 멈췄다.
+    // engine.isPlaying으로 바꿔서 청음/훈련 어느 쪽이든 오디오가 재생 중이면 계속 그려지게 했다.
+    if (!engine.isPlaying) { listenVizRafId = null; return; }
+    const w = listenVizCanvas.width, h = listenVizCanvas.height;
+    if (w > 0 && h > 0) {
+      listenVizCtx.clearRect(0, 0, w, h);
+
+      if (engine.usingMusic && engine.musicWaveformPeaks && engine.musicBuffer) {
+        // ✅ 요청 반영: 곡 전체 파형을 한 번에 그려두고, 재생 위치에 맞춰
+        // 플레이헤드(진행선)가 왼쪽에서 오른쪽으로 흘러가며 지나온 구간을 밝게 채운다.
+        const peaks = engine.musicWaveformPeaks;
+        const n = peaks.length;
+        const midY = h / 2;
+        const barW = w / n;
+        const position = engine.getMusicPlaybackPosition();
+        const duration = engine.musicBuffer.duration;
+        const playedRatio = duration > 0 ? Math.max(0, Math.min(1, position / duration)) : 0;
+        const playheadX = playedRatio * w;
+
+        for (let i = 0; i < n; i++) {
+          const x = i * barW;
+          const amp = Math.max(0.02, peaks[i]); // 완전히 무음인 구간도 아주 얇게는 보이게
+          const barHeight = amp * h * 0.9;
+          // 이미 지나온 구간(플레이헤드 왼쪽)은 밝은 초록, 아직 안 나온 구간은 은은한 회색
+          listenVizCtx.fillStyle = (x < playheadX) ? '#3ddc97' : 'rgba(147,163,163,0.35)';
+          listenVizCtx.fillRect(x, midY - barHeight / 2, Math.max(1, barW - 0.5), barHeight);
+        }
+
+        // 플레이헤드(진행선)
+        listenVizCtx.strokeStyle = '#f2a93b';
+        listenVizCtx.lineWidth = Math.max(2, w * 0.004);
+        listenVizCtx.beginPath();
+        listenVizCtx.moveTo(playheadX, 0);
+        listenVizCtx.lineTo(playheadX, h);
+        listenVizCtx.stroke();
+      } else {
+        // 음악을 업로드하지 않고 핑크노이즈로 청음 중일 때는 실시간 레벨만 간단히 보여준다
+        listenVizCtx.fillStyle = 'rgba(147,163,163,0.7)';
+        listenVizCtx.font = `${Math.max(11, h * 0.13)}px 'IBM Plex Mono', monospace`;
+        listenVizCtx.textAlign = 'center';
+        listenVizCtx.fillText('🎵 음악을 업로드하면 파형이 여기에 표시돼요', w / 2, h / 2);
+        listenVizCtx.textAlign = 'left';
+      }
+    }
+    listenVizRafId = requestAnimationFrame(drawListenViz);
+  }
+
+  function startListenViz(){
+    resizeListenViz();
+    if (!listenVizRafId) listenVizRafId = requestAnimationFrame(drawListenViz);
+  }
+  function stopListenViz(){
+    if (listenVizRafId) cancelAnimationFrame(listenVizRafId);
+    listenVizRafId = null;
+  }
+  window.addEventListener('resize', () => { if (engine.isPlaying) resizeListenViz(); });
+
   function startListening(){
     isListening = true;
     listeningIndex = null;
     startBtn.textContent = '■ 청음 종료';
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
-    engine.start(mode);
+    engine.start(mode, true); // ✅ 요청 반영: 청음은 음악을 처음부터 쭉 재생
     resetBandStyles();
     setModeButtons();
     setBandCountButtons();
@@ -1130,8 +1292,10 @@
     setMagnitudeButtons();
     setChapterButtons();
     setStatus('밴드를 탭하면 바로 들려드려요');
+    requestAnimationFrame(startListenViz); // ✅ 요청 반영: 청음 시작하면 파형+막대 시각화도 함께 시작
   }
   function stopListening(){
+    stopListenViz();
     if (listeningIndex !== null) engine.stopAudition(mode);
     isListening = false;
     engine.stop(0.3);
@@ -1229,6 +1393,8 @@
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
 
     engine.start(mode);
+    updateListenAutoVisibility(); // ✅ 요청 반영: 음악 사용 중이면 훈련에서도 파형+플레이헤드가 보이게
+    requestAnimationFrame(startListenViz);
     setStatus('배경음 청취 중… 곧 문제가 출제됩니다', `(${questionIndex}/${QUESTIONS_PER_CHAPTER})`);
     startDebugTimer('워밍업(1번째 문제)');
 
@@ -1253,6 +1419,7 @@
   function stopChapterEarly(){
     chapterToken++;
     engine.stop(0.3);
+    stopListenViz();
     phase = 'idle';
     setModeButtons();
     setBandCountButtons();
@@ -1303,6 +1470,7 @@
 
       if (questionIndex >= QUESTIONS_PER_CHAPTER){
         engine.stop(0.3);
+        stopListenViz();
         phase = 'idle';
         setModeButtons();
         setBandCountButtons();
@@ -1374,6 +1542,7 @@
   setDirectionModeButtons();
   setMagnitudeButtons();
   updateMusicPanelVisibility();
+  updateListenAutoVisibility();
   updateBandVisibility();
   updateScoreboard();
 })();
