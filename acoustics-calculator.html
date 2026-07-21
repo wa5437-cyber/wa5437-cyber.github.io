@@ -101,7 +101,28 @@
   /* ---- 파형 그래프 ---- */
   .wave-canvas-wrap{ width:100%; }
   #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ width:100%; height:300px; display:block; border-radius:12px; }
-  @media (max-width:480px){ #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ height:230px; } }
+  #roomModeCanvas{ width:100%; height:300px; display:block; border-radius:12px; }
+  @media (max-width:480px){
+    #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ height:230px; }
+    #roomModeCanvas{ height:230px; }
+  }
+
+  .room-mode-legend{ display:flex; gap:18px; margin-top:12px; font-size:13px; color:var(--text-secondary); flex-wrap:wrap; }
+  .room-mode-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+  /* ---- 표(Tempo/Room Modes 등에서 재사용) ---- */
+  .tempo-table{ margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .tempo-row{ display:grid; grid-template-columns:0.6fr 1fr 1fr 1fr; gap:0; border-bottom:1px solid var(--line); }
+  .tempo-row:last-child{ border-bottom:none; }
+  .tempo-row.tempo-header{ background:var(--bg-panel-2); }
+  .tempo-cell{ padding:12px 8px; text-align:center; font-family:'IBM Plex Mono',monospace; }
+  .tempo-header .tempo-cell{ font-size:12.5px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
+  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; }
+  .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ color:var(--teal); font-size:14.5px; font-weight:600; }
+  @media (max-width:480px){
+    .tempo-cell{ padding:9px 3px; font-size:12px; }
+    .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ font-size:12.5px; }
+  }
 
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
@@ -126,7 +147,7 @@
     <button data-tab="band">Band</button>
     <button data-tab="delay">Delay</button>
     <button data-tab="volume">Volume</button>
-    <button data-tab="roommodes" disabled>Room Modes</button>
+    <button data-tab="roommodes">Room Modes</button>
   </div>
 
   <div id="frequencyTab">
@@ -378,10 +399,71 @@
     </div>
   </div>
 
+  <div id="roomModesTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Room Modes (축모드)</div>
+      <p class="phase-desc">가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Length (L, 가로)</label>
+        <div class="input-row">
+          <input type="number" id="roomLengthInput" value="6" step="0.1" min="0.1">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Width (W, 세로)</label>
+        <div class="input-row">
+          <input type="number" id="roomWidthInput" value="4" step="0.1" min="0.1">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Height (H, 높이)</label>
+        <div class="input-row">
+          <input type="number" id="roomHeightInput" value="2.7" step="0.1" min="0.1">
+          <span class="unit">m</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Axial Mode Frequencies</div>
+      <div class="tempo-table" id="roomModeTable"></div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="roomModeWarning"></p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Tangential Mode Frequencies (300Hz 이하)</div>
+      <p class="phase-desc" style="font-size:12.5px;">두 방향이 동시에 작용하는 모드입니다. 축모드보다 세기는 약하지만(약 −3dB), 개수가 많아서 저역을 뿌옇게 만드는 데 영향을 줍니다.</p>
+      <div class="tempo-table" id="tangentialModeTable" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Oblique Mode Frequencies (300Hz 이하)</div>
+      <p class="phase-desc" style="font-size:12.5px;">세 방향이 동시에 작용하는, 가장 약한(약 −6dB) 모드입니다. 참고용으로만 봐주세요.</p>
+      <div class="tempo-table" id="obliqueModeTable" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">저역 모드 분포 (20 – 300Hz)</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="roomModeCanvas"></canvas>
+      </div>
+      <div class="room-mode-legend">
+        <span><i class="dot" style="background:#f2a93b;"></i>Length (축모드)</span>
+        <span><i class="dot" style="background:#3ddc97;"></i>Width (축모드)</span>
+        <span><i class="dot" style="background:#3a86ff;"></i>Height (축모드)</span>
+        <span><i class="dot" style="background:rgba(200,150,255,0.85);"></i>Tangential (접선모드)</span>
+        <span><i class="dot" style="background:rgba(147,163,163,0.85);"></i>Oblique (경사모드)</span>
+      </div>
+    </div>
+  </div>
+
   <div id="placeholderTab" class="panel" style="display:none;">
     <div class="coming-soon">
-      <b>🚧 준비 중이에요</b>
-      이 탭은 곧 추가할 예정입니다.<br>지금은 Frequency · Band · Delay · Volume 탭만 사용할 수 있어요.
+      <b>🎉 모든 탭이 준비됐어요</b>
+      Frequency · Band · Delay · Volume · Room Modes — 전부 사용할 수 있습니다.
     </div>
   </div>
 
@@ -462,6 +544,16 @@
   const volLossVal = document.getElementById('volLossVal');
   const volumeCanvas = document.getElementById('volumeCanvas');
   const volumeCtx = volumeCanvas.getContext('2d');
+  const roomModesTab = document.getElementById('roomModesTab');
+  const roomLengthInput = document.getElementById('roomLengthInput');
+  const roomWidthInput = document.getElementById('roomWidthInput');
+  const roomHeightInput = document.getElementById('roomHeightInput');
+  const roomModeTable = document.getElementById('roomModeTable');
+  const roomModeWarning = document.getElementById('roomModeWarning');
+  const tangentialModeTable = document.getElementById('tangentialModeTable');
+  const obliqueModeTable = document.getElementById('obliqueModeTable');
+  const roomModeCanvas = document.getElementById('roomModeCanvas');
+  const roomModeCtx = roomModeCanvas.getContext('2d');
   const volSensitivityInput = document.getElementById('volSensitivityInput');
   const volPowerDistInput = document.getElementById('volPowerDistInput');
   const volDesiredSplInput = document.getElementById('volDesiredSplInput');
@@ -1082,6 +1174,247 @@
     if (volumeTab.style.display !== 'none') { resizeVolumeCanvas(); drawVolume(); }
   });
 
+  // -----------------------------------------------------------------
+  // Room Modes 탭 — 축모드(axial mode) 계산: f_n = (c × n) / (2 × L)
+  // -----------------------------------------------------------------
+  function computeAxialModes(dimension, speed, count){
+    const modes = [];
+    for (let n = 1; n <= count; n++) {
+      modes.push({ order: n, freq: (speed * n) / (2 * dimension) });
+    }
+    return modes;
+  }
+
+  // ✅ 요청 반영: 접선모드(두 방향이 동시에 작용, 축모드보다 약함) / 경사모드(세 방향 다 작용, 가장 약함)
+  // 공통 공식: f = (c/2) × √((nx/L)² + (ny/W)² + (nz/H)²)
+  function roomModeFreq(speed, L, W, H, nx, ny, nz){
+    return (speed / 2) * Math.sqrt((nx / L) ** 2 + (ny / W) ** 2 + (nz / H) ** 2);
+  }
+
+  function computeTangentialModes(speed, L, W, H, maxN, freqMax){
+    const modes = [];
+    const dims = [[L, 0], [W, 1], [H, 2]]; // [치수, 축 인덱스]
+    for (let a = 0; a < 3; a++) {
+      for (let b = a + 1; b < 3; b++) {
+        for (let na = 1; na <= maxN; na++) {
+          for (let nb = 1; nb <= maxN; nb++) {
+            const n = [0, 0, 0];
+            n[dims[a][1]] = na; n[dims[b][1]] = nb;
+            const freq = roomModeFreq(speed, L, W, H, n[0], n[1], n[2]);
+            if (freq <= freqMax) modes.push({ freq, nx: n[0], ny: n[1], nz: n[2] });
+          }
+        }
+      }
+    }
+    modes.sort((a, b) => a.freq - b.freq);
+    return modes;
+  }
+
+  function computeObliqueModes(speed, L, W, H, maxN, freqMax){
+    const modes = [];
+    for (let nx = 1; nx <= maxN; nx++) {
+      for (let ny = 1; ny <= maxN; ny++) {
+        for (let nz = 1; nz <= maxN; nz++) {
+          const freq = roomModeFreq(speed, L, W, H, nx, ny, nz);
+          if (freq <= freqMax) modes.push({ freq, nx, ny, nz });
+        }
+      }
+    }
+    modes.sort((a, b) => a.freq - b.freq);
+    return modes;
+  }
+
+  function resizeRoomModeCanvas(){
+    const rect = roomModeCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    roomModeCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    roomModeCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  // ✅ 요청 반영: 방은 항상 "고정된 모양의 작은 3D 아이콘"으로만 방향 표시용으로 그리고,
+  // 실제 주파수 정보는 각 축마다 넓고 읽기 쉬운 눈금줄(ruler)로 따로 크게 보여준다.
+  function drawRoomModes(lModes, wModes, hModes, L, W, H, tangentialFreqs, obliqueFreqs){
+    const w = roomModeCanvas.width, h = roomModeCanvas.height;
+    if (w === 0 || h === 0) return;
+    roomModeCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.08, marginR = w * 0.05, marginT = h * 0.08, marginB = h * 0.13;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const FREQ_MIN = 20, FREQ_MAX = 300;
+
+    function freqToX(f){
+      const t = (f - FREQ_MIN) / (FREQ_MAX - FREQ_MIN);
+      return marginL + Math.max(0, Math.min(1, t)) * plotW;
+    }
+
+    // 축
+    roomModeCtx.strokeStyle = 'rgba(255,255,255,0.25)';
+    roomModeCtx.lineWidth = Math.max(1, w * 0.0015);
+    roomModeCtx.beginPath();
+    roomModeCtx.moveTo(marginL, marginT + plotH);
+    roomModeCtx.lineTo(marginL + plotW, marginT + plotH);
+    roomModeCtx.stroke();
+
+    // 50/100/150/200/250/300Hz 기준선
+    roomModeCtx.font = `${Math.max(10, h * 0.04)}px 'IBM Plex Mono', monospace`;
+    roomModeCtx.fillStyle = 'rgba(147,163,163,0.7)';
+    roomModeCtx.textAlign = 'center';
+    for (let f = 50; f <= 300; f += 50) {
+      const x = freqToX(f);
+      roomModeCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+      roomModeCtx.beginPath();
+      roomModeCtx.moveTo(x, marginT);
+      roomModeCtx.lineTo(x, marginT + plotH);
+      roomModeCtx.stroke();
+      roomModeCtx.fillText(f + 'Hz', x, marginT + plotH + h * 0.07);
+    }
+    roomModeCtx.textAlign = 'left';
+
+    // ---- 축모드(가장 강함) — 3줄, 색깔별로, Hz 숫자 라벨 포함 ----
+    const rows = [
+      { modes: lModes, color: '#f2a93b', y0: marginT + plotH * 0.13 },
+      { modes: wModes, color: '#3ddc97', y0: marginT + plotH * 0.36 },
+      { modes: hModes, color: '#3a86ff', y0: marginT + plotH * 0.59 },
+    ];
+    rows.forEach(({ modes, color, y0 }) => {
+      modes.forEach(({ freq }, i) => {
+        if (freq < FREQ_MIN || freq > FREQ_MAX) return;
+        const x = freqToX(freq);
+        roomModeCtx.strokeStyle = color;
+        roomModeCtx.lineWidth = Math.max(2, w * 0.004);
+        roomModeCtx.beginPath();
+        roomModeCtx.moveTo(x, y0 - plotH * 0.07);
+        roomModeCtx.lineTo(x, y0 + plotH * 0.07);
+        roomModeCtx.stroke();
+
+        roomModeCtx.font = `${Math.max(9, h * 0.028)}px 'IBM Plex Mono', monospace`;
+        roomModeCtx.fillStyle = color;
+        roomModeCtx.textAlign = 'center';
+        const labelY = (i % 2 === 0) ? y0 - plotH * 0.09 : y0 + plotH * 0.13;
+        roomModeCtx.fillText(`${Math.round(freq)}Hz`, x, labelY);
+      });
+    });
+
+    // ✅ 요청 반영: 접선모드(중간 세기) / 경사모드(가장 약함)를 아래에 참고용 얇은 줄로 추가한다.
+    // 개수가 많아질 수 있어서 개별 숫자 라벨 없이, 짧고 옅은 눈금으로 "밀집도"만 보여준다.
+    const tanY = marginT + plotH * 0.80;
+    const obliqueY = marginT + plotH * 0.94;
+
+    roomModeCtx.font = `600 ${Math.max(9, h * 0.032)}px 'IBM Plex Mono', monospace`;
+    roomModeCtx.fillStyle = 'rgba(200,150,255,0.85)';
+    roomModeCtx.textAlign = 'left';
+    roomModeCtx.fillText('Tangential', marginL, tanY - plotH * 0.055);
+    roomModeCtx.strokeStyle = 'rgba(200,150,255,0.6)';
+    roomModeCtx.lineWidth = Math.max(1.2, w * 0.002);
+    (tangentialFreqs || []).forEach(({ freq }) => {
+      if (freq < FREQ_MIN || freq > FREQ_MAX) return;
+      const x = freqToX(freq);
+      roomModeCtx.beginPath();
+      roomModeCtx.moveTo(x, tanY - plotH * 0.035);
+      roomModeCtx.lineTo(x, tanY + plotH * 0.035);
+      roomModeCtx.stroke();
+    });
+
+    roomModeCtx.fillStyle = 'rgba(147,163,163,0.85)';
+    roomModeCtx.fillText('Oblique', marginL, obliqueY - plotH * 0.055);
+    roomModeCtx.strokeStyle = 'rgba(147,163,163,0.5)';
+    roomModeCtx.lineWidth = Math.max(1, w * 0.0016);
+    (obliqueFreqs || []).forEach(({ freq }) => {
+      if (freq < FREQ_MIN || freq > FREQ_MAX) return;
+      const x = freqToX(freq);
+      roomModeCtx.beginPath();
+      roomModeCtx.moveTo(x, obliqueY - plotH * 0.03);
+      roomModeCtx.lineTo(x, obliqueY + plotH * 0.03);
+      roomModeCtx.stroke();
+    });
+    roomModeCtx.textAlign = 'left';
+  }
+
+  function recalcRoomModes(){
+    const speed = currentSpeedOfSound();
+    const L = parseFloat(roomLengthInput.value) || 0;
+    const W = parseFloat(roomWidthInput.value) || 0;
+    const H = parseFloat(roomHeightInput.value) || 0;
+    if (L <= 0 || W <= 0 || H <= 0) { roomModeTable.innerHTML = ''; return; }
+
+    const COUNT = 4;
+    const lModes = computeAxialModes(L, speed, COUNT);
+    const wModes = computeAxialModes(W, speed, COUNT);
+    const hModes = computeAxialModes(H, speed, COUNT);
+
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">Order</div>
+        <div class="tempo-cell">Length</div>
+        <div class="tempo-cell">Width</div>
+        <div class="tempo-cell">Height</div>
+      </div>`;
+    for (let i = 0; i < COUNT; i++) {
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell">${i + 1}</div>
+          <div class="tempo-cell">${lModes[i].freq.toFixed(1)}Hz</div>
+          <div class="tempo-cell">${wModes[i].freq.toFixed(1)}Hz</div>
+          <div class="tempo-cell">${hModes[i].freq.toFixed(1)}Hz</div>
+        </div>`;
+    }
+    roomModeTable.innerHTML = html;
+
+    // ✅ 서로 다른 방향의 1차 모드끼리 너무 가까우면(5Hz 이내), 그 대역이 유독 과하게
+    // 부스트될 수 있다는 흔한 경험칙(rule of thumb)을 간단히 안내한다.
+    const firstOrderFreqs = [
+      { label: 'Length', freq: lModes[0].freq },
+      { label: 'Width', freq: wModes[0].freq },
+      { label: 'Height', freq: hModes[0].freq },
+    ];
+    let warning = '';
+    for (let i = 0; i < firstOrderFreqs.length; i++) {
+      for (let j = i + 1; j < firstOrderFreqs.length; j++) {
+        const diff = Math.abs(firstOrderFreqs[i].freq - firstOrderFreqs[j].freq);
+        if (diff < 5) {
+          warning = `⚠️ ${firstOrderFreqs[i].label}(${firstOrderFreqs[i].freq.toFixed(1)}Hz)와 ${firstOrderFreqs[j].label}(${firstOrderFreqs[j].freq.toFixed(1)}Hz)의 1차 모드가 ${diff.toFixed(1)}Hz밖에 안 떨어져 있어요 — 이 대역이 유독 부밍(booming)하게 들릴 수 있습니다. 방 비율을 조금 바꾸면 완화돼요.`;
+        }
+      }
+    }
+    roomModeWarning.textContent = warning;
+
+    const tangentialFreqs = computeTangentialModes(speed, L, W, H, 3, 300);
+    const obliqueFreqs = computeObliqueModes(speed, L, W, H, 2, 300);
+
+    // ✅ 요청 반영: 접선/경사 모드도 축모드처럼 표로 나열한다 (개수가 많을 수 있어 상위 10개까지만)
+    function renderModeTable(container, modes){
+      let html = `
+        <div class="tempo-row tempo-header" style="grid-template-columns:1fr 1fr;">
+          <div class="tempo-cell">Mode (nx,ny,nz)</div>
+          <div class="tempo-cell">Frequency</div>
+        </div>`;
+      modes.slice(0, 10).forEach(({ freq, nx, ny, nz }) => {
+        html += `
+          <div class="tempo-row" style="grid-template-columns:1fr 1fr;">
+            <div class="tempo-cell">(${nx}, ${ny}, ${nz})</div>
+            <div class="tempo-cell">${freq.toFixed(1)}Hz</div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+    renderModeTable(tangentialModeTable, tangentialFreqs);
+    renderModeTable(obliqueModeTable, obliqueFreqs);
+
+    drawRoomModes(lModes, wModes, hModes, L, W, H, tangentialFreqs, obliqueFreqs);
+  }
+
+  [roomLengthInput, roomWidthInput, roomHeightInput].forEach(el => {
+    el.addEventListener('input', recalcRoomModes);
+  });
+  tempInput.addEventListener('input', recalcRoomModes);
+  window.addEventListener('resize', () => {
+    if (roomModesTab.style.display !== 'none') {
+      resizeRoomModeCanvas();
+      recalcRoomModes();
+    }
+  });
+
   freqInput.addEventListener('input', recalc);
 
   // ✅ 요청 반영: 음정을 입력하면 실시간으로 몇 Hz인지 힌트로 보여주고,
@@ -1115,10 +1448,12 @@
       bandTab.style.display = tab === 'band' ? 'block' : 'none';
       delayTab.style.display = tab === 'delay' ? 'block' : 'none';
       volumeTab.style.display = tab === 'volume' ? 'block' : 'none';
-      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay' && tab !== 'volume') ? 'block' : 'none';
+      roomModesTab.style.display = tab === 'roommodes' ? 'block' : 'none';
+      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay' && tab !== 'volume' && tab !== 'roommodes') ? 'block' : 'none';
       if (tab === 'band') { resizeBandCanvas(); drawBand(); }
       if (tab === 'delay') { resizeDelayCanvas(); drawDelay(); }
       if (tab === 'volume') { resizeVolumeCanvas(); drawVolume(); }
+      if (tab === 'roommodes') { resizeRoomModeCanvas(); recalcRoomModes(); }
     });
   });
 
@@ -1127,6 +1462,7 @@
   recalcDelay('distance');
   recalcVolume();
   recalcPower();
+  recalcRoomModes();
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
 })();
 </script>
