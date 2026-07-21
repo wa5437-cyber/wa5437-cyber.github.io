@@ -129,15 +129,15 @@
     font-family:'IBM Plex Mono',monospace; font-size:17px; color:var(--text-primary); line-height:1.7;
     background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center;
   }
-  .quiz-answer-row{ display:flex; gap:8px; margin-top:14px; }
-  .quiz-answer-row input{
-    flex:1; background:#171d21; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
-    font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; padding:12px 14px; min-width:0;
+  .quiz-options{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px; }
+  .quiz-option-btn{
+    border:1px solid var(--line); background:var(--bg-panel-2); color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:17px; font-weight:700; padding:16px 8px; border-radius:12px;
+    min-width:0; transition:background .15s, border-color .15s, color .15s;
   }
-  .quiz-submit-btn{
-    border:none; background:linear-gradient(160deg, var(--teal), #2bb883); color:#04120c; font-weight:700;
-    font-size:15px; padding:12px 20px; border-radius:10px; flex-shrink:0;
-  }
+  .quiz-option-btn:disabled{ cursor:default; }
+  .quiz-option-btn.correct-option{ background:rgba(61,220,151,0.16); border-color:var(--teal); color:var(--teal); }
+  .quiz-option-btn.wrong-option{ background:rgba(239,91,91,0.16); border-color:var(--red); color:var(--red); }
   .feedback{ min-height:22px; text-align:center; font-weight:700; font-size:15px; margin-top:12px; }
   .feedback.correct{ color:var(--teal); }
   .feedback.wrong{ color:var(--red); }
@@ -268,7 +268,55 @@
         <label>Power Ratio (P2 / P1)</label>
         <div class="input-row"><input type="number" id="dbRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
       </div>
-      <p class="phase-desc" style="margin-top:14px; font-size:13px;">참고: 전압비(dB=20×log10(V2/V1)) 기준이라면 같은 dB에서 전력비의 제곱근이 전압비가 됩니다. (예: 3dB → 전력비 2배, 전압비 약 1.41배)</p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">dB ↔ Voltage Ratio</div>
+      <p class="phase-desc">dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.</p>
+      <div class="field">
+        <label>dB (레벨 차이)</label>
+        <div class="input-row"><input type="number" id="dbVoltInput" value="6" step="0.1"><span class="unit">dB</span></div>
+      </div>
+      <div class="field">
+        <label>Voltage Ratio (V2 / V1)</label>
+        <div class="input-row"><input type="number" id="dbVoltRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
+      </div>
+      <p class="phase-desc" style="margin-top:14px; font-size:13px;">참고: 같은 숫자의 "배수"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 "2배"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 "2배"를 넣어 비교해보세요.)</p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">dBu / dBV (전압 기준 절대 레벨)</div>
+      <p class="phase-desc">dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
+      <div class="field">
+        <label>Voltage</label>
+        <div class="input-row"><input type="number" id="voltAbsInput" value="1" step="0.001"><span class="unit">V</span></div>
+      </div>
+      <div class="field">
+        <label>dBV (0dBV = 1V 기준)</label>
+        <div class="input-row"><input type="number" id="dbVInput" value="0" step="0.01"><span class="unit">dBV</span></div>
+      </div>
+      <div class="field">
+        <label>dBu (0dBu = 0.775V 기준)</label>
+        <div class="input-row"><input type="number" id="dbuInput" value="2.22" step="0.01"><span class="unit">dBu</span></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">dBm / dBW (전력 기준 절대 레벨)</div>
+      <p class="phase-desc">dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
+      <div class="field">
+        <label>Power</label>
+        <div class="input-row"><input type="number" id="powerAbsInput" value="1" step="0.001"><span class="unit">W</span></div>
+      </div>
+      <div class="field">
+        <label>dBW (0dBW = 1W 기준)</label>
+        <div class="input-row"><input type="number" id="dbWInput" value="0" step="0.01"><span class="unit">dBW</span></div>
+      </div>
+      <div class="field">
+        <label>dBm (0dBm = 1mW 기준)</label>
+        <div class="input-row"><input type="number" id="dbmInput" value="30" step="0.01"><span class="unit">dBm</span></div>
+      </div>
+      <p class="phase-desc" style="margin-top:14px; font-size:13px;">참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.</p>
     </div>
   </div>
 
@@ -276,10 +324,7 @@
   <div id="quizPanel" class="panel" style="display:none;">
     <div class="panel-title">문제</div>
     <div class="quiz-problem" id="quizProblemText">시작 버튼을 눌러주세요</div>
-    <div class="quiz-answer-row">
-      <input type="number" id="quizAnswerInput" step="any" placeholder="답을 입력하세요">
-      <button class="quiz-submit-btn" id="quizSubmitBtn">제출</button>
-    </div>
+    <div class="quiz-options" id="quizOptions"></div>
     <div class="feedback" id="feedback"></div>
   </div>
 
@@ -322,6 +367,8 @@
   }
   function dbToRatio(db){ return Math.pow(10, db / 10); }
   function ratioToDb(ratio){ return 10 * Math.log10(ratio); }
+  function dbToVoltRatio(db){ return Math.pow(10, db / 20); }
+  function voltRatioToDb(ratio){ return 20 * Math.log10(ratio); }
 
   // =====================================================================
   // 챕터 / 탭 전환
@@ -337,8 +384,7 @@
   const startBtn = document.getElementById('startBtn');
   const quizPanel = document.getElementById('quizPanel');
   const quizProblemText = document.getElementById('quizProblemText');
-  const quizAnswerInput = document.getElementById('quizAnswerInput');
-  const quizSubmitBtn = document.getElementById('quizSubmitBtn');
+  const quizOptionsEl = document.getElementById('quizOptions');
 
   const freeTabs = {
     ohm: document.getElementById('ohmTab'),
@@ -383,7 +429,7 @@
       startBtn.textContent = '▸ 계산 문제 시작';
       startBtn.classList.remove('stop');
       quizProblemText.textContent = '시작 버튼을 눌러주세요';
-      quizAnswerInput.value = '';
+      quizOptionsEl.innerHTML = '';
       questionIndex = 0; hitCount = 0;
       updateScoreboard();
     }
@@ -541,11 +587,77 @@
     dbInput.value = ratioToDb(ratio).toFixed(3);
   });
 
+  const dbVoltInput = document.getElementById('dbVoltInput');
+  const dbVoltRatioInput = document.getElementById('dbVoltRatioInput');
+  dbVoltInput.addEventListener('input', () => {
+    const db = parseFloat(dbVoltInput.value);
+    if (!isFinite(db)) return;
+    dbVoltRatioInput.value = dbToVoltRatio(db).toFixed(4);
+  });
+  dbVoltRatioInput.addEventListener('input', () => {
+    const ratio = parseFloat(dbVoltRatioInput.value);
+    if (!isFinite(ratio) || ratio <= 0) return;
+    dbVoltInput.value = voltRatioToDb(ratio).toFixed(3);
+  });
+
+  // ---- dBu / dBV (전압 기준 절대 레벨) ----
+  // dBu 기준 전압: 0.775V(정확히는 √0.6V) — 600Ω에서 1mW를 내는 전압
+  const DBU_REF_V = Math.sqrt(0.6);
+  const voltAbsInput = document.getElementById('voltAbsInput');
+  const dbVInput = document.getElementById('dbVInput');
+  const dbuInput = document.getElementById('dbuInput');
+
+  voltAbsInput.addEventListener('input', () => {
+    const v = parseFloat(voltAbsInput.value);
+    if (!isFinite(v) || v <= 0) return;
+    dbVInput.value = (20 * Math.log10(v)).toFixed(3);
+    dbuInput.value = (20 * Math.log10(v / DBU_REF_V)).toFixed(3);
+  });
+  dbVInput.addEventListener('input', () => {
+    const db = parseFloat(dbVInput.value);
+    if (!isFinite(db)) return;
+    const v = Math.pow(10, db / 20);
+    voltAbsInput.value = v.toFixed(4);
+    dbuInput.value = (20 * Math.log10(v / DBU_REF_V)).toFixed(3);
+  });
+  dbuInput.addEventListener('input', () => {
+    const db = parseFloat(dbuInput.value);
+    if (!isFinite(db)) return;
+    const v = Math.pow(10, db / 20) * DBU_REF_V;
+    voltAbsInput.value = v.toFixed(4);
+    dbVInput.value = (20 * Math.log10(v)).toFixed(3);
+  });
+
+  // ---- dBm / dBW (전력 기준 절대 레벨) ----
+  const powerAbsInput = document.getElementById('powerAbsInput');
+  const dbWInput = document.getElementById('dbWInput');
+  const dbmInput = document.getElementById('dbmInput');
+
+  powerAbsInput.addEventListener('input', () => {
+    const p = parseFloat(powerAbsInput.value);
+    if (!isFinite(p) || p <= 0) return;
+    dbWInput.value = (10 * Math.log10(p)).toFixed(3);
+    dbmInput.value = (10 * Math.log10(p * 1000)).toFixed(3);
+  });
+  dbWInput.addEventListener('input', () => {
+    const db = parseFloat(dbWInput.value);
+    if (!isFinite(db)) return;
+    const p = Math.pow(10, db / 10);
+    powerAbsInput.value = p.toFixed(4);
+    dbmInput.value = (db + 30).toFixed(3);
+  });
+  dbmInput.addEventListener('input', () => {
+    const db = parseFloat(dbmInput.value);
+    if (!isFinite(db)) return;
+    const pMilliwatts = Math.pow(10, db / 10);
+    powerAbsInput.value = (pMilliwatts / 1000).toFixed(6);
+    dbWInput.value = (db - 30).toFixed(3);
+  });
+
   // =====================================================================
   // 계산 문제(퀴즈)
   // =====================================================================
   const QUESTIONS_PER_QUIZ = 10;
-  const ANSWER_TOLERANCE = 0.03; // ±3% 오차까지 정답으로 인정
   let questionIndex = 0;
   let hitCount = 0;
   let currentQuestion = null; // { text, answer }
@@ -609,29 +721,104 @@
     return { text: `전력비(P2/P1)가 ${ratio}배이면, 몇 dB인가요?`, answer: +ratioToDb(ratio).toFixed(2) };
   }
 
-  const QUESTION_MAKERS = [makeOhmQuestion, makePowerQuestion, makeImpedanceQuestion, makeDbQuestion];
+  function makeDbVoltQuestion(){
+    const useDb = Math.random() < 0.5;
+    if (useDb) {
+      const db = randChoice([6, 12, 20, 40, -6, -20]);
+      return { text: `${db}dB는 전압비(V2/V1)로 몇 배인가요?`, answer: +dbToVoltRatio(db).toFixed(3) };
+    }
+    const ratio = randChoice([2, 4, 10, 0.5, 0.1, 100]);
+    return { text: `전압비(V2/V1)가 ${ratio}배이면, 몇 dB인가요?`, answer: +voltRatioToDb(ratio).toFixed(2) };
+  }
+
+  const DBU_REF_V_Q = Math.sqrt(0.6);
+  function makeDbuDbvQuestion(){
+    const kind = randChoice(['v2dbv', 'v2dbu', 'dbm2dbw']);
+    if (kind === 'v2dbv') {
+      const v = randChoice([0.5, 1, 2, 4, 10]);
+      return { text: `전압이 ${v}V일 때, dBV는 얼마인가요? (0dBV = 1V 기준)`, answer: +(20 * Math.log10(v)).toFixed(2) };
+    }
+    if (kind === 'v2dbu') {
+      const v = randChoice([0.775, 1.55, 3.1, 7.75]);
+      return { text: `전압이 ${v}V일 때, dBu는 얼마인가요? (0dBu = 0.775V 기준)`, answer: +(20 * Math.log10(v / DBU_REF_V_Q)).toFixed(2) };
+    }
+    const dbm = randChoice([0, 10, 20, 30, -10]);
+    return { text: `${dbm}dBm은 몇 dBW인가요? (dBW = dBm − 30)`, answer: dbm - 30 };
+  }
+
+  const QUESTION_MAKERS = [makeOhmQuestion, makePowerQuestion, makeImpedanceQuestion, makeDbQuestion, makeDbVoltQuestion, makeDbuDbvQuestion];
+
+  // ✅ 요청 반영: 정답 근처의 그럴듯한 오답 보기 3개를 만든다.
+  function smartRound(v){
+    if (Math.abs(v) >= 100) return Math.round(v);
+    if (Math.abs(v) >= 10) return Math.round(v * 10) / 10;
+    return Math.round(v * 100) / 100;
+  }
+  function makeDistractors(answer, count){
+    const distractors = new Set();
+    const base = answer === 0 ? 1 : answer; // 0으로 곱하면 전부 0이 되는 것 방지
+    const candidates = [
+      answer * 2, answer / 2, answer * 1.5,
+      answer + Math.abs(base) * 0.25 + 1, answer - Math.abs(base) * 0.25 - 1,
+      -answer, answer * 10, answer / 10,
+    ];
+    candidates.forEach(c => {
+      if (distractors.size >= count) return;
+      const rounded = smartRound(c);
+      if (isFinite(rounded) && rounded !== answer && !distractors.has(rounded)) distractors.add(rounded);
+    });
+    let guard = 0;
+    while (distractors.size < count && guard < 50) {
+      guard++;
+      const factor = 1 + (Math.random() * 1.6 - 0.8); // 대략 0.2~1.8배
+      const rounded = smartRound(base * factor + (Math.random() < 0.5 ? 1 : -1));
+      if (isFinite(rounded) && rounded !== answer && !distractors.has(rounded)) distractors.add(rounded);
+    }
+    return Array.from(distractors).slice(0, count);
+  }
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function formatOption(v){
+    return (Number.isInteger(v)) ? String(v) : v.toFixed(Math.abs(v) >= 10 ? 1 : 2);
+  }
 
   function generateQuizQuestion(){
     questionIndex++;
     currentQuestion = randChoice(QUESTION_MAKERS)();
     quizProblemText.textContent = currentQuestion.text;
-    quizAnswerInput.value = '';
     clearFeedback();
     updateScoreboard();
-    quizAnswerInput.focus();
+
+    const options = shuffle([currentQuestion.answer, ...makeDistractors(currentQuestion.answer, 3)]);
+    quizOptionsEl.innerHTML = options.map(opt => `<button class="quiz-option-btn" data-val="${opt}">${formatOption(opt)}</button>`).join('');
+    quizOptionsEl.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => submitQuizAnswer(btn));
+    });
   }
 
-  function submitQuizAnswer(){
+  function submitQuizAnswer(chosenBtn){
     if (!quizActive || currentQuestion === null) return;
-    const guess = parseFloat(quizAnswerInput.value);
-    if (!isFinite(guess)) return;
+    const guess = parseFloat(chosenBtn.dataset.val);
     const answer = currentQuestion.answer;
-    const tolerance = Math.max(Math.abs(answer) * ANSWER_TOLERANCE, 0.05);
-    const isCorrect = Math.abs(guess - answer) <= tolerance;
+    const isCorrect = Math.abs(guess - answer) < 1e-6;
     if (isCorrect) hitCount++;
-    feedbackEl.textContent = isCorrect ? '✅ 정답이에요!' : `❌ 오답이에요 — 정답은 ${answer}이었어요`;
+    feedbackEl.textContent = isCorrect ? '✅ 정답이에요!' : `❌ 오답이에요 — 정답은 ${formatOption(answer)}이었어요`;
     feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
     updateScoreboard();
+
+    // ✅ 정답/오답 버튼을 색으로 표시하고, 더 이상 못 누르게 잠근다
+    quizOptionsEl.querySelectorAll('button').forEach(btn => {
+      const btnVal = parseFloat(btn.dataset.val);
+      if (Math.abs(btnVal - answer) < 1e-6) btn.classList.add('correct-option');
+      else if (btn === chosenBtn) btn.classList.add('wrong-option');
+      btn.disabled = true;
+    });
     currentQuestion = null;
 
     setTimeout(() => {
@@ -643,15 +830,13 @@
       }
     }, 1600);
   }
-  quizSubmitBtn.addEventListener('click', submitQuizAnswer);
-  quizAnswerInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitQuizAnswer(); });
 
   function finishQuiz(){
     quizActive = false;
     startBtn.textContent = '▸ 계산 문제 시작';
     startBtn.classList.remove('stop');
     quizProblemText.textContent = `퀴즈 종료! ${hitCount}/${QUESTIONS_PER_QUIZ} 정답`;
-    quizAnswerInput.value = '';
+    quizOptionsEl.innerHTML = '';
     clearFeedback();
     chapterFreeBtn.disabled = false;
     chapterQuizBtn.disabled = false;
