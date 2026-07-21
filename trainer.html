@@ -264,7 +264,7 @@
     <div class="scoreitem"><div class="val" id="scAcc">--</div><div class="lbl">ACC</div></div>
   </div>
 
-  <div class="modepicker">
+  <div class="modepicker" id="modeSourcePicker">
     <button id="modeEQ" class="active">
       <span class="full">Pink Noise EQ Boost/Cut</span>
       <span class="short">EQ Boost/Cut</span>
@@ -327,7 +327,7 @@
 
   <div class="feedback" id="feedback"></div>
 
-  <div class="console">
+  <div class="console" id="consoleWrap">
     <div class="consolebody">
       <div class="vscale"><span>+12dB</span><span>0dB</span><span>−12dB</span></div>
       <div class="grid" id="grid"></div>
@@ -342,6 +342,7 @@
     <a href="rta.html?view=spl">📟 SPL Meter</a>
     <a href="delay-calculator.html">⏱️ Delay Calc</a>
     <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
   </div>
 </div>
 
@@ -832,6 +833,7 @@
   const modeSineBtn = document.getElementById('modeSine');
   const chapterTrainingBtn = document.getElementById('chapterTraining');
   const chapterListenBtn = document.getElementById('chapterListen');
+  const bandCountPicker = document.getElementById('bandCountPicker');
   const scoreboardEl = document.getElementById('scoreboard');
   const listenDirPicker = document.getElementById('listenDirPicker');
   const listenAutoPanel = document.getElementById('listenAutoPanel');
@@ -984,6 +986,8 @@
 
   // ✅ 청음 챕터 + EQ 모드일 때만 "부스트로 듣기 / 컷으로 듣기" 토글을 보여준다
   // (사인파 모드는 방향 개념이 없고, 훈련 챕터에서는 정답을 미리 알려주면 안 되므로 숨긴다)
+  // ✅ 요청 반영: 이펙트 청음 챕터에서는 밴드 그리드/모드피커/밴드수 선택이 필요 없고,
+  // 대신 이펙트 선택 피커가 나와야 한다.
   function updateListenDirVisibility(){
     const show = chapter === 'listen' && mode === 'eq';
     listenDirPicker.style.display = show ? 'flex' : 'none';
