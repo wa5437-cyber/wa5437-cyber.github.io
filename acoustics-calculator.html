@@ -79,7 +79,7 @@
     text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; font-weight:600;
   }
   .input-row{ display:flex; align-items:center; gap:8px; }
-  .input-row input[type=number]{
+  .input-row input[type=number], .input-row input[type=text]{
     flex:1; background:#171d21; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
     font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
   }
@@ -175,9 +175,9 @@
         <label>Note Name</label>
         <div class="input-row">
           <input type="text" id="noteInput" value="C5" placeholder="예: A4, C#3, Bb2" style="text-transform:none;">
-          <button class="upload-btn" id="noteApplyBtn" style="width:auto; flex-shrink:0; padding:12px 18px;">적용</button>
+          <button class="upload-btn" id="noteApplyBtn" style="width:auto; flex-shrink:0; padding:12px 22px; font-size:16px; font-weight:700;">적용</button>
         </div>
-        <p class="phase-desc" style="margin-top:8px; font-size:12.5px;" id="noteInputHint">→ 261.63Hz</p>
+        <p class="phase-desc" style="margin-top:8px; font-size:14.5px;" id="noteInputHint">→ 261.63Hz</p>
       </div>
     </div>
 
@@ -291,7 +291,16 @@
   <div id="volumeTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Volume (거리에 따른 SPL 감쇠)</div>
-      <p class="phase-desc">점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.</p>
+
+      <div class="field">
+        <label>Source Type (음원 종류)</label>
+        <div class="tab-picker" id="sourceTypePicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
+          <button data-src="point" class="active">점음원</button>
+          <button data-src="line">선음원</button>
+          <button data-src="plane">면음원</button>
+        </div>
+        <p class="phase-desc" style="margin-top:10px;" id="sourceTypeDesc">점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.</p>
+      </div>
 
       <div class="field" style="margin-top:14px;">
         <label>Reference SPL</label>
@@ -444,6 +453,8 @@
   const delayCtx = delayCanvas.getContext('2d');
   const delayTempInput = document.getElementById('delayTempInput');
   const volumeTab = document.getElementById('volumeTab');
+  const sourceTypePicker = document.getElementById('sourceTypePicker');
+  const sourceTypeDesc = document.getElementById('sourceTypeDesc');
   const volRefSplInput = document.getElementById('volRefSplInput');
   const volRefDistInput = document.getElementById('volRefDistInput');
   const volTargetDistInput = document.getElementById('volTargetDistInput');
@@ -910,9 +921,16 @@
     volumeCanvas.height = Math.max(1, Math.round(rect.height * dpr));
   }
 
-  // SPL2 = SPL1 - 20·log10(d2/d1)  — 점음원, 자유음장 기준
-  function splAtDistance(splRef, distRef, dist){
-    return splRef - 20 * Math.log10(dist / distRef);
+  // ✅ 요청 반영: 음원 종류에 따라 거리에 따른 감쇠 기울기가 다르다.
+  // 점음원: 거리 2배당 -6dB (SPL2 = SPL1 - 20·log10(d2/d1))
+  // 선음원(라인 어레이 등): 거리 2배당 -3dB (SPL2 = SPL1 - 10·log10(d2/d1))
+  // 면음원: 근접장에서는 이론상 거리와 무관하게 감쇠가 거의 없음 (매우 제한적인 근사)
+  let currentSourceType = 'point';
+  function splAtDistance(splRef, distRef, dist, sourceType){
+    const type = sourceType || currentSourceType;
+    if (type === 'line') return splRef - 10 * Math.log10(dist / distRef);
+    if (type === 'plane') return splRef; // 근접장 근사: 감쇠 없음
+    return splRef - 20 * Math.log10(dist / distRef); // point
   }
 
   function drawVolume(){
@@ -1025,6 +1043,20 @@
 
   [volRefSplInput, volRefDistInput, volTargetDistInput].forEach(el => {
     el.addEventListener('input', recalcVolume);
+  });
+
+  const SOURCE_TYPE_DESC = {
+    point: '점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.',
+    line: '선음원(라인 어레이 스피커, 긴 도로 소음 등) 기준입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 3dB만 줄어듭니다.</b> 점음원보다 훨씬 덜 감쇠해서, 라인 어레이가 먼 거리까지 커버하기 유리한 이유이기도 해요.',
+    plane: '면음원(아주 가까운 대형 평면, 근접장) 기준입니다 — <b style="color:var(--text-secondary);">이론상 거리에 따른 감쇠가 거의 없습니다.</b> 다만 이건 음원 바로 앞 근접장에서만 성립하는 특수한 경우라, 실전에서는 참고용으로만 봐주세요.',
+  };
+  sourceTypePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentSourceType = btn.dataset.src;
+      sourceTypePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      sourceTypeDesc.innerHTML = SOURCE_TYPE_DESC[currentSourceType];
+      recalcVolume();
+    });
   });
 
   // ✅ 요청 반영: 스피커 센시티비티(1W/1m 기준) + 거리 + 목표 SPL → 필요 와트(W)
