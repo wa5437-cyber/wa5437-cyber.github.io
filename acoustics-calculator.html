@@ -161,6 +161,23 @@
           <span class="result-lbl">1/4 wave length</span>
           <span class="result-val"><span id="quarterWaveVal">--</span><span class="unit">m</span></span>
         </div>
+        <div class="result-row">
+          <span class="result-lbl">Nearest Musical Note</span>
+          <span class="result-val"><span id="noteVal">--</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Note ↔ Frequency</div>
+      <p class="phase-desc">평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.</p>
+      <div class="field" style="margin-top:14px;">
+        <label>Note Name</label>
+        <div class="input-row">
+          <input type="text" id="noteInput" value="C5" placeholder="예: A4, C#3, Bb2" style="text-transform:none;">
+          <button class="upload-btn" id="noteApplyBtn" style="width:auto; flex-shrink:0; padding:12px 18px;">적용</button>
+        </div>
+        <p class="phase-desc" style="margin-top:8px; font-size:12.5px;" id="noteInputHint">→ 261.63Hz</p>
       </div>
     </div>
 
@@ -380,6 +397,33 @@
     return 331.3 + 0.606 * tempC;
   }
 
+  // ✅ 요청 반영: 평균율(12-tone equal temperament, A4=440Hz 기준) 주파수↔음정 변환
+  const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const NOTE_BASE = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+
+  function freqToNote(freq){
+    if (!freq || freq <= 0) return null;
+    const midi = 69 + 12 * Math.log2(freq / 440);
+    const rounded = Math.round(midi);
+    const cents = Math.round((midi - rounded) * 100);
+    const name = NOTE_NAMES[((rounded % 12) + 12) % 12];
+    const octave = Math.floor(rounded / 12) - 1;
+    return { name, octave, cents };
+  }
+
+  function noteToFreq(str){
+    const m = String(str).trim().match(/^([A-Ga-g])([#b♯♭]?)(-?\d+)$/);
+    if (!m) return null;
+    const letter = m[1].toUpperCase();
+    const accidental = m[2];
+    const octave = parseInt(m[3], 10);
+    let semitone = NOTE_BASE[letter];
+    if (accidental === '#' || accidental === '♯') semitone += 1;
+    if (accidental === 'b' || accidental === '♭') semitone -= 1;
+    const midi = (octave + 1) * 12 + semitone;
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
   const tabPicker = document.getElementById('tabPicker');
   const frequencyTab = document.getElementById('frequencyTab');
   const placeholderTab = document.getElementById('placeholderTab');
@@ -447,6 +491,10 @@
   const periodVal = document.getElementById('periodVal');
   const wavelengthVal = document.getElementById('wavelengthVal');
   const quarterWaveVal = document.getElementById('quarterWaveVal');
+  const noteVal = document.getElementById('noteVal');
+  const noteInput = document.getElementById('noteInput');
+  const noteApplyBtn = document.getElementById('noteApplyBtn');
+  const noteInputHint = document.getElementById('noteInputHint');
   const waveCanvas = document.getElementById('waveCanvas');
   const waveCtx = waveCanvas.getContext('2d');
 
@@ -535,6 +583,7 @@
       periodVal.textContent = '--';
       wavelengthVal.textContent = '--';
       quarterWaveVal.textContent = '--';
+      noteVal.textContent = '--';
       drawWave();
       return;
     }
@@ -545,6 +594,16 @@
     periodVal.textContent = periodMs.toFixed(2);
     wavelengthVal.textContent = wavelengthM.toFixed(5);
     quarterWaveVal.textContent = quarterWaveM.toFixed(5);
+
+    // ✅ 요청 반영: 현재 주파수에 가장 가까운 음정 표시
+    const note = freqToNote(freq);
+    if (note) {
+      const centsStr = note.cents === 0 ? '' : ` (${note.cents > 0 ? '+' : ''}${note.cents}c)`;
+      noteVal.textContent = `${note.name}${note.octave}${centsStr}`;
+    } else {
+      noteVal.textContent = '--';
+    }
+
     drawWave(); // ✅ 요청 반영: 주파수가 바뀔 때마다 그래프도 다시 그린다
   }
 
@@ -992,6 +1051,25 @@
   });
 
   freqInput.addEventListener('input', recalc);
+
+  // ✅ 요청 반영: 음정을 입력하면 실시간으로 몇 Hz인지 힌트로 보여주고,
+  // "적용" 버튼을 누르면 그 값을 실제 Frequency 칸에 반영한다.
+  function updateNoteHint(){
+    const freq = noteToFreq(noteInput.value);
+    noteInputHint.textContent = freq ? `→ ${freq.toFixed(2)}Hz` : '→ 인식할 수 없는 음정이에요 (예: A4, C#3, Bb2)';
+  }
+  noteInput.addEventListener('input', updateNoteHint);
+  noteApplyBtn.addEventListener('click', () => {
+    const freq = noteToFreq(noteInput.value);
+    if (!freq) return;
+    freqInput.value = freq.toFixed(2);
+    recalc();
+  });
+  noteInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') noteApplyBtn.click();
+  });
+  updateNoteHint(); // 초기 힌트 표시
+
   tempInput.addEventListener('input', recalc);
   window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
 
