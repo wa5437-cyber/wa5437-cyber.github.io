@@ -60,7 +60,7 @@
 
   /* ---- 탭 피커(4가지 계산 종류) ---- */
   .tab-picker{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:6px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
     background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px;
   }
   .tab-picker button{
@@ -182,6 +182,8 @@
     <button data-tab="power">Power</button>
     <button data-tab="impedance">Impedance</button>
     <button data-tab="db">dB ↔ Power</button>
+    <button data-tab="acwave">AC Waveform</button>
+    <button data-tab="cable">Cable/Voltage Drop</button>
   </div>
 
   <!-- ============ 자유 계산: Ohm's Law ============ -->
@@ -320,6 +322,67 @@
     </div>
   </div>
 
+  <!-- ============ 자유 계산: AC Waveform (RMS/Peak/P-P) ============ -->
+  <div id="acwaveTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">AC Waveform (RMS ↔ Peak ↔ Peak-to-Peak)</div>
+      <p class="phase-desc">정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)</p>
+      <div class="field">
+        <label>RMS Voltage</label>
+        <div class="input-row"><input type="number" id="acRmsInput" value="1" step="0.001"><span class="unit">V RMS</span></div>
+      </div>
+      <div class="field">
+        <label>Peak Voltage</label>
+        <div class="input-row"><input type="number" id="acPeakInput" value="1.414" step="0.001"><span class="unit">V pk</span></div>
+      </div>
+      <div class="field">
+        <label>Peak-to-Peak Voltage</label>
+        <div class="input-row"><input type="number" id="acPpInput" value="2.828" step="0.001"><span class="unit">V p-p</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Cable / Voltage Drop ============ -->
+  <div id="cableTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Speaker Cable Voltage Drop</div>
+      <p class="phase-desc">스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.</p>
+      <div class="field">
+        <label>Cable Gauge (AWG)</label>
+        <div class="solve-picker" id="awgPicker">
+          <button data-awg="18">18 AWG</button>
+          <button data-awg="16">16 AWG</button>
+          <button data-awg="14" class="active">14 AWG</button>
+          <button data-awg="12">12 AWG</button>
+          <button data-awg="10">10 AWG</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Cable Length (편도, 한쪽 길이)</label>
+        <div class="input-row"><input type="number" id="cableLengthInput" value="15" step="0.1" min="0"><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Load Current</label>
+        <div class="input-row"><input type="number" id="cableCurrentInput" value="2" step="0.1" min="0"><span class="unit">A</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">케이블 저항 (왕복)</span>
+          <span class="result-val"><span id="cableResistanceVal">--</span><span class="unit">Ω</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">전압 강하</span>
+          <span class="result-val"><span id="cableVoltageDropVal">--</span><span class="unit">V</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">손실 전력</span>
+          <span class="result-val"><span id="cablePowerLossVal">--</span><span class="unit">W</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="cableWarning"></p>
+    </div>
+  </div>
+
   <!-- ============ 계산 문제(퀴즈) ============ -->
   <div id="quizPanel" class="panel" style="display:none;">
     <div class="panel-title">문제</div>
@@ -391,6 +454,8 @@
     power: document.getElementById('powerTab'),
     impedance: document.getElementById('impedanceTab'),
     db: document.getElementById('dbTab'),
+    acwave: document.getElementById('acwaveTab'),
+    cable: document.getElementById('cableTab'),
   };
 
   let chapter = 'free'; // free | quiz
@@ -655,6 +720,77 @@
   });
 
   // =====================================================================
+  // 자유 계산 — AC Waveform (RMS ↔ Peak ↔ Peak-to-Peak)
+  // =====================================================================
+  const SQRT2 = Math.SQRT2;
+  const acRmsInput = document.getElementById('acRmsInput');
+  const acPeakInput = document.getElementById('acPeakInput');
+  const acPpInput = document.getElementById('acPpInput');
+
+  acRmsInput.addEventListener('input', () => {
+    const rms = parseFloat(acRmsInput.value);
+    if (!isFinite(rms)) return;
+    const peak = rms * SQRT2;
+    acPeakInput.value = peak.toFixed(4);
+    acPpInput.value = (peak * 2).toFixed(4);
+  });
+  acPeakInput.addEventListener('input', () => {
+    const peak = parseFloat(acPeakInput.value);
+    if (!isFinite(peak)) return;
+    acRmsInput.value = (peak / SQRT2).toFixed(4);
+    acPpInput.value = (peak * 2).toFixed(4);
+  });
+  acPpInput.addEventListener('input', () => {
+    const pp = parseFloat(acPpInput.value);
+    if (!isFinite(pp)) return;
+    const peak = pp / 2;
+    acPeakInput.value = peak.toFixed(4);
+    acRmsInput.value = (peak / SQRT2).toFixed(4);
+  });
+
+  // =====================================================================
+  // 자유 계산 — Speaker Cable Voltage Drop
+  // =====================================================================
+  // 표준 AWG 저항표 (Ω/km, 20°C 구리 기준)
+  const AWG_OHMS_PER_KM = { 18: 20.95, 16: 13.17, 14: 8.286, 12: 5.211, 10: 3.277 };
+  const awgPicker = document.getElementById('awgPicker');
+  const cableLengthInput = document.getElementById('cableLengthInput');
+  const cableCurrentInput = document.getElementById('cableCurrentInput');
+  const cableResistanceVal = document.getElementById('cableResistanceVal');
+  const cableVoltageDropVal = document.getElementById('cableVoltageDropVal');
+  const cablePowerLossVal = document.getElementById('cablePowerLossVal');
+  const cableWarning = document.getElementById('cableWarning');
+  let selectedAwg = 14;
+
+  function recalcCable(){
+    const lengthOneWay = parseFloat(cableLengthInput.value) || 0;
+    const current = parseFloat(cableCurrentInput.value) || 0;
+    const ohmsPerKm = AWG_OHMS_PER_KM[selectedAwg];
+    // ✅ 왕복(往復) 거리 — 전류는 앰프→스피커→앰프로 돌아오므로 편도 길이의 2배가 실제 저항 경로
+    const totalLengthKm = (lengthOneWay * 2) / 1000;
+    const resistance = ohmsPerKm * totalLengthKm;
+    const voltageDrop = current * resistance;
+    const powerLoss = current * current * resistance;
+
+    cableResistanceVal.textContent = resistance.toFixed(3);
+    cableVoltageDropVal.textContent = voltageDrop.toFixed(3);
+    cablePowerLossVal.textContent = powerLoss.toFixed(2);
+
+    cableWarning.textContent = voltageDrop > 0.5
+      ? `⚠️ 전압 강하가 ${voltageDrop.toFixed(2)}V예요 — 케이블이 얇거나 너무 길면 저역이 물러지고(damping factor 저하) 전력 손실도 커질 수 있어요. 더 굵은 케이블을 고려해보세요.`
+      : '';
+  }
+  awgPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedAwg = parseInt(btn.dataset.awg, 10);
+      awgPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcCable();
+    });
+  });
+  [cableLengthInput, cableCurrentInput].forEach(el => el.addEventListener('input', recalcCable));
+  recalcCable();
+
+  // =====================================================================
   // 계산 문제(퀴즈)
   // =====================================================================
   const QUESTIONS_PER_QUIZ = 10;
@@ -746,7 +882,39 @@
     return { text: `${dbm}dBm은 몇 dBW인가요? (dBW = dBm − 30)`, answer: dbm - 30 };
   }
 
-  const QUESTION_MAKERS = [makeOhmQuestion, makePowerQuestion, makeImpedanceQuestion, makeDbQuestion, makeDbVoltQuestion, makeDbuDbvQuestion];
+  function makeAcWaveQuestion(){
+    const kind = randChoice(['rms2peak', 'peak2rms', 'rms2pp']);
+    const rms = randChoice([1, 5, 10, 12, 24, 120]);
+    if (kind === 'rms2peak') {
+      return { text: `RMS 전압이 ${rms}V일 때, Peak 전압은 몇 V인가요? (Peak = RMS × √2)`, answer: +(rms * Math.SQRT2).toFixed(2) };
+    }
+    if (kind === 'peak2rms') {
+      const peak = +(rms * Math.SQRT2).toFixed(2);
+      return { text: `Peak 전압이 ${peak}V일 때, RMS 전압은 몇 V인가요? (RMS = Peak / √2)`, answer: rms };
+    }
+    return { text: `RMS 전압이 ${rms}V일 때, Peak-to-Peak 전압은 몇 V인가요? (P-P = 2 × RMS × √2)`, answer: +(rms * Math.SQRT2 * 2).toFixed(2) };
+  }
+
+  const AWG_OHMS_PER_KM_Q = { 18: 20.95, 16: 13.17, 14: 8.286, 12: 5.211, 10: 3.277 };
+  function makeCableQuestion(){
+    const awg = randChoice([10, 12, 14, 16, 18]);
+    const lengthOneWay = randChoice([5, 10, 15, 20, 30]);
+    const current = randChoice([1, 2, 3, 5]);
+    const resistance = AWG_OHMS_PER_KM_Q[awg] * (lengthOneWay * 2 / 1000);
+    const kind = randChoice(['drop', 'loss']);
+    if (kind === 'drop') {
+      return {
+        text: `${awg}AWG 케이블을 편도 ${lengthOneWay}m 사용해서 ${current}A가 흐르면, 전압 강하는 몇 V인가요? (왕복 저항 고려)`,
+        answer: +(current * resistance).toFixed(2),
+      };
+    }
+    return {
+      text: `${awg}AWG 케이블을 편도 ${lengthOneWay}m 사용해서 ${current}A가 흐르면, 케이블에서 손실되는 전력은 몇 W인가요?`,
+      answer: +(current * current * resistance).toFixed(2),
+    };
+  }
+
+  const QUESTION_MAKERS = [makeOhmQuestion, makePowerQuestion, makeImpedanceQuestion, makeDbQuestion, makeDbVoltQuestion, makeDbuDbvQuestion, makeAcWaveQuestion, makeCableQuestion];
 
   // ✅ 요청 반영: 정답 근처의 그럴듯한 오답 보기 3개를 만든다.
   function smartRound(v){

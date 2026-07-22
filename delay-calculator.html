@@ -242,6 +242,12 @@
   </div>
 
   <div class="panel">
+    <div class="panel-title">Haas Effect (선행효과) 참고표</div>
+    <p class="phase-desc">두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.</p>
+    <div class="tempo-table" id="haasTable"></div>
+  </div>
+
+  <div class="panel">
     <div class="panel-title">Tempo ↔ Delay (박자 동기화)</div>
     <p class="phase-desc">곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.</p>
 
@@ -545,6 +551,34 @@
     phaseGaugeMarker.style.left = (wrapped / 360 * 100) + '%';
 
     drawPhaseWave(phaseDeg);
+    updateHaasTable(timeMs); // ✅ 요청 반영: 지금 Time 값이 어느 구간인지 표에서 강조 표시
+  }
+
+  // ✅ 요청 반영: Haas Effect(선행효과) 참고표 — 시간차에 따른 일반적인 지각 특성
+  const HAAS_ZONES = [
+    { max: 1,   label: '0 ~ 1ms',   desc: '거의 하나의 소리로 합쳐져 들려요. 위상 간섭(콤필터링)이 가장 두드러지는 구간이에요.' },
+    { max: 5,   label: '1 ~ 5ms',   desc: '여전히 하나로 들리지만, 음색이 살짝 변하거나(콤필터링) 공간감이 생기기 시작해요.' },
+    { max: 30,  label: '5 ~ 30ms',  desc: '"선행효과(Precedence Effect)" 구간 — 먼저 도착한 소리 방향으로 위치를 지각해요. 뒤 소리가 더 커도(약 +10dB까지) 에코로 안 들려요.' },
+    { max: Infinity, label: '30ms ~', desc: '별개의 메아리(에코)로 뚜렷하게 들리기 시작해요.' },
+  ];
+  const haasTable = document.getElementById('haasTable');
+  function updateHaasTable(timeMs){
+    const t = Math.abs(timeMs);
+    const activeIdx = HAAS_ZONES.findIndex(zone => t <= zone.max);
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">시간차</div>
+        <div class="tempo-cell" style="text-align:left;">들리는 방식</div>
+      </div>`;
+    HAAS_ZONES.forEach((zone, i) => {
+      const isActive = i === activeIdx;
+      html += `
+        <div class="tempo-row" style="${isActive ? 'background:rgba(61,220,151,0.1);' : ''}">
+          <div class="tempo-cell" style="${isActive ? 'color:var(--teal);' : ''}">${zone.label}</div>
+          <div class="tempo-cell" style="text-align:left; font-size:12.5px; font-weight:400; color:${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'};">${zone.desc}</div>
+        </div>`;
+    });
+    haasTable.innerHTML = html;
   }
 
   const phaseGaugeMarker = document.getElementById('phaseGaugeMarker');
