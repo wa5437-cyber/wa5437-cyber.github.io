@@ -58,7 +58,7 @@
   .chapter-picker button:disabled{ opacity:0.5; cursor:not-allowed; }
 
   .tab-picker{
-    display:grid; grid-template-columns:repeat(2,1fr); gap:6px;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
     background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px;
   }
   .tab-picker button{
@@ -190,6 +190,10 @@
     <button data-tab="notes">BPM & Notes</button>
     <button data-tab="speedpitch">Speed ↔ Pitch</button>
     <button data-tab="keymatch">BPM Key Match</button>
+    <button data-tab="loopbpm">Loop BPM Finder</button>
+    <button data-tab="barduration">Bar Duration</button>
+    <button data-tab="timestretch">Time-Stretch</button>
+    <button data-tab="samplerate">Sample Rate</button>
   </div>
 
   <!-- ============ 자유 계산: Tap Tempo ============ -->
@@ -259,6 +263,18 @@
         <label>목표 BPM</label>
         <div class="input-row"><input type="number" id="targetBpmInput" value="128" step="0.1" min="1"><span class="unit">bpm</span></div>
       </div>
+      <div class="field">
+        <label>원곡 키 (선택사항)</label>
+        <div class="solve-picker" id="origKeyPicker">
+          <button data-key="0" class="active">C</button>
+          <button data-key="2">D</button>
+          <button data-key="4">E</button>
+          <button data-key="5">F</button>
+          <button data-key="7">G</button>
+          <button data-key="9">A</button>
+          <button data-key="11">B</button>
+        </div>
+      </div>
       <div class="result-list">
         <div class="result-row">
           <span class="result-lbl">속도 변화</span>
@@ -268,7 +284,172 @@
           <span class="result-lbl">키(피치) 변화</span>
           <span class="result-val"><span id="keyMatchSemitoneVal">--</span><span class="unit">반음</span></span>
         </div>
+        <div class="result-row">
+          <span class="result-lbl">결과 키 (근사치)</span>
+          <span class="result-val"><span id="keyMatchResultKey">--</span></span>
+        </div>
       </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">참고: 반음 단위로 딱 떨어지지 않으면 가장 가까운 음 이름 + 몇 cents 벗어났는지로 보여줘요.</p>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Loop BPM Finder ============ -->
+  <div id="loopBpmTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Loop / Sample BPM Finder</div>
+      <p class="phase-desc">샘플·루프 파일의 길이(초)와 마디 수를 알면, 원래 BPM이 몇이었는지 거꾸로 계산합니다.</p>
+      <div class="field">
+        <label>샘플 길이</label>
+        <div class="input-row"><input type="number" id="loopLengthInput" value="8" step="0.001" min="0.001"><span class="unit">초</span></div>
+      </div>
+      <div class="field">
+        <label>마디(bar) 수</label>
+        <div class="input-row"><input type="number" id="loopBarsInput" value="4" step="1" min="1"><span class="unit">마디</span></div>
+      </div>
+      <div class="field">
+        <label>박자 (한 마디당 박 수)</label>
+        <div class="solve-picker" id="loopBeatsPicker">
+          <button data-beats="4" class="active">4/4</button>
+          <button data-beats="3">3/4</button>
+          <button data-beats="6">6/8</button>
+        </div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">BPM</span>
+          <span class="result-val"><span id="loopBpmVal">--</span><span class="unit">bpm</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Bar/Measure Duration ============ -->
+  <div id="barDurationTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Bar / Measure Duration</div>
+      <p class="phase-desc">BPM·박자·마디 수를 넣으면, 그 구간이 실제로 몇 분 몇 초인지 계산합니다. 버스 16마디, 코러스 8마디처럼 곡 구조를 짤 때 유용해요.</p>
+      <div class="field">
+        <label>BPM</label>
+        <div class="input-row"><input type="number" id="barBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="field">
+        <label>박자 (한 마디당 박 수)</label>
+        <div class="solve-picker" id="barBeatsPicker">
+          <button data-beats="4" class="active">4/4</button>
+          <button data-beats="3">3/4</button>
+          <button data-beats="6">6/8</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>마디(bar) 수</label>
+        <div class="input-row"><input type="number" id="barCountInput" value="8" step="1" min="1"><span class="unit">마디</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">한 마디 길이</span>
+          <span class="result-val"><span id="barOneDurationVal">--</span><span class="unit">초</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">전체 구간 길이</span>
+          <span class="result-val"><span id="barTotalDurationVal">--</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Time-Stretch (피치 고정) ============ -->
+  <div id="timeStretchTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Time-Stretch (피치 고정)</div>
+      <p class="phase-desc">DAW의 타임스트레치(WSOLA·페이즈보코더 등)처럼, <b style="color:var(--text-secondary);">피치는 그대로 두고 템포만</b> 바꿀 때의 배속 비율을 계산합니다. (턴테이블처럼 속도를 바꾸면 피치도 같이 바뀌는 Speed↔Pitch 탭과 반대 개념이에요)</p>
+      <div class="field">
+        <label>원곡 BPM</label>
+        <div class="input-row"><input type="number" id="tsOrigBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="field">
+        <label>목표 BPM</label>
+        <div class="input-row"><input type="number" id="tsTargetBpmInput" value="128" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">스트레치 비율</span>
+          <span class="result-val"><span id="tsRatioVal">--</span><span class="unit">×</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">템포 변화</span>
+          <span class="result-val"><span id="tsPctVal">--</span><span class="unit">%</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">피치 변화</span>
+          <span class="result-val" style="color:var(--teal);">0 <span class="unit">반음 (고정됨)</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="tsWarning"></p>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Sample Rate ↔ Time ↔ Samples ============ -->
+  <div id="sampleRateTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Samples ↔ Time ↔ Sample Rate</div>
+      <p class="phase-desc">샘플 수 = 시간(초) × 샘플레이트. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
+      <div class="solve-picker" id="srSolvePicker">
+        <button data-solve="time">Time 구하기</button>
+        <button data-solve="samples" class="active">Samples 구하기</button>
+        <button data-solve="rate">Sample Rate 구하기</button>
+      </div>
+      <div class="field">
+        <label>Time</label>
+        <div class="input-row"><input type="number" id="srTimeInput" value="1" step="0.001" min="0"><span class="unit">초</span></div>
+      </div>
+      <div class="field">
+        <label>Samples</label>
+        <div class="input-row"><input type="number" id="srSamplesInput" value="44100" step="1" min="0"><span class="unit">samples</span></div>
+      </div>
+      <div class="field">
+        <label>Sample Rate</label>
+        <div class="input-row"><input type="number" id="srRateInput" value="44100" step="1" min="1"><span class="unit">Hz</span></div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>자주 쓰는 샘플레이트</label>
+        <div class="solve-picker" id="srRatePresetPicker">
+          <button data-rate="44100">44.1k</button>
+          <button data-rate="48000">48k</button>
+          <button data-rate="96000">96k</button>
+          <button data-rate="192000">192k</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Buffer Size ↔ Latency</div>
+      <p class="phase-desc">오디오 인터페이스의 버퍼 사이즈(samples)와 샘플레이트를 넣으면, 한 버퍼가 처리되는 데 걸리는 시간(지연시간)을 계산합니다.</p>
+      <div class="field">
+        <label>Buffer Size</label>
+        <div class="solve-picker" id="bufferSizePicker">
+          <button data-buf="32">32</button>
+          <button data-buf="64">64</button>
+          <button data-buf="128" class="active">128</button>
+          <button data-buf="256">256</button>
+          <button data-buf="512">512</button>
+          <button data-buf="1024">1024</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sample Rate</label>
+        <div class="input-row"><input type="number" id="bufSampleRateInput" value="48000" step="1" min="1"><span class="unit">Hz</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">편도 레이턴시</span>
+          <span class="result-val"><span id="bufLatencyOneWayVal">--</span><span class="unit">ms</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">왕복(라운드트립) 레이턴시</span>
+          <span class="result-val"><span id="bufLatencyRoundTripVal">--</span><span class="unit">ms</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">참고: 실제 체감 레이턴시는 여기에 A/D·D/A 변환, 드라이버, 플러그인 처리 시간 등이 더해져서 이 계산값보다 조금 더 커요.</p>
     </div>
   </div>
 
@@ -328,6 +509,10 @@
     notes: document.getElementById('notesTab'),
     speedpitch: document.getElementById('speedPitchTab'),
     keymatch: document.getElementById('keyMatchTab'),
+    loopbpm: document.getElementById('loopBpmTab'),
+    barduration: document.getElementById('barDurationTab'),
+    timestretch: document.getElementById('timeStretchTab'),
+    samplerate: document.getElementById('sampleRateTab'),
   };
 
   let chapter = 'free';
@@ -494,16 +679,187 @@
   const targetBpmInput = document.getElementById('targetBpmInput');
   const keyMatchPctVal = document.getElementById('keyMatchPctVal');
   const keyMatchSemitoneVal = document.getElementById('keyMatchSemitoneVal');
+  const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const origKeyPicker = document.getElementById('origKeyPicker');
+  const keyMatchResultKey = document.getElementById('keyMatchResultKey');
+  let origKeyIndex = 0;
+
+  origKeyPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      origKeyIndex = parseInt(btn.dataset.key, 10);
+      origKeyPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcKeyMatch();
+    });
+  });
+
   function recalcKeyMatch(){
     const origBpm = parseFloat(origBpmInput.value);
     const targetBpm = parseFloat(targetBpmInput.value);
     if (!isFinite(origBpm) || !isFinite(targetBpm) || origBpm <= 0) return;
     const ratio = targetBpm / origBpm;
+    const semi = speedRatioToSemitones(ratio);
     keyMatchPctVal.textContent = pctFromSpeedRatio(ratio).toFixed(2);
-    keyMatchSemitoneVal.textContent = speedRatioToSemitones(ratio).toFixed(2);
+    keyMatchSemitoneVal.textContent = semi.toFixed(2);
+
+    // ✅ 요청 반영: 반음이 딱 안 떨어지면 가장 가까운 음이름 + 남은 cents로 보여준다
+    const roundedSemi = Math.round(semi);
+    const cents = (semi - roundedSemi) * 100;
+    const resultIndex = ((origKeyIndex + roundedSemi) % 12 + 12) % 12;
+    const centsStr = Math.abs(cents) < 1 ? '' : ` (${cents > 0 ? '+' : ''}${cents.toFixed(0)}c)`;
+    keyMatchResultKey.textContent = `${NOTE_NAMES[origKeyIndex]} → ${NOTE_NAMES[resultIndex]}${centsStr}`;
   }
   [origBpmInput, targetBpmInput].forEach(el => el.addEventListener('input', recalcKeyMatch));
   recalcKeyMatch();
+
+  // =====================================================================
+  // 자유 계산 — Loop / Sample BPM Finder
+  // =====================================================================
+  const loopLengthInput = document.getElementById('loopLengthInput');
+  const loopBarsInput = document.getElementById('loopBarsInput');
+  const loopBeatsPicker = document.getElementById('loopBeatsPicker');
+  const loopBpmVal = document.getElementById('loopBpmVal');
+  let loopBeatsPerBar = 4;
+
+  function recalcLoopBpm(){
+    const lengthSec = parseFloat(loopLengthInput.value);
+    const bars = parseFloat(loopBarsInput.value);
+    if (!isFinite(lengthSec) || lengthSec <= 0 || !isFinite(bars) || bars <= 0) { loopBpmVal.textContent = '--'; return; }
+    const totalBeats = bars * loopBeatsPerBar;
+    const bpm = (60 * totalBeats) / lengthSec;
+    loopBpmVal.textContent = bpm.toFixed(2);
+  }
+  loopBeatsPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      loopBeatsPerBar = parseInt(btn.dataset.beats, 10);
+      loopBeatsPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcLoopBpm();
+    });
+  });
+  [loopLengthInput, loopBarsInput].forEach(el => el.addEventListener('input', recalcLoopBpm));
+  recalcLoopBpm();
+
+  // =====================================================================
+  // 자유 계산 — Bar / Measure Duration
+  // =====================================================================
+  const barBpmInput = document.getElementById('barBpmInput');
+  const barBeatsPicker = document.getElementById('barBeatsPicker');
+  const barCountInput = document.getElementById('barCountInput');
+  const barOneDurationVal = document.getElementById('barOneDurationVal');
+  const barTotalDurationVal = document.getElementById('barTotalDurationVal');
+  let barBeatsPerBar = 4;
+
+  function formatMinSec(totalSec){
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec - m * 60;
+    return `${m}:${s.toFixed(2).padStart(5, '0')}`;
+  }
+  function recalcBarDuration(){
+    const bpm = parseFloat(barBpmInput.value);
+    const bars = parseFloat(barCountInput.value);
+    if (!isFinite(bpm) || bpm <= 0 || !isFinite(bars) || bars <= 0) return;
+    const beatSec = 60 / bpm;
+    const oneBarSec = beatSec * barBeatsPerBar;
+    const totalSec = oneBarSec * bars;
+    barOneDurationVal.textContent = oneBarSec.toFixed(3);
+    barTotalDurationVal.textContent = formatMinSec(totalSec) + ` (${totalSec.toFixed(2)}초)`;
+  }
+  barBeatsPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      barBeatsPerBar = parseInt(btn.dataset.beats, 10);
+      barBeatsPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcBarDuration();
+    });
+  });
+  [barBpmInput, barCountInput].forEach(el => el.addEventListener('input', recalcBarDuration));
+  recalcBarDuration();
+
+  // =====================================================================
+  // 자유 계산 — Time-Stretch (피치 고정)
+  // =====================================================================
+  const tsOrigBpmInput = document.getElementById('tsOrigBpmInput');
+  const tsTargetBpmInput = document.getElementById('tsTargetBpmInput');
+  const tsRatioVal = document.getElementById('tsRatioVal');
+  const tsPctVal = document.getElementById('tsPctVal');
+  const tsWarning = document.getElementById('tsWarning');
+  function recalcTimeStretch(){
+    const origBpm = parseFloat(tsOrigBpmInput.value);
+    const targetBpm = parseFloat(tsTargetBpmInput.value);
+    if (!isFinite(origBpm) || !isFinite(targetBpm) || origBpm <= 0) return;
+    const ratio = targetBpm / origBpm;
+    const pct = pctFromSpeedRatio(ratio);
+    tsRatioVal.textContent = ratio.toFixed(4);
+    tsPctVal.textContent = pct.toFixed(2);
+    tsWarning.textContent = Math.abs(pct) > 20
+      ? '⚠️ ±20%를 넘는 큰 폭의 타임스트레치는 알고리즘에 따라 음질 열화(아티팩트, 워블링)가 뚜렷하게 들릴 수 있어요.'
+      : '';
+  }
+  [tsOrigBpmInput, tsTargetBpmInput].forEach(el => el.addEventListener('input', recalcTimeStretch));
+  recalcTimeStretch();
+
+  // =====================================================================
+  // 자유 계산 — Samples ↔ Time ↔ Sample Rate
+  // =====================================================================
+  const srSolvePicker = document.getElementById('srSolvePicker');
+  const srTimeInput = document.getElementById('srTimeInput');
+  const srSamplesInput = document.getElementById('srSamplesInput');
+  const srRateInput = document.getElementById('srRateInput');
+  const srRatePresetPicker = document.getElementById('srRatePresetPicker');
+  let srSolveFor = 'samples';
+
+  function updateSrInputStates(){
+    srTimeInput.disabled = (srSolveFor === 'time');
+    srSamplesInput.disabled = (srSolveFor === 'samples');
+    srRateInput.disabled = (srSolveFor === 'rate');
+  }
+  function recalcSampleRate(){
+    const t = parseFloat(srTimeInput.value), n = parseFloat(srSamplesInput.value), sr = parseFloat(srRateInput.value);
+    if (srSolveFor === 'time' && isFinite(n) && isFinite(sr) && sr > 0) srTimeInput.value = (n / sr).toFixed(4);
+    if (srSolveFor === 'samples' && isFinite(t) && isFinite(sr)) srSamplesInput.value = Math.round(t * sr);
+    if (srSolveFor === 'rate' && isFinite(n) && isFinite(t) && t > 0) srRateInput.value = Math.round(n / t);
+  }
+  srSolvePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      srSolveFor = btn.dataset.solve;
+      srSolvePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      updateSrInputStates();
+      recalcSampleRate();
+    });
+  });
+  [srTimeInput, srSamplesInput, srRateInput].forEach(el => el.addEventListener('input', recalcSampleRate));
+  srRatePresetPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      srRateInput.value = btn.dataset.rate;
+      recalcSampleRate();
+    });
+  });
+  updateSrInputStates();
+  recalcSampleRate();
+
+  // =====================================================================
+  // 자유 계산 — Buffer Size ↔ Latency
+  // =====================================================================
+  const bufferSizePicker = document.getElementById('bufferSizePicker');
+  const bufSampleRateInput = document.getElementById('bufSampleRateInput');
+  const bufLatencyOneWayVal = document.getElementById('bufLatencyOneWayVal');
+  const bufLatencyRoundTripVal = document.getElementById('bufLatencyRoundTripVal');
+  let bufferSize = 128;
+
+  function recalcBufferLatency(){
+    const sr = parseFloat(bufSampleRateInput.value);
+    if (!isFinite(sr) || sr <= 0) return;
+    const oneWayMs = (bufferSize / sr) * 1000;
+    bufLatencyOneWayVal.textContent = oneWayMs.toFixed(3);
+    bufLatencyRoundTripVal.textContent = (oneWayMs * 2).toFixed(3);
+  }
+  bufferSizePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bufferSize = parseInt(btn.dataset.buf, 10);
+      bufferSizePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcBufferLatency();
+    });
+  });
+  bufSampleRateInput.addEventListener('input', recalcBufferLatency);
+  recalcBufferLatency();
 
   // =====================================================================
   // 계산 문제(퀴즈)
@@ -551,7 +907,58 @@
     }
     return { text: `원곡 BPM ${origBpm}를 ${targetBpm}로 바꾸면, 키(피치)는 몇 반음 바뀌나요?`, answer: +speedRatioToSemitones(ratio).toFixed(2) };
   }
-  const QUESTION_MAKERS = [makeNoteQuestion, makeSpeedPitchQuestion, makeKeyMatchQuestion];
+
+  function makeLoopBpmQuestion(){
+    const bars = randChoice([1, 2, 4, 8]);
+    const beatsPerBar = randChoice([3, 4]);
+    const bpm = randChoice([80, 90, 100, 120, 128, 140]);
+    const totalBeats = bars * beatsPerBar;
+    const lengthSec = +((60 * totalBeats) / bpm).toFixed(3);
+    return {
+      text: `${beatsPerBar}/4박자, ${bars}마디짜리 루프의 길이가 ${lengthSec}초라면, BPM은 얼마인가요?`,
+      answer: bpm,
+    };
+  }
+
+  function makeBarDurationQuestion(){
+    const bpm = randChoice([80, 100, 120, 128, 140]);
+    const beatsPerBar = randChoice([3, 4]);
+    const bars = randChoice([2, 4, 8]);
+    const totalSec = +((60 / bpm) * beatsPerBar * bars).toFixed(2);
+    return {
+      text: `BPM ${bpm}, ${beatsPerBar}/4박자에서 ${bars}마디는 몇 초인가요?`,
+      answer: totalSec,
+    };
+  }
+
+  function makeTimeStretchQuestion(){
+    const origBpm = randChoice([100, 120, 128, 130, 140]);
+    const targetBpm = origBpm + randChoice([5, 10, -5, -10, 20]);
+    const pct = +pctFromSpeedRatio(targetBpm / origBpm).toFixed(2);
+    return {
+      text: `타임스트레치로 BPM ${origBpm} 곡을 ${targetBpm}로 바꾸면(피치는 고정), 템포 변화는 몇 %인가요?`,
+      answer: pct,
+    };
+  }
+
+  function makeSampleRateQuestion(){
+    const kind = randChoice(['samples', 'time', 'latency']);
+    if (kind === 'samples') {
+      const sr = randChoice([44100, 48000, 96000]);
+      const t = randChoice([0.5, 1, 2]);
+      return { text: `샘플레이트 ${sr}Hz에서 ${t}초는 몇 샘플인가요?`, answer: sr * t };
+    }
+    if (kind === 'time') {
+      const sr = randChoice([44100, 48000]);
+      const n = randChoice([22050, 44100, 48000, 96000]);
+      return { text: `샘플레이트 ${sr}Hz에서 ${n} 샘플은 몇 초인가요?`, answer: +(n / sr).toFixed(3) };
+    }
+    const buf = randChoice([64, 128, 256, 512]);
+    const sr = randChoice([44100, 48000, 96000]);
+    return { text: `버퍼 사이즈 ${buf} samples, 샘플레이트 ${sr}Hz일 때, 편도 레이턴시는 몇 ms인가요?`, answer: +((buf / sr) * 1000).toFixed(2) };
+  }
+
+  const QUESTION_MAKERS = [makeNoteQuestion, makeSpeedPitchQuestion, makeKeyMatchQuestion, makeLoopBpmQuestion, makeBarDurationQuestion, makeTimeStretchQuestion, makeSampleRateQuestion];
 
   function smartRound(v){
     if (Math.abs(v) >= 100) return Math.round(v);
