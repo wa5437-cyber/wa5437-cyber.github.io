@@ -566,16 +566,16 @@
     const t = Math.abs(timeMs);
     const activeIdx = HAAS_ZONES.findIndex(zone => t <= zone.max);
     let html = `
-      <div class="tempo-row tempo-header">
+      <div class="tempo-row tempo-header" style="grid-template-columns:0.32fr 1fr;">
         <div class="tempo-cell">시간차</div>
         <div class="tempo-cell" style="text-align:left;">들리는 방식</div>
       </div>`;
     HAAS_ZONES.forEach((zone, i) => {
       const isActive = i === activeIdx;
       html += `
-        <div class="tempo-row" style="${isActive ? 'background:rgba(61,220,151,0.1);' : ''}">
+        <div class="tempo-row" style="grid-template-columns:0.32fr 1fr; ${isActive ? 'background:rgba(61,220,151,0.1);' : ''}">
           <div class="tempo-cell" style="${isActive ? 'color:var(--teal);' : ''}">${zone.label}</div>
-          <div class="tempo-cell" style="text-align:left; font-size:12.5px; font-weight:400; color:${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'};">${zone.desc}</div>
+          <div class="tempo-cell" style="text-align:left; font-size:13.5px; line-height:1.55; font-weight:400; color:${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'};">${zone.desc}</div>
         </div>`;
     });
     haasTable.innerHTML = html;
