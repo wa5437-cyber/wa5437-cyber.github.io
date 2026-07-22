@@ -59,6 +59,38 @@
   .fx-picker button:disabled{ opacity:0.4; cursor:not-allowed; }
   @media (max-width:420px){ .fx-picker button{ font-size:12.5px; padding:12px 3px; } }
 
+  /* ---- 다이나믹스(컴프레서/게이트/더킹) ---- */
+  .solve-picker{ display:flex; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:3px; margin-bottom:16px; }
+  .solve-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:14px; font-weight:700; padding:11px 6px; border-radius:9px; }
+  .solve-picker button.active{ background:#232b2f; color:var(--amber); }
+
+  .slider-field{ margin-top:14px; }
+  .slider-field:first-child{ margin-top:0; }
+  .slider-field .slider-label-row{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+  .slider-field label{
+    font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-primary); opacity:0.9; font-weight:600;
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .slider-field .slider-val{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--teal); font-weight:700; }
+  .slider-field input[type=range]{
+    width:100%; height:6px; border-radius:3px; background:var(--bg-panel-2); appearance:none; outline:none;
+  }
+  .slider-field input[type=range]::-webkit-slider-thumb{
+    appearance:none; width:20px; height:20px; border-radius:50%; background:var(--teal); cursor:pointer;
+    border:2px solid #0d1113;
+  }
+  .slider-field input[type=range]::-moz-range-thumb{
+    width:20px; height:20px; border-radius:50%; background:var(--teal); cursor:pointer; border:2px solid #0d1113;
+  }
+
+  .dynamics-meter{
+    margin-top:16px; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center;
+  }
+  .dynamics-meter .meter-lbl{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-tertiary); letter-spacing:0.08em; }
+  .dynamics-meter .meter-val{ font-family:'IBM Plex Mono',monospace; font-size:32px; font-weight:700; color:var(--red); margin-top:4px; }
+  .dynamics-meter-bar-wrap{ width:100%; height:10px; background:#0d1113; border-radius:5px; margin-top:12px; overflow:hidden; }
+  .dynamics-meter-bar{ height:100%; width:0%; background:linear-gradient(90deg, var(--teal), var(--amber), var(--red)); transition:width .05s linear; }
+
   /* ---- 소스 피커(핑크노이즈/내 음악) ---- */
   .source-picker{ display:flex; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:3px; margin-top:14px; }
   .source-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:14.5px; font-weight:600; padding:11px 8px; border-radius:9px; }
@@ -138,6 +170,7 @@
   <div class="chapter-picker" id="chapterPicker">
     <button id="chapterFreeBtn" class="active">자유 청음</button>
     <button id="chapterQuizBtn">청음 문제</button>
+    <button id="chapterDynamicsBtn">다이나믹스</button>
   </div>
 
   <div class="scoreboard" id="scoreboard" style="display:none;">
@@ -157,7 +190,7 @@
     <div class="music-filename" id="musicFileName"></div>
   </div>
 
-  <div class="panel">
+  <div class="panel" id="effectPanel">
     <div class="panel-title">Effect</div>
     <p class="phase-desc" id="fxDesc">이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.</p>
     <div class="fx-picker" id="fxPicker">
@@ -174,6 +207,96 @@
     </div>
     <div class="ab-badge" id="abBadge" style="display:none;">● 원음</div>
     <div class="feedback" id="feedback"></div>
+  </div>
+
+  <div class="panel" id="dynamicsPanel" style="display:none;">
+    <div class="panel-title">Dynamics</div>
+    <p class="phase-desc">컴프레서·게이트·더킹 파라미터를 직접 조절하면서 들어보세요. 켜고 끄면서 비교할 수 있어요.</p>
+    <div class="solve-picker" id="dynamicsModePicker">
+      <button data-dyn="compressor" class="active">Compressor</button>
+      <button data-dyn="gate">Gate</button>
+      <button data-dyn="ducking">Ducking</button>
+    </div>
+
+    <div class="source-picker" id="dynamicsOnOffPicker" style="margin-bottom:16px;">
+      <button id="dynamicsOffBtn">Bypass (원음)</button>
+      <button id="dynamicsOnBtn" class="active">On (적용됨)</button>
+    </div>
+
+    <!-- Compressor 파라미터 -->
+    <div id="compressorParams">
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Threshold</label><span class="slider-val" id="compThresholdVal">-24 dB</span></div>
+        <input type="range" id="compThreshold" min="-60" max="0" step="1" value="-24">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Ratio</label><span class="slider-val" id="compRatioVal">4:1</span></div>
+        <input type="range" id="compRatio" min="1" max="20" step="0.5" value="4">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Attack</label><span class="slider-val" id="compAttackVal">3 ms</span></div>
+        <input type="range" id="compAttack" min="0" max="200" step="1" value="3">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Release</label><span class="slider-val" id="compReleaseVal">250 ms</span></div>
+        <input type="range" id="compRelease" min="10" max="1000" step="10" value="250">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Makeup Gain</label><span class="slider-val" id="compMakeupVal">0 dB</span></div>
+        <input type="range" id="compMakeup" min="0" max="24" step="0.5" value="0">
+      </div>
+    </div>
+
+    <!-- Gate 파라미터 -->
+    <div id="gateParams" style="display:none;">
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Threshold</label><span class="slider-val" id="gateThresholdVal">-40 dB</span></div>
+        <input type="range" id="gateThreshold" min="-80" max="0" step="1" value="-40">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Range</label><span class="slider-val" id="gateRangeVal">-60 dB</span></div>
+        <input type="range" id="gateRange" min="-80" max="0" step="1" value="-60">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Attack</label><span class="slider-val" id="gateAttackVal">5 ms</span></div>
+        <input type="range" id="gateAttack" min="0" max="100" step="1" value="5">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Hold</label><span class="slider-val" id="gateHoldVal">50 ms</span></div>
+        <input type="range" id="gateHold" min="0" max="500" step="10" value="50">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Release</label><span class="slider-val" id="gateReleaseVal">150 ms</span></div>
+        <input type="range" id="gateRelease" min="10" max="1000" step="10" value="150">
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">Range는 닫혔을 때 얼마나 줄어드는지(완전 무음이 아니라 살짝 남겨둘 수도 있어요), Hold는 신호가 Threshold 아래로 떨어져도 얼마나 더 열려있을지를 정해요 — 너무 짧으면 소리가 지글지글(chattering) 끊길 수 있어요.</p>
+    </div>
+
+    <!-- Ducking 파라미터 -->
+    <div id="duckingParams" style="display:none;">
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Duck Amount</label><span class="slider-val" id="duckAmountVal">-18 dB</span></div>
+        <input type="range" id="duckAmount" min="-40" max="0" step="1" value="-18">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Interval (킥 간격)</label><span class="slider-val" id="duckIntervalVal">1.5 s</span></div>
+        <input type="range" id="duckInterval" min="0.3" max="3" step="0.1" value="1.5">
+      </div>
+      <div class="slider-field">
+        <div class="slider-label-row"><label>Release</label><span class="slider-val" id="duckReleaseVal">300 ms</span></div>
+        <input type="range" id="duckRelease" min="50" max="1000" step="10" value="300">
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">일정한 간격으로 "킥" 소리가 울리고, 그때마다 메인 소리 볼륨이 확 줄었다가 서서히 돌아와요 — EDM에서 흔히 쓰는 사이드체인 펌핑 효과예요.</p>
+    </div>
+
+    <div class="dynamics-meter">
+      <div class="meter-lbl" id="dynamicsMeterLbl">GAIN REDUCTION</div>
+      <div class="meter-val" id="dynamicsMeterVal">0.0 dB</div>
+      <div class="dynamics-meter-bar-wrap"><div class="dynamics-meter-bar" id="dynamicsMeterBar"></div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="vizPanel">
     <canvas id="vizCanvas"></canvas>
   </div>
 
@@ -381,6 +504,95 @@
         this.fxPanner.connect(this.fxAutopanGain);
         this.fxAutopanGain.connect(this.fxOutputGain);
 
+        // ---- Dynamics(컴프레서/게이트/더킹) — fx 체인과는 별개의 병렬 출력 경로 ----
+        this.dynOutputGain = this.ctx.createGain(); this.dynOutputGain.gain.value = 0; // 기본은 무음(자유 청음/청음 문제 챕터에서는 안 씀)
+        this.dynOutputGain.connect(this.masterGain);
+
+        // Bypass(원음 그대로)
+        this.dynBypassGain = this.ctx.createGain(); this.dynBypassGain.gain.value = 0;
+        this.fxInputGain.connect(this.dynBypassGain);
+        this.dynBypassGain.connect(this.dynOutputGain);
+
+        // Compressor — Web Audio 네이티브 DynamicsCompressorNode 사용
+        this.dynCompressor = this.ctx.createDynamicsCompressor();
+        this.dynCompressor.threshold.value = -24;
+        this.dynCompressor.ratio.value = 4;
+        this.dynCompressor.attack.value = 0.003;
+        this.dynCompressor.release.value = 0.25;
+        this.dynCompressor.knee.value = 30;
+        this.dynMakeupGain = this.ctx.createGain(); this.dynMakeupGain.gain.value = 1;
+        this.dynCompOutGain = this.ctx.createGain(); this.dynCompOutGain.gain.value = 0;
+        this.fxInputGain.connect(this.dynCompressor);
+        this.dynCompressor.connect(this.dynMakeupGain);
+        this.dynMakeupGain.connect(this.dynCompOutGain);
+        this.dynCompOutGain.connect(this.dynOutputGain);
+
+        // Gate — 네이티브 게이트 노드가 없어서 ScriptProcessor로 엔벌로프 팔로워를 직접 구현
+        this.gateNode = this.ctx.createScriptProcessor(2048, 1, 1);
+        this._gateEnvelope = 0;
+        this._gateCurrentGain = 0;
+        this._gateThresholdDb = -40;
+        this._gateRangeDb = -60; // ✅ 닫혔을 때 완전 무음이 아니라 이 정도까지만 줄어든다
+        this._gateAttackMs = 5;
+        this._gateHoldMs = 50;  // ✅ threshold 아래로 떨어져도 이만큼은 더 열어둔다
+        this._gateReleaseMs = 150;
+        this._gateHoldSamplesLeft = 0;
+        this._gateIsOpen = false;
+        this.gateNode.onaudioprocess = (e) => {
+          const input = e.inputBuffer.getChannelData(0);
+          const output = e.outputBuffer.getChannelData(0);
+          const sr = this.ctx.sampleRate;
+          const thresholdLin = Math.pow(10, this._gateThresholdDb / 20);
+          const rangeLin = Math.pow(10, this._gateRangeDb / 20);
+          const holdSamples = Math.round(sr * Math.max(0, this._gateHoldMs / 1000));
+          const attackCoef = Math.exp(-1 / (sr * Math.max(0.0005, this._gateAttackMs / 1000)));
+          const releaseCoef = Math.exp(-1 / (sr * Math.max(0.001, this._gateReleaseMs / 1000)));
+          let env = this._gateEnvelope, gain = this._gateCurrentGain;
+          let holdLeft = this._gateHoldSamplesLeft, isOpen = this._gateIsOpen;
+          for (let i = 0; i < input.length; i++) {
+            const abs = Math.abs(input[i]);
+            env = abs > env ? attackCoef * env + (1 - attackCoef) * abs : releaseCoef * env + (1 - releaseCoef) * abs;
+
+            if (env > thresholdLin) {
+              isOpen = true;
+              holdLeft = holdSamples; // ✅ threshold를 넘을 때마다 Hold 타이머를 다시 채운다
+            } else if (isOpen) {
+              if (holdLeft > 0) holdLeft--; else isOpen = false; // Hold가 다 지나야 실제로 닫힌다
+            }
+
+            const targetGain = isOpen ? 1 : rangeLin; // ✅ 완전히 0이 아니라 Range까지만 낮춘다
+            gain += (targetGain - gain) * 0.05; // 클릭 노이즈 방지용 스무딩
+            output[i] = input[i] * gain;
+          }
+          this._gateEnvelope = env;
+          this._gateCurrentGain = gain;
+          this._gateHoldSamplesLeft = holdLeft;
+          this._gateIsOpen = isOpen;
+        };
+        this.dynGateOutGain = this.ctx.createGain(); this.dynGateOutGain.gain.value = 0;
+        this.fxInputGain.connect(this.gateNode);
+        this.gateNode.connect(this.dynGateOutGain);
+        this.dynGateOutGain.connect(this.dynOutputGain);
+
+        // Ducking — 일정 간격으로 "킥" 트리거를 울리고, 그 순간 메인 볼륨을 확 낮췄다가 서서히 복귀시킨다
+        this.duckGain = this.ctx.createGain(); this.duckGain.gain.value = 1;
+        this.dynDuckOutGain = this.ctx.createGain(); this.dynDuckOutGain.gain.value = 0;
+        this.fxInputGain.connect(this.duckGain);
+        this.duckGain.connect(this.dynDuckOutGain);
+        this.dynDuckOutGain.connect(this.dynOutputGain);
+        // 킥 트리거 소리(짧은 펀치감 있는 톤) — 더킹이 "왜" 일어나는지 귀로 알 수 있게
+        this._duckKickOsc = this.ctx.createOscillator();
+        this._duckKickOsc.type = 'sine'; this._duckKickOsc.frequency.value = 60;
+        this._duckKickGain = this.ctx.createGain(); this._duckKickGain.gain.value = 0;
+        this._duckKickOsc.connect(this._duckKickGain);
+        this._duckKickGain.connect(this.dynDuckOutGain);
+        this._duckKickOsc.start();
+        this._duckAmountDb = -18;
+        this._duckIntervalSec = 1.5;
+        this._duckReleaseMs = 300;
+        this._duckActive = false;
+        this._duckTimer = null;
+
         // 시각화용 분석기(오디오 경로에 영향 없는 탭)
         this.analyser = this.ctx.createAnalyser();
         this.analyser.fftSize = 1024;
@@ -506,6 +718,102 @@
       });
     }
 
+    // ✅ 요청 반영: 이펙트 체인 / 다이나믹스 체인 중 지금 챕터에 맞는 쪽만 소리가 나게 한다
+    // (안 그러면 두 체인이 같은 fxInputGain을 공유하므로 소리가 겹쳐 들린다)
+    setActiveChain(chain){ // 'fx' | 'dynamics'
+      this.ensureContext();
+      this.rampParam(this.fxOutputGain.gain, chain === 'fx' ? 1 : 0, 0.05);
+      this.rampParam(this.dynOutputGain.gain, chain === 'dynamics' ? 1 : 0, 0.05);
+    }
+
+    setDynamicsState(mode, bypassed){
+      this.ensureContext();
+      this.dynamicsMode = mode;
+      this.dynamicsBypassed = bypassed;
+      const gains = { bypass: this.dynBypassGain, compressor: this.dynCompOutGain, gate: this.dynGateOutGain, ducking: this.dynDuckOutGain };
+      Object.entries(gains).forEach(([name, g]) => {
+        const active = bypassed ? (name === 'bypass') : (name === mode);
+        this.rampParam(g.gain, active ? 1 : 0, 0.05);
+      });
+      if (!bypassed && mode === 'ducking') this.startDuckingLoop();
+      else this.stopDuckingLoop();
+    }
+
+    updateCompressorParams({ thresholdDb, ratio, attackMs, releaseMs, makeupDb }){
+      this.ensureContext(); // ✅ 재생 시작 전에 슬라이더를 만져도 에러 없이 동작하게
+      if (thresholdDb !== undefined) this.dynCompressor.threshold.value = thresholdDb;
+      if (ratio !== undefined) this.dynCompressor.ratio.value = ratio;
+      if (attackMs !== undefined) this.dynCompressor.attack.value = attackMs / 1000;
+      if (releaseMs !== undefined) this.dynCompressor.release.value = releaseMs / 1000;
+      if (makeupDb !== undefined) this.dynMakeupGain.gain.value = Math.pow(10, makeupDb / 20);
+    }
+    updateGateParams({ thresholdDb, rangeDb, attackMs, holdMs, releaseMs }){
+      if (thresholdDb !== undefined) this._gateThresholdDb = thresholdDb;
+      if (rangeDb !== undefined) this._gateRangeDb = rangeDb;
+      if (attackMs !== undefined) this._gateAttackMs = attackMs;
+      if (holdMs !== undefined) this._gateHoldMs = holdMs;
+      if (releaseMs !== undefined) this._gateReleaseMs = releaseMs;
+    }
+    updateDuckingParams({ duckDb, intervalSec, releaseMs }){
+      if (duckDb !== undefined) this._duckAmountDb = duckDb;
+      if (intervalSec !== undefined) this._duckIntervalSec = intervalSec;
+      if (releaseMs !== undefined) this._duckReleaseMs = releaseMs;
+    }
+
+    // ✅ 요청 반영: 킥 트리거 + 메인 볼륨 더킹을 주기적으로 반복 재생
+    _scheduleDuckPulse(){
+      if (!this._duckActive) return;
+      const now = this.ctx.currentTime;
+      // 킥 트리거 소리(피치가 빠르게 떨어지는 짧은 톤)
+      this._duckKickOsc.frequency.cancelScheduledValues(now);
+      this._duckKickOsc.frequency.setValueAtTime(150, now);
+      this._duckKickOsc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+      this._duckKickGain.gain.cancelScheduledValues(now);
+      this._duckKickGain.gain.setValueAtTime(0.5, now);
+      this._duckKickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+      // 메인 볼륨 더킹: 즉시 낮췄다가 release 시간 동안 서서히 복귀
+      const duckLin = Math.pow(10, this._duckAmountDb / 20);
+      this.duckGain.gain.cancelScheduledValues(now);
+      this.duckGain.gain.setValueAtTime(1.0, now);
+      this.duckGain.gain.linearRampToValueAtTime(duckLin, now + 0.01);
+      this.duckGain.gain.setTargetAtTime(1.0, now + 0.01, Math.max(0.01, this._duckReleaseMs / 1000 / 3));
+
+      this._duckTimer = setTimeout(() => this._scheduleDuckPulse(), this._duckIntervalSec * 1000);
+    }
+    startDuckingLoop(){
+      if (this._duckActive) return;
+      this._duckActive = true;
+      this._scheduleDuckPulse();
+    }
+    stopDuckingLoop(){
+      this._duckActive = false;
+      if (this._duckTimer) { clearTimeout(this._duckTimer); this._duckTimer = null; }
+      if (this.duckGain) this.duckGain.gain.cancelScheduledValues(this.ctx.currentTime);
+      if (this.duckGain) this.duckGain.gain.setValueAtTime(1.0, this.ctx.currentTime);
+    }
+
+    // ✅ 미터 표시용 — 모드에 따라 다른 값을 돌려준다
+    getDynamicsMeterValue(){
+      if (this.dynamicsMode === 'compressor') {
+        const reduction = this.dynCompressor.reduction || 0; // 음수 dB (게인 감소량)
+        return { label: 'GAIN REDUCTION', db: reduction, percent: Math.min(100, Math.abs(reduction) / 24 * 100) };
+      }
+      if (this.dynamicsMode === 'gate') {
+        const gain = this._gateCurrentGain || 0;
+        const db = gain > 0.001 ? 20 * Math.log10(gain) : -60;
+        // ✅ 고친 것: gain > 0.5로 열림/닫힘을 판단하면 Range 값이 -6dB처럼 높을 때
+        // "닫힌" 상태의 게인(약 0.5)과 판정 기준이 겹쳐서 부정확했다. 실제 게이트
+        // 열림 상태(_gateIsOpen)를 직접 써서 Range 값과 무관하게 정확히 표시한다.
+        return { label: this._gateIsOpen ? 'OPEN' : 'CLOSED', db, percent: gain * 100 };
+      }
+      // ducking
+      const now = this.ctx ? this.ctx.currentTime : 0;
+      const currentGain = this.duckGain ? this.duckGain.gain.value : 1;
+      const db = currentGain > 0.001 ? 20 * Math.log10(currentGain) : -60;
+      return { label: 'DUCK GAIN', db, percent: Math.min(100, Math.abs(db) / 24 * 100) };
+    }
+
     start(fromBeginning){
       this.ensureContext();
       if (this.ctx.state === 'suspended') this.ctx.resume();
@@ -537,6 +845,9 @@
   const chapterPicker = document.getElementById('chapterPicker');
   const chapterFreeBtn = document.getElementById('chapterFreeBtn');
   const chapterQuizBtn = document.getElementById('chapterQuizBtn');
+  const chapterDynamicsBtn = document.getElementById('chapterDynamicsBtn');
+  const effectPanelEl = document.getElementById('effectPanel');
+  const dynamicsPanelEl = document.getElementById('dynamicsPanel');
   const scoreboardEl = document.getElementById('scoreboard');
   const scRoundEl = document.getElementById('scRound');
   const scHitEl = document.getElementById('scHit');
@@ -624,7 +935,10 @@
     chapter = next;
     chapterFreeBtn.classList.toggle('active', chapter === 'free');
     chapterQuizBtn.classList.toggle('active', chapter === 'quiz');
+    chapterDynamicsBtn.classList.toggle('active', chapter === 'dynamics');
     scoreboardEl.style.display = chapter === 'quiz' ? 'flex' : 'none';
+    effectPanelEl.style.display = (chapter === 'free' || chapter === 'quiz') ? 'block' : 'none';
+    dynamicsPanelEl.style.display = chapter === 'dynamics' ? 'block' : 'none';
     abBadgeEl.style.display = 'none';
     clearFeedback();
     fxButtons.forEach(b => b.classList.remove('active'));
@@ -635,16 +949,20 @@
       const dryBtn = fxButtons.find(b => b.dataset.fx === 'dry');
       dryBtn.classList.add('active');
       engine.setFxEffect('dry');
-    } else {
+    } else if (chapter === 'quiz') {
       fxDescEl.textContent = '재생되는 이펙트가 뭔지 맞춰보세요. 정답을 고르기 전까지는 어떤 버튼도 표시되지 않아요.';
       setStatus('시작 버튼을 눌러 문제를 시작하세요');
       startBtn.textContent = '▸ 청음 문제 시작';
       questionIndex = 0; hitCount = 0;
       updateScoreboard();
+    } else {
+      setStatus('시작 버튼을 눌러 다이나믹스를 들어보세요');
+      startBtn.textContent = '▸ 다이나믹스 청음 시작';
     }
   }
   chapterFreeBtn.addEventListener('click', () => switchChapter('free'));
   chapterQuizBtn.addEventListener('click', () => switchChapter('quiz'));
+  chapterDynamicsBtn.addEventListener('click', () => switchChapter('dynamics'));
 
   // ---- 청음 문제(퀴즈) 진행 ----
   // ---- 원음/체인지 A/B 사이클 (3초씩 번갈아 재생) ----
@@ -753,7 +1071,98 @@
     uploadMusicBtn.disabled = busy;
     chapterFreeBtn.disabled = busy;
     chapterQuizBtn.disabled = busy;
+    chapterDynamicsBtn.disabled = busy;
   }
+
+  // ---- 다이나믹스(컴프레서/게이트/더킹) UI ----
+  const dynamicsModePicker = document.getElementById('dynamicsModePicker');
+  const dynamicsOffBtn = document.getElementById('dynamicsOffBtn');
+  const dynamicsOnBtn = document.getElementById('dynamicsOnBtn');
+  const compressorParamsEl = document.getElementById('compressorParams');
+  const gateParamsEl = document.getElementById('gateParams');
+  const duckingParamsEl = document.getElementById('duckingParams');
+  const dynamicsMeterLbl = document.getElementById('dynamicsMeterLbl');
+  const dynamicsMeterVal = document.getElementById('dynamicsMeterVal');
+  const dynamicsMeterBar = document.getElementById('dynamicsMeterBar');
+
+  let dynamicsMode = 'compressor';
+  let dynamicsBypassed = false;
+
+  const dynParamPanels = { compressor: compressorParamsEl, gate: gateParamsEl, ducking: duckingParamsEl };
+  function showDynParamPanel(){
+    Object.entries(dynParamPanels).forEach(([name, el]) => { el.style.display = (name === dynamicsMode) ? 'block' : 'none'; });
+  }
+
+  function applyDynamicsState(){
+    engine.setDynamicsState(dynamicsMode, dynamicsBypassed);
+  }
+
+  dynamicsModePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      dynamicsMode = btn.dataset.dyn;
+      dynamicsModePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      showDynParamPanel();
+      applyDynamicsState();
+    });
+  });
+  dynamicsOffBtn.addEventListener('click', () => {
+    dynamicsBypassed = true;
+    dynamicsOffBtn.classList.add('active'); dynamicsOnBtn.classList.remove('active');
+    applyDynamicsState();
+  });
+  dynamicsOnBtn.addEventListener('click', () => {
+    dynamicsBypassed = false;
+    dynamicsOnBtn.classList.add('active'); dynamicsOffBtn.classList.remove('active');
+    applyDynamicsState();
+  });
+  showDynParamPanel();
+
+  // ---- Compressor 슬라이더 ----
+  function wireSlider(id, valId, unit, onChange, decimals){
+    const input = document.getElementById(id);
+    const valEl = document.getElementById(valId);
+    input.addEventListener('input', () => {
+      const v = parseFloat(input.value);
+      valEl.textContent = (decimals !== undefined ? v.toFixed(decimals) : v) + unit;
+      onChange(v);
+    });
+  }
+  wireSlider('compThreshold', 'compThresholdVal', ' dB', (v) => engine.updateCompressorParams({ thresholdDb: v }));
+  wireSlider('compRatio', 'compRatioVal', ':1', (v) => engine.updateCompressorParams({ ratio: v }));
+  wireSlider('compAttack', 'compAttackVal', ' ms', (v) => engine.updateCompressorParams({ attackMs: v }));
+  wireSlider('compRelease', 'compReleaseVal', ' ms', (v) => engine.updateCompressorParams({ releaseMs: v }));
+  wireSlider('compMakeup', 'compMakeupVal', ' dB', (v) => engine.updateCompressorParams({ makeupDb: v }));
+
+  wireSlider('gateThreshold', 'gateThresholdVal', ' dB', (v) => engine.updateGateParams({ thresholdDb: v }));
+  wireSlider('gateRange', 'gateRangeVal', ' dB', (v) => engine.updateGateParams({ rangeDb: v }));
+  wireSlider('gateAttack', 'gateAttackVal', ' ms', (v) => engine.updateGateParams({ attackMs: v }));
+  wireSlider('gateHold', 'gateHoldVal', ' ms', (v) => engine.updateGateParams({ holdMs: v }));
+  wireSlider('gateRelease', 'gateReleaseVal', ' ms', (v) => engine.updateGateParams({ releaseMs: v }));
+
+  wireSlider('duckAmount', 'duckAmountVal', ' dB', (v) => engine.updateDuckingParams({ duckDb: v }));
+  wireSlider('duckInterval', 'duckIntervalVal', ' s', (v) => engine.updateDuckingParams({ intervalSec: v }), 1);
+  wireSlider('duckRelease', 'duckReleaseVal', ' ms', (v) => engine.updateDuckingParams({ releaseMs: v }));
+
+  // 초기 파라미터값을 엔진에도 반영
+  function initDynamicsParams(){
+    engine.updateCompressorParams({ thresholdDb: -24, ratio: 4, attackMs: 3, releaseMs: 250, makeupDb: 0 });
+    engine.updateGateParams({ thresholdDb: -40, rangeDb: -60, attackMs: 5, holdMs: 50, releaseMs: 150 });
+    engine.updateDuckingParams({ duckDb: -18, intervalSec: 1.5, releaseMs: 300 });
+  }
+
+  // ---- 다이나믹스 미터 표시 루프 ----
+  let dynMeterRafId = null;
+  function drawDynMeter(){
+    if (!engine.isPlaying || chapter !== 'dynamics') { dynMeterRafId = null; return; }
+    const m = engine.getDynamicsMeterValue();
+    dynamicsMeterLbl.textContent = m.label;
+    dynamicsMeterVal.textContent = m.db.toFixed(1) + ' dB';
+    dynamicsMeterBar.style.width = Math.max(0, Math.min(100, m.percent)) + '%';
+    dynMeterRafId = requestAnimationFrame(drawDynMeter);
+  }
+  function startDynMeter(){ if (!dynMeterRafId) dynMeterRafId = requestAnimationFrame(drawDynMeter); }
+  function stopDynMeter(){ if (dynMeterRafId) cancelAnimationFrame(dynMeterRafId); dynMeterRafId = null; }
+
 
   startBtn.addEventListener('click', () => {
     if (chapter === 'free') {
@@ -771,7 +1180,7 @@
         startBtn.classList.remove('stop');
         setStatus('이펙트를 골라서 시작해보세요');
       }
-    } else {
+    } else if (chapter === 'quiz') {
       if (!engine.isPlaying) {
         questionIndex = 0; hitCount = 0;
         engine.start(false); // ✅ 요청 반영: 청음 문제는 음악을 랜덤 위치에서 재생
@@ -790,9 +1199,31 @@
         clearFeedback();
         setStatus('시작 버튼을 눌러 문제를 시작하세요');
       }
+    } else {
+      // 다이나믹스 챕터
+      if (!engine.isPlaying) {
+        engine.start();
+        initDynamicsParams(); // ✅ ensureContext()가 이미 호출된 이 시점에 슬라이더 기본값을 엔진에 반영
+        engine.setActiveChain('dynamics');
+        applyDynamicsState();
+        startBtn.textContent = '■ 다이나믹스 청음 종료';
+        startBtn.classList.add('stop');
+        setStatus(`${dynamicsMode.toUpperCase()} 재생 중`, dynamicsBypassed ? 'Bypass 상태예요 — On을 눌러 적용해보세요' : '슬라이더를 움직이며 들어보세요');
+        requestAnimationFrame(startViz);
+        startDynMeter();
+      } else {
+        engine.stop();
+        engine.setActiveChain('fx'); // ✅ 다음에 다른 챕터로 돌아갈 때를 대비해 원상복구
+        stopViz();
+        stopDynMeter();
+        startBtn.textContent = '▸ 다이나믹스 청음 시작';
+        startBtn.classList.remove('stop');
+        setStatus('시작 버튼을 눌러 다이나믹스를 들어보세요');
+      }
     }
     updateLockState();
   });
+
 
   // ---- 시각화: 곡 전체 파형 + 플레이헤드 (음악 사용 시), 핑크노이즈는 안내 문구 ----
   let vizRafId = null;
