@@ -830,6 +830,9 @@
   // ---------------------------------------------------------------
   const LINE_FREQ_MIN = 20, LINE_FREQ_MAX = 20000;
   let lineSmoothed = null; // 프레임 간 지수 평활화용 버퍼 (너무 빠르게 흔들리는 것을 완화)
+  // ✅ 요청 반영: 라인뷰에서 마우스(또는 터치)를 올린 위치의 주파수/레벨을 보여주기 위한 상태
+  let lineHoverX = null;
+  let lineHoverActive = false;
   const LINE_SMOOTHING = 0.75; // 0(스무딩 없음)~1(거의 안 움직임) 사이
 
   // ✅ ResizeObserver로 실제 렌더링 크기 변화를 정확히 추적한다 (레이아웃이
@@ -845,6 +848,19 @@
     new ResizeObserver(() => { if (viewMode === 'line') resizeCanvas(); }).observe(lineCanvas);
     new ResizeObserver(() => { if (viewMode === 'spl') resizeSplCanvas(); }).observe(splHistoryCanvas);
   }
+
+  // ✅ 요청 반영: 마우스(또는 손가락)를 올린 위치의 주파수/레벨을 보여준다
+  function updateLineHoverFromClientX(clientX){
+    const rect = lineCanvas.getBoundingClientRect();
+    const scaleX = lineCanvas.width / rect.width; // CSS 픽셀 -> 캔버스 내부 픽셀 비율
+    lineHoverX = (clientX - rect.left) * scaleX;
+    lineHoverActive = true;
+  }
+  lineCanvas.addEventListener('mousemove', (e) => updateLineHoverFromClientX(e.clientX));
+  lineCanvas.addEventListener('mouseleave', () => { lineHoverActive = false; });
+  lineCanvas.addEventListener('touchstart', (e) => { if (e.touches[0]) updateLineHoverFromClientX(e.touches[0].clientX); }, { passive: true });
+  lineCanvas.addEventListener('touchmove', (e) => { if (e.touches[0]) updateLineHoverFromClientX(e.touches[0].clientX); }, { passive: true });
+  lineCanvas.addEventListener('touchend', () => { lineHoverActive = false; });
 
   // ---------------------------------------------------------------
   // SPL 미터 뷰 — 큰 숫자 + Min/Max/Avg + 시간에 따른 히스토리 그래프
@@ -1037,6 +1053,11 @@
     const t = Math.log(f / LINE_FREQ_MIN) / Math.log(LINE_FREQ_MAX / LINE_FREQ_MIN);
     return plotX0 + Math.max(0, Math.min(1, t)) * plotW;
   }
+  // ✅ 요청 반영: 화면 위치(x좌표) -> 주파수로 되돌리는 역변환 (마우스 호버용)
+  function xToFreq(x, plotW, plotX0){
+    const t = Math.max(0, Math.min(1, (x - plotX0) / plotW));
+    return LINE_FREQ_MIN * Math.pow(LINE_FREQ_MAX / LINE_FREQ_MIN, t);
+  }
 
   function drawLineView(data, binHz){
     const w = lineCanvas.width, h = lineCanvas.height;
@@ -1133,6 +1154,54 @@
         const labelX = Math.min(p.x + 6, w - 44);
         lineCtx.fillText(label, labelX, Math.max(y - 8, marginTop + 12));
       });
+    }
+
+    // ✅ 요청 반영: 마우스(또는 손가락)를 올린 위치의 주파수·레벨을 크로스헤어 + 라벨로 보여준다
+    if (lineHoverActive && lineHoverX !== null) {
+      const hx = Math.max(plotX0, Math.min(plotX0 + plotW, lineHoverX));
+      const hoverFreq = xToFreq(hx, plotW, plotX0);
+      const bin = Math.max(1, Math.round(hoverFreq / binHz));
+      const hoverDb = (lineSmoothed && bin < lineSmoothed.length && isFinite(lineSmoothed[bin])) ? lineSmoothed[bin] : null;
+
+      // 세로 점선(크로스헤어)
+      lineCtx.strokeStyle = 'rgba(255,255,255,0.55)';
+      lineCtx.lineWidth = Math.max(1, w * 0.0015);
+      lineCtx.setLineDash([5, 4]);
+      lineCtx.beginPath();
+      lineCtx.moveTo(hx, plotY0);
+      lineCtx.lineTo(hx, plotY0 + plotH);
+      lineCtx.stroke();
+      lineCtx.setLineDash([]);
+
+      // 해당 지점(레벨) 강조 점
+      if (hoverDb !== null) {
+        lineCtx.beginPath();
+        lineCtx.arc(hx, dbToY(hoverDb), Math.max(3, w * 0.0065), 0, Math.PI * 2);
+        lineCtx.fillStyle = '#f2a93b';
+        lineCtx.fill();
+        lineCtx.strokeStyle = '#0a0d0f';
+        lineCtx.lineWidth = Math.max(1, w * 0.0018);
+        lineCtx.stroke();
+      }
+
+      // 주파수 + dB 텍스트 라벨(배경 박스 포함, 화면 밖으로 안 나가게 위치 보정)
+      const freqLabel = hoverFreq >= 1000 ? (hoverFreq / 1000).toFixed(hoverFreq >= 10000 ? 1 : 2) + 'kHz' : Math.round(hoverFreq) + 'Hz';
+      const text = hoverDb !== null ? `${freqLabel}   ${hoverDb.toFixed(1)}dB` : freqLabel;
+      lineCtx.font = `600 ${Math.max(12, h * 0.036)}px 'IBM Plex Mono', monospace`;
+      const textW = lineCtx.measureText(text).width;
+      const padX = w * 0.014, boxH = h * 0.065;
+      let boxX = hx + w * 0.016;
+      if (boxX + textW + padX * 2 > w - 4) boxX = hx - textW - padX * 2 - w * 0.016;
+      boxX = Math.max(4, boxX);
+      const boxY = plotY0 + h * 0.015;
+
+      lineCtx.fillStyle = 'rgba(10,13,15,0.88)';
+      lineCtx.fillRect(boxX, boxY, textW + padX * 2, boxH);
+      lineCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+      lineCtx.lineWidth = Math.max(1, w * 0.001);
+      lineCtx.strokeRect(boxX, boxY, textW + padX * 2, boxH);
+      lineCtx.fillStyle = '#f4f7f6';
+      lineCtx.fillText(text, boxX + padX, boxY + boxH * 0.68);
     }
   }
 
