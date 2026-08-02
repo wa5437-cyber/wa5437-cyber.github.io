@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>무대예술전문인(음향) 3급 문제풀이 — Sound Engineer Tools</title>
+<meta name="description" content="무대예술전문인 자격검정(음향) 3급 대비 객관식 문제풀이. 표준교재 14개 장 + 계산문제.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
+    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.16);
+    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
+    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+    color:var(--text-primary); font-family:'Inter', -apple-system, sans-serif;
+    -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; letter-spacing:-0.01em; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:920px; margin:0 auto; padding:0 24px 80px; }
+  nav{ position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(10,13,15,0.72); border-bottom:1px solid var(--line); }
+  nav .inner{ max-width:920px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:60px; }
+  .brand{ font-weight:700; font-size:15px; }
+  .backlink{ font-size:13px; color:var(--text-secondary); }
+  .backlink:hover{ color:var(--text-primary); }
+
+  header.hero{ padding:48px 0 28px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(61,220,151,0.28); background:rgba(61,220,151,0.06); padding:6px 12px; border-radius:100px; margin-bottom:18px; }
+  header.hero h1{ font-size:clamp(26px,4.5vw,38px); line-height:1.15; }
+  header.hero p{ margin-top:14px; color:var(--text-secondary); font-size:15px; line-height:1.6; max-width:640px; }
+  .disclaimer{ margin-top:16px; padding:12px 16px; border-radius:10px; background:rgba(242,169,59,0.07); border:1px solid rgba(242,169,59,0.25); color:var(--text-secondary); font-size:12.5px; line-height:1.6; }
+
+  .chapter-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px; margin-top:28px; }
+  .chapter-card{ text-align:left; border:1px solid var(--line); background:var(--bg-panel); border-radius:12px; padding:16px 16px; cursor:pointer; transition:.15s; }
+  .chapter-card:hover{ border-color:var(--line-strong); background:var(--bg-panel-2); }
+  .chapter-card.active{ border-color:var(--teal); background:rgba(61,220,151,0.06); }
+  .chapter-card .num{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-tertiary); }
+  .chapter-card .name{ font-size:14.5px; font-weight:600; margin-top:4px; }
+  .chapter-card .count{ font-size:11.5px; color:var(--text-tertiary); margin-top:6px; }
+  .chapter-card.calc .num{ color:var(--amber); }
+
+  .quiz-panel{ margin-top:28px; border:1px solid var(--line); background:var(--bg-panel); border-radius:16px; padding:24px; display:none; }
+  .quiz-panel.show{ display:block; }
+  .quiz-stats{ display:flex; gap:20px; font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-tertiary); margin-bottom:18px; flex-wrap:wrap; }
+  .quiz-stats b{ color:var(--text-primary); font-size:14px; }
+  .q-progress{ height:4px; background:var(--line); border-radius:4px; overflow:hidden; margin-bottom:20px; }
+  .q-progress-bar{ height:100%; background:linear-gradient(90deg,var(--teal),var(--blue)); transition:width .3s; }
+  .q-text{ font-size:17px; line-height:1.6; margin-bottom:20px; font-weight:500; }
+  .choices{ display:flex; flex-direction:column; gap:10px; }
+  .choice{ text-align:left; padding:14px 16px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,0.02); color:var(--text-primary); font-size:14.5px; cursor:pointer; transition:.12s; }
+  .choice:hover{ background:rgba(255,255,255,0.06); border-color:var(--line-strong); }
+  .choice.correct{ border-color:var(--teal); background:rgba(61,220,151,0.12); }
+  .choice.wrong{ border-color:var(--red); background:rgba(239,91,91,0.12); }
+  .choice[disabled]{ cursor:default; }
+  .q-explain{ margin-top:16px; padding:14px 16px; border-radius:10px; background:rgba(255,255,255,0.03); font-size:13.5px; color:var(--text-secondary); line-height:1.6; display:none; }
+  .q-explain.show{ display:block; }
+  .q-nextbtn{ margin-top:18px; display:none; }
+  .q-nextbtn.show{ display:inline-flex; }
+  .btn-primary{ background:linear-gradient(180deg,#4a90ff, var(--blue)); color:#fff; font-weight:600; font-size:14px; padding:12px 22px; border-radius:10px; border:none; cursor:pointer; }
+  .btn-ghost{ border:1px solid var(--line-strong); color:var(--text-primary); font-weight:600; font-size:14px; padding:12px 20px; border-radius:10px; background:rgba(255,255,255,0.02); cursor:pointer; }
+  .result-box{ text-align:center; padding:20px 0; }
+  .result-box .score{ font-family:'IBM Plex Mono',monospace; font-size:44px; font-weight:600; color:var(--teal); }
+  .result-box p{ color:var(--text-secondary); margin-top:8px; }
+  .result-actions{ display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+  .placeholder{ color:var(--text-tertiary); font-size:14px; text-align:center; padding:40px 0; }
+</style>
+</head>
+<body>
+
+<nav><div class="inner">
+  <div class="brand">SOUND ENGINEER TOOLS</div>
+  <a class="backlink" href="index.html">← 홈으로</a>
+</div></nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow"><span></span> 무대예술전문인(음향) 자격검정 대비</div>
+    <h1>무대음향 3급 문제풀이</h1>
+    <p>국립중앙극장 무대예술전문인 자격검정 표준교재(무대음향) 14개 장 구성에 맞춘 객관식 문제와, 음향 계산문제를 함께 풀어볼 수 있습니다.</p>
+    <div class="disclaimer">⚠️ 이 문제들은 표준교재 목차와 일반적인 음향학 지식을 바탕으로 자체 제작한 학습용 문제이며, 실제 기출문제 원문이나 공식 출제기관의 문제가 아닙니다. 실전 대비를 위해 무대예술전문인 자격검정위원회(staff.or.kr) 공식 표준교재와 기출문제를 함께 확인하세요.</div>
+  </header>
+
+  <div class="chapter-grid" id="chapterGrid"></div>
+
+  <div class="quiz-panel" id="quizPanel">
+    <div class="quiz-stats">
+      <div>CH <b id="statChapter">-</b></div>
+      <div>ROUND <b id="statRound">0/0</b></div>
+      <div>HIT <b id="statHit">0</b></div>
+      <div>ACC <b id="statAcc">--</b></div>
+    </div>
+    <div class="q-progress"><div class="q-progress-bar" id="progressBar" style="width:0%"></div></div>
+    <div id="quizBody">
+      <div class="placeholder">위에서 장(챕터)을 선택하면 문제가 시작됩니다.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const CH = [
+  {id:1, name:"기초 음향 (기초/심리/전기음향)", qs:[
+    {q:"사람이 일반적으로 들을 수 있는 가청주파수 대역은?", c:["20Hz ~ 20,000Hz","50Hz ~ 15,000Hz","10Hz ~ 100,000Hz","100Hz ~ 10,000Hz"], a:0, e:"일반적인 인간의 가청 범위는 약 20Hz~20kHz로 정의됩니다."},
+    {q:"공기 중 음속에 가장 큰 영향을 주는 요소는?", c:["기압","습도","온도","풍속"], a:2, e:"공기 중 음속은 온도에 비례해 변합니다(약 v=331.4+0.6×T m/s)."},
+    {q:"등청감곡선(Equal-loudness contour)이 보여주는 것은?", c:["주파수마다 사람이 느끼는 크기감이 다르다는 것","모든 주파수에서 크기감이 동일하다는 것","음속이 주파수에 따라 다르다는 것","위상차가 크기감을 결정한다는 것"], a:0, e:"같은 음압레벨(dB SPL)이라도 주파수에 따라 사람이 느끼는 라우드니스(크기감)는 다릅니다."},
+    {q:"주파수가 높아질수록 파장(λ)은 어떻게 되는가?", c:["길어진다","짧아진다","변하지 않는다","음속에 따라 랜덤하게 변한다"], a:1, e:"λ = v/f 관계이므로, 음속이 일정할 때 주파수가 높아지면 파장은 짧아집니다."},
+    {q:"옴의 법칙에서 전류(I)를 구하는 식은? (V=전압, R=저항)", c:["I = V × R","I = V / R","I = R / V","I = V + R"], a:1, e:"옴의 법칙: V = I × R, 이를 I에 대해 풀면 I = V/R 입니다."},
+    {q:"데시벨(dB)은 어떤 종류의 척도인가?", c:["선형(리니어) 척도","로그(log) 척도","이진(바이너리) 척도","각도 척도"], a:1, e:"dB는 두 값의 비율을 로그 스케일로 표현한 단위입니다."},
+    {q:"마스킹 효과(Masking Effect)란?", c:["소리가 반사되어 커지는 현상","큰 소리 때문에 작은(또는 비슷한 주파수의) 소리가 안 들리는 현상","음의 위상이 반전되는 현상","저음이 고음보다 멀리 가는 현상"], a:1, e:"마스킹은 강한 소리가 약한 소리의 지각을 방해/차단하는 심리음향 현상입니다."},
+  ]},
+  {id:2, name:"디지털 음향", qs:[
+    {q:"CD 오디오의 표준 샘플링 레이트는?", c:["22.05kHz","32kHz","44.1kHz","96kHz"], a:2, e:"CD-DA 표준 샘플링 레이트는 44.1kHz입니다."},
+    {q:"나이퀴스트(Nyquist) 이론에 따르면, 샘플링 레이트는 재현하려는 최대 주파수의 몇 배 이상이어야 하는가?", c:["1배","1.5배","2배","4배"], a:2, e:"나이퀴스트 정리: 원신호를 왜곡 없이 복원하려면 샘플링 레이트가 최대 주파수의 2배 이상이어야 합니다."},
+    {q:"비트 뎁스(bit depth)가 커지면 주로 좋아지는 것은?", c:["샘플링 주파수","다이나믹 레인지(해상도)","케이블 길이","마이크 지향성"], a:1, e:"비트 뎁스는 신호를 몇 단계로 세분화하는지를 결정하며, 클수록 다이나믹 레인지와 해상도가 좋아집니다."},
+    {q:"아날로그 신호를 디지털로 양자화할 때 생기는 오차성 잡음을 무엇이라 하는가?", c:["험 노이즈","양자화 잡음","크로스토크","클리핑"], a:1, e:"양자화 잡음(퀀타이제이션 노이즈)은 연속 신호를 이산 단계로 근사할 때 발생하는 오차입니다."},
+    {q:"디더링(Dithering)의 주된 목적은?", c:["샘플레이트를 높이기 위해","양자화 왜곡을 랜덤 노이즈로 대체해 줄이기 위해","마이크 감도를 높이기 위해","케이블 저항을 줄이기 위해"], a:1, e:"디더링은 저레벨 양자화 왜곡을 덜 거슬리는 랜덤 노이즈로 바꿔주는 기법입니다."},
+    {q:"디지털 신호의 타이밍 오차를 가리키는 용어는?", c:["지터(Jitter)","리버브","크로스오버","임피던스"], a:0, e:"지터는 디지털 클럭/신호의 타이밍이 흔들리는 현상으로 음질 저하의 원인이 됩니다."},
+  ]},
+  {id:3, name:"마이크로폰", qs:[
+    {q:"다이나믹 마이크의 발전(신호 발생) 원리는?", c:["전자기 유도(무빙코일)","압전 효과","정전용량 변화","광학 반사"], a:0, e:"다이나믹 마이크는 진동판에 붙은 코일이 자기장 안에서 움직이며 전자기 유도로 신호를 만듭니다."},
+    {q:"콘덴서 마이크가 다이나믹 마이크와 다른 가장 큰 특징은?", c:["지향성이 없다","팬텀파워 등 전원이 필요하다","저음만 픽업한다","케이블이 필요 없다"], a:1, e:"콘덴서 마이크는 극판 사이 정전용량 변화를 이용하므로 동작 전원(주로 48V 팬텀파워)이 필요합니다."},
+    {q:"정면과 후면 소리는 잘 받고 측면은 차단하는 지향성 패턴은?", c:["카디오이드","양지향성(Figure-8)","무지향성(옴니)","샷건"], a:1, e:"양지향성(Figure-8)은 앞뒤로는 감도가 높고 좌우 측면 감도는 거의 0에 가깝습니다."},
+    {q:"마이크를 음원에 가깝게 댈수록 저음이 강조되는 현상은?", c:["근접효과(Proximity Effect)","마스킹 효과","도플러 효과","하울링"], a:0, e:"지향성 마이크에서 근접효과는 음원과의 거리가 가까워질수록 저역이 부스트되는 현상입니다."},
+    {q:"팬텀파워의 표준 전압은 일반적으로 얼마인가?", c:["12V","24V","48V","96V"], a:2, e:"콘덴서 마이크용 팬텀파워는 보통 DC 48V가 표준입니다."},
+    {q:"원거리의 소리를 좁은 지향각으로 픽업하기 위해 방송/촬영 현장에서 자주 쓰는 마이크는?", c:["샷건 마이크","라발리에 마이크","리본 마이크","붐 스탠드 마이크(붐대만 지칭, 오답)"], a:0, e:"샷건 마이크는 강한 지향성으로 원거리 음원을 좁게 픽업하는 데 사용됩니다."},
+  ]},
+  {id:4, name:"오디오 믹싱 콘솔", qs:[
+    {q:"채널 스트립에서 게인(Gain/Trim)의 역할은?", c:["최종 출력 볼륨 조절","입력 신호 레벨을 적정 수준으로 맞춤","좌우 패닝 조절","이펙트 센드량 조절"], a:1, e:"게인/트림은 입력 단계에서 신호 레벨을 콘솔이 처리하기 적당한 수준으로 맞추는 역할을 합니다."},
+    {q:"페이더(Fader)의 주된 역할은?", c:["입력 임피던스 조절","채널의 최종 출력 레벨(볼륨) 조절","마이크 전원 공급","주파수 특성 조절"], a:1, e:"페이더는 믹싱 시 각 채널의 상대적 볼륨(레벨)을 조절하는 슬라이더입니다."},
+    {q:"AUX(Auxiliary) 센드의 대표적 용도는?", c:["메인 출력을 두 배로 늘리기 위해","모니터 스피커나 이펙트로 별도 신호를 보내기 위해","마이크 팬텀파워 공급을 위해","입력 게인을 자동 조절하기 위해"], a:1, e:"AUX 센드는 채널 신호를 모니터 믹스나 외부 이펙트 프로세서로 별도로 보낼 때 사용합니다."},
+    {q:"팬(Pan) 노브의 역할은?", c:["좌우 스테레오 위치 조절","저음/고음 조절","입력 게인 조절","리버브량 조절"], a:0, e:"팬은 신호를 스테레오(또는 서라운드) 필드 안에서 좌우로 배치하는 컨트롤입니다."},
+    {q:"PFL/솔로(Solo) 기능의 목적은?", c:["전체 채널을 음소거하기 위해","특정 채널만 따로 모니터링하기 위해","이펙트를 일괄 적용하기 위해","전원을 차단하기 위해"], a:1, e:"솔로/PFL은 특정 채널만 헤드폰이나 모니터로 개별 청취(체크)할 때 사용합니다."},
+    {q:"디지털 믹싱 콘솔이 아날로그 콘솔에 비해 가지는 대표적 장점은?", c:["전원이 필요 없음","씬(Scene) 저장/불러오기가 가능함","케이블이 필요 없음","진공관 음색을 낼 수 있음"], a:1, e:"디지털 콘솔은 채널 설정을 씬으로 저장했다가 즉시 불러올 수 있어 공연 전환이 빠릅니다."},
+  ]},
+  {id:5, name:"케이블과 커넥터", qs:[
+    {q:"마이크 케이블에 표준적으로 쓰이는 커넥터는?", c:["RCA","TS(Phone)","XLR(3핀)","BNC"], a:2, e:"업무용 마이크 케이블은 3핀 XLR 커넥터가 표준입니다."},
+    {q:"밸런스(평형) 케이블의 가장 큰 장점은?", c:["가격이 저렴함","외부 노이즈(험) 유입에 강함","전력 손실이 전혀 없음","무선으로도 사용 가능함"], a:1, e:"밸런스 배선은 두 신호선의 위상차를 이용해 유입된 노이즈를 상쇄시켜 험/잡음에 강합니다."},
+    {q:"TRS 커넥터에서 T, R, S는 각각 무엇을 의미하는가?", c:["Tip, Ring, Sleeve","Top, Right, Side","Test, Run, Stop","Track, Return, Send"], a:0, e:"TRS는 Tip(선단)-Ring(고리)-Sleeve(몸통) 3개 접점 구조를 가진 커넥터입니다."},
+    {q:"스피커 케이블 연결에 흔히 쓰이는 잠금식 커넥터는?", c:["Speakon","XLR","RCA","3.5mm 미니잭"], a:0, e:"Speakon(스피콘) 커넥터는 대전력 스피커 배선에 널리 쓰이는 잠금식 커넥터입니다."},
+    {q:"언밸런스(불평형) 배선의 대표적 커넥터로 옳은 것은?", c:["XLR","Speakon","TS(Phone)/RCA","AES/EBU 전용 커넥터"], a:2, e:"TS 잭이나 RCA는 신호선 1개+접지 1개 구조의 언밸런스 커넥터가 일반적입니다."},
+    {q:"케이블이 길어질수록 발생하기 쉬운 문제는?", c:["신호 손실 및 전압 강하","지향성 증가","팬텀파워 자동 증폭","주파수 응답이 완전히 평탄해짐"], a:0, e:"케이블 저항과 커패시턴스로 인해 길이가 길어질수록 신호 손실(특히 고음역)이 커질 수 있습니다."},
+  ]},
+  {id:6, name:"파워 앰프와 스피커", qs:[
+    {q:"파워앰프의 기본 역할은?", c:["마이크 신호를 라인레벨로 낮춤","라인레벨 신호를 스피커 구동용 전력으로 증폭","디지털 신호를 아날로그로 변환","음향 반사를 흡수"], a:1, e:"파워앰프는 상대적으로 약한 라인레벨 신호를 스피커를 구동할 수 있는 큰 전력으로 증폭합니다."},
+    {q:"스피커의 임피던스가 낮아질수록 앰프 입장에서는?", c:["요구 전류가 줄어든다","요구 전류(부담)가 커진다","전혀 영향이 없다","전압이 자동으로 낮아진다"], a:1, e:"동일 전압에서 임피던스가 낮을수록(I=V/R) 흐르는 전류가 커져 앰프 부담이 증가합니다."},
+    {q:"저음역을 주로 담당하는 스피커 유닛은?", c:["트위터","우퍼(Woofer)","미드레인지 전용 혼","리본 유닛(고음 전용)"], a:1, e:"우퍼는 저음역 재생을 담당하는 대구경 스피커 유닛입니다."},
+    {q:"크로스오버(Crossover)의 역할은?", c:["신호를 증폭한다","주파수 대역을 나눠 각 유닛에 분배한다","전원을 정류한다","마이크 신호를 합성한다"], a:1, e:"크로스오버는 입력 신호를 저/중/고역 등으로 나누어 각각의 담당 스피커 유닛으로 보냅니다."},
+    {q:"동일한 스피커 2개를 직렬로 연결하면 합성 임피던스는?", c:["증가한다(합산됨)","감소한다","변하지 않는다","0이 된다"], a:0, e:"직렬 연결 시 임피던스는 각 스피커 임피던스의 합으로 증가합니다."},
+    {q:"동일한 스피커 2개를 병렬로 연결하면 합성 임피던스는?", c:["증가한다","감소한다","변하지 않는다","무한대가 된다"], a:1, e:"병렬 연결 시 합성 임피던스는 개별 값보다 낮아집니다(동일 임피던스 2개면 절반)."},
+  ]},
+  {id:7, name:"멀티미디어 기기", qs:[
+    {q:"MIDI(Musical Instrument Digital Interface)가 전송하는 것은?", c:["오디오 신호 자체","연주/제어 정보(음표, 타이밍 등)","전원", "영상 신호"], a:1, e:"MIDI는 오디오 자체가 아니라 노트온/오프, 컨트롤 값 등 연주·제어 정보를 전송하는 규격입니다."},
+    {q:"컴퓨터 기반 오디오 인터페이스의 주요 역할은?", c:["아날로그-디지털 변환 및 입출력","무선 전파 송출","조명 제어","영상 압축"], a:0, e:"오디오 인터페이스는 아날로그 신호를 디지털로(또는 그 반대로) 변환하며 컴퓨터와 오디오 장비를 연결합니다."},
+    {q:"타임코드(Timecode)의 주된 용도는?", c:["여러 장비 간 시간 동기화","마이크 감도 조절","케이블 손실 보정","임피던스 매칭"], a:0, e:"타임코드는 영상·음향·조명 등 여러 시스템을 같은 시간 기준으로 동기화하는 데 사용됩니다."},
+    {q:"멀티미디어 시스템을 이중화(리던던시)하는 목적은?", c:["비용 절감","장애 발생시 백업으로 즉시 전환해 공연 중단을 막기 위해","음질을 두 배로 좋게 하기 위해","전력 소모를 줄이기 위해"], a:1, e:"이중화는 주 시스템 장애 시 예비 시스템으로 신속히 전환해 서비스 중단을 방지합니다."},
+    {q:"무대 영상 기기와 음향 시스템의 동기화가 중요한 이유는?", c:["케이블을 아끼기 위해","립싱크 등 시청각 일치를 위해","조명 밝기를 맞추기 위해","전원 소모를 줄이기 위해"], a:1, e:"영상과 음향의 타이밍이 어긋나면 립싱크 불일치 등 관객 체감 품질이 크게 저하됩니다."},
+  ]},
+  {id:8, name:"음향효과기", qs:[
+    {q:"리버브(Reverb) 이펙트의 역할은?", c:["다이나믹 레인지를 줄인다","공간의 잔향감(울림)을 인위적으로 부여한다","저음을 차단한다","임피던스를 매칭한다"], a:1, e:"리버브는 실제 또는 가상의 공간 잔향을 시뮬레이션해 소리에 공간감을 더합니다."},
+    {q:"컴프레서(Compressor)의 기본 역할은?", c:["다이나믹 레인지를 줄여 레벨을 고르게 한다","주파수 대역을 나눈다","신호를 지연시킨다","전원을 공급한다"], a:0, e:"컴프레서는 설정한 임계값 이상의 신호를 일정 비율로 압축해 다이나믹 레인지를 줄입니다."},
+    {q:"노이즈 게이트(Gate)의 역할은?", c:["큰 소리를 증폭한다","설정 레벨 이하의 신호(노이즈 등)를 차단한다","위상을 반전한다","리버브를 추가한다"], a:1, e:"게이트는 임계값 이하로 내려간 신호를 차단해 배경 노이즈 유입을 막습니다."},
+    {q:"리미터(Limiter)의 역할은?", c:["신호가 특정 레벨을 절대 넘지 못하게 강하게 제한한다","저음역만 통과시킨다","임피던스를 낮춘다","마이크 감도를 높인다"], a:0, e:"리미터는 매우 높은 비율(사실상 무한대에 가까운)로 압축해 신호가 특정 레벨을 넘지 않도록 합니다."},
+    {q:"딜레이(Delay) 이펙트의 기본 원리는?", c:["원음을 일정 시간 지연시켜 반복 재생한다","저음을 증폭한다","위상을 90도 돌린다","입력 임피던스를 낮춘다"], a:0, e:"딜레이는 원음을 시간차를 두고 반복 재생해 에코나 두꺼운 질감을 만듭니다."},
+    {q:"하이패스 필터(HPF)의 역할은?", c:["고음역을 차단하고 저음만 통과시킨다","저음역을 차단하고 고음만 통과시킨다","모든 주파수를 동일하게 증폭한다","위상만 반전시킨다"], a:1, e:"하이패스 필터는 설정한 컷오프 주파수 이하(저음)를 차단하고 그 이상만 통과시킵니다."},
+  ]},
+  {id:9, name:"전원 및 기타 무대음향기기", qs:[
+    {q:"무대음향 시스템에서 접지(그라운드)가 중요한 이유는?", c:["소리를 더 크게 만들기 위해","감전 방지 및 험(hum)/노이즈 방지를 위해","케이블 길이를 줄이기 위해","무선 주파수를 늘리기 위해"], a:1, e:"적절한 접지는 감전 사고를 막고, 접지 루프로 인한 험 노이즈를 줄이는 데 필수적입니다."},
+    {q:"UPS(무정전전원장치)의 역할은?", c:["신호를 증폭한다","정전 시에도 일정 시간 전원 공급을 유지한다","임피던스를 매칭한다","마이크 감도를 자동 조절한다"], a:1, e:"UPS는 정전 발생 시 배터리로 전환해 시스템이 갑자기 꺼지지 않도록 합니다."},
+    {q:"무대 통신 시스템(인터컴)의 주된 목적은?", c:["관객에게 안내방송을 하기 위해","스태프 간 실시간 음성 소통을 위해","음악을 재생하기 위해","조명을 제어하기 위해"], a:1, e:"인터컴은 무대감독, 음향, 조명 등 스태프 간 실시간 큐잉·소통에 사용됩니다."},
+    {q:"SPL 미터(계측기)의 용도는?", c:["음압레벨(소음도)을 측정한다","임피던스를 측정한다","주파수 응답을 증폭한다","전력 소모를 계산한다"], a:0, e:"SPL 미터는 특정 지점의 음압레벨(dB SPL)을 측정하는 계측기입니다."},
+  ]},
+  {id:10, name:"음향 기기의 레벨 운영", qs:[
+    {q:"프로 오디오 장비의 표준 밸런스 라인레벨은 대략 얼마인가?", c:["-10dBV","0dBu","+4dBu","+20dBu"], a:2, e:"업무용(프로) 장비의 표준 라인레벨은 약 +4dBu입니다(가정용은 -10dBV)."},
+    {q:"헤드룸(Headroom)이란 무엇인가?", c:["클리핑까지 남은 여유 레벨","마이크와 스피커 사이 거리","임피던스 여유값","케이블 길이 여유"], a:0, e:"헤드룸은 현재 신호 레벨에서 클리핑(과부하)이 발생하는 최대치까지의 여유 폭입니다."},
+    {q:"디지털 오디오에서 0dBFS가 의미하는 것은?", c:["시스템이 표현 가능한 최대 레벨(그 이상은 클리핑)","무음 상태","기준 잡음 레벨","전원이 꺼진 상태"], a:0, e:"0dBFS(Full Scale)는 디지털 시스템에서 표현 가능한 최댓값으로, 이를 넘으면 디지털 클리핑이 발생합니다."},
+    {q:"게인 스테이징(Gain Staging)의 목적은?", c:["신호 경로 전체에서 적정 레벨을 유지해 노이즈·왜곡을 최소화하는 것","케이블 길이를 최소화하는 것","마이크 개수를 줄이는 것","무선 주파수를 절약하는 것"], a:0, e:"게인 스테이징은 입력부터 출력까지 각 단계의 레벨을 적절히 맞춰 신호품질을 최적화하는 작업입니다."},
+    {q:"dBu와 dBV의 기준 전압은 각각 얼마인가?", c:["0.775V, 1V","1V, 0.775V","1V, 1V","0.5V, 1.5V"], a:0, e:"dBu는 0.775V(600Ω에서 1mW 기준), dBV는 1V를 기준으로 하는 절대 레벨 단위입니다."},
+    {q:"레벨 미터에서 피크(Peak)와 RMS(평균/체감)의 차이는?", c:["피크는 순간 최댓값, RMS는 평균적 체감 레벨을 보여준다","둘은 완전히 같은 값이다","RMS가 항상 피크보다 크다","피크는 저음만 표시한다"], a:0, e:"피크 미터는 순간 최고치를, RMS/VU 미터는 시간 평균에 가까운 체감 레벨을 보여줍니다."},
+  ]},
+  {id:11, name:"공연장 실내음향", qs:[
+    {q:"잔향시간(RT60)의 정의는?", c:["음이 멈춘 후 음압레벨이 60dB 감소하는 데 걸리는 시간","최초 반사음이 도달하는 시간","마이크와 스피커 사이 지연시간","방의 부피를 표면적으로 나눈 값"], a:0, e:"RT60은 음원이 멈춘 뒤 실내 음압레벨이 60dB 낮아질 때까지 걸리는 시간으로 정의됩니다."},
+    {q:"세이빈(Sabine) 공식 RT60=0.161×V/A 에서, 흡음력(A)이 커지면 RT60은?", c:["짧아진다","길어진다","변화 없다","무한대가 된다"], a:0, e:"공식에서 A가 분모에 있으므로, 흡음력이 커질수록 RT60(잔향시간)은 짧아집니다."},
+    {q:"공연장에서 흡음재를 과도하게 많이 쓰면 생길 수 있는 문제는?", c:["잔향이 너무 길어진다","소리가 너무 '죽어서' 생동감이 사라질 수 있다","룸모드가 늘어난다","임피던스가 증가한다"], a:1, e:"흡음이 과하면 잔향이 지나치게 짧아져 소리가 건조하고 생동감 없게 느껴질 수 있습니다."},
+    {q:"룸모드(정재파로 인한 공진)가 주로 문제가 되는 주파수 대역은?", c:["저음역","중음역","고음역","초고음역"], a:0, e:"룸모드는 파장이 방의 치수와 관련되는 저음역에서 두드러지게 나타납니다."},
+    {q:"임계거리(Critical Distance)란?", c:["직접음과 잔향음의 에너지가 같아지는 지점","마이크와 스피커 사이 최소 거리","스피커 두 대 사이 최소 간격","무선마이크 최대 수신거리"], a:0, e:"임계거리보다 가까우면 직접음이, 멀면 잔향음(반사음)이 우세해집니다."},
+    {q:"하울링(음향 피드백)이 잘 발생하는 상황은?", c:["마이크가 스피커 소리를 다시 픽업해 루프를 이룰 때","마이크 케이블이 길 때","콘솔의 페이더가 낮을 때","스피커 임피던스가 높을 때"], a:0, e:"마이크-앰프-스피커-마이크로 신호가 되먹임(루프)되며 특정 주파수가 폭주하는 현상이 하울링입니다."},
+  ]},
+  {id:12, name:"디지털 오디오 전송", qs:[
+    {q:"AES/EBU 규격이 정의하는 것은?", c:["2채널 디지털 오디오 신호 전송 표준","무선마이크 주파수 대역","스피커 임피던스 규격","조명 제어 프로토콜"], a:0, e:"AES/EBU는 XLR 커넥터를 이용한 2채널 디지털 오디오 전송의 업무용 표준 규격입니다."},
+    {q:"워드클럭(Word Clock)의 역할은?", c:["여러 디지털 기기 간 샘플링 타이밍을 동기화한다","전원 노이즈를 제거한다","마이크 감도를 높인다","케이블 길이를 늘려준다"], a:0, e:"워드클럭은 여러 디지털 오디오 장비가 같은 샘플 타이밍으로 동작하도록 맞춰주는 기준 신호입니다."},
+    {q:"무손실 압축 오디오 파일 포맷의 예로 옳은 것은?", c:["MP3","FLAC","AAC","OGG(손실 모드)"], a:1, e:"FLAC은 원본 정보를 손실 없이 압축하는 대표적인 무손실 포맷입니다(MP3/AAC/일반 OGG는 손실 압축)."},
+    {q:"네트워크를 통해 다채널 오디오를 전송하는 프로토콜의 예로 옳은 것은?", c:["Dante","HDMI","MIDI 1.0 DIN","Speakon"], a:0, e:"Dante는 이더넷 기반으로 다채널 오디오를 저지연 전송하는 대표적 네트워크 오디오 프로토콜입니다."},
+  ]},
+  {id:13, name:"실감 음향", qs:[
+    {q:"실감음향(Immersive Audio)이 기존 스테레오와 다른 가장 큰 특징은?", c:["좌우뿐 아니라 높이·공간감까지 재현한다","전력 소모가 없다","케이블이 필요 없다","마이크가 필요 없다"], a:0, e:"실감음향은 전후좌우에 더해 높이 방향까지 포함한 입체적 공간감을 재현하는 것을 목표로 합니다."},
+    {q:"오브젝트 기반 오디오(Object-based Audio)란?", c:["채널이 아닌 개별 음원의 위치정보를 전송해 재생환경에 맞게 렌더링하는 방식","모노 신호만 지원하는 방식","아날로그 전용 전송 방식","마이크 없이 녹음하는 방식"], a:0, e:"오브젝트 기반 오디오는 고정 채널이 아니라 각 음원의 위치 메타데이터를 전송해, 재생 시스템에 맞게 최적 렌더링합니다."},
+    {q:"5.1채널 서라운드에서 '.1'이 의미하는 것은?", c:["서브우퍼(LFE, 저음전용) 채널","센터 채널","높이 채널","무선 채널"], a:0, e:"5.1의 '.1'은 저주파 효과(LFE)를 담당하는 서브우퍼 채널을 뜻합니다."},
+  ]},
+  {id:14, name:"무선마이크 시스템", qs:[
+    {q:"무선마이크 시스템의 기본 구성 2가지는?", c:["송신기와 수신기","앰프와 스피커","콘솔과 케이블","마이크와 스탠드"], a:0, e:"무선마이크는 소리를 무선으로 보내는 송신기(트랜스미터)와 이를 받는 수신기(리시버)로 구성됩니다."},
+    {q:"다이버시티(Diversity) 수신 방식의 목적은?", c:["전파 음영(드롭아웃)을 줄이기 위해 두 개 이상의 안테나로 수신한다","배터리 소모를 줄인다","음질을 아날로그로 바꾼다","팬텀파워를 공급한다"], a:0, e:"다이버시티는 여러 안테나로 수신해 신호가 끊기는 드롭아웃 현상을 줄이는 방식입니다."},
+    {q:"서로 다른 무선마이크 주파수가 겹치면 발생하는 문제는?", c:["혼신(간섭)","임피던스 증가","잔향 감소","케이블 손실"], a:0, e:"주파수가 겹치거나 너무 가까우면 신호끼리 간섭(혼신)을 일으켜 노이즈나 끊김이 발생합니다."},
+    {q:"무선마이크 사용 전 반드시 확인해야 하는 것은?", c:["사용 가능한 주파수(전파 관련 법규·허가 대역)","마이크 색상","콘솔 브랜드","스피커 개수"], a:0, e:"국가/지역별로 허가된 무선 주파수 대역이 다르므로 사용 전 반드시 확인해야 합니다."},
+    {q:"인터모듈레이션(Intermodulation) 현상이란?", c:["여러 무선 주파수가 섞여 새로운 간섭 주파수를 만들어내는 현상","음속이 온도에 따라 변하는 현상","임피던스가 매칭되는 현상","리버브가 길어지는 현상"], a:0, e:"여러 송신기의 주파수가 비선형적으로 혼합되어 원치 않는 간섭 주파수(혼변조 왜곡)를 만드는 현상입니다."},
+  ]},
+];
+
+// ---- 계산문제 생성기 ----
+function rnd(min,max,dec=0){ const v = Math.random()*(max-min)+min; return dec? Math.round(v*10**dec)/10**dec : Math.round(v); }
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+function makeChoices(correct, genWrong, fmt){
+  const set = new Set([fmt(correct)]);
+  let tries=0;
+  while(set.size<4 && tries<50){ set.add(fmt(genWrong())); tries++; }
+  const arr = shuffle([...set]);
+  return { choices: arr, answerIndex: arr.indexOf(fmt(correct)) };
+}
+const CALC_GENERATORS = [
+  function(){ // 주파수->파장
+    const f = rnd(50,2000);
+    const v = 343;
+    const wl = Math.round((v/f)*100)/100;
+    const {choices, answerIndex} = makeChoices(wl, ()=>Math.round((wl*(0.5+Math.random()*1.5))*100)/100, x=>x.toFixed(2)+" m");
+    return {q:`음속을 343m/s로 볼 때, 주파수 ${f}Hz의 파장(λ)은? (λ=v/f)`, c:choices, a:answerIndex, e:`λ = 343 / ${f} ≈ ${wl.toFixed(2)} m`};
+  },
+  function(){ // 음속 온도보정
+    const t = rnd(0,35);
+    const v = Math.round((331.4+0.6*t)*10)/10;
+    const {choices, answerIndex} = makeChoices(v, ()=>Math.round((v+ (Math.random()*20-10))*10)/10, x=>x.toFixed(1)+" m/s");
+    return {q:`기온 ${t}°C일 때 공기 중 음속은 약 얼마인가? (v=331.4+0.6×T)`, c:choices, a:answerIndex, e:`v = 331.4 + 0.6×${t} ≈ ${v.toFixed(1)} m/s`};
+  },
+  function(){ // dB 전력비
+    const p2 = [2,4,10,100][rnd(0,3)];
+    const db = Math.round(10*Math.log10(p2)*10)/10;
+    const {choices, answerIndex} = makeChoices(db, ()=>Math.round((db+(Math.random()*6-3))*10)/10, x=>x.toFixed(1)+" dB");
+    return {q:`전력비(P2/P1)가 ${p2}배일 때, dB 차이는? (dB=10×log10(P2/P1))`, c:choices, a:answerIndex, e:`10×log10(${p2}) ≈ ${db.toFixed(1)} dB`};
+  },
+  function(){ // dB 전압비
+    const v2 = [2,4,10][rnd(0,2)];
+    const db = Math.round(20*Math.log10(v2)*10)/10;
+    const {choices, answerIndex} = makeChoices(db, ()=>Math.round((db+(Math.random()*6-3))*10)/10, x=>x.toFixed(1)+" dB");
+    return {q:`전압비(V2/V1)가 ${v2}배일 때, dB 차이는? (dB=20×log10(V2/V1))`, c:choices, a:answerIndex, e:`20×log10(${v2}) ≈ ${db.toFixed(1)} dB`};
+  },
+  function(){ // 옴의 법칙
+    const R = [4,8,16][rnd(0,2)];
+    const V = rnd(6,24);
+    const I = Math.round((V/R)*100)/100;
+    const {choices, answerIndex} = makeChoices(I, ()=>Math.round((I*(0.4+Math.random()*1.6))*100)/100, x=>x.toFixed(2)+" A");
+    return {q:`전압 ${V}V, 저항(임피던스) ${R}Ω일 때 전류(I)는? (I=V/R)`, c:choices, a:answerIndex, e:`I = ${V} / ${R} ≈ ${I.toFixed(2)} A`};
+  },
+  function(){ // 스피커 임피던스 직렬
+    const a = [4,8,16][rnd(0,2)]; const b = [4,8,16][rnd(0,2)];
+    const total = a+b;
+    const {choices, answerIndex} = makeChoices(total, ()=>[4,8,12,16,20,24,32][rnd(0,6)], x=>x+" Ω");
+    return {q:`${a}Ω 스피커와 ${b}Ω 스피커를 직렬로 연결하면 합성 임피던스는?`, c:choices, a:answerIndex, e:`직렬은 단순 합: ${a} + ${b} = ${total} Ω`};
+  },
+  function(){ // 스피커 임피던스 병렬 (동일값)
+    const a = [4,8,16][rnd(0,2)];
+    const total = Math.round((a/2)*100)/100;
+    const {choices, answerIndex} = makeChoices(total, ()=>[a, a*2, a/4, a*1.5][rnd(0,3)], x=>(+x).toFixed(2)+" Ω");
+    return {q:`동일한 ${a}Ω 스피커 2대를 병렬로 연결하면 합성 임피던스는?`, c:choices, a:answerIndex, e:`동일 임피던스 2개 병렬은 절반: ${a} / 2 = ${total} Ω`};
+  },
+  function(){ // RT60 세이빈
+    const V = rnd(200,2000);
+    const A = rnd(20,200);
+    const rt = Math.round((0.161*V/A)*100)/100;
+    const {choices, answerIndex} = makeChoices(rt, ()=>Math.round((rt*(0.4+Math.random()*1.6))*100)/100, x=>x.toFixed(2)+" 초");
+    return {q:`방 부피 ${V}m³, 총 흡음력 ${A}sabins일 때 RT60은? (RT60=0.161×V/A)`, c:choices, a:answerIndex, e:`0.161 × ${V} / ${A} ≈ ${rt.toFixed(2)} 초`};
+  },
+];
+function genCalcQuestion(){ return CALC_GENERATORS[rnd(0,CALC_GENERATORS.length-1)](); }
+
+// ---- 렌더링 & 퀴즈 엔진 ----
+const grid = document.getElementById('chapterGrid');
+CH.forEach(ch=>{
+  const el = document.createElement('button');
+  el.className = 'chapter-card';
+  el.innerHTML = `<div class="num">CH.${ch.id}</div><div class="name">${ch.name}</div><div class="count">${ch.qs.length}문제</div>`;
+  el.onclick = ()=>startQuiz(ch.id, el);
+  grid.appendChild(el);
+});
+const calcCard = document.createElement('button');
+calcCard.className = 'chapter-card calc';
+calcCard.innerHTML = `<div class="num">EXTRA</div><div class="name">🧮 음향 계산문제</div><div class="count">랜덤 생성 · 무제한</div>`;
+calcCard.onclick = ()=>startQuiz('calc', calcCard);
+grid.appendChild(calcCard);
+
+const state = { chapterId:null, pool:[], idx:0, hit:0, total:10 };
+const panel = document.getElementById('quizPanel');
+const body = document.getElementById('quizBody');
+
+function startQuiz(chapterId, cardEl){
+  document.querySelectorAll('.chapter-card').forEach(c=>c.classList.remove('active'));
+  cardEl.classList.add('active');
+  state.chapterId = chapterId;
+  state.idx = 0; state.hit = 0;
+  if(chapterId==='calc'){
+    state.total = 10;
+    state.pool = Array.from({length:10}, ()=>genCalcQuestion());
+    document.getElementById('statChapter').textContent = '계산문제';
+  } else {
+    const ch = CH.find(c=>c.id===chapterId);
+    state.total = ch.qs.length;
+    state.pool = shuffle([...ch.qs]);
+    document.getElementById('statChapter').textContent = 'CH.'+chapterId;
+  }
+  panel.classList.add('show');
+  panel.scrollIntoView({behavior:'smooth', block:'start'});
+  renderQuestion();
+}
+
+function updateStats(){
+  document.getElementById('statRound').textContent = `${state.idx}/${state.total}`;
+  document.getElementById('statHit').textContent = state.hit;
+  document.getElementById('statAcc').textContent = state.idx>0 ? Math.round(state.hit/state.idx*100)+'%' : '--';
+  document.getElementById('progressBar').style.width = (state.idx/state.total*100)+'%';
+}
+
+function renderQuestion(){
+  updateStats();
+  if(state.idx >= state.total){ renderResult(); return; }
+  const q = state.pool[state.idx];
+  body.innerHTML = `
+    <div class="q-text">${state.idx+1}. ${q.q}</div>
+    <div class="choices">${q.c.map((c,i)=>`<button class="choice" data-i="${i}">${c}</button>`).join('')}</div>
+    <div class="q-explain" id="qExplain">${q.e}</div>
+    <button class="btn-primary q-nextbtn" id="nextBtn">다음 문제 →</button>
+  `;
+  document.querySelectorAll('.choice').forEach(btn=>{
+    btn.onclick = ()=>{
+      const i = +btn.dataset.i;
+      document.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+      if(i===q.a){ btn.classList.add('correct'); state.hit++; }
+      else { btn.classList.add('wrong'); document.querySelector(`.choice[data-i="${q.a}"]`).classList.add('correct'); }
+      document.getElementById('qExplain').classList.add('show');
+      document.getElementById('nextBtn').classList.add('show');
+      state.idx++;
+      updateStats();
+    };
+  });
+  document.getElementById('nextBtn').onclick = renderQuestion;
+}
+
+function renderResult(){
+  const pct = Math.round(state.hit/state.total*100);
+  body.innerHTML = `
+    <div class="result-box">
+      <div class="score">${state.hit} / ${state.total}</div>
+      <p>정답률 ${pct}%</p>
+      <div class="result-actions">
+        <button class="btn-primary" id="retryBtn">다시 풀기</button>
+        <button class="btn-ghost" onclick="document.getElementById('chapterGrid').scrollIntoView({behavior:'smooth'})">다른 장 선택</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('retryBtn').onclick = ()=>{
+    const activeCard = document.querySelector('.chapter-card.active');
+    startQuiz(state.chapterId, activeCard);
+  };
+}
+</script>
+</body>
+</html>
