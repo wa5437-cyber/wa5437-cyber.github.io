@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -163,12 +164,13 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">ELECTRICAL CALCULATOR<small>Ohm's Law · Power · Impedance · dB</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="chapter-picker" id="chapterPicker">
-    <button id="chapterFreeBtn" class="active">자유 계산</button>
-    <button id="chapterQuizBtn">계산 문제</button>
+    <button id="chapterFreeBtn" class="active" data-i18n="chapter_free">자유 계산</button>
+    <button id="chapterQuizBtn" data-i18n="chapter_quiz">계산 문제</button>
   </div>
 
   <div class="scoreboard" id="scoreboard" style="display:none;">
@@ -190,11 +192,11 @@
   <div id="ohmTab">
     <div class="panel">
       <div class="panel-title">Ohm's Law</div>
-      <p class="phase-desc">V = I × R. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
+      <p class="phase-desc" data-i18n="ohm_desc">V = I × R. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
       <div class="solve-picker" id="ohmSolvePicker">
-        <button data-solve="v">V 구하기</button>
-        <button data-solve="i" class="active">I 구하기</button>
-        <button data-solve="r">R 구하기</button>
+        <button data-solve="v" data-i18n="solve_v">V 구하기</button>
+        <button data-solve="i" class="active" data-i18n="solve_i">I 구하기</button>
+        <button data-solve="r" data-i18n="solve_r">R 구하기</button>
       </div>
       <div class="field">
         <label>Voltage (V)</label>
@@ -210,7 +212,7 @@
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">결과</span>
+          <span class="result-lbl" data-i18n="result_label">결과</span>
           <span class="result-val"><span id="ohmResultVal">--</span><span class="unit" id="ohmResultUnit"></span></span>
         </div>
       </div>
@@ -221,7 +223,7 @@
   <div id="powerTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Power</div>
-      <p class="phase-desc">필요한 공식을 고르세요 — P=V×I, P=I²×R, P=V²/R.</p>
+      <p class="phase-desc" data-i18n="power_desc">필요한 공식을 고르세요 — P=V×I, P=I²×R, P=V²/R.</p>
       <div class="solve-picker" id="powerFormulaPicker">
         <button data-formula="vi" class="active">P = V×I</button>
         <button data-formula="i2r">P = I²R</button>
@@ -241,16 +243,16 @@
   <div id="impedanceTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Speaker Impedance</div>
-      <p class="phase-desc">스피커를 직렬 또는 병렬로 연결했을 때의 합성 임피던스를 계산합니다.</p>
+      <p class="phase-desc" data-i18n="impedance_desc">스피커를 직렬 또는 병렬로 연결했을 때의 합성 임피던스를 계산합니다.</p>
       <div class="solve-picker" id="wiringPicker">
-        <button data-wiring="series" class="active">직렬 (Series)</button>
-        <button data-wiring="parallel">병렬 (Parallel)</button>
+        <button data-wiring="series" class="active" data-i18n="wiring_series">직렬 (Series)</button>
+        <button data-wiring="parallel" data-i18n="wiring_parallel">병렬 (Parallel)</button>
       </div>
       <div id="zoneList"></div>
-      <button class="add-zone-btn" id="addZoneBtn">+ 스피커 추가</button>
+      <button class="add-zone-btn" id="addZoneBtn" data-i18n="add_speaker_btn">+ 스피커 추가</button>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">합성 임피던스</span>
+          <span class="result-lbl" data-i18n="total_impedance_label">합성 임피던스</span>
           <span class="result-val"><span id="impedanceResultVal">--</span><span class="unit">Ω</span></span>
         </div>
       </div>
@@ -261,9 +263,9 @@
   <div id="dbTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">dB ↔ Power Ratio</div>
-      <p class="phase-desc">dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.</p>
+      <p class="phase-desc" data-i18n="db_power_desc">dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.</p>
       <div class="field">
-        <label>dB (레벨 차이)</label>
+        <label data-i18n="db_level_diff_label">dB (레벨 차이)</label>
         <div class="input-row"><input type="number" id="dbInput" value="3" step="0.1"><span class="unit">dB</span></div>
       </div>
       <div class="field">
@@ -274,51 +276,51 @@
 
     <div class="panel" style="margin-top:16px;">
       <div class="panel-title">dB ↔ Voltage Ratio</div>
-      <p class="phase-desc">dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.</p>
+      <p class="phase-desc" data-i18n="db_volt_desc">dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.</p>
       <div class="field">
-        <label>dB (레벨 차이)</label>
+        <label data-i18n="db_level_diff_label">dB (레벨 차이)</label>
         <div class="input-row"><input type="number" id="dbVoltInput" value="6" step="0.1"><span class="unit">dB</span></div>
       </div>
       <div class="field">
         <label>Voltage Ratio (V2 / V1)</label>
         <div class="input-row"><input type="number" id="dbVoltRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
       </div>
-      <p class="phase-desc" style="margin-top:14px; font-size:13px;">참고: 같은 숫자의 "배수"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 "2배"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 "2배"를 넣어 비교해보세요.)</p>
+      <p class="phase-desc" style="margin-top:14px; font-size:13px;" data-i18n="db_volt_note">참고: 같은 숫자의 "배수"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 "2배"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 "2배"를 넣어 비교해보세요.)</p>
     </div>
 
     <div class="panel" style="margin-top:16px;">
       <div class="panel-title">dBu / dBV (전압 기준 절대 레벨)</div>
-      <p class="phase-desc">dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
+      <p class="phase-desc" data-i18n="dbu_dbv_desc">dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
       <div class="field">
         <label>Voltage</label>
         <div class="input-row"><input type="number" id="voltAbsInput" value="1" step="0.001"><span class="unit">V</span></div>
       </div>
       <div class="field">
-        <label>dBV (0dBV = 1V 기준)</label>
+        <label data-i18n="dbv_label">dBV (0dBV = 1V 기준)</label>
         <div class="input-row"><input type="number" id="dbVInput" value="0" step="0.01"><span class="unit">dBV</span></div>
       </div>
       <div class="field">
-        <label>dBu (0dBu = 0.775V 기준)</label>
+        <label data-i18n="dbu_label">dBu (0dBu = 0.775V 기준)</label>
         <div class="input-row"><input type="number" id="dbuInput" value="2.22" step="0.01"><span class="unit">dBu</span></div>
       </div>
     </div>
 
     <div class="panel" style="margin-top:16px;">
       <div class="panel-title">dBm / dBW (전력 기준 절대 레벨)</div>
-      <p class="phase-desc">dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
+      <p class="phase-desc" data-i18n="dbm_dbw_desc">dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
       <div class="field">
         <label>Power</label>
         <div class="input-row"><input type="number" id="powerAbsInput" value="1" step="0.001"><span class="unit">W</span></div>
       </div>
       <div class="field">
-        <label>dBW (0dBW = 1W 기준)</label>
+        <label data-i18n="dbw_label">dBW (0dBW = 1W 기준)</label>
         <div class="input-row"><input type="number" id="dbWInput" value="0" step="0.01"><span class="unit">dBW</span></div>
       </div>
       <div class="field">
-        <label>dBm (0dBm = 1mW 기준)</label>
+        <label data-i18n="dbm_label">dBm (0dBm = 1mW 기준)</label>
         <div class="input-row"><input type="number" id="dbmInput" value="30" step="0.01"><span class="unit">dBm</span></div>
       </div>
-      <p class="phase-desc" style="margin-top:14px; font-size:13px;">참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.</p>
+      <p class="phase-desc" style="margin-top:14px; font-size:13px;" data-i18n="dbu_dbm_note">참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.</p>
     </div>
   </div>
 
@@ -326,7 +328,7 @@
   <div id="acwaveTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">AC Waveform (RMS ↔ Peak ↔ Peak-to-Peak)</div>
-      <p class="phase-desc">정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)</p>
+      <p class="phase-desc" data-i18n="acwave_desc">정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)</p>
       <div class="field">
         <label>RMS Voltage</label>
         <div class="input-row"><input type="number" id="acRmsInput" value="1" step="0.001"><span class="unit">V RMS</span></div>
@@ -346,7 +348,7 @@
   <div id="cableTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Speaker Cable Voltage Drop</div>
-      <p class="phase-desc">스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.</p>
+      <p class="phase-desc" data-i18n="cable_desc">스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.</p>
       <div class="field">
         <label>Cable Gauge (AWG)</label>
         <div class="solve-picker" id="awgPicker">
@@ -358,7 +360,7 @@
         </div>
       </div>
       <div class="field">
-        <label>Cable Length (편도, 한쪽 길이)</label>
+        <label data-i18n="cable_length_label">Cable Length (편도, 한쪽 길이)</label>
         <div class="input-row"><input type="number" id="cableLengthInput" value="15" step="0.1" min="0"><span class="unit">m</span></div>
       </div>
       <div class="field">
@@ -367,15 +369,15 @@
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">케이블 저항 (왕복)</span>
+          <span class="result-lbl" data-i18n="cable_resistance_label">케이블 저항 (왕복)</span>
           <span class="result-val"><span id="cableResistanceVal">--</span><span class="unit">Ω</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">전압 강하</span>
+          <span class="result-lbl" data-i18n="voltage_drop_label">전압 강하</span>
           <span class="result-val"><span id="cableVoltageDropVal">--</span><span class="unit">V</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">손실 전력</span>
+          <span class="result-lbl" data-i18n="power_loss_label">손실 전력</span>
           <span class="result-val"><span id="cablePowerLossVal">--</span><span class="unit">W</span></span>
         </div>
       </div>
@@ -385,13 +387,13 @@
 
   <!-- ============ 계산 문제(퀴즈) ============ -->
   <div id="quizPanel" class="panel" style="display:none;">
-    <div class="panel-title">문제</div>
-    <div class="quiz-problem" id="quizProblemText">시작 버튼을 눌러주세요</div>
+    <div class="panel-title" data-i18n="quiz_problem_title">문제</div>
+    <div class="quiz-problem" id="quizProblemText" data-i18n="quiz_start_prompt">시작 버튼을 눌러주세요</div>
     <div class="quiz-options" id="quizOptions"></div>
     <div class="feedback" id="feedback"></div>
   </div>
 
-  <button id="startBtn" class="startbtn">▸ 계산 문제 시작</button>
+  <button id="startBtn" class="startbtn" data-i18n="btn_quiz_start">▸ 계산 문제 시작</button>
 
   <div class="tool-links">
     <a href="trainer.html">🎧 Ear Trainer</a>
@@ -492,9 +494,9 @@
     } else {
       Object.values(freeTabs).forEach(el => el.style.display = 'none');
       startBtn.style.display = 'block';
-      startBtn.textContent = '▸ 계산 문제 시작';
+      startBtn.textContent = window.i18n.t('btn_quiz_start');
       startBtn.classList.remove('stop');
-      quizProblemText.textContent = '시작 버튼을 눌러주세요';
+      quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
       quizOptionsEl.innerHTML = '';
       questionIndex = 0; hitCount = 0;
       updateScoreboard();
@@ -598,7 +600,7 @@
   function renderZoneList(){
     zoneListEl.innerHTML = zoneValues.map((v, i) => `
       <div class="zone-row">
-        <span class="zone-label">스피커 ${i + 1}</span>
+        <span class="zone-label">${window.i18n.tpl('speaker_n_template', { n: i + 1 })}</span>
         <input type="number" class="zone-input" data-idx="${i}" value="${v}" step="0.1">
         <span class="unit">Ω</span>
         ${zoneValues.length > 1 ? `<button class="zone-remove-btn" data-idx="${i}">✕</button>` : ''}
@@ -778,7 +780,7 @@
     cablePowerLossVal.textContent = powerLoss.toFixed(2);
 
     cableWarning.textContent = voltageDrop > 0.5
-      ? `⚠️ 전압 강하가 ${voltageDrop.toFixed(2)}V예요 — 케이블이 얇거나 너무 길면 저역이 물러지고(damping factor 저하) 전력 손실도 커질 수 있어요. 더 굵은 케이블을 고려해보세요.`
+      ? window.i18n.tpl('cable_warning_template', { v: voltageDrop.toFixed(2) })
       : '';
   }
   awgPicker.querySelectorAll('button').forEach(btn => {
@@ -814,9 +816,9 @@
     const I = randInt(1, 20) / 10; // 0.1 ~ 2.0 A
     const V = +(I * R).toFixed(2);
     const target = randChoice(['v', 'i', 'r']);
-    if (target === 'v') return { text: `I = ${I}A, R = ${R}Ω 일 때, V(전압)은 몇 V인가요?`, answer: V };
-    if (target === 'i') return { text: `V = ${V}V, R = ${R}Ω 일 때, I(전류)는 몇 A인가요?`, answer: I };
-    return { text: `V = ${V}V, I = ${I}A 일 때, R(저항)은 몇 Ω인가요?`, answer: R };
+    if (target === 'v') return { text: window.i18n.tpl('ohm_q_v', { I, R }), answer: V };
+    if (target === 'i') return { text: window.i18n.tpl('ohm_q_i', { V, R }), answer: I };
+    return { text: window.i18n.tpl('ohm_q_r', { V, I }), answer: R };
   }
 
   function makePowerQuestion(){
@@ -824,16 +826,16 @@
     if (formula === 'vi') {
       const V = randChoice([6, 9, 12, 24, 48, 100, 120]);
       const I = randInt(1, 20) / 10;
-      return { text: `V = ${V}V, I = ${I}A 일 때, P(전력)는 몇 W인가요? (P = V×I)`, answer: +(V * I).toFixed(2) };
+      return { text: window.i18n.tpl('power_q_vi', { V, I }), answer: +(V * I).toFixed(2) };
     }
     if (formula === 'i2r') {
       const I = randInt(1, 20) / 10;
       const R = randChoice([4, 8, 16, 32]);
-      return { text: `I = ${I}A, R = ${R}Ω 일 때, P(전력)는 몇 W인가요? (P = I²×R)`, answer: +(I * I * R).toFixed(2) };
+      return { text: window.i18n.tpl('power_q_i2r', { I, R }), answer: +(I * I * R).toFixed(2) };
     }
     const V = randChoice([6, 9, 12, 24, 48]);
     const R = randChoice([4, 8, 16, 32]);
-    return { text: `V = ${V}V, R = ${R}Ω 일 때, P(전력)는 몇 W인가요? (P = V²/R)`, answer: +((V * V) / R).toFixed(2) };
+    return { text: window.i18n.tpl('power_q_v2r', { V, R }), answer: +((V * V) / R).toFixed(2) };
   }
 
   function makeImpedanceQuestion(){
@@ -841,9 +843,9 @@
     const count = randInt(2, 3);
     const values = Array.from({ length: count }, () => randChoice([4, 8, 16]));
     const total = wiring === 'series' ? seriesImpedance(values) : parallelImpedance(values);
-    const wiringLabel = wiring === 'series' ? '직렬(Series)' : '병렬(Parallel)';
+    const wiringLabel = wiring === 'series' ? window.i18n.t('imp_wiring_series') : window.i18n.t('imp_wiring_parallel');
     return {
-      text: `${values.map(v => v + 'Ω').join(', ')} 스피커 ${count}개를 ${wiringLabel}로 연결하면, 합성 임피던스는 몇 Ω인가요?`,
+      text: window.i18n.tpl('impedance_q_template', { list: values.map(v => v + 'Ω').join(', '), count, wiring: wiringLabel }),
       answer: +total.toFixed(2),
     };
   }
@@ -852,20 +854,20 @@
     const useDb = Math.random() < 0.5;
     if (useDb) {
       const db = randChoice([3, 6, 10, 20, -3, -6]);
-      return { text: `${db}dB는 전력비(P2/P1)로 몇 배인가요?`, answer: +dbToRatio(db).toFixed(3) };
+      return { text: window.i18n.tpl('db_q_from_db', { db }), answer: +dbToRatio(db).toFixed(3) };
     }
     const ratio = randChoice([2, 4, 10, 0.5, 0.25, 100]);
-    return { text: `전력비(P2/P1)가 ${ratio}배이면, 몇 dB인가요?`, answer: +ratioToDb(ratio).toFixed(2) };
+    return { text: window.i18n.tpl('db_q_from_ratio', { ratio }), answer: +ratioToDb(ratio).toFixed(2) };
   }
 
   function makeDbVoltQuestion(){
     const useDb = Math.random() < 0.5;
     if (useDb) {
       const db = randChoice([6, 12, 20, 40, -6, -20]);
-      return { text: `${db}dB는 전압비(V2/V1)로 몇 배인가요?`, answer: +dbToVoltRatio(db).toFixed(3) };
+      return { text: window.i18n.tpl('dbvolt_q_from_db', { db }), answer: +dbToVoltRatio(db).toFixed(3) };
     }
     const ratio = randChoice([2, 4, 10, 0.5, 0.1, 100]);
-    return { text: `전압비(V2/V1)가 ${ratio}배이면, 몇 dB인가요?`, answer: +voltRatioToDb(ratio).toFixed(2) };
+    return { text: window.i18n.tpl('dbvolt_q_from_ratio', { ratio }), answer: +voltRatioToDb(ratio).toFixed(2) };
   }
 
   const DBU_REF_V_Q = Math.sqrt(0.6);
@@ -873,27 +875,27 @@
     const kind = randChoice(['v2dbv', 'v2dbu', 'dbm2dbw']);
     if (kind === 'v2dbv') {
       const v = randChoice([0.5, 1, 2, 4, 10]);
-      return { text: `전압이 ${v}V일 때, dBV는 얼마인가요? (0dBV = 1V 기준)`, answer: +(20 * Math.log10(v)).toFixed(2) };
+      return { text: window.i18n.tpl('dbudbv_q_v2dbv', { v }), answer: +(20 * Math.log10(v)).toFixed(2) };
     }
     if (kind === 'v2dbu') {
       const v = randChoice([0.775, 1.55, 3.1, 7.75]);
-      return { text: `전압이 ${v}V일 때, dBu는 얼마인가요? (0dBu = 0.775V 기준)`, answer: +(20 * Math.log10(v / DBU_REF_V_Q)).toFixed(2) };
+      return { text: window.i18n.tpl('dbudbv_q_v2dbu', { v }), answer: +(20 * Math.log10(v / DBU_REF_V_Q)).toFixed(2) };
     }
     const dbm = randChoice([0, 10, 20, 30, -10]);
-    return { text: `${dbm}dBm은 몇 dBW인가요? (dBW = dBm − 30)`, answer: dbm - 30 };
+    return { text: window.i18n.tpl('dbudbv_q_dbm2dbw', { dbm }), answer: dbm - 30 };
   }
 
   function makeAcWaveQuestion(){
     const kind = randChoice(['rms2peak', 'peak2rms', 'rms2pp']);
     const rms = randChoice([1, 5, 10, 12, 24, 120]);
     if (kind === 'rms2peak') {
-      return { text: `RMS 전압이 ${rms}V일 때, Peak 전압은 몇 V인가요? (Peak = RMS × √2)`, answer: +(rms * Math.SQRT2).toFixed(2) };
+      return { text: window.i18n.tpl('acwave_q_rms2peak', { rms }), answer: +(rms * Math.SQRT2).toFixed(2) };
     }
     if (kind === 'peak2rms') {
       const peak = +(rms * Math.SQRT2).toFixed(2);
-      return { text: `Peak 전압이 ${peak}V일 때, RMS 전압은 몇 V인가요? (RMS = Peak / √2)`, answer: rms };
+      return { text: window.i18n.tpl('acwave_q_peak2rms', { peak }), answer: rms };
     }
-    return { text: `RMS 전압이 ${rms}V일 때, Peak-to-Peak 전압은 몇 V인가요? (P-P = 2 × RMS × √2)`, answer: +(rms * Math.SQRT2 * 2).toFixed(2) };
+    return { text: window.i18n.tpl('acwave_q_rms2pp', { rms }), answer: +(rms * Math.SQRT2 * 2).toFixed(2) };
   }
 
   const AWG_OHMS_PER_KM_Q = { 18: 20.95, 16: 13.17, 14: 8.286, 12: 5.211, 10: 3.277 };
@@ -905,12 +907,12 @@
     const kind = randChoice(['drop', 'loss']);
     if (kind === 'drop') {
       return {
-        text: `${awg}AWG 케이블을 편도 ${lengthOneWay}m 사용해서 ${current}A가 흐르면, 전압 강하는 몇 V인가요? (왕복 저항 고려)`,
+        text: window.i18n.tpl('cable_q_drop', { awg, length: lengthOneWay, current }),
         answer: +(current * resistance).toFixed(2),
       };
     }
     return {
-      text: `${awg}AWG 케이블을 편도 ${lengthOneWay}m 사용해서 ${current}A가 흐르면, 케이블에서 손실되는 전력은 몇 W인가요?`,
+      text: window.i18n.tpl('cable_q_loss', { awg, length: lengthOneWay, current }),
       answer: +(current * current * resistance).toFixed(2),
     };
   }
@@ -977,7 +979,7 @@
     const answer = currentQuestion.answer;
     const isCorrect = Math.abs(guess - answer) < 1e-6;
     if (isCorrect) hitCount++;
-    feedbackEl.textContent = isCorrect ? '✅ 정답이에요!' : `❌ 오답이에요 — 정답은 ${formatOption(answer)}이었어요`;
+    feedbackEl.textContent = isCorrect ? window.i18n.t('feedback_correct') : window.i18n.tpl('feedback_wrong_template', { answer: formatOption(answer) });
     feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
     updateScoreboard();
 
@@ -1002,9 +1004,9 @@
 
   function finishQuiz(){
     quizActive = false;
-    startBtn.textContent = '▸ 계산 문제 시작';
+    startBtn.textContent = window.i18n.t('btn_quiz_start');
     startBtn.classList.remove('stop');
-    quizProblemText.textContent = `퀴즈 종료! ${hitCount}/${QUESTIONS_PER_QUIZ} 정답`;
+    quizProblemText.textContent = window.i18n.tpl('quiz_finish_template', { hit: hitCount, total: QUESTIONS_PER_QUIZ });
     quizOptionsEl.innerHTML = '';
     clearFeedback();
     chapterFreeBtn.disabled = false;
@@ -1016,7 +1018,7 @@
     if (!quizActive) {
       quizActive = true;
       questionIndex = 0; hitCount = 0;
-      startBtn.textContent = '■ 계산 문제 중단';
+      startBtn.textContent = window.i18n.t('btn_quiz_stop');
       startBtn.classList.add('stop');
       chapterFreeBtn.disabled = true;
       chapterQuizBtn.disabled = true;
@@ -1028,7 +1030,20 @@
 
   updateScoreboard();
   startBtn.style.display = 'none'; // ✅ 기본이 자유 계산 모드이므로 시작 버튼은 처음엔 숨긴다
+
+  document.addEventListener('i18nchange', () => {
+    renderZoneList();
+    recalcImpedance();
+    if (chapter === 'quiz') {
+      startBtn.textContent = window.i18n.t(quizActive ? 'btn_quiz_stop' : 'btn_quiz_start');
+      if (!quizActive && currentQuestion === null && questionIndex === 0) {
+        quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
+      }
+    }
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "chapter_free": {"ko": "자유 계산", "en": "Free Calculation", "ja": "自由計算", "es": "Cálculo libre", "zh": "自由计算"}, "chapter_quiz": {"ko": "계산 문제", "en": "Practice Quiz", "ja": "計算問題", "es": "Preguntas de cálculo", "zh": "计算题"}, "solve_v": {"ko": "V 구하기", "en": "Solve V", "ja": "Vを求める", "es": "Calcular V", "zh": "求V"}, "solve_i": {"ko": "I 구하기", "en": "Solve I", "ja": "Iを求める", "es": "Calcular I", "zh": "求I"}, "solve_r": {"ko": "R 구하기", "en": "Solve R", "ja": "Rを求める", "es": "Calcular R", "zh": "求R"}, "ohm_desc": {"ko": "V = I × R. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.", "en": "V = I × R. Choose what you want to solve for, then enter the other two values.", "ja": "V = I × R。何を求めるか選ぶと、残り2つの値を入力して計算します。", "es": "V = I × R. Elige qué quieres calcular y luego introduce los otros dos valores.", "zh": "V = I × R。选择要求解的量，然后输入其余两个数值即可计算。"}, "result_label": {"ko": "결과", "en": "Result", "ja": "結果", "es": "Resultado", "zh": "结果"}, "power_desc": {"ko": "필요한 공식을 고르세요 — P=V×I, P=I²×R, P=V²/R.", "en": "Choose the formula you need — P=V×I, P=I²×R, P=V²/R.", "ja": "必要な公式を選んでください — P=V×I、P=I²×R、P=V²/R。", "es": "Elige la fórmula que necesitas — P=V×I, P=I²×R, P=V²/R.", "zh": "选择所需公式 — P=V×I、P=I²×R、P=V²/R。"}, "wiring_series": {"ko": "직렬 (Series)", "en": "Series", "ja": "直列 (Series)", "es": "Serie (Series)", "zh": "串联 (Series)"}, "wiring_parallel": {"ko": "병렬 (Parallel)", "en": "Parallel", "ja": "並列 (Parallel)", "es": "Paralelo (Parallel)", "zh": "并联 (Parallel)"}, "impedance_desc": {"ko": "스피커를 직렬 또는 병렬로 연결했을 때의 합성 임피던스를 계산합니다.", "en": "Calculates the total impedance when speakers are wired in series or parallel.", "ja": "スピーカーを直列または並列に接続したときの合成インピーダンスを計算します。", "es": "Calcula la impedancia total al conectar altavoces en serie o en paralelo.", "zh": "计算扬声器以串联或并联方式连接时的合成阻抗。"}, "add_speaker_btn": {"ko": "+ 스피커 추가", "en": "+ Add Speaker", "ja": "+ スピーカーを追加", "es": "+ Añadir altavoz", "zh": "+ 添加扬声器"}, "total_impedance_label": {"ko": "합성 임피던스", "en": "Total Impedance", "ja": "合成インピーダンス", "es": "Impedancia total", "zh": "总阻抗"}, "db_power_desc": {"ko": "dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.", "en": "dB = 10 × log10(P2/P1). Enter either value and the other is calculated automatically.", "ja": "dB = 10 × log10(P2/P1)。どちらかを入力すると、もう一方が自動的に計算されます。", "es": "dB = 10 × log10(P2/P1). Introduce cualquiera de los dos valores y el otro se calcula automáticamente.", "zh": "dB = 10 × log10(P2/P1)。输入其中任意一个数值，另一个会自动计算。"}, "db_level_diff_label": {"ko": "dB (레벨 차이)", "en": "dB (Level Difference)", "ja": "dB (レベル差)", "es": "dB (Diferencia de nivel)", "zh": "dB(电平差)"}, "db_volt_desc": {"ko": "dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.", "en": "dB = 20 × log10(V2/V1). The coefficient for voltage (or current)-based dB differs from power-based dB — the same ratio gives a different dB value.", "ja": "dB = 20 × log10(V2/V1)。電圧(または電流)基準のdBは電力基準と係数が異なります — 同じ倍率でもdB値が変わります。", "es": "dB = 20 × log10(V2/V1). El coeficiente para dB basado en voltaje (o corriente) es distinto al basado en potencia — la misma proporción da un valor de dB diferente.", "zh": "dB = 20 × log10(V2/V1)。以电压(或电流)为基准的dB系数与以功率为基准不同 — 相同倍数下dB值也不同。"}, "db_volt_note": {"ko": "참고: 같은 숫자의 \"배수\"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 \"2배\"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 \"2배\"를 넣어 비교해보세요.)", "en": "Note: the same numeric \"ratio\" gives a different dB value depending on whether it's a power ratio or a voltage ratio. For example, a \"2×\" power ratio is 10×log10(2)≈3dB, while a \"2×\" voltage ratio is 20×log10(2)≈6dB. (Since doubling voltage quadruples power, physically the same change always gives the same dB when calculated using its own reference — try entering \"2\" in both panels above to compare.)", "ja": "参考: 同じ数字の「倍率」でも、電力比か電圧比かによってdB値が変わります。例えば「2倍」が電力比なら10×log10(2)≈3dB、電圧比なら20×log10(2)≈6dBです。(電圧が2倍になると電力は4倍になるため、物理的に同じ変化をそれぞれの基準で計算すると常に同じdBになります — 上の2つのパネルに実際に「2」を入れて比べてみてください。)", "es": "Nota: la misma \"proporción\" numérica da un valor de dB distinto según sea una relación de potencia o de voltaje. Por ejemplo, un \"2×\" en relación de potencia es 10×log10(2)≈3dB, mientras que un \"2×\" en relación de voltaje es 20×log10(2)≈6dB. (Como duplicar el voltaje cuadruplica la potencia, el mismo cambio físico siempre da el mismo dB al calcularlo con su propia referencia — prueba a introducir \"2\" en los dos paneles de arriba para comparar.)", "zh": "提示：同样数字的\"倍数\"，按功率比还是电压比计算，dB值是不同的。例如\"2倍\"若是功率比，为10×log10(2)≈3dB；若是电压比，则为20×log10(2)≈6dB。(因为电压变为2倍时功率会变为4倍，所以物理上相同的变化用各自基准计算时dB值始终一致 — 可以在上面两个面板中都输入\"2\"来对比看看。)"}, "dbu_dbv_desc": {"ko": "dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.", "en": "dBV is referenced to 1V, and dBu to 0.775V (the voltage that produces 1mW into 600Ω). Enter any one of the three and the rest are calculated automatically.", "ja": "dBVは1V基準、dBuは0.775V(=600Ωで1mWを出す電圧)基準です。3つのうちどれかを入力すると、残りが自動的に計算されます。", "es": "dBV toma como referencia 1V, y dBu 0.775V (el voltaje que produce 1mW en 600Ω). Introduce cualquiera de los tres y el resto se calcula automáticamente.", "zh": "dBV以1V为基准，dBu以0.775V(在600Ω上产生1mW的电压)为基准。三者中输入任意一个，其余会自动计算。"}, "dbv_label": {"ko": "dBV (0dBV = 1V 기준)", "en": "dBV (0dBV = 1V reference)", "ja": "dBV (0dBV = 1V基準)", "es": "dBV (0dBV = referencia 1V)", "zh": "dBV(0dBV = 1V基准)"}, "dbu_label": {"ko": "dBu (0dBu = 0.775V 기준)", "en": "dBu (0dBu = 0.775V reference)", "ja": "dBu (0dBu = 0.775V基準)", "es": "dBu (0dBu = referencia 0.775V)", "zh": "dBu(0dBu = 0.775V基准)"}, "dbm_dbw_desc": {"ko": "dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.", "en": "dBW is referenced to 1W, and dBm to 1mW (dBW = dBm − 30). Enter any one of the three and the rest are calculated automatically.", "ja": "dBWは1W基準、dBmは1mW基準です(dBW = dBm − 30)。3つのうちどれかを入力すると、残りが自動的に計算されます。", "es": "dBW toma como referencia 1W, y dBm 1mW (dBW = dBm − 30). Introduce cualquiera de los tres y el resto se calcula automáticamente.", "zh": "dBW以1W为基准，dBm以1mW为基准(dBW = dBm − 30)。三者中输入任意一个，其余会自动计算。"}, "dbw_label": {"ko": "dBW (0dBW = 1W 기준)", "en": "dBW (0dBW = 1W reference)", "ja": "dBW (0dBW = 1W基準)", "es": "dBW (0dBW = referencia 1W)", "zh": "dBW(0dBW = 1W基准)"}, "dbm_label": {"ko": "dBm (0dBm = 1mW 기준)", "en": "dBm (0dBm = 1mW reference)", "ja": "dBm (0dBm = 1mW基準)", "es": "dBm (0dBm = referencia 1mW)", "zh": "dBm(0dBm = 1mW基准)"}, "dbu_dbm_note": {"ko": "참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.", "en": "Note: at a 600Ω reference, dBu and dBm are exactly equal (since 0.775V produces exactly 1mW into 600Ω) — this is why this reference became standard in old telephone/broadcast systems.", "ja": "参考: 600Ω基準ではdBuとdBmは正確に同じ値になります(0.775Vが600Ωでちょうど1mWを出すため) — これが昔の電話・放送システムでこの基準が定着した理由です。", "es": "Nota: con una referencia de 600Ω, dBu y dBm son exactamente iguales (ya que 0.775V produce exactamente 1mW en 600Ω) — por eso esta referencia se estableció en los antiguos sistemas telefónicos y de radiodifusión.", "zh": "提示：在600Ω基准下，dBu与dBm数值完全相等(因为0.775V在600Ω上恰好产生1mW) — 这也是早期电话/广播系统采用该基准的原因。"}, "acwave_desc": {"ko": "정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)", "en": "Based on a sine wave. Enter any one of the three and the rest are calculated automatically. (Peak = RMS × √2, P-P = 2 × Peak)", "ja": "正弦波基準です。3つのうちどれかを入力すると、残りが自動的に計算されます。(Peak = RMS × √2、P-P = 2 × Peak)", "es": "Basado en una onda seno. Introduce cualquiera de los tres y el resto se calcula automáticamente. (Peak = RMS × √2, P-P = 2 × Peak)", "zh": "以正弦波为基准。三者中输入任意一个，其余会自动计算。(Peak = RMS × √2，P-P = 2 × Peak)"}, "cable_desc": {"ko": "스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.", "en": "Enter the speaker cable gauge (AWG), length, and current to calculate the voltage drop and power loss caused by cable resistance.", "ja": "スピーカーケーブルの太さ(AWG)・長さ・電流を入力すると、ケーブル抵抗による電圧降下と電力損失を計算します。", "es": "Introduce el calibre del cable (AWG), la longitud y la corriente para calcular la caída de tensión y la pérdida de potencia causadas por la resistencia del cable.", "zh": "输入扬声器线缆的线规(AWG)、长度和电流，即可计算因线缆电阻造成的电压降与功率损耗。"}, "cable_length_label": {"ko": "Cable Length (편도, 한쪽 길이)", "en": "Cable Length (one-way)", "ja": "ケーブル長(片道)", "es": "Longitud del cable (un sentido)", "zh": "线缆长度(单程)"}, "cable_resistance_label": {"ko": "케이블 저항 (왕복)", "en": "Cable Resistance (round-trip)", "ja": "ケーブル抵抗(往復)", "es": "Resistencia del cable (ida y vuelta)", "zh": "线缆电阻(往返)"}, "voltage_drop_label": {"ko": "전압 강하", "en": "Voltage Drop", "ja": "電圧降下", "es": "Caída de tensión", "zh": "电压降"}, "power_loss_label": {"ko": "손실 전력", "en": "Power Loss", "ja": "損失電力", "es": "Pérdida de potencia", "zh": "损耗功率"}, "cable_warning_template": {"ko": "⚠️ 전압 강하가 {v}V예요 — 케이블이 얇거나 너무 길면 저역이 물러지고(damping factor 저하) 전력 손실도 커질 수 있어요. 더 굵은 케이블을 고려해보세요.", "en": "⚠️ The voltage drop is {v}V — if the cable is too thin or too long, the low end can get loose (reduced damping factor) and power loss can increase. Consider a thicker cable.", "ja": "⚠️ 電圧降下が{v}Vです — ケーブルが細すぎたり長すぎたりすると、低域が緩くなり(ダンピングファクター低下)、電力損失も大きくなることがあります。より太いケーブルの使用を検討してください。", "es": "⚠️ La caída de tensión es de {v}V — si el cable es demasiado fino o largo, los graves pueden aflojarse (menor damping factor) y la pérdida de potencia puede aumentar. Considera usar un cable más grueso.", "zh": "⚠️ 电压降为{v}V — 若线缆过细或过长，低频会变得松散(阻尼系数下降)，功率损耗也可能增大。建议考虑使用更粗的线缆。"}, "quiz_problem_title": {"ko": "문제", "en": "Question", "ja": "問題", "es": "Pregunta", "zh": "题目"}, "quiz_start_prompt": {"ko": "시작 버튼을 눌러주세요", "en": "Press Start to begin", "ja": "スタートボタンを押してください", "es": "Pulsa Iniciar para comenzar", "zh": "请点击开始按钮"}, "btn_quiz_start": {"ko": "▸ 계산 문제 시작", "en": "▸ Start Quiz", "ja": "▸ 計算問題スタート", "es": "▸ Iniciar cuestionario", "zh": "▸ 开始计算题"}, "btn_quiz_stop": {"ko": "■ 계산 문제 중단", "en": "■ Stop Quiz", "ja": "■ 計算問題を中断", "es": "■ Detener cuestionario", "zh": "■ 中止计算题"}, "speaker_n_template": {"ko": "스피커 {n}", "en": "Speaker {n}", "ja": "スピーカー{n}", "es": "Altavoz {n}", "zh": "扬声器{n}"}, "feedback_correct": {"ko": "✅ 정답이에요!", "en": "✅ Correct!", "ja": "✅ 正解です！", "es": "✅ ¡Correcto!", "zh": "✅ 答对了！"}, "feedback_wrong_template": {"ko": "❌ 오답이에요 — 정답은 {answer}이었어요", "en": "❌ Wrong — the answer was {answer}", "ja": "❌ 不正解 — 正解は{answer}でした", "es": "❌ Incorrecto — la respuesta era {answer}", "zh": "❌ 答错了 — 正确答案是{answer}"}, "quiz_finish_template": {"ko": "퀴즈 종료! {hit}/{total} 정답", "en": "Quiz complete! {hit}/{total} correct", "ja": "クイズ終了！{hit}/{total}問正解", "es": "¡Cuestionario terminado! {hit}/{total} correctas", "zh": "测验结束！答对{hit}/{total}题"}, "ohm_q_v": {"ko": "I = {I}A, R = {R}Ω 일 때, V(전압)은 몇 V인가요?", "en": "If I = {I}A and R = {R}Ω, what is V (voltage) in volts?", "ja": "I = {I}A、R = {R}Ωのとき、V(電圧)は何Vですか？", "es": "Si I = {I}A y R = {R}Ω, ¿cuál es V (voltaje) en voltios?", "zh": "当I = {I}A，R = {R}Ω时，V(电压)是多少V？"}, "ohm_q_i": {"ko": "V = {V}V, R = {R}Ω 일 때, I(전류)는 몇 A인가요?", "en": "If V = {V}V and R = {R}Ω, what is I (current) in amps?", "ja": "V = {V}V、R = {R}Ωのとき、I(電流)は何Aですか？", "es": "Si V = {V}V y R = {R}Ω, ¿cuál es I (corriente) en amperios?", "zh": "当V = {V}V，R = {R}Ω时，I(电流)是多少A？"}, "ohm_q_r": {"ko": "V = {V}V, I = {I}A 일 때, R(저항)은 몇 Ω인가요?", "en": "If V = {V}V and I = {I}A, what is R (resistance) in ohms?", "ja": "V = {V}V、I = {I}Aのとき、R(抵抗)は何Ωですか？", "es": "Si V = {V}V e I = {I}A, ¿cuál es R (resistencia) en ohmios?", "zh": "当V = {V}V，I = {I}A时，R(电阻)是多少Ω？"}, "power_q_vi": {"ko": "V = {V}V, I = {I}A 일 때, P(전력)는 몇 W인가요? (P = V×I)", "en": "If V = {V}V and I = {I}A, what is P (power) in watts? (P = V×I)", "ja": "V = {V}V、I = {I}Aのとき、P(電力)は何Wですか？(P = V×I)", "es": "Si V = {V}V e I = {I}A, ¿cuál es P (potencia) en vatios? (P = V×I)", "zh": "当V = {V}V，I = {I}A时，P(功率)是多少W？(P = V×I)"}, "power_q_i2r": {"ko": "I = {I}A, R = {R}Ω 일 때, P(전력)는 몇 W인가요? (P = I²×R)", "en": "If I = {I}A and R = {R}Ω, what is P (power) in watts? (P = I²×R)", "ja": "I = {I}A、R = {R}Ωのとき、P(電力)は何Wですか？(P = I²×R)", "es": "Si I = {I}A y R = {R}Ω, ¿cuál es P (potencia) en vatios? (P = I²×R)", "zh": "当I = {I}A，R = {R}Ω时，P(功率)是多少W？(P = I²×R)"}, "power_q_v2r": {"ko": "V = {V}V, R = {R}Ω 일 때, P(전력)는 몇 W인가요? (P = V²/R)", "en": "If V = {V}V and R = {R}Ω, what is P (power) in watts? (P = V²/R)", "ja": "V = {V}V、R = {R}Ωのとき、P(電力)は何Wですか？(P = V²/R)", "es": "Si V = {V}V y R = {R}Ω, ¿cuál es P (potencia) en vatios? (P = V²/R)", "zh": "当V = {V}V，R = {R}Ω时，P(功率)是多少W？(P = V²/R)"}, "impedance_q_template": {"ko": "{list} 스피커 {count}개를 {wiring}로 연결하면, 합성 임피던스는 몇 Ω인가요?", "en": "If you connect {count} speakers ({list}) in {wiring}, what is the total impedance in Ω?", "ja": "{list}のスピーカー{count}台を{wiring}で接続すると、合成インピーダンスは何Ωですか？", "es": "Si conectas {count} altavoces ({list}) en {wiring}, ¿cuál es la impedancia total en Ω?", "zh": "将{list}共{count}个扬声器以{wiring}方式连接，合成阻抗是多少Ω？"}, "imp_wiring_series": {"ko": "직렬(Series)", "en": "series", "ja": "直列(Series)", "es": "serie", "zh": "串联(Series)"}, "imp_wiring_parallel": {"ko": "병렬(Parallel)", "en": "parallel", "ja": "並列(Parallel)", "es": "paralelo", "zh": "并联(Parallel)"}, "db_q_from_db": {"ko": "{db}dB는 전력비(P2/P1)로 몇 배인가요?", "en": "What power ratio (P2/P1) does {db}dB correspond to?", "ja": "{db}dBは電力比(P2/P1)で何倍ですか？", "es": "¿A qué relación de potencia (P2/P1) corresponde {db}dB?", "zh": "{db}dB对应的功率比(P2/P1)是多少倍？"}, "db_q_from_ratio": {"ko": "전력비(P2/P1)가 {ratio}배이면, 몇 dB인가요?", "en": "If the power ratio (P2/P1) is {ratio}×, how many dB is that?", "ja": "電力比(P2/P1)が{ratio}倍のとき、何dBですか？", "es": "Si la relación de potencia (P2/P1) es {ratio}×, ¿cuántos dB son?", "zh": "当功率比(P2/P1)为{ratio}倍时，是多少dB？"}, "dbvolt_q_from_db": {"ko": "{db}dB는 전압비(V2/V1)로 몇 배인가요?", "en": "What voltage ratio (V2/V1) does {db}dB correspond to?", "ja": "{db}dBは電圧比(V2/V1)で何倍ですか？", "es": "¿A qué relación de voltaje (V2/V1) corresponde {db}dB?", "zh": "{db}dB对应的电压比(V2/V1)是多少倍？"}, "dbvolt_q_from_ratio": {"ko": "전압비(V2/V1)가 {ratio}배이면, 몇 dB인가요?", "en": "If the voltage ratio (V2/V1) is {ratio}×, how many dB is that?", "ja": "電圧比(V2/V1)が{ratio}倍のとき、何dBですか？", "es": "Si la relación de voltaje (V2/V1) es {ratio}×, ¿cuántos dB son?", "zh": "当电压比(V2/V1)为{ratio}倍时，是多少dB？"}, "dbudbv_q_v2dbv": {"ko": "전압이 {v}V일 때, dBV는 얼마인가요? (0dBV = 1V 기준)", "en": "If the voltage is {v}V, what is dBV? (0dBV = 1V reference)", "ja": "電圧が{v}Vのとき、dBVはいくつですか？(0dBV = 1V基準)", "es": "Si el voltaje es {v}V, ¿cuál es dBV? (0dBV = referencia 1V)", "zh": "当电压为{v}V时，dBV是多少？(0dBV = 1V基准)"}, "dbudbv_q_v2dbu": {"ko": "전압이 {v}V일 때, dBu는 얼마인가요? (0dBu = 0.775V 기준)", "en": "If the voltage is {v}V, what is dBu? (0dBu = 0.775V reference)", "ja": "電圧が{v}Vのとき、dBuはいくつですか？(0dBu = 0.775V基準)", "es": "Si el voltaje es {v}V, ¿cuál es dBu? (0dBu = referencia 0.775V)", "zh": "当电压为{v}V时，dBu是多少？(0dBu = 0.775V基准)"}, "dbudbv_q_dbm2dbw": {"ko": "{dbm}dBm은 몇 dBW인가요? (dBW = dBm − 30)", "en": "How many dBW is {dbm}dBm? (dBW = dBm − 30)", "ja": "{dbm}dBmは何dBWですか？(dBW = dBm − 30)", "es": "¿Cuántos dBW son {dbm}dBm? (dBW = dBm − 30)", "zh": "{dbm}dBm等于多少dBW？(dBW = dBm − 30)"}, "acwave_q_rms2peak": {"ko": "RMS 전압이 {rms}V일 때, Peak 전압은 몇 V인가요? (Peak = RMS × √2)", "en": "If the RMS voltage is {rms}V, what is the Peak voltage in V? (Peak = RMS × √2)", "ja": "RMS電圧が{rms}Vのとき、Peak電圧は何Vですか？(Peak = RMS × √2)", "es": "Si el voltaje RMS es {rms}V, ¿cuál es el voltaje Peak en V? (Peak = RMS × √2)", "zh": "当RMS电压为{rms}V时，Peak电压是多少V？(Peak = RMS × √2)"}, "acwave_q_peak2rms": {"ko": "Peak 전압이 {peak}V일 때, RMS 전압은 몇 V인가요? (RMS = Peak / √2)", "en": "If the Peak voltage is {peak}V, what is the RMS voltage in V? (RMS = Peak / √2)", "ja": "Peak電圧が{peak}Vのとき、RMS電圧は何Vですか？(RMS = Peak / √2)", "es": "Si el voltaje Peak es {peak}V, ¿cuál es el voltaje RMS en V? (RMS = Peak / √2)", "zh": "当Peak电压为{peak}V时，RMS电压是多少V？(RMS = Peak / √2)"}, "acwave_q_rms2pp": {"ko": "RMS 전압이 {rms}V일 때, Peak-to-Peak 전압은 몇 V인가요? (P-P = 2 × RMS × √2)", "en": "If the RMS voltage is {rms}V, what is the Peak-to-Peak voltage in V? (P-P = 2 × RMS × √2)", "ja": "RMS電圧が{rms}Vのとき、Peak-to-Peak電圧は何Vですか？(P-P = 2 × RMS × √2)", "es": "Si el voltaje RMS es {rms}V, ¿cuál es el voltaje Peak-to-Peak en V? (P-P = 2 × RMS × √2)", "zh": "当RMS电压为{rms}V时，Peak-to-Peak电压是多少V？(P-P = 2 × RMS × √2)"}, "cable_q_drop": {"ko": "{awg}AWG 케이블을 편도 {length}m 사용해서 {current}A가 흐르면, 전압 강하는 몇 V인가요? (왕복 저항 고려)", "en": "With a {awg}AWG cable, {length}m one-way, carrying {current}A, what is the voltage drop in V? (accounting for round-trip resistance)", "ja": "{awg}AWGケーブルを片道{length}m使用して{current}Aが流れる場合、電圧降下は何Vですか？(往復抵抗を考慮)", "es": "Con un cable de {awg}AWG, {length}m en un sentido, y una corriente de {current}A, ¿cuál es la caída de tensión en V? (considerando la resistencia de ida y vuelta)", "zh": "使用{awg}AWG线缆，单程{length}m，通过{current}A电流时，电压降是多少V？(考虑往返电阻)"}, "cable_q_loss": {"ko": "{awg}AWG 케이블을 편도 {length}m 사용해서 {current}A가 흐르면, 케이블에서 손실되는 전력은 몇 W인가요?", "en": "With a {awg}AWG cable, {length}m one-way, carrying {current}A, how much power in W is lost in the cable?", "ja": "{awg}AWGケーブルを片道{length}m使用して{current}Aが流れる場合、ケーブルで損失する電力は何Wですか？", "es": "Con un cable de {awg}AWG, {length}m en un sentido, y una corriente de {current}A, ¿cuánta potencia en W se pierde en el cable?", "zh": "使用{awg}AWG线缆，单程{length}m，通过{current}A电流时，线缆上损耗的功率是多少W？"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

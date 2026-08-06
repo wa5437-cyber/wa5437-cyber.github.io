@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -250,12 +251,13 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">31-BAND EAR TRAINER<small>ISO 266 · 1/3-octave · Web Edition</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="modepicker" id="chapterPicker">
-    <button id="chapterTraining" class="active">훈련</button>
-    <button id="chapterListen">청음</button>
+    <button id="chapterTraining" class="active" data-i18n="chapter_training">훈련</button>
+    <button id="chapterListen" data-i18n="chapter_listen">청음</button>
   </div>
 
   <div class="scoreboard" id="scoreboard">
@@ -286,12 +288,12 @@
 
   <div class="modepicker" id="bandCountPicker">
     <button id="bandCount31" class="active">
-      <span class="full">31밴드 (실전형)</span>
-      <span class="short">31밴드</span>
+      <span class="full" data-i18n="band_count_31_full">31밴드 (실전형)</span>
+      <span class="short" data-i18n="band_count_31_short">31밴드</span>
     </button>
     <button id="bandCount10">
-      <span class="full">10밴드 (입문형)</span>
-      <span class="short">10밴드</span>
+      <span class="full" data-i18n="band_count_10_full">10밴드 (입문형)</span>
+      <span class="short" data-i18n="band_count_10_short">10밴드</span>
     </button>
   </div>
 
@@ -305,23 +307,23 @@
     <button id="mag12" class="active">12dB</button>
     <button id="mag6">6dB</button>
     <button id="mag3">3dB</button>
-    <button id="magMixed">복합(랜덤)</button>
+    <button id="magMixed" data-i18n="mag_mixed">복합(랜덤)</button>
   </div>
 
   <div class="music-upload-panel" id="musicUploadPanel">
     <div class="modepicker" id="sourcePicker">
-      <button id="sourceNoiseBtn" class="active">🌫️ 핑크노이즈</button>
-      <button id="sourceMusicBtn" disabled>🎵 내 음악</button>
+      <button id="sourceNoiseBtn" class="active" data-i18n="source_pink_label">🌫️ 핑크노이즈</button>
+      <button id="sourceMusicBtn" disabled data-i18n="source_music_label">🎵 내 음악</button>
     </div>
     <input type="file" id="musicFileInput" accept="audio/*,.mp3,.m4a,.aac,.wav,.aiff,.caf,.flac,.ogg" style="display:none;">
-    <button class="upload-btn" id="uploadMusicBtn">📂 음악 파일 업로드</button>
+    <button class="upload-btn" id="uploadMusicBtn" data-i18n="upload_music_btn">📂 음악 파일 업로드</button>
     <div class="music-filename" id="musicFileName"></div>
   </div>
 
   <div class="status">
-    <h2 id="statusTitle">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
+    <h2 id="statusTitle" data-i18n="status_default_title">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
     <p id="statusSub"></p>
-    <span id="abBadge" class="ab-badge" style="display:none;">● 기본</span>
+    <span id="abBadge" class="ab-badge" style="display:none;" data-i18n="ab_badge_normal">● 기본</span>
     <p id="debugTimer" class="mono" style="font-size:10px;color:#3ddc97;margin-top:4px;"></p>
   </div>
 
@@ -334,7 +336,7 @@
     </div>
   </div>
 
-  <button id="startBtn" class="startbtn go">▸ 훈련 시작</button>
+  <button id="startBtn" class="startbtn go" data-i18n="btn_training_start">▸ 훈련 시작</button>
 
   <div class="tool-links">
     <a href="generator.html">🎛️ Generator</a>
@@ -807,7 +809,7 @@
       return;
     }
     abBadgeEl.style.display = 'inline-flex';
-    abBadgeEl.textContent = showModified ? '● 변형(부스트/컷) 재생 중' : '● 기본(무변형) 재생 중';
+    abBadgeEl.textContent = showModified ? window.i18n.t('ab_badge_modified') : window.i18n.t('ab_badge_normal');
     abBadgeEl.classList.toggle('modified', showModified);
   }
   function startABCycle(){
@@ -897,11 +899,15 @@
   // 상태 텍스트에 바로 표시한다. 콘솔(F12)에도 상세 내용이 남는다.
   window.addEventListener('error', (e) => {
     console.error('Trainer error:', e.error || e.message);
-    setStatus('⚠️ 오류가 발생했습니다', (e.error && e.error.message) || String(e.message) || '콘솔(F12)에서 자세한 내용을 확인해주세요');
+    const errTitle = window.i18n ? window.i18n.t('error_title') : '⚠️ 오류가 발생했습니다';
+    const errHint = window.i18n ? window.i18n.t('error_console_hint') : '콘솔(F12)에서 자세한 내용을 확인해주세요';
+    setStatus(errTitle, (e.error && e.error.message) || String(e.message) || errHint);
   });
   window.addEventListener('unhandledrejection', (e) => {
     console.error('Trainer unhandled rejection:', e.reason);
-    setStatus('⚠️ 오류가 발생했습니다', (e.reason && e.reason.message) || '콘솔(F12)에서 자세한 내용을 확인해주세요');
+    const errTitle = window.i18n ? window.i18n.t('error_title') : '⚠️ 오류가 발생했습니다';
+    const errHint = window.i18n ? window.i18n.t('error_console_hint') : '콘솔(F12)에서 자세한 내용을 확인해주세요';
+    setStatus(errTitle, (e.reason && e.reason.message) || errHint);
   });
 
   // 31개 밴드 트랙을 그려 넣는다.
@@ -1012,7 +1018,7 @@
     // 지금 재생 중인 밴드가 있다면 새 방향으로 즉시 다시 들려준다
     if (listeningIndex !== null){
       engine.auditionBand(listeningIndex, mode, listenBoost);
-      setStatus(`${LABELS[listeningIndex]}Hz 부스트 재생 중`);
+      setStatus(window.i18n.tpl('listen_playing_generic', { freq: LABELS[listeningIndex], dir: window.i18n.t('label_boost') }));
     }
   });
   listenCutBtn.addEventListener('click', () => {
@@ -1021,7 +1027,7 @@
     setListenDirButtons();
     if (listeningIndex !== null){
       engine.auditionBand(listeningIndex, mode, listenBoost);
-      setStatus(`${LABELS[listeningIndex]}Hz 컷 재생 중`);
+      setStatus(window.i18n.tpl('listen_playing_generic', { freq: LABELS[listeningIndex], dir: window.i18n.t('label_cut') }));
     }
   });
 
@@ -1144,11 +1150,11 @@
   musicFileInput.addEventListener('change', async () => {
     const file = musicFileInput.files && musicFileInput.files[0];
     if (!file) return;
-    musicFileName.textContent = `⏳ "${file.name}" 불러오는 중...`;
+    musicFileName.textContent = window.i18n.tpl('music_loading', { name: file.name });
     try {
       const arrayBuffer = await file.arrayBuffer();
       await engine.loadMusicBuffer(arrayBuffer);
-      musicFileName.textContent = `✅ "${file.name}" (${Math.round(engine.musicBuffer.duration)}초)`;
+      musicFileName.textContent = window.i18n.tpl('music_loaded', { name: file.name, duration: Math.round(engine.musicBuffer.duration) });
       sourceMusicBtn.disabled = false;
       // 업로드하면 바로 "내 음악"을 소스로 선택해준다
       engine.usingMusic = true;
@@ -1157,7 +1163,7 @@
       updateListenAutoVisibility();
     } catch (err) {
       console.error('음악 파일 디코딩 실패:', err);
-      musicFileName.textContent = `⚠️ "${file.name}" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다`;
+      musicFileName.textContent = window.i18n.tpl('music_load_failed', { name: file.name });
       sourceMusicBtn.disabled = true;
     }
   });
@@ -1198,7 +1204,7 @@
       bandButtons[index].wrap.classList.remove('correct');
       bandButtons[index].btn.style.bottom = '50%';
       listeningIndex = null;
-      setStatus('밴드를 탭하면 바로 들려드려요');
+      setStatus(window.i18n.t('status_listen_prompt'));
       return;
     }
     if (listeningIndex !== null){
@@ -1212,8 +1218,8 @@
     // (기존 80%/20%는 어중간해서 마치 6dB 정도만 준 것처럼 보였다)
     bandButtons[index].btn.style.bottom = (mode === 'eq' && !listenBoost) ? '4%' : '96%';
     listeningIndex = index;
-    const dirLabel = mode === 'eq' ? (listenBoost ? '부스트' : '컷') : '사인파';
-    setStatus(`${LABELS[index]}Hz ${dirLabel} 재생 중`);
+    const dirLabel = mode === 'eq' ? (listenBoost ? window.i18n.t('label_boost') : window.i18n.t('label_cut')) : window.i18n.t('label_sine');
+    setStatus(window.i18n.tpl('listen_playing_generic', { freq: LABELS[index], dir: dirLabel }));
   }
 
   // ---- 청음 중 파형 + 흘러가는 레벨 막대 시각화 ----
@@ -1268,7 +1274,7 @@
         listenVizCtx.fillStyle = 'rgba(147,163,163,0.7)';
         listenVizCtx.font = `${Math.max(11, h * 0.13)}px 'IBM Plex Mono', monospace`;
         listenVizCtx.textAlign = 'center';
-        listenVizCtx.fillText('🎵 음악을 업로드하면 파형이 여기에 표시돼요', w / 2, h / 2);
+        listenVizCtx.fillText(window.i18n.t('viz_upload_hint'), w / 2, h / 2);
         listenVizCtx.textAlign = 'left';
       }
     }
@@ -1288,7 +1294,7 @@
   function startListening(){
     isListening = true;
     listeningIndex = null;
-    startBtn.textContent = '■ 청음 종료';
+    startBtn.textContent = window.i18n.t('btn_listen_stop');
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
     engine.start(mode, true); // ✅ 요청 반영: 청음은 음악을 처음부터 쭉 재생
     resetBandStyles();
@@ -1297,7 +1303,7 @@
     setDirectionModeButtons();
     setMagnitudeButtons();
     setChapterButtons();
-    setStatus('밴드를 탭하면 바로 들려드려요');
+    setStatus(window.i18n.t('status_listen_prompt'));
     requestAnimationFrame(startListenViz); // ✅ 요청 반영: 청음 시작하면 파형+막대 시각화도 함께 시작
   }
   function stopListening(){
@@ -1305,7 +1311,7 @@
     if (listeningIndex !== null) engine.stopAudition(mode);
     isListening = false;
     engine.stop(0.3);
-    startBtn.textContent = '▸ 청음 시작';
+    startBtn.textContent = window.i18n.t('btn_listen_start');
     startBtn.classList.remove('stop'); startBtn.classList.add('go');
     resetBandStyles();
     setModeButtons();
@@ -1313,7 +1319,7 @@
     setDirectionModeButtons();
     setMagnitudeButtons();
     setChapterButtons();
-    setStatus('밴드를 탭하면 바로 들려드려요');
+    setStatus(window.i18n.t('status_listen_prompt'));
   }
 
   function setChapterButtons(){
@@ -1337,11 +1343,11 @@
     setMagnitudeButtons();
     resetBandStyles();
     if (chapter === 'training'){
-      setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
-      startBtn.textContent = '▸ 훈련 시작';
+      setStatus(window.i18n.t('status_default_title'));
+      startBtn.textContent = window.i18n.t('btn_training_start');
     } else {
-      setStatus('밴드를 탭하면 바로 들려드려요');
-      startBtn.textContent = '▸ 청음 시작';
+      setStatus(window.i18n.t('status_listen_prompt'));
+      startBtn.textContent = window.i18n.t('btn_listen_start');
     }
     startBtn.classList.remove('stop'); startBtn.classList.add('go');
   }
@@ -1363,19 +1369,19 @@
   function clearFeedback(){ feedbackEl.innerHTML = ''; }
 
   function showFeedback(result){
-    const dir = result.wasBoost ? '부스트' : '컷';
+    const dir = result.wasBoost ? window.i18n.t('label_boost') : window.i18n.t('label_cut');
     const banner = document.createElement('div');
     if (result.isCorrect){
       banner.className = 'banner ok';
-      banner.textContent = `✓ 정답! ${LABELS[result.target]}Hz ${dir}였습니다.`;
+      banner.textContent = window.i18n.tpl('feedback_correct', { freq: LABELS[result.target], dir });
     } else if (result.bandCorrect && !result.directionCorrect){
       // ✅ 요청 반영: 밴드(주파수)는 맞았지만 부스트/컷 방향을 반대로 짚은 경우를 구분해서 안내한다.
       banner.className = 'banner no';
-      banner.textContent = `△ 대역은 맞았지만 방향이 반대예요 — ${LABELS[result.target]}Hz는 ${dir}였습니다. (부스트는 위로, 컷은 아래로 끌어야 정답이에요)`;
+      banner.textContent = window.i18n.tpl('feedback_partial', { freq: LABELS[result.target], dir });
     } else {
-      const direction = result.bandOffset > 0 ? '낮은' : '높은';
+      const direction = result.bandOffset > 0 ? window.i18n.t('label_lower') : window.i18n.t('label_higher');
       banner.className = 'banner no';
-      banner.textContent = `✕ 오답 — 정답은 ${LABELS[result.target]}Hz ${dir}였습니다 (선택: ${LABELS[result.selected]}Hz, 정답이 더 ${direction} 대역)`;
+      banner.textContent = window.i18n.tpl('feedback_wrong', { freq: LABELS[result.target], dir, selectedFreq: LABELS[result.selected], direction });
     }
     feedbackEl.innerHTML = '';
     feedbackEl.appendChild(banner);
@@ -1395,13 +1401,13 @@
     setDirectionModeButtons();
     setMagnitudeButtons();
     resetBandStyles();
-    startBtn.textContent = '■ 종료';
+    startBtn.textContent = window.i18n.t('btn_stop_generic');
     startBtn.classList.remove('go'); startBtn.classList.add('stop');
 
     engine.start(mode);
     updateListenAutoVisibility(); // ✅ 요청 반영: 음악 사용 중이면 훈련에서도 파형+플레이헤드가 보이게
     requestAnimationFrame(startListenViz);
-    setStatus('배경음 청취 중… 곧 문제가 출제됩니다', `(${questionIndex}/${QUESTIONS_PER_CHAPTER})`);
+    setStatus(window.i18n.t('status_warmup_title'), window.i18n.tpl('status_warmup_sub', { index: questionIndex, total: QUESTIONS_PER_CHAPTER }));
     startDebugTimer('워밍업(1번째 문제)');
 
     setTimeout(() => {
@@ -1416,9 +1422,9 @@
       resetBandStyles();
       startABCycle();
       const instruction = mode === 'eq'
-        ? '부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요'
-        : '사인파와 같은 음고의 대역을 짚어주세요';
-      setStatus(`${questionIndex}/${QUESTIONS_PER_CHAPTER} — ${instruction}`);
+        ? window.i18n.t('instruction_eq')
+        : window.i18n.t('instruction_sine');
+      setStatus(window.i18n.tpl('status_active', { index: questionIndex, total: QUESTIONS_PER_CHAPTER, instruction }));
     }, WARMUP_DELAY);
   }
 
@@ -1432,9 +1438,9 @@
     setDirectionModeButtons();
     setMagnitudeButtons();
     resetBandStyles();
-    startBtn.textContent = '▸ 훈련 시작';
+    startBtn.textContent = window.i18n.t('btn_training_start');
     startBtn.classList.remove('stop'); startBtn.classList.add('go');
-    setStatus('시작 버튼을 눌러 핑크노이즈를 재생하세요');
+    setStatus(window.i18n.t('status_default_title'));
     clearFeedback();
     stopDebugTimer('사용자가 종료를 눌러 중단됨');
     stopABCycle();
@@ -1468,8 +1474,8 @@
 
     phase = 'roundEnding';
     const wasCorrect = result.isCorrect;
-    setStatus(wasCorrect ? '정답입니다!' : '오답입니다.',
-      questionIndex >= QUESTIONS_PER_CHAPTER ? '챕터를 마무리하는 중…' : '다음 문제로 이동합니다…');
+    setStatus(wasCorrect ? window.i18n.t('status_correct') : window.i18n.t('status_wrong'),
+      questionIndex >= QUESTIONS_PER_CHAPTER ? window.i18n.t('status_finishing_chapter') : window.i18n.t('status_next_question'));
 
     setTimeout(() => {
       if (chapterToken !== myToken) return;
@@ -1484,10 +1490,10 @@
         setMagnitudeButtons();
         setChapterButtons();
         resetBandStyles();
-        startBtn.textContent = '▸ 훈련 시작';
+        startBtn.textContent = window.i18n.t('btn_training_start');
         startBtn.classList.remove('stop'); startBtn.classList.add('go');
         const pct = Math.round(correctCount/QUESTIONS_PER_CHAPTER*100);
-        setStatus(`챕터 완료! ${QUESTIONS_PER_CHAPTER}문제 중 ${correctCount}개 정답 (${pct}%)`);
+        setStatus(window.i18n.tpl('status_chapter_complete', { total: QUESTIONS_PER_CHAPTER, correct: correctCount, pct }));
         return;
       }
 
@@ -1502,7 +1508,7 @@
         phase = 'warmingUp';
         engine.resumeBackgroundNoise(0.3); // 판정 때 멈췄던 핑크노이즈를 다시 켠다
         resetBandStyles(); // phase가 바뀌었으므로 트랙을 다시 비활성화 상태로 갱신
-        setStatus('배경음 청취 중… 곧 문제가 출제됩니다', `(${questionIndex}/${QUESTIONS_PER_CHAPTER})`);
+        setStatus(window.i18n.t('status_warmup_title'), window.i18n.tpl('status_warmup_sub', { index: questionIndex, total: QUESTIONS_PER_CHAPTER }));
         startDebugTimer(`워밍업(${questionIndex}번째 문제)`);
 
         setTimeout(() => {
@@ -1517,9 +1523,9 @@
           resetBandStyles();
           startABCycle();
           const instruction = mode === 'eq'
-            ? '부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요'
-            : '사인파와 같은 음고의 대역을 짚어주세요';
-          setStatus(`${questionIndex}/${QUESTIONS_PER_CHAPTER} — ${instruction}`);
+            ? window.i18n.t('instruction_eq')
+            : window.i18n.t('instruction_sine');
+          setStatus(window.i18n.tpl('status_active', { index: questionIndex, total: QUESTIONS_PER_CHAPTER, instruction }));
         }, CHIME_TO_NEXT_DELAY + ROUND_WARMUP_DELAY);
       }
 
@@ -1551,7 +1557,33 @@
   updateListenAutoVisibility();
   updateBandVisibility();
   updateScoreboard();
+
+  document.addEventListener('i18nchange', () => {
+    if (chapter === 'training') {
+      if (phase === 'idle') {
+        setStatus(window.i18n.t('status_default_title'));
+        startBtn.textContent = window.i18n.t('btn_training_start');
+      } else if (phase === 'warmingUp') {
+        setStatus(window.i18n.t('status_warmup_title'), window.i18n.tpl('status_warmup_sub', { index: questionIndex, total: QUESTIONS_PER_CHAPTER }));
+        startBtn.textContent = window.i18n.t('btn_stop_generic');
+      } else if (phase === 'active') {
+        const instruction = mode === 'eq' ? window.i18n.t('instruction_eq') : window.i18n.t('instruction_sine');
+        setStatus(window.i18n.tpl('status_active', { index: questionIndex, total: QUESTIONS_PER_CHAPTER, instruction }));
+        startBtn.textContent = window.i18n.t('btn_stop_generic');
+      }
+    } else {
+      startBtn.textContent = isListening ? window.i18n.t('btn_listen_stop') : window.i18n.t('btn_listen_start');
+      if (listeningIndex !== null) {
+        const dirLabel = mode === 'eq' ? (listenBoost ? window.i18n.t('label_boost') : window.i18n.t('label_cut')) : window.i18n.t('label_sine');
+        setStatus(window.i18n.tpl('listen_playing_generic', { freq: LABELS[listeningIndex], dir: dirLabel }));
+      } else {
+        setStatus(window.i18n.t('status_listen_prompt'));
+      }
+    }
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "chapter_training": {"ko": "훈련", "en": "Training", "ja": "トレーニング", "es": "Entrenamiento", "zh": "训练"}, "chapter_listen": {"ko": "청음", "en": "Listen", "ja": "リスニング", "es": "Escucha", "zh": "聆听"}, "band_count_31_full": {"ko": "31밴드 (실전형)", "en": "31-Band (Pro)", "ja": "31バンド（実戦向け）", "es": "31 bandas (avanzado)", "zh": "31 段（实战型）"}, "band_count_31_short": {"ko": "31밴드", "en": "31-Band", "ja": "31バンド", "es": "31 bandas", "zh": "31 段"}, "band_count_10_full": {"ko": "10밴드 (입문형)", "en": "10-Band (Beginner)", "ja": "10バンド（入門向け）", "es": "10 bandas (principiante)", "zh": "10 段（入门型）"}, "band_count_10_short": {"ko": "10밴드", "en": "10-Band", "ja": "10バンド", "es": "10 bandas", "zh": "10 段"}, "mag_mixed": {"ko": "복합(랜덤)", "en": "Mixed (Random)", "ja": "複合（ランダム）", "es": "Mixto (aleatorio)", "zh": "混合（随机）"}, "source_pink_label": {"ko": "🌫️ 핑크노이즈", "en": "🌫️ Pink Noise", "ja": "🌫️ ピンクノイズ", "es": "🌫️ Ruido rosa", "zh": "🌫️ 粉红噪音"}, "source_music_label": {"ko": "🎵 내 음악", "en": "🎵 My Music", "ja": "🎵 マイミュージック", "es": "🎵 Mi música", "zh": "🎵 我的音乐"}, "upload_music_btn": {"ko": "📂 음악 파일 업로드", "en": "📂 Upload Music File", "ja": "📂 音楽ファイルをアップロード", "es": "📂 Subir archivo de música", "zh": "📂 上传音乐文件"}, "status_default_title": {"ko": "시작 버튼을 눌러 핑크노이즈를 재생하세요", "en": "Tap start to play pink noise", "ja": "スタートボタンを押してピンクノイズを再生しましょう", "es": "Pulsa iniciar para reproducir ruido rosa", "zh": "点击开始按钮播放粉红噪音"}, "ab_badge_normal": {"ko": "● 기본(무변형) 재생 중", "en": "● Playing Normal (Unmodified)", "ja": "● 基本（無変形）再生中", "es": "● Reproduciendo normal (sin modificar)", "zh": "● 正在播放原始（未调整）"}, "ab_badge_modified": {"ko": "● 변형(부스트/컷) 재생 중", "en": "● Playing Modified (Boost/Cut)", "ja": "● 変形（ブースト/カット）再生中", "es": "● Reproduciendo modificado (Boost/Cut)", "zh": "● 正在播放调整后（升/降）"}, "btn_training_start": {"ko": "▸ 훈련 시작", "en": "▸ Start Training", "ja": "▸ トレーニング開始", "es": "▸ Iniciar entrenamiento", "zh": "▸ 开始训练"}, "btn_stop_generic": {"ko": "■ 종료", "en": "■ Stop", "ja": "■ 終了", "es": "■ Detener", "zh": "■ 结束"}, "btn_listen_start": {"ko": "▸ 청음 시작", "en": "▸ Start Listening", "ja": "▸ リスニング開始", "es": "▸ Iniciar escucha", "zh": "▸ 开始聆听"}, "btn_listen_stop": {"ko": "■ 청음 종료", "en": "■ End Listening", "ja": "■ リスニング終了", "es": "■ Finalizar escucha", "zh": "■ 结束聆听"}, "status_listen_prompt": {"ko": "밴드를 탭하면 바로 들려드려요", "en": "Tap a band to hear it instantly", "ja": "バンドをタップするとすぐに聴けます", "es": "Toca una banda para escucharla al instante", "zh": "点击频段即可立即试听"}, "error_title": {"ko": "⚠️ 오류가 발생했습니다", "en": "⚠️ An error occurred", "ja": "⚠️ エラーが発生しました", "es": "⚠️ Se produjo un error", "zh": "⚠️ 发生错误"}, "error_console_hint": {"ko": "콘솔(F12)에서 자세한 내용을 확인해주세요", "en": "Check the console (F12) for details", "ja": "コンソール（F12）で詳細をご確認ください", "es": "Consulta la consola (F12) para más detalles", "zh": "请查看控制台（F12）了解详情"}, "label_boost": {"ko": "부스트", "en": "Boost", "ja": "ブースト", "es": "Boost", "zh": "提升"}, "label_cut": {"ko": "컷", "en": "Cut", "ja": "カット", "es": "Cut", "zh": "衰减"}, "label_sine": {"ko": "사인파", "en": "Sine Wave", "ja": "サイン波", "es": "Onda senoidal", "zh": "正弦波"}, "label_lower": {"ko": "낮은", "en": "lower", "ja": "低い", "es": "más baja", "zh": "更低"}, "label_higher": {"ko": "높은", "en": "higher", "ja": "高い", "es": "más alta", "zh": "更高"}, "listen_playing_generic": {"ko": "{freq}Hz {dir} 재생 중", "en": "Playing {freq}Hz {dir}", "ja": "{freq}Hz {dir} 再生中", "es": "Reproduciendo {freq}Hz {dir}", "zh": "正在播放 {freq}Hz {dir}"}, "viz_upload_hint": {"ko": "🎵 음악을 업로드하면 파형이 여기에 표시돼요", "en": "🎵 Upload music to see the waveform here", "ja": "🎵 音楽をアップロードすると、ここに波形が表示されます", "es": "🎵 Sube música para ver aquí la forma de onda", "zh": "🎵 上传音乐后波形会显示在这里"}, "feedback_correct": {"ko": "✓ 정답! {freq}Hz {dir}였습니다.", "en": "✓ Correct! It was {freq}Hz {dir}.", "ja": "✓ 正解！{freq}Hz {dir}でした。", "es": "✓ ¡Correcto! Era {freq}Hz {dir}.", "zh": "✓ 答对了！是 {freq}Hz {dir}。"}, "feedback_partial": {"ko": "△ 대역은 맞았지만 방향이 반대예요 — {freq}Hz는 {dir}였습니다. (부스트는 위로, 컷은 아래로 끌어야 정답이에요)", "en": "△ You got the band right, but the direction was reversed — {freq}Hz was {dir}. (Drag up for boost, down for cut.)", "ja": "△ 帯域は合っていましたが方向が逆でした — {freq}Hzは{dir}でした。（ブーストは上に、カットは下にドラッグするのが正解です）", "es": "△ Acertaste la banda, pero la dirección estaba invertida — {freq}Hz era {dir}. (Arrastra hacia arriba para boost, hacia abajo para cut).", "zh": "△ 频段猜对了，但方向反了——{freq}Hz 是{dir}。（提升需向上拖动，衰减需向下拖动）"}, "feedback_wrong": {"ko": "✕ 오답 — 정답은 {freq}Hz {dir}였습니다 (선택: {selectedFreq}Hz, 정답이 더 {direction} 대역)", "en": "✕ Wrong — the answer was {freq}Hz {dir} (you picked: {selectedFreq}Hz; the answer is a {direction} band)", "ja": "✕ 不正解 — 正解は{freq}Hz {dir}でした（選択：{selectedFreq}Hz、正解はより{direction}帯域）", "es": "✕ Incorrecto — la respuesta era {freq}Hz {dir} (elegiste: {selectedFreq}Hz; la respuesta está en una banda {direction})", "zh": "✕ 答错了 — 正确答案是 {freq}Hz {dir}（你选择了：{selectedFreq}Hz，正确答案在{direction}的频段）"}, "status_warmup_title": {"ko": "배경음 청취 중… 곧 문제가 출제됩니다", "en": "Listening to the background sound… a question is coming up", "ja": "背景音を聴いています…まもなく問題が出題されます", "es": "Escuchando el sonido de fondo… la pregunta está por llegar", "zh": "正在聆听背景音……题目即将出现"}, "status_warmup_sub": {"ko": "({index}/{total})", "en": "({index}/{total})", "ja": "({index}/{total})", "es": "({index}/{total})", "zh": "({index}/{total})"}, "instruction_eq": {"ko": "부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요", "en": "If it's boosted, drag up; if it's cut, drag down — pick the band", "ja": "ブーストなら上へ、カットなら下へ — 帯域を選んでください", "es": "Si está reforzada, arrastra hacia arriba; si está cortada, hacia abajo — elige la banda", "zh": "如果是提升就向上拖，如果是衰减就向下拖——选择频段"}, "instruction_sine": {"ko": "사인파와 같은 음고의 대역을 짚어주세요", "en": "Pick the band that matches the pitch of the sine wave", "ja": "サイン波と同じ音高の帯域を選んでください", "es": "Elige la banda que coincida con el tono de la onda senoidal", "zh": "选择与正弦波音高相同的频段"}, "status_active": {"ko": "{index}/{total} — {instruction}", "en": "{index}/{total} — {instruction}", "ja": "{index}/{total} — {instruction}", "es": "{index}/{total} — {instruction}", "zh": "{index}/{total} — {instruction}"}, "status_correct": {"ko": "정답입니다!", "en": "Correct!", "ja": "正解です！", "es": "¡Correcto!", "zh": "答对了！"}, "status_wrong": {"ko": "오답입니다.", "en": "Wrong.", "ja": "不正解です。", "es": "Incorrecto.", "zh": "答错了。"}, "status_finishing_chapter": {"ko": "챕터를 마무리하는 중…", "en": "Finishing up the chapter…", "ja": "チャプターを終了しています…", "es": "Terminando el capítulo…", "zh": "正在结束本章……"}, "status_next_question": {"ko": "다음 문제로 이동합니다…", "en": "Moving to the next question…", "ja": "次の問題に進みます…", "es": "Pasando a la siguiente pregunta…", "zh": "正在进入下一题……"}, "status_chapter_complete": {"ko": "챕터 완료! {total}문제 중 {correct}개 정답 ({pct}%)", "en": "Chapter complete! {correct} out of {total} correct ({pct}%)", "ja": "チャプター完了！{total}問中{correct}問正解（{pct}%）", "es": "¡Capítulo completado! {correct} de {total} correctas ({pct}%)", "zh": "章节完成！{total} 题中答对 {correct} 题（{pct}%）"}, "music_loading": {"ko": "⏳ \"{name}\" 불러오는 중...", "en": "⏳ Loading \"{name}\"...", "ja": "⏳ \"{name}\" を読み込み中...", "es": "⏳ Cargando \"{name}\"...", "zh": "⏳ 正在加载 \"{name}\"..."}, "music_loaded": {"ko": "✅ \"{name}\" ({duration}초)", "en": "✅ \"{name}\" ({duration}s)", "ja": "✅ \"{name}\" ({duration}秒)", "es": "✅ \"{name}\" ({duration} s)", "zh": "✅ \"{name}\"（{duration}秒）"}, "music_load_failed": {"ko": "⚠️ \"{name}\" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다", "en": "⚠️ Failed to load \"{name}\" — the format may not be supported", "ja": "⚠️ \"{name}\" の読み込みに失敗しました — 対応していない形式の可能性があります", "es": "⚠️ Error al cargar \"{name}\" — puede que el formato no sea compatible", "zh": "⚠️ 加载 \"{name}\" 失败 — 可能是不受支持的格式"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

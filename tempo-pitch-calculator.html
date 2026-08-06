@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -171,12 +172,13 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">TEMPO & PITCH CALCULATOR<small>Tap Tempo · Note Duration · Speed/Pitch</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="chapter-picker" id="chapterPicker">
-    <button id="chapterFreeBtn" class="active">자유 계산</button>
-    <button id="chapterQuizBtn">계산 문제</button>
+    <button id="chapterFreeBtn" class="active" data-i18n="chapter_free">자유 계산</button>
+    <button id="chapterQuizBtn" data-i18n="chapter_quiz">계산 문제</button>
   </div>
 
   <div class="scoreboard" id="scoreboard" style="display:none;">
@@ -200,13 +202,13 @@
   <div id="tapTab">
     <div class="panel">
       <div class="panel-title">Tap Tempo</div>
-      <p class="phase-desc">박자에 맞춰 아래 버튼을 계속 눌러보세요 — 마지막 8번 탭 간격을 평균 내서 BPM을 계산해요.</p>
+      <p class="phase-desc" data-i18n="tap_desc">박자에 맞춰 아래 버튼을 계속 눌러보세요 — 마지막 8번 탭 간격을 평균 내서 BPM을 계산해요.</p>
       <button class="tap-btn" id="tapBtn">👆 TAP</button>
       <div class="tap-bpm-display">
         <div class="num" id="tapBpmVal">--</div>
-        <div class="lbl">BPM (탭 <span id="tapCountVal">0</span>회)</div>
+        <div class="lbl" id="tapBpmLabel">BPM (탭 0회)</div>
       </div>
-      <button class="tap-reset-btn" id="tapResetBtn">초기화</button>
+      <button class="tap-reset-btn" id="tapResetBtn" data-i18n="tap_reset_btn">초기화</button>
     </div>
   </div>
 
@@ -214,7 +216,7 @@
   <div id="notesTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">BPM & Note Duration</div>
-      <p class="phase-desc">곡의 BPM을 입력하면, 각 음표 길이에 해당하는 시간(ms)을 계산합니다. 딜레이·오토메이션을 박자에 맞출 때 유용해요.</p>
+      <p class="phase-desc" data-i18n="notes_desc">곡의 BPM을 입력하면, 각 음표 길이에 해당하는 시간(ms)을 계산합니다. 딜레이·오토메이션을 박자에 맞출 때 유용해요.</p>
       <div class="field" style="max-width:220px;">
         <label>BPM</label>
         <div class="input-row"><input type="number" id="notesBpmInput" value="120" step="1" min="1"><span class="unit">bpm</span></div>
@@ -227,14 +229,14 @@
   <div id="speedPitchTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Speed ↔ Pitch</div>
-      <p class="phase-desc">턴테이블/DJ 믹서의 피치 페이더처럼, 재생 속도를 바꾸면 피치도 같이 바뀝니다. 속도(%) 또는 반음/센트 중 아무거나 입력하면 나머지가 자동 계산돼요.</p>
+      <p class="phase-desc" data-i18n="speedpitch_desc">턴테이블/DJ 믹서의 피치 페이더처럼, 재생 속도를 바꾸면 피치도 같이 바뀝니다. 속도(%) 또는 반음/센트 중 아무거나 입력하면 나머지가 자동 계산돼요.</p>
       <div class="field">
         <label>Speed Change</label>
         <div class="input-row"><input type="number" id="speedPctInput" value="0" step="0.1"><span class="unit">%</span></div>
       </div>
       <div class="field">
         <label>Pitch Shift (Semitones)</label>
-        <div class="input-row"><input type="number" id="speedSemitoneInput" value="0" step="0.01"><span class="unit">반음</span></div>
+        <div class="input-row"><input type="number" id="speedSemitoneInput" value="0" step="0.01"><span class="unit" data-i18n="unit_semitone">반음</span></div>
       </div>
       <div class="field">
         <label>Pitch Shift (Cents)</label>
@@ -242,11 +244,11 @@
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">배속 (Speed Ratio)</span>
+          <span class="result-lbl" data-i18n="speed_ratio_label">배속 (Speed Ratio)</span>
           <span class="result-val"><span id="speedRatioVal">1.000</span><span class="unit">×</span></span>
         </div>
       </div>
-      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">참고: 33⅓ RPM 판을 45 RPM으로 돌리면 속도가 35% 빨라지는 셈이라, 피치는 약 +5.2반음 올라가요.</p>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="speedpitch_note">참고: 33⅓ RPM 판을 45 RPM으로 돌리면 속도가 35% 빨라지는 셈이라, 피치는 약 +5.2반음 올라가요.</p>
     </div>
   </div>
 
@@ -254,17 +256,17 @@
   <div id="keyMatchTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">BPM Key Match</div>
-      <p class="phase-desc">원곡 BPM에서 목표 BPM으로 속도를 바꿀 때(피치를 고정하지 않고 그냥 재생속도만 바꿀 경우), 곡의 키가 몇 반음 바뀌는지 계산합니다. DJ 믹싱에서 템포를 맞출 때 참고하세요.</p>
+      <p class="phase-desc" data-i18n="keymatch_desc">원곡 BPM에서 목표 BPM으로 속도를 바꿀 때(피치를 고정하지 않고 그냥 재생속도만 바꿀 경우), 곡의 키가 몇 반음 바뀌는지 계산합니다. DJ 믹싱에서 템포를 맞출 때 참고하세요.</p>
       <div class="field">
-        <label>원곡 BPM</label>
+        <label data-i18n="orig_bpm_label">원곡 BPM</label>
         <div class="input-row"><input type="number" id="origBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
       </div>
       <div class="field">
-        <label>목표 BPM</label>
+        <label data-i18n="target_bpm_label">목표 BPM</label>
         <div class="input-row"><input type="number" id="targetBpmInput" value="128" step="0.1" min="1"><span class="unit">bpm</span></div>
       </div>
       <div class="field">
-        <label>원곡 키 (선택사항)</label>
+        <label data-i18n="orig_key_label">원곡 키 (선택사항)</label>
         <div class="solve-picker" id="origKeyPicker">
           <button data-key="0" class="active">C</button>
           <button data-key="2">D</button>
@@ -277,19 +279,19 @@
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">속도 변화</span>
+          <span class="result-lbl" data-i18n="speed_change_label">속도 변화</span>
           <span class="result-val"><span id="keyMatchPctVal">--</span><span class="unit">%</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">키(피치) 변화</span>
-          <span class="result-val"><span id="keyMatchSemitoneVal">--</span><span class="unit">반음</span></span>
+          <span class="result-lbl" data-i18n="key_change_label">키(피치) 변화</span>
+          <span class="result-val"><span id="keyMatchSemitoneVal">--</span><span class="unit" data-i18n="unit_semitone">반음</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">결과 키 (근사치)</span>
+          <span class="result-lbl" data-i18n="result_key_label">결과 키 (근사치)</span>
           <span class="result-val"><span id="keyMatchResultKey">--</span></span>
         </div>
       </div>
-      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">참고: 반음 단위로 딱 떨어지지 않으면 가장 가까운 음 이름 + 몇 cents 벗어났는지로 보여줘요.</p>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="keymatch_note">참고: 반음 단위로 딱 떨어지지 않으면 가장 가까운 음 이름 + 몇 cents 벗어났는지로 보여줘요.</p>
     </div>
   </div>
 
@@ -297,17 +299,17 @@
   <div id="loopBpmTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Loop / Sample BPM Finder</div>
-      <p class="phase-desc">샘플·루프 파일의 길이(초)와 마디 수를 알면, 원래 BPM이 몇이었는지 거꾸로 계산합니다.</p>
+      <p class="phase-desc" data-i18n="loopbpm_desc">샘플·루프 파일의 길이(초)와 마디 수를 알면, 원래 BPM이 몇이었는지 거꾸로 계산합니다.</p>
       <div class="field">
-        <label>샘플 길이</label>
-        <div class="input-row"><input type="number" id="loopLengthInput" value="8" step="0.001" min="0.001"><span class="unit">초</span></div>
+        <label data-i18n="sample_length_label">샘플 길이</label>
+        <div class="input-row"><input type="number" id="loopLengthInput" value="8" step="0.001" min="0.001"><span class="unit" data-i18n="unit_seconds">초</span></div>
       </div>
       <div class="field">
-        <label>마디(bar) 수</label>
-        <div class="input-row"><input type="number" id="loopBarsInput" value="4" step="1" min="1"><span class="unit">마디</span></div>
+        <label data-i18n="bar_count_label">마디(bar) 수</label>
+        <div class="input-row"><input type="number" id="loopBarsInput" value="4" step="1" min="1"><span class="unit" data-i18n="unit_bars">마디</span></div>
       </div>
       <div class="field">
-        <label>박자 (한 마디당 박 수)</label>
+        <label data-i18n="beats_per_bar_label">박자 (한 마디당 박 수)</label>
         <div class="solve-picker" id="loopBeatsPicker">
           <button data-beats="4" class="active">4/4</button>
           <button data-beats="3">3/4</button>
@@ -327,13 +329,13 @@
   <div id="barDurationTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Bar / Measure Duration</div>
-      <p class="phase-desc">BPM·박자·마디 수를 넣으면, 그 구간이 실제로 몇 분 몇 초인지 계산합니다. 버스 16마디, 코러스 8마디처럼 곡 구조를 짤 때 유용해요.</p>
+      <p class="phase-desc" data-i18n="bardur_desc">BPM·박자·마디 수를 넣으면, 그 구간이 실제로 몇 분 몇 초인지 계산합니다. 버스 16마디, 코러스 8마디처럼 곡 구조를 짤 때 유용해요.</p>
       <div class="field">
         <label>BPM</label>
         <div class="input-row"><input type="number" id="barBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
       </div>
       <div class="field">
-        <label>박자 (한 마디당 박 수)</label>
+        <label data-i18n="beats_per_bar_label">박자 (한 마디당 박 수)</label>
         <div class="solve-picker" id="barBeatsPicker">
           <button data-beats="4" class="active">4/4</button>
           <button data-beats="3">3/4</button>
@@ -341,16 +343,16 @@
         </div>
       </div>
       <div class="field">
-        <label>마디(bar) 수</label>
-        <div class="input-row"><input type="number" id="barCountInput" value="8" step="1" min="1"><span class="unit">마디</span></div>
+        <label data-i18n="bar_count_label">마디(bar) 수</label>
+        <div class="input-row"><input type="number" id="barCountInput" value="8" step="1" min="1"><span class="unit" data-i18n="unit_bars">마디</span></div>
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">한 마디 길이</span>
-          <span class="result-val"><span id="barOneDurationVal">--</span><span class="unit">초</span></span>
+          <span class="result-lbl" data-i18n="one_bar_length_label">한 마디 길이</span>
+          <span class="result-val"><span id="barOneDurationVal">--</span><span class="unit" data-i18n="unit_seconds">초</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">전체 구간 길이</span>
+          <span class="result-lbl" data-i18n="total_length_label">전체 구간 길이</span>
           <span class="result-val"><span id="barTotalDurationVal">--</span></span>
         </div>
       </div>
@@ -360,8 +362,8 @@
   <!-- ============ 자유 계산: Time-Stretch (피치 고정) ============ -->
   <div id="timeStretchTab" style="display:none;">
     <div class="panel">
-      <div class="panel-title">Time-Stretch (피치 고정)</div>
-      <p class="phase-desc">DAW의 타임스트레치(WSOLA·페이즈보코더 등)처럼, <b style="color:var(--text-secondary);">피치는 그대로 두고 템포만</b> 바꿀 때의 배속 비율을 계산합니다. (턴테이블처럼 속도를 바꾸면 피치도 같이 바뀌는 Speed↔Pitch 탭과 반대 개념이에요)</p>
+      <div class="panel-title" data-i18n="timestretch_title">Time-Stretch (피치 고정)</div>
+      <p class="phase-desc" data-i18n="timestretch_desc" data-i18n-html="true">DAW의 타임스트레치(WSOLA·페이즈보코더 등)처럼, <b style="color:var(--text-secondary);">피치는 그대로 두고 템포만</b> 바꿀 때의 배속 비율을 계산합니다. (턴테이블처럼 속도를 바꾸면 피치도 같이 바뀌는 Speed↔Pitch 탭과 반대 개념이에요)</p>
       <div class="field">
         <label>원곡 BPM</label>
         <div class="input-row"><input type="number" id="tsOrigBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
@@ -372,16 +374,16 @@
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">스트레치 비율</span>
+          <span class="result-lbl" data-i18n="stretch_ratio_label">스트레치 비율</span>
           <span class="result-val"><span id="tsRatioVal">--</span><span class="unit">×</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">템포 변화</span>
+          <span class="result-lbl" data-i18n="tempo_change_label">템포 변화</span>
           <span class="result-val"><span id="tsPctVal">--</span><span class="unit">%</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">피치 변화</span>
-          <span class="result-val" style="color:var(--teal);">0 <span class="unit">반음 (고정됨)</span></span>
+          <span class="result-lbl" data-i18n="pitch_change_label">피치 변화</span>
+          <span class="result-val" style="color:var(--teal);">0 <span class="unit" data-i18n="unit_semitone_fixed">반음 (고정됨)</span></span>
         </div>
       </div>
       <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="tsWarning"></p>
@@ -392,15 +394,15 @@
   <div id="sampleRateTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Samples ↔ Time ↔ Sample Rate</div>
-      <p class="phase-desc">샘플 수 = 시간(초) × 샘플레이트. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
+      <p class="phase-desc" data-i18n="samplerate_desc">샘플 수 = 시간(초) × 샘플레이트. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
       <div class="solve-picker" id="srSolvePicker">
-        <button data-solve="time">Time 구하기</button>
-        <button data-solve="samples" class="active">Samples 구하기</button>
-        <button data-solve="rate">Sample Rate 구하기</button>
+        <button data-solve="time" data-i18n="time_solve_btn">Time 구하기</button>
+        <button data-solve="samples" class="active" data-i18n="samples_solve_btn">Samples 구하기</button>
+        <button data-solve="rate" data-i18n="rate_solve_btn">Sample Rate 구하기</button>
       </div>
       <div class="field">
         <label>Time</label>
-        <div class="input-row"><input type="number" id="srTimeInput" value="1" step="0.001" min="0"><span class="unit">초</span></div>
+        <div class="input-row"><input type="number" id="srTimeInput" value="1" step="0.001" min="0"><span class="unit" data-i18n="unit_seconds">초</span></div>
       </div>
       <div class="field">
         <label>Samples</label>
@@ -411,7 +413,7 @@
         <div class="input-row"><input type="number" id="srRateInput" value="44100" step="1" min="1"><span class="unit">Hz</span></div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>자주 쓰는 샘플레이트</label>
+        <label data-i18n="common_samplerate_label">자주 쓰는 샘플레이트</label>
         <div class="solve-picker" id="srRatePresetPicker">
           <button data-rate="44100">44.1k</button>
           <button data-rate="48000">48k</button>
@@ -423,7 +425,7 @@
 
     <div class="panel" style="margin-top:16px;">
       <div class="panel-title">Buffer Size ↔ Latency</div>
-      <p class="phase-desc">오디오 인터페이스의 버퍼 사이즈(samples)와 샘플레이트를 넣으면, 한 버퍼가 처리되는 데 걸리는 시간(지연시간)을 계산합니다.</p>
+      <p class="phase-desc" data-i18n="buffer_desc">오디오 인터페이스의 버퍼 사이즈(samples)와 샘플레이트를 넣으면, 한 버퍼가 처리되는 데 걸리는 시간(지연시간)을 계산합니다.</p>
       <div class="field">
         <label>Buffer Size</label>
         <div class="solve-picker" id="bufferSizePicker">
@@ -441,27 +443,27 @@
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">편도 레이턴시</span>
+          <span class="result-lbl" data-i18n="oneway_latency_label">편도 레이턴시</span>
           <span class="result-val"><span id="bufLatencyOneWayVal">--</span><span class="unit">ms</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">왕복(라운드트립) 레이턴시</span>
+          <span class="result-lbl" data-i18n="roundtrip_latency_label">왕복(라운드트립) 레이턴시</span>
           <span class="result-val"><span id="bufLatencyRoundTripVal">--</span><span class="unit">ms</span></span>
         </div>
       </div>
-      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">참고: 실제 체감 레이턴시는 여기에 A/D·D/A 변환, 드라이버, 플러그인 처리 시간 등이 더해져서 이 계산값보다 조금 더 커요.</p>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="buffer_note">참고: 실제 체감 레이턴시는 여기에 A/D·D/A 변환, 드라이버, 플러그인 처리 시간 등이 더해져서 이 계산값보다 조금 더 커요.</p>
     </div>
   </div>
 
   <!-- ============ 계산 문제(퀴즈) ============ -->
   <div id="quizPanel" class="panel" style="display:none;">
-    <div class="panel-title">문제</div>
-    <div class="quiz-problem" id="quizProblemText">시작 버튼을 눌러주세요</div>
+    <div class="panel-title" data-i18n="quiz_problem_title">문제</div>
+    <div class="quiz-problem" id="quizProblemText" data-i18n="quiz_start_prompt">시작 버튼을 눌러주세요</div>
     <div class="quiz-options" id="quizOptions"></div>
     <div class="feedback" id="feedback"></div>
   </div>
 
-  <button id="startBtn" class="startbtn" style="display:none;">▸ 계산 문제 시작</button>
+  <button id="startBtn" class="startbtn" style="display:none;" data-i18n="btn_quiz_start">▸ 계산 문제 시작</button>
 
   <div class="tool-links">
     <a href="trainer.html">🎧 Ear Trainer</a>
@@ -546,9 +548,9 @@
     } else {
       Object.values(freeTabs).forEach(el => el.style.display = 'none');
       startBtn.style.display = 'block';
-      startBtn.textContent = '▸ 계산 문제 시작';
+      startBtn.textContent = window.i18n.t('btn_quiz_start');
       startBtn.classList.remove('stop');
-      quizProblemText.textContent = '시작 버튼을 눌러주세요';
+      quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
       quizOptionsEl.innerHTML = '';
       questionIndex = 0; hitCount = 0;
       updateScoreboard();
@@ -562,16 +564,20 @@
   // =====================================================================
   const tapBtn = document.getElementById('tapBtn');
   const tapBpmVal = document.getElementById('tapBpmVal');
-  const tapCountVal = document.getElementById('tapCountVal');
+  
   const tapResetBtn = document.getElementById('tapResetBtn');
+  const tapBpmLabel = document.getElementById('tapBpmLabel');
   let tapTimestamps = [];
   const TAP_MAX_HISTORY = 8;
   const TAP_TIMEOUT_MS = 2000; // 2초 넘게 안 누르면 새로 시작
 
+  function updateTapCountLabel(){
+    tapBpmLabel.textContent = window.i18n.tpl('tap_bpm_template', { count: tapTimestamps.length });
+  }
   function resetTap(){
     tapTimestamps = [];
     tapBpmVal.textContent = '--';
-    tapCountVal.textContent = '0';
+    updateTapCountLabel();
   }
   tapBtn.addEventListener('click', () => {
     const now = performance.now();
@@ -580,7 +586,7 @@
     }
     tapTimestamps.push(now);
     if (tapTimestamps.length > TAP_MAX_HISTORY) tapTimestamps.shift();
-    tapCountVal.textContent = String(tapTimestamps.length);
+    updateTapCountLabel();
     if (tapTimestamps.length >= 2) {
       const intervals = [];
       for (let i = 1; i < tapTimestamps.length; i++) intervals.push(tapTimestamps[i] - tapTimestamps[i - 1]);
@@ -597,29 +603,32 @@
   const notesBpmInput = document.getElementById('notesBpmInput');
   const notesTable = document.getElementById('notesTable');
   const NOTE_DIVISIONS = [
-    { label: '1/1 (온음표)', div: 1 },
-    { label: '1/2 (2분음표)', div: 2 },
-    { label: '1/4 (4분음표)', div: 4 },
-    { label: '1/8 (8분음표)', div: 8 },
-    { label: '1/16 (16분음표)', div: 16 },
-    { label: '1/32 (32분음표)', div: 32 },
+    { nameKey: 'note_name_whole', frac: '1/1', div: 1 },
+    { nameKey: 'note_name_half', frac: '1/2', div: 2 },
+    { nameKey: 'note_name_quarter', frac: '1/4', div: 4 },
+    { nameKey: 'note_name_eighth', frac: '1/8', div: 8 },
+    { nameKey: 'note_name_sixteenth', frac: '1/16', div: 16 },
+    { nameKey: 'note_name_thirtysecond', frac: '1/32', div: 32 },
   ];
+  function noteLabel(frac, nameKey){
+    return window.i18n.tpl('note_label_template', { frac, name: window.i18n.t(nameKey) });
+  }
   function formatMs(ms){ return ms >= 1000 ? (ms / 1000).toFixed(3) + 's' : ms.toFixed(1) + 'ms'; }
   function renderNotesTable(){
     const bpm = parseFloat(notesBpmInput.value) || 120;
     const quarterMs = 60000 / bpm;
     let html = `
       <div class="tempo-row tempo-header">
-        <div class="tempo-cell">음표</div>
-        <div class="tempo-cell">일반</div>
-        <div class="tempo-cell">붙임(1.5×)</div>
-        <div class="tempo-cell">셋잇단(2/3×)</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_note')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_normal')}</div>
+        <div class="tempo-cell">${window.i18n.t('notes_col_dotted')}</div>
+        <div class="tempo-cell">${window.i18n.t('notes_col_triplet')}</div>
       </div>`;
-    NOTE_DIVISIONS.forEach(({ label, div }) => {
+    NOTE_DIVISIONS.forEach(({ nameKey, frac, div }) => {
       const baseMs = quarterMs * (4 / div);
       html += `
         <div class="tempo-row">
-          <div class="tempo-cell">${label}</div>
+          <div class="tempo-cell">${noteLabel(frac, nameKey)}</div>
           <div class="tempo-cell">${formatMs(baseMs)}</div>
           <div class="tempo-cell">${formatMs(baseMs * 1.5)}</div>
           <div class="tempo-cell">${formatMs(baseMs * 2 / 3)}</div>
@@ -761,7 +770,7 @@
     const oneBarSec = beatSec * barBeatsPerBar;
     const totalSec = oneBarSec * bars;
     barOneDurationVal.textContent = oneBarSec.toFixed(3);
-    barTotalDurationVal.textContent = formatMinSec(totalSec) + ` (${totalSec.toFixed(2)}초)`;
+    barTotalDurationVal.textContent = formatMinSec(totalSec) + ' ' + window.i18n.tpl('seconds_paren_template', { sec: totalSec.toFixed(2) });
   }
   barBeatsPicker.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -790,7 +799,7 @@
     tsRatioVal.textContent = ratio.toFixed(4);
     tsPctVal.textContent = pct.toFixed(2);
     tsWarning.textContent = Math.abs(pct) > 20
-      ? '⚠️ ±20%를 넘는 큰 폭의 타임스트레치는 알고리즘에 따라 음질 열화(아티팩트, 워블링)가 뚜렷하게 들릴 수 있어요.'
+      ? window.i18n.t('ts_warning')
       : '';
   }
   [tsOrigBpmInput, tsTargetBpmInput].forEach(el => el.addEventListener('input', recalcTimeStretch));
@@ -883,19 +892,21 @@
     const div = randChoice([1, 2, 4, 8, 16]);
     const quarterMs = 60000 / bpm;
     const ms = quarterMs * (4 / div);
-    const label = { 1: '1/1(온음표)', 2: '1/2(2분음표)', 4: '1/4(4분음표)', 8: '1/8(8분음표)', 16: '1/16(16분음표)' }[div];
-    return { text: `BPM ${bpm}에서 ${label}는 몇 ms인가요?`, answer: +ms.toFixed(1) };
+    const nameKey = { 1: 'note_name_whole', 2: 'note_name_half', 4: 'note_name_quarter', 8: 'note_name_eighth', 16: 'note_name_sixteenth' }[div];
+    const frac = { 1: '1/1', 2: '1/2', 4: '1/4', 8: '1/8', 16: '1/16' }[div];
+    const label = noteLabel(frac, nameKey);
+    return { text: window.i18n.tpl('note_q_template', { bpm, label }), answer: +ms.toFixed(1) };
   }
   function makeSpeedPitchQuestion(){
     const kind = randChoice(['pct2semi', 'semi2pct']);
     if (kind === 'pct2semi') {
       const pct = randChoice([6, 8, 10, 12, -6, -8, 35]);
       const ratio = speedRatioFromPct(pct);
-      return { text: `재생 속도를 ${pct}% 바꾸면, 피치는 몇 반음 바뀌나요?`, answer: +speedRatioToSemitones(ratio).toFixed(2) };
+      return { text: window.i18n.tpl('speedpitch_q_pct2semi', { pct }), answer: +speedRatioToSemitones(ratio).toFixed(2) };
     }
     const semi = randChoice([1, 2, 3, -1, -2, 12]);
     const ratio = semitonesToSpeedRatio(semi);
-    return { text: `피치를 ${semi}반음 바꾸려면, 재생 속도를 몇 % 바꿔야 하나요?`, answer: +pctFromSpeedRatio(ratio).toFixed(2) };
+    return { text: window.i18n.tpl('speedpitch_q_semi2pct', { semi }), answer: +pctFromSpeedRatio(ratio).toFixed(2) };
   }
   function makeKeyMatchQuestion(){
     const origBpm = randChoice([120, 128, 130, 100, 140]);
@@ -903,9 +914,9 @@
     const ratio = targetBpm / origBpm;
     const kind = randChoice(['pct', 'semi']);
     if (kind === 'pct') {
-      return { text: `원곡 BPM ${origBpm}를 ${targetBpm}로 바꾸면, 속도 변화는 몇 %인가요?`, answer: +pctFromSpeedRatio(ratio).toFixed(2) };
+      return { text: window.i18n.tpl('keymatch_q_pct', { origBpm, targetBpm }), answer: +pctFromSpeedRatio(ratio).toFixed(2) };
     }
-    return { text: `원곡 BPM ${origBpm}를 ${targetBpm}로 바꾸면, 키(피치)는 몇 반음 바뀌나요?`, answer: +speedRatioToSemitones(ratio).toFixed(2) };
+    return { text: window.i18n.tpl('keymatch_q_semi', { origBpm, targetBpm }), answer: +speedRatioToSemitones(ratio).toFixed(2) };
   }
 
   function makeLoopBpmQuestion(){
@@ -915,7 +926,7 @@
     const totalBeats = bars * beatsPerBar;
     const lengthSec = +((60 * totalBeats) / bpm).toFixed(3);
     return {
-      text: `${beatsPerBar}/4박자, ${bars}마디짜리 루프의 길이가 ${lengthSec}초라면, BPM은 얼마인가요?`,
+      text: window.i18n.tpl('loopbpm_q_template', { beatsPerBar, bars, lengthSec }),
       answer: bpm,
     };
   }
@@ -926,7 +937,7 @@
     const bars = randChoice([2, 4, 8]);
     const totalSec = +((60 / bpm) * beatsPerBar * bars).toFixed(2);
     return {
-      text: `BPM ${bpm}, ${beatsPerBar}/4박자에서 ${bars}마디는 몇 초인가요?`,
+      text: window.i18n.tpl('bardur_q_template', { bpm, beatsPerBar, bars }),
       answer: totalSec,
     };
   }
@@ -936,7 +947,7 @@
     const targetBpm = origBpm + randChoice([5, 10, -5, -10, 20]);
     const pct = +pctFromSpeedRatio(targetBpm / origBpm).toFixed(2);
     return {
-      text: `타임스트레치로 BPM ${origBpm} 곡을 ${targetBpm}로 바꾸면(피치는 고정), 템포 변화는 몇 %인가요?`,
+      text: window.i18n.tpl('timestretch_q_template', { origBpm, targetBpm }),
       answer: pct,
     };
   }
@@ -946,16 +957,16 @@
     if (kind === 'samples') {
       const sr = randChoice([44100, 48000, 96000]);
       const t = randChoice([0.5, 1, 2]);
-      return { text: `샘플레이트 ${sr}Hz에서 ${t}초는 몇 샘플인가요?`, answer: sr * t };
+      return { text: window.i18n.tpl('samplerate_q_samples', { sr, t }), answer: sr * t };
     }
     if (kind === 'time') {
       const sr = randChoice([44100, 48000]);
       const n = randChoice([22050, 44100, 48000, 96000]);
-      return { text: `샘플레이트 ${sr}Hz에서 ${n} 샘플은 몇 초인가요?`, answer: +(n / sr).toFixed(3) };
+      return { text: window.i18n.tpl('samplerate_q_time', { sr, n }), answer: +(n / sr).toFixed(3) };
     }
     const buf = randChoice([64, 128, 256, 512]);
     const sr = randChoice([44100, 48000, 96000]);
-    return { text: `버퍼 사이즈 ${buf} samples, 샘플레이트 ${sr}Hz일 때, 편도 레이턴시는 몇 ms인가요?`, answer: +((buf / sr) * 1000).toFixed(2) };
+    return { text: window.i18n.tpl('samplerate_q_latency', { buf, sr }), answer: +((buf / sr) * 1000).toFixed(2) };
   }
 
   const QUESTION_MAKERS = [makeNoteQuestion, makeSpeedPitchQuestion, makeKeyMatchQuestion, makeLoopBpmQuestion, makeBarDurationQuestion, makeTimeStretchQuestion, makeSampleRateQuestion];
@@ -1016,7 +1027,7 @@
     const answer = currentQuestion.answer;
     const isCorrect = Math.abs(guess - answer) < 1e-6;
     if (isCorrect) hitCount++;
-    feedbackEl.textContent = isCorrect ? '✅ 정답이에요!' : `❌ 오답이에요 — 정답은 ${formatOption(answer)}이었어요`;
+    feedbackEl.textContent = isCorrect ? window.i18n.t('feedback_correct') : window.i18n.tpl('feedback_wrong_template', { answer: formatOption(answer) });
     feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
     updateScoreboard();
 
@@ -1036,9 +1047,9 @@
   }
   function finishQuiz(){
     quizActive = false;
-    startBtn.textContent = '▸ 계산 문제 시작';
+    startBtn.textContent = window.i18n.t('btn_quiz_start');
     startBtn.classList.remove('stop');
-    quizProblemText.textContent = `퀴즈 종료! ${hitCount}/${QUESTIONS_PER_QUIZ} 정답`;
+    quizProblemText.textContent = window.i18n.tpl('quiz_finish_template', { hit: hitCount, total: QUESTIONS_PER_QUIZ });
     quizOptionsEl.innerHTML = '';
     clearFeedback();
     chapterFreeBtn.disabled = false;
@@ -1049,7 +1060,7 @@
     if (!quizActive) {
       quizActive = true;
       questionIndex = 0; hitCount = 0;
-      startBtn.textContent = '■ 계산 문제 중단';
+      startBtn.textContent = window.i18n.t('btn_quiz_stop');
       startBtn.classList.add('stop');
       chapterFreeBtn.disabled = true;
       chapterQuizBtn.disabled = true;
@@ -1060,7 +1071,20 @@
   });
 
   updateScoreboard();
+  updateTapCountLabel();
+
+  document.addEventListener('i18nchange', () => {
+    renderNotesTable();
+    if (chapter === 'quiz') {
+      startBtn.textContent = window.i18n.t(quizActive ? 'btn_quiz_stop' : 'btn_quiz_start');
+      if (!quizActive && currentQuestion === null && questionIndex === 0) {
+        quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
+      }
+    }
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "chapter_free": {"ko": "자유 계산", "en": "Free Calculation", "ja": "自由計算", "es": "Cálculo libre", "zh": "自由计算"}, "chapter_quiz": {"ko": "계산 문제", "en": "Practice Quiz", "ja": "計算問題", "es": "Preguntas de cálculo", "zh": "计算题"}, "tap_desc": {"ko": "박자에 맞춰 아래 버튼을 계속 눌러보세요 — 마지막 8번 탭 간격을 평균 내서 BPM을 계산해요.", "en": "Tap the button below in time with the beat — it averages your last 8 tap intervals to calculate BPM.", "ja": "拍に合わせて下のボタンを押し続けてください — 直近8回のタップ間隔を平均してBPMを計算します。", "es": "Pulsa el botón de abajo al ritmo de la música — se calcula el BPM promediando tus últimos 8 intervalos entre toques.", "zh": "跟随节拍持续点击下方按钮 — 系统会取最近8次点击间隔的平均值来计算BPM。"}, "tap_bpm_template": {"ko": "BPM (탭 {count}회)", "en": "BPM ({count} taps)", "ja": "BPM (タップ{count}回)", "es": "BPM ({count} toques)", "zh": "BPM (已点击{count}次)"}, "tap_reset_btn": {"ko": "초기화", "en": "Reset", "ja": "リセット", "es": "Reiniciar", "zh": "重置"}, "notes_desc": {"ko": "곡의 BPM을 입력하면, 각 음표 길이에 해당하는 시간(ms)을 계산합니다. 딜레이·오토메이션을 박자에 맞출 때 유용해요.", "en": "Enter the song's BPM to calculate the time (ms) for each note length. Useful for syncing delays and automation to the beat.", "ja": "曲のBPMを入力すると、各音符の長さに対応する時間(ms)を計算します。ディレイ・オートメーションを拍に合わせる際に便利です。", "es": "Introduce el BPM de la canción para calcular la duración (ms) de cada nota. Útil para sincronizar delays y automatizaciones con el ritmo.", "zh": "输入歌曲的BPM，即可计算各音符时值对应的时间(ms)，方便将延时和自动化对齐节拍。"}, "tempo_col_note": {"ko": "음표", "en": "Note", "ja": "音符", "es": "Nota", "zh": "音符"}, "tempo_col_normal": {"ko": "일반", "en": "Normal", "ja": "通常", "es": "Normal", "zh": "普通"}, "notes_col_dotted": {"ko": "붙임(1.5×)", "en": "Dotted (1.5×)", "ja": "付点(1.5×)", "es": "Con puntillo (1.5×)", "zh": "附点(1.5×)"}, "notes_col_triplet": {"ko": "셋잇단(2/3×)", "en": "Triplet (2/3×)", "ja": "三連符(2/3×)", "es": "Tresillo (2/3×)", "zh": "三连音(2/3×)"}, "note_name_whole": {"ko": "온음표", "en": "Whole Note", "ja": "全音符", "es": "Redonda", "zh": "全音符"}, "note_name_half": {"ko": "2분음표", "en": "Half Note", "ja": "2分音符", "es": "Blanca", "zh": "二分音符"}, "note_name_quarter": {"ko": "4분음표", "en": "Quarter Note", "ja": "4分音符", "es": "Negra", "zh": "四分音符"}, "note_name_eighth": {"ko": "8분음표", "en": "Eighth Note", "ja": "8分音符", "es": "Corchea", "zh": "八分音符"}, "note_name_sixteenth": {"ko": "16분음표", "en": "Sixteenth Note", "ja": "16分音符", "es": "Semicorchea", "zh": "十六分音符"}, "note_name_thirtysecond": {"ko": "32분음표", "en": "Thirty-Second Note", "ja": "32分音符", "es": "Fusa", "zh": "三十二分音符"}, "note_label_template": {"ko": "{frac} ({name})", "en": "{frac} ({name})", "ja": "{frac}（{name}）", "es": "{frac} ({name})", "zh": "{frac}（{name}）"}, "speedpitch_desc": {"ko": "턴테이블/DJ 믹서의 피치 페이더처럼, 재생 속도를 바꾸면 피치도 같이 바뀝니다. 속도(%) 또는 반음/센트 중 아무거나 입력하면 나머지가 자동 계산돼요.", "en": "Just like a turntable/DJ mixer's pitch fader, changing the playback speed changes the pitch too. Enter either the speed (%) or semitones/cents and the rest is calculated automatically.", "ja": "ターンテーブル/DJミキサーのピッチフェーダーのように、再生速度を変えるとピッチも一緒に変わります。速度(%)または半音/セントのどちらかを入力すると、残りが自動的に計算されます。", "es": "Igual que el fader de pitch de un plato/mesa de DJ, cambiar la velocidad de reproducción también cambia el tono. Introduce la velocidad (%) o los semitonos/cents y el resto se calcula automáticamente.", "zh": "就像转盘/DJ调音台上的pitch推子一样，改变播放速度也会改变音高。输入速度(%)或半音/音分中的任意一个，其余会自动计算。"}, "unit_semitone": {"ko": "반음", "en": "semitones", "ja": "半音", "es": "semitonos", "zh": "半音"}, "unit_semitone_fixed": {"ko": "반음 (고정됨)", "en": "semitones (fixed)", "ja": "半音（固定）", "es": "semitonos (fijo)", "zh": "半音(固定)"}, "speed_ratio_label": {"ko": "배속 (Speed Ratio)", "en": "Speed Ratio", "ja": "倍速 (Speed Ratio)", "es": "Relación de velocidad (Speed Ratio)", "zh": "倍速 (Speed Ratio)"}, "speedpitch_note": {"ko": "참고: 33⅓ RPM 판을 45 RPM으로 돌리면 속도가 35% 빨라지는 셈이라, 피치는 약 +5.2반음 올라가요.", "en": "Note: playing a 33⅓ RPM record at 45 RPM speeds it up by about 35%, raising the pitch by roughly +5.2 semitones.", "ja": "参考: 33⅓ RPMのレコードを45 RPMで回すと速度が約35%速くなり、ピッチは約+5.2半音上がります。", "es": "Nota: reproducir un disco de 33⅓ RPM a 45 RPM acelera la velocidad en un 35% aproximadamente, subiendo el tono unos +5.2 semitonos.", "zh": "提示：将33⅓转的黑胶用45转播放，速度约加快35%，音高会升高约+5.2个半音。"}, "keymatch_desc": {"ko": "원곡 BPM에서 목표 BPM으로 속도를 바꿀 때(피치를 고정하지 않고 그냥 재생속도만 바꿀 경우), 곡의 키가 몇 반음 바뀌는지 계산합니다. DJ 믹싱에서 템포를 맞출 때 참고하세요.", "en": "Calculates how many semitones the song's key shifts when you change the speed from the original BPM to a target BPM (without pitch-locking — just changing playback speed). Useful as a reference when matching tempo in DJ mixing.", "ja": "元曲BPMから目標BPMへ速度を変える際(ピッチを固定せず、単に再生速度だけを変える場合)、曲のキーが何半音変わるかを計算します。DJミキシングでテンポを合わせる際の参考にしてください。", "es": "Calcula cuántos semitonos cambia la tonalidad de la canción al cambiar la velocidad del BPM original a un BPM objetivo (sin fijar el tono, solo cambiando la velocidad de reproducción). Útil como referencia al ajustar el tempo en mezclas de DJ.", "zh": "计算将速度从原曲BPM改为目标BPM时(不锁定音高，仅改变播放速度)，曲目调性会变化多少半音。可作为DJ混音对齐节拍时的参考。"}, "orig_bpm_label": {"ko": "원곡 BPM", "en": "Original BPM", "ja": "元曲BPM", "es": "BPM original", "zh": "原曲BPM"}, "target_bpm_label": {"ko": "목표 BPM", "en": "Target BPM", "ja": "目標BPM", "es": "BPM objetivo", "zh": "目标BPM"}, "orig_key_label": {"ko": "원곡 키 (선택사항)", "en": "Original Key (optional)", "ja": "元曲のキー(任意)", "es": "Tonalidad original (opcional)", "zh": "原曲调性(可选)"}, "speed_change_label": {"ko": "속도 변화", "en": "Speed Change", "ja": "速度変化", "es": "Cambio de velocidad", "zh": "速度变化"}, "key_change_label": {"ko": "키(피치) 변화", "en": "Key (Pitch) Change", "ja": "キー(ピッチ)変化", "es": "Cambio de tonalidad (tono)", "zh": "调性(音高)变化"}, "result_key_label": {"ko": "결과 키 (근사치)", "en": "Resulting Key (approx.)", "ja": "結果のキー(近似値)", "es": "Tonalidad resultante (aprox.)", "zh": "结果调性(近似值)"}, "keymatch_note": {"ko": "참고: 반음 단위로 딱 떨어지지 않으면 가장 가까운 음 이름 + 몇 cents 벗어났는지로 보여줘요.", "en": "Note: if it doesn't land exactly on a semitone, it shows the nearest note name plus how many cents off it is.", "ja": "参考: 半音単位でぴったり合わない場合、最も近い音名と何セントずれているかを表示します。", "es": "Nota: si no coincide exactamente con un semitono, se muestra el nombre de la nota más cercana más los cents de desviación.", "zh": "提示：若无法精确落在半音上，会显示最接近的音名以及偏差的音分(cents)数。"}, "loopbpm_desc": {"ko": "샘플·루프 파일의 길이(초)와 마디 수를 알면, 원래 BPM이 몇이었는지 거꾸로 계산합니다.", "en": "If you know the length (seconds) and number of bars of a sample or loop file, this works backward to find the original BPM.", "ja": "サンプル・ループファイルの長さ(秒)と小節数がわかれば、元のBPMが何だったかを逆算します。", "es": "Si conoces la duración (segundos) y el número de compases de un sample o loop, esto calcula a la inversa cuál era el BPM original.", "zh": "只要知道样本/loop文件的长度(秒)和小节数，即可反推原始BPM是多少。"}, "sample_length_label": {"ko": "샘플 길이", "en": "Sample Length", "ja": "サンプル長", "es": "Duración de la muestra", "zh": "样本长度"}, "bar_count_label": {"ko": "마디(bar) 수", "en": "Number of Bars", "ja": "小節数", "es": "Número de compases", "zh": "小节数"}, "beats_per_bar_label": {"ko": "박자 (한 마디당 박 수)", "en": "Time Signature (beats per bar)", "ja": "拍子(1小節あたりの拍数)", "es": "Compás (pulsos por compás)", "zh": "拍号(每小节拍数)"}, "bardur_desc": {"ko": "BPM·박자·마디 수를 넣으면, 그 구간이 실제로 몇 분 몇 초인지 계산합니다. 버스 16마디, 코러스 8마디처럼 곡 구조를 짤 때 유용해요.", "en": "Enter the BPM, time signature, and number of bars to calculate how many minutes and seconds that section actually lasts. Useful for structuring a song, like a 16-bar verse or 8-bar chorus.", "ja": "BPM・拍子・小節数を入力すると、その区間が実際に何分何秒かを計算します。16小節のバース、8小節のコーラスのように曲構成を組む際に便利です。", "es": "Introduce el BPM, el compás y el número de compases para calcular cuántos minutos y segundos dura realmente esa sección. Útil para estructurar una canción, como una estrofa de 16 compases o un estribillo de 8.", "zh": "输入BPM、拍号和小节数，即可计算该段落实际时长为几分几秒。适合用于编排歌曲结构，如16小节的主歌、8小节的副歌。"}, "one_bar_length_label": {"ko": "한 마디 길이", "en": "One Bar Length", "ja": "1小節の長さ", "es": "Duración de un compás", "zh": "一小节长度"}, "total_length_label": {"ko": "전체 구간 길이", "en": "Total Section Length", "ja": "全体区間の長さ", "es": "Duración total de la sección", "zh": "总时长"}, "seconds_paren_template": {"ko": "({sec}초)", "en": "({sec}s)", "ja": "({sec}秒)", "es": "({sec}s)", "zh": "({sec}秒)"}, "timestretch_title": {"ko": "Time-Stretch (피치 고정)", "en": "Time-Stretch (Pitch Locked)", "ja": "Time-Stretch (ピッチ固定)", "es": "Time-Stretch (Tono fijo)", "zh": "Time-Stretch (音高锁定)"}, "timestretch_desc": {"ko": "DAW의 타임스트레치(WSOLA·페이즈보코더 등)처럼, <b style=\"color:var(--text-secondary);\">피치는 그대로 두고 템포만</b> 바꿀 때의 배속 비율을 계산합니다. (턴테이블처럼 속도를 바꾸면 피치도 같이 바뀌는 Speed↔Pitch 탭과 반대 개념이에요)", "en": "Like a DAW's time-stretch (WSOLA, phase vocoder, etc.), this calculates the ratio when you change <b style=\"color:var(--text-secondary);\">only the tempo while keeping the pitch fixed</b>. (This is the opposite concept of the Speed↔Pitch tab, where changing speed like a turntable also shifts the pitch.)", "ja": "DAWのタイムストレッチ(WSOLA・フェイズボコーダーなど)のように、<b style=\"color:var(--text-secondary);\">ピッチはそのままでテンポだけ</b>を変える際の倍速比率を計算します。(ターンテーブルのように速度を変えるとピッチも一緒に変わるSpeed↔Pitchタブとは逆の概念です)", "es": "Como el time-stretch de una DAW (WSOLA, phase vocoder, etc.), esto calcula la relación al cambiar <b style=\"color:var(--text-secondary);\">solo el tempo manteniendo el tono fijo</b>. (Es el concepto opuesto a la pestaña Speed↔Pitch, donde cambiar la velocidad como en un plato también cambia el tono.)", "zh": "如同DAW中的Time-Stretch(WSOLA、相位声码器等)，本工具计算<b style=\"color:var(--text-secondary);\">仅改变节拍、音高保持不变</b>时的倍速比率。(这与像转盘那样改变速度会同时改变音高的Speed↔Pitch标签页正好相反)"}, "stretch_ratio_label": {"ko": "스트레치 비율", "en": "Stretch Ratio", "ja": "ストレッチ比率", "es": "Relación de estiramiento", "zh": "拉伸比率"}, "tempo_change_label": {"ko": "템포 변화", "en": "Tempo Change", "ja": "テンポ変化", "es": "Cambio de tempo", "zh": "节拍变化"}, "pitch_change_label": {"ko": "피치 변화", "en": "Pitch Change", "ja": "ピッチ変化", "es": "Cambio de tono", "zh": "音高变化"}, "ts_warning": {"ko": "⚠️ ±20%를 넘는 큰 폭의 타임스트레치는 알고리즘에 따라 음질 열화(아티팩트, 워블링)가 뚜렷하게 들릴 수 있어요.", "en": "⚠️ Time-stretching by more than ±20% can cause noticeable audio degradation (artifacts, wobbling) depending on the algorithm.", "ja": "⚠️ ±20%を超える大幅なタイムストレッチは、アルゴリズムによって音質劣化(アーティファクト、ワブリング)がはっきり聴こえることがあります。", "es": "⚠️ Aplicar time-stretch de más de ±20% puede causar una degradación de audio notable (artefactos, ondulaciones) según el algoritmo.", "zh": "⚠️ 超过±20%的大幅度Time-Stretch，根据算法不同，可能会出现明显的音质劣化(伪影、抖动)。"}, "samplerate_desc": {"ko": "샘플 수 = 시간(초) × 샘플레이트. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.", "en": "Samples = Time (seconds) × Sample Rate. Choose what you want to solve for, then enter the other two values.", "ja": "サンプル数 = 時間(秒) × サンプルレート。何を求めるか選ぶと、残り2つの値を入力して計算します。", "es": "Muestras = Tiempo (segundos) × Frecuencia de muestreo. Elige qué quieres calcular y luego introduce los otros dos valores.", "zh": "采样点数 = 时间(秒) × 采样率。选择要求解的量，然后输入其余两个数值即可计算。"}, "time_solve_btn": {"ko": "Time 구하기", "en": "Solve Time", "ja": "Timeを求める", "es": "Calcular Time", "zh": "求Time"}, "samples_solve_btn": {"ko": "Samples 구하기", "en": "Solve Samples", "ja": "Samplesを求める", "es": "Calcular Samples", "zh": "求Samples"}, "rate_solve_btn": {"ko": "Sample Rate 구하기", "en": "Solve Sample Rate", "ja": "Sample Rateを求める", "es": "Calcular Sample Rate", "zh": "求Sample Rate"}, "common_samplerate_label": {"ko": "자주 쓰는 샘플레이트", "en": "Common Sample Rates", "ja": "よく使うサンプルレート", "es": "Frecuencias de muestreo comunes", "zh": "常用采样率"}, "buffer_desc": {"ko": "오디오 인터페이스의 버퍼 사이즈(samples)와 샘플레이트를 넣으면, 한 버퍼가 처리되는 데 걸리는 시간(지연시간)을 계산합니다.", "en": "Enter your audio interface's buffer size (samples) and sample rate to calculate how long it takes to process one buffer (latency).", "ja": "オーディオインターフェースのバッファサイズ(samples)とサンプルレートを入力すると、1バッファの処理にかかる時間(レイテンシー)を計算します。", "es": "Introduce el tamaño de buffer (muestras) y la frecuencia de muestreo de tu interfaz de audio para calcular cuánto tarda en procesarse un buffer (latencia).", "zh": "输入音频接口的缓冲区大小(samples)和采样率，即可计算处理一个缓冲区所需的时间(延迟)。"}, "oneway_latency_label": {"ko": "편도 레이턴시", "en": "One-Way Latency", "ja": "片道レイテンシー", "es": "Latencia unidireccional", "zh": "单程延迟"}, "roundtrip_latency_label": {"ko": "왕복(라운드트립) 레이턴시", "en": "Round-Trip Latency", "ja": "往復レイテンシー", "es": "Latencia de ida y vuelta", "zh": "往返延迟"}, "buffer_note": {"ko": "참고: 실제 체감 레이턴시는 여기에 A/D·D/A 변환, 드라이버, 플러그인 처리 시간 등이 더해져서 이 계산값보다 조금 더 커요.", "en": "Note: the actual perceived latency is a bit higher than this calculated value, since it also includes A/D·D/A conversion, driver, and plugin processing time.", "ja": "参考: 実際に体感するレイテンシーは、A/D・D/A変換、ドライバー、プラグイン処理時間などが加わるため、この計算値より少し大きくなります。", "es": "Nota: la latencia percibida real es un poco mayor que este valor calculado, ya que también incluye la conversión A/D·D/A, el driver y el tiempo de procesamiento de plugins.", "zh": "提示：实际体感延迟会比该计算值略高，因为还需加上A/D·D/A转换、驱动程序及插件处理时间等。"}, "quiz_problem_title": {"ko": "문제", "en": "Question", "ja": "問題", "es": "Pregunta", "zh": "题目"}, "quiz_start_prompt": {"ko": "시작 버튼을 눌러주세요", "en": "Press Start to begin", "ja": "スタートボタンを押してください", "es": "Pulsa Iniciar para comenzar", "zh": "请点击开始按钮"}, "btn_quiz_start": {"ko": "▸ 계산 문제 시작", "en": "▸ Start Quiz", "ja": "▸ 計算問題スタート", "es": "▸ Iniciar cuestionario", "zh": "▸ 开始计算题"}, "btn_quiz_stop": {"ko": "■ 계산 문제 중단", "en": "■ Stop Quiz", "ja": "■ 計算問題を中断", "es": "■ Detener cuestionario", "zh": "■ 中止计算题"}, "feedback_correct": {"ko": "✅ 정답이에요!", "en": "✅ Correct!", "ja": "✅ 正解です！", "es": "✅ ¡Correcto!", "zh": "✅ 答对了！"}, "feedback_wrong_template": {"ko": "❌ 오답이에요 — 정답은 {answer}이었어요", "en": "❌ Wrong — the answer was {answer}", "ja": "❌ 不正解 — 正解は{answer}でした", "es": "❌ Incorrecto — la respuesta era {answer}", "zh": "❌ 答错了 — 正确答案是{answer}"}, "quiz_finish_template": {"ko": "퀴즈 종료! {hit}/{total} 정답", "en": "Quiz complete! {hit}/{total} correct", "ja": "クイズ終了！{hit}/{total}問正解", "es": "¡Cuestionario terminado! {hit}/{total} correctas", "zh": "测验结束！答对{hit}/{total}题"}, "unit_seconds": {"ko": "초", "en": "s", "ja": "秒", "es": "s", "zh": "秒"}, "unit_bars": {"ko": "마디", "en": "bars", "ja": "小節", "es": "compases", "zh": "小节"}, "note_q_template": {"ko": "BPM {bpm}에서 {label}는 몇 ms인가요?", "en": "At {bpm} BPM, how many ms is a {label}?", "ja": "BPM {bpm}のとき、{label}は何msですか？", "es": "A {bpm} BPM, ¿cuántos ms dura una {label}?", "zh": "在{bpm} BPM下，{label}是多少ms？"}, "speedpitch_q_pct2semi": {"ko": "재생 속도를 {pct}% 바꾸면, 피치는 몇 반음 바뀌나요?", "en": "If you change the playback speed by {pct}%, how many semitones does the pitch shift?", "ja": "再生速度を{pct}%変えると、ピッチは何半音変わりますか？", "es": "Si cambias la velocidad de reproducción en {pct}%, ¿cuántos semitonos cambia el tono?", "zh": "若将播放速度改变{pct}%，音高会变化多少半音？"}, "speedpitch_q_semi2pct": {"ko": "피치를 {semi}반음 바꾸려면, 재생 속도를 몇 % 바꿔야 하나요?", "en": "To shift the pitch by {semi} semitones, by what percentage must you change the playback speed?", "ja": "ピッチを{semi}半音変えるには、再生速度を何%変える必要がありますか？", "es": "Para cambiar el tono en {semi} semitonos, ¿en qué porcentaje debes cambiar la velocidad de reproducción?", "zh": "要将音高改变{semi}个半音，播放速度需要改变百分之多少？"}, "keymatch_q_pct": {"ko": "원곡 BPM {origBpm}를 {targetBpm}로 바꾸면, 속도 변화는 몇 %인가요?", "en": "If you change the original BPM {origBpm} to {targetBpm}, what is the speed change in %?", "ja": "元曲BPM {origBpm}を{targetBpm}に変えると、速度変化は何%ですか？", "es": "Si cambias el BPM original de {origBpm} a {targetBpm}, ¿cuál es el cambio de velocidad en %?", "zh": "将原曲BPM {origBpm}改为{targetBpm}时，速度变化是百分之多少？"}, "keymatch_q_semi": {"ko": "원곡 BPM {origBpm}를 {targetBpm}로 바꾸면, 키(피치)는 몇 반음 바뀌나요?", "en": "If you change the original BPM {origBpm} to {targetBpm}, how many semitones does the key (pitch) shift?", "ja": "元曲BPM {origBpm}を{targetBpm}に変えると、キー(ピッチ)は何半音変わりますか？", "es": "Si cambias el BPM original de {origBpm} a {targetBpm}, ¿cuántos semitonos cambia la tonalidad (tono)?", "zh": "将原曲BPM {origBpm}改为{targetBpm}时，调性(音高)会变化多少半音？"}, "loopbpm_q_template": {"ko": "{beatsPerBar}/4박자, {bars}마디짜리 루프의 길이가 {lengthSec}초라면, BPM은 얼마인가요?", "en": "For a {beatsPerBar}/4 time signature, {bars}-bar loop that is {lengthSec} seconds long, what is the BPM?", "ja": "{beatsPerBar}/4拍子、{bars}小節のループの長さが{lengthSec}秒なら、BPMはいくつですか？", "es": "Para un compás de {beatsPerBar}/4, un loop de {bars} compases que dura {lengthSec} segundos, ¿cuál es el BPM?", "zh": "在{beatsPerBar}/4拍号、{bars}小节的loop长度为{lengthSec}秒时，BPM是多少？"}, "bardur_q_template": {"ko": "BPM {bpm}, {beatsPerBar}/4박자에서 {bars}마디는 몇 초인가요?", "en": "At {bpm} BPM in {beatsPerBar}/4 time, how many seconds are {bars} bars?", "ja": "BPM {bpm}、{beatsPerBar}/4拍子で{bars}小節は何秒ですか？", "es": "A {bpm} BPM en compás de {beatsPerBar}/4, ¿cuántos segundos duran {bars} compases?", "zh": "在{bpm} BPM、{beatsPerBar}/4拍号下，{bars}小节是多少秒？"}, "timestretch_q_template": {"ko": "타임스트레치로 BPM {origBpm} 곡을 {targetBpm}로 바꾸면(피치는 고정), 템포 변화는 몇 %인가요?", "en": "If you time-stretch a {origBpm} BPM track to {targetBpm} BPM (pitch locked), what is the tempo change in %?", "ja": "タイムストレッチでBPM {origBpm}の曲を{targetBpm}に変えると(ピッチ固定)、テンポ変化は何%ですか？", "es": "Si aplicas time-stretch a una pista de {origBpm} BPM para llevarla a {targetBpm} BPM (tono fijo), ¿cuál es el cambio de tempo en %?", "zh": "使用Time-Stretch将{origBpm} BPM的曲目改为{targetBpm} BPM(音高锁定)时，节拍变化是百分之多少？"}, "samplerate_q_samples": {"ko": "샘플레이트 {sr}Hz에서 {t}초는 몇 샘플인가요?", "en": "At a sample rate of {sr}Hz, how many samples is {t} seconds?", "ja": "サンプルレート{sr}Hzで{t}秒は何サンプルですか？", "es": "A una frecuencia de muestreo de {sr}Hz, ¿cuántas muestras son {t} segundos?", "zh": "在采样率{sr}Hz下，{t}秒是多少个采样点？"}, "samplerate_q_time": {"ko": "샘플레이트 {sr}Hz에서 {n} 샘플은 몇 초인가요?", "en": "At a sample rate of {sr}Hz, how many seconds are {n} samples?", "ja": "サンプルレート{sr}Hzで{n}サンプルは何秒ですか？", "es": "A una frecuencia de muestreo de {sr}Hz, ¿cuántos segundos son {n} muestras?", "zh": "在采样率{sr}Hz下，{n}个采样点是多少秒？"}, "samplerate_q_latency": {"ko": "버퍼 사이즈 {buf} samples, 샘플레이트 {sr}Hz일 때, 편도 레이턴시는 몇 ms인가요?", "en": "With a buffer size of {buf} samples and a sample rate of {sr}Hz, what is the one-way latency in ms?", "ja": "バッファサイズ{buf}samples、サンプルレート{sr}Hzのとき、片道レイテンシーは何msですか？", "es": "Con un tamaño de buffer de {buf} muestras y una frecuencia de muestreo de {sr}Hz, ¿cuál es la latencia unidireccional en ms?", "zh": "缓冲区大小为{buf}个采样点、采样率为{sr}Hz时，单程延迟是多少ms？"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

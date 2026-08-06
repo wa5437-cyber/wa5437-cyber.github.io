@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -151,23 +152,24 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">SIGNAL GENERATOR<small>Pink / White / Sine / Square / Triangle</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="sigpicker" id="sigPicker">
-    <button data-type="pink" class="active"><span class="ic">▤</span>핑크</button>
-    <button data-type="white"><span class="ic">▦</span>화이트</button>
-    <button data-type="sine"><span class="ic">∿</span>사인</button>
-    <button data-type="square"><span class="ic">⊓</span>사각</button>
-    <button data-type="triangle"><span class="ic">△</span>삼각</button>
-    <button data-type="hum"><span class="ic">〰</span>험</button>
-    <button data-type="buzz"><span class="ic">⚡</span>버즈</button>
-    <button data-type="hiss"><span class="ic">〜</span>히스</button>
+    <button data-type="pink" class="active"><span class="ic">▤</span><span data-i18n="sig_pink">핑크</span></button>
+    <button data-type="white"><span class="ic">▦</span><span data-i18n="sig_white">화이트</span></button>
+    <button data-type="sine"><span class="ic">∿</span><span data-i18n="sig_sine">사인</span></button>
+    <button data-type="square"><span class="ic">⊓</span><span data-i18n="sig_square">사각</span></button>
+    <button data-type="triangle"><span class="ic">△</span><span data-i18n="sig_triangle">삼각</span></button>
+    <button data-type="hum"><span class="ic">〰</span><span data-i18n="sig_hum">험</span></button>
+    <button data-type="buzz"><span class="ic">⚡</span><span data-i18n="sig_buzz">버즈</span></button>
+    <button data-type="hiss"><span class="ic">〜</span><span data-i18n="sig_hiss">히스</span></button>
   </div>
 
   <div class="status">
-    <h2 id="statusTitle">시작 버튼을 눌러 소리를 재생하세요</h2>
-    <p id="statusSub">노이즈는 배경을 채우고, 파형은 지정한 주파수의 순수 톤을 냅니다</p>
+    <h2 id="statusTitle" data-i18n="status_default_title">시작 버튼을 눌러 소리를 재생하세요</h2>
+    <p id="statusSub" data-i18n="status_default_sub">노이즈는 배경을 채우고, 파형은 지정한 주파수의 순수 톤을 냅니다</p>
   </div>
 
   <div class="console">
@@ -194,8 +196,8 @@
     </div>
   </div>
 
-  <button id="startBtn" class="startbtn go">▸ 시작</button>
-  <p class="hint">주파수 노브는 위/아래로 드래그하거나, 아래 숫자 입력칸에 직접 입력할 수 있습니다.</p>
+  <button id="startBtn" class="startbtn go" data-i18n="btn_start">▸ 시작</button>
+  <p class="hint" data-i18n="hint_freq">주파수 노브는 위/아래로 드래그하거나, 아래 숫자 입력칸에 직접 입력할 수 있습니다.</p>
 
   <div class="tool-links">
     <a href="trainer.html">🎧 Ear Trainer</a>
@@ -525,16 +527,20 @@
   volTrack.addEventListener('pointercancel', volRelease);
 
   // ---- 신호 종류 선택 ----
-  const SIGNAL_LABELS = {
-    pink: ['핑크노이즈 재생 중', '넓은 대역을 균등하게 채우는 배경 노이즈입니다'],
-    white: ['화이트노이즈 재생 중', '모든 주파수를 동일한 세기로 담은 노이즈입니다'],
-    sine: ['사인파 재생 중', '가장 깨끗한 순음입니다 — 노브로 음높이를 바꿔보세요'],
-    square: ['사각파 재생 중', '배음이 풍부한 각진 파형입니다 — 노브로 음높이를 바꿔보세요'],
-    triangle: ['삼각파 재생 중', '사인파보다 살짝 날카로운 부드러운 파형입니다'],
-    hum: ['험(Hum) 노이즈 재생 중', '전원 잡음 특유의 낮은 웅웅거림입니다 — 그라운드 루프 문제를 들어볼 때 유용해요'],
-    buzz: ['버즈(Buzz) 노이즈 재생 중', '배음이 풍부해 험보다 거칠고 지지직거리는 질감입니다'],
-    hiss: ['히스(Hiss) 노이즈 재생 중', '고음 위주로 걸러낸 노이즈입니다 — 테이프 히스, 프리앰프 노이즈와 비슷해요']
+  const SIGNAL_LABEL_KEYS = {
+    pink: ['status_pink_title', 'status_pink_sub'],
+    white: ['status_white_title', 'status_white_sub'],
+    sine: ['status_sine_title', 'status_sine_sub'],
+    square: ['status_square_title', 'status_square_sub'],
+    triangle: ['status_triangle_title', 'status_triangle_sub'],
+    hum: ['status_hum_title', 'status_hum_sub'],
+    buzz: ['status_buzz_title', 'status_buzz_sub'],
+    hiss: ['status_hiss_title', 'status_hiss_sub']
   };
+  function signalLabel(type){
+    const keys = SIGNAL_LABEL_KEYS[type];
+    return [window.i18n.t(keys[0]), window.i18n.t(keys[1])];
+  }
 
   function setSignalType(type){
     signalType = type;
@@ -544,7 +550,7 @@
     updateKnobEnabledState();
     engine.setType(type);
     if (isPlaying){
-      const [title, sub] = SIGNAL_LABELS[type];
+      const [title, sub] = signalLabel(type);
       setStatus(title, sub);
     }
   }
@@ -561,16 +567,16 @@
     if (!isPlaying){
       isPlaying = true;
       engine.start();
-      startBtn.textContent = '■ 정지';
+      startBtn.textContent = window.i18n.t('btn_stop');
       startBtn.classList.remove('go'); startBtn.classList.add('stop');
-      const [title, sub] = SIGNAL_LABELS[signalType];
+      const [title, sub] = signalLabel(signalType);
       setStatus(title, sub);
     } else {
       isPlaying = false;
       engine.stop();
-      startBtn.textContent = '▸ 시작';
+      startBtn.textContent = window.i18n.t('btn_start');
       startBtn.classList.remove('stop'); startBtn.classList.add('go');
-      setStatus('시작 버튼을 눌러 소리를 재생하세요', '노이즈는 배경을 채우고, 파형은 지정한 주파수의 순수 톤을 냅니다');
+      setStatus(window.i18n.t('status_default_title'), window.i18n.t('status_default_sub'));
     }
   });
 
@@ -578,7 +584,17 @@
   updateKnobVisual();
   updateKnobEnabledState();
   applyVolVisual(volume);
+
+  document.addEventListener('i18nchange', () => {
+    startBtn.textContent = window.i18n.t(isPlaying ? 'btn_stop' : 'btn_start');
+    if (isPlaying) {
+      const [title, sub] = signalLabel(signalType);
+      setStatus(title, sub);
+    }
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "sig_pink": {"ko": "핑크", "en": "Pink", "ja": "ピンク", "es": "Rosa", "zh": "粉红"}, "sig_white": {"ko": "화이트", "en": "White", "ja": "ホワイト", "es": "Blanco", "zh": "白噪"}, "sig_sine": {"ko": "사인", "en": "Sine", "ja": "サイン", "es": "Seno", "zh": "正弦"}, "sig_square": {"ko": "사각", "en": "Square", "ja": "矩形", "es": "Cuadrada", "zh": "方波"}, "sig_triangle": {"ko": "삼각", "en": "Triangle", "ja": "三角", "es": "Triangular", "zh": "三角"}, "sig_hum": {"ko": "험", "en": "Hum", "ja": "ハム", "es": "Zumbido", "zh": "电流声"}, "sig_buzz": {"ko": "버즈", "en": "Buzz", "ja": "バズ", "es": "Bordoneo", "zh": "蜂鸣"}, "sig_hiss": {"ko": "히스", "en": "Hiss", "ja": "ヒス", "es": "Siseo", "zh": "嘶声"}, "status_default_title": {"ko": "시작 버튼을 눌러 소리를 재생하세요", "en": "Press Start to play sound", "ja": "スタートボタンを押して音を再生してください", "es": "Pulsa Iniciar para reproducir el sonido", "zh": "点击开始按钮播放声音"}, "status_default_sub": {"ko": "노이즈는 배경을 채우고, 파형은 지정한 주파수의 순수 톤을 냅니다", "en": "Noise fills the background, while waveforms produce a pure tone at the chosen frequency", "ja": "ノイズは背景を満たし、波形は指定した周波数の純音を鳴らします", "es": "El ruido llena el fondo, mientras que las formas de onda producen un tono puro en la frecuencia elegida", "zh": "噪声用于填充背景，波形则以指定频率发出纯音"}, "status_pink_title": {"ko": "핑크노이즈 재생 중", "en": "Playing pink noise", "ja": "ピンクノイズ再生中", "es": "Reproduciendo ruido rosa", "zh": "正在播放粉红噪声"}, "status_pink_sub": {"ko": "넓은 대역을 균등하게 채우는 배경 노이즈입니다", "en": "Background noise that evenly fills a wide frequency range", "ja": "広い帯域を均等に満たす背景ノイズです", "es": "Ruido de fondo que llena uniformemente un amplio rango de frecuencias", "zh": "均匀覆盖宽频段的背景噪声"}, "status_white_title": {"ko": "화이트노이즈 재생 중", "en": "Playing white noise", "ja": "ホワイトノイズ再生中", "es": "Reproduciendo ruido blanco", "zh": "正在播放白噪声"}, "status_white_sub": {"ko": "모든 주파수를 동일한 세기로 담은 노이즈입니다", "en": "Noise containing all frequencies at equal intensity", "ja": "すべての周波数を同じ強さで含むノイズです", "es": "Ruido que contiene todas las frecuencias con la misma intensidad", "zh": "包含所有频率且强度相同的噪声"}, "status_sine_title": {"ko": "사인파 재생 중", "en": "Playing sine wave", "ja": "サイン波再生中", "es": "Reproduciendo onda seno", "zh": "正在播放正弦波"}, "status_sine_sub": {"ko": "가장 깨끗한 순음입니다 — 노브로 음높이를 바꿔보세요", "en": "The purest tone — turn the knob to change the pitch", "ja": "最もクリアな純音です — ノブでピッチを変えてみましょう", "es": "El tono más puro — gira la perilla para cambiar el tono", "zh": "最纯净的单音 — 转动旋钮可改变音高"}, "status_square_title": {"ko": "사각파 재생 중", "en": "Playing square wave", "ja": "矩形波再生中", "es": "Reproduciendo onda cuadrada", "zh": "正在播放方波"}, "status_square_sub": {"ko": "배음이 풍부한 각진 파형입니다 — 노브로 음높이를 바꿔보세요", "en": "An angular waveform rich in harmonics — turn the knob to change the pitch", "ja": "倍音が豊かな角ばった波形です — ノブでピッチを変えてみましょう", "es": "Una forma de onda angular rica en armónicos — gira la perilla para cambiar el tono", "zh": "谐波丰富的方形波形 — 转动旋钮可改变音高"}, "status_triangle_title": {"ko": "삼각파 재생 중", "en": "Playing triangle wave", "ja": "三角波再生中", "es": "Reproduciendo onda triangular", "zh": "正在播放三角波"}, "status_triangle_sub": {"ko": "사인파보다 살짝 날카로운 부드러운 파형입니다", "en": "A smooth waveform, just slightly sharper than a sine wave", "ja": "サイン波よりわずかに鋭い、なめらかな波形です", "es": "Una forma de onda suave, ligeramente más definida que una onda seno", "zh": "比正弦波稍显尖锐的平滑波形"}, "status_hum_title": {"ko": "험(Hum) 노이즈 재생 중", "en": "Playing Hum noise", "ja": "ハムノイズ再生中", "es": "Reproduciendo ruido de zumbido (Hum)", "zh": "正在播放电流声(Hum)"}, "status_hum_sub": {"ko": "전원 잡음 특유의 낮은 웅웅거림입니다 — 그라운드 루프 문제를 들어볼 때 유용해요", "en": "The low droning sound typical of power line noise — useful for listening for ground loop issues", "ja": "電源ノイズ特有の低いうなりです — グラウンドループ問題を聴く際に便利です", "es": "El zumbido grave típico del ruido de la línea eléctrica — útil para detectar problemas de bucle de tierra", "zh": "电源噪声特有的低沉嗡嗡声 — 适合用来听地回路问题"}, "status_buzz_title": {"ko": "버즈(Buzz) 노이즈 재생 중", "en": "Playing Buzz noise", "ja": "バズノイズ再生中", "es": "Reproduciendo ruido de zumbido agudo (Buzz)", "zh": "正在播放蜂鸣噪声(Buzz)"}, "status_buzz_sub": {"ko": "배음이 풍부해 험보다 거칠고 지지직거리는 질감입니다", "en": "Rich in harmonics, giving it a rougher, crackling texture than hum", "ja": "倍音が豊かでハムより粗くジリジリした質感です", "es": "Rico en armónicos, con una textura más áspera y crepitante que el zumbido", "zh": "谐波丰富，比电流声更粗糙、带有滋滋声质感"}, "status_hiss_title": {"ko": "히스(Hiss) 노이즈 재생 중", "en": "Playing Hiss noise", "ja": "ヒスノイズ再生中", "es": "Reproduciendo ruido de siseo (Hiss)", "zh": "正在播放嘶声噪声(Hiss)"}, "status_hiss_sub": {"ko": "고음 위주로 걸러낸 노이즈입니다 — 테이프 히스, 프리앰프 노이즈와 비슷해요", "en": "Noise filtered to emphasize high frequencies — similar to tape hiss or preamp noise", "ja": "高音域を中心に濾過したノイズです — テープヒスやプリアンプノイズに似ています", "es": "Ruido filtrado para enfatizar las frecuencias altas — similar al siseo de cinta o al ruido de preamplificador", "zh": "以高频为主过滤出的噪声 — 类似磁带底噪或前级放大器噪声"}, "btn_start": {"ko": "▸ 시작", "en": "▸ Start", "ja": "▸ スタート", "es": "▸ Iniciar", "zh": "▸ 开始"}, "btn_stop": {"ko": "■ 정지", "en": "■ Stop", "ja": "■ ストップ", "es": "■ Detener", "zh": "■ 停止"}, "hint_freq": {"ko": "주파수 노브는 위/아래로 드래그하거나, 아래 숫자 입력칸에 직접 입력할 수 있습니다.", "en": "Drag the frequency knob up or down, or type a value directly into the number field below.", "ja": "周波数ノブは上下にドラッグするか、下の数値入力欄に直接入力できます。", "es": "Arrastra la perilla de frecuencia hacia arriba o abajo, o escribe un valor directamente en el campo numérico de abajo.", "zh": "可以上下拖动频率旋钮，也可以直接在下方的数字输入框中输入数值。"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

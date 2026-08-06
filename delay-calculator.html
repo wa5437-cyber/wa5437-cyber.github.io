@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -176,7 +177,8 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">DELAY CALCULATOR<small>Speaker Alignment / Precedence Offset</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="panel">
@@ -192,17 +194,17 @@
       <div class="field">
         <label>Unit</label>
         <div class="unit-toggle" id="unitToggle">
-          <button data-unit="m" class="active">Meters</button>
-          <button data-unit="ft">Feet</button>
+          <button data-unit="m" class="active" data-i18n="unit_meters">Meters</button>
+          <button data-unit="ft" data-i18n="unit_feet">Feet</button>
         </div>
       </div>
     </div>
-    <div class="speed-readout">현재 온도 기준 음속: <b id="speedReadout">343.4 m/s</b></div>
+    <div class="speed-readout"><span data-i18n="speed_readout_label">현재 온도 기준 음속:</span> <b id="speedReadout">343.4 m/s</b></div>
   </div>
 
   <div class="panel">
     <div class="panel-title">Time ↔ Distance ↔ Phase</div>
-    <p class="phase-desc">딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.</p>
+    <p class="phase-desc" data-i18n="phase_desc">딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.</p>
 
     <div class="phase-grid">
       <div class="field">
@@ -236,20 +238,20 @@
       <canvas id="phaseCanvas"></canvas>
     </div>
     <div class="phase-legend">
-      <span><i class="dot" style="background:var(--blue);"></i>원음(0°)</span>
-      <span><i class="dot dashed"></i>딜레이 신호 (<span id="phaseWrapLabel">0°</span>)</span>
+      <span><i class="dot" style="background:var(--blue);"></i><span data-i18n="phase_legend_original">원음</span>(0°)</span>
+      <span><i class="dot dashed"></i><span data-i18n="phase_legend_delayed">딜레이 신호</span> (<span id="phaseWrapLabel">0°</span>)</span>
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Haas Effect (선행효과) 참고표</div>
-    <p class="phase-desc">두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.</p>
+    <div class="panel-title" data-i18n="panel_haas">Haas Effect (선행효과) 참고표</div>
+    <p class="phase-desc" data-i18n="haas_panel_desc">두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.</p>
     <div class="tempo-table" id="haasTable"></div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Tempo ↔ Delay (박자 동기화)</div>
-    <p class="phase-desc">곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.</p>
+    <div class="panel-title" data-i18n="panel_tempo_delay">Tempo ↔ Delay (박자 동기화)</div>
+    <p class="phase-desc" data-i18n="tempo_panel_desc">곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.</p>
 
     <div class="field" style="max-width:200px;">
       <label>BPM</label>
@@ -263,24 +265,24 @@
   </div>
 
   <div class="panel">
-    <div class="panel-title">Reverb Time (리버브 타임)</div>
-    <p class="phase-desc">
+    <div class="panel-title" data-i18n="panel_reverb_time">Reverb Time (리버브 타임)</div>
+    <p class="phase-desc" data-i18n="reverb_panel_desc" data-i18n-html="true">
       위의 BPM을 그대로 사용합니다. <b style="color:var(--text-secondary)">프리딜레이 + 디케이 타임의 합이 박자 단위(마디/half/quarter/eighth)로 딱 떨어지게</b> 잡으면,
       리버브 꼬리가 다음 박이 오기 직전에 자연스럽게 사라져서 믹스가 지저분해지지 않습니다
       (믹싱 엔지니어 Bobby Owsinski가 저서 《The Mixing Engineer's Handbook》에서 소개한 방법입니다).
     </p>
     <div class="tempo-table" id="reverbTable"></div>
-    <div class="warn-note">
+    <div class="warn-note" data-i18n="warn_reverb_note" data-i18n-html="true">
       <b>참고:</b> 프리딜레이는 짧게(1/64~1/128 음표)만 잡고, 나머지 길이를 디케이 타임으로 채우는 방식입니다.
       이건 실전에서 바로 쓸 수 있는 "시작점"이고, 곡의 느낌에 따라 취향껏 조절해서 쓰시면 됩니다.
     </div>
   </div>
 
   <div class="panel">
-    <div class="panel-title">Speaker Delay (스피커 딜레이 계산)</div>
+    <div class="panel-title" data-i18n="panel_speaker_delay">Speaker Delay (스피커 딜레이 계산)</div>
     <div class="main-dist-row">
       <div class="field">
-        <label>메인 스피커 → 기준 지점 거리</label>
+        <label data-i18n="label_main_dist">메인 스피커 → 기준 지점 거리</label>
         <div class="input-row">
           <input type="number" id="mainDistInput" value="30" step="0.1">
           <span class="unit" id="mainDistUnit">m</span>
@@ -297,9 +299,9 @@
 
     <div class="panel-subtitle">Delay Zones</div>
     <div id="zoneList"></div>
-    <button class="add-zone-btn" id="addZoneBtn">+ 존 추가</button>
+    <button class="add-zone-btn" id="addZoneBtn" data-i18n="add_zone_btn">+ 존 추가</button>
 
-    <div class="warn-note">
+    <div class="warn-note" data-i18n="warn_calc_method" data-i18n-html="true">
       <b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋.
       값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장).
       프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.
@@ -369,7 +371,7 @@
       const display = totalMs < 0 ? 0 : totalMs;
       z.resultVal.textContent = display.toFixed(1) + 'ms';
       z.resultVal.classList.toggle('negative', totalMs < 0);
-      z.resultLbl.textContent = totalMs < 0 ? '딜레이 불필요' : '권장 딜레이';
+      z.resultLbl.textContent = totalMs < 0 ? window.i18n.t('zone_result_none_lbl') : window.i18n.t('zone_result_default_lbl');
     });
   }
 
@@ -380,11 +382,11 @@
     row.className = 'zone';
     row.innerHTML = `
       <div class="field">
-        <label>존 이름</label>
+        <label>${window.i18n.t('zone_name_label')}</label>
         <input type="text" value="${name}">
       </div>
       <div class="field">
-        <label>딜레이 스피커 → 기준 지점 거리</label>
+        <label>${window.i18n.t('zone_dist_label')}</label>
         <div class="input-row">
           <input type="number" value="${distanceDefault}" step="0.1">
           <span class="unit zone-unit">${unit}</span>
@@ -392,9 +394,9 @@
       </div>
       <div class="result-cell">
         <div class="val">0.0ms</div>
-        <div class="lbl">권장 딜레이</div>
+        <div class="lbl">${window.i18n.t('zone_result_default_lbl')}</div>
       </div>
-      <button class="remove-btn" title="이 존 삭제">✕</button>
+      <button class="remove-btn" title="${window.i18n.t('zone_remove_title')}">✕</button>
     `;
     const nameEl = row.querySelector('input[type=text]');
     const distInput = row.querySelector('input[type=number]');
@@ -545,7 +547,7 @@
     if (source !== 'phase') phPhaseInput.value = wrapped.toFixed(1);
 
     phaseWrapLabel.textContent = cycles > 0
-      ? `${wrapped.toFixed(0)}° (총 ${cycles}사이클 + ${wrapped.toFixed(0)}°)`
+      ? window.i18n.tpl('phase_wrap_template', { wrapped: wrapped.toFixed(0), cycles: cycles })
       : `${wrapped.toFixed(0)}°`;
 
     // 0~360도 게이지에 현재 위상(감긴 값) 위치 표시
@@ -557,10 +559,10 @@
 
   // ✅ 요청 반영: Haas Effect(선행효과) 참고표 — 시간차에 따른 일반적인 지각 특성
   const HAAS_ZONES = [
-    { max: 1,   label: '0 ~ 1ms',   desc: '거의 하나의 소리로 합쳐져 들려요. 위상 간섭(콤필터링)이 가장 두드러지는 구간이에요.' },
-    { max: 5,   label: '1 ~ 5ms',   desc: '여전히 하나로 들리지만, 음색이 살짝 변하거나(콤필터링) 공간감이 생기기 시작해요.' },
-    { max: 30,  label: '5 ~ 30ms',  desc: '"선행효과(Precedence Effect)" 구간 — 먼저 도착한 소리 방향으로 위치를 지각해요. 뒤 소리가 더 커도(약 +10dB까지) 에코로 안 들려요.' },
-    { max: Infinity, label: '30ms ~', desc: '별개의 메아리(에코)로 뚜렷하게 들리기 시작해요.' },
+    { max: 1,   label: '0 ~ 1ms',   descKey: 'haas_zone1_desc' },
+    { max: 5,   label: '1 ~ 5ms',   descKey: 'haas_zone2_desc' },
+    { max: 30,  label: '5 ~ 30ms',  descKey: 'haas_zone3_desc' },
+    { max: Infinity, label: '30ms ~', descKey: 'haas_zone4_desc' },
   ];
   const haasTable = document.getElementById('haasTable');
   function updateHaasTable(timeMs){
@@ -568,15 +570,15 @@
     const activeIdx = HAAS_ZONES.findIndex(zone => t <= zone.max);
     let html = `
       <div class="tempo-row tempo-header" style="grid-template-columns:0.32fr 1fr;">
-        <div class="tempo-cell">시간차</div>
-        <div class="tempo-cell" style="text-align:left;">들리는 방식</div>
+        <div class="tempo-cell">${window.i18n.t('haas_col_time')}</div>
+        <div class="tempo-cell" style="text-align:left;">${window.i18n.t('haas_col_perception')}</div>
       </div>`;
     HAAS_ZONES.forEach((zone, i) => {
       const isActive = i === activeIdx;
       html += `
         <div class="tempo-row" style="grid-template-columns:0.32fr 1fr; ${isActive ? 'background:rgba(61,220,151,0.1);' : ''}">
           <div class="tempo-cell" style="${isActive ? 'color:var(--teal);' : ''}">${zone.label}</div>
-          <div class="tempo-cell" style="text-align:left; font-size:13.5px; line-height:1.55; font-weight:400; color:${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'};">${zone.desc}</div>
+          <div class="tempo-cell" style="text-align:left; font-size:13.5px; line-height:1.55; font-weight:400; color:${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'};">${window.i18n.t(zone.descKey)}</div>
         </div>`;
     });
     haasTable.innerHTML = html;
@@ -644,10 +646,10 @@
 
     let html = `
       <div class="tempo-row tempo-header">
-        <div class="tempo-cell">음표</div>
-        <div class="tempo-cell">일반</div>
-        <div class="tempo-cell">붙임(●)</div>
-        <div class="tempo-cell">셋잇단(3)</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_note')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_normal')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_dotted')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_triplet')}</div>
       </div>`;
 
     NOTE_DIVISIONS.forEach(({ icon, frac, mult }) => {
@@ -675,10 +677,10 @@
   // barFraction: 1마디(4/4 기준) 대비 몇 배(또는 몇 분의 1)를 총 리버브 길이(프리딜레이+디케이)로 쓸지
   // ✅ 요청 반영: Hall을 2마디로 키우고, 그 아래로 절반씩 taper되게 정리했다(2 → 1 → 1/2 → 1/4마디).
   const REVERB_PRESETS = [
-    { name: 'Hall',           desc: '크고 웅장하게 — 두 마디를 꽉 채움',   barFraction: 2 },
-    { name: 'Big Room',       desc: '중간 크기 — 한 마디',               barFraction: 1 },
-    { name: 'Small Room',     desc: '작은 방 — 반 마디',                 barFraction: 1/2 },
-    { name: 'Tight Ambience', desc: '아주 짧은 잔향 — 4분의 1마디',       barFraction: 1/4 },
+    { name: 'Hall',           descKey: 'reverb_hall_desc',       barFraction: 2 },
+    { name: 'Big Room',       descKey: 'reverb_bigroom_desc',    barFraction: 1 },
+    { name: 'Small Room',     descKey: 'reverb_smallroom_desc',  barFraction: 1/2 },
+    { name: 'Tight Ambience', descKey: 'reverb_tight_desc',      barFraction: 1/4 },
   ];
 
   function renderReverbTable(){
@@ -694,7 +696,7 @@
         <div class="tempo-cell">Total Reverb</div>
       </div>`;
 
-    REVERB_PRESETS.forEach(({ name, desc, barFraction }) => {
+    REVERB_PRESETS.forEach(({ name, descKey, barFraction }) => {
       const totalMs = barMs * barFraction;
       // ✅ 고친 것: 프리딜레이를 "4분음표 기준 1/64"로 고정하면 Hall과 Big Room처럼
       // 총 길이가 다른 프리셋끼리 우연히 같은 값이 나올 수 있었다. 대신 "이 프리셋
@@ -706,7 +708,7 @@
         <div class="tempo-row">
           <div class="tempo-cell tempo-note-cell" style="display:block;">
             <div>${name}</div>
-            <div style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-top:2px;">${desc}</div>
+            <div style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-top:2px;">${window.i18n.t(descKey)}</div>
           </div>
           <div class="tempo-cell">${formatMs(preDelayMs)}</div>
           <div class="tempo-cell">${formatMs(decayMs)}</div>
@@ -727,7 +729,16 @@
   createZoneRow('Delay Tower 2', 65);
   recalcAll();
   recalcPhaseFrom('phase'); // ✅ 기본값이 Phase(15°) 기준이므로 여기서부터 계산 시작
+
+  document.addEventListener('i18nchange', () => {
+    recalcAll();
+    recalcPhaseFrom('phase');
+    renderTempoTable();
+    renderReverbTable();
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "panel_tempo_delay": {"ko": "Tempo ↔ Delay (박자 동기화)", "en": "Tempo ↔ Delay (Sync to Tempo)", "ja": "Tempo ↔ Delay (テンポ同期)", "es": "Tempo ↔ Delay (Sincronización de tempo)", "zh": "Tempo ↔ Delay (节拍同步)"}, "panel_reverb_time": {"ko": "Reverb Time (리버브 타임)", "en": "Reverb Time", "ja": "Reverb Time (リバーブタイム)", "es": "Reverb Time (Tiempo de reverberación)", "zh": "Reverb Time (混响时间)"}, "panel_speaker_delay": {"ko": "Speaker Delay (스피커 딜레이 계산)", "en": "Speaker Delay (Calculation)", "ja": "Speaker Delay (スピーカーディレイ計算)", "es": "Speaker Delay (Cálculo)", "zh": "Speaker Delay (扬声器延时计算)"}, "panel_haas": {"ko": "Haas Effect (선행효과) 참고표", "en": "Haas Effect Reference Table", "ja": "Haas Effect (先行効果) 早見表", "es": "Tabla de referencia del Efecto Haas", "zh": "哈斯效应(先行效应)参考表"}, "unit_meters": {"ko": "Meters", "en": "Meters", "ja": "メートル", "es": "Metros", "zh": "米(公制)"}, "unit_feet": {"ko": "Feet", "en": "Feet", "ja": "フィート", "es": "Pies", "zh": "英尺"}, "speed_readout_label": {"ko": "현재 온도 기준 음속:", "en": "Speed of sound at current temperature:", "ja": "現在の気温での音速:", "es": "Velocidad del sonido a la temperatura actual:", "zh": "当前温度下的音速："}, "phase_desc": {"ko": "딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.", "en": "See how much a delay time (or distance) shifts the phase at a given frequency. Useful for mic phase alignment and checking for comb filtering. Change any one of the four values and the rest update automatically.", "ja": "ディレイ時間(または距離)が特定の周波数でどれだけ位相をずらすかを確認します。マイクの位相合わせやコムフィルタリングの確認に便利です。4つの値のどれかを変えると、残りが自動的に調整されます。", "es": "Comprueba cuánto desplaza la fase un tiempo de delay (o distancia) a una frecuencia determinada. Útil para alinear la fase de micrófonos y detectar comb filtering. Cambia cualquiera de los cuatro valores y el resto se ajusta automáticamente.", "zh": "查看延时时间(或距离)在特定频率下会造成多大的相位偏移。适用于麦克风相位对齐和梳状滤波检查。四个数值中任意一个改变，其余会自动联动更新。"}, "phase_legend_original": {"ko": "원음", "en": "Original", "ja": "原音", "es": "Original", "zh": "原声"}, "phase_legend_delayed": {"ko": "딜레이 신호", "en": "Delayed signal", "ja": "ディレイ信号", "es": "Señal con delay", "zh": "延时信号"}, "phase_wrap_template": {"ko": "{wrapped}° (총 {cycles}사이클 + {wrapped}°)", "en": "{wrapped}° (total {cycles} cycles + {wrapped}°)", "ja": "{wrapped}° (合計{cycles}サイクル + {wrapped}°)", "es": "{wrapped}° (total {cycles} ciclos + {wrapped}°)", "zh": "{wrapped}° (共{cycles}个周期 + {wrapped}°)"}, "haas_panel_desc": {"ko": "두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.", "en": "General guidelines for how the human ear perceives two sounds based on the time gap between them. The matching row is highlighted based on the Time value above.", "ja": "2つの音の時間差によって人の耳にどう聴こえるかについての一般的な目安です。上のTime値に応じて該当する区間がハイライトされます。", "es": "Pautas generales sobre cómo percibe el oído humano dos sonidos según la diferencia de tiempo entre ellos. La fila correspondiente se resalta según el valor de Time de arriba.", "zh": "关于两个声音之间的时间差如何被人耳感知的一般性参考标准。会根据上方的Time数值高亮对应的区间。"}, "tempo_panel_desc": {"ko": "곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.", "en": "Enter the song's BPM (beats per minute) and it automatically calculates the delay time (ms) for each note length, so you can set a delay effect perfectly in time with the beat.", "ja": "曲のBPM(1分あたりの拍数)を入力すると、ディレイエフェクトを拍にぴったり合わせられるよう、各音符の長さに対応するディレイタイム(ms)を自動計算します。", "es": "Introduce el BPM (pulsos por minuto) de la canción y se calculará automáticamente el tiempo de delay (ms) para cada duración de nota, para que puedas ajustar un efecto de delay perfectamente sincronizado con el ritmo.", "zh": "输入歌曲的BPM(每分钟拍数)，即可自动计算各音符时值对应的延时时间(ms)，方便将延时效果精确对齐节拍。"}, "reverb_panel_desc": {"ko": "위의 BPM을 그대로 사용합니다. <b style=\"color:var(--text-secondary)\">프리딜레이 + 디케이 타임의 합이 박자 단위(마디/half/quarter/eighth)로 딱 떨어지게</b> 잡으면, 리버브 꼬리가 다음 박이 오기 직전에 자연스럽게 사라져서 믹스가 지저분해지지 않습니다 (믹싱 엔지니어 Bobby Owsinski가 저서 《The Mixing Engineer's Handbook》에서 소개한 방법입니다).", "en": "Uses the BPM entered above. If you set the <b style=\"color:var(--text-secondary)\">pre-delay + decay time to add up exactly to a beat division (bar/half/quarter/eighth)</b>, the reverb tail naturally fades away right before the next beat, keeping the mix from getting muddy (a technique introduced by mixing engineer Bobby Owsinski in his book The Mixing Engineer's Handbook).", "ja": "上のBPMをそのまま使用します。<b style=\"color:var(--text-secondary)\">プリディレイ＋ディケイタイムの合計を拍単位(小節/2分/4分/8分)にきっちり合わせる</b>と、リバーブの余韻が次の拍が来る直前に自然に消えるため、ミックスが濁りません(ミキシングエンジニアBobby Owsinskiが著書『The Mixing Engineer's Handbook』で紹介した手法です)。", "es": "Usa el BPM introducido arriba. Si ajustas <b style=\"color:var(--text-secondary)\">la suma de pre-delay + decay time para que coincida exactamente con una división del pulso (compás/mitad/negra/corchea)</b>, la cola de la reverb se desvanece de forma natural justo antes del siguiente pulso, evitando que la mezcla se ensucie (una técnica presentada por el ingeniero de mezcla Bobby Owsinski en su libro The Mixing Engineer's Handbook).", "zh": "沿用上方输入的BPM。若将<b style=\"color:var(--text-secondary)\">预延时+衰减时间之和精确对齐到节拍单位(小节/二分/四分/八分)</b>，混响尾音会在下一拍到来前自然消失，避免混音变得浑浊(这是混音工程师Bobby Owsinski在其著作《The Mixing Engineer's Handbook》中介绍的方法)。"}, "warn_reverb_note": {"ko": "<b>참고:</b> 프리딜레이는 짧게(1/64~1/128 음표)만 잡고, 나머지 길이를 디케이 타임으로 채우는 방식입니다. 이건 실전에서 바로 쓸 수 있는 \"시작점\"이고, 곡의 느낌에 따라 취향껏 조절해서 쓰시면 됩니다.", "en": "<b>Note:</b> Pre-delay is kept short (a 1/64–1/128 note), with the remaining length filled by the decay time. This is a practical \"starting point\" — feel free to adjust it to taste depending on the feel of the song.", "ja": "<b>参考:</b> プリディレイは短く(1/64〜1/128音符)に留め、残りの長さをディケイタイムで埋める方式です。これは実践ですぐ使える「出発点」なので、曲の雰囲気に合わせて好みで調整して使ってください。", "es": "<b>Nota:</b> El pre-delay se mantiene corto (una nota de 1/64–1/128), y el resto de la duración se llena con el decay time. Este es un \"punto de partida\" práctico — ajústalo a tu gusto según la sensación de la canción.", "zh": "<b>提示：</b>预延时保持较短(1/64~1/128音符)，其余长度由衰减时间填充。这是一个可直接用于实战的\"起点\"，可根据歌曲的感觉自行调整。"}, "label_main_dist": {"ko": "메인 스피커 → 기준 지점 거리", "en": "Main speaker → reference point distance", "ja": "メインスピーカー→基準地点までの距離", "es": "Distancia de altavoz principal → punto de referencia", "zh": "主扬声器→基准点距离"}, "add_zone_btn": {"ko": "+ 존 추가", "en": "+ Add Zone", "ja": "+ ゾーンを追加", "es": "+ Añadir zona", "zh": "+ 添加分区"}, "warn_calc_method": {"ko": "<b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋. 값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장). 프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.", "en": "<b>Calculation method:</b> Delay time = (delay speaker → reference point distance − main speaker → reference point distance) ÷ speed of sound + precedence offset. A negative result means the delay speaker is farther from the reference point than the main speaker, so delay may not be needed (we recommend treating it as 0). The precedence offset (typically 10–20ms) makes the delay speaker's sound arrive slightly later than the main, so listeners perceive the sound's location as coming from the stage (main speaker) — this is the Haas Effect correction value.", "ja": "<b>計算方法:</b> ディレイ時間 = (ディレイスピーカー→基準地点までの距離 − メインスピーカー→基準地点までの距離) ÷ 音速 + プリシデンスオフセット。値がマイナスになる場合、ディレイスピーカーの方が基準地点からメインより遠いことを意味し、ディレイが不要な場合があります(0として扱うことを推奨)。プリシデンスオフセット(通常10〜20ms)は、ディレイスピーカーの音がメインよりわずかに遅れて届くようにすることで、聴き手が音の位置をステージ(メインスピーカー)側と知覚するようにするハース効果の補正値です。", "es": "<b>Método de cálculo:</b> Tiempo de delay = (distancia del altavoz de delay al punto de referencia − distancia del altavoz principal al punto de referencia) ÷ velocidad del sonido + offset de precedencia. Un resultado negativo significa que el altavoz de delay está más lejos del punto de referencia que el principal, por lo que puede no necesitarse delay (se recomienda tratarlo como 0). El offset de precedencia (normalmente 10–20ms) hace que el sonido del altavoz de delay llegue un poco más tarde que el principal, para que los oyentes perciban la ubicación del sonido hacia el escenario (altavoz principal) — este es el valor de corrección del Efecto Haas.", "zh": "<b>计算方式：</b>延时时间 = (延时扬声器→基准点距离 − 主扬声器→基准点距离) ÷ 音速 + 优先效应偏移量。若结果为负数，表示延时扬声器离基准点比主扬声器更远，可能不需要延时(建议按0处理)。优先效应偏移量(通常10~20ms)会让延时扬声器的声音比主扬声器稍晚到达，使听众将声音的位置感知为来自舞台(主扬声器)方向 — 这是哈斯效应(Haas Effect)的修正值。"}, "zone_name_label": {"ko": "존 이름", "en": "Zone Name", "ja": "ゾーン名", "es": "Nombre de la zona", "zh": "分区名称"}, "zone_dist_label": {"ko": "딜레이 스피커 → 기준 지점 거리", "en": "Delay speaker → reference point distance", "ja": "ディレイスピーカー→基準地点までの距離", "es": "Altavoz de delay → distancia al punto de referencia", "zh": "延时扬声器→基准点距离"}, "zone_result_default_lbl": {"ko": "권장 딜레이", "en": "Recommended delay", "ja": "推奨ディレイ", "es": "Delay recomendado", "zh": "建议延时"}, "zone_result_none_lbl": {"ko": "딜레이 불필요", "en": "No delay needed", "ja": "ディレイ不要", "es": "No se necesita delay", "zh": "无需延时"}, "zone_remove_title": {"ko": "이 존 삭제", "en": "Delete this zone", "ja": "このゾーンを削除", "es": "Eliminar esta zona", "zh": "删除此分区"}, "haas_col_time": {"ko": "시간차", "en": "Time Diff", "ja": "時間差", "es": "Diferencia de tiempo", "zh": "时间差"}, "haas_col_perception": {"ko": "들리는 방식", "en": "How it's perceived", "ja": "聴こえ方", "es": "Cómo se percibe", "zh": "听感"}, "haas_zone1_desc": {"ko": "거의 하나의 소리로 합쳐져 들려요. 위상 간섭(콤필터링)이 가장 두드러지는 구간이에요.", "en": "The two sounds nearly fuse into one. This is the range where phase interference (comb filtering) is most noticeable.", "ja": "ほぼ一つの音として聴こえます。位相干渉(コムフィルタリング)が最も目立つ区間です。", "es": "Los dos sonidos casi se fusionan en uno. Es el rango donde la interferencia de fase (comb filtering) es más notable.", "zh": "两个声音几乎融合为一体，是相位干扰(梳状滤波)最明显的区间。"}, "haas_zone2_desc": {"ko": "여전히 하나로 들리지만, 음색이 살짝 변하거나(콤필터링) 공간감이 생기기 시작해요.", "en": "Still perceived as one sound, but the tone starts to shift slightly (comb filtering) and a sense of space begins to emerge.", "ja": "依然として一つの音に聴こえますが、音色がわずかに変化したり(コムフィルタリング)、空間感が生まれ始めます。", "es": "Aún se percibe como un solo sonido, pero el timbre empieza a cambiar ligeramente (comb filtering) y comienza a aparecer sensación de espacio.", "zh": "仍会被感知为一个声音，但音色开始略有变化(梳状滤波)，并开始产生空间感。"}, "haas_zone3_desc": {"ko": "\"선행효과(Precedence Effect)\" 구간 — 먼저 도착한 소리 방향으로 위치를 지각해요. 뒤 소리가 더 커도(약 +10dB까지) 에코로 안 들려요.", "en": "The \"Precedence Effect\" range — you perceive the location as coming from the direction of the first-arriving sound. Even if the later sound is louder (up to about +10dB), it isn't heard as a separate echo.", "ja": "「先行効果(Precedence Effect)」区間 — 先に到達した音の方向に位置を知覚します。後の音が大きくても(約+10dBまで)エコーとして聴こえません。", "es": "El rango del \"Efecto de precedencia\" — percibes la ubicación en la dirección del sonido que llega primero. Aunque el sonido posterior sea más fuerte (hasta unos +10dB), no se percibe como un eco aparte.", "zh": "\"优先效应(Precedence Effect)\"区间 — 会将声音方位感知为先到达的那个声音的方向。即使后到的声音更大声(最多约+10dB)，也不会被听成回声。"}, "haas_zone4_desc": {"ko": "별개의 메아리(에코)로 뚜렷하게 들리기 시작해요.", "en": "You start to clearly hear it as a distinct echo.", "ja": "別々のこだま(エコー)としてはっきり聴こえ始めます。", "es": "Empiezas a escucharlo claramente como un eco independiente.", "zh": "会开始清楚地被听成独立的回声(Echo)。"}, "tempo_col_note": {"ko": "음표", "en": "Note", "ja": "音符", "es": "Nota", "zh": "音符"}, "tempo_col_normal": {"ko": "일반", "en": "Normal", "ja": "通常", "es": "Normal", "zh": "普通"}, "tempo_col_dotted": {"ko": "붙임(●)", "en": "Dotted (●)", "ja": "付点(●)", "es": "Con puntillo (●)", "zh": "附点(●)"}, "tempo_col_triplet": {"ko": "셋잇단(3)", "en": "Triplet (3)", "ja": "三連符(3)", "es": "Tresillo (3)", "zh": "三连音(3)"}, "reverb_hall_desc": {"ko": "크고 웅장하게 — 두 마디를 꽉 채움", "en": "Big and grand — fills two full bars", "ja": "大きく壮大に — 2小節をフルに使用", "es": "Grande y majestuoso — llena dos compases completos", "zh": "宏大壮阔 — 填满两个小节"}, "reverb_bigroom_desc": {"ko": "중간 크기 — 한 마디", "en": "Medium size — one bar", "ja": "中くらいのサイズ — 1小節", "es": "Tamaño mediano — un compás", "zh": "中等大小 — 一个小节"}, "reverb_smallroom_desc": {"ko": "작은 방 — 반 마디", "en": "Small room — half a bar", "ja": "小さな部屋 — 半小節", "es": "Sala pequeña — medio compás", "zh": "小房间 — 半个小节"}, "reverb_tight_desc": {"ko": "아주 짧은 잔향 — 4분의 1마디", "en": "Very short tail — a quarter bar", "ja": "非常に短い残響 — 4分の1小節", "es": "Cola muy corta — un cuarto de compás", "zh": "极短尾音 — 四分之一小节"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

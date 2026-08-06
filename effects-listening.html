@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -164,13 +165,14 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">EFFECTS LISTENING<small>Reverb · Delay · Chorus · Flanger · Distortion</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="chapter-picker" id="chapterPicker">
-    <button id="chapterFreeBtn" class="active">자유 청음</button>
-    <button id="chapterQuizBtn">청음 문제</button>
-    <button id="chapterDynamicsBtn">다이나믹스</button>
+    <button id="chapterFreeBtn" class="active" data-i18n="chapter_free">자유 청음</button>
+    <button id="chapterQuizBtn" data-i18n="chapter_quiz">청음 문제</button>
+    <button id="chapterDynamicsBtn" data-i18n="chapter_dynamics">다이나믹스</button>
   </div>
 
   <div class="scoreboard" id="scoreboard" style="display:none;">
@@ -180,21 +182,21 @@
   </div>
 
   <div class="panel">
-    <div class="panel-title">Source (소리 원본)</div>
+    <div class="panel-title" data-i18n="panel_source_title">Source (소리 원본)</div>
     <div class="source-picker" id="sourcePicker">
-      <button id="sourceNoiseBtn" class="active">🌫️ 핑크노이즈</button>
-      <button id="sourceMusicBtn" disabled>🎵 내 음악</button>
+      <button id="sourceNoiseBtn" class="active" data-i18n="source_pink_label">🌫️ 핑크노이즈</button>
+      <button id="sourceMusicBtn" disabled data-i18n="source_music_label">🎵 내 음악</button>
     </div>
     <input type="file" id="musicFileInput" accept="audio/*,.mp3,.m4a,.aac,.wav,.aiff,.caf,.flac,.ogg" style="display:none;">
-    <button class="upload-btn" id="uploadMusicBtn">📂 음악 파일 업로드</button>
+    <button class="upload-btn" id="uploadMusicBtn" data-i18n="upload_music_btn">📂 음악 파일 업로드</button>
     <div class="music-filename" id="musicFileName"></div>
   </div>
 
   <div class="panel" id="effectPanel">
     <div class="panel-title">Effect</div>
-    <p class="phase-desc" id="fxDesc">이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.</p>
+    <p class="phase-desc" id="fxDesc" data-i18n="fx_desc_free">이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.</p>
     <div class="fx-picker" id="fxPicker">
-      <button data-fx="dry" class="active">Dry <span style="font-weight:400;font-size:11px;">(원음)</span></button>
+      <button data-fx="dry" class="active" data-i18n="dry_label" data-i18n-html="true">Dry <span style="font-weight:400;font-size:11px;">(원음)</span></button>
       <button data-fx="reverb">Reverb</button>
       <button data-fx="delay">Delay</button>
       <button data-fx="chorus">Chorus</button>
@@ -205,13 +207,13 @@
       <button data-fx="wow">Wow</button>
       <button data-fx="autopan">Auto-Pan</button>
     </div>
-    <div class="ab-badge" id="abBadge" style="display:none;">● 원음</div>
+    <div class="ab-badge" id="abBadge" style="display:none;" data-i18n="ab_badge_dry">● 원음</div>
     <div class="feedback" id="feedback"></div>
   </div>
 
   <div class="panel" id="dynamicsPanel" style="display:none;">
     <div class="panel-title">Dynamics</div>
-    <p class="phase-desc">컴프레서·게이트·더킹 파라미터를 직접 조절하면서 들어보세요. 켜고 끄면서 비교할 수 있어요.</p>
+    <p class="phase-desc" data-i18n="dynamics_desc">컴프레서·게이트·더킹 파라미터를 직접 조절하면서 들어보세요. 켜고 끄면서 비교할 수 있어요.</p>
     <div class="solve-picker" id="dynamicsModePicker">
       <button data-dyn="compressor" class="active">Compressor</button>
       <button data-dyn="gate">Gate</button>
@@ -219,8 +221,8 @@
     </div>
 
     <div class="source-picker" id="dynamicsOnOffPicker" style="margin-bottom:16px;">
-      <button id="dynamicsOffBtn">Bypass (원음)</button>
-      <button id="dynamicsOnBtn" class="active">On (적용됨)</button>
+      <button id="dynamicsOffBtn" data-i18n="dyn_bypass_label">Bypass (원음)</button>
+      <button id="dynamicsOnBtn" class="active" data-i18n="dyn_on_label">On (적용됨)</button>
     </div>
 
     <!-- Compressor 파라미터 -->
@@ -269,7 +271,7 @@
         <div class="slider-label-row"><label>Release</label><span class="slider-val" id="gateReleaseVal">150 ms</span></div>
         <input type="range" id="gateRelease" min="10" max="1000" step="10" value="150">
       </div>
-      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">Range는 닫혔을 때 얼마나 줄어드는지(완전 무음이 아니라 살짝 남겨둘 수도 있어요), Hold는 신호가 Threshold 아래로 떨어져도 얼마나 더 열려있을지를 정해요 — 너무 짧으면 소리가 지글지글(chattering) 끊길 수 있어요.</p>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="gate_note">Range는 닫혔을 때 얼마나 줄어드는지(완전 무음이 아니라 살짝 남겨둘 수도 있어요), Hold는 신호가 Threshold 아래로 떨어져도 얼마나 더 열려있을지를 정해요 — 너무 짧으면 소리가 지글지글(chattering) 끊길 수 있어요.</p>
     </div>
 
     <!-- Ducking 파라미터 -->
@@ -279,14 +281,14 @@
         <input type="range" id="duckAmount" min="-40" max="0" step="1" value="-18">
       </div>
       <div class="slider-field">
-        <div class="slider-label-row"><label>Interval (킥 간격)</label><span class="slider-val" id="duckIntervalVal">1.5 s</span></div>
+        <div class="slider-label-row"><label data-i18n="duck_interval_label">Interval (킥 간격)</label><span class="slider-val" id="duckIntervalVal">1.5 s</span></div>
         <input type="range" id="duckInterval" min="0.3" max="3" step="0.1" value="1.5">
       </div>
       <div class="slider-field">
         <div class="slider-label-row"><label>Release</label><span class="slider-val" id="duckReleaseVal">300 ms</span></div>
         <input type="range" id="duckRelease" min="50" max="1000" step="10" value="300">
       </div>
-      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;">일정한 간격으로 "킥" 소리가 울리고, 그때마다 메인 소리 볼륨이 확 줄었다가 서서히 돌아와요 — EDM에서 흔히 쓰는 사이드체인 펌핑 효과예요.</p>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="duck_note">일정한 간격으로 "킥" 소리가 울리고, 그때마다 메인 소리 볼륨이 확 줄었다가 서서히 돌아와요 — EDM에서 흔히 쓰는 사이드체인 펌핑 효과예요.</p>
     </div>
 
     <div class="dynamics-meter">
@@ -301,11 +303,11 @@
   </div>
 
   <div class="status">
-    <h2 id="statusTitle">이펙트를 골라서 시작해보세요</h2>
+    <h2 id="statusTitle" data-i18n="status_free_default">이펙트를 골라서 시작해보세요</h2>
     <p id="statusSub"></p>
   </div>
 
-  <button id="startBtn" class="startbtn">▸ 이펙트 청음 시작</button>
+  <button id="startBtn" class="startbtn" data-i18n="btn_fx_start">▸ 이펙트 청음 시작</button>
 
   <div class="tool-links">
     <a href="trainer.html">🎧 Ear Trainer</a>
@@ -882,18 +884,18 @@
   musicFileInput.addEventListener('change', async () => {
     const file = musicFileInput.files && musicFileInput.files[0];
     if (!file) return;
-    musicFileName.textContent = `⏳ "${file.name}" 불러오는 중...`;
+    musicFileName.textContent = window.i18n.tpl('music_loading', { name: file.name });
     try {
       const arrayBuffer = await file.arrayBuffer();
       await engine.loadMusicBuffer(arrayBuffer);
-      musicFileName.textContent = `✅ "${file.name}" (${Math.round(engine.musicBuffer.duration)}초)`;
+      musicFileName.textContent = window.i18n.tpl('music_loaded', { name: file.name, duration: Math.round(engine.musicBuffer.duration) });
       sourceMusicBtn.disabled = false;
       engine.usingMusic = true;
       sourceNoiseBtn.classList.remove('active');
       sourceMusicBtn.classList.add('active');
     } catch (err) {
       console.error('음악 파일 디코딩 실패:', err);
-      musicFileName.textContent = `⚠️ "${file.name}" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다`;
+      musicFileName.textContent = window.i18n.tpl('music_load_failed', { name: file.name });
       sourceMusicBtn.disabled = true;
     }
   });
@@ -943,21 +945,21 @@
     clearFeedback();
     fxButtons.forEach(b => b.classList.remove('active'));
     if (chapter === 'free') {
-      fxDescEl.textContent = '이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.';
-      setStatus('이펙트를 골라서 시작해보세요');
-      startBtn.textContent = '▸ 이펙트 청음 시작';
+      fxDescEl.textContent = window.i18n.t('fx_desc_free');
+      setStatus(window.i18n.t('status_free_default'));
+      startBtn.textContent = window.i18n.t('btn_fx_start');
       const dryBtn = fxButtons.find(b => b.dataset.fx === 'dry');
       dryBtn.classList.add('active');
       engine.setFxEffect('dry');
     } else if (chapter === 'quiz') {
-      fxDescEl.textContent = '재생되는 이펙트가 뭔지 맞춰보세요. 정답을 고르기 전까지는 어떤 버튼도 표시되지 않아요.';
-      setStatus('시작 버튼을 눌러 문제를 시작하세요');
-      startBtn.textContent = '▸ 청음 문제 시작';
+      fxDescEl.textContent = window.i18n.t('fx_desc_quiz');
+      setStatus(window.i18n.t('status_quiz_default'));
+      startBtn.textContent = window.i18n.t('btn_quiz_start');
       questionIndex = 0; hitCount = 0;
       updateScoreboard();
     } else {
-      setStatus('시작 버튼을 눌러 다이나믹스를 들어보세요');
-      startBtn.textContent = '▸ 다이나믹스 청음 시작';
+      setStatus(window.i18n.t('status_dynamics_default'));
+      startBtn.textContent = window.i18n.t('btn_dynamics_start');
     }
   }
   chapterFreeBtn.addEventListener('click', () => switchChapter('free'));
@@ -971,7 +973,7 @@
 
   function setAbBadge(isDry){
     abBadgeEl.style.display = 'inline-flex';
-    abBadgeEl.textContent = isDry ? '● 원음' : '● 체인지';
+    abBadgeEl.textContent = isDry ? window.i18n.t('ab_badge_dry') : window.i18n.t('ab_badge_wet');
     abBadgeEl.classList.toggle('changed', !isDry);
   }
 
@@ -1007,7 +1009,7 @@
     fxButtons.forEach(b => b.classList.remove('active')); // ✅ 정답을 숨긴다
     clearFeedback();
     quizPhase = 'playing';
-    setStatus(`문제 ${questionIndex}/${QUESTIONS_PER_QUIZ}`, '재생되는 이펙트를 맞춰보세요');
+    setStatus(window.i18n.tpl('quiz_problem_title', { index: questionIndex, total: QUESTIONS_PER_QUIZ }), window.i18n.t('quiz_guess_prompt'));
     updateScoreboard();
     startAbCycle();
   }
@@ -1022,7 +1024,7 @@
     if (isCorrect) hitCount++;
     // 정답 공개
     fxButtons.forEach(b => b.classList.toggle('active', b.dataset.fx === currentAnswer));
-    feedbackEl.textContent = isCorrect ? '✅ 정답이에요!' : `❌ 오답이에요 — 정답은 ${currentAnswer.toUpperCase()}였어요`;
+    feedbackEl.textContent = isCorrect ? window.i18n.t('feedback_correct') : window.i18n.tpl('feedback_wrong', { answer: currentAnswer.toUpperCase() });
     feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
     updateScoreboard();
 
@@ -1041,9 +1043,9 @@
     stopAbCycle();
     engine.stop();
     stopViz();
-    startBtn.textContent = '▸ 청음 문제 시작';
+    startBtn.textContent = window.i18n.t('btn_quiz_start');
     startBtn.classList.remove('stop');
-    setStatus(`퀴즈 종료! ${hitCount}/${QUESTIONS_PER_QUIZ} 정답`, '다시 시작하려면 시작 버튼을 눌러주세요');
+    setStatus(window.i18n.tpl('quiz_finished', { hit: hitCount, total: QUESTIONS_PER_QUIZ }), window.i18n.t('quiz_restart_prompt'));
     fxButtons.forEach(b => b.classList.remove('active'));
     updateLockState();
   }
@@ -1058,7 +1060,7 @@
       engine.setFxEffect(btn.dataset.fx);
       fxButtons.forEach(b => b.classList.toggle('active', b === btn));
       if (engine.isPlaying) {
-        setStatus(`${btn.dataset.fx.toUpperCase()} 재생 중`, '다른 이펙트를 눌러 비교해보세요');
+        setStatus(window.i18n.tpl('fx_playing', { name: btn.dataset.fx.toUpperCase() }), window.i18n.t('fx_compare_prompt'));
       }
     });
   });
@@ -1168,23 +1170,23 @@
     if (chapter === 'free') {
       if (!engine.isPlaying) {
         engine.start();
-        startBtn.textContent = '■ 이펙트 청음 종료';
+        startBtn.textContent = window.i18n.t('btn_fx_stop');
         startBtn.classList.add('stop');
         const activeBtn = fxButtons.find(b => b.dataset.fx === engine.currentFxEffect);
-        setStatus(`${activeBtn.dataset.fx.toUpperCase()} 재생 중`, '다른 이펙트를 눌러 비교해보세요');
+        setStatus(window.i18n.tpl('fx_playing', { name: activeBtn.dataset.fx.toUpperCase() }), window.i18n.t('fx_compare_prompt'));
         requestAnimationFrame(startViz);
       } else {
         engine.stop();
         stopViz();
-        startBtn.textContent = '▸ 이펙트 청음 시작';
+        startBtn.textContent = window.i18n.t('btn_fx_start');
         startBtn.classList.remove('stop');
-        setStatus('이펙트를 골라서 시작해보세요');
+        setStatus(window.i18n.t('status_free_default'));
       }
     } else if (chapter === 'quiz') {
       if (!engine.isPlaying) {
         questionIndex = 0; hitCount = 0;
         engine.start(false); // ✅ 요청 반영: 청음 문제는 음악을 랜덤 위치에서 재생
-        startBtn.textContent = '■ 청음 문제 중단';
+        startBtn.textContent = window.i18n.t('btn_quiz_stop');
         startBtn.classList.add('stop');
         requestAnimationFrame(startViz);
         generateQuizQuestion();
@@ -1193,11 +1195,11 @@
         stopAbCycle();
         engine.stop();
         stopViz();
-        startBtn.textContent = '▸ 청음 문제 시작';
+        startBtn.textContent = window.i18n.t('btn_quiz_start');
         startBtn.classList.remove('stop');
         fxButtons.forEach(b => b.classList.remove('active'));
         clearFeedback();
-        setStatus('시작 버튼을 눌러 문제를 시작하세요');
+        setStatus(window.i18n.t('status_quiz_default'));
       }
     } else {
       // 다이나믹스 챕터
@@ -1206,9 +1208,9 @@
         initDynamicsParams(); // ✅ ensureContext()가 이미 호출된 이 시점에 슬라이더 기본값을 엔진에 반영
         engine.setActiveChain('dynamics');
         applyDynamicsState();
-        startBtn.textContent = '■ 다이나믹스 청음 종료';
+        startBtn.textContent = window.i18n.t('btn_dynamics_stop');
         startBtn.classList.add('stop');
-        setStatus(`${dynamicsMode.toUpperCase()} 재생 중`, dynamicsBypassed ? 'Bypass 상태예요 — On을 눌러 적용해보세요' : '슬라이더를 움직이며 들어보세요');
+        setStatus(window.i18n.tpl('dyn_playing', { mode: dynamicsMode.toUpperCase() }), dynamicsBypassed ? window.i18n.t('dyn_bypass_hint') : window.i18n.t('dyn_slider_hint'));
         requestAnimationFrame(startViz);
         startDynMeter();
       } else {
@@ -1216,9 +1218,9 @@
         engine.setActiveChain('fx'); // ✅ 다음에 다른 챕터로 돌아갈 때를 대비해 원상복구
         stopViz();
         stopDynMeter();
-        startBtn.textContent = '▸ 다이나믹스 청음 시작';
+        startBtn.textContent = window.i18n.t('btn_dynamics_start');
         startBtn.classList.remove('stop');
-        setStatus('시작 버튼을 눌러 다이나믹스를 들어보세요');
+        setStatus(window.i18n.t('status_dynamics_default'));
       }
     }
     updateLockState();
@@ -1265,7 +1267,7 @@
         vizCtx.fillStyle = 'rgba(147,163,163,0.7)';
         vizCtx.font = `${Math.max(11, h * 0.13)}px 'IBM Plex Mono', monospace`;
         vizCtx.textAlign = 'center';
-        vizCtx.fillText('🎵 음악을 업로드하면 파형이 여기에 표시돼요', w / 2, h / 2);
+        vizCtx.fillText(window.i18n.t('viz_upload_hint'), w / 2, h / 2);
         vizCtx.textAlign = 'left';
       }
     }
@@ -1284,7 +1286,40 @@
   updateLockState();
   updateScoreboard();
 
+  document.addEventListener('i18nchange', () => {
+    fxDescEl.textContent = chapter === 'quiz' ? window.i18n.t('fx_desc_quiz') : window.i18n.t('fx_desc_free');
+    if (abBadgeEl.style.display !== 'none') {
+      abBadgeEl.textContent = abBadgeEl.classList.contains('changed') ? window.i18n.t('ab_badge_wet') : window.i18n.t('ab_badge_dry');
+    }
+    if (!engine.isPlaying) {
+      if (chapter === 'free') {
+        setStatus(window.i18n.t('status_free_default'));
+        startBtn.textContent = window.i18n.t('btn_fx_start');
+      } else if (chapter === 'quiz') {
+        setStatus(window.i18n.t('status_quiz_default'));
+        startBtn.textContent = window.i18n.t('btn_quiz_start');
+      } else {
+        setStatus(window.i18n.t('status_dynamics_default'));
+        startBtn.textContent = window.i18n.t('btn_dynamics_start');
+      }
+    } else {
+      if (chapter === 'free') {
+        startBtn.textContent = window.i18n.t('btn_fx_stop');
+        const activeBtn = fxButtons.find(b => b.classList.contains('active'));
+        if (activeBtn) setStatus(window.i18n.tpl('fx_playing', { name: activeBtn.dataset.fx.toUpperCase() }), window.i18n.t('fx_compare_prompt'));
+      } else if (chapter === 'quiz') {
+        startBtn.textContent = window.i18n.t('btn_quiz_stop');
+        if (quizPhase === 'playing') setStatus(window.i18n.tpl('quiz_problem_title', { index: questionIndex, total: QUESTIONS_PER_QUIZ }), window.i18n.t('quiz_guess_prompt'));
+      } else {
+        startBtn.textContent = window.i18n.t('btn_dynamics_stop');
+        setStatus(window.i18n.tpl('dyn_playing', { mode: dynamicsMode.toUpperCase() }), dynamicsBypassed ? window.i18n.t('dyn_bypass_hint') : window.i18n.t('dyn_slider_hint'));
+      }
+    }
+  });
+
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "chapter_free": {"ko": "자유 청음", "en": "Free Listening", "ja": "自由リスニング", "es": "Escucha libre", "zh": "自由聆听"}, "chapter_quiz": {"ko": "청음 문제", "en": "Listening Quiz", "ja": "リスニングクイズ", "es": "Cuestionario auditivo", "zh": "听力测验"}, "chapter_dynamics": {"ko": "다이나믹스", "en": "Dynamics", "ja": "ダイナミクス", "es": "Dinámica", "zh": "动态处理"}, "panel_source_title": {"ko": "Source (소리 원본)", "en": "Source (Sound Source)", "ja": "Source（音源）", "es": "Source (Fuente de sonido)", "zh": "Source（声音来源）"}, "source_pink_label": {"ko": "🌫️ 핑크노이즈", "en": "🌫️ Pink Noise", "ja": "🌫️ ピンクノイズ", "es": "🌫️ Ruido rosa", "zh": "🌫️ 粉红噪音"}, "source_music_label": {"ko": "🎵 내 음악", "en": "🎵 My Music", "ja": "🎵 マイミュージック", "es": "🎵 Mi música", "zh": "🎵 我的音乐"}, "upload_music_btn": {"ko": "📂 음악 파일 업로드", "en": "📂 Upload Music File", "ja": "📂 音楽ファイルをアップロード", "es": "📂 Subir archivo de música", "zh": "📂 上传音乐文件"}, "fx_desc_free": {"ko": "이펙트를 눌러 재생 중에도 바로바로 비교해서 들어볼 수 있어요.", "en": "Tap an effect to compare it instantly, even while playback continues.", "ja": "エフェクトをタップすると、再生中でもすぐに聴き比べできます。", "es": "Toca un efecto para compararlo al instante, incluso durante la reproducción.", "zh": "点击特效即可在播放中随时对比试听。"}, "fx_desc_quiz": {"ko": "재생되는 이펙트가 뭔지 맞춰보세요. 정답을 고르기 전까지는 어떤 버튼도 표시되지 않아요.", "en": "Guess which effect is playing. No button will be highlighted until you pick an answer.", "ja": "再生されているエフェクトが何か当ててみましょう。答えを選ぶまでどのボタンも表示されません。", "es": "Adivina qué efecto se está reproduciendo. Ningún botón se resaltará hasta que elijas una respuesta.", "zh": "猜猜正在播放的是什么特效。在你选出答案之前不会高亮任何按钮。"}, "dry_label": {"ko": "Dry <span style=\"font-weight:400;font-size:11px;\">(원음)</span>", "en": "Dry <span style=\"font-weight:400;font-size:11px;\">(Original)</span>", "ja": "Dry <span style=\"font-weight:400;font-size:11px;\">(原音)</span>", "es": "Dry <span style=\"font-weight:400;font-size:11px;\">(Original)</span>", "zh": "Dry <span style=\"font-weight:400;font-size:11px;\">(原声)</span>"}, "ab_badge_dry": {"ko": "● 원음", "en": "● Original", "ja": "● 原音", "es": "● Original", "zh": "● 原声"}, "ab_badge_wet": {"ko": "● 체인지", "en": "● Changed", "ja": "● 変更後", "es": "● Cambiado", "zh": "● 已变化"}, "dynamics_desc": {"ko": "컴프레서·게이트·더킹 파라미터를 직접 조절하면서 들어보세요. 켜고 끄면서 비교할 수 있어요.", "en": "Adjust the compressor, gate, and ducking parameters yourself and listen to the result. Toggle it on and off to compare.", "ja": "コンプレッサー・ゲート・ダッキングのパラメーターを自分で調整して聴いてみましょう。オン/オフを切り替えて比較できます。", "es": "Ajusta tú mismo los parámetros del compresor, la puerta de ruido y el ducking, y escucha el resultado. Actívalo y desactívalo para comparar.", "zh": "亲自调节压缩器、噪声门和闪避（Ducking）参数并聆听效果，可以开关对比。"}, "dyn_bypass_label": {"ko": "Bypass (원음)", "en": "Bypass (Original)", "ja": "Bypass（原音）", "es": "Bypass (Original)", "zh": "Bypass（原声）"}, "dyn_on_label": {"ko": "On (적용됨)", "en": "On (Applied)", "ja": "On（適用済み）", "es": "On (Aplicado)", "zh": "On（已应用）"}, "duck_interval_label": {"ko": "Interval (킥 간격)", "en": "Interval (Kick Spacing)", "ja": "Interval（キック間隔）", "es": "Interval (espaciado del golpe)", "zh": "Interval（踢鼓间隔）"}, "gate_note": {"ko": "Range는 닫혔을 때 얼마나 줄어드는지(완전 무음이 아니라 살짝 남겨둘 수도 있어요), Hold는 신호가 Threshold 아래로 떨어져도 얼마나 더 열려있을지를 정해요 — 너무 짧으면 소리가 지글지글(chattering) 끊길 수 있어요.", "en": "Range sets how much the signal is reduced when closed (it doesn't have to be complete silence), and Hold sets how long the gate stays open after the signal drops below Threshold — too short and you'll hear chattering.", "ja": "Rangeは閉じたときにどれだけ音量が下がるか(完全な無音でなく少し残すこともできます)、Holdは信号がThresholdを下回っても、あとどれくらい開いたままにするかを決めます — 短すぎると音がジリジリ途切れる(chattering)ことがあります。", "es": "Range determina cuánto se reduce la señal cuando está cerrada (no tiene por qué ser silencio total), y Hold determina cuánto tiempo permanece abierta la puerta aunque la señal caiga por debajo del Threshold — si es demasiado corto, se puede oír un parpadeo (chattering).", "zh": "Range 决定关闭时信号衰减多少（不一定要完全静音），Hold 决定信号低于 Threshold 后噪声门还会保持打开多久——太短的话声音可能会出现抖动（chattering）。"}, "duck_note": {"ko": "일정한 간격으로 \"킥\" 소리가 울리고, 그때마다 메인 소리 볼륨이 확 줄었다가 서서히 돌아와요 — EDM에서 흔히 쓰는 사이드체인 펌핑 효과예요.", "en": "A \"kick\" sound plays at a steady interval, and each time it does, the main volume drops sharply then slowly recovers — this is the sidechain pumping effect commonly used in EDM.", "ja": "一定間隔で「キック」音が鳴り、そのたびにメインの音量が一気に下がってからゆっくり戻ります — EDMでよく使われるサイドチェーン・パンピング効果です。", "es": "Un sonido de \"bombo\" suena a intervalos regulares, y cada vez el volumen principal baja bruscamente y luego se recupera lentamente — es el efecto de sidechain pumping habitual en la música EDM.", "zh": "以固定间隔发出\"底鼓\"声，每次响起主音量都会骤降后缓慢恢复——这就是 EDM 中常见的 Sidechain 泵浦效果。"}, "status_free_default": {"ko": "이펙트를 골라서 시작해보세요", "en": "Pick an effect to get started", "ja": "エフェクトを選んで始めてみましょう", "es": "Elige un efecto para empezar", "zh": "选择一个特效开始吧"}, "btn_fx_start": {"ko": "▸ 이펙트 청음 시작", "en": "▸ Start Effects Listening", "ja": "▸ エフェクト聴音を開始", "es": "▸ Iniciar escucha de efectos", "zh": "▸ 开始特效聆听"}, "btn_fx_stop": {"ko": "■ 이펙트 청음 종료", "en": "■ End Effects Listening", "ja": "■ エフェクト聴音を終了", "es": "■ Finalizar escucha de efectos", "zh": "■ 结束特效聆听"}, "status_quiz_default": {"ko": "시작 버튼을 눌러 문제를 시작하세요", "en": "Tap start to begin the quiz", "ja": "スタートボタンを押して問題を始めましょう", "es": "Pulsa iniciar para comenzar el cuestionario", "zh": "点击开始按钮开始测验"}, "btn_quiz_start": {"ko": "▸ 청음 문제 시작", "en": "▸ Start Listening Quiz", "ja": "▸ リスニングクイズを開始", "es": "▸ Iniciar cuestionario auditivo", "zh": "▸ 开始听力测验"}, "btn_quiz_stop": {"ko": "■ 청음 문제 중단", "en": "■ Stop Listening Quiz", "ja": "■ リスニングクイズを中断", "es": "■ Detener cuestionario auditivo", "zh": "■ 中止听力测验"}, "status_dynamics_default": {"ko": "시작 버튼을 눌러 다이나믹스를 들어보세요", "en": "Tap start to listen to dynamics", "ja": "スタートボタンを押してダイナミクスを聴いてみましょう", "es": "Pulsa iniciar para escuchar la dinámica", "zh": "点击开始按钮聆听动态处理"}, "btn_dynamics_start": {"ko": "▸ 다이나믹스 청음 시작", "en": "▸ Start Dynamics Listening", "ja": "▸ ダイナミクス聴音を開始", "es": "▸ Iniciar escucha de dinámica", "zh": "▸ 开始动态聆听"}, "btn_dynamics_stop": {"ko": "■ 다이나믹스 청음 종료", "en": "■ End Dynamics Listening", "ja": "■ ダイナミクス聴音を終了", "es": "■ Finalizar escucha de dinámica", "zh": "■ 结束动态聆听"}, "music_loading": {"ko": "⏳ \"{name}\" 불러오는 중...", "en": "⏳ Loading \"{name}\"...", "ja": "⏳ \"{name}\" を読み込み中...", "es": "⏳ Cargando \"{name}\"...", "zh": "⏳ 正在加载 \"{name}\"..."}, "music_loaded": {"ko": "✅ \"{name}\" ({duration}초)", "en": "✅ \"{name}\" ({duration}s)", "ja": "✅ \"{name}\" ({duration}秒)", "es": "✅ \"{name}\" ({duration} s)", "zh": "✅ \"{name}\"（{duration}秒）"}, "music_load_failed": {"ko": "⚠️ \"{name}\" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다", "en": "⚠️ Failed to load \"{name}\" — the format may not be supported", "ja": "⚠️ \"{name}\" の読み込みに失敗しました — 対応していない形式の可能性があります", "es": "⚠️ Error al cargar \"{name}\" — puede que el formato no sea compatible", "zh": "⚠️ 加载 \"{name}\" 失败 — 可能是不受支持的格式"}, "quiz_problem_title": {"ko": "문제 {index}/{total}", "en": "Question {index}/{total}", "ja": "問題 {index}/{total}", "es": "Pregunta {index}/{total}", "zh": "题目 {index}/{total}"}, "quiz_guess_prompt": {"ko": "재생되는 이펙트를 맞춰보세요", "en": "Guess which effect is playing", "ja": "再生されているエフェクトを当ててみましょう", "es": "Adivina qué efecto se está reproduciendo", "zh": "猜猜正在播放的特效"}, "feedback_correct": {"ko": "✅ 정답이에요!", "en": "✅ Correct!", "ja": "✅ 正解です！", "es": "✅ ¡Correcto!", "zh": "✅ 答对了！"}, "feedback_wrong": {"ko": "❌ 오답이에요 — 정답은 {answer}였어요", "en": "❌ Wrong — the answer was {answer}", "ja": "❌ 不正解です — 正解は{answer}でした", "es": "❌ Incorrecto — la respuesta era {answer}", "zh": "❌ 答错了 — 正确答案是{answer}"}, "quiz_finished": {"ko": "퀴즈 종료! {hit}/{total} 정답", "en": "Quiz complete! {hit}/{total} correct", "ja": "クイズ終了！{hit}/{total} 正解", "es": "¡Cuestionario terminado! {hit}/{total} correctas", "zh": "测验结束！答对 {hit}/{total} 题"}, "quiz_restart_prompt": {"ko": "다시 시작하려면 시작 버튼을 눌러주세요", "en": "Tap start to try again", "ja": "もう一度始めるにはスタートボタンを押してください", "es": "Pulsa iniciar para volver a intentarlo", "zh": "点击开始按钮再来一次"}, "fx_playing": {"ko": "{name} 재생 중", "en": "Playing {name}", "ja": "{name} 再生中", "es": "Reproduciendo {name}", "zh": "正在播放 {name}"}, "fx_compare_prompt": {"ko": "다른 이펙트를 눌러 비교해보세요", "en": "Tap another effect to compare", "ja": "他のエフェクトを押して聴き比べてみましょう", "es": "Toca otro efecto para comparar", "zh": "点击其他特效进行对比"}, "dyn_playing": {"ko": "{mode} 재생 중", "en": "Playing {mode}", "ja": "{mode} 再生中", "es": "Reproduciendo {mode}", "zh": "正在播放 {mode}"}, "dyn_bypass_hint": {"ko": "Bypass 상태예요 — On을 눌러 적용해보세요", "en": "It's in Bypass — tap On to apply it", "ja": "Bypass状態です — Onを押して適用してみましょう", "es": "Está en Bypass — pulsa On para aplicarlo", "zh": "当前为 Bypass 状态 — 点击 On 应用效果"}, "dyn_slider_hint": {"ko": "슬라이더를 움직이며 들어보세요", "en": "Move the sliders and listen", "ja": "スライダーを動かしながら聴いてみましょう", "es": "Mueve los deslizadores y escucha", "zh": "拖动滑块聆听效果"}, "viz_upload_hint": {"ko": "🎵 음악을 업로드하면 파형이 여기에 표시돼요", "en": "🎵 Upload music to see the waveform here", "ja": "🎵 音楽をアップロードすると、ここに波形が表示されます", "es": "🎵 Sube música para ver aquí la forma de onda", "zh": "🎵 上传音乐后波形会显示在这里"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

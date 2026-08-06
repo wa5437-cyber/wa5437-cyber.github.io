@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -265,69 +266,70 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">RTA<small>Real-Time Analyzer · Mic Input</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="status">
-    <h2 id="statusTitle">시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요</h2>
-    <p id="statusSub">기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다</p>
+    <h2 id="statusTitle" data-i18n="status_default_title">시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요</h2>
+    <p id="statusSub" data-i18n="status_default_sub">기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다</p>
   </div>
 
-  <div class="mic-denied" id="micDenied">
+  <div class="mic-denied" id="micDenied" data-i18n="mic_denied_msg">
     마이크 접근이 거부되었습니다. 브라우저 주소창 옆 자물쇠(또는 사이트 설정)에서 마이크 권한을 허용한 뒤 다시 시도해주세요.
   </div>
 
   <div class="toolbar">
-    <button class="toolbar-btn" id="startBtn">▸ 마이크 시작</button>
+    <button class="toolbar-btn" id="startBtn" data-i18n="btn_mic_start">▸ 마이크 시작</button>
     <button class="toolbar-btn active" id="peakToggle">Peak Hold: ON</button>
   </div>
 
   <div class="view-toggle" id="viewToggle">
-    <button data-view="bar" class="active">▤ 막대(Bar)</button>
-    <button data-view="line">∿ 라인(Line)</button>
-    <button data-view="spl">📟 SPL 미터</button>
+    <button data-view="bar" class="active" data-i18n="view_bar_label">▤ 막대(Bar)</button>
+    <button data-view="line" data-i18n="view_line_label">∿ 라인(Line)</button>
+    <button data-view="spl" data-i18n="view_spl_label">📟 SPL 미터</button>
   </div>
 
   <div class="range-panel">
     <div class="range-field">
-      <label>Floor (조용한 소리 기준)</label>
+      <label data-i18n="label_floor">Floor (조용한 소리 기준)</label>
       <div class="range-input-row">
         <input type="number" id="floorInput" value="30" step="1">
         <span class="unit">dB</span>
       </div>
     </div>
     <div class="range-field">
-      <label>Ceiling (큰 소리 기준)</label>
+      <label data-i18n="label_ceiling">Ceiling (큰 소리 기준)</label>
       <div class="range-input-row">
         <input type="number" id="ceilingInput" value="120" step="1">
         <span class="unit">dB</span>
       </div>
     </div>
     <div class="range-field">
-      <label>Range (Floor 기준 폭) · <span id="rangeValueLabel">90</span>dB</label>
+      <label><span data-i18n="label_range_prefix">Range (Floor 기준 폭) · </span><span id="rangeValueLabel">90</span>dB</label>
       <input type="range" id="rangeInput" min="20" max="140" step="1" value="90" class="range-slider">
     </div>
-    <button class="toolbar-btn" id="boostQuietBtn">🔉 작은 소리 더 잘 보이게</button>
-    <button class="toolbar-btn" id="resetRangeBtn">↺ 기본값으로 초기화</button>
+    <button class="toolbar-btn" id="boostQuietBtn" data-i18n="btn_boost_quiet">🔉 작은 소리 더 잘 보이게</button>
+    <button class="toolbar-btn" id="resetRangeBtn" data-i18n="btn_reset_range">↺ 기본값으로 초기화</button>
 
     <details class="calib-details">
-      <summary>🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)</summary>
-      <p class="calib-note">기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.</p>
+      <summary data-i18n="calib_summary">🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)</summary>
+      <p class="calib-note" data-i18n="calib_note">기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.</p>
       <div class="range-field">
-        <label>보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨</label>
+        <label data-i18n="label_calib_offset">보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨</label>
         <div class="range-input-row">
           <input type="number" id="calibInput" value="140" step="1">
           <span class="unit">dB</span>
         </div>
       </div>
       <div class="range-field">
-        <label>기준 SPL (다른 SPL미터 값)</label>
+        <label data-i18n="label_target_spl">기준 SPL (다른 SPL미터 값)</label>
         <div class="range-input-row">
           <input type="number" id="targetSplInput" value="0" step="1">
           <span class="unit">dB SPL</span>
         </div>
       </div>
-      <button class="toolbar-btn" id="calibrateNowBtn">🎯 지금 소리로 자동 보정</button>
+      <button class="toolbar-btn" id="calibrateNowBtn" data-i18n="btn_calibrate_now">🎯 지금 소리로 자동 보정</button>
     </details>
   </div>
 
@@ -335,7 +337,7 @@
   <div class="level-readout" id="levelReadout" style="display:none;">
     <span class="level-val" id="levelVal">−∞</span><span class="level-unit">dB SPL</span>
     <span class="level-fs" id="levelFsVal">(−∞ dBFS)</span>
-    <span class="level-lbl">PEAK (피크)</span>
+    <span class="level-lbl" data-i18n="level_peak_label">PEAK (피크)</span>
   </div>
 
   <div class="console" id="consoleBar">
@@ -388,7 +390,7 @@
     <div class="spl-big-row">
       <span class="spl-big-val" id="splBigVal">--</span><span class="spl-big-unit">dB SPL</span>
     </div>
-    <div class="spl-avg-lbl" id="splModeLbl">PEAK (피크)</div>
+    <div class="spl-avg-lbl" id="splModeLbl" data-i18n="level_peak_label">PEAK (피크)</div>
     <div class="spl-fs-row" id="splFsRow">(-- dBFS)</div>
     <div class="vu-bar-wrap">
       <div class="vu-bar-fill" id="vuBarFill"></div>
@@ -399,10 +401,10 @@
       <div class="spl-stat"><span class="spl-stat-lbl">MAX</span><span class="spl-stat-val" id="splMaxVal">--</span></div>
     </div>
     <canvas id="splHistoryCanvas"></canvas>
-    <button class="toolbar-btn" id="splResetBtn">↺ Min/Max/Avg 초기화</button>
+    <button class="toolbar-btn" id="splResetBtn" data-i18n="btn_spl_reset">↺ Min/Max/Avg 초기화</button>
   </div>
 
-  <p class="hint">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
+  <p class="hint" data-i18n="hint_text">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
 
   <div class="tool-links">
     <a href="trainer.html">🎧 Ear Trainer</a>
@@ -578,7 +580,7 @@
 
   calibrateNowBtn.addEventListener('click', () => {
     if (!isRunning || !isFinite(lastRawAverageDb)) {
-      setStatus('먼저 마이크를 켜고 소리를 들려주세요', '보정하려면 실시간으로 소리가 들어오고 있어야 합니다');
+      setStatus(window.i18n.t('calib_need_mic_title'), window.i18n.t('calib_need_mic_sub'));
       return;
     }
     const targetSpl = parseFloat(targetSplInput.value) || 0;
@@ -589,7 +591,7 @@
 
     // ✅ 요청 반영: Floor/Ceiling은 건드리지 않는다. 실제 SPL 스케일(기본 30~120dB)로
     // 고정해두고, 보정 버튼은 오직 오프셋만 계산한다 — 훨씬 예측 가능하고 단순한 방식.
-    setStatus('보정 완료', `기준 SPL ${targetSpl}dB(평균 기준)에 맞춰 오프셋을 ${Math.round(offset)}dB로 설정했습니다. 이 값은 자동 저장되어 다음에 열 때도 유지됩니다.`);
+    setStatus(window.i18n.t('calib_done_title'), window.i18n.tpl('calib_done_sub', { targetSpl: targetSpl, offset: Math.round(offset) }));
     saveCalibToStorage(); // ✅ 요청 반영: 매번 다시 잴 필요 없이, 한 번 보정하면 브라우저에 저장해서 계속 기억한다
   });
 
@@ -692,7 +694,7 @@
     targetSplInput.value = '0';
     commitRange();
     saveCalibToStorage(); // 초기화한 값도 저장해서, 다음에 열 때 이전(수정된) 값이 남아있지 않게 한다
-    setStatus('기본값으로 초기화했습니다', 'Floor 30dB, Ceiling 120dB, 오프셋 140dB로 되돌렸습니다');
+    setStatus(window.i18n.t('reset_done_title'), window.i18n.t('reset_done_sub'));
   });
 
   async function startRTA(){
@@ -710,7 +712,7 @@
     } catch (err) {
       console.error('마이크 접근 실패:', err);
       micDeniedEl.style.display = 'block';
-      setStatus('마이크 접근이 필요합니다', '브라우저에서 마이크 권한을 허용해주세요');
+      setStatus(window.i18n.t('mic_permission_needed_title'), window.i18n.t('mic_permission_needed_sub'));
       return;
     }
 
@@ -744,15 +746,15 @@
 
       isRunning = true;
       lastFrameTime = performance.now();
-      startBtn.textContent = '■ 정지';
+      startBtn.textContent = window.i18n.t('btn_mic_stop');
       startBtn.classList.add('active');
       levelReadoutEl.style.display = 'flex';
-      setStatus('실시간 분석 중', '마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다');
+      setStatus(window.i18n.t('status_running_title'), window.i18n.t('status_running_sub'));
       renderLoop();
     } catch (setupErr) {
       // ✅ 진단용: 정확한 에러 메시지를 화면에 그대로 표시한다
       console.error('오디오 그래프 설정 실패:', setupErr);
-      setStatus('오류가 발생했습니다', `${setupErr.name}: ${setupErr.message}`);
+      setStatus(window.i18n.t('error_title'), `${setupErr.name}: ${setupErr.message}`);
     }
   }
 
@@ -763,11 +765,11 @@
     if (audioCtx) audioCtx.close();
     audioCtx = null; analyser = null; micStream = null;
 
-    startBtn.textContent = '▸ 마이크 시작';
+    startBtn.textContent = window.i18n.t('btn_mic_start');
     startBtn.classList.remove('active');
     levelReadoutEl.style.display = 'none';
     levelSmoothed = -Infinity;
-    setStatus('시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요', '기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다');
+    setStatus(window.i18n.t('status_default_title'), window.i18n.t('status_default_sub'));
 
     bars.forEach(b => {
       b.bar.style.height = '0%';
@@ -1018,7 +1020,7 @@
       if (splDisplayMode === d) return;
       splDisplayMode = d;
       splDisplayToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-      splModeLbl.textContent = d === 'peak' ? 'PEAK (피크)' : 'BAND AVG (대역 평균)';
+      splModeLbl.textContent = d === 'peak' ? window.i18n.t('level_peak_label') : window.i18n.t('level_avg_label');
     });
   });
 
@@ -1290,7 +1292,20 @@
       setViewMode(requestedView);
     }
   } catch (e) { /* URL 파라미터 파싱 실패는 무시하고 기본 막대 뷰로 시작 */ }
+
+  document.addEventListener('i18nchange', () => {
+    if (!isRunning) {
+      setStatus(window.i18n.t('status_default_title'), window.i18n.t('status_default_sub'));
+      startBtn.textContent = window.i18n.t('btn_mic_start');
+    } else {
+      setStatus(window.i18n.t('status_running_title'), window.i18n.t('status_running_sub'));
+      startBtn.textContent = window.i18n.t('btn_mic_stop');
+    }
+    splModeLbl.textContent = splDisplayMode === 'peak' ? window.i18n.t('level_peak_label') : window.i18n.t('level_avg_label');
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "status_default_title": {"ko": "시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요", "en": "Tap start to view the real-time spectrum from your mic", "ja": "スタートボタンを押してマイクのリアルタイムスペクトラムを確認しましょう", "es": "Pulsa iniciar para ver el espectro en tiempo real desde tu micrófono", "zh": "点击开始按钮查看麦克风的实时频谱"}, "status_default_sub": {"ko": "기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다", "en": "Displays sound from your device's mic in real time as a 31-band (ISO 266) spectrum", "ja": "デバイスのマイクに入る音を31バンド（ISO 266）スペクトラムでリアルタイム表示します", "es": "Muestra el sonido captado por el micrófono del dispositivo en tiempo real como un espectro de 31 bandas (ISO 266)", "zh": "将设备麦克风采集的声音实时显示为 31 段（ISO 266）频谱"}, "mic_denied_msg": {"ko": "마이크 접근이 거부되었습니다. 브라우저 주소창 옆 자물쇠(또는 사이트 설정)에서 마이크 권한을 허용한 뒤 다시 시도해주세요.", "en": "Microphone access was denied. Please allow microphone permission from the lock icon (or site settings) next to your browser's address bar, then try again.", "ja": "マイクへのアクセスが拒否されました。ブラウザのアドレスバー横の鍵アイコン（またはサイト設定）でマイクの許可を有効にしてから、もう一度お試しください。", "es": "Se denegó el acceso al micrófono. Permite el acceso al micrófono desde el icono de candado (o la configuración del sitio) junto a la barra de direcciones del navegador y vuelve a intentarlo.", "zh": "麦克风访问被拒绝。请在浏览器地址栏旁的锁形图标（或网站设置）中允许麦克风权限，然后重试。"}, "btn_mic_start": {"ko": "▸ 마이크 시작", "en": "▸ Start Mic", "ja": "▸ マイクを開始", "es": "▸ Iniciar micrófono", "zh": "▸ 开始麦克风"}, "btn_mic_stop": {"ko": "■ 정지", "en": "■ Stop", "ja": "■ 停止", "es": "■ Detener", "zh": "■ 停止"}, "view_bar_label": {"ko": "▤ 막대(Bar)", "en": "▤ Bar", "ja": "▤ バー", "es": "▤ Barras", "zh": "▤ 条形图"}, "view_line_label": {"ko": "∿ 라인(Line)", "en": "∿ Line", "ja": "∿ ライン", "es": "∿ Línea", "zh": "∿ 线形图"}, "view_spl_label": {"ko": "📟 SPL 미터", "en": "📟 SPL Meter", "ja": "📟 SPLメーター", "es": "📟 Medidor SPL", "zh": "📟 SPL 声级计"}, "label_floor": {"ko": "Floor (조용한 소리 기준)", "en": "Floor (Quiet Sound Reference)", "ja": "Floor（静かな音の基準）", "es": "Floor (referencia de sonido silencioso)", "zh": "Floor（安静声音基准）"}, "label_ceiling": {"ko": "Ceiling (큰 소리 기준)", "en": "Ceiling (Loud Sound Reference)", "ja": "Ceiling（大きな音の基準）", "es": "Ceiling (referencia de sonido fuerte)", "zh": "Ceiling（响亮声音基准）"}, "label_range_prefix": {"ko": "Range (Floor 기준 폭) · ", "en": "Range (Width from Floor) · ", "ja": "Range（Floor基準の幅） · ", "es": "Range (ancho desde Floor) · ", "zh": "Range（相对 Floor 的宽度） · "}, "btn_boost_quiet": {"ko": "🔉 작은 소리 더 잘 보이게", "en": "🔉 Boost Quiet Sounds", "ja": "🔉 小さな音をもっと見やすく", "es": "🔉 Resaltar sonidos suaves", "zh": "🔉 放大安静声音的显示"}, "btn_reset_range": {"ko": "↺ 기본값으로 초기화", "en": "↺ Reset to Default", "ja": "↺ 初期値にリセット", "es": "↺ Restablecer valores predeterminados", "zh": "↺ 恢复默认值"}, "calib_summary": {"ko": "🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)", "en": "🎯 Improve Accuracy (Optional — works automatically without it)", "ja": "🎯 精度をさらに高める（任意 — しなくても自動で動作します）", "es": "🎯 Mejorar la precisión (opcional — funciona automáticamente sin esto)", "zh": "🎯 提高精度（可选 — 不设置也能自动工作）"}, "calib_note": {"ko": "기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.", "en": "The default (140dB offset) works right away. Only use the settings below if you want a more precise calibration.", "ja": "デフォルト（オフセット140dB）だけでもすぐに動作します。より正確に合わせたいときだけ、以下を使ってみてください。", "es": "El valor predeterminado (offset de 140dB) funciona de inmediato. Usa lo siguiente solo si quieres una calibración más precisa.", "zh": "默认值（偏移量 140dB）即可直接使用。只有在想要更精确校准时才需要使用下面的设置。"}, "label_calib_offset": {"ko": "보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨", "en": "Calibration Offset (dBFS→SPL approx.) · Auto-saved", "ja": "補正オフセット（dBFS→SPL近似） · 自動保存", "es": "Offset de calibración (aprox. dBFS→SPL) · Guardado automático", "zh": "校准偏移量（dBFS→SPL 近似值） · 自动保存"}, "label_target_spl": {"ko": "기준 SPL (다른 SPL미터 값)", "en": "Reference SPL (value from another SPL meter)", "ja": "基準SPL（他のSPLメーターの値）", "es": "SPL de referencia (valor de otro medidor SPL)", "zh": "基准 SPL（其他声级计的读数）"}, "btn_calibrate_now": {"ko": "🎯 지금 소리로 자동 보정", "en": "🎯 Auto-Calibrate with Current Sound", "ja": "🎯 今の音で自動補正", "es": "🎯 Autocalibrar con el sonido actual", "zh": "🎯 用当前声音自动校准"}, "level_peak_label": {"ko": "PEAK (피크)", "en": "PEAK (Peak)", "ja": "PEAK（ピーク）", "es": "PEAK (Pico)", "zh": "PEAK（峰值）"}, "level_avg_label": {"ko": "BAND AVG (대역 평균)", "en": "BAND AVG (Band Average)", "ja": "BAND AVG（帯域平均）", "es": "BAND AVG (promedio de banda)", "zh": "BAND AVG（频段平均）"}, "hint_text": {"ko": "라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)", "en": "Use this for live sound checks, checking room characteristics, or finding feedback points. (Mic input is never saved or transmitted — it's used only for the on-screen display.)", "ja": "ライブサウンドチェック、ルームの特性確認、ハウリングポイントの発見などに使ってみましょう。（マイク入力は保存・送信されず、画面表示のみに使用されます）", "es": "Úsalo para revisiones de sonido en vivo, comprobar las características de la sala o encontrar puntos de retroalimentación (feedback). (La entrada del micrófono nunca se guarda ni se transmite — solo se usa para la visualización en pantalla).", "zh": "可用于现场声音检查、房间特性确认、寻找啸叫点等。（麦克风输入不会被保存或传输，仅用于屏幕显示）"}, "btn_spl_reset": {"ko": "↺ Min/Max/Avg 초기화", "en": "↺ Reset Min/Max/Avg", "ja": "↺ Min/Max/Avgをリセット", "es": "↺ Restablecer Min/Max/Avg", "zh": "↺ 重置 Min/Max/Avg"}, "calib_need_mic_title": {"ko": "먼저 마이크를 켜고 소리를 들려주세요", "en": "Turn on the mic and make some sound first", "ja": "まずマイクをオンにして音を出してください", "es": "Primero enciende el micrófono y produce algún sonido", "zh": "请先打开麦克风并发出声音"}, "calib_need_mic_sub": {"ko": "보정하려면 실시간으로 소리가 들어오고 있어야 합니다", "en": "Calibration requires live sound input", "ja": "補正するにはリアルタイムで音が入力されている必要があります", "es": "Para calibrar es necesario que haya entrada de sonido en tiempo real", "zh": "校准需要实时输入声音"}, "calib_done_title": {"ko": "보정 완료", "en": "Calibration Complete", "ja": "補正完了", "es": "Calibración completa", "zh": "校准完成"}, "calib_done_sub": {"ko": "기준 SPL {targetSpl}dB(평균 기준)에 맞춰 오프셋을 {offset}dB로 설정했습니다. 이 값은 자동 저장되어 다음에 열 때도 유지됩니다.", "en": "Set the offset to {offset}dB to match a reference SPL of {targetSpl}dB (based on average). This value is saved automatically and will be kept the next time you open the page.", "ja": "基準SPL {targetSpl}dB（平均基準）に合わせてオフセットを{offset}dBに設定しました。この値は自動保存され、次回開いたときも維持されます。", "es": "Se ajustó el offset a {offset}dB para coincidir con un SPL de referencia de {targetSpl}dB (basado en el promedio). Este valor se guarda automáticamente y se mantendrá la próxima vez que abras la página.", "zh": "已根据基准 SPL {targetSpl}dB（按平均值计算）将偏移量设置为 {offset}dB。该数值会自动保存，下次打开时依然生效。"}, "reset_done_title": {"ko": "기본값으로 초기화했습니다", "en": "Reset to defaults", "ja": "初期値にリセットしました", "es": "Se restablecieron los valores predeterminados", "zh": "已恢复默认值"}, "reset_done_sub": {"ko": "Floor 30dB, Ceiling 120dB, 오프셋 140dB로 되돌렸습니다", "en": "Restored to Floor 30dB, Ceiling 120dB, offset 140dB", "ja": "Floor 30dB、Ceiling 120dB、オフセット140dBに戻しました", "es": "Se restauraron Floor 30dB, Ceiling 120dB, offset 140dB", "zh": "已恢复为 Floor 30dB、Ceiling 120dB、偏移量 140dB"}, "mic_permission_needed_title": {"ko": "마이크 접근이 필요합니다", "en": "Microphone access is needed", "ja": "マイクへのアクセスが必要です", "es": "Se necesita acceso al micrófono", "zh": "需要麦克风访问权限"}, "mic_permission_needed_sub": {"ko": "브라우저에서 마이크 권한을 허용해주세요", "en": "Please allow microphone permission in your browser", "ja": "ブラウザでマイクの許可を有効にしてください", "es": "Permite el acceso al micrófono en tu navegador", "zh": "请在浏览器中允许麦克风权限"}, "status_running_title": {"ko": "실시간 분석 중", "en": "Analyzing in Real Time", "ja": "リアルタイム解析中", "es": "Analizando en tiempo real", "zh": "正在实时分析"}, "status_running_sub": {"ko": "마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다", "en": "Make a sound near the mic and the corresponding band's bar will rise", "ja": "マイクに音を聞かせると、該当する帯域のバーが上がります", "es": "Haz un sonido cerca del micrófono y la barra de la banda correspondiente subirá", "zh": "对着麦克风发出声音，相应频段的柱形就会升高"}, "error_title": {"ko": "오류가 발생했습니다", "en": "An error occurred", "ja": "エラーが発生しました", "es": "Se produjo un error", "zh": "发生错误"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>

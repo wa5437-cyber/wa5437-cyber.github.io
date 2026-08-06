@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
     --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
@@ -139,7 +140,8 @@
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
     <div class="title">ACOUSTICS CALCULATOR<small>Frequency · Wavelength · Period</small></div>
-    <a class="home-link" href="index.html">← 홈으로</a>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 
   <div class="tab-picker" id="tabPicker">
@@ -155,12 +157,12 @@
     <div class="panel">
       <div class="panel-title">Frequency</div>
       <div class="field">
-        <label>Temperature (음속 계산용)</label>
+        <label data-i18n="label_temperature">Temperature (음속 계산용)</label>
         <div class="input-row">
           <input type="number" id="tempInput" value="15" step="1">
           <span class="unit">°C</span>
         </div>
-        <p class="speed-readout">현재 음속: <span id="speedReadout">343.0</span> m/s</p>
+        <p class="speed-readout"><span data-i18n="label_current_speed_prefix">현재 음속: </span><span id="speedReadout">343.0</span> m/s</p>
       </div>
       <div class="field" style="margin-top:14px;">
         <label>Frequency</label>
@@ -192,12 +194,12 @@
 
     <div class="panel" style="margin-top:16px;">
       <div class="panel-title">Note ↔ Frequency</div>
-      <p class="phase-desc">평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.</p>
+      <p class="phase-desc" data-i18n="note_freq_desc">평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.</p>
       <div class="field" style="margin-top:14px;">
         <label>Note Name</label>
         <div class="input-row">
-          <input type="text" id="noteInput" value="C5" placeholder="예: A4, C#3, Bb2" style="text-transform:none;">
-          <button class="upload-btn" id="noteApplyBtn" style="width:auto; flex-shrink:0; padding:12px 22px; font-size:16px; font-weight:700;">적용</button>
+          <input type="text" id="noteInput" value="C5" placeholder="예: A4, C#3, Bb2" data-i18n-placeholder="placeholder_note_example" style="text-transform:none;">
+          <button class="upload-btn" id="noteApplyBtn" data-i18n="btn_apply" style="width:auto; flex-shrink:0; padding:12px 22px; font-size:16px; font-weight:700;">적용</button>
         </div>
         <p class="phase-desc" style="margin-top:8px; font-size:14.5px;" id="noteInputHint">→ 261.63Hz</p>
       </div>
@@ -230,16 +232,16 @@
           <button data-oct="6">1/6 Oct</button>
           <button data-oct="12">1/12 Oct</button>
         </div>
-        <p class="phase-desc" style="margin-top:10px;">F1(하한)·F2(상한)는 중심 주파수(F0) 대비 반전력점(<b style="color:var(--text-secondary);">−3dB 지점</b>)을 기준으로 계산합니다 — 필터 설계에서 흔히 쓰는 표준 정의입니다.</p>
+        <p class="phase-desc" style="margin-top:10px;" data-i18n="band_desc" data-i18n-html="true">F1(하한)·F2(상한)는 중심 주파수(F0) 대비 반전력점(<b style="color:var(--text-secondary);">−3dB 지점</b>)을 기준으로 계산합니다 — 필터 설계에서 흔히 쓰는 표준 정의입니다.</p>
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label>Q factor (직접 입력 가능)</label>
+        <label data-i18n="label_q_factor">Q factor (직접 입력 가능)</label>
         <div class="input-row">
           <input type="number" id="qFactorInput" value="4.32" step="0.01" min="0.01">
         </div>
-        <p class="speed-readout">≈ <span id="qOctaveReadout">1/3</span> 옥타브에 해당</p>
-        <p class="phase-desc" style="margin-top:6px;">위 프리셋 버튼을 누르면 이 값이 자동으로 채워지고, 직접 숫자를 입력하면 그 Q값 기준으로 다시 계산됩니다.</p>
+        <p class="speed-readout">≈ <span id="qOctaveReadout">1/3</span> <span data-i18n="octave_suffix">옥타브에 해당</span></p>
+        <p class="phase-desc" style="margin-top:6px;" data-i18n="band_q_hint">위 프리셋 버튼을 누르면 이 값이 자동으로 채워지고, 직접 숫자를 입력하면 그 Q값 기준으로 다시 계산됩니다.</p>
       </div>
 
       <div class="result-list">
@@ -252,7 +254,7 @@
           <span class="result-val"><span id="bandHighVal">--</span><span class="unit">Hz</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">Bandwidth (−3dB 기준)</span>
+          <span class="result-lbl" data-i18n="label_bandwidth_result">Bandwidth (−3dB 기준)</span>
           <span class="result-val"><span id="bandWidthVal">--</span><span class="unit">Hz</span></span>
         </div>
         <div class="result-row">
@@ -273,7 +275,7 @@
   <div id="delayTab" style="display:none;">
     <div class="panel">
       <div class="panel-title">Delay</div>
-      <p class="phase-desc">거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.</p>
+      <p class="phase-desc" data-i18n="delay_desc">거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.</p>
 
       <div class="field" style="margin-top:14px;">
         <label>Temperature</label>
@@ -299,7 +301,7 @@
         </div>
       </div>
 
-      <p class="speed-readout">현재 음속(Frequency 탭 온도 기준): <span id="delaySpeedReadout">340.4</span> m/s</p>
+      <p class="speed-readout"><span data-i18n="delay_speed_prefix">현재 음속(Frequency 탭 온도 기준): </span><span id="delaySpeedReadout">340.4</span> m/s</p>
     </div>
 
     <div class="panel" style="margin-top:16px;">
@@ -312,16 +314,16 @@
 
   <div id="volumeTab" style="display:none;">
     <div class="panel">
-      <div class="panel-title">Volume (거리에 따른 SPL 감쇠)</div>
+      <div class="panel-title" data-i18n="panel_volume_title">Volume (거리에 따른 SPL 감쇠)</div>
 
       <div class="field">
-        <label>Source Type (음원 종류)</label>
+        <label data-i18n="label_source_type">Source Type (음원 종류)</label>
         <div class="tab-picker" id="sourceTypePicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
-          <button data-src="point" class="active">점음원</button>
-          <button data-src="line">선음원</button>
-          <button data-src="plane">면음원</button>
+          <button data-src="point" class="active" data-i18n="src_point">점음원</button>
+          <button data-src="line" data-i18n="src_line">선음원</button>
+          <button data-src="plane" data-i18n="src_plane">면음원</button>
         </div>
-        <p class="phase-desc" style="margin-top:10px;" id="sourceTypeDesc">점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.</p>
+        <p class="phase-desc" style="margin-top:10px;" id="sourceTypeDesc" data-i18n="src_desc_point" data-i18n-html="true">점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.</p>
       </div>
 
       <div class="field" style="margin-top:14px;">
@@ -352,7 +354,7 @@
           <span class="result-val"><span id="volTargetSplVal">--</span><span class="unit">dB SPL</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">감쇠량</span>
+          <span class="result-lbl" data-i18n="label_loss">감쇠량</span>
           <span class="result-val"><span id="volLossVal">--</span><span class="unit">dB</span></span>
         </div>
       </div>
@@ -366,8 +368,8 @@
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-title">Required Power (스피커 센시티비티 기준)</div>
-      <p class="phase-desc">스피커 센시티비티(보통 "1W/1m 기준 dB"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.</p>
+      <div class="panel-title" data-i18n="panel_required_power_title">Required Power (스피커 센시티비티 기준)</div>
+      <p class="phase-desc" data-i18n="required_power_desc">스피커 센시티비티(보통 "1W/1m 기준 dB"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.</p>
 
       <div class="field" style="margin-top:14px;">
         <label>Speaker Sensitivity (@ 1W/1m)</label>
@@ -402,25 +404,25 @@
 
   <div id="roomModesTab" style="display:none;">
     <div class="panel">
-      <div class="panel-title">Room Modes (축모드)</div>
-      <p class="phase-desc">가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.</p>
+      <div class="panel-title" data-i18n="panel_room_modes_title">Room Modes (축모드)</div>
+      <p class="phase-desc" data-i18n="room_modes_desc">가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.</p>
 
       <div class="field" style="margin-top:14px;">
-        <label>Length (L, 가로)</label>
+        <label data-i18n="label_length">Length (L, 가로)</label>
         <div class="input-row">
           <input type="number" id="roomLengthInput" value="6" step="0.1" min="0.1">
           <span class="unit">m</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Width (W, 세로)</label>
+        <label data-i18n="label_width">Width (W, 세로)</label>
         <div class="input-row">
           <input type="number" id="roomWidthInput" value="4" step="0.1" min="0.1">
           <span class="unit">m</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Height (H, 높이)</label>
+        <label data-i18n="label_height">Height (H, 높이)</label>
         <div class="input-row">
           <input type="number" id="roomHeightInput" value="2.7" step="0.1" min="0.1">
           <span class="unit">m</span>
@@ -435,36 +437,36 @@
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-title">Tangential Mode Frequencies (300Hz 이하)</div>
-      <p class="phase-desc" style="font-size:12.5px;">두 방향이 동시에 작용하는 모드입니다. 축모드보다 세기는 약하지만(약 −3dB), 개수가 많아서 저역을 뿌옇게 만드는 데 영향을 줍니다.</p>
+      <div class="panel-title" data-i18n="panel_tangential_title">Tangential Mode Frequencies (300Hz 이하)</div>
+      <p class="phase-desc" style="font-size:12.5px;" data-i18n="tangential_desc">두 방향이 동시에 작용하는 모드입니다. 축모드보다 세기는 약하지만(약 −3dB), 개수가 많아서 저역을 뿌옇게 만드는 데 영향을 줍니다.</p>
       <div class="tempo-table" id="tangentialModeTable" style="margin-top:10px;"></div>
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-title">Oblique Mode Frequencies (300Hz 이하)</div>
-      <p class="phase-desc" style="font-size:12.5px;">세 방향이 동시에 작용하는, 가장 약한(약 −6dB) 모드입니다. 참고용으로만 봐주세요.</p>
+      <div class="panel-title" data-i18n="panel_oblique_title">Oblique Mode Frequencies (300Hz 이하)</div>
+      <p class="phase-desc" style="font-size:12.5px;" data-i18n="oblique_desc">세 방향이 동시에 작용하는, 가장 약한(약 −6dB) 모드입니다. 참고용으로만 봐주세요.</p>
       <div class="tempo-table" id="obliqueModeTable" style="margin-top:10px;"></div>
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-title">저역 모드 분포 (20 – 300Hz)</div>
+      <div class="panel-title" data-i18n="panel_low_mode_distribution">저역 모드 분포 (20 – 300Hz)</div>
       <div class="wave-canvas-wrap">
         <canvas id="roomModeCanvas"></canvas>
       </div>
       <div class="room-mode-legend">
-        <span><i class="dot" style="background:#f2a93b;"></i>Length (축모드)</span>
-        <span><i class="dot" style="background:#3ddc97;"></i>Width (축모드)</span>
-        <span><i class="dot" style="background:#3a86ff;"></i>Height (축모드)</span>
-        <span><i class="dot" style="background:rgba(200,150,255,0.85);"></i>Tangential (접선모드)</span>
-        <span><i class="dot" style="background:rgba(147,163,163,0.85);"></i>Oblique (경사모드)</span>
+        <span><i class="dot" style="background:#f2a93b;"></i><span data-i18n="legend_length_axial">Length (축모드)</span></span>
+        <span><i class="dot" style="background:#3ddc97;"></i><span data-i18n="legend_width_axial">Width (축모드)</span></span>
+        <span><i class="dot" style="background:#3a86ff;"></i><span data-i18n="legend_height_axial">Height (축모드)</span></span>
+        <span><i class="dot" style="background:rgba(200,150,255,0.85);"></i><span data-i18n="legend_tangential">Tangential (접선모드)</span></span>
+        <span><i class="dot" style="background:rgba(147,163,163,0.85);"></i><span data-i18n="legend_oblique">Oblique (경사모드)</span></span>
       </div>
     </div>
   </div>
 
   <div id="rt60Tab" style="display:none;">
     <div class="panel">
-      <div class="panel-title">Reverb Time (RT60, Sabine 공식)</div>
-      <p class="phase-desc">RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.</p>
+      <div class="panel-title" data-i18n="panel_rt60_title">Reverb Time (RT60, Sabine 공식)</div>
+      <p class="phase-desc" data-i18n="rt60_desc">RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.</p>
 
       <div class="field">
         <label>Length (L)</label>
@@ -480,11 +482,11 @@
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label>표면 처리 (평균 흡음계수 α)</label>
+        <label data-i18n="label_surface_treatment">표면 처리 (평균 흡음계수 α)</label>
         <div class="tab-picker" id="absorptionPresetPicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
-          <button data-alpha="0.05">매우 단단함<br><span style="font-weight:400;font-size:10.5px;">(콘크리트·유리)</span></button>
-          <button data-alpha="0.15" class="active">보통<br><span style="font-weight:400;font-size:10.5px;">(벽지·바닥재)</span></button>
-          <button data-alpha="0.35">흡음 처리<br><span style="font-weight:400;font-size:10.5px;">(카펫·커튼)</span></button>
+          <button data-alpha="0.05" data-i18n="absorption_hard" data-i18n-html="true">매우 단단함<br><span style="font-weight:400;font-size:10.5px;">(콘크리트·유리)</span></button>
+          <button data-alpha="0.15" class="active" data-i18n="absorption_medium" data-i18n-html="true">보통<br><span style="font-weight:400;font-size:10.5px;">(벽지·바닥재)</span></button>
+          <button data-alpha="0.35" data-i18n="absorption_soft" data-i18n-html="true">흡음 처리<br><span style="font-weight:400;font-size:10.5px;">(카펫·커튼)</span></button>
         </div>
         <div class="input-row" style="margin-top:10px;">
           <input type="number" id="absorptionAlphaInput" value="0.15" step="0.01" min="0.01" max="1">
@@ -494,36 +496,36 @@
 
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">방 부피 (V)</span>
+          <span class="result-lbl" data-i18n="label_room_volume">방 부피 (V)</span>
           <span class="result-val"><span id="rt60VolumeVal">--</span><span class="unit">m³</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">총 표면적 (S)</span>
+          <span class="result-lbl" data-i18n="label_total_surface">총 표면적 (S)</span>
           <span class="result-val"><span id="rt60SurfaceVal">--</span><span class="unit">m²</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">총 흡음력 (A = S×α)</span>
+          <span class="result-lbl" data-i18n="label_total_absorption">총 흡음력 (A = S×α)</span>
           <span class="result-val"><span id="rt60AbsorptionVal">--</span><span class="unit">sabins</span></span>
         </div>
         <div class="result-row">
-          <span class="result-lbl">RT60 (잔향시간)</span>
-          <span class="result-val"><span id="rt60ResultVal">--</span><span class="unit">초</span></span>
+          <span class="result-lbl" data-i18n="label_rt60_result">RT60 (잔향시간)</span>
+          <span class="result-val"><span id="rt60ResultVal">--</span><span class="unit" data-i18n="unit_seconds">초</span></span>
         </div>
       </div>
       <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="rt60Guideline"></p>
     </div>
 
     <div class="panel" style="margin-top:16px;">
-      <div class="panel-title">Critical Distance (임계거리)</div>
-      <p class="phase-desc">직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.</p>
+      <div class="panel-title" data-i18n="panel_critical_distance_title">Critical Distance (임계거리)</div>
+      <p class="phase-desc" data-i18n="critical_distance_desc">직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.</p>
       <div class="field">
-        <label>스피커 지향성 계수 (Q)</label>
+        <label data-i18n="label_directivity_q">스피커 지향성 계수 (Q)</label>
         <div class="input-row"><input type="number" id="directivityQInput" value="2" step="0.1" min="0.1"><span class="unit">Q</span></div>
-        <p class="phase-desc" style="margin-top:8px; font-size:12.5px;">참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.</p>
+        <p class="phase-desc" style="margin-top:8px; font-size:12.5px;" data-i18n="directivity_note">참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.</p>
       </div>
       <div class="result-list">
         <div class="result-row">
-          <span class="result-lbl">임계거리 (Dc)</span>
+          <span class="result-lbl" data-i18n="label_critical_distance_result">임계거리 (Dc)</span>
           <span class="result-val"><span id="criticalDistVal">--</span><span class="unit">m</span></span>
         </div>
       </div>
@@ -532,8 +534,8 @@
 
   <div id="placeholderTab" class="panel" style="display:none;">
     <div class="coming-soon">
-      <b>🎉 모든 탭이 준비됐어요</b>
-      Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.
+      <b data-i18n="coming_soon_title">🎉 모든 탭이 준비됐어요</b>
+      <span data-i18n="coming_soon_text">Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.</span>
     </div>
   </div>
 
@@ -1223,16 +1225,16 @@
     el.addEventListener('input', recalcVolume);
   });
 
-  const SOURCE_TYPE_DESC = {
-    point: '점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.',
-    line: '선음원(라인 어레이 스피커, 긴 도로 소음 등) 기준입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 3dB만 줄어듭니다.</b> 점음원보다 훨씬 덜 감쇠해서, 라인 어레이가 먼 거리까지 커버하기 유리한 이유이기도 해요.',
-    plane: '면음원(아주 가까운 대형 평면, 근접장) 기준입니다 — <b style="color:var(--text-secondary);">이론상 거리에 따른 감쇠가 거의 없습니다.</b> 다만 이건 음원 바로 앞 근접장에서만 성립하는 특수한 경우라, 실전에서는 참고용으로만 봐주세요.',
-  };
+  const SOURCE_TYPE_DESC_KEYS = { point: 'src_desc_point', line: 'src_desc_line', plane: 'src_desc_plane' };
+  function updateSourceTypeDesc(){
+    if (!window.i18n) return;
+    sourceTypeDesc.innerHTML = window.i18n.t(SOURCE_TYPE_DESC_KEYS[currentSourceType]);
+  }
   sourceTypePicker.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', () => {
       currentSourceType = btn.dataset.src;
       sourceTypePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-      sourceTypeDesc.innerHTML = SOURCE_TYPE_DESC[currentSourceType];
+      updateSourceTypeDesc();
       recalcVolume();
     });
   });
@@ -1458,8 +1460,12 @@
     for (let i = 0; i < firstOrderFreqs.length; i++) {
       for (let j = i + 1; j < firstOrderFreqs.length; j++) {
         const diff = Math.abs(firstOrderFreqs[i].freq - firstOrderFreqs[j].freq);
-        if (diff < 5) {
-          warning = `⚠️ ${firstOrderFreqs[i].label}(${firstOrderFreqs[i].freq.toFixed(1)}Hz)와 ${firstOrderFreqs[j].label}(${firstOrderFreqs[j].freq.toFixed(1)}Hz)의 1차 모드가 ${diff.toFixed(1)}Hz밖에 안 떨어져 있어요 — 이 대역이 유독 부밍(booming)하게 들릴 수 있습니다. 방 비율을 조금 바꾸면 완화돼요.`;
+        if (diff < 5 && window.i18n) {
+          warning = window.i18n.tpl('room_mode_warning', {
+            labelA: firstOrderFreqs[i].label, freqA: firstOrderFreqs[i].freq.toFixed(1),
+            labelB: firstOrderFreqs[j].label, freqB: firstOrderFreqs[j].freq.toFixed(1),
+            diff: diff.toFixed(1)
+          });
         }
       }
     }
@@ -1516,11 +1522,12 @@
     return 0.057 * Math.sqrt((Q * V) / rt60);
   }
   function rt60Guidelines(rt60){
-    if (rt60 < 0.4) return '📀 아주 건조한 편이에요 — 방송 부스, 보컬 부스 같은 데드(dead)한 공간에 어울려요.';
-    if (rt60 < 0.8) return '🎙️ 스튜디오 컨트롤룸이나 회의실 정도의 표준적인 잔향이에요.';
-    if (rt60 < 1.5) return '🏠 일반 거실/사무 공간 수준의 잔향이에요.';
-    if (rt60 < 3.0) return '🎭 작은 공연장·강당 정도의 울림이에요.';
-    return '⛪ 성당·대형 홀처럼 아주 많이 울리는 공간이에요.';
+    if (!window.i18n) return '';
+    if (rt60 < 0.4) return window.i18n.t('rt60_very_dry');
+    if (rt60 < 0.8) return window.i18n.t('rt60_standard');
+    if (rt60 < 1.5) return window.i18n.t('rt60_living');
+    if (rt60 < 3.0) return window.i18n.t('rt60_hall_small');
+    return window.i18n.t('rt60_cathedral');
   }
 
   function recalcRT60(){
@@ -1568,7 +1575,11 @@
   // "적용" 버튼을 누르면 그 값을 실제 Frequency 칸에 반영한다.
   function updateNoteHint(){
     const freq = noteToFreq(noteInput.value);
-    noteInputHint.textContent = freq ? `→ ${freq.toFixed(2)}Hz` : '→ 인식할 수 없는 음정이에요 (예: A4, C#3, Bb2)';
+    if (freq) {
+      noteInputHint.textContent = window.i18n ? window.i18n.tpl('note_valid_hint', { freq: freq.toFixed(2) }) : `→ ${freq.toFixed(2)}Hz`;
+    } else {
+      noteInputHint.textContent = window.i18n ? window.i18n.t('note_invalid_hint') : '→ 인식할 수 없는 음정이에요 (예: A4, C#3, Bb2)';
+    }
   }
   noteInput.addEventListener('input', updateNoteHint);
   noteApplyBtn.addEventListener('click', () => {
@@ -1614,7 +1625,16 @@
   recalcRoomModes();
   recalcRT60();
   requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
+
+  document.addEventListener('i18nchange', () => {
+    updateSourceTypeDesc();
+    recalcRoomModes();
+    recalcRT60();
+    updateNoteHint();
+  });
 })();
 </script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "label_temperature": {"ko": "Temperature (음속 계산용)", "en": "Temperature (For Speed of Sound)", "ja": "Temperature（音速計算用）", "es": "Temperature (para calcular la velocidad del sonido)", "zh": "Temperature（用于计算声速）"}, "label_current_speed_prefix": {"ko": "현재 음속: ", "en": "Current speed of sound: ", "ja": "現在の音速: ", "es": "Velocidad del sonido actual: ", "zh": "当前声速："}, "note_freq_desc": {"ko": "평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.", "en": "Equal temperament (12-tone, based on A4 = 440Hz). Enter a note (e.g. A4, C#3, Bb2) to set the Frequency above to that pitch.", "ja": "平均律（12音階、A4 = 440Hz基準）です。音名を入力すると（例：A4, C#3, Bb2）、上のFrequencyがその音の周波数に変わります。", "es": "Temperamento igual (12 tonos, basado en A4 = 440Hz). Introduce una nota (p. ej. A4, C#3, Bb2) para ajustar la Frequency de arriba a ese tono.", "zh": "十二平均律（以 A4 = 440Hz 为基准）。输入音名（例如 A4、C#3、Bb2）即可将上方 Frequency 改为该音高对应的频率。"}, "placeholder_note_example": {"ko": "예: A4, C#3, Bb2", "en": "e.g. A4, C#3, Bb2", "ja": "例：A4, C#3, Bb2", "es": "ej. A4, C#3, Bb2", "zh": "例如：A4、C#3、Bb2"}, "btn_apply": {"ko": "적용", "en": "Apply", "ja": "適用", "es": "Aplicar", "zh": "应用"}, "note_valid_hint": {"ko": "→ {freq}Hz", "en": "→ {freq}Hz", "ja": "→ {freq}Hz", "es": "→ {freq}Hz", "zh": "→ {freq}Hz"}, "note_invalid_hint": {"ko": "→ 인식할 수 없는 음정이에요 (예: A4, C#3, Bb2)", "en": "→ Unrecognized note (e.g. A4, C#3, Bb2)", "ja": "→ 認識できない音名です（例：A4, C#3, Bb2）", "es": "→ Nota no reconocida (ej. A4, C#3, Bb2)", "zh": "→ 无法识别的音名（例如 A4、C#3、Bb2）"}, "band_desc": {"ko": "F1(하한)·F2(상한)는 중심 주파수(F0) 대비 반전력점(<b style=\"color:var(--text-secondary);\">−3dB 지점</b>)을 기준으로 계산합니다 — 필터 설계에서 흔히 쓰는 표준 정의입니다.", "en": "F1 (lower) and F2 (upper) are calculated at the half-power point (<b style=\"color:var(--text-secondary);\">the −3dB point</b>) relative to the center frequency (F0) — a standard definition commonly used in filter design.", "ja": "F1（下限）・F2（上限）は、中心周波数（F0）を基準とした半電力点（<b style=\"color:var(--text-secondary);\">−3dBポイント</b>）で計算されます — フィルター設計でよく使われる標準的な定義です。", "es": "F1 (inferior) y F2 (superior) se calculan en el punto de media potencia (<b style=\"color:var(--text-secondary);\">el punto de −3dB</b>) respecto a la frecuencia central (F0) — una definición estándar habitual en el diseño de filtros.", "zh": "F1（下限）和 F2（上限）是相对于中心频率（F0）的半功率点（<b style=\"color:var(--text-secondary);\">−3dB 点</b>）计算得出的——这是滤波器设计中常用的标准定义。"}, "label_q_factor": {"ko": "Q factor (직접 입력 가능)", "en": "Q Factor (can be entered directly)", "ja": "Q factor（直接入力可能）", "es": "Q Factor (se puede introducir directamente)", "zh": "Q Factor（可直接输入）"}, "octave_suffix": {"ko": "옥타브에 해당", "en": "octave", "ja": "オクターブに相当", "es": "de octava", "zh": "倍频程"}, "band_q_hint": {"ko": "위 프리셋 버튼을 누르면 이 값이 자동으로 채워지고, 직접 숫자를 입력하면 그 Q값 기준으로 다시 계산됩니다.", "en": "Pressing a preset button above fills this value automatically; entering a number directly recalculates based on that Q value.", "ja": "上のプリセットボタンを押すとこの値が自動的に入り、直接数値を入力するとそのQ値を基準に再計算されます。", "es": "Al pulsar un botón de preajuste de arriba, este valor se rellena automáticamente; si introduces un número directamente, se recalcula según ese valor de Q.", "zh": "点击上方的预设按钮会自动填入该数值；直接输入数字则会按该 Q 值重新计算。"}, "label_bandwidth_result": {"ko": "Bandwidth (−3dB 기준)", "en": "Bandwidth (at −3dB)", "ja": "Bandwidth（−3dB基準）", "es": "Bandwidth (en −3dB)", "zh": "Bandwidth（−3dB 基准）"}, "delay_desc": {"ko": "거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.", "en": "Enter either distance or time and the other will be calculated automatically. Temperature is linked with the Frequency tab.", "ja": "距離または時間のどちらかを入力すると、残りが自動的に計算されます。温度はFrequencyタブと連動しています。", "es": "Introduce la distancia o el tiempo y el otro valor se calculará automáticamente. La temperatura está vinculada con la pestaña Frequency.", "zh": "输入距离或时间中的任意一个，另一个会自动计算。温度与 Frequency 标签页联动。"}, "delay_speed_prefix": {"ko": "현재 음속(Frequency 탭 온도 기준): ", "en": "Current speed of sound (based on Frequency tab temperature): ", "ja": "現在の音速（Frequencyタブの温度基準）: ", "es": "Velocidad del sonido actual (según la temperatura de la pestaña Frequency): ", "zh": "当前声速（基于 Frequency 标签页的温度）："}, "panel_volume_title": {"ko": "Volume (거리에 따른 SPL 감쇠)", "en": "Volume (SPL Attenuation with Distance)", "ja": "Volume（距離によるSPL減衰）", "es": "Volume (atenuación de SPL con la distancia)", "zh": "Volume（随距离衰减的 SPL）"}, "label_source_type": {"ko": "Source Type (음원 종류)", "en": "Source Type", "ja": "Source Type（音源の種類）", "es": "Source Type (tipo de fuente)", "zh": "Source Type（声源类型）"}, "src_point": {"ko": "점음원", "en": "Point Source", "ja": "点音源", "es": "Fuente puntual", "zh": "点声源"}, "src_line": {"ko": "선음원", "en": "Line Source", "ja": "線音源", "es": "Fuente lineal", "zh": "线声源"}, "src_plane": {"ko": "면음원", "en": "Plane Source", "ja": "面音源", "es": "Fuente plana", "zh": "面声源"}, "src_desc_point": {"ko": "점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style=\"color:var(--text-secondary);\">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.", "en": "Based on the inverse square law for a point source — <b style=\"color:var(--text-secondary);\">SPL drops by about 6dB every time the distance doubles.</b> This is an approximation for a free field (a space with no reflections).", "ja": "点音源基準の逆二乗則（Inverse Square Law）です — <b style=\"color:var(--text-secondary);\">距離が2倍になるたびにSPLが約6dB下がります。</b> 自由音場（反射のない空間）を基準とした近似値です。", "es": "Basado en la ley del cuadrado inverso para una fuente puntual — <b style=\"color:var(--text-secondary);\">el SPL baja unos 6dB cada vez que se duplica la distancia.</b> Es una aproximación para un campo libre (un espacio sin reflexiones).", "zh": "基于点声源的平方反比定律——<b style=\"color:var(--text-secondary);\">距离每增加一倍，SPL 约下降 6dB。</b> 这是自由声场（无反射空间）下的近似值。"}, "src_desc_line": {"ko": "선음원(라인 어레이 스피커, 긴 도로 소음 등) 기준입니다 — <b style=\"color:var(--text-secondary);\">거리가 2배 될 때마다 SPL이 약 3dB만 줄어듭니다.</b> 점음원보다 훨씬 덜 감쇠해서, 라인 어레이가 먼 거리까지 커버하기 유리한 이유이기도 해요.", "en": "Based on a line source (line array speakers, long road noise, etc.) — <b style=\"color:var(--text-secondary);\">SPL drops by only about 3dB every time the distance doubles.</b> This attenuates much less than a point source, which is one reason line arrays can cover long distances effectively.", "ja": "線音源（ラインアレイスピーカー、長い道路騒音など）基準です — <b style=\"color:var(--text-secondary);\">距離が2倍になってもSPLは約3dBしか下がりません。</b> 点音源よりずっと減衰が少ないため、ラインアレイが遠くまでカバーしやすい理由の一つです。", "es": "Basado en una fuente lineal (altavoces de line array, ruido de carretera largo, etc.) — <b style=\"color:var(--text-secondary);\">el SPL baja solo unos 3dB cada vez que se duplica la distancia.</b> Esto atenúa mucho menos que una fuente puntual, una de las razones por las que los line arrays pueden cubrir grandes distancias eficazmente.", "zh": "基于线声源（线阵列音箱、长直道路噪声等）——<b style=\"color:var(--text-secondary);\">距离每增加一倍，SPL 仅下降约 3dB。</b> 这比点声源的衰减小得多，也是线阵列能有效覆盖远距离的原因之一。"}, "src_desc_plane": {"ko": "면음원(아주 가까운 대형 평면, 근접장) 기준입니다 — <b style=\"color:var(--text-secondary);\">이론상 거리에 따른 감쇠가 거의 없습니다.</b> 다만 이건 음원 바로 앞 근접장에서만 성립하는 특수한 경우라, 실전에서는 참고용으로만 봐주세요.", "en": "Based on a plane source (a large flat surface very close by, the near field) — <b style=\"color:var(--text-secondary);\">theoretically there is almost no attenuation with distance.</b> However, this only holds in the near field directly in front of the source, so treat it as a rough reference in practice.", "ja": "面音源（すぐ近くの大きな平面、近接場）基準です — <b style=\"color:var(--text-secondary);\">理論上、距離による減衰はほとんどありません。</b> ただしこれは音源のすぐ前の近接場でのみ成立する特殊なケースなので、実際には参考程度に見てください。", "es": "Basado en una fuente plana (una gran superficie plana muy cercana, el campo próximo) — <b style=\"color:var(--text-secondary);\">en teoría casi no hay atenuación con la distancia.</b> Sin embargo, esto solo se cumple en el campo próximo justo delante de la fuente, así que tómalo solo como referencia en la práctica.", "zh": "基于面声源（非常靠近的大型平面，近场）——<b style=\"color:var(--text-secondary);\">理论上几乎不随距离衰减。</b> 但这仅在声源正前方的近场成立，实际应用中仅供参考。"}, "label_loss": {"ko": "감쇠량", "en": "Attenuation", "ja": "減衰量", "es": "Atenuación", "zh": "衰减量"}, "panel_required_power_title": {"ko": "Required Power (스피커 센시티비티 기준)", "en": "Required Power (Based on Speaker Sensitivity)", "ja": "Required Power（スピーカー感度基準）", "es": "Required Power (según la sensibilidad del altavoz)", "zh": "Required Power（基于音箱灵敏度）"}, "required_power_desc": {"ko": "스피커 센시티비티(보통 \"1W/1m 기준 dB\"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.", "en": "Enter the speaker sensitivity (usually shown as \"dB at 1W/1m\"), the distance, and the target SPL, and this calculates the amplifier power (W) needed to produce that SPL.", "ja": "スピーカー感度（通常「1W/1m基準のdB」で表記）と距離・目標SPLを入力すると、そのSPLを出すのに必要なアンプ出力（W）を計算します。", "es": "Introduce la sensibilidad del altavoz (normalmente indicada como \"dB a 1W/1m\"), la distancia y el SPL objetivo, y esto calcula la potencia del amplificador (W) necesaria para producir ese SPL.", "zh": "输入音箱灵敏度（通常标注为\"1W/1m 下的 dB 值\"）、距离和目标 SPL，即可计算出达到该 SPL 所需的功放功率（W）。"}, "panel_room_modes_title": {"ko": "Room Modes (축모드)", "en": "Room Modes (Axial Modes)", "ja": "Room Modes（軸モード）", "es": "Room Modes (modos axiales)", "zh": "Room Modes（轴向模式）"}, "room_modes_desc": {"ko": "가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.", "en": "These are the standing-wave resonance frequencies (axial modes) that occur in the three directions: length, width, and height. It uses the temperature (speed of sound) from the Frequency tab. If several modes cluster together below 100Hz, that room can easily develop a boomy low end or dead spots where bass isn't heard at certain positions.", "ja": "縦・横・高さの3方向に生じる定在波の共振周波数（軸モード）です。Frequencyタブの温度（音速）をそのまま使用します。100Hz以下の低域に複数のモードが集中していると、その部屋では低音が特に団子状(ブーム)になったり、特定の場所で聞こえにくくなる問題が起きやすいです。", "es": "Son las frecuencias de resonancia de onda estacionaria (modos axiales) que se producen en las tres direcciones: largo, ancho y alto. Usa la temperatura (velocidad del sonido) de la pestaña Frequency. Si varios modos se agrupan por debajo de 100Hz, esa sala puede desarrollar fácilmente graves retumbantes o puntos muertos donde no se oyen los graves en ciertas posiciones.", "zh": "这是在长、宽、高三个方向上产生的驻波共振频率（轴向模式）。使用 Frequency 标签页中的温度（声速）。如果多个模式集中在 100Hz 以下的低频区域，该房间容易出现低音发闷（轰鸣）或在特定位置听不到低音的问题。"}, "label_length": {"ko": "Length (L, 가로)", "en": "Length (L)", "ja": "Length（L、奥行き）", "es": "Length (L, longitud)", "zh": "Length（L，长度）"}, "label_width": {"ko": "Width (W, 세로)", "en": "Width (W)", "ja": "Width（W、幅）", "es": "Width (W, anchura)", "zh": "Width（W，宽度）"}, "label_height": {"ko": "Height (H, 높이)", "en": "Height (H)", "ja": "Height（H、高さ）", "es": "Height (H, altura)", "zh": "Height（H，高度）"}, "panel_tangential_title": {"ko": "Tangential Mode Frequencies (300Hz 이하)", "en": "Tangential Mode Frequencies (Below 300Hz)", "ja": "Tangential Mode Frequencies（300Hz以下）", "es": "Tangential Mode Frequencies (por debajo de 300Hz)", "zh": "Tangential Mode Frequencies（300Hz 以下）"}, "tangential_desc": {"ko": "두 방향이 동시에 작용하는 모드입니다. 축모드보다 세기는 약하지만(약 −3dB), 개수가 많아서 저역을 뿌옇게 만드는 데 영향을 줍니다.", "en": "These are modes where two directions act at once. They're weaker than axial modes (about −3dB), but there are many of them, which contributes to making the low end sound smeared.", "ja": "2方向が同時に作用するモードです。軸モードより強さは弱い（約−3dB）ですが、数が多いため低域をぼやけさせる要因になります。", "es": "Son modos en los que actúan dos direcciones a la vez. Son más débiles que los modos axiales (unos −3dB), pero hay muchos, lo que contribuye a que los graves suenen difusos.", "zh": "这是两个方向同时作用产生的模式。虽然强度比轴向模式弱（约 −3dB），但数量较多，会使低频听起来模糊不清。"}, "panel_oblique_title": {"ko": "Oblique Mode Frequencies (300Hz 이하)", "en": "Oblique Mode Frequencies (Below 300Hz)", "ja": "Oblique Mode Frequencies（300Hz以下）", "es": "Oblique Mode Frequencies (por debajo de 300Hz)", "zh": "Oblique Mode Frequencies（300Hz 以下）"}, "oblique_desc": {"ko": "세 방향이 동시에 작용하는, 가장 약한(약 −6dB) 모드입니다. 참고용으로만 봐주세요.", "en": "These are the weakest modes (about −6dB), where all three directions act at once. Treat them as reference only.", "ja": "3方向すべてが同時に作用する、最も弱い（約−6dB）モードです。参考程度に見てください。", "es": "Son los modos más débiles (unos −6dB), en los que actúan las tres direcciones a la vez. Considéralos solo como referencia.", "zh": "这是三个方向同时作用产生的最弱模式（约 −6dB）。仅供参考。"}, "panel_low_mode_distribution": {"ko": "저역 모드 분포 (20 – 300Hz)", "en": "Low-Frequency Mode Distribution (20 – 300Hz)", "ja": "低域モード分布（20 – 300Hz）", "es": "Distribución de modos de baja frecuencia (20 – 300Hz)", "zh": "低频模式分布（20 – 300Hz）"}, "legend_length_axial": {"ko": "Length (축모드)", "en": "Length (Axial)", "ja": "Length（軸モード）", "es": "Length (axial)", "zh": "Length（轴向模式）"}, "legend_width_axial": {"ko": "Width (축모드)", "en": "Width (Axial)", "ja": "Width（軸モード）", "es": "Width (axial)", "zh": "Width（轴向模式）"}, "legend_height_axial": {"ko": "Height (축모드)", "en": "Height (Axial)", "ja": "Height（軸モード）", "es": "Height (axial)", "zh": "Height（轴向模式）"}, "legend_tangential": {"ko": "Tangential (접선모드)", "en": "Tangential", "ja": "Tangential（接線モード）", "es": "Tangential", "zh": "Tangential（切线模式）"}, "legend_oblique": {"ko": "Oblique (경사모드)", "en": "Oblique", "ja": "Oblique（斜めモード）", "es": "Oblique", "zh": "Oblique（斜向模式）"}, "panel_rt60_title": {"ko": "Reverb Time (RT60, Sabine 공식)", "en": "Reverb Time (RT60, Sabine Formula)", "ja": "Reverb Time（RT60、Sabineの公式）", "es": "Reverb Time (RT60, fórmula de Sabine)", "zh": "Reverb Time（RT60，Sabine 公式）"}, "rt60_desc": {"ko": "RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.", "en": "RT60 = 0.161 × V / A — calculates how long a room rings (reverberation time). V is the room volume, and A is the total absorption (sabins).", "ja": "RT60 = 0.161 × V / A — 部屋がどれくらい長く響くか（残響時間）を計算します。Vは部屋の体積、Aは総吸音力（sabins）です。", "es": "RT60 = 0.161 × V / A — calcula cuánto tiempo resuena una sala (tiempo de reverberación). V es el volumen de la sala y A es la absorción total (sabins).", "zh": "RT60 = 0.161 × V / A —— 计算房间的混响时间（声音持续回响多久）。V 是房间体积，A 是总吸声量（sabins）。"}, "label_surface_treatment": {"ko": "표면 처리 (평균 흡음계수 α)", "en": "Surface Treatment (Average Absorption Coefficient α)", "ja": "表面処理（平均吸音係数α）", "es": "Tratamiento de superficie (coeficiente de absorción medio α)", "zh": "表面处理（平均吸声系数 α）"}, "absorption_hard": {"ko": "매우 단단함<br><span style=\"font-weight:400;font-size:10.5px;\">(콘크리트·유리)</span>", "en": "Very Hard<br><span style=\"font-weight:400;font-size:10.5px;\">(Concrete/Glass)</span>", "ja": "非常に硬い<br><span style=\"font-weight:400;font-size:10.5px;\">(コンクリート・ガラス)</span>", "es": "Muy dura<br><span style=\"font-weight:400;font-size:10.5px;\">(Hormigón/Cristal)</span>", "zh": "非常坚硬<br><span style=\"font-weight:400;font-size:10.5px;\">(混凝土·玻璃)</span>"}, "absorption_medium": {"ko": "보통<br><span style=\"font-weight:400;font-size:10.5px;\">(벽지·바닥재)</span>", "en": "Average<br><span style=\"font-weight:400;font-size:10.5px;\">(Wallpaper/Flooring)</span>", "ja": "普通<br><span style=\"font-weight:400;font-size:10.5px;\">(壁紙・床材)</span>", "es": "Media<br><span style=\"font-weight:400;font-size:10.5px;\">(Papel pintado/Suelo)</span>", "zh": "中等<br><span style=\"font-weight:400;font-size:10.5px;\">(壁纸·地板)</span>"}, "absorption_soft": {"ko": "흡음 처리<br><span style=\"font-weight:400;font-size:10.5px;\">(카펫·커튼)</span>", "en": "Absorptive<br><span style=\"font-weight:400;font-size:10.5px;\">(Carpet/Curtains)</span>", "ja": "吸音処理<br><span style=\"font-weight:400;font-size:10.5px;\">(カーペット・カーテン)</span>", "es": "Absorbente<br><span style=\"font-weight:400;font-size:10.5px;\">(Alfombra/Cortinas)</span>", "zh": "吸音处理<br><span style=\"font-weight:400;font-size:10.5px;\">(地毯·窗帘)</span>"}, "label_room_volume": {"ko": "방 부피 (V)", "en": "Room Volume (V)", "ja": "部屋の体積 (V)", "es": "Volumen de la sala (V)", "zh": "房间体积 (V)"}, "label_total_surface": {"ko": "총 표면적 (S)", "en": "Total Surface Area (S)", "ja": "総表面積 (S)", "es": "Superficie total (S)", "zh": "总表面积 (S)"}, "label_total_absorption": {"ko": "총 흡음력 (A = S×α)", "en": "Total Absorption (A = S×α)", "ja": "総吸音力 (A = S×α)", "es": "Absorción total (A = S×α)", "zh": "总吸声量 (A = S×α)"}, "label_rt60_result": {"ko": "RT60 (잔향시간)", "en": "RT60 (Reverberation Time)", "ja": "RT60（残響時間）", "es": "RT60 (tiempo de reverberación)", "zh": "RT60（混响时间）"}, "unit_seconds": {"ko": "초", "en": "s", "ja": "秒", "es": "s", "zh": "秒"}, "panel_critical_distance_title": {"ko": "Critical Distance (임계거리)", "en": "Critical Distance", "ja": "Critical Distance（臨界距離）", "es": "Critical Distance (distancia crítica)", "zh": "Critical Distance（临界距离）"}, "critical_distance_desc": {"ko": "직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.", "en": "This is the distance where the direct sound and reflected (reverberant) sound are equal in level. Closer than this, direct sound dominates; farther away, reverberant sound dominates.", "ja": "直接音と反射音（残響音）の強さが等しくなる距離です。これより近ければ直接音が、遠ければ残響音が優勢になります。", "es": "Es la distancia a la que el sonido directo y el sonido reflejado (reverberante) tienen el mismo nivel. Más cerca de esta, predomina el sonido directo; más lejos, predomina el sonido reverberante.", "zh": "这是直达声与反射声（混响声）强度相等的距离。比这更近时直达声占主导，更远时混响声占主导。"}, "label_directivity_q": {"ko": "스피커 지향성 계수 (Q)", "en": "Speaker Directivity Factor (Q)", "ja": "スピーカー指向性係数 (Q)", "es": "Factor de directividad del altavoz (Q)", "zh": "音箱指向性系数 (Q)"}, "directivity_note": {"ko": "참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.", "en": "Note: Omnidirectional speakers have Q≈1, and typical directional speakers have Q≈2–6.", "ja": "参考：無指向性スピーカーはQ≈1、一般的な指向性スピーカーはQ≈2〜6程度です。", "es": "Nota: los altavoces omnidireccionales tienen Q≈1, y los altavoces direccionales típicos tienen Q≈2–6.", "zh": "提示：无指向性音箱 Q≈1，一般指向性音箱 Q≈2~6 左右。"}, "label_critical_distance_result": {"ko": "임계거리 (Dc)", "en": "Critical Distance (Dc)", "ja": "臨界距離 (Dc)", "es": "Distancia crítica (Dc)", "zh": "临界距离 (Dc)"}, "coming_soon_title": {"ko": "🎉 모든 탭이 준비됐어요", "en": "🎉 All tabs are ready", "ja": "🎉 すべてのタブが使えます", "es": "🎉 Todas las pestañas están listas", "zh": "🎉 所有标签页均已就绪"}, "coming_soon_text": {"ko": "Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.", "en": "Frequency · Band · Delay · Volume · Room Modes · Reverb (RT60) — all available to use.", "ja": "Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — すべて使用できます。", "es": "Frequency · Band · Delay · Volume · Room Modes · Reverb (RT60) — todo disponible para usar.", "zh": "Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) —— 全部可用。"}, "room_mode_warning": {"ko": "⚠️ {labelA}({freqA}Hz)와 {labelB}({freqB}Hz)의 1차 모드가 {diff}Hz밖에 안 떨어져 있어요 — 이 대역이 유독 부밍(booming)하게 들릴 수 있습니다. 방 비율을 조금 바꾸면 완화돼요.", "en": "⚠️ The first-order modes of {labelA}({freqA}Hz) and {labelB}({freqB}Hz) are only {diff}Hz apart — this range may sound especially boomy. Adjusting the room proportions a bit can ease this.", "ja": "⚠️ {labelA}（{freqA}Hz）と{labelB}（{freqB}Hz）の1次モードが{diff}Hzしか離れていません — この帯域が特にブーミー（booming）に聞こえることがあります。部屋の比率を少し変えると緩和されます。", "es": "⚠️ Los modos de primer orden de {labelA}({freqA}Hz) y {labelB}({freqB}Hz) están separados solo {diff}Hz — este rango puede sonar especialmente retumbante. Ajustar un poco las proporciones de la sala puede aliviarlo.", "zh": "⚠️ {labelA}（{freqA}Hz）和 {labelB}（{freqB}Hz）的一阶模式仅相差 {diff}Hz —— 该频段可能听起来特别轰鸣。稍微调整房间比例可以缓解这个问题。"}, "rt60_very_dry": {"ko": "📀 아주 건조한 편이에요 — 방송 부스, 보컬 부스 같은 데드(dead)한 공간에 어울려요.", "en": "📀 This is quite dry — suited to dead spaces like broadcast booths or vocal booths.", "ja": "📀 かなりデッド（乾いた）な部屋です — 放送ブースやボーカルブースのようなデッドな空間に向いています。", "es": "📀 Es bastante seco — adecuado para espacios muertos como cabinas de locución o cabinas vocales.", "zh": "📀 相当干燥——适合播音室、人声录音间等无混响空间。"}, "rt60_standard": {"ko": "🎙️ 스튜디오 컨트롤룸이나 회의실 정도의 표준적인 잔향이에요.", "en": "🎙️ This is a standard reverb level, similar to a studio control room or a meeting room.", "ja": "🎙️ スタジオのコントロールルームや会議室程度の標準的な残響です。", "es": "🎙️ Es un nivel de reverberación estándar, similar al de una sala de control de estudio o una sala de reuniones.", "zh": "🎙️ 属于典型的录音室控制间或会议室水平的混响。"}, "rt60_living": {"ko": "🏠 일반 거실/사무 공간 수준의 잔향이에요.", "en": "🏠 This is a reverb level typical of a living room or office space.", "ja": "🏠 一般的なリビングやオフィス空間くらいの残響です。", "es": "🏠 Es un nivel de reverberación típico de un salón o una oficina.", "zh": "🏠 属于一般客厅/办公空间水平的混响。"}, "rt60_hall_small": {"ko": "🎭 작은 공연장·강당 정도의 울림이에요.", "en": "🎭 This is a resonance level typical of a small performance venue or auditorium.", "ja": "🎭 小さな公演会場・講堂程度の響きです。", "es": "🎭 Es un nivel de resonancia típico de un pequeño recinto o auditorio.", "zh": "🎭 属于小型演出场地/礼堂水平的回响。"}, "rt60_cathedral": {"ko": "⛪ 성당·대형 홀처럼 아주 많이 울리는 공간이에요.", "en": "⛪ This is a very reverberant space, like a cathedral or a large hall.", "ja": "⛪ 大聖堂や大ホールのように非常によく響く空間です。", "es": "⛪ Es un espacio muy reverberante, como una catedral o una gran sala.", "zh": "⛪ 属于大教堂、大型音乐厅那样回响非常强烈的空间。"}};</script>
+<script src="i18n-core.js"></script>
 </body>
 </html>
