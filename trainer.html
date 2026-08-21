@@ -10,17 +10,17 @@
 <link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
-    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
-    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
-    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
-    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
   body{
     margin:0; background:
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
     color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
     display:flex; justify-content:center; align-items:flex-start;
   }
@@ -39,8 +39,8 @@
     padding:8px 12px; border-radius:100px; border:1px solid var(--line);
     text-decoration:none; flex-shrink:0;
   }
-  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
-  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#1b2226,#0d1113); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
   .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
   .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
   .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
@@ -60,7 +60,7 @@
   .modepicker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
   .modepicker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:15px; font-weight:600; padding:12px 8px; border-radius:9px; transition:background .15s, color .15s; white-space:nowrap; }
   .modepicker button .short{ display:none; }
-  .modepicker button.active{ background:#232b2f; color:var(--text-primary); }
+  .modepicker button.active{ background:#e3ddd0; color:var(--text-primary); }
   .modepicker button:disabled{ opacity:0.5; cursor:not-allowed; }
 
   /* ---- 음악 업로드 패널 ---- */
@@ -69,10 +69,10 @@
     background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:14px;
   }
   .upload-btn{
-    border:1px dashed var(--line); background:rgba(255,255,255,0.02); color:var(--text-secondary);
+    border:1px dashed var(--line); background:rgba(30,26,20,0.02); color:var(--text-secondary);
     font-size:13px; font-weight:600; padding:10px 18px; border-radius:10px; width:100%;
   }
-  .upload-btn:hover{ background:rgba(255,255,255,0.06); color:var(--text-primary); }
+  .upload-btn:hover{ background:rgba(30,26,20,0.06); color:var(--text-primary); }
   .music-filename{
     font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--teal); text-align:center;
     word-break:break-all;
@@ -94,11 +94,11 @@
     display:inline-flex; align-items:center; gap:5px; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
     padding:5px 12px; border-radius:100px; letter-spacing:0.02em;
-    background:rgba(61,220,151,0.12); color:var(--teal); border:1px solid rgba(61,220,151,0.3);
+    background:rgba(47,109,76,0.12); color:var(--teal); border:1px solid rgba(47,109,76,0.3);
     transition:background .2s, color .2s, border-color .2s;
   }
   .ab-badge.modified{
-    background:rgba(242,169,59,0.14); color:var(--amber); border-color:rgba(242,169,59,0.35);
+    background:rgba(156,107,23,0.14); color:var(--amber); border-color:rgba(156,107,23,0.35);
   }
 
   /* ---- feedback banner ---- */
@@ -109,13 +109,13 @@
     display:flex; gap:8px; align-items:flex-start; font-size:13px; font-weight:500;
     padding:12px 14px; border-radius:12px; line-height:1.5; animation:popin .25s ease;
   }
-  .feedback .banner.ok{ background:rgba(61,220,151,0.12); color:var(--teal); border:1px solid rgba(61,220,151,0.3); }
-  .feedback .banner.no{ background:rgba(242,169,59,0.12); color:var(--amber); border:1px solid rgba(242,169,59,0.3); }
+  .feedback .banner.ok{ background:rgba(47,109,76,0.12); color:var(--teal); border:1px solid rgba(47,109,76,0.3); }
+  .feedback .banner.no{ background:rgba(156,107,23,0.12); color:var(--amber); border:1px solid rgba(156,107,23,0.3); }
   @keyframes popin{ from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:translateY(0);} }
 
   /* ---- fader grid (the answer surface) ---- */
   .console{
-    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113);
+    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff);
     padding:16px 8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden;
     /* ✅ 세로를 억지로 채우는 대신, 가로 폭에 비례한 넓은 배너 형태로 — 화면이 넓을수록 옆으로 커진다 */
     aspect-ratio:2.6 / 1; max-height:60vh; min-height:220px;
@@ -141,7 +141,7 @@
   }
   .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
   .track{
-    position:relative; width:100%; flex:1; min-height:60px; background:#1a2124; border-radius:4px; border:1px solid rgba(255,255,255,0.04);
+    position:relative; width:100%; flex:1; min-height:60px; background:#ece7db; border-radius:4px; border:1px solid rgba(30,26,20,0.04);
     overflow:hidden; cursor:ns-resize;
     /* ✅ pan-x: 가로 스와이프는 브라우저가 그리드를 가로 스크롤하도록 허용하고,
        세로 방향 움직임은 우리 JS(포인터 이벤트)가 그대로 받아 페이더 드래그로 처리한다.
@@ -149,38 +149,38 @@
     touch-action:pan-x;
   }
   .track.disabled{ cursor:default; }
-  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(255,255,255,0.12); pointer-events:none; }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(30,26,20,0.12); pointer-events:none; }
   /* ✅ cap은 절대 위치(bottom %)로 두고, 평소엔 transition 없이 포인터를 1:1로 즉시 따라간다.
      (transition을 항상 걸어두면 드래그할 때 손가락보다 한 박자 늦게 따라오는 "밀림" 현상이 생긴다) */
   .band button.cap{
-    all:unset; width:100%; height:12px; border-radius:3px; background:#4a565a;
+    all:unset; width:100%; height:12px; border-radius:3px; background:#8c8677;
     position:absolute; left:0; right:0; bottom:50%; pointer-events:none; /* 드래그는 트랙 전체가 받는다 */
   }
   .band button.cap.settle{ transition:bottom .35s cubic-bezier(.22,.85,.32,1); }
   /* ✅ 정답 공개 시 색상만 바뀌고 위치는 그대로 유지한다 (요청에 따라 위치 이동 애니메이션 제거) */
   .band button.cap{ transition:background .15s, box-shadow .15s; }
-  .band.dragging button.cap{ background:var(--blue); box-shadow:0 0 10px rgba(58,134,255,0.5); }
-  .band.correct button.cap{ background:var(--teal) !important; box-shadow:0 0 12px rgba(61,220,151,0.6); }
-  .band.wrong button.cap{ background:var(--red) !important; box-shadow:0 0 12px rgba(239,91,91,0.6); }
+  .band.dragging button.cap{ background:var(--blue); box-shadow:0 0 10px rgba(51,88,122,0.5); }
+  .band.correct button.cap{ background:var(--teal) !important; box-shadow:0 0 12px rgba(47,109,76,0.6); }
+  .band.wrong button.cap{ background:var(--red) !important; box-shadow:0 0 12px rgba(178,58,42,0.6); }
   /* ✅ 밴드는 맞았지만 부스트/컷 방향이 반대인 "부분 정답" 상태 — 완전 오답(빨강)과 구분되게 주황으로 표시 */
-  .band.partial button.cap{ background:var(--amber) !important; box-shadow:0 0 12px rgba(242,169,59,0.6); }
+  .band.partial button.cap{ background:var(--amber) !important; box-shadow:0 0 12px rgba(156,107,23,0.6); }
 
   /* ---- start button ---- */
   .startbtn{
     border:none; border-radius:14px; padding:16px; font-weight:700; font-size:15px;
     display:flex; align-items:center; justify-content:center; gap:8px;
   }
-  .startbtn.go{ background:linear-gradient(180deg,#4a90ff, var(--blue)); color:#fff; box-shadow:0 8px 24px rgba(58,134,255,0.35); }
-  .startbtn.stop{ background:rgba(239,91,91,0.14); color:#ff8080; border:1px solid rgba(239,91,91,0.4); }
+  .startbtn.go{ background:linear-gradient(180deg,#33587a, var(--blue)); color:#fff; box-shadow:0 8px 24px rgba(51,88,122,0.35); }
+  .startbtn.stop{ background:rgba(178,58,42,0.14); color:#c1584a; border:1px solid rgba(178,58,42,0.4); }
 
   /* ---- 다른 도구 바로가기 링크 ---- */
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
-    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
     display:inline-flex; align-items:center; gap:5px;
   }
-  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
 
   /* ==================================================================
      모바일 전용 레이아웃 (~700px 이하 폰 화면)
@@ -324,7 +324,7 @@
     <h2 id="statusTitle" data-i18n="status_default_title">시작 버튼을 눌러 핑크노이즈를 재생하세요</h2>
     <p id="statusSub"></p>
     <span id="abBadge" class="ab-badge" style="display:none;" data-i18n="ab_badge_normal">● 기본</span>
-    <p id="debugTimer" class="mono" style="font-size:10px;color:#3ddc97;margin-top:4px;"></p>
+    <p id="debugTimer" class="mono" style="font-size:10px;color:#2f6d4c;margin-top:4px;"></p>
   </div>
 
   <div class="feedback" id="feedback"></div>
@@ -1258,12 +1258,12 @@
           const amp = Math.max(0.02, peaks[i]); // 완전히 무음인 구간도 아주 얇게는 보이게
           const barHeight = amp * h * 0.9;
           // 이미 지나온 구간(플레이헤드 왼쪽)은 밝은 초록, 아직 안 나온 구간은 은은한 회색
-          listenVizCtx.fillStyle = (x < playheadX) ? '#3ddc97' : 'rgba(147,163,163,0.35)';
+          listenVizCtx.fillStyle = (x < playheadX) ? '#2f6d4c' : 'rgba(92,87,76,0.35)';
           listenVizCtx.fillRect(x, midY - barHeight / 2, Math.max(1, barW - 0.5), barHeight);
         }
 
         // 플레이헤드(진행선)
-        listenVizCtx.strokeStyle = '#f2a93b';
+        listenVizCtx.strokeStyle = '#9c6b17';
         listenVizCtx.lineWidth = Math.max(2, w * 0.004);
         listenVizCtx.beginPath();
         listenVizCtx.moveTo(playheadX, 0);
@@ -1271,7 +1271,7 @@
         listenVizCtx.stroke();
       } else {
         // 음악을 업로드하지 않고 핑크노이즈로 청음 중일 때는 실시간 레벨만 간단히 보여준다
-        listenVizCtx.fillStyle = 'rgba(147,163,163,0.7)';
+        listenVizCtx.fillStyle = 'rgba(92,87,76,0.7)';
         listenVizCtx.font = `${Math.max(11, h * 0.13)}px 'IBM Plex Mono', monospace`;
         listenVizCtx.textAlign = 'center';
         listenVizCtx.fillText(window.i18n.t('viz_upload_hint'), w / 2, h / 2);

@@ -10,17 +10,17 @@
 <link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
-    --bg-deep:#0a0d0f; --bg-panel:#12171a; --bg-panel-2:#171d21;
-    --line: rgba(255,255,255,0.08); --line-strong: rgba(255,255,255,0.18);
-    --teal:#3ddc97; --blue:#3a86ff; --amber:#f2a93b; --red:#ef5b5b;
-    --text-primary:#f4f7f6; --text-secondary:#93a3a3; --text-tertiary:#5d6b6b;
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
   body{
     margin:0; background:
-      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #060809 70%, #050607);
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
     color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
     display:flex; justify-content:center; align-items:flex-start;
   }
@@ -31,7 +31,7 @@
   .app{ width:100%; max-width:1180px; padding:20px 24px 32px; display:flex; flex-direction:column; gap:16px; }
 
   .topbar{ display:flex; align-items:center; gap:10px; }
-  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#1b2226,#0d1113); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
   .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
   .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
   .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
@@ -43,7 +43,7 @@
     margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
     padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
   }
-  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(255,255,255,0.04); }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
 
   .status{ text-align:center; }
   .status h2{ font-size:19px; font-weight:700; }
@@ -62,7 +62,7 @@
     border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
     font-size:16px; font-weight:600; padding:9px 16px; border-radius:10px;
   }
-  .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#232b2f; }
+  .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#e3ddd0; }
 
   /* ---- dB 범위(민감도) 조절 패널 ---- */
   .range-panel{
@@ -75,7 +75,7 @@
   }
   .range-input-row{ display:flex; align-items:center; gap:6px; }
   .range-input-row input[type=number]{
-    width:76px; background:#171d21; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    width:76px; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
     font-family:'IBM Plex Mono',monospace; font-size:14px; padding:8px 9px;
   }
   .range-input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); }
@@ -88,11 +88,11 @@
   }
   .range-slider::-webkit-slider-thumb{
     -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%;
-    background:#fff; border:2px solid var(--bg-deep); box-shadow:0 2px 6px rgba(0,0,0,0.4); cursor:pointer;
+    background:#fff; border:2px solid var(--text-primary); box-shadow:0 2px 6px rgba(30,26,20,0.13); cursor:pointer;
   }
   .range-slider::-moz-range-thumb{
-    width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--bg-deep);
-    box-shadow:0 2px 6px rgba(0,0,0,0.4); cursor:pointer;
+    width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--text-primary);
+    box-shadow:0 2px 6px rgba(30,26,20,0.13); cursor:pointer;
   }
 
   /* ---- 보정(선택사항) 접이식 섹션 ---- */
@@ -106,7 +106,7 @@
   .calib-note{ font-size:13px; color:var(--text-secondary); margin:4px 0 12px; line-height:1.6; }
 
   .console{
-    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #0d1113);
+    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff);
     padding:16px 8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden;
     aspect-ratio:2.2 / 1; max-height:60vh; min-height:260px;
   }
@@ -118,7 +118,7 @@
     border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
     font-size:14.5px; font-weight:600; padding:9px 16px; border-radius:10px;
   }
-  .view-toggle button.active{ color:var(--text-primary); border-color:var(--line-strong); background:#232b2f; }
+  .view-toggle button.active{ color:var(--text-primary); border-color:var(--line-strong); background:#e3ddd0; }
 
   /* ---- 라인(연속 스펙트럼) 뷰 ---- */
   .line-console{ padding:14px; }
@@ -139,12 +139,12 @@
   }
   .spl-fs-row{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--text-secondary); margin-top:-2px; }
   .vu-bar-wrap{
-    width:100%; max-width:340px; height:24px; background:#1a2124; border-radius:7px;
-    overflow:hidden; border:1px solid rgba(255,255,255,0.04);
+    width:100%; max-width:340px; height:24px; background:#ece7db; border-radius:7px;
+    overflow:hidden; border:1px solid rgba(30,26,20,0.04);
   }
   .vu-bar-fill{
     height:100%; width:0%;
-    background:linear-gradient(90deg, #3ddc97, #3ddc97 65%, #f2a93b 85%, #ef5b5b 96%);
+    background:linear-gradient(90deg, #2f6d4c, #2f6d4c 65%, #9c6b17 85%, #b23a2a 96%);
     transition:width 0.08s linear;
   }
   .spl-big-val{ font-family:'IBM Plex Mono',monospace; font-size:76px; font-weight:700; color:var(--teal); line-height:1; }
@@ -159,13 +159,13 @@
     border:none; background:var(--bg-panel-2); color:var(--text-secondary); font-size:14px; font-weight:600;
     padding:8px 15px;
   }
-  .vu-toggle button.active{ background:#232b2f; color:var(--text-primary); }
+  .vu-toggle button.active{ background:#e3ddd0; color:var(--text-primary); }
 
   /* ---- 아날로그 VU 니들 게이지 ---- */
   .vu-gauge-wrap{ width:100%; max-width:320px; }
   .vu-gauge-svg{ width:100%; height:auto; display:block; }
   #vuNeedle, #vuMaxNeedle{ transition:transform 0.08s linear; transform-origin:150px 160px; }
-  .vu-gauge-tick{ stroke:rgba(255,255,255,0.25); stroke-width:1.5; }
+  .vu-gauge-tick{ stroke:rgba(30,26,20,0.25); stroke-width:1.5; }
   .vu-gauge-ticklabel{ font-family:'IBM Plex Mono',monospace; font-size:9px; fill:var(--text-tertiary); text-anchor:middle; }
   .spl-stats-row{ display:flex; gap:14px; }
   .spl-stat{
@@ -194,18 +194,18 @@
   .grid{ display:flex; align-items:stretch; gap:2px; flex:1; min-height:0; }
   .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
   .track{
-    position:relative; width:100%; flex:1; min-height:60px; background:#1a2124; border-radius:4px; border:1px solid rgba(255,255,255,0.04);
+    position:relative; width:100%; flex:1; min-height:60px; background:#ece7db; border-radius:4px; border:1px solid rgba(30,26,20,0.04);
     overflow:hidden;
   }
-  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(255,255,255,0.08); pointer-events:none; }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(30,26,20,0.08); pointer-events:none; }
   .band .bar{
     position:absolute; left:1px; right:1px; bottom:0; border-radius:2px 2px 0 0;
-    background:linear-gradient(180deg, var(--teal), #1f8f63);
+    background:linear-gradient(180deg, var(--teal), #1e4a33);
     height:0%;
   }
   .band .peak{
     position:absolute; left:1px; right:1px; height:2px; background:var(--amber);
-    box-shadow:0 0 4px rgba(242,169,59,0.7); bottom:0%;
+    box-shadow:0 0 4px rgba(156,107,23,0.7); bottom:0%;
   }
   .band .lbl{
     font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--text-primary);
@@ -250,13 +250,13 @@
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
-    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(255,255,255,0.02);
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
     display:inline-flex; align-items:center; gap:5px;
   }
-  .tool-links a:hover{ color:var(--text-primary); background:rgba(255,255,255,0.06); }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
   .mic-denied{
-    text-align:center; font-size:16px; color:var(--red); background:rgba(239,91,91,0.08);
-    border:1px solid rgba(239,91,91,0.25); border-radius:10px; padding:12px 16px; display:none;
+    text-align:center; font-size:16px; color:var(--red); background:rgba(178,58,42,0.08);
+    border:1px solid rgba(178,58,42,0.25); border-radius:10px; padding:12px 16px; display:none;
   }
 </style>
 </head>
@@ -379,7 +379,7 @@
 
     <div class="vu-gauge-wrap">
       <svg viewBox="0 0 300 175" class="vu-gauge-svg">
-        <path d="M 30 160 A 120 120 0 0 1 270 160" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+        <path d="M 30 160 A 120 120 0 0 1 270 160" fill="none" stroke="rgba(30,26,20,0.12)" stroke-width="2"/>
         <g id="vuGaugeTicks"></g>
         <line id="vuMaxNeedle" x1="150" y1="160" x2="150" y2="48" stroke="var(--amber)" stroke-width="1.5" opacity="0.85"/>
         <line id="vuNeedle" x1="150" y1="160" x2="150" y2="42" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"/>
@@ -881,7 +881,7 @@
     splHistoryCtx.clearRect(0, 0, w, h);
 
     // 배경 그리드(가로선 3개)
-    splHistoryCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+    splHistoryCtx.strokeStyle = 'rgba(30,26,20,0.08)';
     splHistoryCtx.lineWidth = 1;
     for (let i = 0; i <= 2; i++) {
       const y = (i / 2) * h;
@@ -905,7 +905,7 @@
       const y = toY(v);
       if (i === 0) splHistoryCtx.moveTo(x, y); else splHistoryCtx.lineTo(x, y);
     });
-    splHistoryCtx.strokeStyle = '#3ddc97';
+    splHistoryCtx.strokeStyle = '#2f6d4c';
     splHistoryCtx.lineWidth = Math.max(1.5, w * 0.003);
     splHistoryCtx.lineJoin = 'round';
     splHistoryCtx.stroke();
@@ -1078,10 +1078,10 @@
     }
 
     // 그리드: dB 가로선 (Floor~Ceiling 사이 4등분) + 옥타브 세로선
-    lineCtx.strokeStyle = 'rgba(255,255,255,0.08)';
+    lineCtx.strokeStyle = 'rgba(30,26,20,0.08)';
     lineCtx.lineWidth = Math.max(1, w * 0.0012);
     lineCtx.font = `${Math.max(11, h*0.032)}px 'IBM Plex Mono', monospace`;
-    lineCtx.fillStyle = 'rgba(147,163,163,0.85)';
+    lineCtx.fillStyle = 'rgba(92,87,76,0.85)';
     const gridSteps = 4;
     for (let i = 0; i <= gridSteps; i++) {
       const db = DB_MAX - (DB_MAX - DB_MIN) * (i / gridSteps);
@@ -1115,9 +1115,9 @@
 
     // 진폭(레벨)에 따라 파랑→초록→노랑으로 바뀌는 세로 방향 그라데이션
     const gradient = lineCtx.createLinearGradient(0, plotY0 + plotH, 0, plotY0);
-    gradient.addColorStop(0, '#3a86ff');
-    gradient.addColorStop(0.55, '#3ddc97');
-    gradient.addColorStop(1, '#f2e93b');
+    gradient.addColorStop(0, '#33587a');
+    gradient.addColorStop(0.55, '#2f6d4c');
+    gradient.addColorStop(1, '#9c8f17');
 
     // FFT 빈을 그대로 로그 주파수축 위에 점 찍어 연결 (평활화된 값 사용)
     lineCtx.beginPath();
@@ -1148,9 +1148,9 @@
         const y = dbToY(p.db);
         lineCtx.beginPath();
         lineCtx.arc(p.x, y, Math.max(2.5, w*0.005), 0, Math.PI*2);
-        lineCtx.fillStyle = '#fff';
+        lineCtx.fillStyle = '#221f1a';
         lineCtx.fill();
-        lineCtx.fillStyle = 'rgba(244,247,246,0.9)';
+        lineCtx.fillStyle = 'rgba(34,31,26,0.9)';
         lineCtx.font = `${Math.max(11, h*0.03)}px 'IBM Plex Mono', monospace`;
         const label = p.freq >= 1000 ? (p.freq/1000).toFixed(p.freq>=10000?1:2)+'k' : Math.round(p.freq);
         const labelX = Math.min(p.x + 6, w - 44);
@@ -1166,7 +1166,7 @@
       const hoverDb = (lineSmoothed && bin < lineSmoothed.length && isFinite(lineSmoothed[bin])) ? lineSmoothed[bin] : null;
 
       // 세로 점선(크로스헤어)
-      lineCtx.strokeStyle = 'rgba(255,255,255,0.55)';
+      lineCtx.strokeStyle = 'rgba(30,26,20,0.55)';
       lineCtx.lineWidth = Math.max(1, w * 0.0015);
       lineCtx.setLineDash([5, 4]);
       lineCtx.beginPath();
@@ -1179,9 +1179,9 @@
       if (hoverDb !== null) {
         lineCtx.beginPath();
         lineCtx.arc(hx, dbToY(hoverDb), Math.max(3, w * 0.0065), 0, Math.PI * 2);
-        lineCtx.fillStyle = '#f2a93b';
+        lineCtx.fillStyle = '#9c6b17';
         lineCtx.fill();
-        lineCtx.strokeStyle = '#0a0d0f';
+        lineCtx.strokeStyle = '#faf8f3';
         lineCtx.lineWidth = Math.max(1, w * 0.0018);
         lineCtx.stroke();
       }
@@ -1197,12 +1197,12 @@
       boxX = Math.max(4, boxX);
       const boxY = plotY0 + h * 0.015;
 
-      lineCtx.fillStyle = 'rgba(10,13,15,0.88)';
+      lineCtx.fillStyle = 'rgba(250,248,243,0.88)';
       lineCtx.fillRect(boxX, boxY, textW + padX * 2, boxH);
-      lineCtx.strokeStyle = 'rgba(255,255,255,0.15)';
+      lineCtx.strokeStyle = 'rgba(30,26,20,0.15)';
       lineCtx.lineWidth = Math.max(1, w * 0.001);
       lineCtx.strokeRect(boxX, boxY, textW + padX * 2, boxH);
-      lineCtx.fillStyle = '#f4f7f6';
+      lineCtx.fillStyle = '#221f1a';
       lineCtx.fillText(text, boxX + padX, boxY + boxH * 0.68);
     }
   }
