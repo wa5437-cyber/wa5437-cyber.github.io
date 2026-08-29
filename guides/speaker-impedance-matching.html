@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭 | ML Music Studio</title>
+<meta name="description" content="공칭 임피던스의 의미, 스피커를 직렬·병렬로 연결했을 때의 합성 임피던스 계산, 앰프가 견디는 최소 부하와 2Ω 연결의 위험을 계산 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/speaker-impedance-matching.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/speaker-impedance-matching.html">
+<meta property="og:title" content="스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭">
+<meta property="og:description" content="병렬·직렬 합성 임피던스 계산, 앰프의 최소 부하, 2Ω의 위험을 계산 예시와 함께.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭",
+  "description": "공칭 임피던스의 의미와 직렬·병렬 합성 임피던스 계산, 앰프 매칭.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/speaker-impedance-matching.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭</h1>
+  <div class="meta">도구 가이드 · 약 6분</div>
+
+  <p class="lede">한 앰프 채널에 스피커 여러 개를 물릴 때, 합성 임피던스가 앰프가 견디는 값보다 낮아지면 앰프가 보호 회로로 뮤트되거나 최악의 경우 출력단이 손상됩니다. 병렬·직렬 계산만 알면 미리 피할 수 있습니다.</p>
+
+  <h2>공칭 임피던스란</h2>
+  <p>스피커에 적힌 <code>8Ω</code>, <code>4Ω</code>은 <strong>공칭(nominal) 임피던스</strong>입니다. 실제 임피던스는 주파수에 따라 오르내리며, 공칭값은 그 곡선의 대표값(대략 최소값 근처)입니다. 앰프 매칭은 이 공칭값으로 계산합니다.</p>
+  <div class="note">임피던스가 낮을수록 앰프는 같은 전압에서 더 많은 전류를 흘려야 합니다. 그래서 4Ω 부하는 8Ω보다 앰프에 더 힘든 조건이고, 출력은 대략 두 배로 커집니다(전압이 같다면).</div>
+
+  <h2>병렬 연결</h2>
+  <p>스피커를 병렬로 물리면 합성 임피던스가 <strong>내려갑니다.</strong></p>
+  <div class="formula">1 / R합 = 1/R₁ + 1/R₂ + 1/R₃ + …</div>
+  <p>모든 스피커가 같은 값이면 간단합니다.</p>
+  <div class="formula">R합 = R / n   (R = 스피커 임피던스, n = 개수)</div>
+
+  <div class="example">
+    <h4>계산 예시 — 병렬</h4>
+    <p>8Ω 스피커 2개 병렬: 8 ÷ 2 = <strong>4Ω</strong><br>
+    8Ω 스피커 4개 병렬: 8 ÷ 4 = <strong>2Ω</strong><br>
+    8Ω 하나 + 4Ω 하나 병렬: 1/R = 1/8 + 1/4 = 3/8 → R = 8/3 ≈ <strong>2.67Ω</strong></p>
+  </div>
+
+  <h2>직렬 연결</h2>
+  <p>직렬로 물리면 합성 임피던스가 <strong>올라갑니다.</strong> 단순히 더하면 됩니다.</p>
+  <div class="formula">R합 = R₁ + R₂ + R₃ + …</div>
+  <div class="example">
+    <h4>계산 예시 — 직렬</h4>
+    <p>8Ω 스피커 2개 직렬: 8 + 8 = <strong>16Ω</strong></p>
+    <p>직렬은 한 스피커가 끊기면 전체가 무음이 되고, 스피커마다 걸리는 전압이 임피던스 비율대로 나뉘어 음색·레벨이 달라질 수 있어 실전에서는 병렬이 훨씬 흔합니다.</p>
+  </div>
+
+  <h2>앰프가 견디는 최소 임피던스</h2>
+  <p>앰프 스펙시트에는 보통 <strong>"8Ω: 500W, 4Ω: 800W, 2Ω: 1200W"</strong> 식으로 부하별 출력이 적혀 있습니다. 여기 적힌 가장 낮은 값이 그 앰프의 한계입니다.</p>
+  <ul>
+    <li><strong>2Ω 지원 표기가 없다면</strong> 8Ω 스피커 4개 병렬(=2Ω)은 물리면 안 됩니다.</li>
+    <li>2Ω 구동은 앰프 발열이 크게 늘어납니다. 랙 환기가 부족하면 장시간 공연에서 보호 회로가 뜰 수 있습니다.</li>
+    <li>여유를 두려면 계산된 합성 임피던스가 앰프 최소값보다 한 단계 위(예: 앰프가 2Ω까지면 4Ω로 운용)가 안전합니다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🔌</div>
+    <div class="body">
+      <b>전기 계산기 (무료 웹 도구)</b>
+      <p>옴의 법칙, 전력, 스피커 임피던스(직렬/병렬), dB↔전력비를 계산하고 랜덤 문제로 연습할 수 있습니다.</p>
+      <a href="/electrical-calculator.html">▸ 전기 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>참고: 70V / 100V 라인</h2>
+  <p>매장 BGM처럼 스피커를 아주 많이, 길게 연결해야 하는 상황에서는 각 스피커에 트랜스포머를 달아 <strong>정전압(70V·100V) 라인</strong>으로 묶습니다. 이때는 임피던스가 아니라 각 스피커의 <strong>탭 전력(W)</strong>을 더해서 앰프 정격 이내인지만 확인하면 됩니다. 라이브 SR에서는 거의 쓰지 않습니다.</p>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·iPadOS·macOS)</b>
+      <p>임피던스·전력·dB 계산문제가 무제한으로 생성되고 정답마다 공식 해설이 붙습니다. 자격검정 필기 대비에 좋습니다.</p>
+      <a href="https://apps.apple.com/app/id6798884217" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/stage-sound-cert-study-plan.html">무대음향 3급 필기 — 과목별 순서와 3주 플랜 <span>· 학습 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

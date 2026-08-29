@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Signal Generator — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
+<style>
+  :root{
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:820px; padding:20px 24px 32px; display:flex; flex-direction:column; gap:16px; }
+
+  /* ---- top bar ---- */
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:14.5px; letter-spacing:0.01em; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-secondary); font-weight:500; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px;
+    font-size:12px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line);
+    text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+
+  /* ---- signal type picker ---- */
+  .sigpicker{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px; }
+  .sigpicker button{
+    border:none; background:transparent; color:var(--text-secondary); font-size:14.5px; font-weight:600;
+    padding:13px 4px; border-radius:9px; transition:background .15s, color .15s;
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+  }
+  .sigpicker button .ic{ font-size:18px; }
+  .sigpicker button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .sigpicker button.active .ic{ color:var(--teal); }
+  @media (max-width:560px){
+    .sigpicker{ grid-template-columns:repeat(4,1fr); }
+    .sigpicker button{ font-size:10px; padding:10px 2px; }
+  }
+
+  /* ---- status ---- */
+  .status{ text-align:center; }
+  .status h2{ font-size:15px; font-weight:700; }
+  .status p{ margin:4px 0 0; font-size:12.5px; color:var(--text-secondary); }
+
+  /* ---- main console: knob + fader side by side ---- */
+  .console{
+    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff);
+    padding:28px 20px; display:flex; align-items:stretch; justify-content:center; gap:36px; flex-wrap:wrap;
+  }
+
+  /* ---- frequency knob ---- */
+  .knob-block{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .knob-label{ font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.08em; color:var(--text-primary); opacity:0.85; font-weight:600; text-transform:uppercase; }
+  .knob-outer{
+    width:150px; height:150px; border-radius:50%; position:relative;
+    background:radial-gradient(circle at 35% 30%, #e3ddd0, #f1ede3 70%);
+    border:1px solid var(--line-strong);
+    box-shadow: inset 0 2px 6px rgba(30,26,20,0.16), 0 6px 18px rgba(30,26,20,0.11);
+    cursor:ns-resize; touch-action:none;
+  }
+  .knob-outer::before{
+    content:""; position:absolute; inset:10px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #d9d3c4, #ece7db 75%);
+    border:1px solid rgba(30,26,20,0.05);
+  }
+  .knob-ticks{ position:absolute; inset:0; }
+  .knob-ticks span{
+    position:absolute; left:50%; top:3px; width:2px; height:8px; background:var(--line-strong);
+    transform-origin:1px 72px;
+  }
+  .knob-indicator{
+    position:absolute; left:50%; top:50%; width:4px; height:52px; margin-left:-2px; margin-top:-52px;
+    transform-origin:2px 52px; transition:none;
+  }
+  .knob-indicator::after{
+    content:""; position:absolute; top:0; left:0; width:4px; height:22px; border-radius:2px;
+    background:linear-gradient(180deg, var(--teal), #1e4a33); box-shadow:0 0 8px rgba(47,109,76,0.6);
+  }
+  .knob-outer.disabled{ cursor:default; opacity:0.4; }
+  .knob-value{ font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600; color:var(--text-primary); }
+  .freq-input-row{ display:flex; align-items:center; gap:6px; }
+  .freq-input{
+    width:84px; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    padding:6px 4px; -moz-appearance:textfield;
+  }
+  .freq-input::-webkit-outer-spin-button, .freq-input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .freq-input:disabled{ opacity:0.4; }
+  .freq-unit{ font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--text-secondary); }
+
+  /* ---- volume fader ---- */
+  .fader-block{ display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .fader-track{
+    position:relative; width:56px; height:210px; background:#ece7db; border-radius:8px;
+    border:1px solid rgba(30,26,20,0.04); overflow:hidden; cursor:ns-resize; touch-action:none;
+  }
+  .fader-fill{ position:absolute; left:0; right:0; bottom:0; background:linear-gradient(180deg, rgba(51,88,122,0.5), rgba(47,109,76,0.35)); }
+  .fader-cap{
+    position:absolute; left:3px; right:3px; height:16px; border-radius:4px; background:#221f1a;
+    box-shadow:0 2px 6px rgba(30,26,20,0.13);
+  }
+  .fader-value{ font-family:'IBM Plex Mono',monospace; font-size:15px; font-weight:600; }
+
+  /* ---- start button ---- */
+  .startbtn{
+    border:none; border-radius:14px; padding:16px; font-weight:700; font-size:15px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .startbtn.go{ background:linear-gradient(180deg,#33587a, var(--blue)); color:#fff; box-shadow:0 8px 24px rgba(51,88,122,0.35); }
+  .startbtn.stop{ background:rgba(178,58,42,0.14); color:#c1584a; border:1px solid rgba(178,58,42,0.4); }
+
+  .hint{ text-align:center; font-size:13px; color:var(--text-secondary); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">SIGNAL GENERATOR<small>Pink / White / Sine / Square / Triangle</small></div>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
+  </div>
+
+  <div class="sigpicker" id="sigPicker">
+    <button data-type="pink" class="active"><span class="ic">▤</span><span data-i18n="sig_pink">핑크</span></button>
+    <button data-type="white"><span class="ic">▦</span><span data-i18n="sig_white">화이트</span></button>
+    <button data-type="sine"><span class="ic">∿</span><span data-i18n="sig_sine">사인</span></button>
+    <button data-type="square"><span class="ic">⊓</span><span data-i18n="sig_square">사각</span></button>
+    <button data-type="triangle"><span class="ic">△</span><span data-i18n="sig_triangle">삼각</span></button>
+    <button data-type="hum"><span class="ic">〰</span><span data-i18n="sig_hum">험</span></button>
+    <button data-type="buzz"><span class="ic">⚡</span><span data-i18n="sig_buzz">버즈</span></button>
+    <button data-type="hiss"><span class="ic">〜</span><span data-i18n="sig_hiss">히스</span></button>
+  </div>
+
+  <div class="status">
+    <h2 id="statusTitle" data-i18n="status_default_title">시작 버튼을 눌러 소리를 재생하세요</h2>
+    <p id="statusSub" data-i18n="status_default_sub">노이즈는 배경을 채우고, 파형은 지정한 주파수의 순수 톤을 냅니다</p>
+  </div>
+
+  <div class="console">
+    <div class="knob-block">
+      <div class="knob-label">Frequency</div>
+      <div class="knob-outer" id="freqKnob">
+        <div class="knob-ticks" id="knobTicks"></div>
+        <div class="knob-indicator" id="knobIndicator"></div>
+      </div>
+      <div class="knob-value" id="freqValue">1.00k<span class="freq-unit">Hz</span></div>
+      <div class="freq-input-row">
+        <input type="number" id="freqInput" class="freq-input" value="1000" min="10" max="22000" step="1">
+        <span class="freq-unit">Hz</span>
+      </div>
+    </div>
+
+    <div class="fader-block">
+      <div class="knob-label">Volume</div>
+      <div class="fader-track" id="volTrack">
+        <div class="fader-fill" id="volFill" style="height:60%;"></div>
+        <div class="fader-cap" id="volCap" style="bottom:calc(60% - 8px);"></div>
+      </div>
+      <div class="fader-value" id="volValue">60%</div>
+    </div>
+  </div>
+
+  <button id="startBtn" class="startbtn go" data-i18n="btn_start">▸ 시작</button>
+  <p class="hint" data-i18n="hint_freq">주파수 노브는 위/아래로 드래그하거나, 아래 숫자 입력칸에 직접 입력할 수 있습니다.</p>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+    <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
+    <a href="electrical-calculator.html">🔌 Electrical Calc</a>
+    <a href="tempo-pitch-calculator.html">🥁 Tempo & Pitch</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const FREQ_MIN = 10, FREQ_MAX = 22000;
+  const OSC_TYPES = new Set(['sine','square','triangle']); // this.osc.type으로 직접 설정 가능한 것들
+  const WAVEFORM_TYPES = new Set(['sine','square','triangle','buzz','hum']); // 주파수 노브가 활성화되는 것들
+
+  // ---------------------------------------------------------------
+  // 오디오 엔진: 핑크/화이트 노이즈 + 사인/사각/삼각 오실레이터
+  // 항상 모든 소스를 켜둔 채로, 신호 종류 전환 시 게인만 부드럽게 바꾼다
+  // (Web Audio의 AudioParam 자동화가 취소/스케줄까지 알아서 처리해준다).
+  // ---------------------------------------------------------------
+  class Engine {
+    constructor(){
+      this.ctx = null;
+      this.isPlaying = false;
+      this.currentType = 'pink';
+      this.volume = 0.6; // 0~1 (페이더 위치)
+    }
+
+    ensureContext(){
+      if (this.ctx) return;
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+      // 핑크노이즈 (Paul Kellet의 정제된 알고리즘)
+      this.pinkNode = this.ctx.createScriptProcessor(4096, 1, 1);
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      this.pinkNode.onaudioprocess = (e) => {
+        const out = e.outputBuffer.getChannelData(0);
+        for (let i=0;i<out.length;i++){
+          const white = Math.random()*2-1;
+          b0=0.99886*b0+white*0.0555179;
+          b1=0.99332*b1+white*0.0750759;
+          b2=0.96900*b2+white*0.1538520;
+          b3=0.86650*b3+white*0.3104856;
+          b4=0.55000*b4+white*0.5329522;
+          b5=-0.7616*b5-white*0.0168980;
+          const pink = b0+b1+b2+b3+b4+b5+b6+white*0.5362;
+          b6 = white*0.115926;
+          out[i] = pink*0.11;
+        }
+      };
+
+      // 화이트노이즈 (필터링 없는 순수 랜덤)
+      this.whiteNode = this.ctx.createScriptProcessor(4096, 1, 1);
+      this.whiteNode.onaudioprocess = (e) => {
+        const out = e.outputBuffer.getChannelData(0);
+        for (let i=0;i<out.length;i++) out[i] = (Math.random()*2-1) * 0.25;
+      };
+
+      // 사인/사각/삼각 — 하나의 오실레이터에서 type만 바꿔가며 사용
+      this.osc = this.ctx.createOscillator();
+      this.osc.type = 'sine';
+      this.osc.frequency.value = 1000;
+
+      // ✅ 험(Hum) — 전원 잡음 특유의 낮은 웅웅거림. 기본 주파수(60Hz) + 배음 2개를
+      // 함께 섞어서 실제 험 노이즈와 비슷한 울림을 만든다 (순수 사인 하나보다 훨씬 자연스럽다).
+      this.humOsc1 = this.ctx.createOscillator(); this.humOsc1.type='sine'; this.humOsc1.frequency.value=60;
+      this.humOsc2 = this.ctx.createOscillator(); this.humOsc2.type='sine'; this.humOsc2.frequency.value=120;
+      this.humOsc3 = this.ctx.createOscillator(); this.humOsc3.type='sine'; this.humOsc3.frequency.value=180;
+      this.humMix1 = this.ctx.createGain(); this.humMix1.gain.value = 1.0;
+      this.humMix2 = this.ctx.createGain(); this.humMix2.gain.value = 0.45;
+      this.humMix3 = this.ctx.createGain(); this.humMix3.gain.value = 0.2;
+
+      // ✅ 버즈(Buzz) — 톱니파는 모든 배음을 다 갖고 있어서, 험보다 훨씬 거칠고
+      // "지지직"거리는 버즈 특유의 질감이 자연스럽게 난다.
+      this.buzzOsc = this.ctx.createOscillator(); this.buzzOsc.type = 'sawtooth'; this.buzzOsc.frequency.value = 60;
+
+      // ✅ 히스(Hiss) — 화이트노이즈를 하이패스 필터에 통과시켜 고음 위주로 걸러내면
+      // 테이프 히스/에어컨 바람 소리 같은 "쉬익" 하는 질감이 된다.
+      this.hissNode = this.ctx.createScriptProcessor(4096, 1, 1);
+      this.hissNode.onaudioprocess = (e) => {
+        const out = e.outputBuffer.getChannelData(0);
+        for (let i=0;i<out.length;i++) out[i] = (Math.random()*2-1) * 0.35;
+      };
+      this.hissFilter = this.ctx.createBiquadFilter();
+      this.hissFilter.type = 'highpass';
+      this.hissFilter.frequency.value = 3000;
+      this.hissFilter.Q.value = 0.7;
+
+      this.pinkGain = this.ctx.createGain(); this.pinkGain.gain.value = 0;
+      this.whiteGain = this.ctx.createGain(); this.whiteGain.gain.value = 0;
+      this.oscGain = this.ctx.createGain(); this.oscGain.gain.value = 0;
+      this.humGain = this.ctx.createGain(); this.humGain.gain.value = 0;
+      this.buzzGain = this.ctx.createGain(); this.buzzGain.gain.value = 0;
+      this.hissGain = this.ctx.createGain(); this.hissGain.gain.value = 0;
+
+      this.pinkNode.connect(this.pinkGain);
+      this.whiteNode.connect(this.whiteGain);
+      this.osc.connect(this.oscGain);
+
+      this.humOsc1.connect(this.humMix1); this.humMix1.connect(this.humGain);
+      this.humOsc2.connect(this.humMix2); this.humMix2.connect(this.humGain);
+      this.humOsc3.connect(this.humMix3); this.humMix3.connect(this.humGain);
+
+      this.buzzOsc.connect(this.buzzGain);
+
+      this.hissNode.connect(this.hissFilter);
+      this.hissFilter.connect(this.hissGain);
+
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.value = 0;
+
+      this.pinkGain.connect(this.masterGain);
+      this.whiteGain.connect(this.masterGain);
+      this.oscGain.connect(this.masterGain);
+      this.humGain.connect(this.masterGain);
+      this.buzzGain.connect(this.masterGain);
+      this.hissGain.connect(this.masterGain);
+      this.masterGain.connect(this.ctx.destination);
+
+      this.osc.start();
+      this.humOsc1.start(); this.humOsc2.start(); this.humOsc3.start();
+      this.buzzOsc.start();
+    }
+
+    rampParam(param, target, duration){
+      const now = this.ctx.currentTime;
+      param.cancelScheduledValues(now);
+      param.setValueAtTime(param.value, now);
+      param.linearRampToValueAtTime(target, now + duration);
+    }
+
+    start(){
+      this.ensureContext();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      this.isPlaying = true;
+      this.rampParam(this.masterGain.gain, 1.0, 0.25);
+      this._applyActiveGain();
+    }
+
+    stop(){
+      if (!this.isPlaying) return;
+      this.rampParam(this.masterGain.gain, 0, 0.25);
+      this.isPlaying = false;
+    }
+
+    // 볼륨 스케일: 페이더 100%가 실제로는 마스터 0.55 정도가 되도록 캡을 둬서
+    // 사각파/삼각파처럼 배음이 많은 파형도 귀나 스피커에 부담 없게 한다.
+    _volumeToGain(vol){ return vol * 0.55; }
+
+    // ✅ 요청 반영: 험/버즈는 다른 신호들보다 체감 음량이 커서, 시작할 때 약 3dB(≈0.708배)
+    // 더 작게 나오도록 타입별 배율을 둔다. (-3dB ≈ 진폭 기준 70.8%)
+    _typeGainMultiplier(type){
+      if (type === 'hum' || type === 'buzz') return 0.708;
+      return 1.0;
+    }
+
+    _applyActiveGain(){
+      if (!this.isPlaying) return;
+      const g = this._volumeToGain(this.volume) * this._typeGainMultiplier(this.currentType);
+      const activeNode = this.currentType === 'pink' ? this.pinkGain
+        : this.currentType === 'white' ? this.whiteGain
+        : this.currentType === 'hum' ? this.humGain
+        : this.currentType === 'buzz' ? this.buzzGain
+        : this.currentType === 'hiss' ? this.hissGain
+        : this.oscGain;
+      [this.pinkGain, this.whiteGain, this.oscGain, this.humGain, this.buzzGain, this.hissGain].forEach(node => {
+        this.rampParam(node.gain, node === activeNode ? g : 0, 0.12);
+      });
+    }
+
+    setType(type){
+      this.currentType = type;
+      if (OSC_TYPES.has(type) && this.osc){
+        this.osc.type = type;
+      }
+      this._applyActiveGain();
+    }
+
+    setFrequency(freq){
+      if (this.osc) this.osc.frequency.value = freq;
+      // ✅ 버즈는 사각/사인처럼 노브로 주파수를 바꿀 수 있다 (기본 60Hz에서 자유롭게 탐색 가능)
+      if (this.buzzOsc) this.buzzOsc.frequency.value = freq;
+      // ✅ 험은 기본음:2배음:3배음 비율(예: 60:120:180)을 유지한 채 함께 움직인다
+      if (this.humOsc1 && this.humOsc2 && this.humOsc3) {
+        this.humOsc1.frequency.value = freq;
+        this.humOsc2.frequency.value = freq * 2;
+        this.humOsc3.frequency.value = freq * 3;
+      }
+    }
+
+    setVolume(vol){
+      this.volume = vol;
+      this._applyActiveGain();
+    }
+  }
+
+  const engine = new Engine();
+
+  // ---------------------------------------------------------------
+  // UI
+  // ---------------------------------------------------------------
+  const sigPicker = document.getElementById('sigPicker');
+  const startBtn = document.getElementById('startBtn');
+  const statusTitle = document.getElementById('statusTitle');
+  const statusSub = document.getElementById('statusSub');
+  const freqKnob = document.getElementById('freqKnob');
+  const knobIndicator = document.getElementById('knobIndicator');
+  const knobTicks = document.getElementById('knobTicks');
+  const freqValueEl = document.getElementById('freqValue');
+  const freqInput = document.getElementById('freqInput');
+  const volTrack = document.getElementById('volTrack');
+  const volFill = document.getElementById('volFill');
+  const volCap = document.getElementById('volCap');
+  const volValueEl = document.getElementById('volValue');
+
+  let signalType = 'pink';
+  let frequency = 1000;
+  let volume = 0.6;
+  let isPlaying = false;
+
+  // 눈금(tick) 그리기: -135deg ~ +135deg 사이 11개
+  for (let i=0;i<11;i++){
+    const tick = document.createElement('span');
+    const angle = -135 + (270/10)*i;
+    tick.style.transform = `rotate(${angle}deg)`;
+    knobTicks.appendChild(tick);
+  }
+
+  function freqToT(f){ return Math.log(f/FREQ_MIN) / Math.log(FREQ_MAX/FREQ_MIN); }
+  function tToFreq(t){ return FREQ_MIN * Math.pow(FREQ_MAX/FREQ_MIN, Math.max(0, Math.min(1, t))); }
+
+  function formatFreq(f){
+    if (f >= 1000){
+      const k = f/1000;
+      return (k >= 10 ? k.toFixed(1) : k.toFixed(2)) + 'k';
+    }
+    return String(Math.round(f));
+  }
+
+  function updateKnobVisual(){
+    const t = freqToT(frequency);
+    const angle = -135 + t*270;
+    knobIndicator.style.transform = `rotate(${angle}deg)`;
+    freqValueEl.innerHTML = formatFreq(frequency) + '<span class="freq-unit">Hz</span>';
+    freqInput.value = Math.round(frequency);
+  }
+
+  function setFrequency(f, opts){
+    f = Math.max(FREQ_MIN, Math.min(FREQ_MAX, f));
+    frequency = f;
+    updateKnobVisual();
+    if (!(opts && opts.skipEngine)) engine.setFrequency(frequency);
+  }
+
+  // ---- 주파수 노브 드래그 ----
+  let knobDragStartY = null;
+  let knobDragStartT = null;
+  function knobEnabled(){ return WAVEFORM_TYPES.has(signalType); }
+
+  freqKnob.addEventListener('pointerdown', (e) => {
+    if (!knobEnabled()) return;
+    knobDragStartY = e.clientY;
+    knobDragStartT = freqToT(frequency);
+    freqKnob.setPointerCapture(e.pointerId);
+    e.preventDefault();
+  });
+  freqKnob.addEventListener('pointermove', (e) => {
+    if (knobDragStartY === null) return;
+    const dy = knobDragStartY - e.clientY; // 위로 끌수록 증가
+    const sensitivity = 220; // 이 픽셀만큼 끌면 전체 범위(20Hz~20kHz)를 다 돈다
+    let t = knobDragStartT + dy / sensitivity;
+    t = Math.max(0, Math.min(1, t));
+    setFrequency(tToFreq(t));
+  });
+  function knobRelease(){ knobDragStartY = null; }
+  freqKnob.addEventListener('pointerup', knobRelease);
+  freqKnob.addEventListener('pointercancel', knobRelease);
+
+  freqInput.addEventListener('change', () => {
+    const v = parseFloat(freqInput.value);
+    if (!isNaN(v)) setFrequency(v);
+  });
+
+  function updateKnobEnabledState(){
+    freqKnob.classList.toggle('disabled', !knobEnabled());
+    freqInput.disabled = !knobEnabled();
+  }
+
+  // ---- 볼륨 페이더 드래그 ----
+  function clampVolFromClientY(clientY){
+    const rect = volTrack.getBoundingClientRect();
+    const relY = clientY - rect.top;
+    let pct = 1 - (relY / rect.height);
+    return Math.max(0, Math.min(1, pct));
+  }
+  function applyVolVisual(pct){
+    const pctStr = Math.round(pct*100) + '%';
+    volFill.style.height = (pct*100) + '%';
+    volCap.style.bottom = `calc(${pct*100}% - 8px)`;
+    volValueEl.textContent = pctStr;
+  }
+  function setVolume(pct){
+    volume = pct;
+    applyVolVisual(pct);
+    engine.setVolume(pct);
+  }
+
+  let volDragging = false;
+  volTrack.addEventListener('pointerdown', (e) => {
+    volDragging = true;
+    volTrack.setPointerCapture(e.pointerId);
+    setVolume(clampVolFromClientY(e.clientY));
+    e.preventDefault();
+  });
+  volTrack.addEventListener('pointermove', (e) => {
+    if (!volDragging) return;
+    setVolume(clampVolFromClientY(e.clientY));
+  });
+  function volRelease(){ volDragging = false; }
+  volTrack.addEventListener('pointerup', volRelease);
+  volTrack.addEventListener('pointercancel', volRelease);
+
+  // ---- 신호 종류 선택 ----
+  const SIGNAL_LABEL_KEYS = {
+    pink: ['status_pink_title', 'status_pink_sub'],
+    white: ['status_white_title', 'status_white_sub'],
+    sine: ['status_sine_title', 'status_sine_sub'],
+    square: ['status_square_title', 'status_square_sub'],
+    triangle: ['status_triangle_title', 'status_triangle_sub'],
+    hum: ['status_hum_title', 'status_hum_sub'],
+    buzz: ['status_buzz_title', 'status_buzz_sub'],
+    hiss: ['status_hiss_title', 'status_hiss_sub']
+  };
+  function signalLabel(type){
+    const keys = SIGNAL_LABEL_KEYS[type];
+    return [window.i18n.t(keys[0]), window.i18n.t(keys[1])];
+  }
+
+  function setSignalType(type){
+    signalType = type;
+    sigPicker.querySelectorAll('button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.type === type);
+    });
+    updateKnobEnabledState();
+    engine.setType(type);
+    if (isPlaying){
+      const [title, sub] = signalLabel(type);
+      setStatus(title, sub);
+    }
+  }
+  sigPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => setSignalType(btn.dataset.type));
+  });
+
+  function setStatus(title, sub){
+    statusTitle.textContent = title;
+    statusSub.textContent = sub || '';
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (!isPlaying){
+      isPlaying = true;
+      engine.start();
+      startBtn.textContent = window.i18n.t('btn_stop');
+      startBtn.classList.remove('go'); startBtn.classList.add('stop');
+      const [title, sub] = signalLabel(signalType);
+      setStatus(title, sub);
+    } else {
+      isPlaying = false;
+      engine.stop();
+      startBtn.textContent = window.i18n.t('btn_start');
+      startBtn.classList.remove('stop'); startBtn.classList.add('go');
+      setStatus(window.i18n.t('status_default_title'), window.i18n.t('status_default_sub'));
+    }
+  });
+
+  // ---- 초기화 ----
+  updateKnobVisual();
+  updateKnobEnabledState();
+  applyVolVisual(volume);
+
+  document.addEventListener('i18nchange', () => {
+    startBtn.textContent = window.i18n.t(isPlaying ? 'btn_stop' : 'btn_start');
+    if (isPlaying) {
+      const [title, sub] = signalLabel(signalType);
+      setStatus(title, sub);
+    }
+  });
+})();
+</script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "sig_pink": {"ko": "핑크", "en": "Pink", "ja": "ピンク", "es": "Rosa", "zh": "粉红"}, "sig_white": {"ko": "화이트", "en": "White", "ja": "ホワイト", "es": "Blanco", "zh": "白噪"}, "sig_sine": {"ko": "사인", "en": "Sine", "ja": "サイン", "es": "Seno", "zh": "正弦"}, "sig_square": {"ko": "사각", "en": "Square", "ja": "矩形", "es": "Cuadrada", "zh": "方波"}, "sig_triangle": {"ko": "삼각", "en": "Triangle", "ja": "三角", "es": "Triangular", "zh": "三角"}, "sig_hum": {"ko": "험", "en": "Hum", "ja": "ハム", "es": "Zumbido", "zh": "电流声"}, "sig_buzz": {"ko": "버즈", "en": "Buzz", "ja": "バズ", "es": "Bordoneo", "zh": "蜂鸣"}, "sig_hiss": {"ko": "히스", "en": "Hiss", "ja": "ヒス", "es": "Siseo", "zh": "嘶声"}, "status_default_title": {"ko": "시작 버튼을 눌러 소리를 재생하세요", "en": "Press Start to play sound", "ja": "スタートボタンを押して音を再生してください", "es": "Pulsa Iniciar para reproducir el sonido", "zh": "点击开始按钮播放声音"}, "status_default_sub": {"ko": "노이즈는 배경을 채우고, 파형은 지정한 주파수의 순수 톤을 냅니다", "en": "Noise fills the background, while waveforms produce a pure tone at the chosen frequency", "ja": "ノイズは背景を満たし、波形は指定した周波数の純音を鳴らします", "es": "El ruido llena el fondo, mientras que las formas de onda producen un tono puro en la frecuencia elegida", "zh": "噪声用于填充背景，波形则以指定频率发出纯音"}, "status_pink_title": {"ko": "핑크노이즈 재생 중", "en": "Playing pink noise", "ja": "ピンクノイズ再生中", "es": "Reproduciendo ruido rosa", "zh": "正在播放粉红噪声"}, "status_pink_sub": {"ko": "넓은 대역을 균등하게 채우는 배경 노이즈입니다", "en": "Background noise that evenly fills a wide frequency range", "ja": "広い帯域を均等に満たす背景ノイズです", "es": "Ruido de fondo que llena uniformemente un amplio rango de frecuencias", "zh": "均匀覆盖宽频段的背景噪声"}, "status_white_title": {"ko": "화이트노이즈 재생 중", "en": "Playing white noise", "ja": "ホワイトノイズ再生中", "es": "Reproduciendo ruido blanco", "zh": "正在播放白噪声"}, "status_white_sub": {"ko": "모든 주파수를 동일한 세기로 담은 노이즈입니다", "en": "Noise containing all frequencies at equal intensity", "ja": "すべての周波数を同じ強さで含むノイズです", "es": "Ruido que contiene todas las frecuencias con la misma intensidad", "zh": "包含所有频率且强度相同的噪声"}, "status_sine_title": {"ko": "사인파 재생 중", "en": "Playing sine wave", "ja": "サイン波再生中", "es": "Reproduciendo onda seno", "zh": "正在播放正弦波"}, "status_sine_sub": {"ko": "가장 깨끗한 순음입니다 — 노브로 음높이를 바꿔보세요", "en": "The purest tone — turn the knob to change the pitch", "ja": "最もクリアな純音です — ノブでピッチを変えてみましょう", "es": "El tono más puro — gira la perilla para cambiar el tono", "zh": "最纯净的单音 — 转动旋钮可改变音高"}, "status_square_title": {"ko": "사각파 재생 중", "en": "Playing square wave", "ja": "矩形波再生中", "es": "Reproduciendo onda cuadrada", "zh": "正在播放方波"}, "status_square_sub": {"ko": "배음이 풍부한 각진 파형입니다 — 노브로 음높이를 바꿔보세요", "en": "An angular waveform rich in harmonics — turn the knob to change the pitch", "ja": "倍音が豊かな角ばった波形です — ノブでピッチを変えてみましょう", "es": "Una forma de onda angular rica en armónicos — gira la perilla para cambiar el tono", "zh": "谐波丰富的方形波形 — 转动旋钮可改变音高"}, "status_triangle_title": {"ko": "삼각파 재생 중", "en": "Playing triangle wave", "ja": "三角波再生中", "es": "Reproduciendo onda triangular", "zh": "正在播放三角波"}, "status_triangle_sub": {"ko": "사인파보다 살짝 날카로운 부드러운 파형입니다", "en": "A smooth waveform, just slightly sharper than a sine wave", "ja": "サイン波よりわずかに鋭い、なめらかな波形です", "es": "Una forma de onda suave, ligeramente más definida que una onda seno", "zh": "比正弦波稍显尖锐的平滑波形"}, "status_hum_title": {"ko": "험(Hum) 노이즈 재생 중", "en": "Playing Hum noise", "ja": "ハムノイズ再生中", "es": "Reproduciendo ruido de zumbido (Hum)", "zh": "正在播放电流声(Hum)"}, "status_hum_sub": {"ko": "전원 잡음 특유의 낮은 웅웅거림입니다 — 그라운드 루프 문제를 들어볼 때 유용해요", "en": "The low droning sound typical of power line noise — useful for listening for ground loop issues", "ja": "電源ノイズ特有の低いうなりです — グラウンドループ問題を聴く際に便利です", "es": "El zumbido grave típico del ruido de la línea eléctrica — útil para detectar problemas de bucle de tierra", "zh": "电源噪声特有的低沉嗡嗡声 — 适合用来听地回路问题"}, "status_buzz_title": {"ko": "버즈(Buzz) 노이즈 재생 중", "en": "Playing Buzz noise", "ja": "バズノイズ再生中", "es": "Reproduciendo ruido de zumbido agudo (Buzz)", "zh": "正在播放蜂鸣噪声(Buzz)"}, "status_buzz_sub": {"ko": "배음이 풍부해 험보다 거칠고 지지직거리는 질감입니다", "en": "Rich in harmonics, giving it a rougher, crackling texture than hum", "ja": "倍音が豊かでハムより粗くジリジリした質感です", "es": "Rico en armónicos, con una textura más áspera y crepitante que el zumbido", "zh": "谐波丰富，比电流声更粗糙、带有滋滋声质感"}, "status_hiss_title": {"ko": "히스(Hiss) 노이즈 재생 중", "en": "Playing Hiss noise", "ja": "ヒスノイズ再生中", "es": "Reproduciendo ruido de siseo (Hiss)", "zh": "正在播放嘶声噪声(Hiss)"}, "status_hiss_sub": {"ko": "고음 위주로 걸러낸 노이즈입니다 — 테이프 히스, 프리앰프 노이즈와 비슷해요", "en": "Noise filtered to emphasize high frequencies — similar to tape hiss or preamp noise", "ja": "高音域を中心に濾過したノイズです — テープヒスやプリアンプノイズに似ています", "es": "Ruido filtrado para enfatizar las frecuencias altas — similar al siseo de cinta o al ruido de preamplificador", "zh": "以高频为主过滤出的噪声 — 类似磁带底噪或前级放大器噪声"}, "btn_start": {"ko": "▸ 시작", "en": "▸ Start", "ja": "▸ スタート", "es": "▸ Iniciar", "zh": "▸ 开始"}, "btn_stop": {"ko": "■ 정지", "en": "■ Stop", "ja": "■ ストップ", "es": "■ Detener", "zh": "■ 停止"}, "hint_freq": {"ko": "주파수 노브는 위/아래로 드래그하거나, 아래 숫자 입력칸에 직접 입력할 수 있습니다.", "en": "Drag the frequency knob up or down, or type a value directly into the number field below.", "ja": "周波数ノブは上下にドラッグするか、下の数値入力欄に直接入力できます。", "es": "Arrastra la perilla de frecuencia hacia arriba o abajo, o escribe un valor directamente en el campo numérico de abajo.", "zh": "可以上下拖动频率旋钮，也可以直接在下方的数字输入框中输入数值。"}};</script>
+<script src="i18n-core.js"></script>
+</body>
+</html>

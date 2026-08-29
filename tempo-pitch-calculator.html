@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tempo & Pitch Calculator — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
+<style>
+  :root{
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:700px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); font-weight:400; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+
+  @media (max-width:480px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar{ align-items:flex-start; }
+    .topbar .title{ font-size:14.5px; }
+    .topbar .title small{ font-size:10px; }
+    .topbar .home-link{ font-size:11.5px; padding:7px 10px; margin-top:1px; }
+  }
+
+  .chapter-picker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
+  .chapter-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:15px; font-weight:600; padding:12px 8px; border-radius:9px; }
+  .chapter-picker button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .chapter-picker button:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  .tab-picker{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px;
+  }
+  .tab-picker button{
+    border:none; background:transparent; color:var(--text-secondary); font-size:14px; font-weight:700;
+    padding:13px 4px; border-radius:9px; min-width:0; white-space:normal; word-break:keep-all;
+  }
+  .tab-picker button.active{ background:#e3ddd0; color:var(--teal); }
+  .tab-picker button:disabled{ opacity:0.35; cursor:default; }
+
+  .scoreboard{ display:flex; background:transparent; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .scoreitem{ flex:1; text-align:center; padding:12px 6px; }
+  .scoreitem + .scoreitem{ border-left:1px solid var(--line); }
+  .scoreitem .val{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:17px; color:var(--teal); }
+  .scoreitem .lbl{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-tertiary); letter-spacing:0.08em; margin-top:3px; }
+
+  .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:20px; }
+  .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-primary); font-weight:600; margin-bottom:14px; }
+  .phase-desc{ font-size:15px; color:var(--text-primary); opacity:0.85; line-height:1.7; margin:0 0 14px; }
+
+  .solve-picker{ display:flex; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:3px; margin-bottom:16px; flex-wrap:wrap; }
+  .solve-picker button{ flex:1; min-width:0; border:none; background:transparent; color:var(--text-secondary); font-size:13.5px; font-weight:700; padding:11px 6px; border-radius:9px; white-space:normal; }
+  .solve-picker button.active{ background:#e3ddd0; color:var(--amber); }
+
+  .field{ margin-top:14px; }
+  .field:first-child{ margin-top:0; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:var(--text-primary); opacity:0.9; font-weight:600;
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;
+  }
+  .input-row{ display:flex; align-items:center; gap:8px; }
+  .input-row input[type=number]{
+    flex:1; background:#f1ede3; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
+  }
+  .input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--text-primary); opacity:0.75; flex-shrink:0; }
+
+  .result-list{ margin-top:6px; }
+  .result-row{ display:flex; justify-content:space-between; align-items:baseline; padding:14px 0; border-bottom:1px solid var(--line); }
+  .result-row:last-child{ border-bottom:none; }
+  .result-lbl{ font-size:15px; color:var(--text-secondary); }
+  .result-val{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:700; color:var(--amber); }
+  .result-val .unit{ font-size:13.5px; font-weight:600; color:var(--text-secondary); margin-left:6px; }
+
+  /* ---- Tap Tempo ---- */
+  .tap-btn{
+    width:100%; padding:34px; border-radius:16px; border:2px solid var(--line-strong);
+    background:linear-gradient(160deg, #ffffff, #ffffff); color:var(--text-primary);
+    font-size:19px; font-weight:700; font-family:'Space Grotesk','Inter',sans-serif;
+    transition:background .1s, transform .1s;
+  }
+  .tap-btn:active{ transform:scale(0.98); background:linear-gradient(160deg, #e3ddd0, #ffffff); }
+  .tap-bpm-display{ text-align:center; margin-top:16px; }
+  .tap-bpm-display .num{ font-family:'IBM Plex Mono',monospace; font-size:44px; font-weight:700; color:var(--teal); }
+  .tap-bpm-display .lbl{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-tertiary); letter-spacing:0.1em; margin-top:2px; }
+  .tap-reset-btn{
+    width:100%; margin-top:14px; padding:11px; border-radius:10px; border:1px solid var(--line);
+    background:rgba(30,26,20,0.02); color:var(--text-secondary); font-size:13.5px; font-weight:600;
+  }
+
+  /* ---- 표 ---- */
+  .tempo-table{ margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .tempo-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-bottom:1px solid var(--line); }
+  .tempo-row:last-child{ border-bottom:none; }
+  .tempo-row.tempo-header{ background:var(--bg-panel-2); }
+  .tempo-cell{ padding:12px 8px; text-align:center; font-family:'IBM Plex Mono',monospace; }
+  .tempo-header .tempo-cell{ font-size:12.5px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
+  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; }
+  .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ color:var(--teal); font-size:14px; font-weight:600; }
+  @media (max-width:480px){
+    .tempo-cell{ padding:9px 3px; font-size:12px; }
+    .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ font-size:12.5px; }
+  }
+
+  /* ---- 계산 문제(퀴즈) ---- */
+  .quiz-problem{
+    font-family:'IBM Plex Mono',monospace; font-size:17px; color:var(--text-primary); line-height:1.7;
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center;
+  }
+  .quiz-options{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px; }
+  .quiz-option-btn{
+    border:1px solid var(--line); background:var(--bg-panel-2); color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:17px; font-weight:700; padding:16px 8px; border-radius:12px;
+    min-width:0; transition:background .15s, border-color .15s, color .15s;
+  }
+  .quiz-option-btn:disabled{ cursor:default; }
+  .quiz-option-btn.correct-option{ background:rgba(47,109,76,0.16); border-color:var(--teal); color:var(--teal); }
+  .quiz-option-btn.wrong-option{ background:rgba(178,58,42,0.16); border-color:var(--red); color:var(--red); }
+  .feedback{ min-height:22px; text-align:center; font-weight:700; font-size:15px; margin-top:12px; }
+  .feedback.correct{ color:var(--teal); }
+  .feedback.wrong{ color:var(--red); }
+
+  .startbtn{
+    width:100%; padding:16px; border-radius:14px; border:none; font-size:16px; font-weight:700;
+    color:#e8f2ec; background:linear-gradient(160deg, var(--teal), #3a8c5e);
+  }
+  .startbtn.stop{ color:#fff; background:linear-gradient(160deg, var(--red), #8f2c22); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">TEMPO & PITCH CALCULATOR<small>Tap Tempo · Note Duration · Speed/Pitch</small></div>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
+  </div>
+
+  <div class="chapter-picker" id="chapterPicker">
+    <button id="chapterFreeBtn" class="active" data-i18n="chapter_free">자유 계산</button>
+    <button id="chapterQuizBtn" data-i18n="chapter_quiz">계산 문제</button>
+  </div>
+
+  <div class="scoreboard" id="scoreboard" style="display:none;">
+    <div class="scoreitem"><div class="val" id="scRound">0/10</div><div class="lbl">ROUND</div></div>
+    <div class="scoreitem"><div class="val" id="scHit">0</div><div class="lbl">HIT</div></div>
+    <div class="scoreitem"><div class="val" id="scAcc">--</div><div class="lbl">ACC</div></div>
+  </div>
+
+  <div class="tab-picker" id="tabPicker">
+    <button data-tab="tap" class="active">Tap Tempo</button>
+    <button data-tab="notes">BPM & Notes</button>
+    <button data-tab="speedpitch">Speed ↔ Pitch</button>
+    <button data-tab="keymatch">BPM Key Match</button>
+    <button data-tab="loopbpm">Loop BPM Finder</button>
+    <button data-tab="barduration">Bar Duration</button>
+    <button data-tab="timestretch">Time-Stretch</button>
+    <button data-tab="samplerate">Sample Rate</button>
+  </div>
+
+  <!-- ============ 자유 계산: Tap Tempo ============ -->
+  <div id="tapTab">
+    <div class="panel">
+      <div class="panel-title">Tap Tempo</div>
+      <p class="phase-desc" data-i18n="tap_desc">박자에 맞춰 아래 버튼을 계속 눌러보세요 — 마지막 8번 탭 간격을 평균 내서 BPM을 계산해요.</p>
+      <button class="tap-btn" id="tapBtn">👆 TAP</button>
+      <div class="tap-bpm-display">
+        <div class="num" id="tapBpmVal">--</div>
+        <div class="lbl" id="tapBpmLabel">BPM (탭 0회)</div>
+      </div>
+      <button class="tap-reset-btn" id="tapResetBtn" data-i18n="tap_reset_btn">초기화</button>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: BPM & Notes ============ -->
+  <div id="notesTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">BPM & Note Duration</div>
+      <p class="phase-desc" data-i18n="notes_desc">곡의 BPM을 입력하면, 각 음표 길이에 해당하는 시간(ms)을 계산합니다. 딜레이·오토메이션을 박자에 맞출 때 유용해요.</p>
+      <div class="field" style="max-width:220px;">
+        <label>BPM</label>
+        <div class="input-row"><input type="number" id="notesBpmInput" value="120" step="1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="tempo-table" id="notesTable"></div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Speed ↔ Pitch ============ -->
+  <div id="speedPitchTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Speed ↔ Pitch</div>
+      <p class="phase-desc" data-i18n="speedpitch_desc">턴테이블/DJ 믹서의 피치 페이더처럼, 재생 속도를 바꾸면 피치도 같이 바뀝니다. 속도(%) 또는 반음/센트 중 아무거나 입력하면 나머지가 자동 계산돼요.</p>
+      <div class="field">
+        <label>Speed Change</label>
+        <div class="input-row"><input type="number" id="speedPctInput" value="0" step="0.1"><span class="unit">%</span></div>
+      </div>
+      <div class="field">
+        <label>Pitch Shift (Semitones)</label>
+        <div class="input-row"><input type="number" id="speedSemitoneInput" value="0" step="0.01"><span class="unit" data-i18n="unit_semitone">반음</span></div>
+      </div>
+      <div class="field">
+        <label>Pitch Shift (Cents)</label>
+        <div class="input-row"><input type="number" id="speedCentsInput" value="0" step="1"><span class="unit">cents</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="speed_ratio_label">배속 (Speed Ratio)</span>
+          <span class="result-val"><span id="speedRatioVal">1.000</span><span class="unit">×</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="speedpitch_note">참고: 33⅓ RPM 판을 45 RPM으로 돌리면 속도가 35% 빨라지는 셈이라, 피치는 약 +5.2반음 올라가요.</p>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: BPM Key Match ============ -->
+  <div id="keyMatchTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">BPM Key Match</div>
+      <p class="phase-desc" data-i18n="keymatch_desc">원곡 BPM에서 목표 BPM으로 속도를 바꿀 때(피치를 고정하지 않고 그냥 재생속도만 바꿀 경우), 곡의 키가 몇 반음 바뀌는지 계산합니다. DJ 믹싱에서 템포를 맞출 때 참고하세요.</p>
+      <div class="field">
+        <label data-i18n="orig_bpm_label">원곡 BPM</label>
+        <div class="input-row"><input type="number" id="origBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="target_bpm_label">목표 BPM</label>
+        <div class="input-row"><input type="number" id="targetBpmInput" value="128" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="orig_key_label">원곡 키 (선택사항)</label>
+        <div class="solve-picker" id="origKeyPicker">
+          <button data-key="0" class="active">C</button>
+          <button data-key="2">D</button>
+          <button data-key="4">E</button>
+          <button data-key="5">F</button>
+          <button data-key="7">G</button>
+          <button data-key="9">A</button>
+          <button data-key="11">B</button>
+        </div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="speed_change_label">속도 변화</span>
+          <span class="result-val"><span id="keyMatchPctVal">--</span><span class="unit">%</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="key_change_label">키(피치) 변화</span>
+          <span class="result-val"><span id="keyMatchSemitoneVal">--</span><span class="unit" data-i18n="unit_semitone">반음</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="result_key_label">결과 키 (근사치)</span>
+          <span class="result-val"><span id="keyMatchResultKey">--</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="keymatch_note">참고: 반음 단위로 딱 떨어지지 않으면 가장 가까운 음 이름 + 몇 cents 벗어났는지로 보여줘요.</p>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Loop BPM Finder ============ -->
+  <div id="loopBpmTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Loop / Sample BPM Finder</div>
+      <p class="phase-desc" data-i18n="loopbpm_desc">샘플·루프 파일의 길이(초)와 마디 수를 알면, 원래 BPM이 몇이었는지 거꾸로 계산합니다.</p>
+      <div class="field">
+        <label data-i18n="sample_length_label">샘플 길이</label>
+        <div class="input-row"><input type="number" id="loopLengthInput" value="8" step="0.001" min="0.001"><span class="unit" data-i18n="unit_seconds">초</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="bar_count_label">마디(bar) 수</label>
+        <div class="input-row"><input type="number" id="loopBarsInput" value="4" step="1" min="1"><span class="unit" data-i18n="unit_bars">마디</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="beats_per_bar_label">박자 (한 마디당 박 수)</label>
+        <div class="solve-picker" id="loopBeatsPicker">
+          <button data-beats="4" class="active">4/4</button>
+          <button data-beats="3">3/4</button>
+          <button data-beats="6">6/8</button>
+        </div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">BPM</span>
+          <span class="result-val"><span id="loopBpmVal">--</span><span class="unit">bpm</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Bar/Measure Duration ============ -->
+  <div id="barDurationTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Bar / Measure Duration</div>
+      <p class="phase-desc" data-i18n="bardur_desc">BPM·박자·마디 수를 넣으면, 그 구간이 실제로 몇 분 몇 초인지 계산합니다. 버스 16마디, 코러스 8마디처럼 곡 구조를 짤 때 유용해요.</p>
+      <div class="field">
+        <label>BPM</label>
+        <div class="input-row"><input type="number" id="barBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="beats_per_bar_label">박자 (한 마디당 박 수)</label>
+        <div class="solve-picker" id="barBeatsPicker">
+          <button data-beats="4" class="active">4/4</button>
+          <button data-beats="3">3/4</button>
+          <button data-beats="6">6/8</button>
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="bar_count_label">마디(bar) 수</label>
+        <div class="input-row"><input type="number" id="barCountInput" value="8" step="1" min="1"><span class="unit" data-i18n="unit_bars">마디</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="one_bar_length_label">한 마디 길이</span>
+          <span class="result-val"><span id="barOneDurationVal">--</span><span class="unit" data-i18n="unit_seconds">초</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="total_length_label">전체 구간 길이</span>
+          <span class="result-val"><span id="barTotalDurationVal">--</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Time-Stretch (피치 고정) ============ -->
+  <div id="timeStretchTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title" data-i18n="timestretch_title">Time-Stretch (피치 고정)</div>
+      <p class="phase-desc" data-i18n="timestretch_desc" data-i18n-html="true">DAW의 타임스트레치(WSOLA·페이즈보코더 등)처럼, <b style="color:var(--text-secondary);">피치는 그대로 두고 템포만</b> 바꿀 때의 배속 비율을 계산합니다. (턴테이블처럼 속도를 바꾸면 피치도 같이 바뀌는 Speed↔Pitch 탭과 반대 개념이에요)</p>
+      <div class="field">
+        <label>원곡 BPM</label>
+        <div class="input-row"><input type="number" id="tsOrigBpmInput" value="120" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="field">
+        <label>목표 BPM</label>
+        <div class="input-row"><input type="number" id="tsTargetBpmInput" value="128" step="0.1" min="1"><span class="unit">bpm</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="stretch_ratio_label">스트레치 비율</span>
+          <span class="result-val"><span id="tsRatioVal">--</span><span class="unit">×</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="tempo_change_label">템포 변화</span>
+          <span class="result-val"><span id="tsPctVal">--</span><span class="unit">%</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="pitch_change_label">피치 변화</span>
+          <span class="result-val" style="color:var(--teal);">0 <span class="unit" data-i18n="unit_semitone_fixed">반음 (고정됨)</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="tsWarning"></p>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Sample Rate ↔ Time ↔ Samples ============ -->
+  <div id="sampleRateTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Samples ↔ Time ↔ Sample Rate</div>
+      <p class="phase-desc" data-i18n="samplerate_desc">샘플 수 = 시간(초) × 샘플레이트. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
+      <div class="solve-picker" id="srSolvePicker">
+        <button data-solve="time" data-i18n="time_solve_btn">Time 구하기</button>
+        <button data-solve="samples" class="active" data-i18n="samples_solve_btn">Samples 구하기</button>
+        <button data-solve="rate" data-i18n="rate_solve_btn">Sample Rate 구하기</button>
+      </div>
+      <div class="field">
+        <label>Time</label>
+        <div class="input-row"><input type="number" id="srTimeInput" value="1" step="0.001" min="0"><span class="unit" data-i18n="unit_seconds">초</span></div>
+      </div>
+      <div class="field">
+        <label>Samples</label>
+        <div class="input-row"><input type="number" id="srSamplesInput" value="44100" step="1" min="0"><span class="unit">samples</span></div>
+      </div>
+      <div class="field">
+        <label>Sample Rate</label>
+        <div class="input-row"><input type="number" id="srRateInput" value="44100" step="1" min="1"><span class="unit">Hz</span></div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label data-i18n="common_samplerate_label">자주 쓰는 샘플레이트</label>
+        <div class="solve-picker" id="srRatePresetPicker">
+          <button data-rate="44100">44.1k</button>
+          <button data-rate="48000">48k</button>
+          <button data-rate="96000">96k</button>
+          <button data-rate="192000">192k</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Buffer Size ↔ Latency</div>
+      <p class="phase-desc" data-i18n="buffer_desc">오디오 인터페이스의 버퍼 사이즈(samples)와 샘플레이트를 넣으면, 한 버퍼가 처리되는 데 걸리는 시간(지연시간)을 계산합니다.</p>
+      <div class="field">
+        <label>Buffer Size</label>
+        <div class="solve-picker" id="bufferSizePicker">
+          <button data-buf="32">32</button>
+          <button data-buf="64">64</button>
+          <button data-buf="128" class="active">128</button>
+          <button data-buf="256">256</button>
+          <button data-buf="512">512</button>
+          <button data-buf="1024">1024</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Sample Rate</label>
+        <div class="input-row"><input type="number" id="bufSampleRateInput" value="48000" step="1" min="1"><span class="unit">Hz</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="oneway_latency_label">편도 레이턴시</span>
+          <span class="result-val"><span id="bufLatencyOneWayVal">--</span><span class="unit">ms</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="roundtrip_latency_label">왕복(라운드트립) 레이턴시</span>
+          <span class="result-val"><span id="bufLatencyRoundTripVal">--</span><span class="unit">ms</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" data-i18n="buffer_note">참고: 실제 체감 레이턴시는 여기에 A/D·D/A 변환, 드라이버, 플러그인 처리 시간 등이 더해져서 이 계산값보다 조금 더 커요.</p>
+    </div>
+  </div>
+
+  <!-- ============ 계산 문제(퀴즈) ============ -->
+  <div id="quizPanel" class="panel" style="display:none;">
+    <div class="panel-title" data-i18n="quiz_problem_title">문제</div>
+    <div class="quiz-problem" id="quizProblemText" data-i18n="quiz_start_prompt">시작 버튼을 눌러주세요</div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <button id="startBtn" class="startbtn" style="display:none;" data-i18n="btn_quiz_start">▸ 계산 문제 시작</button>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+    <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
+    <a href="electrical-calculator.html">🔌 Electrical Calc</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // =====================================================================
+  // 공용 계산 함수
+  // =====================================================================
+  function speedRatioToSemitones(ratio){ return 12 * Math.log2(ratio); }
+  function semitonesToSpeedRatio(semi){ return Math.pow(2, semi / 12); }
+  function speedRatioFromPct(pct){ return 1 + pct / 100; }
+  function pctFromSpeedRatio(ratio){ return (ratio - 1) * 100; }
+
+  // =====================================================================
+  // 챕터 / 탭 전환
+  // =====================================================================
+  const chapterFreeBtn = document.getElementById('chapterFreeBtn');
+  const chapterQuizBtn = document.getElementById('chapterQuizBtn');
+  const tabPicker = document.getElementById('tabPicker');
+  const scoreboardEl = document.getElementById('scoreboard');
+  const scRoundEl = document.getElementById('scRound');
+  const scHitEl = document.getElementById('scHit');
+  const scAccEl = document.getElementById('scAcc');
+  const feedbackEl = document.getElementById('feedback');
+  const startBtn = document.getElementById('startBtn');
+  const quizPanel = document.getElementById('quizPanel');
+  const quizProblemText = document.getElementById('quizProblemText');
+  const quizOptionsEl = document.getElementById('quizOptions');
+
+  const freeTabs = {
+    tap: document.getElementById('tapTab'),
+    notes: document.getElementById('notesTab'),
+    speedpitch: document.getElementById('speedPitchTab'),
+    keymatch: document.getElementById('keyMatchTab'),
+    loopbpm: document.getElementById('loopBpmTab'),
+    barduration: document.getElementById('barDurationTab'),
+    timestretch: document.getElementById('timeStretchTab'),
+    samplerate: document.getElementById('sampleRateTab'),
+  };
+
+  let chapter = 'free';
+  let activeTab = 'tap';
+
+  function clearFeedback(){ feedbackEl.textContent = ''; feedbackEl.className = 'feedback'; }
+  function showFreeTabs(){
+    Object.entries(freeTabs).forEach(([name, el]) => { el.style.display = (name === activeTab) ? 'block' : 'none'; });
+  }
+  tabPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      activeTab = btn.dataset.tab;
+      tabPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      showFreeTabs();
+    });
+  });
+
+  function switchChapter(next){
+    if (chapter === next) return;
+    chapter = next;
+    chapterFreeBtn.classList.toggle('active', chapter === 'free');
+    chapterQuizBtn.classList.toggle('active', chapter === 'quiz');
+    scoreboardEl.style.display = chapter === 'quiz' ? 'flex' : 'none';
+    tabPicker.style.display = chapter === 'free' ? 'grid' : 'none';
+    quizPanel.style.display = chapter === 'quiz' ? 'block' : 'none';
+    clearFeedback();
+    if (chapter === 'free') {
+      showFreeTabs();
+      startBtn.style.display = 'none';
+    } else {
+      Object.values(freeTabs).forEach(el => el.style.display = 'none');
+      startBtn.style.display = 'block';
+      startBtn.textContent = window.i18n.t('btn_quiz_start');
+      startBtn.classList.remove('stop');
+      quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
+      quizOptionsEl.innerHTML = '';
+      questionIndex = 0; hitCount = 0;
+      updateScoreboard();
+    }
+  }
+  chapterFreeBtn.addEventListener('click', () => switchChapter('free'));
+  chapterQuizBtn.addEventListener('click', () => switchChapter('quiz'));
+
+  // =====================================================================
+  // 자유 계산 — Tap Tempo
+  // =====================================================================
+  const tapBtn = document.getElementById('tapBtn');
+  const tapBpmVal = document.getElementById('tapBpmVal');
+  
+  const tapResetBtn = document.getElementById('tapResetBtn');
+  const tapBpmLabel = document.getElementById('tapBpmLabel');
+  let tapTimestamps = [];
+  const TAP_MAX_HISTORY = 8;
+  const TAP_TIMEOUT_MS = 2000; // 2초 넘게 안 누르면 새로 시작
+
+  function updateTapCountLabel(){
+    tapBpmLabel.textContent = window.i18n.tpl('tap_bpm_template', { count: tapTimestamps.length });
+  }
+  function resetTap(){
+    tapTimestamps = [];
+    tapBpmVal.textContent = '--';
+    updateTapCountLabel();
+  }
+  tapBtn.addEventListener('click', () => {
+    const now = performance.now();
+    if (tapTimestamps.length > 0 && now - tapTimestamps[tapTimestamps.length - 1] > TAP_TIMEOUT_MS) {
+      tapTimestamps = []; // 너무 오래 쉬었으면 새로 센다
+    }
+    tapTimestamps.push(now);
+    if (tapTimestamps.length > TAP_MAX_HISTORY) tapTimestamps.shift();
+    updateTapCountLabel();
+    if (tapTimestamps.length >= 2) {
+      const intervals = [];
+      for (let i = 1; i < tapTimestamps.length; i++) intervals.push(tapTimestamps[i] - tapTimestamps[i - 1]);
+      const avgMs = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+      const bpm = 60000 / avgMs;
+      tapBpmVal.textContent = bpm.toFixed(1);
+    }
+  });
+  tapResetBtn.addEventListener('click', resetTap);
+
+  // =====================================================================
+  // 자유 계산 — BPM & Note Duration
+  // =====================================================================
+  const notesBpmInput = document.getElementById('notesBpmInput');
+  const notesTable = document.getElementById('notesTable');
+  const NOTE_DIVISIONS = [
+    { nameKey: 'note_name_whole', frac: '1/1', div: 1 },
+    { nameKey: 'note_name_half', frac: '1/2', div: 2 },
+    { nameKey: 'note_name_quarter', frac: '1/4', div: 4 },
+    { nameKey: 'note_name_eighth', frac: '1/8', div: 8 },
+    { nameKey: 'note_name_sixteenth', frac: '1/16', div: 16 },
+    { nameKey: 'note_name_thirtysecond', frac: '1/32', div: 32 },
+  ];
+  function noteLabel(frac, nameKey){
+    return window.i18n.tpl('note_label_template', { frac, name: window.i18n.t(nameKey) });
+  }
+  function formatMs(ms){ return ms >= 1000 ? (ms / 1000).toFixed(3) + 's' : ms.toFixed(1) + 'ms'; }
+  function renderNotesTable(){
+    const bpm = parseFloat(notesBpmInput.value) || 120;
+    const quarterMs = 60000 / bpm;
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">${window.i18n.t('tempo_col_note')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_normal')}</div>
+        <div class="tempo-cell">${window.i18n.t('notes_col_dotted')}</div>
+        <div class="tempo-cell">${window.i18n.t('notes_col_triplet')}</div>
+      </div>`;
+    NOTE_DIVISIONS.forEach(({ nameKey, frac, div }) => {
+      const baseMs = quarterMs * (4 / div);
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell">${noteLabel(frac, nameKey)}</div>
+          <div class="tempo-cell">${formatMs(baseMs)}</div>
+          <div class="tempo-cell">${formatMs(baseMs * 1.5)}</div>
+          <div class="tempo-cell">${formatMs(baseMs * 2 / 3)}</div>
+        </div>`;
+    });
+    notesTable.innerHTML = html;
+  }
+  notesBpmInput.addEventListener('input', renderNotesTable);
+  renderNotesTable();
+
+  // =====================================================================
+  // 자유 계산 — Speed ↔ Pitch (3방향: %, 반음, 센트)
+  // =====================================================================
+  const speedPctInput = document.getElementById('speedPctInput');
+  const speedSemitoneInput = document.getElementById('speedSemitoneInput');
+  const speedCentsInput = document.getElementById('speedCentsInput');
+  const speedRatioVal = document.getElementById('speedRatioVal');
+
+  function updateSpeedPitchFromRatio(ratio){
+    speedRatioVal.textContent = ratio.toFixed(4);
+    speedPctInput.value = pctFromSpeedRatio(ratio).toFixed(3);
+    const semi = speedRatioToSemitones(ratio);
+    speedSemitoneInput.value = semi.toFixed(3);
+    speedCentsInput.value = (semi * 100).toFixed(1);
+  }
+  speedPctInput.addEventListener('input', () => {
+    const pct = parseFloat(speedPctInput.value);
+    if (!isFinite(pct)) return;
+    const ratio = speedRatioFromPct(pct);
+    speedRatioVal.textContent = ratio.toFixed(4);
+    const semi = speedRatioToSemitones(ratio);
+    speedSemitoneInput.value = semi.toFixed(3);
+    speedCentsInput.value = (semi * 100).toFixed(1);
+  });
+  speedSemitoneInput.addEventListener('input', () => {
+    const semi = parseFloat(speedSemitoneInput.value);
+    if (!isFinite(semi)) return;
+    const ratio = semitonesToSpeedRatio(semi);
+    speedRatioVal.textContent = ratio.toFixed(4);
+    speedPctInput.value = pctFromSpeedRatio(ratio).toFixed(3);
+    speedCentsInput.value = (semi * 100).toFixed(1);
+  });
+  speedCentsInput.addEventListener('input', () => {
+    const cents = parseFloat(speedCentsInput.value);
+    if (!isFinite(cents)) return;
+    const semi = cents / 100;
+    const ratio = semitonesToSpeedRatio(semi);
+    speedRatioVal.textContent = ratio.toFixed(4);
+    speedPctInput.value = pctFromSpeedRatio(ratio).toFixed(3);
+    speedSemitoneInput.value = semi.toFixed(3);
+  });
+
+  // =====================================================================
+  // 자유 계산 — BPM Key Match
+  // =====================================================================
+  const origBpmInput = document.getElementById('origBpmInput');
+  const targetBpmInput = document.getElementById('targetBpmInput');
+  const keyMatchPctVal = document.getElementById('keyMatchPctVal');
+  const keyMatchSemitoneVal = document.getElementById('keyMatchSemitoneVal');
+  const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const origKeyPicker = document.getElementById('origKeyPicker');
+  const keyMatchResultKey = document.getElementById('keyMatchResultKey');
+  let origKeyIndex = 0;
+
+  origKeyPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      origKeyIndex = parseInt(btn.dataset.key, 10);
+      origKeyPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcKeyMatch();
+    });
+  });
+
+  function recalcKeyMatch(){
+    const origBpm = parseFloat(origBpmInput.value);
+    const targetBpm = parseFloat(targetBpmInput.value);
+    if (!isFinite(origBpm) || !isFinite(targetBpm) || origBpm <= 0) return;
+    const ratio = targetBpm / origBpm;
+    const semi = speedRatioToSemitones(ratio);
+    keyMatchPctVal.textContent = pctFromSpeedRatio(ratio).toFixed(2);
+    keyMatchSemitoneVal.textContent = semi.toFixed(2);
+
+    // ✅ 요청 반영: 반음이 딱 안 떨어지면 가장 가까운 음이름 + 남은 cents로 보여준다
+    const roundedSemi = Math.round(semi);
+    const cents = (semi - roundedSemi) * 100;
+    const resultIndex = ((origKeyIndex + roundedSemi) % 12 + 12) % 12;
+    const centsStr = Math.abs(cents) < 1 ? '' : ` (${cents > 0 ? '+' : ''}${cents.toFixed(0)}c)`;
+    keyMatchResultKey.textContent = `${NOTE_NAMES[origKeyIndex]} → ${NOTE_NAMES[resultIndex]}${centsStr}`;
+  }
+  [origBpmInput, targetBpmInput].forEach(el => el.addEventListener('input', recalcKeyMatch));
+  recalcKeyMatch();
+
+  // =====================================================================
+  // 자유 계산 — Loop / Sample BPM Finder
+  // =====================================================================
+  const loopLengthInput = document.getElementById('loopLengthInput');
+  const loopBarsInput = document.getElementById('loopBarsInput');
+  const loopBeatsPicker = document.getElementById('loopBeatsPicker');
+  const loopBpmVal = document.getElementById('loopBpmVal');
+  let loopBeatsPerBar = 4;
+
+  function recalcLoopBpm(){
+    const lengthSec = parseFloat(loopLengthInput.value);
+    const bars = parseFloat(loopBarsInput.value);
+    if (!isFinite(lengthSec) || lengthSec <= 0 || !isFinite(bars) || bars <= 0) { loopBpmVal.textContent = '--'; return; }
+    const totalBeats = bars * loopBeatsPerBar;
+    const bpm = (60 * totalBeats) / lengthSec;
+    loopBpmVal.textContent = bpm.toFixed(2);
+  }
+  loopBeatsPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      loopBeatsPerBar = parseInt(btn.dataset.beats, 10);
+      loopBeatsPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcLoopBpm();
+    });
+  });
+  [loopLengthInput, loopBarsInput].forEach(el => el.addEventListener('input', recalcLoopBpm));
+  recalcLoopBpm();
+
+  // =====================================================================
+  // 자유 계산 — Bar / Measure Duration
+  // =====================================================================
+  const barBpmInput = document.getElementById('barBpmInput');
+  const barBeatsPicker = document.getElementById('barBeatsPicker');
+  const barCountInput = document.getElementById('barCountInput');
+  const barOneDurationVal = document.getElementById('barOneDurationVal');
+  const barTotalDurationVal = document.getElementById('barTotalDurationVal');
+  let barBeatsPerBar = 4;
+
+  function formatMinSec(totalSec){
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec - m * 60;
+    return `${m}:${s.toFixed(2).padStart(5, '0')}`;
+  }
+  function recalcBarDuration(){
+    const bpm = parseFloat(barBpmInput.value);
+    const bars = parseFloat(barCountInput.value);
+    if (!isFinite(bpm) || bpm <= 0 || !isFinite(bars) || bars <= 0) return;
+    const beatSec = 60 / bpm;
+    const oneBarSec = beatSec * barBeatsPerBar;
+    const totalSec = oneBarSec * bars;
+    barOneDurationVal.textContent = oneBarSec.toFixed(3);
+    barTotalDurationVal.textContent = formatMinSec(totalSec) + ' ' + window.i18n.tpl('seconds_paren_template', { sec: totalSec.toFixed(2) });
+  }
+  barBeatsPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      barBeatsPerBar = parseInt(btn.dataset.beats, 10);
+      barBeatsPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcBarDuration();
+    });
+  });
+  [barBpmInput, barCountInput].forEach(el => el.addEventListener('input', recalcBarDuration));
+  recalcBarDuration();
+
+  // =====================================================================
+  // 자유 계산 — Time-Stretch (피치 고정)
+  // =====================================================================
+  const tsOrigBpmInput = document.getElementById('tsOrigBpmInput');
+  const tsTargetBpmInput = document.getElementById('tsTargetBpmInput');
+  const tsRatioVal = document.getElementById('tsRatioVal');
+  const tsPctVal = document.getElementById('tsPctVal');
+  const tsWarning = document.getElementById('tsWarning');
+  function recalcTimeStretch(){
+    const origBpm = parseFloat(tsOrigBpmInput.value);
+    const targetBpm = parseFloat(tsTargetBpmInput.value);
+    if (!isFinite(origBpm) || !isFinite(targetBpm) || origBpm <= 0) return;
+    const ratio = targetBpm / origBpm;
+    const pct = pctFromSpeedRatio(ratio);
+    tsRatioVal.textContent = ratio.toFixed(4);
+    tsPctVal.textContent = pct.toFixed(2);
+    tsWarning.textContent = Math.abs(pct) > 20
+      ? window.i18n.t('ts_warning')
+      : '';
+  }
+  [tsOrigBpmInput, tsTargetBpmInput].forEach(el => el.addEventListener('input', recalcTimeStretch));
+  recalcTimeStretch();
+
+  // =====================================================================
+  // 자유 계산 — Samples ↔ Time ↔ Sample Rate
+  // =====================================================================
+  const srSolvePicker = document.getElementById('srSolvePicker');
+  const srTimeInput = document.getElementById('srTimeInput');
+  const srSamplesInput = document.getElementById('srSamplesInput');
+  const srRateInput = document.getElementById('srRateInput');
+  const srRatePresetPicker = document.getElementById('srRatePresetPicker');
+  let srSolveFor = 'samples';
+
+  function updateSrInputStates(){
+    srTimeInput.disabled = (srSolveFor === 'time');
+    srSamplesInput.disabled = (srSolveFor === 'samples');
+    srRateInput.disabled = (srSolveFor === 'rate');
+  }
+  function recalcSampleRate(){
+    const t = parseFloat(srTimeInput.value), n = parseFloat(srSamplesInput.value), sr = parseFloat(srRateInput.value);
+    if (srSolveFor === 'time' && isFinite(n) && isFinite(sr) && sr > 0) srTimeInput.value = (n / sr).toFixed(4);
+    if (srSolveFor === 'samples' && isFinite(t) && isFinite(sr)) srSamplesInput.value = Math.round(t * sr);
+    if (srSolveFor === 'rate' && isFinite(n) && isFinite(t) && t > 0) srRateInput.value = Math.round(n / t);
+  }
+  srSolvePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      srSolveFor = btn.dataset.solve;
+      srSolvePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      updateSrInputStates();
+      recalcSampleRate();
+    });
+  });
+  [srTimeInput, srSamplesInput, srRateInput].forEach(el => el.addEventListener('input', recalcSampleRate));
+  srRatePresetPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      srRateInput.value = btn.dataset.rate;
+      recalcSampleRate();
+    });
+  });
+  updateSrInputStates();
+  recalcSampleRate();
+
+  // =====================================================================
+  // 자유 계산 — Buffer Size ↔ Latency
+  // =====================================================================
+  const bufferSizePicker = document.getElementById('bufferSizePicker');
+  const bufSampleRateInput = document.getElementById('bufSampleRateInput');
+  const bufLatencyOneWayVal = document.getElementById('bufLatencyOneWayVal');
+  const bufLatencyRoundTripVal = document.getElementById('bufLatencyRoundTripVal');
+  let bufferSize = 128;
+
+  function recalcBufferLatency(){
+    const sr = parseFloat(bufSampleRateInput.value);
+    if (!isFinite(sr) || sr <= 0) return;
+    const oneWayMs = (bufferSize / sr) * 1000;
+    bufLatencyOneWayVal.textContent = oneWayMs.toFixed(3);
+    bufLatencyRoundTripVal.textContent = (oneWayMs * 2).toFixed(3);
+  }
+  bufferSizePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bufferSize = parseInt(btn.dataset.buf, 10);
+      bufferSizePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcBufferLatency();
+    });
+  });
+  bufSampleRateInput.addEventListener('input', recalcBufferLatency);
+  recalcBufferLatency();
+
+  // =====================================================================
+  // 계산 문제(퀴즈)
+  // =====================================================================
+  const QUESTIONS_PER_QUIZ = 10;
+  let questionIndex = 0;
+  let hitCount = 0;
+  let currentQuestion = null;
+  let quizActive = false;
+
+  function updateScoreboard(){
+    scRoundEl.textContent = `${questionIndex}/${QUESTIONS_PER_QUIZ}`;
+    scHitEl.textContent = hitCount;
+    scAccEl.textContent = questionIndex > 0 ? Math.round((hitCount / questionIndex) * 100) + '%' : '--';
+  }
+  function randChoice(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+  function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+  function makeNoteQuestion(){
+    const bpm = randChoice([60, 90, 100, 120, 128, 140, 160]);
+    const div = randChoice([1, 2, 4, 8, 16]);
+    const quarterMs = 60000 / bpm;
+    const ms = quarterMs * (4 / div);
+    const nameKey = { 1: 'note_name_whole', 2: 'note_name_half', 4: 'note_name_quarter', 8: 'note_name_eighth', 16: 'note_name_sixteenth' }[div];
+    const frac = { 1: '1/1', 2: '1/2', 4: '1/4', 8: '1/8', 16: '1/16' }[div];
+    const label = noteLabel(frac, nameKey);
+    return { text: window.i18n.tpl('note_q_template', { bpm, label }), answer: +ms.toFixed(1) };
+  }
+  function makeSpeedPitchQuestion(){
+    const kind = randChoice(['pct2semi', 'semi2pct']);
+    if (kind === 'pct2semi') {
+      const pct = randChoice([6, 8, 10, 12, -6, -8, 35]);
+      const ratio = speedRatioFromPct(pct);
+      return { text: window.i18n.tpl('speedpitch_q_pct2semi', { pct }), answer: +speedRatioToSemitones(ratio).toFixed(2) };
+    }
+    const semi = randChoice([1, 2, 3, -1, -2, 12]);
+    const ratio = semitonesToSpeedRatio(semi);
+    return { text: window.i18n.tpl('speedpitch_q_semi2pct', { semi }), answer: +pctFromSpeedRatio(ratio).toFixed(2) };
+  }
+  function makeKeyMatchQuestion(){
+    const origBpm = randChoice([120, 128, 130, 100, 140]);
+    const targetBpm = origBpm + randChoice([4, 8, -4, -8, 10]);
+    const ratio = targetBpm / origBpm;
+    const kind = randChoice(['pct', 'semi']);
+    if (kind === 'pct') {
+      return { text: window.i18n.tpl('keymatch_q_pct', { origBpm, targetBpm }), answer: +pctFromSpeedRatio(ratio).toFixed(2) };
+    }
+    return { text: window.i18n.tpl('keymatch_q_semi', { origBpm, targetBpm }), answer: +speedRatioToSemitones(ratio).toFixed(2) };
+  }
+
+  function makeLoopBpmQuestion(){
+    const bars = randChoice([1, 2, 4, 8]);
+    const beatsPerBar = randChoice([3, 4]);
+    const bpm = randChoice([80, 90, 100, 120, 128, 140]);
+    const totalBeats = bars * beatsPerBar;
+    const lengthSec = +((60 * totalBeats) / bpm).toFixed(3);
+    return {
+      text: window.i18n.tpl('loopbpm_q_template', { beatsPerBar, bars, lengthSec }),
+      answer: bpm,
+    };
+  }
+
+  function makeBarDurationQuestion(){
+    const bpm = randChoice([80, 100, 120, 128, 140]);
+    const beatsPerBar = randChoice([3, 4]);
+    const bars = randChoice([2, 4, 8]);
+    const totalSec = +((60 / bpm) * beatsPerBar * bars).toFixed(2);
+    return {
+      text: window.i18n.tpl('bardur_q_template', { bpm, beatsPerBar, bars }),
+      answer: totalSec,
+    };
+  }
+
+  function makeTimeStretchQuestion(){
+    const origBpm = randChoice([100, 120, 128, 130, 140]);
+    const targetBpm = origBpm + randChoice([5, 10, -5, -10, 20]);
+    const pct = +pctFromSpeedRatio(targetBpm / origBpm).toFixed(2);
+    return {
+      text: window.i18n.tpl('timestretch_q_template', { origBpm, targetBpm }),
+      answer: pct,
+    };
+  }
+
+  function makeSampleRateQuestion(){
+    const kind = randChoice(['samples', 'time', 'latency']);
+    if (kind === 'samples') {
+      const sr = randChoice([44100, 48000, 96000]);
+      const t = randChoice([0.5, 1, 2]);
+      return { text: window.i18n.tpl('samplerate_q_samples', { sr, t }), answer: sr * t };
+    }
+    if (kind === 'time') {
+      const sr = randChoice([44100, 48000]);
+      const n = randChoice([22050, 44100, 48000, 96000]);
+      return { text: window.i18n.tpl('samplerate_q_time', { sr, n }), answer: +(n / sr).toFixed(3) };
+    }
+    const buf = randChoice([64, 128, 256, 512]);
+    const sr = randChoice([44100, 48000, 96000]);
+    return { text: window.i18n.tpl('samplerate_q_latency', { buf, sr }), answer: +((buf / sr) * 1000).toFixed(2) };
+  }
+
+  const QUESTION_MAKERS = [makeNoteQuestion, makeSpeedPitchQuestion, makeKeyMatchQuestion, makeLoopBpmQuestion, makeBarDurationQuestion, makeTimeStretchQuestion, makeSampleRateQuestion];
+
+  function smartRound(v){
+    if (Math.abs(v) >= 100) return Math.round(v);
+    if (Math.abs(v) >= 10) return Math.round(v * 10) / 10;
+    return Math.round(v * 100) / 100;
+  }
+  function makeDistractors(answer, count){
+    const distractors = new Set();
+    const base = answer === 0 ? 1 : answer;
+    const candidates = [
+      answer * 2, answer / 2, answer * 1.5,
+      answer + Math.abs(base) * 0.25 + 1, answer - Math.abs(base) * 0.25 - 1,
+      -answer, answer * 10, answer / 10,
+    ];
+    candidates.forEach(c => {
+      if (distractors.size >= count) return;
+      const rounded = smartRound(c);
+      if (isFinite(rounded) && rounded !== answer && !distractors.has(rounded)) distractors.add(rounded);
+    });
+    let guard = 0;
+    while (distractors.size < count && guard < 50) {
+      guard++;
+      const factor = 1 + (Math.random() * 1.6 - 0.8);
+      const rounded = smartRound(base * factor + (Math.random() < 0.5 ? 1 : -1));
+      if (isFinite(rounded) && rounded !== answer && !distractors.has(rounded)) distractors.add(rounded);
+    }
+    return Array.from(distractors).slice(0, count);
+  }
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function formatOption(v){ return (Number.isInteger(v)) ? String(v) : v.toFixed(Math.abs(v) >= 10 ? 1 : 2); }
+
+  function generateQuizQuestion(){
+    questionIndex++;
+    currentQuestion = randChoice(QUESTION_MAKERS)();
+    quizProblemText.textContent = currentQuestion.text;
+    clearFeedback();
+    updateScoreboard();
+
+    const options = shuffle([currentQuestion.answer, ...makeDistractors(currentQuestion.answer, 3)]);
+    quizOptionsEl.innerHTML = options.map(opt => `<button class="quiz-option-btn" data-val="${opt}">${formatOption(opt)}</button>`).join('');
+    quizOptionsEl.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => submitQuizAnswer(btn));
+    });
+  }
+  function submitQuizAnswer(chosenBtn){
+    if (!quizActive || currentQuestion === null) return;
+    const guess = parseFloat(chosenBtn.dataset.val);
+    const answer = currentQuestion.answer;
+    const isCorrect = Math.abs(guess - answer) < 1e-6;
+    if (isCorrect) hitCount++;
+    feedbackEl.textContent = isCorrect ? window.i18n.t('feedback_correct') : window.i18n.tpl('feedback_wrong_template', { answer: formatOption(answer) });
+    feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+    updateScoreboard();
+
+    quizOptionsEl.querySelectorAll('button').forEach(btn => {
+      const btnVal = parseFloat(btn.dataset.val);
+      if (Math.abs(btnVal - answer) < 1e-6) btn.classList.add('correct-option');
+      else if (btn === chosenBtn) btn.classList.add('wrong-option');
+      btn.disabled = true;
+    });
+    currentQuestion = null;
+
+    setTimeout(() => {
+      if (!quizActive) return;
+      if (questionIndex >= QUESTIONS_PER_QUIZ) finishQuiz();
+      else generateQuizQuestion();
+    }, 1600);
+  }
+  function finishQuiz(){
+    quizActive = false;
+    startBtn.textContent = window.i18n.t('btn_quiz_start');
+    startBtn.classList.remove('stop');
+    quizProblemText.textContent = window.i18n.tpl('quiz_finish_template', { hit: hitCount, total: QUESTIONS_PER_QUIZ });
+    quizOptionsEl.innerHTML = '';
+    clearFeedback();
+    chapterFreeBtn.disabled = false;
+    chapterQuizBtn.disabled = false;
+  }
+  startBtn.addEventListener('click', () => {
+    if (chapter !== 'quiz') return;
+    if (!quizActive) {
+      quizActive = true;
+      questionIndex = 0; hitCount = 0;
+      startBtn.textContent = window.i18n.t('btn_quiz_stop');
+      startBtn.classList.add('stop');
+      chapterFreeBtn.disabled = true;
+      chapterQuizBtn.disabled = true;
+      generateQuizQuestion();
+    } else {
+      finishQuiz();
+    }
+  });
+
+  updateScoreboard();
+  updateTapCountLabel();
+
+  document.addEventListener('i18nchange', () => {
+    renderNotesTable();
+    if (chapter === 'quiz') {
+      startBtn.textContent = window.i18n.t(quizActive ? 'btn_quiz_stop' : 'btn_quiz_start');
+      if (!quizActive && currentQuestion === null && questionIndex === 0) {
+        quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
+      }
+    }
+  });
+})();
+</script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "chapter_free": {"ko": "자유 계산", "en": "Free Calculation", "ja": "自由計算", "es": "Cálculo libre", "zh": "自由计算"}, "chapter_quiz": {"ko": "계산 문제", "en": "Practice Quiz", "ja": "計算問題", "es": "Preguntas de cálculo", "zh": "计算题"}, "tap_desc": {"ko": "박자에 맞춰 아래 버튼을 계속 눌러보세요 — 마지막 8번 탭 간격을 평균 내서 BPM을 계산해요.", "en": "Tap the button below in time with the beat — it averages your last 8 tap intervals to calculate BPM.", "ja": "拍に合わせて下のボタンを押し続けてください — 直近8回のタップ間隔を平均してBPMを計算します。", "es": "Pulsa el botón de abajo al ritmo de la música — se calcula el BPM promediando tus últimos 8 intervalos entre toques.", "zh": "跟随节拍持续点击下方按钮 — 系统会取最近8次点击间隔的平均值来计算BPM。"}, "tap_bpm_template": {"ko": "BPM (탭 {count}회)", "en": "BPM ({count} taps)", "ja": "BPM (タップ{count}回)", "es": "BPM ({count} toques)", "zh": "BPM (已点击{count}次)"}, "tap_reset_btn": {"ko": "초기화", "en": "Reset", "ja": "リセット", "es": "Reiniciar", "zh": "重置"}, "notes_desc": {"ko": "곡의 BPM을 입력하면, 각 음표 길이에 해당하는 시간(ms)을 계산합니다. 딜레이·오토메이션을 박자에 맞출 때 유용해요.", "en": "Enter the song's BPM to calculate the time (ms) for each note length. Useful for syncing delays and automation to the beat.", "ja": "曲のBPMを入力すると、各音符の長さに対応する時間(ms)を計算します。ディレイ・オートメーションを拍に合わせる際に便利です。", "es": "Introduce el BPM de la canción para calcular la duración (ms) de cada nota. Útil para sincronizar delays y automatizaciones con el ritmo.", "zh": "输入歌曲的BPM，即可计算各音符时值对应的时间(ms)，方便将延时和自动化对齐节拍。"}, "tempo_col_note": {"ko": "음표", "en": "Note", "ja": "音符", "es": "Nota", "zh": "音符"}, "tempo_col_normal": {"ko": "일반", "en": "Normal", "ja": "通常", "es": "Normal", "zh": "普通"}, "notes_col_dotted": {"ko": "붙임(1.5×)", "en": "Dotted (1.5×)", "ja": "付点(1.5×)", "es": "Con puntillo (1.5×)", "zh": "附点(1.5×)"}, "notes_col_triplet": {"ko": "셋잇단(2/3×)", "en": "Triplet (2/3×)", "ja": "三連符(2/3×)", "es": "Tresillo (2/3×)", "zh": "三连音(2/3×)"}, "note_name_whole": {"ko": "온음표", "en": "Whole Note", "ja": "全音符", "es": "Redonda", "zh": "全音符"}, "note_name_half": {"ko": "2분음표", "en": "Half Note", "ja": "2分音符", "es": "Blanca", "zh": "二分音符"}, "note_name_quarter": {"ko": "4분음표", "en": "Quarter Note", "ja": "4分音符", "es": "Negra", "zh": "四分音符"}, "note_name_eighth": {"ko": "8분음표", "en": "Eighth Note", "ja": "8分音符", "es": "Corchea", "zh": "八分音符"}, "note_name_sixteenth": {"ko": "16분음표", "en": "Sixteenth Note", "ja": "16分音符", "es": "Semicorchea", "zh": "十六分音符"}, "note_name_thirtysecond": {"ko": "32분음표", "en": "Thirty-Second Note", "ja": "32分音符", "es": "Fusa", "zh": "三十二分音符"}, "note_label_template": {"ko": "{frac} ({name})", "en": "{frac} ({name})", "ja": "{frac}（{name}）", "es": "{frac} ({name})", "zh": "{frac}（{name}）"}, "speedpitch_desc": {"ko": "턴테이블/DJ 믹서의 피치 페이더처럼, 재생 속도를 바꾸면 피치도 같이 바뀝니다. 속도(%) 또는 반음/센트 중 아무거나 입력하면 나머지가 자동 계산돼요.", "en": "Just like a turntable/DJ mixer's pitch fader, changing the playback speed changes the pitch too. Enter either the speed (%) or semitones/cents and the rest is calculated automatically.", "ja": "ターンテーブル/DJミキサーのピッチフェーダーのように、再生速度を変えるとピッチも一緒に変わります。速度(%)または半音/セントのどちらかを入力すると、残りが自動的に計算されます。", "es": "Igual que el fader de pitch de un plato/mesa de DJ, cambiar la velocidad de reproducción también cambia el tono. Introduce la velocidad (%) o los semitonos/cents y el resto se calcula automáticamente.", "zh": "就像转盘/DJ调音台上的pitch推子一样，改变播放速度也会改变音高。输入速度(%)或半音/音分中的任意一个，其余会自动计算。"}, "unit_semitone": {"ko": "반음", "en": "semitones", "ja": "半音", "es": "semitonos", "zh": "半音"}, "unit_semitone_fixed": {"ko": "반음 (고정됨)", "en": "semitones (fixed)", "ja": "半音（固定）", "es": "semitonos (fijo)", "zh": "半音(固定)"}, "speed_ratio_label": {"ko": "배속 (Speed Ratio)", "en": "Speed Ratio", "ja": "倍速 (Speed Ratio)", "es": "Relación de velocidad (Speed Ratio)", "zh": "倍速 (Speed Ratio)"}, "speedpitch_note": {"ko": "참고: 33⅓ RPM 판을 45 RPM으로 돌리면 속도가 35% 빨라지는 셈이라, 피치는 약 +5.2반음 올라가요.", "en": "Note: playing a 33⅓ RPM record at 45 RPM speeds it up by about 35%, raising the pitch by roughly +5.2 semitones.", "ja": "参考: 33⅓ RPMのレコードを45 RPMで回すと速度が約35%速くなり、ピッチは約+5.2半音上がります。", "es": "Nota: reproducir un disco de 33⅓ RPM a 45 RPM acelera la velocidad en un 35% aproximadamente, subiendo el tono unos +5.2 semitonos.", "zh": "提示：将33⅓转的黑胶用45转播放，速度约加快35%，音高会升高约+5.2个半音。"}, "keymatch_desc": {"ko": "원곡 BPM에서 목표 BPM으로 속도를 바꿀 때(피치를 고정하지 않고 그냥 재생속도만 바꿀 경우), 곡의 키가 몇 반음 바뀌는지 계산합니다. DJ 믹싱에서 템포를 맞출 때 참고하세요.", "en": "Calculates how many semitones the song's key shifts when you change the speed from the original BPM to a target BPM (without pitch-locking — just changing playback speed). Useful as a reference when matching tempo in DJ mixing.", "ja": "元曲BPMから目標BPMへ速度を変える際(ピッチを固定せず、単に再生速度だけを変える場合)、曲のキーが何半音変わるかを計算します。DJミキシングでテンポを合わせる際の参考にしてください。", "es": "Calcula cuántos semitonos cambia la tonalidad de la canción al cambiar la velocidad del BPM original a un BPM objetivo (sin fijar el tono, solo cambiando la velocidad de reproducción). Útil como referencia al ajustar el tempo en mezclas de DJ.", "zh": "计算将速度从原曲BPM改为目标BPM时(不锁定音高，仅改变播放速度)，曲目调性会变化多少半音。可作为DJ混音对齐节拍时的参考。"}, "orig_bpm_label": {"ko": "원곡 BPM", "en": "Original BPM", "ja": "元曲BPM", "es": "BPM original", "zh": "原曲BPM"}, "target_bpm_label": {"ko": "목표 BPM", "en": "Target BPM", "ja": "目標BPM", "es": "BPM objetivo", "zh": "目标BPM"}, "orig_key_label": {"ko": "원곡 키 (선택사항)", "en": "Original Key (optional)", "ja": "元曲のキー(任意)", "es": "Tonalidad original (opcional)", "zh": "原曲调性(可选)"}, "speed_change_label": {"ko": "속도 변화", "en": "Speed Change", "ja": "速度変化", "es": "Cambio de velocidad", "zh": "速度变化"}, "key_change_label": {"ko": "키(피치) 변화", "en": "Key (Pitch) Change", "ja": "キー(ピッチ)変化", "es": "Cambio de tonalidad (tono)", "zh": "调性(音高)变化"}, "result_key_label": {"ko": "결과 키 (근사치)", "en": "Resulting Key (approx.)", "ja": "結果のキー(近似値)", "es": "Tonalidad resultante (aprox.)", "zh": "结果调性(近似值)"}, "keymatch_note": {"ko": "참고: 반음 단위로 딱 떨어지지 않으면 가장 가까운 음 이름 + 몇 cents 벗어났는지로 보여줘요.", "en": "Note: if it doesn't land exactly on a semitone, it shows the nearest note name plus how many cents off it is.", "ja": "参考: 半音単位でぴったり合わない場合、最も近い音名と何セントずれているかを表示します。", "es": "Nota: si no coincide exactamente con un semitono, se muestra el nombre de la nota más cercana más los cents de desviación.", "zh": "提示：若无法精确落在半音上，会显示最接近的音名以及偏差的音分(cents)数。"}, "loopbpm_desc": {"ko": "샘플·루프 파일의 길이(초)와 마디 수를 알면, 원래 BPM이 몇이었는지 거꾸로 계산합니다.", "en": "If you know the length (seconds) and number of bars of a sample or loop file, this works backward to find the original BPM.", "ja": "サンプル・ループファイルの長さ(秒)と小節数がわかれば、元のBPMが何だったかを逆算します。", "es": "Si conoces la duración (segundos) y el número de compases de un sample o loop, esto calcula a la inversa cuál era el BPM original.", "zh": "只要知道样本/loop文件的长度(秒)和小节数，即可反推原始BPM是多少。"}, "sample_length_label": {"ko": "샘플 길이", "en": "Sample Length", "ja": "サンプル長", "es": "Duración de la muestra", "zh": "样本长度"}, "bar_count_label": {"ko": "마디(bar) 수", "en": "Number of Bars", "ja": "小節数", "es": "Número de compases", "zh": "小节数"}, "beats_per_bar_label": {"ko": "박자 (한 마디당 박 수)", "en": "Time Signature (beats per bar)", "ja": "拍子(1小節あたりの拍数)", "es": "Compás (pulsos por compás)", "zh": "拍号(每小节拍数)"}, "bardur_desc": {"ko": "BPM·박자·마디 수를 넣으면, 그 구간이 실제로 몇 분 몇 초인지 계산합니다. 버스 16마디, 코러스 8마디처럼 곡 구조를 짤 때 유용해요.", "en": "Enter the BPM, time signature, and number of bars to calculate how many minutes and seconds that section actually lasts. Useful for structuring a song, like a 16-bar verse or 8-bar chorus.", "ja": "BPM・拍子・小節数を入力すると、その区間が実際に何分何秒かを計算します。16小節のバース、8小節のコーラスのように曲構成を組む際に便利です。", "es": "Introduce el BPM, el compás y el número de compases para calcular cuántos minutos y segundos dura realmente esa sección. Útil para estructurar una canción, como una estrofa de 16 compases o un estribillo de 8.", "zh": "输入BPM、拍号和小节数，即可计算该段落实际时长为几分几秒。适合用于编排歌曲结构，如16小节的主歌、8小节的副歌。"}, "one_bar_length_label": {"ko": "한 마디 길이", "en": "One Bar Length", "ja": "1小節の長さ", "es": "Duración de un compás", "zh": "一小节长度"}, "total_length_label": {"ko": "전체 구간 길이", "en": "Total Section Length", "ja": "全体区間の長さ", "es": "Duración total de la sección", "zh": "总时长"}, "seconds_paren_template": {"ko": "({sec}초)", "en": "({sec}s)", "ja": "({sec}秒)", "es": "({sec}s)", "zh": "({sec}秒)"}, "timestretch_title": {"ko": "Time-Stretch (피치 고정)", "en": "Time-Stretch (Pitch Locked)", "ja": "Time-Stretch (ピッチ固定)", "es": "Time-Stretch (Tono fijo)", "zh": "Time-Stretch (音高锁定)"}, "timestretch_desc": {"ko": "DAW의 타임스트레치(WSOLA·페이즈보코더 등)처럼, <b style=\"color:var(--text-secondary);\">피치는 그대로 두고 템포만</b> 바꿀 때의 배속 비율을 계산합니다. (턴테이블처럼 속도를 바꾸면 피치도 같이 바뀌는 Speed↔Pitch 탭과 반대 개념이에요)", "en": "Like a DAW's time-stretch (WSOLA, phase vocoder, etc.), this calculates the ratio when you change <b style=\"color:var(--text-secondary);\">only the tempo while keeping the pitch fixed</b>. (This is the opposite concept of the Speed↔Pitch tab, where changing speed like a turntable also shifts the pitch.)", "ja": "DAWのタイムストレッチ(WSOLA・フェイズボコーダーなど)のように、<b style=\"color:var(--text-secondary);\">ピッチはそのままでテンポだけ</b>を変える際の倍速比率を計算します。(ターンテーブルのように速度を変えるとピッチも一緒に変わるSpeed↔Pitchタブとは逆の概念です)", "es": "Como el time-stretch de una DAW (WSOLA, phase vocoder, etc.), esto calcula la relación al cambiar <b style=\"color:var(--text-secondary);\">solo el tempo manteniendo el tono fijo</b>. (Es el concepto opuesto a la pestaña Speed↔Pitch, donde cambiar la velocidad como en un plato también cambia el tono.)", "zh": "如同DAW中的Time-Stretch(WSOLA、相位声码器等)，本工具计算<b style=\"color:var(--text-secondary);\">仅改变节拍、音高保持不变</b>时的倍速比率。(这与像转盘那样改变速度会同时改变音高的Speed↔Pitch标签页正好相反)"}, "stretch_ratio_label": {"ko": "스트레치 비율", "en": "Stretch Ratio", "ja": "ストレッチ比率", "es": "Relación de estiramiento", "zh": "拉伸比率"}, "tempo_change_label": {"ko": "템포 변화", "en": "Tempo Change", "ja": "テンポ変化", "es": "Cambio de tempo", "zh": "节拍变化"}, "pitch_change_label": {"ko": "피치 변화", "en": "Pitch Change", "ja": "ピッチ変化", "es": "Cambio de tono", "zh": "音高变化"}, "ts_warning": {"ko": "⚠️ ±20%를 넘는 큰 폭의 타임스트레치는 알고리즘에 따라 음질 열화(아티팩트, 워블링)가 뚜렷하게 들릴 수 있어요.", "en": "⚠️ Time-stretching by more than ±20% can cause noticeable audio degradation (artifacts, wobbling) depending on the algorithm.", "ja": "⚠️ ±20%を超える大幅なタイムストレッチは、アルゴリズムによって音質劣化(アーティファクト、ワブリング)がはっきり聴こえることがあります。", "es": "⚠️ Aplicar time-stretch de más de ±20% puede causar una degradación de audio notable (artefactos, ondulaciones) según el algoritmo.", "zh": "⚠️ 超过±20%的大幅度Time-Stretch，根据算法不同，可能会出现明显的音质劣化(伪影、抖动)。"}, "samplerate_desc": {"ko": "샘플 수 = 시간(초) × 샘플레이트. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.", "en": "Samples = Time (seconds) × Sample Rate. Choose what you want to solve for, then enter the other two values.", "ja": "サンプル数 = 時間(秒) × サンプルレート。何を求めるか選ぶと、残り2つの値を入力して計算します。", "es": "Muestras = Tiempo (segundos) × Frecuencia de muestreo. Elige qué quieres calcular y luego introduce los otros dos valores.", "zh": "采样点数 = 时间(秒) × 采样率。选择要求解的量，然后输入其余两个数值即可计算。"}, "time_solve_btn": {"ko": "Time 구하기", "en": "Solve Time", "ja": "Timeを求める", "es": "Calcular Time", "zh": "求Time"}, "samples_solve_btn": {"ko": "Samples 구하기", "en": "Solve Samples", "ja": "Samplesを求める", "es": "Calcular Samples", "zh": "求Samples"}, "rate_solve_btn": {"ko": "Sample Rate 구하기", "en": "Solve Sample Rate", "ja": "Sample Rateを求める", "es": "Calcular Sample Rate", "zh": "求Sample Rate"}, "common_samplerate_label": {"ko": "자주 쓰는 샘플레이트", "en": "Common Sample Rates", "ja": "よく使うサンプルレート", "es": "Frecuencias de muestreo comunes", "zh": "常用采样率"}, "buffer_desc": {"ko": "오디오 인터페이스의 버퍼 사이즈(samples)와 샘플레이트를 넣으면, 한 버퍼가 처리되는 데 걸리는 시간(지연시간)을 계산합니다.", "en": "Enter your audio interface's buffer size (samples) and sample rate to calculate how long it takes to process one buffer (latency).", "ja": "オーディオインターフェースのバッファサイズ(samples)とサンプルレートを入力すると、1バッファの処理にかかる時間(レイテンシー)を計算します。", "es": "Introduce el tamaño de buffer (muestras) y la frecuencia de muestreo de tu interfaz de audio para calcular cuánto tarda en procesarse un buffer (latencia).", "zh": "输入音频接口的缓冲区大小(samples)和采样率，即可计算处理一个缓冲区所需的时间(延迟)。"}, "oneway_latency_label": {"ko": "편도 레이턴시", "en": "One-Way Latency", "ja": "片道レイテンシー", "es": "Latencia unidireccional", "zh": "单程延迟"}, "roundtrip_latency_label": {"ko": "왕복(라운드트립) 레이턴시", "en": "Round-Trip Latency", "ja": "往復レイテンシー", "es": "Latencia de ida y vuelta", "zh": "往返延迟"}, "buffer_note": {"ko": "참고: 실제 체감 레이턴시는 여기에 A/D·D/A 변환, 드라이버, 플러그인 처리 시간 등이 더해져서 이 계산값보다 조금 더 커요.", "en": "Note: the actual perceived latency is a bit higher than this calculated value, since it also includes A/D·D/A conversion, driver, and plugin processing time.", "ja": "参考: 実際に体感するレイテンシーは、A/D・D/A変換、ドライバー、プラグイン処理時間などが加わるため、この計算値より少し大きくなります。", "es": "Nota: la latencia percibida real es un poco mayor que este valor calculado, ya que también incluye la conversión A/D·D/A, el driver y el tiempo de procesamiento de plugins.", "zh": "提示：实际体感延迟会比该计算值略高，因为还需加上A/D·D/A转换、驱动程序及插件处理时间等。"}, "quiz_problem_title": {"ko": "문제", "en": "Question", "ja": "問題", "es": "Pregunta", "zh": "题目"}, "quiz_start_prompt": {"ko": "시작 버튼을 눌러주세요", "en": "Press Start to begin", "ja": "スタートボタンを押してください", "es": "Pulsa Iniciar para comenzar", "zh": "请点击开始按钮"}, "btn_quiz_start": {"ko": "▸ 계산 문제 시작", "en": "▸ Start Quiz", "ja": "▸ 計算問題スタート", "es": "▸ Iniciar cuestionario", "zh": "▸ 开始计算题"}, "btn_quiz_stop": {"ko": "■ 계산 문제 중단", "en": "■ Stop Quiz", "ja": "■ 計算問題を中断", "es": "■ Detener cuestionario", "zh": "■ 中止计算题"}, "feedback_correct": {"ko": "✅ 정답이에요!", "en": "✅ Correct!", "ja": "✅ 正解です！", "es": "✅ ¡Correcto!", "zh": "✅ 答对了！"}, "feedback_wrong_template": {"ko": "❌ 오답이에요 — 정답은 {answer}이었어요", "en": "❌ Wrong — the answer was {answer}", "ja": "❌ 不正解 — 正解は{answer}でした", "es": "❌ Incorrecto — la respuesta era {answer}", "zh": "❌ 答错了 — 正确答案是{answer}"}, "quiz_finish_template": {"ko": "퀴즈 종료! {hit}/{total} 정답", "en": "Quiz complete! {hit}/{total} correct", "ja": "クイズ終了！{hit}/{total}問正解", "es": "¡Cuestionario terminado! {hit}/{total} correctas", "zh": "测验结束！答对{hit}/{total}题"}, "unit_seconds": {"ko": "초", "en": "s", "ja": "秒", "es": "s", "zh": "秒"}, "unit_bars": {"ko": "마디", "en": "bars", "ja": "小節", "es": "compases", "zh": "小节"}, "note_q_template": {"ko": "BPM {bpm}에서 {label}는 몇 ms인가요?", "en": "At {bpm} BPM, how many ms is a {label}?", "ja": "BPM {bpm}のとき、{label}は何msですか？", "es": "A {bpm} BPM, ¿cuántos ms dura una {label}?", "zh": "在{bpm} BPM下，{label}是多少ms？"}, "speedpitch_q_pct2semi": {"ko": "재생 속도를 {pct}% 바꾸면, 피치는 몇 반음 바뀌나요?", "en": "If you change the playback speed by {pct}%, how many semitones does the pitch shift?", "ja": "再生速度を{pct}%変えると、ピッチは何半音変わりますか？", "es": "Si cambias la velocidad de reproducción en {pct}%, ¿cuántos semitonos cambia el tono?", "zh": "若将播放速度改变{pct}%，音高会变化多少半音？"}, "speedpitch_q_semi2pct": {"ko": "피치를 {semi}반음 바꾸려면, 재생 속도를 몇 % 바꿔야 하나요?", "en": "To shift the pitch by {semi} semitones, by what percentage must you change the playback speed?", "ja": "ピッチを{semi}半音変えるには、再生速度を何%変える必要がありますか？", "es": "Para cambiar el tono en {semi} semitonos, ¿en qué porcentaje debes cambiar la velocidad de reproducción?", "zh": "要将音高改变{semi}个半音，播放速度需要改变百分之多少？"}, "keymatch_q_pct": {"ko": "원곡 BPM {origBpm}를 {targetBpm}로 바꾸면, 속도 변화는 몇 %인가요?", "en": "If you change the original BPM {origBpm} to {targetBpm}, what is the speed change in %?", "ja": "元曲BPM {origBpm}を{targetBpm}に変えると、速度変化は何%ですか？", "es": "Si cambias el BPM original de {origBpm} a {targetBpm}, ¿cuál es el cambio de velocidad en %?", "zh": "将原曲BPM {origBpm}改为{targetBpm}时，速度变化是百分之多少？"}, "keymatch_q_semi": {"ko": "원곡 BPM {origBpm}를 {targetBpm}로 바꾸면, 키(피치)는 몇 반음 바뀌나요?", "en": "If you change the original BPM {origBpm} to {targetBpm}, how many semitones does the key (pitch) shift?", "ja": "元曲BPM {origBpm}を{targetBpm}に変えると、キー(ピッチ)は何半音変わりますか？", "es": "Si cambias el BPM original de {origBpm} a {targetBpm}, ¿cuántos semitonos cambia la tonalidad (tono)?", "zh": "将原曲BPM {origBpm}改为{targetBpm}时，调性(音高)会变化多少半音？"}, "loopbpm_q_template": {"ko": "{beatsPerBar}/4박자, {bars}마디짜리 루프의 길이가 {lengthSec}초라면, BPM은 얼마인가요?", "en": "For a {beatsPerBar}/4 time signature, {bars}-bar loop that is {lengthSec} seconds long, what is the BPM?", "ja": "{beatsPerBar}/4拍子、{bars}小節のループの長さが{lengthSec}秒なら、BPMはいくつですか？", "es": "Para un compás de {beatsPerBar}/4, un loop de {bars} compases que dura {lengthSec} segundos, ¿cuál es el BPM?", "zh": "在{beatsPerBar}/4拍号、{bars}小节的loop长度为{lengthSec}秒时，BPM是多少？"}, "bardur_q_template": {"ko": "BPM {bpm}, {beatsPerBar}/4박자에서 {bars}마디는 몇 초인가요?", "en": "At {bpm} BPM in {beatsPerBar}/4 time, how many seconds are {bars} bars?", "ja": "BPM {bpm}、{beatsPerBar}/4拍子で{bars}小節は何秒ですか？", "es": "A {bpm} BPM en compás de {beatsPerBar}/4, ¿cuántos segundos duran {bars} compases?", "zh": "在{bpm} BPM、{beatsPerBar}/4拍号下，{bars}小节是多少秒？"}, "timestretch_q_template": {"ko": "타임스트레치로 BPM {origBpm} 곡을 {targetBpm}로 바꾸면(피치는 고정), 템포 변화는 몇 %인가요?", "en": "If you time-stretch a {origBpm} BPM track to {targetBpm} BPM (pitch locked), what is the tempo change in %?", "ja": "タイムストレッチでBPM {origBpm}の曲を{targetBpm}に変えると(ピッチ固定)、テンポ変化は何%ですか？", "es": "Si aplicas time-stretch a una pista de {origBpm} BPM para llevarla a {targetBpm} BPM (tono fijo), ¿cuál es el cambio de tempo en %?", "zh": "使用Time-Stretch将{origBpm} BPM的曲目改为{targetBpm} BPM(音高锁定)时，节拍变化是百分之多少？"}, "samplerate_q_samples": {"ko": "샘플레이트 {sr}Hz에서 {t}초는 몇 샘플인가요?", "en": "At a sample rate of {sr}Hz, how many samples is {t} seconds?", "ja": "サンプルレート{sr}Hzで{t}秒は何サンプルですか？", "es": "A una frecuencia de muestreo de {sr}Hz, ¿cuántas muestras son {t} segundos?", "zh": "在采样率{sr}Hz下，{t}秒是多少个采样点？"}, "samplerate_q_time": {"ko": "샘플레이트 {sr}Hz에서 {n} 샘플은 몇 초인가요?", "en": "At a sample rate of {sr}Hz, how many seconds are {n} samples?", "ja": "サンプルレート{sr}Hzで{n}サンプルは何秒ですか？", "es": "A una frecuencia de muestreo de {sr}Hz, ¿cuántos segundos son {n} muestras?", "zh": "在采样率{sr}Hz下，{n}个采样点是多少秒？"}, "samplerate_q_latency": {"ko": "버퍼 사이즈 {buf} samples, 샘플레이트 {sr}Hz일 때, 편도 레이턴시는 몇 ms인가요?", "en": "With a buffer size of {buf} samples and a sample rate of {sr}Hz, what is the one-way latency in ms?", "ja": "バッファサイズ{buf}samples、サンプルレート{sr}Hzのとき、片道レイテンシーは何msですか？", "es": "Con un tamaño de buffer de {buf} muestras y una frecuencia de muestreo de {sr}Hz, ¿cuál es la latencia unidireccional en ms?", "zh": "缓冲区大小为{buf}个采样点、采样率为{sr}Hz时，单程延迟是多少ms？"}};</script>
+<script src="i18n-core.js"></script>
+</body>
+</html>

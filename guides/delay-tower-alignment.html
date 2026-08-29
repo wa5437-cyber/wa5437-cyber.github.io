@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>딜레이 타워, 거리로 딜레이 타임 계산하는 법 | ML Music Studio</title>
+<meta name="description" content="음속과 온도 보정 공식으로 딜레이 스피커의 지연 시간을 계산하는 법. 하스 효과를 고려한 추가 지연, 여러 존을 정렬하는 실전 순서, 흔한 실수까지 계산 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/delay-tower-alignment.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/delay-tower-alignment.html">
+<meta property="og:title" content="딜레이 타워, 거리로 딜레이 타임 계산하는 법">
+<meta property="og:description" content="음속·온도 보정 공식, 하스 효과 추가 지연, 여러 존 정렬 순서를 계산 예시와 함께.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "딜레이 타워, 거리로 딜레이 타임 계산하는 법",
+  "description": "음속과 온도 보정 공식으로 딜레이 스피커의 지연 시간을 계산하는 법.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/delay-tower-alignment.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>딜레이 타워, 거리로 딜레이 타임 계산하는 법</h1>
+  <div class="meta">도구 가이드 · 약 6분</div>
+
+  <p class="lede">넓은 공연장에서 뒤쪽 관객에게 소리를 보강하려면 딜레이 스피커를 세웁니다. 이때 딜레이 스피커의 소리가 메인 스피커보다 <strong>먼저 도착하면</strong> 정위가 무너지고 명료도가 떨어집니다. 메인의 소리가 그 위치에 도달하는 시간만큼 딜레이 스피커를 늦춰야 하고, 그 값은 거리 하나로 계산할 수 있습니다.</p>
+
+  <h2>기본 공식: 지연 = 거리 ÷ 음속</h2>
+  <p>공기 중 음속은 20°C에서 약 <strong>343 m/s</strong>입니다. 메인 스피커와 딜레이 스피커 사이의 직선 거리를 음속으로 나누면 필요한 지연 시간이 나옵니다.</p>
+  <div class="formula">지연(ms) = 거리(m) ÷ 음속(m/s) × 1000</div>
+  <p>음속은 온도에 따라 달라집니다. 야외 공연처럼 온도 변화가 큰 현장에서는 보정 공식을 씁니다.</p>
+  <div class="formula">음속(m/s) ≈ 331.3 + 0.606 × 기온(°C)</div>
+
+  <div class="example">
+    <h4>계산 예시</h4>
+    <p>메인 스피커에서 딜레이 타워까지 34 m, 기온 25°C인 경우:</p>
+    <p>음속 = 331.3 + 0.606 × 25 = <strong>346.5 m/s</strong><br>
+    지연 = 34 ÷ 346.5 × 1000 ≈ <strong>98.1 ms</strong></p>
+    <p>같은 거리라도 5°C 새벽 리허설이라면 음속은 334.3 m/s, 지연은 101.7 ms로 3.6 ms 늘어납니다. 저역에서는 티가 안 나지만 고역 트랜지언트에서는 위상 차이로 들릴 수 있습니다.</p>
+  </div>
+
+  <h2>하스 효과: 몇 ms 더 늦춘다</h2>
+  <p>정확히 시간을 맞추면 두 스피커가 동시에 도착합니다. 여기서 딜레이 스피커를 <strong>5~15 ms 더 늦추면</strong>, 청취자는 소리가 메인(무대) 쪽에서 온다고 인지합니다. 이것이 하스 효과(선행음 효과)입니다. 딜레이 스피커는 명료도만 보태고 정위는 무대에 남습니다.</p>
+  <ul>
+    <li>실내·가까운 존: +5~8 ms</li>
+    <li>야외·먼 존: +10~15 ms</li>
+    <li>딜레이 스피커 레벨이 높을수록 더 많이 늦춰야 무대 정위가 유지됩니다.</li>
+  </ul>
+  <div class="note">스피커·앰프·DSP 자체의 처리 지연(레이턴시)도 있습니다. 요즘 파워드 스피커는 1~4 ms 정도의 고정 레이턴시를 갖는데, 메인과 딜레이가 같은 모델이면 상쇄되지만 다른 모델이면 스펙시트를 확인해 빼거나 더해야 합니다.</div>
+
+  <h2>여러 존을 정렬하는 순서</h2>
+  <ol>
+    <li><strong>기준점을 정한다.</strong> 보통 메인 스피커(또는 무대 앞 라인). 모든 딜레이 존의 거리를 이 기준점에서 잰다.</li>
+    <li><strong>거리를 측정한다.</strong> 레이저 거리계나 도면. 스피커 그릴 면 기준.</li>
+    <li><strong>각 존의 지연을 계산한다.</strong> 위 공식으로. 2차 딜레이(딜레이 타워를 또 보강)는 1차 타워가 아니라 여전히 메인 기준으로 계산한다.</li>
+    <li><strong>하스 오프셋을 더한다.</strong> 존마다 5~15 ms.</li>
+    <li><strong>현장에서 귀로 확인한다.</strong> 트랜지언트가 많은 소스(스네어, 박수, 말소리)를 틀고 딜레이 존 경계를 걸어다니며 에코가 들리는지, 정위가 무대에 있는지 듣는다. 1~2 ms씩 미세 조정.</li>
+  </ol>
+
+  <div class="callout">
+    <div class="ico">⏱️</div>
+    <div class="body">
+      <b>딜레이 계산기 (무료 웹 도구)</b>
+      <p>거리와 기온을 입력하면 지연 시간을 바로 계산합니다. 여러 존을 한 번에 비교할 수 있어 현장에서 표로 정리하기 좋습니다.</p>
+      <a href="/delay-calculator.html">▸ 딜레이 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>수평 거리만 잰다.</strong> 스피커가 높이 걸려 있으면 실제 음파 경로는 빗변이다. 높이 차가 크면 피타고라스로 직선 거리를 구한다.</li>
+    <li><strong>온도를 무시한다.</strong> 낮 공연이 저녁까지 이어지면 10°C 이상 떨어지기도 한다. 사운드체크와 본공연의 지연이 달라질 수 있다.</li>
+    <li><strong>딜레이 스피커 레벨이 너무 크다.</strong> 지연이 맞아도 레벨이 세면 하스 효과가 깨지고 소리가 뒤에서 난다. 레벨을 먼저 낮추고 지연을 맞춘다.</li>
+    <li><strong>2차 타워를 1차 타워 기준으로 계산한다.</strong> 오차가 누적된다. 항상 같은 기준점.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>딜레이·음향·전기·템포 계산기를 인터넷 없이 현장에서. 딜레이 존을 저장해두고 온도만 바꿔 재계산할 수 있습니다.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/speaker-impedance-matching.html">스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭 <span>· 도구 가이드</span></a>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

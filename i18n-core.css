@@ -1,0 +1,20 @@
+/* Shared language-switcher styling for Sound Engineer Tools pages. */
+.lang-switch{ position:relative; display:inline-flex; flex-shrink:0; }
+.lang-switch-btn{
+  display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12px;
+  color:var(--text-secondary); background:rgba(255,255,255,0.03); border:1px solid var(--line);
+  border-radius:100px; padding:8px 12px; cursor:pointer;
+}
+.lang-switch-btn:hover{ color:var(--text-primary); background:rgba(255,255,255,0.07); }
+.lang-switch-menu{
+  display:none; position:absolute; top:calc(100% + 8px); right:0; min-width:150px;
+  background:var(--bg-panel, #12171a); border:1px solid var(--line-strong); border-radius:12px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.4); padding:6px; z-index:200;
+}
+.lang-switch-menu.open{ display:block; }
+.lang-switch-menu button{
+  display:block; width:100%; text-align:left; background:none; border:none; color:var(--text-secondary);
+  font-size:13px; font-family:'Inter',sans-serif; padding:8px 10px; border-radius:8px; cursor:pointer;
+}
+.lang-switch-menu button:hover{ background:rgba(255,255,255,0.06); color:var(--text-primary); }
+.lang-switch-menu button.active{ color:var(--teal, #3ddc97); font-weight:600; }

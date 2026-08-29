@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>RTA — Real-Time Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
+<style>
+  :root{
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:1180px; padding:20px 24px 32px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--text-secondary); font-weight:500; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+
+  .status{ text-align:center; }
+  .status h2{ font-size:19px; font-weight:700; }
+  .status p{ margin:4px 0 0; font-size:16px; color:var(--text-secondary); }
+  .level-readout{
+    margin:0 auto; display:flex; align-items:baseline; justify-content:center; gap:6px; width:fit-content;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:100px; padding:8px 16px;
+  }
+  .level-val{ font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:var(--teal); }
+  .level-unit{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); }
+  .level-fs{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); margin-left:4px; }
+  .level-lbl{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-secondary); margin-left:6px; text-transform:uppercase; letter-spacing:0.05em; }
+
+  .toolbar{ display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; }
+  .toolbar-btn{
+    border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
+    font-size:16px; font-weight:600; padding:9px 16px; border-radius:10px;
+  }
+  .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#e3ddd0; }
+
+  /* ---- dB 범위(민감도) 조절 패널 ---- */
+  .range-panel{
+    display:flex; align-items:flex-end; justify-content:center; gap:16px; flex-wrap:wrap;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:14px 18px;
+  }
+  .range-field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-primary); opacity:0.9; font-weight:600;
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;
+  }
+  .range-input-row{ display:flex; align-items:center; gap:6px; }
+  .range-input-row input[type=number]{
+    width:76px; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:14px; padding:8px 9px;
+  }
+  .range-input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); }
+  @media (max-width:560px){ .range-panel{ padding:12px; } }
+
+  /* ---- Range 슬라이더 ---- */
+  .range-slider{
+    -webkit-appearance:none; appearance:none; width:100%; height:6px; border-radius:100px;
+    background:linear-gradient(90deg, var(--blue), var(--teal)); outline:none; cursor:pointer;
+  }
+  .range-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%;
+    background:#fff; border:2px solid var(--text-primary); box-shadow:0 2px 6px rgba(30,26,20,0.13); cursor:pointer;
+  }
+  .range-slider::-moz-range-thumb{
+    width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--text-primary);
+    box-shadow:0 2px 6px rgba(30,26,20,0.13); cursor:pointer;
+  }
+
+  /* ---- 보정(선택사항) 접이식 섹션 ---- */
+  .calib-details{ width:100%; margin-top:6px; }
+  .calib-details summary{
+    cursor:pointer; font-size:13px; font-weight:600; color:var(--text-secondary);
+    padding:8px 4px; list-style:none;
+  }
+  .calib-details summary::-webkit-details-marker{ display:none; }
+  .calib-details[open] summary{ color:var(--text-primary); }
+  .calib-note{ font-size:13px; color:var(--text-secondary); margin:4px 0 12px; line-height:1.6; }
+
+  .console{
+    border-radius:18px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff);
+    padding:16px 8px 12px; display:flex; flex-direction:column; min-height:0; overflow:hidden;
+    aspect-ratio:2.2 / 1; max-height:60vh; min-height:260px;
+  }
+  .consolebody{ display:flex; align-items:stretch; gap:10px; flex:1; min-height:0; }
+
+  /* ---- 막대/라인 보기 전환 토글 ---- */
+  .view-toggle{ display:flex; justify-content:center; gap:8px; }
+  .view-toggle button{
+    border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
+    font-size:14.5px; font-weight:600; padding:9px 16px; border-radius:10px;
+  }
+  .view-toggle button.active{ color:var(--text-primary); border-color:var(--line-strong); background:#e3ddd0; }
+
+  /* ---- 라인(연속 스펙트럼) 뷰 ---- */
+  .line-console{ padding:14px; }
+
+  /* ---- SPL 미터 뷰 ---- */
+  .spl-console{
+    align-items:center; justify-content:flex-start; gap:14px; padding:24px 16px;
+    /* ✅ 고친 것: 예전 가로세로 비율 기준 높이 계산식을 그대로 쓰다 보니, 게이지·토글이 추가되며
+       내용이 훨씬 많아진 지금은 박스보다 내용이 더 길어서 위쪽(Weighting/Response)이
+       박스 밖으로 밀려나 잘려 있었다. 내용 길이에 맞춰 박스가 자동으로 늘어나게 한다. */
+    aspect-ratio:auto !important; height:auto !important; max-height:none !important; min-height:0 !important;
+    overflow-y:auto;
+  }
+  .spl-big-row{ display:flex; align-items:baseline; gap:8px; }
+  .spl-avg-lbl{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-secondary);
+    letter-spacing:0.1em; margin-top:-10px; text-transform:uppercase;
+  }
+  .spl-fs-row{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--text-secondary); margin-top:-2px; }
+  .vu-bar-wrap{
+    width:100%; max-width:340px; height:24px; background:#ece7db; border-radius:7px;
+    overflow:hidden; border:1px solid rgba(30,26,20,0.04);
+  }
+  .vu-bar-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, #2f6d4c, #2f6d4c 65%, #9c6b17 85%, #b23a2a 96%);
+    transition:width 0.08s linear;
+  }
+  .spl-big-val{ font-family:'IBM Plex Mono',monospace; font-size:76px; font-weight:700; color:var(--teal); line-height:1; }
+  .spl-big-unit{ font-family:'IBM Plex Mono',monospace; font-size:22px; color:var(--text-secondary); }
+
+  /* ---- Weighting / Response 컨트롤 ---- */
+  .vu-controls-row{ display:flex; gap:24px; flex-wrap:wrap; justify-content:center; margin-bottom:4px; }
+  .vu-control-group{ display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .vu-control-lbl{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-secondary); letter-spacing:0.08em; }
+  .vu-toggle{ display:flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; }
+  .vu-toggle button{
+    border:none; background:var(--bg-panel-2); color:var(--text-secondary); font-size:14px; font-weight:600;
+    padding:8px 15px;
+  }
+  .vu-toggle button.active{ background:#e3ddd0; color:var(--text-primary); }
+
+  /* ---- 아날로그 VU 니들 게이지 ---- */
+  .vu-gauge-wrap{ width:100%; max-width:320px; }
+  .vu-gauge-svg{ width:100%; height:auto; display:block; }
+  #vuNeedle, #vuMaxNeedle{ transition:transform 0.08s linear; transform-origin:150px 160px; }
+  .vu-gauge-tick{ stroke:rgba(30,26,20,0.25); stroke-width:1.5; }
+  .vu-gauge-ticklabel{ font-family:'IBM Plex Mono',monospace; font-size:9px; fill:var(--text-tertiary); text-anchor:middle; }
+  .spl-stats-row{ display:flex; gap:14px; }
+  .spl-stat{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:10px 20px;
+  }
+  .spl-stat-lbl{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-secondary); letter-spacing:0.08em; }
+  .spl-stat-val{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:700; color:var(--text-primary); }
+  #splHistoryCanvas{ width:100%; height:120px; flex-shrink:0; border-radius:8px; }
+  #lineCanvas{ width:100%; height:100%; display:block; border-radius:8px; }
+
+  /* ✅ 요청 반영: 세로(portrait) 모바일 화면에서는 라인 뷰가 화면을 꽉 채우도록
+     화면 높이 기준으로 훨씬 크게 잡는다 (가로 aspect-ratio 대신 vh 기반 높이 사용) */
+  @media (max-width:700px) and (orientation:portrait){
+    body.line-view .console{
+      aspect-ratio:auto; height:44vh; max-height:none; min-height:240px;
+    }
+    /* ✅ SPL 미터는 .spl-console 자체에서 height:auto !important로 항상 내용에 맞게
+       늘어나도록 처리했으므로, 여기서 별도 높이를 강제하지 않는다. */
+  }
+  .vscale{
+    display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end;
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-secondary);
+    flex-shrink:0; width:44px; padding:2px 0;
+  }
+  .grid{ display:flex; align-items:stretch; gap:2px; flex:1; min-height:0; }
+  .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
+  .track{
+    position:relative; width:100%; flex:1; min-height:60px; background:#ece7db; border-radius:4px; border:1px solid rgba(30,26,20,0.04);
+    overflow:hidden;
+  }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(30,26,20,0.08); pointer-events:none; }
+  .band .bar{
+    position:absolute; left:1px; right:1px; bottom:0; border-radius:2px 2px 0 0;
+    background:linear-gradient(180deg, var(--teal), #1e4a33);
+    height:0%;
+  }
+  .band .peak{
+    position:absolute; left:1px; right:1px; height:2px; background:var(--amber);
+    box-shadow:0 0 4px rgba(156,107,23,0.7); bottom:0%;
+  }
+  .band .lbl{
+    font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--text-primary);
+    margin-top:9px; writing-mode:vertical-rl; transform:rotate(180deg); height:44px; flex-shrink:0; overflow:hidden; width:100%;
+    text-align:center;
+  }
+  @media (min-width:820px){
+    .band .lbl{ writing-mode:horizontal-tb; transform:none; height:auto; margin-top:8px; font-size:13.5px; white-space:nowrap; }
+  }
+  @media (max-width:700px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar .title{ font-size:16.5px; }
+    .topbar .title small{ font-size:12px; }
+    .console{ aspect-ratio:auto; height:44vh; max-height:none; min-height:240px; padding:14px 4px 10px; }
+    .consolebody{ gap:4px; }
+    .vscale{ width:30px; font-size:11px; }
+    .band .lbl{ font-size:9px; height:26px; margin-top:5px; }
+    .track{ min-height:0; }
+
+    /* ✅ 요청 반영: 모바일에서 SPL 미터 글씨/여백이 너무 커서 위아래가 잘리던 것을 줄임 */
+    .spl-console{ padding:16px 12px; gap:8px; }
+    .spl-big-val{ font-size:52px; }
+    .spl-fs-row{ font-size:14px; }
+    .spl-stats-row{ gap:8px; }
+    .spl-stat{ padding:8px 12px; }
+    .spl-stat-val{ font-size:16px; }
+    #splHistoryCanvas{ height:80px; }
+    .vu-gauge-wrap{ max-width:230px; }
+    .vu-controls-row{ gap:14px; }
+    .vu-toggle button{ font-size:11px; padding:6px 10px; }
+  }
+
+  /* ✅ 요청 반영: 휴대폰 가로 모드에서는 aspect-ratio 대신 화면 폭을 그대로 채운다
+     (가로 모드는 폭이 700px를 넘는 경우가 많아 위 규칙이 적용되지 않기 때문에 별도 처리) */
+  @media (orientation:landscape) and (max-height:500px){
+    .app{ padding:8px 6px 14px; gap:8px; }
+    .console{ aspect-ratio:auto; width:100%; height:min(68vh, 300px); max-height:none; min-height:180px; }
+  }
+
+  .hint{ text-align:center; font-size:14.5px; color:var(--text-secondary); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+  .mic-denied{
+    text-align:center; font-size:16px; color:var(--red); background:rgba(178,58,42,0.08);
+    border:1px solid rgba(178,58,42,0.25); border-radius:10px; padding:12px 16px; display:none;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">RTA<small>Real-Time Analyzer · Mic Input</small></div>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
+  </div>
+
+  <div class="status">
+    <h2 id="statusTitle" data-i18n="status_default_title">시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요</h2>
+    <p id="statusSub" data-i18n="status_default_sub">기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다</p>
+  </div>
+
+  <div class="mic-denied" id="micDenied" data-i18n="mic_denied_msg">
+    마이크 접근이 거부되었습니다. 브라우저 주소창 옆 자물쇠(또는 사이트 설정)에서 마이크 권한을 허용한 뒤 다시 시도해주세요.
+  </div>
+
+  <div class="toolbar">
+    <button class="toolbar-btn" id="startBtn" data-i18n="btn_mic_start">▸ 마이크 시작</button>
+    <button class="toolbar-btn active" id="peakToggle">Peak Hold: ON</button>
+  </div>
+
+  <div class="view-toggle" id="viewToggle">
+    <button data-view="bar" class="active" data-i18n="view_bar_label">▤ 막대(Bar)</button>
+    <button data-view="line" data-i18n="view_line_label">∿ 라인(Line)</button>
+    <button data-view="spl" data-i18n="view_spl_label">📟 SPL 미터</button>
+  </div>
+
+  <div class="range-panel">
+    <div class="range-field">
+      <label data-i18n="label_floor">Floor (조용한 소리 기준)</label>
+      <div class="range-input-row">
+        <input type="number" id="floorInput" value="30" step="1">
+        <span class="unit">dB</span>
+      </div>
+    </div>
+    <div class="range-field">
+      <label data-i18n="label_ceiling">Ceiling (큰 소리 기준)</label>
+      <div class="range-input-row">
+        <input type="number" id="ceilingInput" value="120" step="1">
+        <span class="unit">dB</span>
+      </div>
+    </div>
+    <div class="range-field">
+      <label><span data-i18n="label_range_prefix">Range (Floor 기준 폭) · </span><span id="rangeValueLabel">90</span>dB</label>
+      <input type="range" id="rangeInput" min="20" max="140" step="1" value="90" class="range-slider">
+    </div>
+    <button class="toolbar-btn" id="boostQuietBtn" data-i18n="btn_boost_quiet">🔉 작은 소리 더 잘 보이게</button>
+    <button class="toolbar-btn" id="resetRangeBtn" data-i18n="btn_reset_range">↺ 기본값으로 초기화</button>
+
+    <details class="calib-details">
+      <summary data-i18n="calib_summary">🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)</summary>
+      <p class="calib-note" data-i18n="calib_note">기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.</p>
+      <div class="range-field">
+        <label data-i18n="label_calib_offset">보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨</label>
+        <div class="range-input-row">
+          <input type="number" id="calibInput" value="140" step="1">
+          <span class="unit">dB</span>
+        </div>
+      </div>
+      <div class="range-field">
+        <label data-i18n="label_target_spl">기준 SPL (다른 SPL미터 값)</label>
+        <div class="range-input-row">
+          <input type="number" id="targetSplInput" value="0" step="1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+      <button class="toolbar-btn" id="calibrateNowBtn" data-i18n="btn_calibrate_now">🎯 지금 소리로 자동 보정</button>
+    </details>
+  </div>
+
+  <!-- ✅ 요청 반영: 현재 레벨(dB) 표시를 그래프 바로 위로 이동 -->
+  <div class="level-readout" id="levelReadout" style="display:none;">
+    <span class="level-val" id="levelVal">−∞</span><span class="level-unit">dB SPL</span>
+    <span class="level-fs" id="levelFsVal">(−∞ dBFS)</span>
+    <span class="level-lbl" data-i18n="level_peak_label">PEAK (피크)</span>
+  </div>
+
+  <div class="console" id="consoleBar">
+    <div class="consolebody">
+      <div class="vscale" id="vscale"><span id="vscaleTop">0dB</span><span id="vscaleMid">−35dB</span><span id="vscaleBottom">−70dB</span></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+
+  <div class="console line-console" id="consoleLine" style="display:none;">
+    <canvas id="lineCanvas"></canvas>
+  </div>
+
+  <div class="console spl-console" id="consoleSpl" style="display:none;">
+    <div class="vu-controls-row">
+      <div class="vu-control-group">
+        <span class="vu-control-lbl">WEIGHTING</span>
+        <div class="vu-toggle" id="weightingToggle">
+          <button data-w="Z" class="active">Z</button>
+          <button data-w="A">A</button>
+          <button data-w="C">C</button>
+        </div>
+      </div>
+      <div class="vu-control-group">
+        <span class="vu-control-lbl">RESPONSE</span>
+        <div class="vu-toggle" id="responseToggle">
+          <button data-r="slow" class="active">Slow</button>
+          <button data-r="fast">Fast</button>
+        </div>
+      </div>
+      <div class="vu-control-group">
+        <span class="vu-control-lbl">DISPLAY</span>
+        <div class="vu-toggle" id="splDisplayToggle">
+          <button data-d="peak" class="active">Peak</button>
+          <button data-d="avg">Avg</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="vu-gauge-wrap">
+      <svg viewBox="0 0 300 175" class="vu-gauge-svg">
+        <path d="M 30 160 A 120 120 0 0 1 270 160" fill="none" stroke="rgba(30,26,20,0.12)" stroke-width="2"/>
+        <g id="vuGaugeTicks"></g>
+        <line id="vuMaxNeedle" x1="150" y1="160" x2="150" y2="48" stroke="var(--amber)" stroke-width="1.5" opacity="0.85"/>
+        <line id="vuNeedle" x1="150" y1="160" x2="150" y2="42" stroke="var(--teal)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="150" cy="160" r="7" fill="var(--text-primary)"/>
+      </svg>
+    </div>
+
+    <div class="spl-big-row">
+      <span class="spl-big-val" id="splBigVal">--</span><span class="spl-big-unit">dB SPL</span>
+    </div>
+    <div class="spl-avg-lbl" id="splModeLbl" data-i18n="level_peak_label">PEAK (피크)</div>
+    <div class="spl-fs-row" id="splFsRow">(-- dBFS)</div>
+    <div class="vu-bar-wrap">
+      <div class="vu-bar-fill" id="vuBarFill"></div>
+    </div>
+    <div class="spl-stats-row">
+      <div class="spl-stat"><span class="spl-stat-lbl">MIN</span><span class="spl-stat-val" id="splMinVal">--</span></div>
+      <div class="spl-stat"><span class="spl-stat-lbl">AVG</span><span class="spl-stat-val" id="splAvgVal">--</span></div>
+      <div class="spl-stat"><span class="spl-stat-lbl">MAX</span><span class="spl-stat-val" id="splMaxVal">--</span></div>
+    </div>
+    <canvas id="splHistoryCanvas"></canvas>
+    <button class="toolbar-btn" id="splResetBtn" data-i18n="btn_spl_reset">↺ Min/Max/Avg 초기화</button>
+  </div>
+
+  <p class="hint" data-i18n="hint_text">라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)</p>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+    <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
+    <a href="electrical-calculator.html">🔌 Electrical Calc</a>
+    <a href="tempo-pitch-calculator.html">🥁 Tempo & Pitch</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ISO 266 표준 31밴드 (다른 페이지들과 동일한 데이터)
+  const BANDS = [20,25,31.5,40,50,63,80,100,125,160,200,250,315,400,500,630,800,1000,1250,1600,2000,2500,3150,4000,5000,6300,8000,10000,12500,16000,20000];
+
+  // ✅ IEC 61672-1 표준 A/C 가중치 보정값(dB). BANDS 배열과 순서가 1:1로 대응한다.
+  // A가중치: 사람 귀가 실제로 느끼는 크기에 가깝게(저음/초고음을 깎는다) — 소음 측정에서 가장 흔히 쓰임.
+  // C가중치: A보다 훨씬 평탄해서, 저음이 많은 큰 소리(피크 측정 등)에 주로 쓰임.
+  const A_WEIGHTING = [-50.5,-44.7,-39.4,-34.6,-30.2,-26.2,-22.5,-19.1,-16.1,-13.4,-10.9,-8.6,-6.6,-4.8,-3.2,-1.9,-0.8,0.0,0.6,1.0,1.2,1.3,1.2,1.0,0.5,-0.1,-1.1,-2.5,-4.3,-6.6,-9.3];
+  const C_WEIGHTING = [-6.2,-4.4,-3.0,-2.0,-1.3,-0.8,-0.5,-0.3,-0.2,-0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,-0.1,-0.2,-0.3,-0.5,-0.8,-1.3,-2.0,-3.0,-4.4,-6.2,-8.5,-11.2];
+  const LABELS = ["20","25","31.5","40","50","63","80","100","125","160","200","250","315","400","500","630","800","1k","1.25k","1.6k","2k","2.5k","3.15k","4k","5k","6.3k","8k","10k","12.5k","16k","20k"];
+
+  // 1/3 옥타브 밴드 경계 (센터 주파수 기준 상하 1/6 옥타브)
+  const OCTAVE_RATIO = Math.pow(2, 1/6);
+  const BAND_EDGES = BANDS.map(f => [f / OCTAVE_RATIO, f * OCTAVE_RATIO]);
+
+  // ✅ 요청 반영: 고정 상수가 아니라 사용자가 직접 조절할 수 있는 값으로 변경
+  // (작은 소리가 잘 안 보인다는 피드백 → Floor를 더 높여서 조용한 구간을 넓게 펼쳐볼 수 있게 함)
+  let DB_MIN = 30, DB_MAX = 120; // 화면 표시 범위 (dB SPL 근사 — 보정 후 실사용 스케일)
+  const PEAK_DECAY_PER_SEC = 18;  // dB/s — 피크 홀드가 서서히 내려오는 속도
+
+  const grid = document.getElementById('grid');
+  const startBtn = document.getElementById('startBtn');
+  const peakToggle = document.getElementById('peakToggle');
+  const statusTitle = document.getElementById('statusTitle');
+  const statusSub = document.getElementById('statusSub');
+  const micDeniedEl = document.getElementById('micDenied');
+  const levelReadoutEl = document.getElementById('levelReadout');
+  const levelValEl = document.getElementById('levelVal');
+  const levelFsValEl = document.getElementById('levelFsVal');
+  const floorInput = document.getElementById('floorInput');
+  const ceilingInput = document.getElementById('ceilingInput');
+  const boostQuietBtn = document.getElementById('boostQuietBtn');
+  const calibInput = document.getElementById('calibInput');
+  const targetSplInput = document.getElementById('targetSplInput');
+  const calibrateNowBtn = document.getElementById('calibrateNowBtn');
+  const vscaleTop = document.getElementById('vscaleTop');
+  const vscaleMid = document.getElementById('vscaleMid');
+  const vscaleBottom = document.getElementById('vscaleBottom');
+  const viewToggle = document.getElementById('viewToggle');
+  const consoleBar = document.getElementById('consoleBar');
+  const consoleLine = document.getElementById('consoleLine');
+  const lineCanvas = document.getElementById('lineCanvas');
+  const lineCtx = lineCanvas.getContext('2d');
+  const consoleSpl = document.getElementById('consoleSpl');
+  const splBigVal = document.getElementById('splBigVal');
+  const splFsRow = document.getElementById('splFsRow');
+  const vuBarFill = document.getElementById('vuBarFill');
+  const splMinVal = document.getElementById('splMinVal');
+  const splAvgVal = document.getElementById('splAvgVal');
+  const splMaxVal = document.getElementById('splMaxVal');
+  const splHistoryCanvas = document.getElementById('splHistoryCanvas');
+  const splHistoryCtx = splHistoryCanvas.getContext('2d');
+  const splResetBtn = document.getElementById('splResetBtn');
+  const weightingToggle = document.getElementById('weightingToggle');
+  const responseToggle = document.getElementById('responseToggle');
+  const splDisplayToggle = document.getElementById('splDisplayToggle');
+  const splModeLbl = document.getElementById('splModeLbl');
+  const rangeInput = document.getElementById('rangeInput');
+  const rangeValueLabel = document.getElementById('rangeValueLabel');
+  const vuNeedle = document.getElementById('vuNeedle');
+  const vuMaxNeedle = document.getElementById('vuMaxNeedle');
+  const vuGaugeTicks = document.getElementById('vuGaugeTicks');
+
+  let viewMode = 'bar'; // 'bar' | 'line' | 'spl'
+
+  // ---- SPL 미터 상태 ----
+  let splSmoothed = null;
+  let splMin = Infinity, splMax = -Infinity, splSum = 0, splCount = 0;
+  let splHistory = []; // 최근 값들 (스크롤되는 히스토리 그래프용)
+  const SPL_HISTORY_MAX_POINTS = 240; // 대략 최근 몇 분 분량
+
+  let audioCtx = null;
+  let analyser = null;
+  let micStream = null;
+  let freqData = null;
+  let isRunning = false;
+  let rafId = null;
+  let peakHoldOn = true;
+  let lastFrameTime = 0;
+
+  const bars = []; // { wrap, bar, peakEl, peakDb }
+
+  BANDS.forEach((freq, i) => {
+    const band = document.createElement('div');
+    band.className = 'band';
+    band.innerHTML = `
+      <div class="track"><div class="zero"></div>
+        <div class="bar"></div>
+        <div class="peak"></div>
+      </div>
+      <div class="lbl">${LABELS[i]}</div>`;
+    grid.appendChild(band);
+    bars.push({
+      bar: band.querySelector('.bar'),
+      peakEl: band.querySelector('.peak'),
+      peakDb: DB_MIN
+    });
+  });
+
+  function dbToPct(db){
+    const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
+    return (clamped - DB_MIN) / (DB_MAX - DB_MIN) * 100;
+  }
+
+  // ✅ FFT 원본 dB 배열 전체에 보정 오프셋을 한 번에 적용한다.
+  // 이후 이 데이터를 쓰는 막대/라인/피크/레벨 표시가 전부 자동으로 보정된 값을 쓰게 된다.
+  function applyCalibration(data){
+    const offset = parseFloat(calibInput.value) || 0;
+    if (offset === 0) return data;
+    for (let i = 0; i < data.length; i++) {
+      if (isFinite(data[i])) data[i] += offset;
+    }
+    return data;
+  }
+
+  // ✅ 요청 반영: 보정 전(raw) 피크값을 매 프레임 기록해둔다.
+  // "지금 소리로 자동 보정" 버튼을 누르면, 이 값과 사용자가 입력한 "기준 SPL"의 차이를
+  // 오프셋으로 계산해서 자동으로 채워준다 — 감으로 오프셋 숫자를 맞출 필요가 없어진다.
+  let lastRawPeakDb = -Infinity;
+  // ✅ 요청 반영: 보정 기준을 "전체 스펙트럼 중 가장 큰 1개 지점(peak)"이 아니라
+  // "막대가 실제로 보여주는 것과 똑같은 방식의 평균"으로 바꾼다.
+  // (처음엔 FFT bin을 그냥 다 더해 평균냈는데, FFT는 저음보다 고음 쪽에 훨씬 많은
+  //  bin이 몰려있어서 — 조용한 고음 구간이 평균을 확 끌어내려 막대와 기준이 안 맞았다.
+  //  막대와 똑같이 "31개 옥타브 대역을 각각 평균 낸 뒤, 그 대역들을 다시 평균"내는
+  //  방식으로 바꿔서 실제 막대 눈높이와 정확히 일치하게 한다.)
+  let lastRawAverageDb = -Infinity;
+  let weightingMode = 'Z'; // 'Z'(무보정) | 'A' | 'C'
+  let responseMode = 'slow'; // 'slow' | 'fast' — 반응 속도(시간 가중치)
+  let splDisplayMode = 'peak'; // ✅ 요청 반영: 'peak' | 'avg' — SPL 미터 메인 표시 기준 (기본값 Peak)
+
+  function captureRawPeak(data){
+    const binHz = audioCtx.sampleRate / analyser.fftSize;
+
+    // ✅ 요청 반영: Peak과 Avg를 "같은 31개 가중치 적용 대역값"에서 함께 계산한다.
+    // (전에는 Peak이 가중치 없는 단일 FFT bin 기준이라 Avg와 기준 자체가 달랐다.
+    //  이제 Peak = 31개 대역 중 가장 큰 값, Avg = 31개 대역의 평균 — 막대가 보여주는
+    //  값과 완전히 같은 기준이라 서로 비교하기도 훨씬 자연스럽다.)
+    const weightTable = weightingMode === 'A' ? A_WEIGHTING : weightingMode === 'C' ? C_WEIGHTING : null;
+    let bandSum = 0, bandCount = 0, bandPeak = -Infinity;
+    BAND_EDGES.forEach(([lo, hi], bandIdx) => {
+      const loBin = Math.max(1, Math.floor(lo / binHz));
+      const hiBin = Math.min(data.length - 1, Math.ceil(hi / binHz));
+      let sum = 0, count = 0;
+      for (let b = loBin; b <= hiBin; b++) {
+        if (isFinite(data[b])) { sum += data[b]; count++; }
+      }
+      if (count > 0) {
+        const avg = sum / count;
+        const weighted = weightTable ? avg + weightTable[bandIdx] : avg;
+        bandSum += weighted;
+        bandCount++;
+        if (weighted > bandPeak) bandPeak = weighted;
+      }
+    });
+    if (bandCount > 0) lastRawAverageDb = bandSum / bandCount;
+    if (isFinite(bandPeak)) lastRawPeakDb = bandPeak;
+  }
+
+  calibrateNowBtn.addEventListener('click', () => {
+    if (!isRunning || !isFinite(lastRawAverageDb)) {
+      setStatus(window.i18n.t('calib_need_mic_title'), window.i18n.t('calib_need_mic_sub'));
+      return;
+    }
+    const targetSpl = parseFloat(targetSplInput.value) || 0;
+    // ✅ 요청 반영: peak(순간 최댓값) 대신 평균을 기준으로 오프셋을 계산한다.
+    // 막대는 평균을 보여주므로, 평균을 기준으로 맞춰야 보정 후에도 막대가 제대로 보인다.
+    const offset = targetSpl - lastRawAverageDb;
+    calibInput.value = Math.round(offset);
+
+    // ✅ 요청 반영: Floor/Ceiling은 건드리지 않는다. 실제 SPL 스케일(기본 30~120dB)로
+    // 고정해두고, 보정 버튼은 오직 오프셋만 계산한다 — 훨씬 예측 가능하고 단순한 방식.
+    setStatus(window.i18n.t('calib_done_title'), window.i18n.tpl('calib_done_sub', { targetSpl: targetSpl, offset: Math.round(offset) }));
+    saveCalibToStorage(); // ✅ 요청 반영: 매번 다시 잴 필요 없이, 한 번 보정하면 브라우저에 저장해서 계속 기억한다
+  });
+
+  // ✅ 보정 오프셋을 브라우저(localStorage)에 저장/불러오기.
+  // 이 기기·이 브라우저에서는 한 번만 보정해두면, 다음에 다시 열어도 자동으로 그 값을 씁니다.
+  const CALIB_STORAGE_KEY = 'rta_calib_offset_v1';
+  function saveCalibToStorage(){
+    try {
+      localStorage.setItem(CALIB_STORAGE_KEY, calibInput.value);
+    } catch (e) {
+      // 브라우저가 localStorage를 막아둔 경우(예: 시크릿 모드 일부) 조용히 무시한다
+      console.warn('보정값 저장 실패(무시 가능):', e);
+    }
+  }
+  function loadCalibFromStorage(){
+    try {
+      const saved = localStorage.getItem(CALIB_STORAGE_KEY);
+      if (saved !== null && saved !== '') {
+        calibInput.value = saved;
+      }
+    } catch (e) {
+      console.warn('보정값 불러오기 실패(무시 가능):', e);
+    }
+  }
+  loadCalibFromStorage(); // 페이지를 열자마자 저장된 보정값이 있으면 바로 적용
+
+  // 오프셋을 직접 손으로 수정한 경우에도 저장한다
+  calibInput.addEventListener('change', saveCalibToStorage);
+
+  // ✅ 요청 반영: 그래프뿐 아니라 현재 전체 레벨(가청 대역 내 최대치)을 숫자로도 보여준다.
+  // ✅ 요청 반영: 값이 매 프레임 그대로 튀지 않고 조금 천천히 반응하도록 스무딩(지수 평활화)을 추가.
+  // 값이 올라갈 땐 비교적 빠르게, 내려갈 땐 느리게 — 실제 레벨미터의 자연스러운 움직임과 비슷하다.
+  let levelSmoothed = -Infinity;
+  function updateLevelReadout(data){
+    const binHz = audioCtx.sampleRate / analyser.fftSize;
+    let peak = -Infinity;
+    for (let b = 1; b < data.length; b++) {
+      const freq = b * binHz;
+      if (freq < 20 || freq > 20000) continue;
+      if (isFinite(data[b]) && data[b] > peak) peak = data[b];
+    }
+    if (isFinite(peak)) {
+      if (!isFinite(levelSmoothed) || peak > levelSmoothed) {
+        levelSmoothed = levelSmoothed === -Infinity ? peak : levelSmoothed * 0.5 + peak * 0.5; // 올라갈 때는 빠르게
+      } else {
+        levelSmoothed = levelSmoothed * 0.9 + peak * 0.1; // 내려갈 때는 천천히
+      }
+    }
+    // data가 이미 applyCalibration()을 거쳤으므로 여기서 오프셋을 또 더하지 않는다.
+    levelValEl.textContent = isFinite(levelSmoothed) ? Math.round(levelSmoothed) : '−∞';
+
+    // ✅ 요청 반영: 보정된 SPL 근사치와 함께, 원본 dBFS 값도 같이 보여준다.
+    const calibOffset = parseFloat(calibInput.value) || 0;
+    const rawDbfs = isFinite(levelSmoothed) ? levelSmoothed - calibOffset : -Infinity;
+    levelFsValEl.textContent = isFinite(rawDbfs) ? `(${Math.round(rawDbfs)} dBFS)` : '(−∞ dBFS)';
+  }
+
+  function setStatus(title, sub){
+    statusTitle.textContent = title;
+    statusSub.textContent = sub || '';
+  }
+
+  // ✅ Floor/Ceiling 값이 바뀌면 왼쪽 dB 눈금과 analyser의 표시 범위를 함께 갱신한다.
+  function updateVScaleLabels(){
+    const mid = Math.round((DB_MIN + DB_MAX) / 2);
+    vscaleTop.textContent = DB_MAX + 'dB';
+    vscaleMid.textContent = mid + 'dB';
+    vscaleBottom.textContent = DB_MIN + 'dB';
+  }
+  function applyRangeToAnalyser(){
+    // ✅ 고친 것: getFloatFrequencyData()는 minDecibels/maxDecibels의 영향을 받지 않으므로
+    // (그 값들은 getByteFrequencyData 전용) 화면 표시 범위(Floor/Ceiling)를 analyser에
+    // 다시 넣어줄 필요가 원래 없었다. 안전하게 아무 것도 하지 않도록 비워둔다.
+  }
+  function commitRange(){
+    const newMin = parseFloat(floorInput.value);
+    const newMax = parseFloat(ceilingInput.value);
+    if (isNaN(newMin) || isNaN(newMax) || newMin >= newMax) return; // 잘못된 값이면 무시
+    DB_MIN = newMin;
+    DB_MAX = newMax;
+    updateVScaleLabels();
+    applyRangeToAnalyser();
+    buildVuGaugeTicks();
+  }
+  floorInput.addEventListener('change', commitRange);
+  ceilingInput.addEventListener('change', commitRange);
+  boostQuietBtn.addEventListener('click', () => {
+    // ✅ 요청 반영: Floor를 0dB부터 시작하도록 변경 (작은 소리 구간을 더 넓게 보여준다)
+    floorInput.value = '0';
+    ceilingInput.value = '75';
+    commitRange();
+  });
+
+  const resetRangeBtn = document.getElementById('resetRangeBtn');
+  resetRangeBtn.addEventListener('click', () => {
+    // ✅ 요청 반영: Floor/Ceiling/보정 오프셋/기준 SPL을 전부 처음 기본값으로 되돌린다
+    floorInput.value = '30';
+    ceilingInput.value = '120';
+    calibInput.value = '140';
+    targetSplInput.value = '0';
+    commitRange();
+    saveCalibToStorage(); // 초기화한 값도 저장해서, 다음에 열 때 이전(수정된) 값이 남아있지 않게 한다
+    setStatus(window.i18n.t('reset_done_title'), window.i18n.t('reset_done_sub'));
+  });
+
+  async function startRTA(){
+    micDeniedEl.style.display = 'none';
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        }
+      });
+    } catch (err) {
+      console.error('마이크 접근 실패:', err);
+      micDeniedEl.style.display = 'block';
+      setStatus(window.i18n.t('mic_permission_needed_title'), window.i18n.t('mic_permission_needed_sub'));
+      return;
+    }
+
+    const source = audioCtx.createMediaStreamSource(micStream);
+
+    try {
+      // ✅ 진단용: 이 블록에서 에러가 나면 화면에 그대로 보여준다 (원인을 바로 알 수 있게)
+      if (audioCtx.state === 'suspended') {
+        await audioCtx.resume();
+      }
+
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 8192;
+      // ✅ 요청 반영: 값이 너무 빠르게 왔다갔다 하는 것을 줄이기 위해 analyser 자체의
+      // 시간축 스무딩을 0.35 → 0.75로 높였다 (여기에 더해 라인 뷰는 별도로 프레임 간 평활화도 적용한다)
+      analyser.smoothingTimeConstant = 0.75;
+      // ✅ 고친 것: minDecibels/maxDecibels는 마이크 분석기 자체의 내부 설정이라 항상
+      // 음수(dBFS) 값이어야 하는데, 화면 표시용 DB_MIN/DB_MAX(이제는 SPL 스케일이라 양수)를
+      // 그대로 넣고 있어서 분석기가 제대로 시작되지 않는 원인이 됐다. 화면 표시 범위와
+      // 완전히 분리해서 항상 안전한 고정값을 쓴다.
+      analyser.minDecibels = -100;
+      analyser.maxDecibels = -10;
+
+      // ⚠️ 중요: analyser를 절대 destination(스피커)에 연결하지 않는다.
+      // 연결하면 마이크 소리가 스피커로 그대로 나가 하울링(피드백)이 발생한다.
+      source.connect(analyser);
+
+      freqData = new Float32Array(analyser.frequencyBinCount);
+      lineSmoothed = null; // 새로 시작할 때는 이전 세션의 평활화 값을 초기화한다
+      splSmoothed = null; splMin = Infinity; splMax = -Infinity; splSum = 0; splCount = 0; splHistory = [];
+
+      isRunning = true;
+      lastFrameTime = performance.now();
+      startBtn.textContent = window.i18n.t('btn_mic_stop');
+      startBtn.classList.add('active');
+      levelReadoutEl.style.display = 'flex';
+      setStatus(window.i18n.t('status_running_title'), window.i18n.t('status_running_sub'));
+      renderLoop();
+    } catch (setupErr) {
+      // ✅ 진단용: 정확한 에러 메시지를 화면에 그대로 표시한다
+      console.error('오디오 그래프 설정 실패:', setupErr);
+      setStatus(window.i18n.t('error_title'), `${setupErr.name}: ${setupErr.message}`);
+    }
+  }
+
+  function stopRTA(){
+    isRunning = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    if (micStream) micStream.getTracks().forEach(track => track.stop());
+    if (audioCtx) audioCtx.close();
+    audioCtx = null; analyser = null; micStream = null;
+
+    startBtn.textContent = window.i18n.t('btn_mic_start');
+    startBtn.classList.remove('active');
+    levelReadoutEl.style.display = 'none';
+    levelSmoothed = -Infinity;
+    setStatus(window.i18n.t('status_default_title'), window.i18n.t('status_default_sub'));
+
+    bars.forEach(b => {
+      b.bar.style.height = '0%';
+      b.peakEl.style.bottom = '0%';
+      b.peakDb = DB_MIN;
+    });
+  }
+
+  function renderLoop(){
+    if (!isRunning) return;
+    const now = performance.now();
+    const dt = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
+
+    analyser.getFloatFrequencyData(freqData);
+    captureRawPeak(freqData); // ✅ "지금 소리로 자동 보정" 버튼이 쓸 보정 전 원본 피크값을 기록해둔다
+    applyCalibration(freqData); // ✅ 요청 반영: 보정 오프셋을 막대/라인/레벨 표시 전부에 동일하게 적용
+    updateLevelReadout(freqData);
+    updateSplMeter(); // ✅ SPL 미터 뷰(큰 숫자 + Min/Max/Avg + 히스토리)도 매 프레임 갱신
+
+    const binHz = audioCtx.sampleRate / analyser.fftSize;
+
+    if (viewMode === 'bar') {
+      BAND_EDGES.forEach(([lo, hi], i) => {
+        const loBin = Math.max(1, Math.floor(lo / binHz));
+        const hiBin = Math.min(freqData.length - 1, Math.ceil(hi / binHz));
+        let sum = 0, count = 0;
+        for (let b = loBin; b <= hiBin; b++) {
+          // getFloatFrequencyData가 -Infinity를 반환할 수 있으므로(무음 구간) 방어적으로 처리
+          const v = freqData[b];
+          if (isFinite(v)) { sum += v; count++; }
+        }
+        const avgDb = count > 0 ? sum / count : DB_MIN;
+
+        const entry = bars[i];
+        entry.bar.style.height = dbToPct(avgDb) + '%';
+
+        if (peakHoldOn) {
+          if (avgDb > entry.peakDb) {
+            entry.peakDb = avgDb;
+          } else {
+            entry.peakDb = Math.max(DB_MIN, entry.peakDb - PEAK_DECAY_PER_SEC * dt);
+          }
+          entry.peakEl.style.bottom = dbToPct(entry.peakDb) + '%';
+          entry.peakEl.style.display = '';
+        } else {
+          entry.peakEl.style.display = 'none';
+        }
+      });
+    } else {
+      drawLineView(freqData, binHz);
+    }
+
+    rafId = requestAnimationFrame(renderLoop);
+  }
+
+  // ---------------------------------------------------------------
+  // 라인(연속 스펙트럼) 뷰 — FFT 빈(bin)을 있는 그대로, 로그 주파수축 위에 그린다.
+  // 31밴드로 뭉개지 않아서 화면 캡처처럼 훨씬 촘촘하고 디테일한 곡선이 나온다.
+  // ---------------------------------------------------------------
+  const LINE_FREQ_MIN = 20, LINE_FREQ_MAX = 20000;
+  let lineSmoothed = null; // 프레임 간 지수 평활화용 버퍼 (너무 빠르게 흔들리는 것을 완화)
+  // ✅ 요청 반영: 라인뷰에서 마우스(또는 터치)를 올린 위치의 주파수/레벨을 보여주기 위한 상태
+  let lineHoverX = null;
+  let lineHoverActive = false;
+  const LINE_SMOOTHING = 0.75; // 0(스무딩 없음)~1(거의 안 움직임) 사이
+
+  // ✅ ResizeObserver로 실제 렌더링 크기 변화를 정확히 추적한다 (레이아웃이
+  // 아직 안정되기 전에 한 번만 측정해서 잘려 보이던 문제를 근본적으로 해결).
+  function resizeCanvas(){
+    const rect = lineCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    lineCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    lineCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => { if (viewMode === 'line') resizeCanvas(); }).observe(lineCanvas);
+    new ResizeObserver(() => { if (viewMode === 'spl') resizeSplCanvas(); }).observe(splHistoryCanvas);
+  }
+
+  // ✅ 요청 반영: 마우스(또는 손가락)를 올린 위치의 주파수/레벨을 보여준다
+  function updateLineHoverFromClientX(clientX){
+    const rect = lineCanvas.getBoundingClientRect();
+    const scaleX = lineCanvas.width / rect.width; // CSS 픽셀 -> 캔버스 내부 픽셀 비율
+    lineHoverX = (clientX - rect.left) * scaleX;
+    lineHoverActive = true;
+  }
+  lineCanvas.addEventListener('mousemove', (e) => updateLineHoverFromClientX(e.clientX));
+  lineCanvas.addEventListener('mouseleave', () => { lineHoverActive = false; });
+  lineCanvas.addEventListener('touchstart', (e) => { if (e.touches[0]) updateLineHoverFromClientX(e.touches[0].clientX); }, { passive: true });
+  lineCanvas.addEventListener('touchmove', (e) => { if (e.touches[0]) updateLineHoverFromClientX(e.touches[0].clientX); }, { passive: true });
+  lineCanvas.addEventListener('touchend', () => { lineHoverActive = false; });
+
+  // ---------------------------------------------------------------
+  // SPL 미터 뷰 — 큰 숫자 + Min/Max/Avg + 시간에 따른 히스토리 그래프
+  // ---------------------------------------------------------------
+  function resizeSplCanvas(){
+    const rect = splHistoryCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    splHistoryCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    splHistoryCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawSplHistory(){
+    const w = splHistoryCanvas.width, h = splHistoryCanvas.height;
+    if (w === 0 || h === 0) return;
+    splHistoryCtx.clearRect(0, 0, w, h);
+
+    // 배경 그리드(가로선 3개)
+    splHistoryCtx.strokeStyle = 'rgba(30,26,20,0.08)';
+    splHistoryCtx.lineWidth = 1;
+    for (let i = 0; i <= 2; i++) {
+      const y = (i / 2) * h;
+      splHistoryCtx.beginPath();
+      splHistoryCtx.moveTo(0, y);
+      splHistoryCtx.lineTo(w, y);
+      splHistoryCtx.stroke();
+    }
+
+    if (splHistory.length < 2) return;
+
+    // Floor/Ceiling(DB_MIN/DB_MAX) 기준으로 y축 스케일 (다른 뷰들과 일관되게)
+    const toY = (v) => {
+      const t = (v - DB_MIN) / (DB_MAX - DB_MIN);
+      return h - Math.max(0, Math.min(1, t)) * h;
+    };
+
+    splHistoryCtx.beginPath();
+    splHistory.forEach((v, i) => {
+      const x = (i / (SPL_HISTORY_MAX_POINTS - 1)) * w;
+      const y = toY(v);
+      if (i === 0) splHistoryCtx.moveTo(x, y); else splHistoryCtx.lineTo(x, y);
+    });
+    splHistoryCtx.strokeStyle = '#2f6d4c';
+    splHistoryCtx.lineWidth = Math.max(1.5, w * 0.003);
+    splHistoryCtx.lineJoin = 'round';
+    splHistoryCtx.stroke();
+  }
+
+  function updateSplMeter(){
+    if (!isFinite(lastRawAverageDb) || !isFinite(lastRawPeakDb)) return;
+    const calibOffset = parseFloat(calibInput.value) || 0;
+    // ✅ 요청 반영: Peak/Avg 중 선택된 쪽을 메인 표시(큰 숫자·게이지·바)의 소스로 쓴다.
+    const rawSource = splDisplayMode === 'peak' ? lastRawPeakDb : lastRawAverageDb;
+    const raw = rawSource + calibOffset;
+    // ✅ 요청 반영: Slow/Fast 응답속도 — 실제 SPL 미터의 IEC 시간가중치(Fast=125ms, Slow=1000ms) 개념을
+    // 근사한 스무딩 계수. Fast는 훨씬 빠르게 따라가고, Slow는 천천히 안정적으로 움직인다.
+    const smoothingFactor = responseMode === 'fast' ? 0.35 : 0.85;
+    splSmoothed = (splSmoothed === null) ? raw : splSmoothed * smoothingFactor + raw * (1 - smoothingFactor);
+
+    splMin = Math.min(splMin, splSmoothed);
+    splMax = Math.max(splMax, splSmoothed);
+    splSum += splSmoothed;
+    splCount++;
+
+    splHistory.push(splSmoothed);
+    if (splHistory.length > SPL_HISTORY_MAX_POINTS) splHistory.shift();
+
+    if (viewMode === 'spl') {
+      splBigVal.textContent = Math.round(splSmoothed);
+      splFsRow.textContent = `(${Math.round(splSmoothed - calibOffset)} dBFS)`;
+      splMinVal.textContent = isFinite(splMin) ? Math.round(splMin) : '--';
+      splMaxVal.textContent = isFinite(splMax) ? Math.round(splMax) : '--';
+      splAvgVal.textContent = splCount > 0 ? Math.round(splSum / splCount) : '--';
+      // ✅ 요청 반영: VU 바 — Floor~Ceiling 범위 기준으로 현재 레벨 위치를 막대로 표시
+      const vuPct = Math.max(0, Math.min(100, ((splSmoothed - DB_MIN) / (DB_MAX - DB_MIN)) * 100));
+      vuBarFill.style.width = vuPct + '%';
+      updateVuGauge(splSmoothed, splMax);
+      drawSplHistory();
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // 아날로그 VU 니들 게이지 — Floor~Ceiling을 -60°~+60° 부채꼴에 매핑한다.
+  // ---------------------------------------------------------------
+  const VU_GAUGE_MIN_ANGLE = -60, VU_GAUGE_MAX_ANGLE = 60;
+
+  function vuAngleForValue(v){
+    const pct = Math.max(0, Math.min(1, (v - DB_MIN) / (DB_MAX - DB_MIN)));
+    return VU_GAUGE_MIN_ANGLE + pct * (VU_GAUGE_MAX_ANGLE - VU_GAUGE_MIN_ANGLE);
+  }
+
+  function updateVuGauge(currentVal, maxVal){
+    // ✅ 고친 것: SVG의 transform "속성"(setAttribute)과 CSS transition을 함께 쓰면
+    // 특히 사파리에서 애니메이션이 아예 안 먹는 경우가 있었다. CSS의 style.transform으로
+    // 직접 설정하는 방식으로 바꿔서 확실하게 동작하도록 했다.
+    vuNeedle.style.transform = `rotate(${vuAngleForValue(currentVal)}deg)`;
+    if (isFinite(maxVal)) {
+      vuMaxNeedle.style.display = '';
+      vuMaxNeedle.style.transform = `rotate(${vuAngleForValue(maxVal)}deg)`;
+    } else {
+      vuMaxNeedle.style.display = 'none';
+    }
+  }
+
+  function buildVuGaugeTicks(){
+    vuGaugeTicks.innerHTML = '';
+    const steps = 6; // Floor~Ceiling 사이 6칸(7개 눈금)
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const angleDeg = VU_GAUGE_MIN_ANGLE + t * (VU_GAUGE_MAX_ANGLE - VU_GAUGE_MIN_ANGLE);
+      const angleRad = (angleDeg - 90) * Math.PI / 180; // SVG 기준 위쪽이 -90°
+      const cx = 150, cy = 160, rOuter = 120, rInner = 106, rLabel = 92;
+      const x1 = cx + rOuter * Math.cos(angleRad), y1 = cy + rOuter * Math.sin(angleRad);
+      const x2 = cx + rInner * Math.cos(angleRad), y2 = cy + rInner * Math.sin(angleRad);
+      const xL = cx + rLabel * Math.cos(angleRad), yL = cy + rLabel * Math.sin(angleRad);
+      const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      tick.setAttribute('x1', x1); tick.setAttribute('y1', y1);
+      tick.setAttribute('x2', x2); tick.setAttribute('y2', y2);
+      tick.setAttribute('class', 'vu-gauge-tick');
+      vuGaugeTicks.appendChild(tick);
+
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      const val = Math.round(DB_MIN + t * (DB_MAX - DB_MIN));
+      label.textContent = val;
+      label.setAttribute('x', xL); label.setAttribute('y', yL);
+      label.setAttribute('class', 'vu-gauge-ticklabel');
+      vuGaugeTicks.appendChild(label);
+    }
+  }
+
+  // ✅ Weighting(Z/A/C) 토글
+  weightingToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const w = btn.dataset.w;
+      if (weightingMode === w) return;
+      weightingMode = w;
+      weightingToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  // ✅ Response(Slow/Fast) 토글
+  responseToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const r = btn.dataset.r;
+      if (responseMode === r) return;
+      responseMode = r;
+      responseToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+    });
+  });
+
+  // ✅ 요청 반영: SPL 미터 메인 표시(큰 숫자+게이지+바)를 Peak/Avg 중 골라서 볼 수 있게 한다
+  splDisplayToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const d = btn.dataset.d;
+      if (splDisplayMode === d) return;
+      splDisplayMode = d;
+      splDisplayToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      splModeLbl.textContent = d === 'peak' ? window.i18n.t('level_peak_label') : window.i18n.t('level_avg_label');
+    });
+  });
+
+  // ✅ Range — Floor 기준으로 폭(Range)만큼 Ceiling을 자동 계산해준다
+  function applyRangeFromInput(){
+    const floor = parseFloat(floorInput.value) || 0;
+    const range = parseFloat(rangeInput.value) || 90;
+    rangeValueLabel.textContent = range;
+    ceilingInput.value = Math.round(floor + range);
+    commitRange();
+    buildVuGaugeTicks();
+  }
+  // ✅ 요청 반영: 슬라이더를 드래그하는 동안 실시간으로 반영되도록 'input' 이벤트 사용
+  // ('change'는 손을 뗀 뒤에야 발생해서 드래그 중엔 반응이 없었다)
+  rangeInput.addEventListener('input', applyRangeFromInput);
+
+  function resetSplStats(){
+    splMin = Infinity; splMax = -Infinity; splSum = 0; splCount = 0;
+    splHistory = [];
+    splBigVal.textContent = '--';
+    splFsRow.textContent = '(-- dBFS)';
+    splMinVal.textContent = '--';
+    splMaxVal.textContent = '--';
+    splAvgVal.textContent = '--';
+    vuBarFill.style.width = '0%';
+    updateVuGauge(DB_MIN, null);
+    drawSplHistory();
+  }
+  splResetBtn.addEventListener('click', resetSplStats);
+
+  function freqToX(f, plotW, plotX0){
+    const t = Math.log(f / LINE_FREQ_MIN) / Math.log(LINE_FREQ_MAX / LINE_FREQ_MIN);
+    return plotX0 + Math.max(0, Math.min(1, t)) * plotW;
+  }
+  // ✅ 요청 반영: 화면 위치(x좌표) -> 주파수로 되돌리는 역변환 (마우스 호버용)
+  function xToFreq(x, plotW, plotX0){
+    const t = Math.max(0, Math.min(1, (x - plotX0) / plotW));
+    return LINE_FREQ_MIN * Math.pow(LINE_FREQ_MAX / LINE_FREQ_MIN, t);
+  }
+
+  function drawLineView(data, binHz){
+    const w = lineCanvas.width, h = lineCanvas.height;
+    if (w === 0 || h === 0) return;
+    lineCtx.clearRect(0, 0, w, h);
+
+    // ✅ 요청 반영: 그래프가 둥근 모서리/화면 끝에 바짝 붙어 "잘린" 것처럼 보이던 것을
+    // 막기 위해, 그리는 영역 자체에 여백(margin)을 넉넉히 둔다.
+    const marginLeft = w * 0.09, marginRight = w * 0.03, marginTop = h * 0.06, marginBottom = h * 0.1;
+    const plotX0 = marginLeft, plotW = w - marginLeft - marginRight;
+    const plotY0 = marginTop, plotH = h - marginTop - marginBottom;
+
+    function dbToY(db){
+      const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
+      return plotY0 + plotH - ((clamped - DB_MIN) / (DB_MAX - DB_MIN)) * plotH;
+    }
+
+    // 그리드: dB 가로선 (Floor~Ceiling 사이 4등분) + 옥타브 세로선
+    lineCtx.strokeStyle = 'rgba(30,26,20,0.08)';
+    lineCtx.lineWidth = Math.max(1, w * 0.0012);
+    lineCtx.font = `${Math.max(11, h*0.032)}px 'IBM Plex Mono', monospace`;
+    lineCtx.fillStyle = 'rgba(92,87,76,0.85)';
+    const gridSteps = 4;
+    for (let i = 0; i <= gridSteps; i++) {
+      const db = DB_MAX - (DB_MAX - DB_MIN) * (i / gridSteps);
+      const y = dbToY(db);
+      lineCtx.beginPath();
+      lineCtx.moveTo(plotX0, y);
+      lineCtx.lineTo(plotX0 + plotW, y);
+      lineCtx.stroke();
+      lineCtx.fillText(Math.round(db) + 'dB', 4, Math.min(Math.max(y + 4, marginTop + 12), h - 6));
+    }
+    // ✅ 요청 반영: 100/1k/10k 세 개짜리 옥타브 라인 대신, 10밴드 표준 주파수
+    // (31.5/63/125/250/500/1k/2k/4k/8k/16k) 기준으로 그리드를 그린다.
+    const TEN_BAND_FREQS = [31.5, 63, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
+    lineCtx.font = `${Math.max(9, h*0.024)}px 'IBM Plex Mono', monospace`;
+    TEN_BAND_FREQS.forEach((f, i) => {
+      const x = freqToX(f, plotW, plotX0);
+      lineCtx.beginPath();
+      lineCtx.moveTo(x, plotY0);
+      lineCtx.lineTo(x, plotY0 + plotH);
+      lineCtx.stroke();
+      const label = (f >= 1000 ? (f/1000)+'k' : f) + 'Hz';
+      // 라벨이 촘촘해서 겹치지 않도록, 짝/홀 순서로 위아래(높이)를 번갈아 배치한다
+      const labelY = (i % 2 === 0) ? h - 8 : h - 8 - h * 0.045;
+      lineCtx.fillText(label, Math.min(Math.max(x - 14, 2), w - 34), labelY);
+    });
+
+    // ✅ 프레임 간 지수 평활화 — 매 프레임 값이 그대로 튀지 않고 부드럽게 이어지게 한다
+    if (!lineSmoothed || lineSmoothed.length !== data.length) {
+      lineSmoothed = Float32Array.from(data);
+    }
+
+    // 진폭(레벨)에 따라 파랑→초록→노랑으로 바뀌는 세로 방향 그라데이션
+    const gradient = lineCtx.createLinearGradient(0, plotY0 + plotH, 0, plotY0);
+    gradient.addColorStop(0, '#33587a');
+    gradient.addColorStop(0.55, '#2f6d4c');
+    gradient.addColorStop(1, '#9c8f17');
+
+    // FFT 빈을 그대로 로그 주파수축 위에 점 찍어 연결 (평활화된 값 사용)
+    lineCtx.beginPath();
+    let started = false;
+    for (let b = 1; b < data.length; b++) {
+      const freq = b * binHz;
+      if (freq < LINE_FREQ_MIN) continue;
+      if (freq > LINE_FREQ_MAX) break;
+      const raw = isFinite(data[b]) ? data[b] : DB_MIN;
+      const prev = isFinite(lineSmoothed[b]) ? lineSmoothed[b] : raw;
+      const v = prev * LINE_SMOOTHING + raw * (1 - LINE_SMOOTHING);
+      lineSmoothed[b] = v;
+      const x = freqToX(freq, plotW, plotX0);
+      const y = dbToY(v);
+      if (!started) { lineCtx.moveTo(x, y); started = true; }
+      else lineCtx.lineTo(x, y);
+    }
+    lineCtx.strokeStyle = gradient;
+    // ✅ 요청 반영: 선이 너무 두꺼워 보이던 것을 절반 이하로 줄임 (화면 크기와 무관하게 일정하게 얇음)
+    lineCtx.lineWidth = Math.max(1, Math.min(2.2, w * 0.0022));
+    lineCtx.lineJoin = 'round';
+    lineCtx.stroke();
+
+    // 피크 홀드가 켜져 있으면, 두드러진 로컬 피크 지점에 흰 점 + 주파수 라벨 표시 (평활화된 값 기준)
+    if (peakHoldOn) {
+      const peaks = findPeaks(lineSmoothed, binHz, plotW, plotX0);
+      peaks.forEach(p => {
+        const y = dbToY(p.db);
+        lineCtx.beginPath();
+        lineCtx.arc(p.x, y, Math.max(2.5, w*0.005), 0, Math.PI*2);
+        lineCtx.fillStyle = '#221f1a';
+        lineCtx.fill();
+        lineCtx.fillStyle = 'rgba(34,31,26,0.9)';
+        lineCtx.font = `${Math.max(11, h*0.03)}px 'IBM Plex Mono', monospace`;
+        const label = p.freq >= 1000 ? (p.freq/1000).toFixed(p.freq>=10000?1:2)+'k' : Math.round(p.freq);
+        const labelX = Math.min(p.x + 6, w - 44);
+        lineCtx.fillText(label, labelX, Math.max(y - 8, marginTop + 12));
+      });
+    }
+
+    // ✅ 요청 반영: 마우스(또는 손가락)를 올린 위치의 주파수·레벨을 크로스헤어 + 라벨로 보여준다
+    if (lineHoverActive && lineHoverX !== null) {
+      const hx = Math.max(plotX0, Math.min(plotX0 + plotW, lineHoverX));
+      const hoverFreq = xToFreq(hx, plotW, plotX0);
+      const bin = Math.max(1, Math.round(hoverFreq / binHz));
+      const hoverDb = (lineSmoothed && bin < lineSmoothed.length && isFinite(lineSmoothed[bin])) ? lineSmoothed[bin] : null;
+
+      // 세로 점선(크로스헤어)
+      lineCtx.strokeStyle = 'rgba(30,26,20,0.55)';
+      lineCtx.lineWidth = Math.max(1, w * 0.0015);
+      lineCtx.setLineDash([5, 4]);
+      lineCtx.beginPath();
+      lineCtx.moveTo(hx, plotY0);
+      lineCtx.lineTo(hx, plotY0 + plotH);
+      lineCtx.stroke();
+      lineCtx.setLineDash([]);
+
+      // 해당 지점(레벨) 강조 점
+      if (hoverDb !== null) {
+        lineCtx.beginPath();
+        lineCtx.arc(hx, dbToY(hoverDb), Math.max(3, w * 0.0065), 0, Math.PI * 2);
+        lineCtx.fillStyle = '#9c6b17';
+        lineCtx.fill();
+        lineCtx.strokeStyle = '#faf8f3';
+        lineCtx.lineWidth = Math.max(1, w * 0.0018);
+        lineCtx.stroke();
+      }
+
+      // 주파수 + dB 텍스트 라벨(배경 박스 포함, 화면 밖으로 안 나가게 위치 보정)
+      const freqLabel = hoverFreq >= 1000 ? (hoverFreq / 1000).toFixed(hoverFreq >= 10000 ? 1 : 2) + 'kHz' : Math.round(hoverFreq) + 'Hz';
+      const text = hoverDb !== null ? `${freqLabel}   ${hoverDb.toFixed(1)}dB` : freqLabel;
+      lineCtx.font = `600 ${Math.max(12, h * 0.036)}px 'IBM Plex Mono', monospace`;
+      const textW = lineCtx.measureText(text).width;
+      const padX = w * 0.014, boxH = h * 0.065;
+      let boxX = hx + w * 0.016;
+      if (boxX + textW + padX * 2 > w - 4) boxX = hx - textW - padX * 2 - w * 0.016;
+      boxX = Math.max(4, boxX);
+      const boxY = plotY0 + h * 0.015;
+
+      lineCtx.fillStyle = 'rgba(250,248,243,0.88)';
+      lineCtx.fillRect(boxX, boxY, textW + padX * 2, boxH);
+      lineCtx.strokeStyle = 'rgba(30,26,20,0.15)';
+      lineCtx.lineWidth = Math.max(1, w * 0.001);
+      lineCtx.strokeRect(boxX, boxY, textW + padX * 2, boxH);
+      lineCtx.fillStyle = '#221f1a';
+      lineCtx.fillText(text, boxX + padX, boxY + boxH * 0.68);
+    }
+  }
+
+  // 로컬 최댓값 중, 최소 간격(주파수축 기준 약 5%) 이상 떨어진 두드러진 피크만 골라낸다
+  function findPeaks(data, binHz, plotW, plotX0){
+    const candidates = [];
+    for (let b = 2; b < data.length - 2; b++) {
+      const freq = b * binHz;
+      if (freq < LINE_FREQ_MIN || freq > LINE_FREQ_MAX) continue;
+      const v = isFinite(data[b]) ? data[b] : DB_MIN;
+      if (v < DB_MIN + (DB_MAX - DB_MIN) * 0.15) continue; // 너무 작은 잡음성 피크는 제외
+      const isLocalMax = v >= data[b-1] && v >= data[b-2] && v >= data[b+1] && v >= data[b+2];
+      if (isLocalMax) candidates.push({ freq, x: freqToX(freq, plotW, plotX0), db: v });
+    }
+
+    // x축 기준 최소 간격보다 가까운 후보끼리는 더 큰 값만 남긴다
+    candidates.sort((a, b) => b.db - a.db);
+    const kept = [];
+    const minGap = plotW * 0.06;
+    candidates.forEach(c => {
+      if (kept.every(k => Math.abs(k.x - c.x) > minGap)) kept.push(c);
+    });
+    return kept.slice(0, 8); // 너무 많으면 라벨이 뒤엉키므로 최대 8개까지만
+  }
+
+  // ---- 막대(Bar) / 라인(Line) 보기 전환 ----
+  function setViewMode(mode){
+    if (viewMode === mode) return;
+    viewMode = mode;
+    viewToggle.querySelectorAll('button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === mode);
+    });
+    consoleBar.style.display = mode === 'bar' ? 'flex' : 'none';
+    consoleLine.style.display = mode === 'line' ? 'flex' : 'none';
+    consoleSpl.style.display = mode === 'spl' ? 'flex' : 'none';
+    document.body.classList.toggle('line-view', mode === 'line' || mode === 'spl');
+    if (mode === 'line') {
+      // 레이아웃이 실제로 반영된 다음 프레임에 리사이즈해야 정확한 크기를 잡는다
+      requestAnimationFrame(() => {
+        resizeCanvas();
+        // ✅ 아직 마이크를 안 켰어도, 완전히 새까맣게 비어 보이지 않도록
+        // 빈 그리드(축/눈금)만이라도 미리 그려둔다.
+        if (!isRunning) {
+          const placeholderData = new Float32Array(2048).fill(DB_MIN);
+          const placeholderBinHz = 44100 / 8192;
+          drawLineView(placeholderData, placeholderBinHz);
+        }
+      });
+    }
+    if (mode === 'spl') {
+      requestAnimationFrame(() => {
+        resizeSplCanvas();
+        drawSplHistory();
+      });
+    }
+  }
+  viewToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => setViewMode(btn.dataset.view));
+  });
+  window.addEventListener('resize', () => {
+    if (viewMode === 'line') resizeCanvas();
+    if (viewMode === 'spl') resizeSplCanvas();
+  });
+
+  startBtn.addEventListener('click', () => {
+    if (!isRunning) startRTA();
+    else stopRTA();
+  });
+
+  peakToggle.addEventListener('click', () => {
+    peakHoldOn = !peakHoldOn;
+    peakToggle.textContent = 'Peak Hold: ' + (peakHoldOn ? 'ON' : 'OFF');
+    peakToggle.classList.toggle('active', peakHoldOn);
+  });
+
+  updateVScaleLabels();
+  buildVuGaugeTicks();
+  updateVuGauge(DB_MIN, null);
+
+  // ✅ 요청 반영: index.html에서 "rta.html?view=spl" 같은 링크로 들어오면
+  // 바로 해당 뷰(막대/라인/SPL 미터)로 전환해준다.
+  try {
+    const params = new URLSearchParams(location.search);
+    const requestedView = params.get('view');
+    if (requestedView === 'spl' || requestedView === 'line' || requestedView === 'bar') {
+      setViewMode(requestedView);
+    }
+  } catch (e) { /* URL 파라미터 파싱 실패는 무시하고 기본 막대 뷰로 시작 */ }
+
+  document.addEventListener('i18nchange', () => {
+    if (!isRunning) {
+      setStatus(window.i18n.t('status_default_title'), window.i18n.t('status_default_sub'));
+      startBtn.textContent = window.i18n.t('btn_mic_start');
+    } else {
+      setStatus(window.i18n.t('status_running_title'), window.i18n.t('status_running_sub'));
+      startBtn.textContent = window.i18n.t('btn_mic_stop');
+    }
+    splModeLbl.textContent = splDisplayMode === 'peak' ? window.i18n.t('level_peak_label') : window.i18n.t('level_avg_label');
+  });
+})();
+</script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "status_default_title": {"ko": "시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요", "en": "Tap start to view the real-time spectrum from your mic", "ja": "スタートボタンを押してマイクのリアルタイムスペクトラムを確認しましょう", "es": "Pulsa iniciar para ver el espectro en tiempo real desde tu micrófono", "zh": "点击开始按钮查看麦克风的实时频谱"}, "status_default_sub": {"ko": "기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다", "en": "Displays sound from your device's mic in real time as a 31-band (ISO 266) spectrum", "ja": "デバイスのマイクに入る音を31バンド（ISO 266）スペクトラムでリアルタイム表示します", "es": "Muestra el sonido captado por el micrófono del dispositivo en tiempo real como un espectro de 31 bandas (ISO 266)", "zh": "将设备麦克风采集的声音实时显示为 31 段（ISO 266）频谱"}, "mic_denied_msg": {"ko": "마이크 접근이 거부되었습니다. 브라우저 주소창 옆 자물쇠(또는 사이트 설정)에서 마이크 권한을 허용한 뒤 다시 시도해주세요.", "en": "Microphone access was denied. Please allow microphone permission from the lock icon (or site settings) next to your browser's address bar, then try again.", "ja": "マイクへのアクセスが拒否されました。ブラウザのアドレスバー横の鍵アイコン（またはサイト設定）でマイクの許可を有効にしてから、もう一度お試しください。", "es": "Se denegó el acceso al micrófono. Permite el acceso al micrófono desde el icono de candado (o la configuración del sitio) junto a la barra de direcciones del navegador y vuelve a intentarlo.", "zh": "麦克风访问被拒绝。请在浏览器地址栏旁的锁形图标（或网站设置）中允许麦克风权限，然后重试。"}, "btn_mic_start": {"ko": "▸ 마이크 시작", "en": "▸ Start Mic", "ja": "▸ マイクを開始", "es": "▸ Iniciar micrófono", "zh": "▸ 开始麦克风"}, "btn_mic_stop": {"ko": "■ 정지", "en": "■ Stop", "ja": "■ 停止", "es": "■ Detener", "zh": "■ 停止"}, "view_bar_label": {"ko": "▤ 막대(Bar)", "en": "▤ Bar", "ja": "▤ バー", "es": "▤ Barras", "zh": "▤ 条形图"}, "view_line_label": {"ko": "∿ 라인(Line)", "en": "∿ Line", "ja": "∿ ライン", "es": "∿ Línea", "zh": "∿ 线形图"}, "view_spl_label": {"ko": "📟 SPL 미터", "en": "📟 SPL Meter", "ja": "📟 SPLメーター", "es": "📟 Medidor SPL", "zh": "📟 SPL 声级计"}, "label_floor": {"ko": "Floor (조용한 소리 기준)", "en": "Floor (Quiet Sound Reference)", "ja": "Floor（静かな音の基準）", "es": "Floor (referencia de sonido silencioso)", "zh": "Floor（安静声音基准）"}, "label_ceiling": {"ko": "Ceiling (큰 소리 기준)", "en": "Ceiling (Loud Sound Reference)", "ja": "Ceiling（大きな音の基準）", "es": "Ceiling (referencia de sonido fuerte)", "zh": "Ceiling（响亮声音基准）"}, "label_range_prefix": {"ko": "Range (Floor 기준 폭) · ", "en": "Range (Width from Floor) · ", "ja": "Range（Floor基準の幅） · ", "es": "Range (ancho desde Floor) · ", "zh": "Range（相对 Floor 的宽度） · "}, "btn_boost_quiet": {"ko": "🔉 작은 소리 더 잘 보이게", "en": "🔉 Boost Quiet Sounds", "ja": "🔉 小さな音をもっと見やすく", "es": "🔉 Resaltar sonidos suaves", "zh": "🔉 放大安静声音的显示"}, "btn_reset_range": {"ko": "↺ 기본값으로 초기화", "en": "↺ Reset to Default", "ja": "↺ 初期値にリセット", "es": "↺ Restablecer valores predeterminados", "zh": "↺ 恢复默认值"}, "calib_summary": {"ko": "🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)", "en": "🎯 Improve Accuracy (Optional — works automatically without it)", "ja": "🎯 精度をさらに高める（任意 — しなくても自動で動作します）", "es": "🎯 Mejorar la precisión (opcional — funciona automáticamente sin esto)", "zh": "🎯 提高精度（可选 — 不设置也能自动工作）"}, "calib_note": {"ko": "기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.", "en": "The default (140dB offset) works right away. Only use the settings below if you want a more precise calibration.", "ja": "デフォルト（オフセット140dB）だけでもすぐに動作します。より正確に合わせたいときだけ、以下を使ってみてください。", "es": "El valor predeterminado (offset de 140dB) funciona de inmediato. Usa lo siguiente solo si quieres una calibración más precisa.", "zh": "默认值（偏移量 140dB）即可直接使用。只有在想要更精确校准时才需要使用下面的设置。"}, "label_calib_offset": {"ko": "보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨", "en": "Calibration Offset (dBFS→SPL approx.) · Auto-saved", "ja": "補正オフセット（dBFS→SPL近似） · 自動保存", "es": "Offset de calibración (aprox. dBFS→SPL) · Guardado automático", "zh": "校准偏移量（dBFS→SPL 近似值） · 自动保存"}, "label_target_spl": {"ko": "기준 SPL (다른 SPL미터 값)", "en": "Reference SPL (value from another SPL meter)", "ja": "基準SPL（他のSPLメーターの値）", "es": "SPL de referencia (valor de otro medidor SPL)", "zh": "基准 SPL（其他声级计的读数）"}, "btn_calibrate_now": {"ko": "🎯 지금 소리로 자동 보정", "en": "🎯 Auto-Calibrate with Current Sound", "ja": "🎯 今の音で自動補正", "es": "🎯 Autocalibrar con el sonido actual", "zh": "🎯 用当前声音自动校准"}, "level_peak_label": {"ko": "PEAK (피크)", "en": "PEAK (Peak)", "ja": "PEAK（ピーク）", "es": "PEAK (Pico)", "zh": "PEAK（峰值）"}, "level_avg_label": {"ko": "BAND AVG (대역 평균)", "en": "BAND AVG (Band Average)", "ja": "BAND AVG（帯域平均）", "es": "BAND AVG (promedio de banda)", "zh": "BAND AVG（频段平均）"}, "hint_text": {"ko": "라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)", "en": "Use this for live sound checks, checking room characteristics, or finding feedback points. (Mic input is never saved or transmitted — it's used only for the on-screen display.)", "ja": "ライブサウンドチェック、ルームの特性確認、ハウリングポイントの発見などに使ってみましょう。（マイク入力は保存・送信されず、画面表示のみに使用されます）", "es": "Úsalo para revisiones de sonido en vivo, comprobar las características de la sala o encontrar puntos de retroalimentación (feedback). (La entrada del micrófono nunca se guarda ni se transmite — solo se usa para la visualización en pantalla).", "zh": "可用于现场声音检查、房间特性确认、寻找啸叫点等。（麦克风输入不会被保存或传输，仅用于屏幕显示）"}, "btn_spl_reset": {"ko": "↺ Min/Max/Avg 초기화", "en": "↺ Reset Min/Max/Avg", "ja": "↺ Min/Max/Avgをリセット", "es": "↺ Restablecer Min/Max/Avg", "zh": "↺ 重置 Min/Max/Avg"}, "calib_need_mic_title": {"ko": "먼저 마이크를 켜고 소리를 들려주세요", "en": "Turn on the mic and make some sound first", "ja": "まずマイクをオンにして音を出してください", "es": "Primero enciende el micrófono y produce algún sonido", "zh": "请先打开麦克风并发出声音"}, "calib_need_mic_sub": {"ko": "보정하려면 실시간으로 소리가 들어오고 있어야 합니다", "en": "Calibration requires live sound input", "ja": "補正するにはリアルタイムで音が入力されている必要があります", "es": "Para calibrar es necesario que haya entrada de sonido en tiempo real", "zh": "校准需要实时输入声音"}, "calib_done_title": {"ko": "보정 완료", "en": "Calibration Complete", "ja": "補正完了", "es": "Calibración completa", "zh": "校准完成"}, "calib_done_sub": {"ko": "기준 SPL {targetSpl}dB(평균 기준)에 맞춰 오프셋을 {offset}dB로 설정했습니다. 이 값은 자동 저장되어 다음에 열 때도 유지됩니다.", "en": "Set the offset to {offset}dB to match a reference SPL of {targetSpl}dB (based on average). This value is saved automatically and will be kept the next time you open the page.", "ja": "基準SPL {targetSpl}dB（平均基準）に合わせてオフセットを{offset}dBに設定しました。この値は自動保存され、次回開いたときも維持されます。", "es": "Se ajustó el offset a {offset}dB para coincidir con un SPL de referencia de {targetSpl}dB (basado en el promedio). Este valor se guarda automáticamente y se mantendrá la próxima vez que abras la página.", "zh": "已根据基准 SPL {targetSpl}dB（按平均值计算）将偏移量设置为 {offset}dB。该数值会自动保存，下次打开时依然生效。"}, "reset_done_title": {"ko": "기본값으로 초기화했습니다", "en": "Reset to defaults", "ja": "初期値にリセットしました", "es": "Se restablecieron los valores predeterminados", "zh": "已恢复默认值"}, "reset_done_sub": {"ko": "Floor 30dB, Ceiling 120dB, 오프셋 140dB로 되돌렸습니다", "en": "Restored to Floor 30dB, Ceiling 120dB, offset 140dB", "ja": "Floor 30dB、Ceiling 120dB、オフセット140dBに戻しました", "es": "Se restauraron Floor 30dB, Ceiling 120dB, offset 140dB", "zh": "已恢复为 Floor 30dB、Ceiling 120dB、偏移量 140dB"}, "mic_permission_needed_title": {"ko": "마이크 접근이 필요합니다", "en": "Microphone access is needed", "ja": "マイクへのアクセスが必要です", "es": "Se necesita acceso al micrófono", "zh": "需要麦克风访问权限"}, "mic_permission_needed_sub": {"ko": "브라우저에서 마이크 권한을 허용해주세요", "en": "Please allow microphone permission in your browser", "ja": "ブラウザでマイクの許可を有効にしてください", "es": "Permite el acceso al micrófono en tu navegador", "zh": "请在浏览器中允许麦克风权限"}, "status_running_title": {"ko": "실시간 분석 중", "en": "Analyzing in Real Time", "ja": "リアルタイム解析中", "es": "Analizando en tiempo real", "zh": "正在实时分析"}, "status_running_sub": {"ko": "마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다", "en": "Make a sound near the mic and the corresponding band's bar will rise", "ja": "マイクに音を聞かせると、該当する帯域のバーが上がります", "es": "Haz un sonido cerca del micrófono y la barra de la banda correspondiente subirá", "zh": "对着麦克风发出声音，相应频段的柱形就会升高"}, "error_title": {"ko": "오류가 발생했습니다", "en": "An error occurred", "ja": "エラーが発生しました", "es": "Se produjo un error", "zh": "发生错误"}};</script>
+<script src="i18n-core.js"></script>
+</body>
+</html>

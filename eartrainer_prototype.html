@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Ear Trainer 가안</title>
+<style>
+  :root{
+    --bg:#0d0f12; --card:#15181d; --chip:#171a1f;
+    --teal:#5dcaa5; --teal-dark:#123830;
+    --amber:#e0993a; --amber-dark:#3a2205;
+    --coral:#d85a30; --coral-dark:#3a180a;
+    --text:#e8e8ea; --text-dim:#8a8d94; --text-faint:#5a5d64;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; }
+  .wrap{ max-width:420px; margin:0 auto; padding:24px 20px 40px; min-height:100vh; }
+  .header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; }
+  .header h1{ font-size:18px; font-weight:700; margin:0; color:var(--text); }
+  .streak{ font-size:14px; color:var(--amber); background:var(--amber-dark); padding:6px 14px; border-radius:20px; font-weight:600; }
+  .tab-row{ display:flex; gap:6px; background:var(--card); border-radius:12px; padding:4px; margin-bottom:16px; }
+  .tab-btn{ flex:1; padding:12px 4px; border-radius:9px; border:none; background:transparent;
+    color:var(--text-dim); font-size:16px; font-weight:700; cursor:pointer; transition:all .15s ease; }
+  .tab-btn.active{ background:var(--teal-dark); color:var(--teal); }
+  .mode-select{ margin-bottom:18px; }
+  .mode-label{ font-size:14px; color:var(--text-dim); margin-bottom:8px; font-weight:500; }
+  .mode-row{ display:flex; gap:6px; background:var(--card); border-radius:12px; padding:4px; }
+  .mode-btn{ flex:1; padding:11px 4px; border-radius:9px; border:none; background:transparent;
+    color:var(--text-dim); font-size:15px; font-weight:600; cursor:pointer; transition:all .15s ease; }
+  .mode-btn.active{ background:var(--teal-dark); color:var(--teal); }
+  .mode-btn:disabled{ cursor:not-allowed; opacity:0.5; }
+  .listen-hint{ text-align:center; font-size:14px; color:var(--text-faint); margin-top:14px; line-height:1.6; }
+  .stage{ display:flex; flex-direction:column; align-items:center; padding:8px 0 24px; }
+  .orb-wrap{ position:relative; width:190px; height:190px; }
+  .orb-wrap svg{ width:190px; height:190px; transform:rotate(-90deg); }
+  .ring-bg{ fill:none; stroke:#1c2530; stroke-width:7; }
+  .ring-fg{ fill:none; stroke-width:7; stroke-linecap:round; transition:stroke .25s ease; }
+  .orb-center{ position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:4px; }
+  .orb-dot{ width:64px; height:64px; border-radius:50%; border:2px solid var(--teal);
+    background:var(--teal-dark); transition:all .25s ease;
+    display:flex; align-items:center; justify-content:center; }
+  .orb-dot i{ display:block; width:0; height:0;
+    border-top:9px solid transparent; border-bottom:9px solid transparent;
+    border-left:14px solid var(--teal); margin-left:3px; }
+  .phase-label{ font-size:17px; font-weight:700; margin-top:14px; transition:color .25s ease; }
+  .phase-hint{ font-size:15px; color:var(--text-dim); margin-top:4px; }
+  .stop-row{ display:flex; justify-content:center; margin-top:16px; }
+  .stop-btn{ flex:none; padding:11px 22px; border-radius:20px; background:var(--card); color:var(--text-dim);
+    font-size:16px; font-weight:600; border:1px solid #262a31; cursor:pointer; transition:all .15s ease; }
+  .stop-btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .stop-btn.paused{ background:var(--coral-dark); color:var(--coral); border-color:var(--coral); }
+  .picker-label{ text-align:center; font-size:15px; color:var(--text-dim); margin:24px 0 12px; }
+  .picker{ display:flex; gap:8px; overflow-x:auto; padding:4px 2px 10px; scroll-snap-type:x proximity; }
+  .picker::-webkit-scrollbar{ height:4px; }
+  .picker::-webkit-scrollbar-thumb{ background:#2a2d33; border-radius:4px; }
+  .chip{ flex:0 0 auto; min-width:60px; padding:14px 8px; border-radius:12px; background:var(--chip);
+    border:1.5px solid transparent; color:var(--text-dim); font-size:15px; font-weight:500; text-align:center;
+    scroll-snap-align:center; cursor:pointer; transition:all .15s ease; user-select:none; }
+  .chip:active{ transform:scale(0.95); }
+  .chip.correct{ background:var(--teal-dark); border-color:var(--teal); color:var(--teal); font-weight:700; }
+  .chip.wrong{ background:var(--coral-dark); border-color:var(--coral); color:var(--coral); font-weight:700; }
+  .chip.active{ background:var(--teal-dark); border-color:var(--teal); color:var(--teal); font-weight:700; }
+  .result{ text-align:center; font-size:14.5px; font-weight:500; color:var(--text-dim); min-height:20px; margin-top:8px; }
+  .result.good{ color:var(--teal); }
+  .result.bad{ color:var(--coral); }
+  .actions{ margin-top:22px; display:flex; gap:10px; }
+  button{ flex:1; padding:15px; border-radius:12px; border:none; font-size:16px; font-weight:700;
+    cursor:pointer; transition:transform .12s ease; }
+  button:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--teal); color:var(--teal-dark); }
+  .btn-primary:disabled{ background:#2a2d33; color:var(--text-faint); cursor:not-allowed; }
+  .btn-ghost{ background:var(--card); color:var(--text-dim); }
+  .note{ font-size:10px; color:var(--text-faint); text-align:center; margin-top:18px; line-height:1.5; }
+
+  /* iPad / Mac 넓은 화면: 스크롤 스트립 대신 한 줄(무료)/그리드(Pro)로 전부 펼쳐 보여줌 */
+  @media (min-width:700px){
+    .wrap{ max-width:720px; }
+    .picker{ overflow-x:visible; flex-wrap:nowrap; scroll-snap-type:none; justify-content:stretch; }
+    .picker .chip{ flex:1 1 0; min-width:0; scroll-snap-align:none; }
+    body.tier-pro .picker{ flex-wrap:wrap; justify-content:center; }
+    body.tier-pro .picker .chip{ flex:0 0 auto; min-width:78px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>주파수 귀 훈련 · 가안</h1>
+    <div class="streak" id="streak">🔥 0</div>
+  </div>
+
+  <div class="tab-row" id="tabRow">
+    <button class="tab-btn active" data-tab="quiz">🎯 퀴즈</button>
+    <button class="tab-btn" data-tab="listen">👂 청음</button>
+  </div>
+
+  <div class="mode-select" id="tierSelect">
+    <div class="mode-label">밴드 해상도 (미리보기용 — 실제로는 Pro 잠금)</div>
+    <div class="mode-row">
+      <button class="mode-btn active" data-tier="free">무료 · 10밴드</button>
+      <button class="mode-btn" data-tier="pro">Pro · 31밴드</button>
+    </div>
+  </div>
+
+  <div class="mode-select" id="modeSelect">
+    <div class="mode-label">연습할 변화 종류</div>
+    <div class="mode-row">
+      <button class="mode-btn active" data-mode="mixed">섞어서</button>
+      <button class="mode-btn" data-mode="boost">부스트만</button>
+      <button class="mode-btn" data-mode="cut">컷만</button>
+    </div>
+  </div>
+
+  <div class="stage">
+    <div class="orb-wrap">
+      <svg viewBox="0 0 190 190">
+        <circle class="ring-bg" cx="95" cy="95" r="82"></circle>
+        <circle class="ring-fg" id="ringFg" cx="95" cy="95" r="82"
+          stroke="#5dcaa5" stroke-dasharray="515.2" stroke-dashoffset="0"></circle>
+      </svg>
+      <div class="orb-center">
+        <div class="orb-dot" id="orbDot"><i id="orbIcon"></i></div>
+      </div>
+    </div>
+    <div class="phase-label" id="phaseLabel" style="color:var(--teal);">준비됨</div>
+    <div class="phase-hint" id="phaseHint">시작하기를 눌러주세요</div>
+    <div class="stop-row">
+      <button class="stop-btn" id="stopBtn" disabled>⏸ 소리 정지</button>
+    </div>
+  </div>
+
+  <div class="picker-label" id="pickerLabel">핑크노이즈 속에서 바뀐 대역을 짚어보세요</div>
+  <div class="picker" id="picker"></div>
+  <div class="result" id="result">&nbsp;</div>
+
+  <div class="actions" id="actions">
+    <button class="btn-primary" id="startBtn">▸ 시작하기</button>
+    <button class="btn-ghost" id="nextBtn" style="display:none;">다음 문제 ▸</button>
+  </div>
+  <p class="listen-hint" id="listenHint" style="display:none;">판정 없이 자유롭게 들어보는 모드예요. 밴드를 눌러보세요.</p>
+
+  <p class="note">가안 프로토타입 — dB 폭은 아직 ±12dB 고정만 구현됨(6/3dB 선택은 미구현). 밴드 해상도는 미리보기용으로 자유롭게 전환 가능(실제 앱에서는 31밴드가 Pro 잠금).<br>퀴즈 탭: 답을 고를 때까지 자동 반복. 청음 탭: 원하는 밴드를 눌러 자유롭게 들어보세요.</p>
+</div>
+
+<script>
+const FREE_BANDS = [
+  {hz:31.5, label:"31.5"}, {hz:63, label:"63"}, {hz:125, label:"125"},
+  {hz:250, label:"250"}, {hz:500, label:"500"}, {hz:1000, label:"1k"},
+  {hz:2000, label:"2k"}, {hz:4000, label:"4k"}, {hz:8000, label:"8k"}, {hz:16000, label:"16k"}
+];
+// Pro 티어 — 31밴드 1/3옥타브 (ISO 266 표준 대역)
+const PRO_BANDS = [
+  {hz:20, label:"20"}, {hz:25, label:"25"}, {hz:31.5, label:"31.5"}, {hz:40, label:"40"},
+  {hz:50, label:"50"}, {hz:63, label:"63"}, {hz:80, label:"80"}, {hz:100, label:"100"},
+  {hz:125, label:"125"}, {hz:160, label:"160"}, {hz:200, label:"200"}, {hz:250, label:"250"},
+  {hz:315, label:"315"}, {hz:400, label:"400"}, {hz:500, label:"500"}, {hz:630, label:"630"},
+  {hz:800, label:"800"}, {hz:1000, label:"1k"}, {hz:1250, label:"1.25k"}, {hz:1600, label:"1.6k"},
+  {hz:2000, label:"2k"}, {hz:2500, label:"2.5k"}, {hz:3150, label:"3.15k"}, {hz:4000, label:"4k"},
+  {hz:5000, label:"5k"}, {hz:6300, label:"6.3k"}, {hz:8000, label:"8k"}, {hz:10000, label:"10k"},
+  {hz:12500, label:"12.5k"}, {hz:16000, label:"16k"}, {hz:20000, label:"20k"}
+];
+let currentTier = 'free';
+let BANDS = FREE_BANDS;
+const PHASE_MS = 4000;
+const RING_CIRC = 2 * Math.PI * 82;
+
+let audioCtx, dryGain, wetGain, filterNode, noiseSource;
+let answered = false;
+let currentBandIndex = 0;
+let currentGainDb = 12;
+let streak = 0;
+let phaseStart = 0;
+let isDryPhase = true;
+let rafId = null;
+let practiceMode = 'mixed';
+let topMode = 'quiz';
+let previewActive = false;
+let audioPaused = false;
+
+function formatHz(entry){
+  // label already includes the "k" suffix where relevant (e.g. "1.25k"), so just append the unit.
+  return entry.label + 'Hz';
+}
+function gainLabel(db){
+  return db > 0 ? '부스트' : '컷';
+}
+
+document.querySelectorAll('#modeSelect .mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    practiceMode = btn.dataset.mode;
+    document.querySelectorAll('#modeSelect .mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+document.querySelectorAll('#tierSelect .mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTier(btn.dataset.tier));
+});
+
+function switchTier(tier){
+  if (tier === currentTier) return;
+  currentTier = tier;
+  BANDS = tier === 'pro' ? PRO_BANDS : FREE_BANDS;
+  document.body.classList.toggle('tier-pro', tier === 'pro');
+  document.querySelectorAll('#tierSelect .mode-btn').forEach(b => b.classList.toggle('active', b.dataset.tier === tier));
+
+  buildPicker();
+  previewActive = false;
+  resetStopBtn();
+  resultEl.textContent = ' ';
+  resultEl.className = 'result';
+
+  if (topMode === 'quiz'){
+    if (audioCtx){
+      newQuestion();
+    } else {
+      phaseLabelEl.textContent = '준비됨';
+      phaseLabelEl.style.color = 'var(--teal)';
+      phaseHintEl.textContent = '시작하기를 눌러주세요';
+    }
+  } else {
+    phaseLabelEl.textContent = '준비됨';
+    phaseLabelEl.style.color = 'var(--teal)';
+    phaseHintEl.textContent = '아래에서 밴드를 선택하세요';
+    if (audioCtx) setPhaseGains(true);
+  }
+}
+
+const pickerEl = document.getElementById('picker');
+const streakEl = document.getElementById('streak');
+const startBtn = document.getElementById('startBtn');
+const nextBtn = document.getElementById('nextBtn');
+const resultEl = document.getElementById('result');
+const phaseLabelEl = document.getElementById('phaseLabel');
+const phaseHintEl = document.getElementById('phaseHint');
+const ringFgEl = document.getElementById('ringFg');
+const orbDotEl = document.getElementById('orbDot');
+const actionsEl = document.getElementById('actions');
+const pickerLabelEl = document.getElementById('pickerLabel');
+const listenHintEl = document.getElementById('listenHint');
+const stopBtn = document.getElementById('stopBtn');
+
+function resetStopBtn(){
+  audioPaused = false;
+  stopBtn.disabled = !audioCtx;
+  stopBtn.textContent = '⏸ 소리 정지';
+  stopBtn.classList.remove('paused');
+}
+
+stopBtn.addEventListener('click', () => {
+  if (!audioCtx) return;
+  audioPaused = !audioPaused;
+  if (audioPaused){
+    const now = audioCtx.currentTime;
+    dryGain.gain.cancelScheduledValues(now);
+    wetGain.gain.cancelScheduledValues(now);
+    dryGain.gain.linearRampToValueAtTime(0, now + 0.08);
+    wetGain.gain.linearRampToValueAtTime(0, now + 0.08);
+    stopBtn.textContent = '▶ 다시 듣기';
+    stopBtn.classList.add('paused');
+  } else {
+    phaseStart = performance.now();
+    setPhaseGains(isDryPhase);
+    stopBtn.textContent = '⏸ 소리 정지';
+    stopBtn.classList.remove('paused');
+  }
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchTopMode(btn.dataset.tab));
+});
+
+function switchTopMode(mode){
+  topMode = mode;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === mode));
+
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('correct','wrong','active'));
+  resultEl.textContent = ' ';
+  resultEl.className = 'result';
+  document.querySelectorAll('#modeSelect .mode-btn').forEach(b => { b.disabled = false; });
+  previewActive = false;
+  resetStopBtn();
+
+  if (mode === 'listen'){
+    streakEl.style.display = 'none';
+    actionsEl.style.display = 'none';
+    listenHintEl.style.display = 'block';
+    pickerLabelEl.textContent = '밴드를 탭하면 바로 들어볼 수 있어요';
+    phaseLabelEl.textContent = '준비됨';
+    phaseLabelEl.style.color = 'var(--teal)';
+    phaseHintEl.textContent = '아래에서 밴드를 선택하세요';
+    if (audioCtx) setPhaseGains(true);
+  } else {
+    streakEl.style.display = 'block';
+    actionsEl.style.display = 'flex';
+    listenHintEl.style.display = 'none';
+    pickerLabelEl.textContent = '핑크노이즈 속에서 바뀐 대역을 짚어보세요';
+    if (!audioCtx){
+      phaseLabelEl.textContent = '준비됨';
+      phaseLabelEl.style.color = 'var(--teal)';
+      phaseHintEl.textContent = '시작하기를 눌러주세요';
+      startBtn.style.display = 'block';
+      nextBtn.style.display = 'none';
+      answered = true;
+    } else {
+      newQuestion();
+    }
+  }
+}
+
+function buildPicker(){
+  pickerEl.innerHTML = '';
+  BANDS.forEach((b, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'chip';
+    chip.textContent = b.label;
+    chip.dataset.index = i;
+    chip.addEventListener('click', () => {
+      if (wasDragging) return;
+      if (topMode === 'listen') previewBand(i);
+      else onPick(i);
+    });
+    pickerEl.appendChild(chip);
+  });
+  enableMouseDragScroll(pickerEl);
+}
+
+let wasDragging = false;
+
+function enableMouseDragScroll(el){
+  let isDown = false;
+  let startX = 0;
+  let startScroll = 0;
+  let moved = 0;
+
+  el.addEventListener('mousedown', (e) => {
+    isDown = true;
+    moved = 0;
+    wasDragging = false;
+    startX = e.pageX;
+    startScroll = el.scrollLeft;
+    el.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    const dx = e.pageX - startX;
+    moved = Math.max(moved, Math.abs(dx));
+    if (moved > 4) wasDragging = true;
+    el.scrollLeft = startScroll - dx;
+  });
+  window.addEventListener('mouseup', () => {
+    isDown = false;
+    el.style.cursor = 'grab';
+    setTimeout(() => { wasDragging = false; }, 0);
+  });
+  el.style.cursor = 'grab';
+}
+
+function createPinkNoiseBuffer(ctx, seconds){
+  const bufferSize = Math.floor(ctx.sampleRate * seconds);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const output = buffer.getChannelData(0);
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  for (let i=0;i<bufferSize;i++){
+    const white = Math.random()*2-1;
+    b0 = 0.99886*b0 + white*0.0555179;
+    b1 = 0.99332*b1 + white*0.0750759;
+    b2 = 0.96900*b2 + white*0.1538520;
+    b3 = 0.86650*b3 + white*0.3104856;
+    b4 = 0.55000*b4 + white*0.5329522;
+    b5 = -0.7616*b5 - white*0.0168980;
+    let out = b0+b1+b2+b3+b4+b5+b6+white*0.5362;
+    out *= 0.11;
+    b6 = white*0.115926;
+    output[i] = out;
+  }
+  return buffer;
+}
+
+function setupAudioGraph(){
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const buffer = createPinkNoiseBuffer(audioCtx, 3);
+  noiseSource = audioCtx.createBufferSource();
+  noiseSource.buffer = buffer;
+  noiseSource.loop = true;
+
+  dryGain = audioCtx.createGain();
+  wetGain = audioCtx.createGain();
+  dryGain.gain.value = 1;
+  wetGain.gain.value = 0;
+
+  filterNode = audioCtx.createBiquadFilter();
+  filterNode.type = 'peaking';
+  filterNode.Q.value = 1.4;
+
+  noiseSource.connect(dryGain).connect(audioCtx.destination);
+  noiseSource.connect(filterNode).connect(wetGain).connect(audioCtx.destination);
+  noiseSource.start();
+}
+
+function newQuestion(){
+  answered = false;
+  currentBandIndex = Math.floor(Math.random() * BANDS.length);
+  if (practiceMode === 'boost'){
+    currentGainDb = 12;
+  } else if (practiceMode === 'cut'){
+    currentGainDb = -12;
+  } else {
+    currentGainDb = Math.random() < 0.5 ? 12 : -12;
+  }
+  filterNode.frequency.value = BANDS[currentBandIndex].hz;
+  filterNode.gain.value = currentGainDb;
+
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.remove('correct','wrong');
+  });
+  resultEl.textContent = ' ';
+  resultEl.className = 'result';
+  nextBtn.style.display = 'none';
+  startBtn.style.display = 'none';
+
+  isDryPhase = true;
+  phaseStart = performance.now();
+  setPhaseGains(true);
+  resetStopBtn();
+  if (!rafId) rafId = requestAnimationFrame(tick);
+}
+
+function setPhaseGains(dry){
+  const now = audioCtx.currentTime;
+  dryGain.gain.cancelScheduledValues(now);
+  wetGain.gain.cancelScheduledValues(now);
+  dryGain.gain.linearRampToValueAtTime(dry ? 1 : 0, now + 0.08);
+  wetGain.gain.linearRampToValueAtTime(dry ? 0 : 1, now + 0.08);
+
+  if (dry){
+    phaseLabelEl.textContent = '● 원음';
+    phaseLabelEl.style.color = 'var(--teal)';
+    phaseHintEl.textContent = '변화 전 재생 중';
+    orbDotEl.style.borderColor = 'var(--teal)';
+    orbDotEl.style.background = 'var(--teal-dark)';
+    ringFgEl.setAttribute('stroke', '#5dcaa5');
+  } else {
+    phaseLabelEl.textContent = '● 적용 후';
+    phaseLabelEl.style.color = 'var(--amber)';
+    phaseHintEl.textContent = '변화 후 재생 중';
+    orbDotEl.style.borderColor = 'var(--amber)';
+    orbDotEl.style.background = 'var(--amber-dark)';
+    ringFgEl.setAttribute('stroke', '#e0993a');
+  }
+}
+
+function tick(now){
+  const shouldAnimate = !audioPaused && ((topMode === 'quiz' && !answered) || (topMode === 'listen' && previewActive));
+  if (shouldAnimate){
+    const elapsed = now - phaseStart;
+    const frac = Math.min(elapsed / PHASE_MS, 1);
+    ringFgEl.setAttribute('stroke-dasharray', RING_CIRC);
+    ringFgEl.setAttribute('stroke-dashoffset', RING_CIRC * frac);
+    if (frac >= 1){
+      isDryPhase = !isDryPhase;
+      phaseStart = now;
+      setPhaseGains(isDryPhase);
+    }
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+function previewBand(index){
+  if (!audioCtx) setupAudioGraph();
+
+  let gainDb;
+  if (practiceMode === 'boost'){
+    gainDb = 12;
+  } else if (practiceMode === 'cut'){
+    gainDb = -12;
+  } else {
+    gainDb = Math.random() < 0.5 ? 12 : -12;
+  }
+
+  currentBandIndex = index;
+  currentGainDb = gainDb;
+  filterNode.frequency.value = BANDS[index].hz;
+  filterNode.gain.value = gainDb;
+
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('correct','wrong','active'));
+  document.querySelectorAll('.chip')[index].classList.add('active');
+
+  const freqLabel = formatHz(BANDS[index]);
+  const gLabel = gainLabel(gainDb);
+  resultEl.textContent = '🔊 지금 재생 중 — ' + freqLabel + ' ' + gLabel;
+  resultEl.className = 'result';
+
+  isDryPhase = true;
+  phaseStart = performance.now();
+  setPhaseGains(true);
+  resetStopBtn();
+  previewActive = true;
+  if (!rafId) rafId = requestAnimationFrame(tick);
+}
+
+function onPick(index){
+  if (answered) return;
+  answered = true;
+
+  const chips = document.querySelectorAll('.chip');
+  const correctIndex = currentBandIndex;
+  chips[correctIndex].classList.add('correct');
+
+  const correctFreqLabel = formatHz(BANDS[correctIndex]);
+  const gLabel = gainLabel(currentGainDb);
+
+  if (index === correctIndex){
+    streak += 1;
+    resultEl.textContent = '정답입니다! ' + correctFreqLabel + ' ' + gLabel;
+    resultEl.className = 'result good';
+  } else {
+    streak = 0;
+    chips[index].classList.add('wrong');
+    resultEl.textContent = '정답: ' + correctFreqLabel + ' ' + gLabel;
+    resultEl.className = 'result bad';
+  }
+  streakEl.textContent = '🔥 ' + streak;
+
+  setPhaseGains(true);
+  phaseHintEl.textContent = '정답을 확인하세요';
+  nextBtn.style.display = 'block';
+}
+
+startBtn.addEventListener('click', () => {
+  if (!audioCtx) setupAudioGraph();
+  newQuestion();
+});
+nextBtn.addEventListener('click', newQuestion);
+
+buildPicker();
+</script>
+</body>
+</html>

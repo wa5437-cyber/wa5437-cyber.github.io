@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Delay Calculator — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
+<style>
+  :root{
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:780px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:14px; color:var(--text-secondary); font-weight:500; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+
+  /* ✅ 모바일에서 제목/부제 글자가 커서 줄바꿈되며 상단바가 어긋나 보이던 것을 수정 */
+  @media (max-width:480px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar{ align-items:flex-start; }
+    .topbar .title{ font-size:14.5px; }
+    .topbar .title small{ font-size:10px; }
+    .topbar .home-link{ font-size:11.5px; padding:7px 10px; margin-top:1px; }
+  }
+
+  .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:20px; }
+  .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:16.5px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-primary); font-weight:600; margin-bottom:14px; }
+  .panel-subtitle{ font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); font-weight:600; margin:22px 0 12px; padding-top:18px; border-top:1px solid var(--line); }
+
+  /* ---- 전역 설정(온도/단위/프리시던스) ---- */
+  .settings-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  @media (max-width:560px){ .settings-grid{ grid-template-columns:1fr; } }
+  .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:var(--text-primary); opacity:0.9; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
+  .field .input-row{ display:flex; align-items:center; gap:6px; }
+  .field input[type=number]{
+    width:100%; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:18px; padding:9px 10px;
+  }
+  .field .unit{ font-family:'IBM Plex Mono',monospace; font-size:15.5px; color:var(--text-secondary); flex-shrink:0; }
+  .unit-toggle{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .unit-toggle button{ flex:1; border:none; background:#f1ede3; color:var(--text-secondary); font-size:15.5px; font-weight:600; padding:9px 4px; }
+  .unit-toggle button.active{ background:#e3ddd0; color:var(--text-primary); }
+
+  .speed-readout{ margin-top:12px; font-size:15.5px; color:var(--text-secondary); }
+  .speed-readout b{ color:var(--teal); font-family:'IBM Plex Mono',monospace; }
+
+  /* ---- 메인 스피커 거리 ---- */
+  .main-dist-row{ display:flex; align-items:flex-end; gap:12px; margin-top:14px; flex-wrap:wrap; }
+  .main-dist-row .field{ flex:1; min-width:180px; }
+  .main-dist-row .field{ flex:1; }
+
+  /* ---- 존(Zone) 목록 ---- */
+  .zone{
+    display:grid; grid-template-columns:1.1fr 1fr 1fr auto; gap:10px; align-items:end;
+    padding:14px 0; border-bottom:1px solid var(--line);
+  }
+  .zone:last-of-type{ border-bottom:none; }
+  @media (max-width:640px){ .zone{ grid-template-columns:1fr 1fr; row-gap:10px; } .zone .result-cell{ grid-column:1/2; } .zone .remove-cell{ grid-column:2/3; justify-self:end; } }
+  .zone input[type=text]{
+    width:100%; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    font-size:16.5px; padding:9px 10px; font-family:'Inter',sans-serif;
+  }
+  .result-cell{ text-align:center; }
+  .result-cell .val{ font-family:'IBM Plex Mono',monospace; font-size:24.5px; font-weight:700; color:var(--teal); }
+  .result-cell .val.negative{ color:var(--red); }
+  .result-cell .lbl{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--text-secondary); margin-top:2px; }
+  .remove-btn{
+    border:1px solid var(--line); background:rgba(178,58,42,0.08); color:var(--red); border-radius:8px;
+    width:34px; height:34px; font-size:19px; flex-shrink:0;
+  }
+  .add-zone-btn{
+    margin-top:14px; width:100%; border:1px dashed var(--line-strong); background:transparent; color:var(--text-secondary);
+    border-radius:10px; padding:12px; font-size:16.5px; font-weight:600;
+  }
+  .add-zone-btn:hover{ color:var(--text-primary); background:rgba(30,26,20,0.03); }
+
+  .warn-note{
+    margin-top:16px; font-size:14.5px; color:var(--text-secondary); line-height:1.6;
+    background:rgba(156,107,23,0.06); border:1px solid rgba(156,107,23,0.2); border-radius:10px; padding:12px 14px;
+  }
+  .warn-note b{ color:var(--amber); }
+
+  /* ---- Time ↔ Distance ↔ Phase 패널 ---- */
+  .phase-desc{ font-size:15px; color:var(--text-primary); opacity:0.85; line-height:1.7; margin:0 0 16px; }
+  .phase-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+  @media (max-width:640px){ .phase-grid{ grid-template-columns:1fr 1fr; } }
+  .phase-canvas-wrap{
+    margin-top:18px; border:1px solid var(--line); border-radius:12px; background:#ffffff;
+    height:180px; overflow:hidden;
+  }
+  #phaseCanvas{ width:100%; height:100%; display:block; }
+  .phase-legend{ display:flex; gap:20px; margin-top:10px; font-size:12.5px; color:var(--text-secondary); flex-wrap:wrap; }
+  .phase-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+  .phase-legend .dot.dashed{ background:transparent; border:2px dashed var(--amber); }
+
+  /* ---- Tempo ↔ Delay 표 ---- */
+  .tempo-table{ margin-top:18px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .tempo-row{
+    display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0;
+    border-bottom:1px solid var(--line);
+  }
+  .tempo-row:last-child{ border-bottom:none; }
+  .tempo-row.tempo-header{ background:var(--bg-panel-2); }
+  .tempo-cell{ padding:12px 10px; text-align:center; font-family:'IBM Plex Mono',monospace; }
+  .tempo-header .tempo-cell{ font-size:12.5px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
+  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; text-align:left; padding-left:16px; }
+  .tempo-note-cell{ display:flex; align-items:center; gap:8px; }
+  .note-icon{ color:var(--teal); flex-shrink:0; }
+  .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ color:var(--teal); font-size:15px; font-weight:600; }
+  @media (max-width:480px){
+    .tempo-cell{ padding:10px 4px; font-size:12.5px; }
+    .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ font-size:13px; }
+  }
+
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+
+  /* ---- 0~360도 위상 게이지 ---- */
+  .phase-gauge-wrap{ margin-top:18px; }
+  .phase-gauge-track{
+    position:relative; height:8px; border-radius:100px;
+    background:linear-gradient(90deg, var(--blue), var(--teal) 50%, var(--amber));
+    opacity:0.85;
+  }
+  .phase-gauge-marker{
+    position:absolute; top:50%; left:0%; width:16px; height:16px; margin-left:-8px; margin-top:-8px;
+    border-radius:50%; background:#fff; border:2px solid var(--text-primary);
+    box-shadow:0 0 0 2px rgba(30,26,20,0.4), 0 2px 6px rgba(30,26,20,0.13);
+    transition:left 0.1s linear;
+  }
+  .phase-gauge-ticks{
+    display:flex; justify-content:space-between; margin-top:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">DELAY CALCULATOR<small>Speaker Alignment / Precedence Offset</small></div>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Global Settings</div>
+    <div class="settings-grid">
+      <div class="field">
+        <label>Temperature</label>
+        <div class="input-row">
+          <input type="number" id="tempInput" value="15" step="1">
+          <span class="unit">°C</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Unit</label>
+        <div class="unit-toggle" id="unitToggle">
+          <button data-unit="m" class="active" data-i18n="unit_meters">Meters</button>
+          <button data-unit="ft" data-i18n="unit_feet">Feet</button>
+        </div>
+      </div>
+    </div>
+    <div class="speed-readout"><span data-i18n="speed_readout_label">현재 온도 기준 음속:</span> <b id="speedReadout">343.4 m/s</b></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Time ↔ Distance ↔ Phase</div>
+    <p class="phase-desc" data-i18n="phase_desc">딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.</p>
+
+    <div class="phase-grid">
+      <div class="field">
+        <label>Time</label>
+        <div class="input-row"><input type="number" id="phTimeInput" value="1.0" step="0.001"><span class="unit">ms</span></div>
+      </div>
+      <div class="field">
+        <label>Distance</label>
+        <div class="input-row"><input type="number" id="phDistInput" value="0.34" step="0.001"><span class="unit" id="phDistUnit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Frequency</label>
+        <div class="input-row"><input type="number" id="phFreqInput" value="1000" step="1"><span class="unit">Hz</span></div>
+      </div>
+      <div class="field">
+        <label>Phase</label>
+        <div class="input-row"><input type="number" id="phPhaseInput" value="0" step="0.1"><span class="unit">°</span></div>
+      </div>
+    </div>
+
+    <div class="phase-gauge-wrap">
+      <div class="phase-gauge-track" id="phaseGaugeTrack">
+        <div class="phase-gauge-marker" id="phaseGaugeMarker"></div>
+      </div>
+      <div class="phase-gauge-ticks">
+        <span>0°</span><span>90°</span><span>180°</span><span>270°</span><span>360°</span>
+      </div>
+    </div>
+
+    <div class="phase-canvas-wrap">
+      <canvas id="phaseCanvas"></canvas>
+    </div>
+    <div class="phase-legend">
+      <span><i class="dot" style="background:var(--blue);"></i><span data-i18n="phase_legend_original">원음</span>(0°)</span>
+      <span><i class="dot dashed"></i><span data-i18n="phase_legend_delayed">딜레이 신호</span> (<span id="phaseWrapLabel">0°</span>)</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="panel_haas">Haas Effect (선행효과) 참고표</div>
+    <p class="phase-desc" data-i18n="haas_panel_desc">두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.</p>
+    <div class="tempo-table" id="haasTable"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="panel_tempo_delay">Tempo ↔ Delay (박자 동기화)</div>
+    <p class="phase-desc" data-i18n="tempo_panel_desc">곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.</p>
+
+    <div class="field" style="max-width:200px;">
+      <label>BPM</label>
+      <div class="input-row">
+        <input type="number" id="bpmInput" value="120" step="1" min="1">
+        <span class="unit">bpm</span>
+      </div>
+    </div>
+
+    <div class="tempo-table" id="tempoTable"></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="panel_reverb_time">Reverb Time (리버브 타임)</div>
+    <p class="phase-desc" data-i18n="reverb_panel_desc" data-i18n-html="true">
+      위의 BPM을 그대로 사용합니다. <b style="color:var(--text-secondary)">프리딜레이 + 디케이 타임의 합이 박자 단위(마디/half/quarter/eighth)로 딱 떨어지게</b> 잡으면,
+      리버브 꼬리가 다음 박이 오기 직전에 자연스럽게 사라져서 믹스가 지저분해지지 않습니다
+      (믹싱 엔지니어 Bobby Owsinski가 저서 《The Mixing Engineer's Handbook》에서 소개한 방법입니다).
+    </p>
+    <div class="tempo-table" id="reverbTable"></div>
+    <div class="warn-note" data-i18n="warn_reverb_note" data-i18n-html="true">
+      <b>참고:</b> 프리딜레이는 짧게(1/64~1/128 음표)만 잡고, 나머지 길이를 디케이 타임으로 채우는 방식입니다.
+      이건 실전에서 바로 쓸 수 있는 "시작점"이고, 곡의 느낌에 따라 취향껏 조절해서 쓰시면 됩니다.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title" data-i18n="panel_speaker_delay">Speaker Delay (스피커 딜레이 계산)</div>
+    <div class="main-dist-row">
+      <div class="field">
+        <label data-i18n="label_main_dist">메인 스피커 → 기준 지점 거리</label>
+        <div class="input-row">
+          <input type="number" id="mainDistInput" value="30" step="0.1">
+          <span class="unit" id="mainDistUnit">m</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Precedence Offset</label>
+        <div class="input-row">
+          <input type="number" id="precedenceInput" value="0" step="1" min="0">
+          <span class="unit">ms</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-subtitle">Delay Zones</div>
+    <div id="zoneList"></div>
+    <button class="add-zone-btn" id="addZoneBtn" data-i18n="add_zone_btn">+ 존 추가</button>
+
+    <div class="warn-note" data-i18n="warn_calc_method" data-i18n-html="true">
+      <b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋.
+      값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장).
+      프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.
+    </div>
+  </div>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
+    <a href="electrical-calculator.html">🔌 Electrical Calc</a>
+    <a href="tempo-pitch-calculator.html">🥁 Tempo & Pitch</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const tempInput = document.getElementById('tempInput');
+  const precedenceInput = document.getElementById('precedenceInput');
+  const unitToggle = document.getElementById('unitToggle');
+  const speedReadout = document.getElementById('speedReadout');
+  const mainDistInput = document.getElementById('mainDistInput');
+  const mainDistUnit = document.getElementById('mainDistUnit');
+  const zoneList = document.getElementById('zoneList');
+  const addZoneBtn = document.getElementById('addZoneBtn');
+
+  let unit = 'm'; // 'm' | 'ft'
+  let zoneSeq = 0;
+  const zones = []; // { id, nameEl, distInput, resultVal, resultLbl }
+
+  const FT_PER_M = 3.28084;
+
+  function speedOfSoundMps(tempC){
+    return 331.3 + 0.606 * tempC;
+  }
+
+  function toMeters(value){
+    return unit === 'ft' ? value / FT_PER_M : value;
+  }
+
+  function updateSpeedReadout(){
+    const tempC = parseFloat(tempInput.value) || 0;
+    const speed = speedOfSoundMps(tempC);
+    speedReadout.innerHTML = unit === 'm'
+      ? `${speed.toFixed(1)} m/s`
+      : `${(speed * FT_PER_M).toFixed(1)} ft/s`;
+  }
+
+  function recalcAll(){
+    updateSpeedReadout();
+    const tempC = parseFloat(tempInput.value) || 0;
+    const speed = speedOfSoundMps(tempC); // m/s
+    const precedence = parseFloat(precedenceInput.value) || 0;
+    const mainDistM = toMeters(parseFloat(mainDistInput.value) || 0);
+
+    zones.forEach(z => {
+      const zoneDistM = toMeters(parseFloat(z.distInput.value) || 0);
+      const diffM = zoneDistM - mainDistM;
+      const rawMs = (diffM / speed) * 1000;
+      const totalMs = rawMs + precedence;
+      const display = totalMs < 0 ? 0 : totalMs;
+      z.resultVal.textContent = display.toFixed(1) + 'ms';
+      z.resultVal.classList.toggle('negative', totalMs < 0);
+      z.resultLbl.textContent = totalMs < 0 ? window.i18n.t('zone_result_none_lbl') : window.i18n.t('zone_result_default_lbl');
+    });
+  }
+
+  function createZoneRow(name, distanceDefault){
+    zoneSeq++;
+    const id = zoneSeq;
+    const row = document.createElement('div');
+    row.className = 'zone';
+    row.innerHTML = `
+      <div class="field">
+        <label>${window.i18n.t('zone_name_label')}</label>
+        <input type="text" value="${name}">
+      </div>
+      <div class="field">
+        <label>${window.i18n.t('zone_dist_label')}</label>
+        <div class="input-row">
+          <input type="number" value="${distanceDefault}" step="0.1">
+          <span class="unit zone-unit">${unit}</span>
+        </div>
+      </div>
+      <div class="result-cell">
+        <div class="val">0.0ms</div>
+        <div class="lbl">${window.i18n.t('zone_result_default_lbl')}</div>
+      </div>
+      <button class="remove-btn" title="${window.i18n.t('zone_remove_title')}">✕</button>
+    `;
+    const nameEl = row.querySelector('input[type=text]');
+    const distInput = row.querySelector('input[type=number]');
+    const resultVal = row.querySelector('.result-cell .val');
+    const resultLbl = row.querySelector('.result-cell .lbl');
+    const removeBtn = row.querySelector('.remove-btn');
+    const zoneUnitEl = row.querySelector('.zone-unit');
+
+    distInput.addEventListener('input', recalcAll);
+    removeBtn.addEventListener('click', () => {
+      row.remove();
+      const idx = zones.findIndex(z => z.id === id);
+      if (idx !== -1) zones.splice(idx, 1);
+      recalcAll();
+    });
+
+    zoneList.appendChild(row);
+    zones.push({ id, nameEl, distInput, resultVal, resultLbl, zoneUnitEl });
+  }
+
+  addZoneBtn.addEventListener('click', () => {
+    createZoneRow(`Zone ${zones.length + 1}`, 45);
+    recalcAll();
+  });
+
+  unitToggle.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newUnit = btn.dataset.unit;
+      if (newUnit === unit) return;
+
+      // 단위가 바뀌면, 이미 입력된 숫자값도 새 단위 기준으로 환산해서 보여준다.
+      const convert = (val) => newUnit === 'ft' ? (val * FT_PER_M) : (val / FT_PER_M);
+      mainDistInput.value = convert(parseFloat(mainDistInput.value) || 0).toFixed(1);
+      zones.forEach(z => {
+        z.distInput.value = convert(parseFloat(z.distInput.value) || 0).toFixed(1);
+        z.zoneUnitEl.textContent = newUnit;
+      });
+      phDistInput.value = convert(parseFloat(phDistInput.value) || 0).toFixed(3);
+      phDistUnit.textContent = newUnit;
+
+      unit = newUnit;
+      mainDistUnit.textContent = unit;
+      unitToggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcAll();
+    });
+  });
+
+  tempInput.addEventListener('input', recalcAll);
+  precedenceInput.addEventListener('input', recalcAll);
+  mainDistInput.addEventListener('input', recalcAll);
+
+  // -----------------------------------------------------------------
+  // ✅ 요청 반영: Time ↔ Distance ↔ Frequency ↔ Phase 상호 연동 계산기
+  // 네 값 중 무엇을 바꾸든 나머지가 자동으로 맞춰진다.
+  //   - Time ↔ Distance: 음속(현재 온도 기준, 위 설정과 공유)으로 연결
+  //   - Time × Frequency → Phase(도), 반대로 Phase × Frequency → Time
+  // -----------------------------------------------------------------
+  const phTimeInput = document.getElementById('phTimeInput');
+  const phDistInput = document.getElementById('phDistInput');
+  const phFreqInput = document.getElementById('phFreqInput');
+  const phPhaseInput = document.getElementById('phPhaseInput');
+  const phaseCanvas = document.getElementById('phaseCanvas');
+  const phaseCtx = phaseCanvas.getContext('2d');
+  const phaseWrapLabel = document.getElementById('phaseWrapLabel');
+
+  function timeMsToDistM(ms, tempC){
+    return (ms / 1000) * speedOfSoundMps(tempC);
+  }
+  function distMToTimeMs(distM, tempC){
+    return (distM / speedOfSoundMps(tempC)) * 1000;
+  }
+  function timeMsToPhaseDeg(ms, freqHz){
+    return (ms / 1000) * freqHz * 360;
+  }
+  function phaseDegToTimeMs(deg, freqHz){
+    if (!freqHz) return 0;
+    return (deg / 360 / freqHz) * 1000;
+  }
+
+  function drawPhaseWave(phaseDeg){
+    const dpr = window.devicePixelRatio || 1;
+    const rect = phaseCanvas.getBoundingClientRect();
+    phaseCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    phaseCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+    const w = phaseCanvas.width, h = phaseCanvas.height;
+    phaseCtx.clearRect(0, 0, w, h);
+
+    const cycles = 2;
+    const amp = h * 0.32;
+    const midY = h / 2;
+    const phaseRad = (phaseDeg * Math.PI) / 180;
+
+    // 기준(원음) 파형
+    phaseCtx.beginPath();
+    for (let x = 0; x <= w; x++) {
+      const t = (x / w) * cycles * Math.PI * 2;
+      const y = midY - Math.sin(t) * amp;
+      if (x === 0) phaseCtx.moveTo(x, y); else phaseCtx.lineTo(x, y);
+    }
+    phaseCtx.strokeStyle = '#33587a';
+    phaseCtx.lineWidth = Math.max(1.5, h * 0.012);
+    phaseCtx.stroke();
+
+    // 딜레이(위상 이동)된 파형 — 점선
+    phaseCtx.beginPath();
+    phaseCtx.setLineDash([h * 0.03, h * 0.025]);
+    for (let x = 0; x <= w; x++) {
+      const t = (x / w) * cycles * Math.PI * 2;
+      const y = midY - Math.sin(t - phaseRad) * amp;
+      if (x === 0) phaseCtx.moveTo(x, y); else phaseCtx.lineTo(x, y);
+    }
+    phaseCtx.strokeStyle = '#9c6b17';
+    phaseCtx.stroke();
+    phaseCtx.setLineDash([]);
+  }
+
+  function recalcPhaseFrom(source){
+    const tempC = parseFloat(tempInput.value) || 0;
+    let timeMs = parseFloat(phTimeInput.value) || 0;
+    let distM = toMeters(parseFloat(phDistInput.value) || 0);
+    let freqHz = parseFloat(phFreqInput.value) || 0;
+    let phaseDeg = parseFloat(phPhaseInput.value) || 0;
+
+    if (source === 'time') {
+      distM = timeMsToDistM(timeMs, tempC);
+      phaseDeg = timeMsToPhaseDeg(timeMs, freqHz);
+    } else if (source === 'distance') {
+      timeMs = distMToTimeMs(distM, tempC);
+      phaseDeg = timeMsToPhaseDeg(timeMs, freqHz);
+    } else if (source === 'frequency') {
+      phaseDeg = timeMsToPhaseDeg(timeMs, freqHz);
+    } else if (source === 'phase') {
+      timeMs = phaseDegToTimeMs(phaseDeg, freqHz);
+      distM = timeMsToDistM(timeMs, tempC);
+    }
+
+    // ✅ 요청 반영: 지금 사용자가 타이핑하고 있는 칸(source) 자체는 절대 덮어쓰지 않는다.
+    // (이전에는 키 하나 누를 때마다 그 칸의 값을 다시 포맷해서 다시 넣어버려서,
+    //  특히 모바일에서 커서가 튀며 사실상 입력이 안 되는 것처럼 느껴졌다)
+    if (source !== 'time') phTimeInput.value = timeMs.toFixed(4);
+    if (source !== 'distance') phDistInput.value = (unit === 'ft' ? distM * FT_PER_M : distM).toFixed(3);
+
+    const wrapped = ((phaseDeg % 360) + 360) % 360;
+    const cycles = Math.floor(phaseDeg / 360);
+
+    // ✅ 요청 반영: Phase 칸에는 1057.6°처럼 여러 바퀴 돈 값을 그대로 보여주면 헷갈리므로,
+    // 항상 감긴 값(0~360°)만 보여준다. 몇 바퀴 돌았는지는 아래 보조 라벨로만 알려준다.
+    if (source !== 'phase') phPhaseInput.value = wrapped.toFixed(1);
+
+    phaseWrapLabel.textContent = cycles > 0
+      ? window.i18n.tpl('phase_wrap_template', { wrapped: wrapped.toFixed(0), cycles: cycles })
+      : `${wrapped.toFixed(0)}°`;
+
+    // 0~360도 게이지에 현재 위상(감긴 값) 위치 표시
+    phaseGaugeMarker.style.left = (wrapped / 360 * 100) + '%';
+
+    drawPhaseWave(phaseDeg);
+    updateHaasTable(timeMs); // ✅ 요청 반영: 지금 Time 값이 어느 구간인지 표에서 강조 표시
+  }
+
+  // ✅ 요청 반영: Haas Effect(선행효과) 참고표 — 시간차에 따른 일반적인 지각 특성
+  const HAAS_ZONES = [
+    { max: 1,   label: '0 ~ 1ms',   descKey: 'haas_zone1_desc' },
+    { max: 5,   label: '1 ~ 5ms',   descKey: 'haas_zone2_desc' },
+    { max: 30,  label: '5 ~ 30ms',  descKey: 'haas_zone3_desc' },
+    { max: Infinity, label: '30ms ~', descKey: 'haas_zone4_desc' },
+  ];
+  const haasTable = document.getElementById('haasTable');
+  function updateHaasTable(timeMs){
+    const t = Math.abs(timeMs);
+    const activeIdx = HAAS_ZONES.findIndex(zone => t <= zone.max);
+    let html = `
+      <div class="tempo-row tempo-header" style="grid-template-columns:0.32fr 1fr;">
+        <div class="tempo-cell">${window.i18n.t('haas_col_time')}</div>
+        <div class="tempo-cell" style="text-align:left;">${window.i18n.t('haas_col_perception')}</div>
+      </div>`;
+    HAAS_ZONES.forEach((zone, i) => {
+      const isActive = i === activeIdx;
+      html += `
+        <div class="tempo-row" style="grid-template-columns:0.32fr 1fr; ${isActive ? 'background:rgba(47,109,76,0.1);' : ''}">
+          <div class="tempo-cell" style="${isActive ? 'color:var(--teal);' : ''}">${zone.label}</div>
+          <div class="tempo-cell" style="text-align:left; font-size:13.5px; line-height:1.55; font-weight:400; color:${isActive ? 'var(--text-primary)' : 'var(--text-secondary)'};">${window.i18n.t(zone.descKey)}</div>
+        </div>`;
+    });
+    haasTable.innerHTML = html;
+  }
+
+  const phaseGaugeMarker = document.getElementById('phaseGaugeMarker');
+
+  phTimeInput.addEventListener('input', () => recalcPhaseFrom('time'));
+  phDistInput.addEventListener('input', () => recalcPhaseFrom('distance'));
+  phFreqInput.addEventListener('input', () => recalcPhaseFrom('frequency'));
+  phPhaseInput.addEventListener('input', () => recalcPhaseFrom('phase'));
+  tempInput.addEventListener('input', () => recalcPhaseFrom('time'));
+  window.addEventListener('resize', () => drawPhaseWave(parseFloat(phPhaseInput.value) || 0));
+
+  // ✅ 입력을 마치고 칸에서 벗어나면(blur/change), 그때는 그 칸 자신도 깔끔하게 정리된 값으로 맞춰준다
+  phTimeInput.addEventListener('change', () => { phTimeInput.value = parseFloat(phTimeInput.value || 0).toFixed(4); });
+  phDistInput.addEventListener('change', () => { phDistInput.value = parseFloat(phDistInput.value || 0).toFixed(3); });
+  phPhaseInput.addEventListener('change', () => {
+    const v = parseFloat(phPhaseInput.value) || 0;
+    const wrapped = ((v % 360) + 360) % 360;
+    phPhaseInput.value = wrapped.toFixed(1);
+  });
+
+  // -----------------------------------------------------------------
+  // ✅ 요청 반영: Tempo(BPM) ↔ Delay — 곡 박자에 맞는 딜레이 타임 계산
+  // -----------------------------------------------------------------
+  const bpmInput = document.getElementById('bpmInput');
+  const tempoTable = document.getElementById('tempoTable');
+
+  // 4분음표를 기준(1배)으로 한 각 음표의 상대 길이
+  // ✅ 요청 반영: 유니코드 음표 문자는 기기/폰트에 따라 깨져 보여서, 직접 그린 SVG로 대체한다.
+  // (어떤 폰이든 똑같이 나온다)
+  function noteIconSVG({ hollow, stem, flags }){
+    const headFill = hollow ? 'none' : 'currentColor';
+    let extra = '';
+    if (stem) {
+      extra += `<line x1="13" y1="21.5" x2="13" y2="4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`;
+      for (let i = 0; i < flags; i++) {
+        const y0 = 4 + i * 6;
+        extra += `<path d="M13 ${y0} C 19 ${y0 + 2}, 19 ${y0 + 7}, 13 ${y0 + 9}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>`;
+      }
+    }
+    return `<svg viewBox="0 0 22 26" width="20" height="24" class="note-icon">
+      <ellipse cx="7" cy="21.5" rx="5.2" ry="3.6" transform="rotate(-18 7 21.5)" fill="${headFill}" stroke="currentColor" stroke-width="1.7"/>
+      ${extra}
+    </svg>`;
+  }
+
+  const NOTE_DIVISIONS = [
+    { icon: noteIconSVG({ hollow: true,  stem: false, flags: 0 }), frac: '1/1',  mult: 4 },
+    { icon: noteIconSVG({ hollow: true,  stem: true,  flags: 0 }), frac: '1/2',  mult: 2 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 0 }), frac: '1/4',  mult: 1 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 1 }), frac: '1/8',  mult: 0.5 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 2 }), frac: '1/16', mult: 0.25 },
+    { icon: noteIconSVG({ hollow: false, stem: true,  flags: 3 }), frac: '1/32', mult: 0.125 },
+  ];
+
+  function formatMs(ms){
+    return ms >= 1000 ? (ms/1000).toFixed(2) + 's' : Math.round(ms) + 'ms';
+  }
+
+  function renderTempoTable(){
+    const bpm = parseFloat(bpmInput.value) || 120;
+    const quarterMs = 60000 / bpm;
+
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">${window.i18n.t('tempo_col_note')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_normal')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_dotted')}</div>
+        <div class="tempo-cell">${window.i18n.t('tempo_col_triplet')}</div>
+      </div>`;
+
+    NOTE_DIVISIONS.forEach(({ icon, frac, mult }) => {
+      const normalMs = quarterMs * mult;
+      const dottedMs = normalMs * 1.5;
+      const tripletMs = normalMs * (2 / 3);
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell tempo-note-cell">${icon}<span>${frac}</span></div>
+          <div class="tempo-cell">${formatMs(normalMs)}</div>
+          <div class="tempo-cell">${formatMs(dottedMs)}</div>
+          <div class="tempo-cell">${formatMs(tripletMs)}</div>
+        </div>`;
+    });
+
+    tempoTable.innerHTML = html;
+  }
+
+  // -----------------------------------------------------------------
+  // ✅ 요청 반영: Reverb Time — Bobby Owsinski 방식(프리딜레이+디케이 = 박자 단위)
+  // reverbcalculator.com을 참고해 같은 4가지 사이즈(Hall/Big Room/Small Room/Tight Ambience)로 구성했다.
+  // -----------------------------------------------------------------
+  const reverbTable = document.getElementById('reverbTable');
+
+  // barFraction: 1마디(4/4 기준) 대비 몇 배(또는 몇 분의 1)를 총 리버브 길이(프리딜레이+디케이)로 쓸지
+  // ✅ 요청 반영: Hall을 2마디로 키우고, 그 아래로 절반씩 taper되게 정리했다(2 → 1 → 1/2 → 1/4마디).
+  const REVERB_PRESETS = [
+    { name: 'Hall',           descKey: 'reverb_hall_desc',       barFraction: 2 },
+    { name: 'Big Room',       descKey: 'reverb_bigroom_desc',    barFraction: 1 },
+    { name: 'Small Room',     descKey: 'reverb_smallroom_desc',  barFraction: 1/2 },
+    { name: 'Tight Ambience', descKey: 'reverb_tight_desc',      barFraction: 1/4 },
+  ];
+
+  function renderReverbTable(){
+    const bpm = parseFloat(bpmInput.value) || 120;
+    const quarterMs = 60000 / bpm;
+    const barMs = quarterMs * 4; // 4/4 기준 한 마디 길이
+
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">Reverb Size</div>
+        <div class="tempo-cell">Pre-Delay</div>
+        <div class="tempo-cell">Decay Time</div>
+        <div class="tempo-cell">Total Reverb</div>
+      </div>`;
+
+    REVERB_PRESETS.forEach(({ name, descKey, barFraction }) => {
+      const totalMs = barMs * barFraction;
+      // ✅ 고친 것: 프리딜레이를 "4분음표 기준 1/64"로 고정하면 Hall과 Big Room처럼
+      // 총 길이가 다른 프리셋끼리 우연히 같은 값이 나올 수 있었다. 대신 "이 프리셋
+      // 자신의 총 길이 대비 1/64"로 바꿔서, 공간이 작아질수록 프리딜레이도 자연스럽게
+      // 비례해서 짧아지게 했다.
+      const preDelayMs = totalMs / 64;
+      const decayMs = Math.max(0, totalMs - preDelayMs);
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell tempo-note-cell" style="display:block;">
+            <div>${name}</div>
+            <div style="font-size:12px; color:var(--text-secondary); font-weight:400; margin-top:2px;">${window.i18n.t(descKey)}</div>
+          </div>
+          <div class="tempo-cell">${formatMs(preDelayMs)}</div>
+          <div class="tempo-cell">${formatMs(decayMs)}</div>
+          <div class="tempo-cell">${formatMs(totalMs)}</div>
+        </div>`;
+    });
+
+    reverbTable.innerHTML = html;
+  }
+
+  bpmInput.addEventListener('input', renderTempoTable);
+  bpmInput.addEventListener('input', renderReverbTable);
+  renderTempoTable();
+  renderReverbTable();
+
+  // 초기 예시 존 2개
+  createZoneRow('Delay Tower 1', 45);
+  createZoneRow('Delay Tower 2', 65);
+  recalcAll();
+  recalcPhaseFrom('phase'); // ✅ 기본값이 Phase(15°) 기준이므로 여기서부터 계산 시작
+
+  document.addEventListener('i18nchange', () => {
+    recalcAll();
+    recalcPhaseFrom('phase');
+    renderTempoTable();
+    renderReverbTable();
+  });
+})();
+</script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "panel_tempo_delay": {"ko": "Tempo ↔ Delay (박자 동기화)", "en": "Tempo ↔ Delay (Sync to Tempo)", "ja": "Tempo ↔ Delay (テンポ同期)", "es": "Tempo ↔ Delay (Sincronización de tempo)", "zh": "Tempo ↔ Delay (节拍同步)"}, "panel_reverb_time": {"ko": "Reverb Time (리버브 타임)", "en": "Reverb Time", "ja": "Reverb Time (リバーブタイム)", "es": "Reverb Time (Tiempo de reverberación)", "zh": "Reverb Time (混响时间)"}, "panel_speaker_delay": {"ko": "Speaker Delay (스피커 딜레이 계산)", "en": "Speaker Delay (Calculation)", "ja": "Speaker Delay (スピーカーディレイ計算)", "es": "Speaker Delay (Cálculo)", "zh": "Speaker Delay (扬声器延时计算)"}, "panel_haas": {"ko": "Haas Effect (선행효과) 참고표", "en": "Haas Effect Reference Table", "ja": "Haas Effect (先行効果) 早見表", "es": "Tabla de referencia del Efecto Haas", "zh": "哈斯效应(先行效应)参考表"}, "unit_meters": {"ko": "Meters", "en": "Meters", "ja": "メートル", "es": "Metros", "zh": "米(公制)"}, "unit_feet": {"ko": "Feet", "en": "Feet", "ja": "フィート", "es": "Pies", "zh": "英尺"}, "speed_readout_label": {"ko": "현재 온도 기준 음속:", "en": "Speed of sound at current temperature:", "ja": "現在の気温での音速:", "es": "Velocidad del sonido a la temperatura actual:", "zh": "当前温度下的音速："}, "phase_desc": {"ko": "딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.", "en": "See how much a delay time (or distance) shifts the phase at a given frequency. Useful for mic phase alignment and checking for comb filtering. Change any one of the four values and the rest update automatically.", "ja": "ディレイ時間(または距離)が特定の周波数でどれだけ位相をずらすかを確認します。マイクの位相合わせやコムフィルタリングの確認に便利です。4つの値のどれかを変えると、残りが自動的に調整されます。", "es": "Comprueba cuánto desplaza la fase un tiempo de delay (o distancia) a una frecuencia determinada. Útil para alinear la fase de micrófonos y detectar comb filtering. Cambia cualquiera de los cuatro valores y el resto se ajusta automáticamente.", "zh": "查看延时时间(或距离)在特定频率下会造成多大的相位偏移。适用于麦克风相位对齐和梳状滤波检查。四个数值中任意一个改变，其余会自动联动更新。"}, "phase_legend_original": {"ko": "원음", "en": "Original", "ja": "原音", "es": "Original", "zh": "原声"}, "phase_legend_delayed": {"ko": "딜레이 신호", "en": "Delayed signal", "ja": "ディレイ信号", "es": "Señal con delay", "zh": "延时信号"}, "phase_wrap_template": {"ko": "{wrapped}° (총 {cycles}사이클 + {wrapped}°)", "en": "{wrapped}° (total {cycles} cycles + {wrapped}°)", "ja": "{wrapped}° (合計{cycles}サイクル + {wrapped}°)", "es": "{wrapped}° (total {cycles} ciclos + {wrapped}°)", "zh": "{wrapped}° (共{cycles}个周期 + {wrapped}°)"}, "haas_panel_desc": {"ko": "두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.", "en": "General guidelines for how the human ear perceives two sounds based on the time gap between them. The matching row is highlighted based on the Time value above.", "ja": "2つの音の時間差によって人の耳にどう聴こえるかについての一般的な目安です。上のTime値に応じて該当する区間がハイライトされます。", "es": "Pautas generales sobre cómo percibe el oído humano dos sonidos según la diferencia de tiempo entre ellos. La fila correspondiente se resalta según el valor de Time de arriba.", "zh": "关于两个声音之间的时间差如何被人耳感知的一般性参考标准。会根据上方的Time数值高亮对应的区间。"}, "tempo_panel_desc": {"ko": "곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.", "en": "Enter the song's BPM (beats per minute) and it automatically calculates the delay time (ms) for each note length, so you can set a delay effect perfectly in time with the beat.", "ja": "曲のBPM(1分あたりの拍数)を入力すると、ディレイエフェクトを拍にぴったり合わせられるよう、各音符の長さに対応するディレイタイム(ms)を自動計算します。", "es": "Introduce el BPM (pulsos por minuto) de la canción y se calculará automáticamente el tiempo de delay (ms) para cada duración de nota, para que puedas ajustar un efecto de delay perfectamente sincronizado con el ritmo.", "zh": "输入歌曲的BPM(每分钟拍数)，即可自动计算各音符时值对应的延时时间(ms)，方便将延时效果精确对齐节拍。"}, "reverb_panel_desc": {"ko": "위의 BPM을 그대로 사용합니다. <b style=\"color:var(--text-secondary)\">프리딜레이 + 디케이 타임의 합이 박자 단위(마디/half/quarter/eighth)로 딱 떨어지게</b> 잡으면, 리버브 꼬리가 다음 박이 오기 직전에 자연스럽게 사라져서 믹스가 지저분해지지 않습니다 (믹싱 엔지니어 Bobby Owsinski가 저서 《The Mixing Engineer's Handbook》에서 소개한 방법입니다).", "en": "Uses the BPM entered above. If you set the <b style=\"color:var(--text-secondary)\">pre-delay + decay time to add up exactly to a beat division (bar/half/quarter/eighth)</b>, the reverb tail naturally fades away right before the next beat, keeping the mix from getting muddy (a technique introduced by mixing engineer Bobby Owsinski in his book The Mixing Engineer's Handbook).", "ja": "上のBPMをそのまま使用します。<b style=\"color:var(--text-secondary)\">プリディレイ＋ディケイタイムの合計を拍単位(小節/2分/4分/8分)にきっちり合わせる</b>と、リバーブの余韻が次の拍が来る直前に自然に消えるため、ミックスが濁りません(ミキシングエンジニアBobby Owsinskiが著書『The Mixing Engineer's Handbook』で紹介した手法です)。", "es": "Usa el BPM introducido arriba. Si ajustas <b style=\"color:var(--text-secondary)\">la suma de pre-delay + decay time para que coincida exactamente con una división del pulso (compás/mitad/negra/corchea)</b>, la cola de la reverb se desvanece de forma natural justo antes del siguiente pulso, evitando que la mezcla se ensucie (una técnica presentada por el ingeniero de mezcla Bobby Owsinski en su libro The Mixing Engineer's Handbook).", "zh": "沿用上方输入的BPM。若将<b style=\"color:var(--text-secondary)\">预延时+衰减时间之和精确对齐到节拍单位(小节/二分/四分/八分)</b>，混响尾音会在下一拍到来前自然消失，避免混音变得浑浊(这是混音工程师Bobby Owsinski在其著作《The Mixing Engineer's Handbook》中介绍的方法)。"}, "warn_reverb_note": {"ko": "<b>참고:</b> 프리딜레이는 짧게(1/64~1/128 음표)만 잡고, 나머지 길이를 디케이 타임으로 채우는 방식입니다. 이건 실전에서 바로 쓸 수 있는 \"시작점\"이고, 곡의 느낌에 따라 취향껏 조절해서 쓰시면 됩니다.", "en": "<b>Note:</b> Pre-delay is kept short (a 1/64–1/128 note), with the remaining length filled by the decay time. This is a practical \"starting point\" — feel free to adjust it to taste depending on the feel of the song.", "ja": "<b>参考:</b> プリディレイは短く(1/64〜1/128音符)に留め、残りの長さをディケイタイムで埋める方式です。これは実践ですぐ使える「出発点」なので、曲の雰囲気に合わせて好みで調整して使ってください。", "es": "<b>Nota:</b> El pre-delay se mantiene corto (una nota de 1/64–1/128), y el resto de la duración se llena con el decay time. Este es un \"punto de partida\" práctico — ajústalo a tu gusto según la sensación de la canción.", "zh": "<b>提示：</b>预延时保持较短(1/64~1/128音符)，其余长度由衰减时间填充。这是一个可直接用于实战的\"起点\"，可根据歌曲的感觉自行调整。"}, "label_main_dist": {"ko": "메인 스피커 → 기준 지점 거리", "en": "Main speaker → reference point distance", "ja": "メインスピーカー→基準地点までの距離", "es": "Distancia de altavoz principal → punto de referencia", "zh": "主扬声器→基准点距离"}, "add_zone_btn": {"ko": "+ 존 추가", "en": "+ Add Zone", "ja": "+ ゾーンを追加", "es": "+ Añadir zona", "zh": "+ 添加分区"}, "warn_calc_method": {"ko": "<b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋. 값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장). 프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.", "en": "<b>Calculation method:</b> Delay time = (delay speaker → reference point distance − main speaker → reference point distance) ÷ speed of sound + precedence offset. A negative result means the delay speaker is farther from the reference point than the main speaker, so delay may not be needed (we recommend treating it as 0). The precedence offset (typically 10–20ms) makes the delay speaker's sound arrive slightly later than the main, so listeners perceive the sound's location as coming from the stage (main speaker) — this is the Haas Effect correction value.", "ja": "<b>計算方法:</b> ディレイ時間 = (ディレイスピーカー→基準地点までの距離 − メインスピーカー→基準地点までの距離) ÷ 音速 + プリシデンスオフセット。値がマイナスになる場合、ディレイスピーカーの方が基準地点からメインより遠いことを意味し、ディレイが不要な場合があります(0として扱うことを推奨)。プリシデンスオフセット(通常10〜20ms)は、ディレイスピーカーの音がメインよりわずかに遅れて届くようにすることで、聴き手が音の位置をステージ(メインスピーカー)側と知覚するようにするハース効果の補正値です。", "es": "<b>Método de cálculo:</b> Tiempo de delay = (distancia del altavoz de delay al punto de referencia − distancia del altavoz principal al punto de referencia) ÷ velocidad del sonido + offset de precedencia. Un resultado negativo significa que el altavoz de delay está más lejos del punto de referencia que el principal, por lo que puede no necesitarse delay (se recomienda tratarlo como 0). El offset de precedencia (normalmente 10–20ms) hace que el sonido del altavoz de delay llegue un poco más tarde que el principal, para que los oyentes perciban la ubicación del sonido hacia el escenario (altavoz principal) — este es el valor de corrección del Efecto Haas.", "zh": "<b>计算方式：</b>延时时间 = (延时扬声器→基准点距离 − 主扬声器→基准点距离) ÷ 音速 + 优先效应偏移量。若结果为负数，表示延时扬声器离基准点比主扬声器更远，可能不需要延时(建议按0处理)。优先效应偏移量(通常10~20ms)会让延时扬声器的声音比主扬声器稍晚到达，使听众将声音的位置感知为来自舞台(主扬声器)方向 — 这是哈斯效应(Haas Effect)的修正值。"}, "zone_name_label": {"ko": "존 이름", "en": "Zone Name", "ja": "ゾーン名", "es": "Nombre de la zona", "zh": "分区名称"}, "zone_dist_label": {"ko": "딜레이 스피커 → 기준 지점 거리", "en": "Delay speaker → reference point distance", "ja": "ディレイスピーカー→基準地点までの距離", "es": "Altavoz de delay → distancia al punto de referencia", "zh": "延时扬声器→基准点距离"}, "zone_result_default_lbl": {"ko": "권장 딜레이", "en": "Recommended delay", "ja": "推奨ディレイ", "es": "Delay recomendado", "zh": "建议延时"}, "zone_result_none_lbl": {"ko": "딜레이 불필요", "en": "No delay needed", "ja": "ディレイ不要", "es": "No se necesita delay", "zh": "无需延时"}, "zone_remove_title": {"ko": "이 존 삭제", "en": "Delete this zone", "ja": "このゾーンを削除", "es": "Eliminar esta zona", "zh": "删除此分区"}, "haas_col_time": {"ko": "시간차", "en": "Time Diff", "ja": "時間差", "es": "Diferencia de tiempo", "zh": "时间差"}, "haas_col_perception": {"ko": "들리는 방식", "en": "How it's perceived", "ja": "聴こえ方", "es": "Cómo se percibe", "zh": "听感"}, "haas_zone1_desc": {"ko": "거의 하나의 소리로 합쳐져 들려요. 위상 간섭(콤필터링)이 가장 두드러지는 구간이에요.", "en": "The two sounds nearly fuse into one. This is the range where phase interference (comb filtering) is most noticeable.", "ja": "ほぼ一つの音として聴こえます。位相干渉(コムフィルタリング)が最も目立つ区間です。", "es": "Los dos sonidos casi se fusionan en uno. Es el rango donde la interferencia de fase (comb filtering) es más notable.", "zh": "两个声音几乎融合为一体，是相位干扰(梳状滤波)最明显的区间。"}, "haas_zone2_desc": {"ko": "여전히 하나로 들리지만, 음색이 살짝 변하거나(콤필터링) 공간감이 생기기 시작해요.", "en": "Still perceived as one sound, but the tone starts to shift slightly (comb filtering) and a sense of space begins to emerge.", "ja": "依然として一つの音に聴こえますが、音色がわずかに変化したり(コムフィルタリング)、空間感が生まれ始めます。", "es": "Aún se percibe como un solo sonido, pero el timbre empieza a cambiar ligeramente (comb filtering) y comienza a aparecer sensación de espacio.", "zh": "仍会被感知为一个声音，但音色开始略有变化(梳状滤波)，并开始产生空间感。"}, "haas_zone3_desc": {"ko": "\"선행효과(Precedence Effect)\" 구간 — 먼저 도착한 소리 방향으로 위치를 지각해요. 뒤 소리가 더 커도(약 +10dB까지) 에코로 안 들려요.", "en": "The \"Precedence Effect\" range — you perceive the location as coming from the direction of the first-arriving sound. Even if the later sound is louder (up to about +10dB), it isn't heard as a separate echo.", "ja": "「先行効果(Precedence Effect)」区間 — 先に到達した音の方向に位置を知覚します。後の音が大きくても(約+10dBまで)エコーとして聴こえません。", "es": "El rango del \"Efecto de precedencia\" — percibes la ubicación en la dirección del sonido que llega primero. Aunque el sonido posterior sea más fuerte (hasta unos +10dB), no se percibe como un eco aparte.", "zh": "\"优先效应(Precedence Effect)\"区间 — 会将声音方位感知为先到达的那个声音的方向。即使后到的声音更大声(最多约+10dB)，也不会被听成回声。"}, "haas_zone4_desc": {"ko": "별개의 메아리(에코)로 뚜렷하게 들리기 시작해요.", "en": "You start to clearly hear it as a distinct echo.", "ja": "別々のこだま(エコー)としてはっきり聴こえ始めます。", "es": "Empiezas a escucharlo claramente como un eco independiente.", "zh": "会开始清楚地被听成独立的回声(Echo)。"}, "tempo_col_note": {"ko": "음표", "en": "Note", "ja": "音符", "es": "Nota", "zh": "音符"}, "tempo_col_normal": {"ko": "일반", "en": "Normal", "ja": "通常", "es": "Normal", "zh": "普通"}, "tempo_col_dotted": {"ko": "붙임(●)", "en": "Dotted (●)", "ja": "付点(●)", "es": "Con puntillo (●)", "zh": "附点(●)"}, "tempo_col_triplet": {"ko": "셋잇단(3)", "en": "Triplet (3)", "ja": "三連符(3)", "es": "Tresillo (3)", "zh": "三连音(3)"}, "reverb_hall_desc": {"ko": "크고 웅장하게 — 두 마디를 꽉 채움", "en": "Big and grand — fills two full bars", "ja": "大きく壮大に — 2小節をフルに使用", "es": "Grande y majestuoso — llena dos compases completos", "zh": "宏大壮阔 — 填满两个小节"}, "reverb_bigroom_desc": {"ko": "중간 크기 — 한 마디", "en": "Medium size — one bar", "ja": "中くらいのサイズ — 1小節", "es": "Tamaño mediano — un compás", "zh": "中等大小 — 一个小节"}, "reverb_smallroom_desc": {"ko": "작은 방 — 반 마디", "en": "Small room — half a bar", "ja": "小さな部屋 — 半小節", "es": "Sala pequeña — medio compás", "zh": "小房间 — 半个小节"}, "reverb_tight_desc": {"ko": "아주 짧은 잔향 — 4분의 1마디", "en": "Very short tail — a quarter bar", "ja": "非常に短い残響 — 4分の1小節", "es": "Cola muy corta — un cuarto de compás", "zh": "极短尾音 — 四分之一小节"}};</script>
+<script src="i18n-core.js"></script>
+</body>
+</html>

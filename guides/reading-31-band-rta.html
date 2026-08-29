@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 | ML Music Studio</title>
+<meta name="description" content="1/3 옥타브 31밴드 RTA의 기준선, 핑크노이즈로 룸 특성 읽기, 저역 피크·딥으로 룸 모드 파악, 피드백 직전 밴드를 잡아내는 법을 실전 관점에서 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/reading-31-band-rta.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/reading-31-band-rta.html">
+<meta property="og:title" content="31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트">
+<meta property="og:description" content="핑크노이즈 기준선, 저역 피크·딥으로 룸 모드 읽기, 피드백 직전 밴드 잡아내기.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트",
+  "description": "1/3 옥타브 31밴드 RTA의 기준선과 룸 특성 해석, 피드백 밴드 파악.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/reading-31-band-rta.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트</h1>
+  <div class="meta">도구 가이드 · 약 7분</div>
+
+  <p class="lede">RTA(Real-Time Analyzer, 실시간 스펙트럼 분석기)는 지금 마이크로 들어오는 소리의 주파수별 에너지를 막대그래프로 보여줍니다. 정답을 알려주는 도구는 아니지만, 룸의 문제 대역과 피드백 직전 신호를 눈으로 확인하는 데 유용합니다.</p>
+
+  <h2>31밴드 = 1/3 옥타브</h2>
+  <p>표준 31밴드 RTA는 20Hz부터 20kHz까지를 <strong>1/3 옥타브</strong> 간격(ISO 266)으로 나눕니다. 중심 주파수는 20, 25, 31.5, 40, 50, 63, 80, 100, 125, … 1k, 1.25k, 1.6k, 2k … 16k, 20k입니다. 옥타브 이퀄라이저(그래픽 EQ)의 슬라이더와 같은 간격이라, RTA에서 솟은 밴드를 그래픽 EQ의 같은 슬라이더로 바로 손볼 수 있습니다.</p>
+
+  <h2>기준선: 핑크노이즈는 평평해야 한다</h2>
+  <p>화이트노이즈는 모든 주파수에 같은 에너지를 담고 있어서 RTA에서 고역이 올라간 사선으로 보입니다. <strong>핑크노이즈</strong>는 옥타브당 에너지가 일정하도록 만들어져, 1/3 옥타브 RTA에서 <strong>평평한 가로선</strong>으로 나타납니다.</p>
+  <p>그래서 측정 절차는 이렇습니다.</p>
+  <ol>
+    <li>시스템으로 핑크노이즈를 재생한다.</li>
+    <li>측정 마이크(무지향성, 가능하면 교정된 것)를 청취 위치에 둔다.</li>
+    <li>RTA가 평평하지 않은 부분 — 솟은 밴드와 꺼진 밴드 — 이 룸+시스템의 특성이다.</li>
+  </ol>
+  <div class="note">완전히 평평하게 만드는 게 목표가 아닙니다. 많은 현장에서 저역을 살짝 올리고 초고역을 살짝 내린 완만한 우하향 곡선(“하우스 커브”)을 기준으로 잡습니다. RTA는 그 곡선에서 튀는 지점을 찾는 용도입니다.</div>
+
+  <h2>저역 피크와 딥 = 룸 모드</h2>
+  <p>방의 벽·바닥·천장 사이 거리에 대응하는 주파수에서 정재파(룸 모드)가 생깁니다. 위치에 따라 그 주파수가 크게 솟거나(피크) 푹 꺼집니다(딥, 널).</p>
+  <ul>
+    <li><strong>피크</strong>는 그래픽 EQ나 파라메트릭 EQ로 좁게 <strong>컷</strong>하면 개선됩니다.</li>
+    <li><strong>딥(널)</strong>은 부스트로 잘 안 메워집니다. 스피커·청취 위치를 옮기는 게 답입니다.</li>
+    <li>측정 마이크를 1~2m만 옮겨도 저역 그래프가 확 바뀝니다. 여러 위치를 재고 평균을 봐야 룸 모드인지 한 지점의 특이점인지 구분됩니다.</li>
+  </ul>
+  <div class="example">
+    <h4>대략의 감</h4>
+    <p>방의 한 축 길이가 L(m)이면, 그 축의 첫 번째 룸 모드는 약 <strong>172 ÷ L (Hz)</strong> 근처입니다. 길이 5m 방이면 약 34Hz, 그 배수인 69Hz·103Hz…에서도 모드가 생깁니다. RTA에서 이 근처 밴드가 유독 튀면 룸 모드일 가능성이 큽니다.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">📊</div>
+    <div class="body">
+      <b>RTA (무료 웹 도구)</b>
+      <p>마이크로 들어오는 소리를 31밴드(ISO 266) 실시간 스펙트럼으로 보여줍니다. 룸 특성 확인, 하울링 포인트 점검에 바로 쓸 수 있습니다.</p>
+      <a href="/rta.html">▸ RTA 열기</a>
+    </div>
+  </div>
+
+  <h2>하울링(피드백) 포인트 찾기</h2>
+  <p>마이크 게인을 서서히 올리다 보면 피드백이 터지기 직전, 특정 밴드가 <strong>다른 밴드보다 먼저 솟아오릅니다.</strong> 그 주파수가 그 마이크·스피커·룸 조합에서 가장 취약한 지점입니다.</p>
+  <ol>
+    <li>공연 전, 실제 마이크를 실제 위치에 두고 게인을 올린다.</li>
+    <li>RTA에서 먼저 뾰족하게 솟는 밴드를 확인한다.</li>
+    <li>그래픽 EQ의 같은 슬라이더를 2~3dB만 내린다(과하게 내리면 음색이 상한다).</li>
+    <li>게인을 조금 더 올려 다음으로 솟는 밴드를 찾는다. 보통 2~4개 대역만 살짝 손봐도 게인 여유가 눈에 띄게 늘어난다.</li>
+  </ol>
+
+  <h2>RTA를 믿을 때와 믿지 말아야 할 때</h2>
+  <ul>
+    <li><strong>믿을 것:</strong> 좁고 큰 피크, 피드백 직전 대역, 큰 톤 밸런스 문제(“전체적으로 답답하다/쨍하다”).</li>
+    <li><strong>믿지 말 것:</strong> 미세한 요철을 EQ로 다 펴려는 것. 위상·시간 문제는 RTA에 안 보인다. 음악적 판단은 결국 귀가 한다.</li>
+    <li>1/3 옥타브 RTA는 해상도가 낮아 좁은 노칭 노이즈나 정확한 피드백 주파수를 특정하진 못한다. 대역을 좁히려면 FFT 기반 분석기가 필요하다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">📟</div>
+    <div class="body">
+      <b>AudioEngineerKit: SPL &amp; RTA (iOS·iPadOS·macOS)</b>
+      <p>전문가용 SPL 미터와 31밴드 RTA를 한 앱에. 마이크 교정, A/C 가중치, LUFS, RT60 잔향시간, 딜레이 파인더까지 현장용 정밀 측정 도구입니다.</p>
+      <a href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🎧</div>
+    <div class="body">
+      <b>AudioEngineer Ear Trainer (iOS·iPadOS·macOS)</b>
+      <p>RTA에 의존하지 않고 대역을 귀로 짚는 감각을 기르는 훈련 앱. 핑크노이즈 속 31밴드 부스트/컷을 맞히고, 내 음악으로도 훈련할 수 있습니다.</p>
+      <a href="https://apps.apple.com/app/audioengineer-ear-trainer/id6801893036" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/speaker-impedance-matching.html">스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

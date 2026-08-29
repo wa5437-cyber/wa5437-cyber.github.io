@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Electrical Calculator — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
+<style>
+  :root{
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:700px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); font-weight:400; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+
+  @media (max-width:480px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar{ align-items:flex-start; }
+    .topbar .title{ font-size:14.5px; }
+    .topbar .title small{ font-size:10px; }
+    .topbar .home-link{ font-size:11.5px; padding:7px 10px; margin-top:1px; }
+  }
+
+  /* ---- 챕터 피커(자유 계산 / 계산 문제) ---- */
+  .chapter-picker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
+  .chapter-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:15px; font-weight:600; padding:12px 8px; border-radius:9px; }
+  .chapter-picker button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .chapter-picker button:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  /* ---- 탭 피커(4가지 계산 종류) ---- */
+  .tab-picker{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px;
+  }
+  .tab-picker button{
+    border:none; background:transparent; color:var(--text-secondary); font-size:13px; font-weight:700;
+    padding:12px 4px; border-radius:9px; min-width:0; white-space:normal; word-break:keep-all;
+  }
+  .tab-picker button.active{ background:#e3ddd0; color:var(--teal); }
+  .tab-picker button:disabled{ opacity:0.35; cursor:default; }
+
+  /* ---- 스코어보드 ---- */
+  .scoreboard{ display:flex; background:transparent; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .scoreitem{ flex:1; text-align:center; padding:12px 6px; }
+  .scoreitem + .scoreitem{ border-left:1px solid var(--line); }
+  .scoreitem .val{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:17px; color:var(--teal); }
+  .scoreitem .lbl{ font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--text-tertiary); letter-spacing:0.08em; margin-top:3px; }
+
+  .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:20px; }
+  .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-primary); font-weight:600; margin-bottom:14px; }
+  .phase-desc{ font-size:15px; color:var(--text-primary); opacity:0.85; line-height:1.7; margin:0 0 14px; }
+
+  /* ---- 값 선택(Solve for) 피커 ---- */
+  .solve-picker{ display:flex; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:3px; margin-bottom:16px; }
+  .solve-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:14px; font-weight:700; padding:11px 6px; border-radius:9px; }
+  .solve-picker button.active{ background:#e3ddd0; color:var(--amber); }
+
+  .field{ margin-top:14px; }
+  .field:first-child{ margin-top:0; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:var(--text-primary); opacity:0.9; font-weight:600;
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px;
+  }
+  .input-row{ display:flex; align-items:center; gap:8px; }
+  .input-row input[type=number], .input-row input[type=text]{
+    flex:1; background:#f1ede3; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
+  }
+  .input-row input:disabled{ opacity:0.55; }
+  .input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--text-primary); opacity:0.75; flex-shrink:0; }
+
+  .result-list{ margin-top:6px; }
+  .result-row{ display:flex; justify-content:space-between; align-items:baseline; padding:14px 0; border-bottom:1px solid var(--line); }
+  .result-row:last-child{ border-bottom:none; }
+  .result-lbl{ font-size:15px; color:var(--text-secondary); }
+  .result-val{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:700; color:var(--amber); }
+  .result-val .unit{ font-size:13.5px; font-weight:600; color:var(--text-secondary); margin-left:6px; }
+
+  /* ---- 스피커 임피던스: 배선 방식 + 존 리스트 ---- */
+  .zone-row{ display:flex; align-items:center; gap:8px; margin-top:10px; }
+  .zone-row input[type=number]{
+    flex:1; background:#f1ede3; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:600; padding:10px 12px; min-width:0;
+  }
+  .zone-row .zone-label{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-secondary); width:60px; flex-shrink:0; }
+  .zone-remove-btn{
+    border:1px solid var(--line); background:rgba(178,58,42,0.08); color:var(--red); font-weight:700;
+    border-radius:8px; padding:9px 12px; flex-shrink:0;
+  }
+  .add-zone-btn{
+    border:1px dashed var(--line); background:rgba(30,26,20,0.02); color:var(--text-secondary);
+    font-size:13.5px; font-weight:600; padding:10px 16px; border-radius:10px; width:100%; margin-top:12px;
+  }
+  .add-zone-btn:hover{ background:rgba(30,26,20,0.06); color:var(--text-primary); }
+
+  /* ---- 계산 문제(퀴즈) ---- */
+  .quiz-problem{
+    font-family:'IBM Plex Mono',monospace; font-size:17px; color:var(--text-primary); line-height:1.7;
+    background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center;
+  }
+  .quiz-options{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:14px; }
+  .quiz-option-btn{
+    border:1px solid var(--line); background:var(--bg-panel-2); color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:17px; font-weight:700; padding:16px 8px; border-radius:12px;
+    min-width:0; transition:background .15s, border-color .15s, color .15s;
+  }
+  .quiz-option-btn:disabled{ cursor:default; }
+  .quiz-option-btn.correct-option{ background:rgba(47,109,76,0.16); border-color:var(--teal); color:var(--teal); }
+  .quiz-option-btn.wrong-option{ background:rgba(178,58,42,0.16); border-color:var(--red); color:var(--red); }
+  .feedback{ min-height:22px; text-align:center; font-weight:700; font-size:15px; margin-top:12px; }
+  .feedback.correct{ color:var(--teal); }
+  .feedback.wrong{ color:var(--red); }
+
+  .startbtn{
+    width:100%; padding:16px; border-radius:14px; border:none; font-size:16px; font-weight:700;
+    color:#e8f2ec; background:linear-gradient(160deg, var(--teal), #3a8c5e);
+  }
+  .startbtn.stop{ color:#fff; background:linear-gradient(160deg, var(--red), #8f2c22); }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">ELECTRICAL CALCULATOR<small>Ohm's Law · Power · Impedance · dB</small></div>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
+  </div>
+
+  <div class="chapter-picker" id="chapterPicker">
+    <button id="chapterFreeBtn" class="active" data-i18n="chapter_free">자유 계산</button>
+    <button id="chapterQuizBtn" data-i18n="chapter_quiz">계산 문제</button>
+  </div>
+
+  <div class="scoreboard" id="scoreboard" style="display:none;">
+    <div class="scoreitem"><div class="val" id="scRound">0/10</div><div class="lbl">ROUND</div></div>
+    <div class="scoreitem"><div class="val" id="scHit">0</div><div class="lbl">HIT</div></div>
+    <div class="scoreitem"><div class="val" id="scAcc">--</div><div class="lbl">ACC</div></div>
+  </div>
+
+  <div class="tab-picker" id="tabPicker">
+    <button data-tab="ohm" class="active">Ohm's Law</button>
+    <button data-tab="power">Power</button>
+    <button data-tab="impedance">Impedance</button>
+    <button data-tab="db">dB ↔ Power</button>
+    <button data-tab="acwave">AC Waveform</button>
+    <button data-tab="cable">Cable/Voltage Drop</button>
+  </div>
+
+  <!-- ============ 자유 계산: Ohm's Law ============ -->
+  <div id="ohmTab">
+    <div class="panel">
+      <div class="panel-title">Ohm's Law</div>
+      <p class="phase-desc" data-i18n="ohm_desc">V = I × R. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.</p>
+      <div class="solve-picker" id="ohmSolvePicker">
+        <button data-solve="v" data-i18n="solve_v">V 구하기</button>
+        <button data-solve="i" class="active" data-i18n="solve_i">I 구하기</button>
+        <button data-solve="r" data-i18n="solve_r">R 구하기</button>
+      </div>
+      <div class="field">
+        <label>Voltage (V)</label>
+        <div class="input-row"><input type="number" id="ohmV" value="12" step="0.1"><span class="unit">V</span></div>
+      </div>
+      <div class="field">
+        <label>Current (I)</label>
+        <div class="input-row"><input type="number" id="ohmI" value="2" step="0.01"><span class="unit">A</span></div>
+      </div>
+      <div class="field">
+        <label>Resistance (R)</label>
+        <div class="input-row"><input type="number" id="ohmR" value="6" step="0.1"><span class="unit">Ω</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="result_label">결과</span>
+          <span class="result-val"><span id="ohmResultVal">--</span><span class="unit" id="ohmResultUnit"></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Power ============ -->
+  <div id="powerTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Power</div>
+      <p class="phase-desc" data-i18n="power_desc">필요한 공식을 고르세요 — P=V×I, P=I²×R, P=V²/R.</p>
+      <div class="solve-picker" id="powerFormulaPicker">
+        <button data-formula="vi" class="active">P = V×I</button>
+        <button data-formula="i2r">P = I²R</button>
+        <button data-formula="v2r">P = V²/R</button>
+      </div>
+      <div id="powerInputs"></div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">Power (P)</span>
+          <span class="result-val"><span id="powerResultVal">--</span><span class="unit">W</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Speaker Impedance ============ -->
+  <div id="impedanceTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Speaker Impedance</div>
+      <p class="phase-desc" data-i18n="impedance_desc">스피커를 직렬 또는 병렬로 연결했을 때의 합성 임피던스를 계산합니다.</p>
+      <div class="solve-picker" id="wiringPicker">
+        <button data-wiring="series" class="active" data-i18n="wiring_series">직렬 (Series)</button>
+        <button data-wiring="parallel" data-i18n="wiring_parallel">병렬 (Parallel)</button>
+      </div>
+      <div id="zoneList"></div>
+      <button class="add-zone-btn" id="addZoneBtn" data-i18n="add_speaker_btn">+ 스피커 추가</button>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="total_impedance_label">합성 임피던스</span>
+          <span class="result-val"><span id="impedanceResultVal">--</span><span class="unit">Ω</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: dB ↔ Power Ratio ============ -->
+  <div id="dbTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">dB ↔ Power Ratio</div>
+      <p class="phase-desc" data-i18n="db_power_desc">dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.</p>
+      <div class="field">
+        <label data-i18n="db_level_diff_label">dB (레벨 차이)</label>
+        <div class="input-row"><input type="number" id="dbInput" value="3" step="0.1"><span class="unit">dB</span></div>
+      </div>
+      <div class="field">
+        <label>Power Ratio (P2 / P1)</label>
+        <div class="input-row"><input type="number" id="dbRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">dB ↔ Voltage Ratio</div>
+      <p class="phase-desc" data-i18n="db_volt_desc">dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.</p>
+      <div class="field">
+        <label data-i18n="db_level_diff_label">dB (레벨 차이)</label>
+        <div class="input-row"><input type="number" id="dbVoltInput" value="6" step="0.1"><span class="unit">dB</span></div>
+      </div>
+      <div class="field">
+        <label>Voltage Ratio (V2 / V1)</label>
+        <div class="input-row"><input type="number" id="dbVoltRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
+      </div>
+      <p class="phase-desc" style="margin-top:14px; font-size:13px;" data-i18n="db_volt_note">참고: 같은 숫자의 "배수"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 "2배"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 "2배"를 넣어 비교해보세요.)</p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">dBu / dBV (전압 기준 절대 레벨)</div>
+      <p class="phase-desc" data-i18n="dbu_dbv_desc">dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
+      <div class="field">
+        <label>Voltage</label>
+        <div class="input-row"><input type="number" id="voltAbsInput" value="1" step="0.001"><span class="unit">V</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="dbv_label">dBV (0dBV = 1V 기준)</label>
+        <div class="input-row"><input type="number" id="dbVInput" value="0" step="0.01"><span class="unit">dBV</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="dbu_label">dBu (0dBu = 0.775V 기준)</label>
+        <div class="input-row"><input type="number" id="dbuInput" value="2.22" step="0.01"><span class="unit">dBu</span></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">dBm / dBW (전력 기준 절대 레벨)</div>
+      <p class="phase-desc" data-i18n="dbm_dbw_desc">dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
+      <div class="field">
+        <label>Power</label>
+        <div class="input-row"><input type="number" id="powerAbsInput" value="1" step="0.001"><span class="unit">W</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="dbw_label">dBW (0dBW = 1W 기준)</label>
+        <div class="input-row"><input type="number" id="dbWInput" value="0" step="0.01"><span class="unit">dBW</span></div>
+      </div>
+      <div class="field">
+        <label data-i18n="dbm_label">dBm (0dBm = 1mW 기준)</label>
+        <div class="input-row"><input type="number" id="dbmInput" value="30" step="0.01"><span class="unit">dBm</span></div>
+      </div>
+      <p class="phase-desc" style="margin-top:14px; font-size:13px;" data-i18n="dbu_dbm_note">참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.</p>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: AC Waveform (RMS/Peak/P-P) ============ -->
+  <div id="acwaveTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">AC Waveform (RMS ↔ Peak ↔ Peak-to-Peak)</div>
+      <p class="phase-desc" data-i18n="acwave_desc">정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)</p>
+      <div class="field">
+        <label>RMS Voltage</label>
+        <div class="input-row"><input type="number" id="acRmsInput" value="1" step="0.001"><span class="unit">V RMS</span></div>
+      </div>
+      <div class="field">
+        <label>Peak Voltage</label>
+        <div class="input-row"><input type="number" id="acPeakInput" value="1.414" step="0.001"><span class="unit">V pk</span></div>
+      </div>
+      <div class="field">
+        <label>Peak-to-Peak Voltage</label>
+        <div class="input-row"><input type="number" id="acPpInput" value="2.828" step="0.001"><span class="unit">V p-p</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 자유 계산: Cable / Voltage Drop ============ -->
+  <div id="cableTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Speaker Cable Voltage Drop</div>
+      <p class="phase-desc" data-i18n="cable_desc">스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.</p>
+      <div class="field">
+        <label>Cable Gauge (AWG)</label>
+        <div class="solve-picker" id="awgPicker">
+          <button data-awg="18">18 AWG</button>
+          <button data-awg="16">16 AWG</button>
+          <button data-awg="14" class="active">14 AWG</button>
+          <button data-awg="12">12 AWG</button>
+          <button data-awg="10">10 AWG</button>
+        </div>
+      </div>
+      <div class="field">
+        <label data-i18n="cable_length_label">Cable Length (편도, 한쪽 길이)</label>
+        <div class="input-row"><input type="number" id="cableLengthInput" value="15" step="0.1" min="0"><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Load Current</label>
+        <div class="input-row"><input type="number" id="cableCurrentInput" value="2" step="0.1" min="0"><span class="unit">A</span></div>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="cable_resistance_label">케이블 저항 (왕복)</span>
+          <span class="result-val"><span id="cableResistanceVal">--</span><span class="unit">Ω</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="voltage_drop_label">전압 강하</span>
+          <span class="result-val"><span id="cableVoltageDropVal">--</span><span class="unit">V</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="power_loss_label">손실 전력</span>
+          <span class="result-val"><span id="cablePowerLossVal">--</span><span class="unit">W</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="cableWarning"></p>
+    </div>
+  </div>
+
+  <!-- ============ 계산 문제(퀴즈) ============ -->
+  <div id="quizPanel" class="panel" style="display:none;">
+    <div class="panel-title" data-i18n="quiz_problem_title">문제</div>
+    <div class="quiz-problem" id="quizProblemText" data-i18n="quiz_start_prompt">시작 버튼을 눌러주세요</div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <button id="startBtn" class="startbtn" data-i18n="btn_quiz_start">▸ 계산 문제 시작</button>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+    <a href="acoustics-calculator.html">🌊 Acoustics Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
+    <a href="tempo-pitch-calculator.html">🥁 Tempo & Pitch</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // =====================================================================
+  // 공용 계산 함수
+  // =====================================================================
+  function ohmSolve(target, a, b){
+    // target='v' → a=I,b=R ; target='i' → a=V,b=R ; target='r' → a=V,b=I
+    if (target === 'v') return a * b;       // V = I × R
+    if (target === 'i') return a / b;       // I = V / R
+    return a / b;                            // R = V / I
+  }
+  function powerSolve(formula, a, b){
+    if (formula === 'vi') return a * b;          // P = V × I
+    if (formula === 'i2r') return a * a * b;     // P = I² × R
+    return (a * a) / b;                          // P = V² / R
+  }
+  function seriesImpedance(values){ return values.reduce((s, v) => s + v, 0); }
+  function parallelImpedance(values){
+    const sumRecip = values.reduce((s, v) => s + (v > 0 ? 1 / v : 0), 0);
+    return sumRecip > 0 ? 1 / sumRecip : 0;
+  }
+  function dbToRatio(db){ return Math.pow(10, db / 10); }
+  function ratioToDb(ratio){ return 10 * Math.log10(ratio); }
+  function dbToVoltRatio(db){ return Math.pow(10, db / 20); }
+  function voltRatioToDb(ratio){ return 20 * Math.log10(ratio); }
+
+  // =====================================================================
+  // 챕터 / 탭 전환
+  // =====================================================================
+  const chapterFreeBtn = document.getElementById('chapterFreeBtn');
+  const chapterQuizBtn = document.getElementById('chapterQuizBtn');
+  const tabPicker = document.getElementById('tabPicker');
+  const scoreboardEl = document.getElementById('scoreboard');
+  const scRoundEl = document.getElementById('scRound');
+  const scHitEl = document.getElementById('scHit');
+  const scAccEl = document.getElementById('scAcc');
+  const feedbackEl = document.getElementById('feedback');
+  const startBtn = document.getElementById('startBtn');
+  const quizPanel = document.getElementById('quizPanel');
+  const quizProblemText = document.getElementById('quizProblemText');
+  const quizOptionsEl = document.getElementById('quizOptions');
+
+  const freeTabs = {
+    ohm: document.getElementById('ohmTab'),
+    power: document.getElementById('powerTab'),
+    impedance: document.getElementById('impedanceTab'),
+    db: document.getElementById('dbTab'),
+    acwave: document.getElementById('acwaveTab'),
+    cable: document.getElementById('cableTab'),
+  };
+
+  let chapter = 'free'; // free | quiz
+  let activeTab = 'ohm';
+
+  function clearFeedback(){ feedbackEl.textContent = ''; feedbackEl.className = 'feedback'; }
+
+  function showFreeTabs(){
+    Object.entries(freeTabs).forEach(([name, el]) => { el.style.display = (name === activeTab) ? 'block' : 'none'; });
+  }
+
+  tabPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      activeTab = btn.dataset.tab;
+      tabPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      showFreeTabs();
+    });
+  });
+
+  function switchChapter(next){
+    if (chapter === next) return;
+    chapter = next;
+    chapterFreeBtn.classList.toggle('active', chapter === 'free');
+    chapterQuizBtn.classList.toggle('active', chapter === 'quiz');
+    scoreboardEl.style.display = chapter === 'quiz' ? 'flex' : 'none';
+    tabPicker.style.display = chapter === 'free' ? 'grid' : 'none';
+    quizPanel.style.display = chapter === 'quiz' ? 'block' : 'none';
+    clearFeedback();
+    if (chapter === 'free') {
+      showFreeTabs();
+      startBtn.style.display = 'none';
+    } else {
+      Object.values(freeTabs).forEach(el => el.style.display = 'none');
+      startBtn.style.display = 'block';
+      startBtn.textContent = window.i18n.t('btn_quiz_start');
+      startBtn.classList.remove('stop');
+      quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
+      quizOptionsEl.innerHTML = '';
+      questionIndex = 0; hitCount = 0;
+      updateScoreboard();
+    }
+  }
+  chapterFreeBtn.addEventListener('click', () => switchChapter('free'));
+  chapterQuizBtn.addEventListener('click', () => switchChapter('quiz'));
+
+  // =====================================================================
+  // 자유 계산 — Ohm's Law
+  // =====================================================================
+  const ohmSolvePicker = document.getElementById('ohmSolvePicker');
+  const ohmVInput = document.getElementById('ohmV');
+  const ohmIInput = document.getElementById('ohmI');
+  const ohmRInput = document.getElementById('ohmR');
+  const ohmResultVal = document.getElementById('ohmResultVal');
+  const ohmResultUnit = document.getElementById('ohmResultUnit');
+  let ohmSolveFor = 'i';
+
+  function updateOhmInputStates(){
+    ohmVInput.disabled = (ohmSolveFor === 'v');
+    ohmIInput.disabled = (ohmSolveFor === 'i');
+    ohmRInput.disabled = (ohmSolveFor === 'r');
+  }
+  function recalcOhm(){
+    const V = parseFloat(ohmVInput.value), I = parseFloat(ohmIInput.value), R = parseFloat(ohmRInput.value);
+    let result = null, unit = '';
+    if (ohmSolveFor === 'v' && isFinite(I) && isFinite(R)) { result = ohmSolve('v', I, R); unit = 'V'; }
+    if (ohmSolveFor === 'i' && isFinite(V) && isFinite(R) && R !== 0) { result = ohmSolve('i', V, R); unit = 'A'; }
+    if (ohmSolveFor === 'r' && isFinite(V) && isFinite(I) && I !== 0) { result = ohmSolve('r', V, I); unit = 'Ω'; }
+    ohmResultVal.textContent = (result === null || !isFinite(result)) ? '--' : result.toFixed(3);
+    ohmResultUnit.textContent = unit;
+    if (result !== null && isFinite(result)) {
+      if (ohmSolveFor === 'v') ohmVInput.value = result.toFixed(3);
+      if (ohmSolveFor === 'i') ohmIInput.value = result.toFixed(3);
+      if (ohmSolveFor === 'r') ohmRInput.value = result.toFixed(3);
+    }
+  }
+  ohmSolvePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      ohmSolveFor = btn.dataset.solve;
+      ohmSolvePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      updateOhmInputStates();
+      recalcOhm();
+    });
+  });
+  [ohmVInput, ohmIInput, ohmRInput].forEach(inp => inp.addEventListener('input', recalcOhm));
+  updateOhmInputStates();
+
+  // =====================================================================
+  // 자유 계산 — Power
+  // =====================================================================
+  const powerFormulaPicker = document.getElementById('powerFormulaPicker');
+  const powerInputsEl = document.getElementById('powerInputs');
+  const powerResultVal = document.getElementById('powerResultVal');
+  let powerFormula = 'vi';
+
+  const POWER_FIELD_DEFS = {
+    vi:  [{ id: 'powerV', label: 'Voltage (V)', unit: 'V', value: 12 }, { id: 'powerI', label: 'Current (I)', unit: 'A', value: 2 }],
+    i2r: [{ id: 'powerI2', label: 'Current (I)', unit: 'A', value: 2 }, { id: 'powerR2', label: 'Resistance (R)', unit: 'Ω', value: 8 }],
+    v2r: [{ id: 'powerV2', label: 'Voltage (V)', unit: 'V', value: 12 }, { id: 'powerR3', label: 'Resistance (R)', unit: 'Ω', value: 8 }],
+  };
+
+  function renderPowerInputs(){
+    const defs = POWER_FIELD_DEFS[powerFormula];
+    powerInputsEl.innerHTML = defs.map(d => `
+      <div class="field">
+        <label>${d.label}</label>
+        <div class="input-row"><input type="number" id="${d.id}" value="${d.value}" step="0.1"><span class="unit">${d.unit}</span></div>
+      </div>`).join('');
+    defs.forEach(d => document.getElementById(d.id).addEventListener('input', recalcPower));
+    recalcPower();
+  }
+  function recalcPower(){
+    const defs = POWER_FIELD_DEFS[powerFormula];
+    const a = parseFloat(document.getElementById(defs[0].id).value);
+    const b = parseFloat(document.getElementById(defs[1].id).value);
+    if (!isFinite(a) || !isFinite(b)) { powerResultVal.textContent = '--'; return; }
+    const p = powerSolve(powerFormula, a, b);
+    powerResultVal.textContent = isFinite(p) ? p.toFixed(2) : '--';
+  }
+  powerFormulaPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      powerFormula = btn.dataset.formula;
+      powerFormulaPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      renderPowerInputs();
+    });
+  });
+  renderPowerInputs();
+
+  // =====================================================================
+  // 자유 계산 — Speaker Impedance
+  // =====================================================================
+  const wiringPicker = document.getElementById('wiringPicker');
+  const zoneListEl = document.getElementById('zoneList');
+  const addZoneBtn = document.getElementById('addZoneBtn');
+  const impedanceResultVal = document.getElementById('impedanceResultVal');
+  let wiringType = 'series';
+  let zoneValues = [8, 8];
+
+  function renderZoneList(){
+    zoneListEl.innerHTML = zoneValues.map((v, i) => `
+      <div class="zone-row">
+        <span class="zone-label">${window.i18n.tpl('speaker_n_template', { n: i + 1 })}</span>
+        <input type="number" class="zone-input" data-idx="${i}" value="${v}" step="0.1">
+        <span class="unit">Ω</span>
+        ${zoneValues.length > 1 ? `<button class="zone-remove-btn" data-idx="${i}">✕</button>` : ''}
+      </div>`).join('');
+    zoneListEl.querySelectorAll('.zone-input').forEach(inp => {
+      inp.addEventListener('input', () => {
+        zoneValues[parseInt(inp.dataset.idx, 10)] = parseFloat(inp.value) || 0;
+        recalcImpedance();
+      });
+    });
+    zoneListEl.querySelectorAll('.zone-remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        zoneValues.splice(parseInt(btn.dataset.idx, 10), 1);
+        renderZoneList();
+        recalcImpedance();
+      });
+    });
+  }
+  function recalcImpedance(){
+    const total = wiringType === 'series' ? seriesImpedance(zoneValues) : parallelImpedance(zoneValues);
+    impedanceResultVal.textContent = isFinite(total) ? total.toFixed(2) : '--';
+  }
+  addZoneBtn.addEventListener('click', () => {
+    if (zoneValues.length >= 8) return;
+    zoneValues.push(8);
+    renderZoneList();
+    recalcImpedance();
+  });
+  wiringPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      wiringType = btn.dataset.wiring;
+      wiringPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcImpedance();
+    });
+  });
+  renderZoneList();
+  recalcImpedance();
+
+  // =====================================================================
+  // 자유 계산 — dB ↔ Power Ratio (양방향)
+  // =====================================================================
+  const dbInput = document.getElementById('dbInput');
+  const dbRatioInput = document.getElementById('dbRatioInput');
+  dbInput.addEventListener('input', () => {
+    const db = parseFloat(dbInput.value);
+    if (!isFinite(db)) return;
+    dbRatioInput.value = dbToRatio(db).toFixed(4);
+  });
+  dbRatioInput.addEventListener('input', () => {
+    const ratio = parseFloat(dbRatioInput.value);
+    if (!isFinite(ratio) || ratio <= 0) return;
+    dbInput.value = ratioToDb(ratio).toFixed(3);
+  });
+
+  const dbVoltInput = document.getElementById('dbVoltInput');
+  const dbVoltRatioInput = document.getElementById('dbVoltRatioInput');
+  dbVoltInput.addEventListener('input', () => {
+    const db = parseFloat(dbVoltInput.value);
+    if (!isFinite(db)) return;
+    dbVoltRatioInput.value = dbToVoltRatio(db).toFixed(4);
+  });
+  dbVoltRatioInput.addEventListener('input', () => {
+    const ratio = parseFloat(dbVoltRatioInput.value);
+    if (!isFinite(ratio) || ratio <= 0) return;
+    dbVoltInput.value = voltRatioToDb(ratio).toFixed(3);
+  });
+
+  // ---- dBu / dBV (전압 기준 절대 레벨) ----
+  // dBu 기준 전압: 0.775V(정확히는 √0.6V) — 600Ω에서 1mW를 내는 전압
+  const DBU_REF_V = Math.sqrt(0.6);
+  const voltAbsInput = document.getElementById('voltAbsInput');
+  const dbVInput = document.getElementById('dbVInput');
+  const dbuInput = document.getElementById('dbuInput');
+
+  voltAbsInput.addEventListener('input', () => {
+    const v = parseFloat(voltAbsInput.value);
+    if (!isFinite(v) || v <= 0) return;
+    dbVInput.value = (20 * Math.log10(v)).toFixed(3);
+    dbuInput.value = (20 * Math.log10(v / DBU_REF_V)).toFixed(3);
+  });
+  dbVInput.addEventListener('input', () => {
+    const db = parseFloat(dbVInput.value);
+    if (!isFinite(db)) return;
+    const v = Math.pow(10, db / 20);
+    voltAbsInput.value = v.toFixed(4);
+    dbuInput.value = (20 * Math.log10(v / DBU_REF_V)).toFixed(3);
+  });
+  dbuInput.addEventListener('input', () => {
+    const db = parseFloat(dbuInput.value);
+    if (!isFinite(db)) return;
+    const v = Math.pow(10, db / 20) * DBU_REF_V;
+    voltAbsInput.value = v.toFixed(4);
+    dbVInput.value = (20 * Math.log10(v)).toFixed(3);
+  });
+
+  // ---- dBm / dBW (전력 기준 절대 레벨) ----
+  const powerAbsInput = document.getElementById('powerAbsInput');
+  const dbWInput = document.getElementById('dbWInput');
+  const dbmInput = document.getElementById('dbmInput');
+
+  powerAbsInput.addEventListener('input', () => {
+    const p = parseFloat(powerAbsInput.value);
+    if (!isFinite(p) || p <= 0) return;
+    dbWInput.value = (10 * Math.log10(p)).toFixed(3);
+    dbmInput.value = (10 * Math.log10(p * 1000)).toFixed(3);
+  });
+  dbWInput.addEventListener('input', () => {
+    const db = parseFloat(dbWInput.value);
+    if (!isFinite(db)) return;
+    const p = Math.pow(10, db / 10);
+    powerAbsInput.value = p.toFixed(4);
+    dbmInput.value = (db + 30).toFixed(3);
+  });
+  dbmInput.addEventListener('input', () => {
+    const db = parseFloat(dbmInput.value);
+    if (!isFinite(db)) return;
+    const pMilliwatts = Math.pow(10, db / 10);
+    powerAbsInput.value = (pMilliwatts / 1000).toFixed(6);
+    dbWInput.value = (db - 30).toFixed(3);
+  });
+
+  // =====================================================================
+  // 자유 계산 — AC Waveform (RMS ↔ Peak ↔ Peak-to-Peak)
+  // =====================================================================
+  const SQRT2 = Math.SQRT2;
+  const acRmsInput = document.getElementById('acRmsInput');
+  const acPeakInput = document.getElementById('acPeakInput');
+  const acPpInput = document.getElementById('acPpInput');
+
+  acRmsInput.addEventListener('input', () => {
+    const rms = parseFloat(acRmsInput.value);
+    if (!isFinite(rms)) return;
+    const peak = rms * SQRT2;
+    acPeakInput.value = peak.toFixed(4);
+    acPpInput.value = (peak * 2).toFixed(4);
+  });
+  acPeakInput.addEventListener('input', () => {
+    const peak = parseFloat(acPeakInput.value);
+    if (!isFinite(peak)) return;
+    acRmsInput.value = (peak / SQRT2).toFixed(4);
+    acPpInput.value = (peak * 2).toFixed(4);
+  });
+  acPpInput.addEventListener('input', () => {
+    const pp = parseFloat(acPpInput.value);
+    if (!isFinite(pp)) return;
+    const peak = pp / 2;
+    acPeakInput.value = peak.toFixed(4);
+    acRmsInput.value = (peak / SQRT2).toFixed(4);
+  });
+
+  // =====================================================================
+  // 자유 계산 — Speaker Cable Voltage Drop
+  // =====================================================================
+  // 표준 AWG 저항표 (Ω/km, 20°C 구리 기준)
+  const AWG_OHMS_PER_KM = { 18: 20.95, 16: 13.17, 14: 8.286, 12: 5.211, 10: 3.277 };
+  const awgPicker = document.getElementById('awgPicker');
+  const cableLengthInput = document.getElementById('cableLengthInput');
+  const cableCurrentInput = document.getElementById('cableCurrentInput');
+  const cableResistanceVal = document.getElementById('cableResistanceVal');
+  const cableVoltageDropVal = document.getElementById('cableVoltageDropVal');
+  const cablePowerLossVal = document.getElementById('cablePowerLossVal');
+  const cableWarning = document.getElementById('cableWarning');
+  let selectedAwg = 14;
+
+  function recalcCable(){
+    const lengthOneWay = parseFloat(cableLengthInput.value) || 0;
+    const current = parseFloat(cableCurrentInput.value) || 0;
+    const ohmsPerKm = AWG_OHMS_PER_KM[selectedAwg];
+    // ✅ 왕복(往復) 거리 — 전류는 앰프→스피커→앰프로 돌아오므로 편도 길이의 2배가 실제 저항 경로
+    const totalLengthKm = (lengthOneWay * 2) / 1000;
+    const resistance = ohmsPerKm * totalLengthKm;
+    const voltageDrop = current * resistance;
+    const powerLoss = current * current * resistance;
+
+    cableResistanceVal.textContent = resistance.toFixed(3);
+    cableVoltageDropVal.textContent = voltageDrop.toFixed(3);
+    cablePowerLossVal.textContent = powerLoss.toFixed(2);
+
+    cableWarning.textContent = voltageDrop > 0.5
+      ? window.i18n.tpl('cable_warning_template', { v: voltageDrop.toFixed(2) })
+      : '';
+  }
+  awgPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedAwg = parseInt(btn.dataset.awg, 10);
+      awgPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcCable();
+    });
+  });
+  [cableLengthInput, cableCurrentInput].forEach(el => el.addEventListener('input', recalcCable));
+  recalcCable();
+
+  // =====================================================================
+  // 계산 문제(퀴즈)
+  // =====================================================================
+  const QUESTIONS_PER_QUIZ = 10;
+  let questionIndex = 0;
+  let hitCount = 0;
+  let currentQuestion = null; // { text, answer }
+  let quizActive = false;
+
+  function updateScoreboard(){
+    scRoundEl.textContent = `${questionIndex}/${QUESTIONS_PER_QUIZ}`;
+    scHitEl.textContent = hitCount;
+    scAccEl.textContent = questionIndex > 0 ? Math.round((hitCount / questionIndex) * 100) + '%' : '--';
+  }
+
+  function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+  function randChoice(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function makeOhmQuestion(){
+    const R = randChoice([4, 6, 8, 10, 16, 20, 33, 47, 100]);
+    const I = randInt(1, 20) / 10; // 0.1 ~ 2.0 A
+    const V = +(I * R).toFixed(2);
+    const target = randChoice(['v', 'i', 'r']);
+    if (target === 'v') return { text: window.i18n.tpl('ohm_q_v', { I, R }), answer: V };
+    if (target === 'i') return { text: window.i18n.tpl('ohm_q_i', { V, R }), answer: I };
+    return { text: window.i18n.tpl('ohm_q_r', { V, I }), answer: R };
+  }
+
+  function makePowerQuestion(){
+    const formula = randChoice(['vi', 'i2r', 'v2r']);
+    if (formula === 'vi') {
+      const V = randChoice([6, 9, 12, 24, 48, 100, 120]);
+      const I = randInt(1, 20) / 10;
+      return { text: window.i18n.tpl('power_q_vi', { V, I }), answer: +(V * I).toFixed(2) };
+    }
+    if (formula === 'i2r') {
+      const I = randInt(1, 20) / 10;
+      const R = randChoice([4, 8, 16, 32]);
+      return { text: window.i18n.tpl('power_q_i2r', { I, R }), answer: +(I * I * R).toFixed(2) };
+    }
+    const V = randChoice([6, 9, 12, 24, 48]);
+    const R = randChoice([4, 8, 16, 32]);
+    return { text: window.i18n.tpl('power_q_v2r', { V, R }), answer: +((V * V) / R).toFixed(2) };
+  }
+
+  function makeImpedanceQuestion(){
+    const wiring = randChoice(['series', 'parallel']);
+    const count = randInt(2, 3);
+    const values = Array.from({ length: count }, () => randChoice([4, 8, 16]));
+    const total = wiring === 'series' ? seriesImpedance(values) : parallelImpedance(values);
+    const wiringLabel = wiring === 'series' ? window.i18n.t('imp_wiring_series') : window.i18n.t('imp_wiring_parallel');
+    return {
+      text: window.i18n.tpl('impedance_q_template', { list: values.map(v => v + 'Ω').join(', '), count, wiring: wiringLabel }),
+      answer: +total.toFixed(2),
+    };
+  }
+
+  function makeDbQuestion(){
+    const useDb = Math.random() < 0.5;
+    if (useDb) {
+      const db = randChoice([3, 6, 10, 20, -3, -6]);
+      return { text: window.i18n.tpl('db_q_from_db', { db }), answer: +dbToRatio(db).toFixed(3) };
+    }
+    const ratio = randChoice([2, 4, 10, 0.5, 0.25, 100]);
+    return { text: window.i18n.tpl('db_q_from_ratio', { ratio }), answer: +ratioToDb(ratio).toFixed(2) };
+  }
+
+  function makeDbVoltQuestion(){
+    const useDb = Math.random() < 0.5;
+    if (useDb) {
+      const db = randChoice([6, 12, 20, 40, -6, -20]);
+      return { text: window.i18n.tpl('dbvolt_q_from_db', { db }), answer: +dbToVoltRatio(db).toFixed(3) };
+    }
+    const ratio = randChoice([2, 4, 10, 0.5, 0.1, 100]);
+    return { text: window.i18n.tpl('dbvolt_q_from_ratio', { ratio }), answer: +voltRatioToDb(ratio).toFixed(2) };
+  }
+
+  const DBU_REF_V_Q = Math.sqrt(0.6);
+  function makeDbuDbvQuestion(){
+    const kind = randChoice(['v2dbv', 'v2dbu', 'dbm2dbw']);
+    if (kind === 'v2dbv') {
+      const v = randChoice([0.5, 1, 2, 4, 10]);
+      return { text: window.i18n.tpl('dbudbv_q_v2dbv', { v }), answer: +(20 * Math.log10(v)).toFixed(2) };
+    }
+    if (kind === 'v2dbu') {
+      const v = randChoice([0.775, 1.55, 3.1, 7.75]);
+      return { text: window.i18n.tpl('dbudbv_q_v2dbu', { v }), answer: +(20 * Math.log10(v / DBU_REF_V_Q)).toFixed(2) };
+    }
+    const dbm = randChoice([0, 10, 20, 30, -10]);
+    return { text: window.i18n.tpl('dbudbv_q_dbm2dbw', { dbm }), answer: dbm - 30 };
+  }
+
+  function makeAcWaveQuestion(){
+    const kind = randChoice(['rms2peak', 'peak2rms', 'rms2pp']);
+    const rms = randChoice([1, 5, 10, 12, 24, 120]);
+    if (kind === 'rms2peak') {
+      return { text: window.i18n.tpl('acwave_q_rms2peak', { rms }), answer: +(rms * Math.SQRT2).toFixed(2) };
+    }
+    if (kind === 'peak2rms') {
+      const peak = +(rms * Math.SQRT2).toFixed(2);
+      return { text: window.i18n.tpl('acwave_q_peak2rms', { peak }), answer: rms };
+    }
+    return { text: window.i18n.tpl('acwave_q_rms2pp', { rms }), answer: +(rms * Math.SQRT2 * 2).toFixed(2) };
+  }
+
+  const AWG_OHMS_PER_KM_Q = { 18: 20.95, 16: 13.17, 14: 8.286, 12: 5.211, 10: 3.277 };
+  function makeCableQuestion(){
+    const awg = randChoice([10, 12, 14, 16, 18]);
+    const lengthOneWay = randChoice([5, 10, 15, 20, 30]);
+    const current = randChoice([1, 2, 3, 5]);
+    const resistance = AWG_OHMS_PER_KM_Q[awg] * (lengthOneWay * 2 / 1000);
+    const kind = randChoice(['drop', 'loss']);
+    if (kind === 'drop') {
+      return {
+        text: window.i18n.tpl('cable_q_drop', { awg, length: lengthOneWay, current }),
+        answer: +(current * resistance).toFixed(2),
+      };
+    }
+    return {
+      text: window.i18n.tpl('cable_q_loss', { awg, length: lengthOneWay, current }),
+      answer: +(current * current * resistance).toFixed(2),
+    };
+  }
+
+  const QUESTION_MAKERS = [makeOhmQuestion, makePowerQuestion, makeImpedanceQuestion, makeDbQuestion, makeDbVoltQuestion, makeDbuDbvQuestion, makeAcWaveQuestion, makeCableQuestion];
+
+  // ✅ 요청 반영: 정답 근처의 그럴듯한 오답 보기 3개를 만든다.
+  function smartRound(v){
+    if (Math.abs(v) >= 100) return Math.round(v);
+    if (Math.abs(v) >= 10) return Math.round(v * 10) / 10;
+    return Math.round(v * 100) / 100;
+  }
+  function makeDistractors(answer, count){
+    const distractors = new Set();
+    const base = answer === 0 ? 1 : answer; // 0으로 곱하면 전부 0이 되는 것 방지
+    const candidates = [
+      answer * 2, answer / 2, answer * 1.5,
+      answer + Math.abs(base) * 0.25 + 1, answer - Math.abs(base) * 0.25 - 1,
+      -answer, answer * 10, answer / 10,
+    ];
+    candidates.forEach(c => {
+      if (distractors.size >= count) return;
+      const rounded = smartRound(c);
+      if (isFinite(rounded) && rounded !== answer && !distractors.has(rounded)) distractors.add(rounded);
+    });
+    let guard = 0;
+    while (distractors.size < count && guard < 50) {
+      guard++;
+      const factor = 1 + (Math.random() * 1.6 - 0.8); // 대략 0.2~1.8배
+      const rounded = smartRound(base * factor + (Math.random() < 0.5 ? 1 : -1));
+      if (isFinite(rounded) && rounded !== answer && !distractors.has(rounded)) distractors.add(rounded);
+    }
+    return Array.from(distractors).slice(0, count);
+  }
+  function shuffle(arr){
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function formatOption(v){
+    return (Number.isInteger(v)) ? String(v) : v.toFixed(Math.abs(v) >= 10 ? 1 : 2);
+  }
+
+  function generateQuizQuestion(){
+    questionIndex++;
+    currentQuestion = randChoice(QUESTION_MAKERS)();
+    quizProblemText.textContent = currentQuestion.text;
+    clearFeedback();
+    updateScoreboard();
+
+    const options = shuffle([currentQuestion.answer, ...makeDistractors(currentQuestion.answer, 3)]);
+    quizOptionsEl.innerHTML = options.map(opt => `<button class="quiz-option-btn" data-val="${opt}">${formatOption(opt)}</button>`).join('');
+    quizOptionsEl.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => submitQuizAnswer(btn));
+    });
+  }
+
+  function submitQuizAnswer(chosenBtn){
+    if (!quizActive || currentQuestion === null) return;
+    const guess = parseFloat(chosenBtn.dataset.val);
+    const answer = currentQuestion.answer;
+    const isCorrect = Math.abs(guess - answer) < 1e-6;
+    if (isCorrect) hitCount++;
+    feedbackEl.textContent = isCorrect ? window.i18n.t('feedback_correct') : window.i18n.tpl('feedback_wrong_template', { answer: formatOption(answer) });
+    feedbackEl.className = 'feedback ' + (isCorrect ? 'correct' : 'wrong');
+    updateScoreboard();
+
+    // ✅ 정답/오답 버튼을 색으로 표시하고, 더 이상 못 누르게 잠근다
+    quizOptionsEl.querySelectorAll('button').forEach(btn => {
+      const btnVal = parseFloat(btn.dataset.val);
+      if (Math.abs(btnVal - answer) < 1e-6) btn.classList.add('correct-option');
+      else if (btn === chosenBtn) btn.classList.add('wrong-option');
+      btn.disabled = true;
+    });
+    currentQuestion = null;
+
+    setTimeout(() => {
+      if (!quizActive) return;
+      if (questionIndex >= QUESTIONS_PER_QUIZ) {
+        finishQuiz();
+      } else {
+        generateQuizQuestion();
+      }
+    }, 1600);
+  }
+
+  function finishQuiz(){
+    quizActive = false;
+    startBtn.textContent = window.i18n.t('btn_quiz_start');
+    startBtn.classList.remove('stop');
+    quizProblemText.textContent = window.i18n.tpl('quiz_finish_template', { hit: hitCount, total: QUESTIONS_PER_QUIZ });
+    quizOptionsEl.innerHTML = '';
+    clearFeedback();
+    chapterFreeBtn.disabled = false;
+    chapterQuizBtn.disabled = false;
+  }
+
+  startBtn.addEventListener('click', () => {
+    if (chapter !== 'quiz') return;
+    if (!quizActive) {
+      quizActive = true;
+      questionIndex = 0; hitCount = 0;
+      startBtn.textContent = window.i18n.t('btn_quiz_stop');
+      startBtn.classList.add('stop');
+      chapterFreeBtn.disabled = true;
+      chapterQuizBtn.disabled = true;
+      generateQuizQuestion();
+    } else {
+      finishQuiz();
+    }
+  });
+
+  updateScoreboard();
+  startBtn.style.display = 'none'; // ✅ 기본이 자유 계산 모드이므로 시작 버튼은 처음엔 숨긴다
+
+  document.addEventListener('i18nchange', () => {
+    renderZoneList();
+    recalcImpedance();
+    if (chapter === 'quiz') {
+      startBtn.textContent = window.i18n.t(quizActive ? 'btn_quiz_stop' : 'btn_quiz_start');
+      if (!quizActive && currentQuestion === null && questionIndex === 0) {
+        quizProblemText.textContent = window.i18n.t('quiz_start_prompt');
+      }
+    }
+  });
+})();
+</script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "chapter_free": {"ko": "자유 계산", "en": "Free Calculation", "ja": "自由計算", "es": "Cálculo libre", "zh": "自由计算"}, "chapter_quiz": {"ko": "계산 문제", "en": "Practice Quiz", "ja": "計算問題", "es": "Preguntas de cálculo", "zh": "计算题"}, "solve_v": {"ko": "V 구하기", "en": "Solve V", "ja": "Vを求める", "es": "Calcular V", "zh": "求V"}, "solve_i": {"ko": "I 구하기", "en": "Solve I", "ja": "Iを求める", "es": "Calcular I", "zh": "求I"}, "solve_r": {"ko": "R 구하기", "en": "Solve R", "ja": "Rを求める", "es": "Calcular R", "zh": "求R"}, "ohm_desc": {"ko": "V = I × R. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.", "en": "V = I × R. Choose what you want to solve for, then enter the other two values.", "ja": "V = I × R。何を求めるか選ぶと、残り2つの値を入力して計算します。", "es": "V = I × R. Elige qué quieres calcular y luego introduce los otros dos valores.", "zh": "V = I × R。选择要求解的量，然后输入其余两个数值即可计算。"}, "result_label": {"ko": "결과", "en": "Result", "ja": "結果", "es": "Resultado", "zh": "结果"}, "power_desc": {"ko": "필요한 공식을 고르세요 — P=V×I, P=I²×R, P=V²/R.", "en": "Choose the formula you need — P=V×I, P=I²×R, P=V²/R.", "ja": "必要な公式を選んでください — P=V×I、P=I²×R、P=V²/R。", "es": "Elige la fórmula que necesitas — P=V×I, P=I²×R, P=V²/R.", "zh": "选择所需公式 — P=V×I、P=I²×R、P=V²/R。"}, "wiring_series": {"ko": "직렬 (Series)", "en": "Series", "ja": "直列 (Series)", "es": "Serie (Series)", "zh": "串联 (Series)"}, "wiring_parallel": {"ko": "병렬 (Parallel)", "en": "Parallel", "ja": "並列 (Parallel)", "es": "Paralelo (Parallel)", "zh": "并联 (Parallel)"}, "impedance_desc": {"ko": "스피커를 직렬 또는 병렬로 연결했을 때의 합성 임피던스를 계산합니다.", "en": "Calculates the total impedance when speakers are wired in series or parallel.", "ja": "スピーカーを直列または並列に接続したときの合成インピーダンスを計算します。", "es": "Calcula la impedancia total al conectar altavoces en serie o en paralelo.", "zh": "计算扬声器以串联或并联方式连接时的合成阻抗。"}, "add_speaker_btn": {"ko": "+ 스피커 추가", "en": "+ Add Speaker", "ja": "+ スピーカーを追加", "es": "+ Añadir altavoz", "zh": "+ 添加扬声器"}, "total_impedance_label": {"ko": "합성 임피던스", "en": "Total Impedance", "ja": "合成インピーダンス", "es": "Impedancia total", "zh": "总阻抗"}, "db_power_desc": {"ko": "dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.", "en": "dB = 10 × log10(P2/P1). Enter either value and the other is calculated automatically.", "ja": "dB = 10 × log10(P2/P1)。どちらかを入力すると、もう一方が自動的に計算されます。", "es": "dB = 10 × log10(P2/P1). Introduce cualquiera de los dos valores y el otro se calcula automáticamente.", "zh": "dB = 10 × log10(P2/P1)。输入其中任意一个数值，另一个会自动计算。"}, "db_level_diff_label": {"ko": "dB (레벨 차이)", "en": "dB (Level Difference)", "ja": "dB (レベル差)", "es": "dB (Diferencia de nivel)", "zh": "dB(电平差)"}, "db_volt_desc": {"ko": "dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.", "en": "dB = 20 × log10(V2/V1). The coefficient for voltage (or current)-based dB differs from power-based dB — the same ratio gives a different dB value.", "ja": "dB = 20 × log10(V2/V1)。電圧(または電流)基準のdBは電力基準と係数が異なります — 同じ倍率でもdB値が変わります。", "es": "dB = 20 × log10(V2/V1). El coeficiente para dB basado en voltaje (o corriente) es distinto al basado en potencia — la misma proporción da un valor de dB diferente.", "zh": "dB = 20 × log10(V2/V1)。以电压(或电流)为基准的dB系数与以功率为基准不同 — 相同倍数下dB值也不同。"}, "db_volt_note": {"ko": "참고: 같은 숫자의 \"배수\"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 \"2배\"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 \"2배\"를 넣어 비교해보세요.)", "en": "Note: the same numeric \"ratio\" gives a different dB value depending on whether it's a power ratio or a voltage ratio. For example, a \"2×\" power ratio is 10×log10(2)≈3dB, while a \"2×\" voltage ratio is 20×log10(2)≈6dB. (Since doubling voltage quadruples power, physically the same change always gives the same dB when calculated using its own reference — try entering \"2\" in both panels above to compare.)", "ja": "参考: 同じ数字の「倍率」でも、電力比か電圧比かによってdB値が変わります。例えば「2倍」が電力比なら10×log10(2)≈3dB、電圧比なら20×log10(2)≈6dBです。(電圧が2倍になると電力は4倍になるため、物理的に同じ変化をそれぞれの基準で計算すると常に同じdBになります — 上の2つのパネルに実際に「2」を入れて比べてみてください。)", "es": "Nota: la misma \"proporción\" numérica da un valor de dB distinto según sea una relación de potencia o de voltaje. Por ejemplo, un \"2×\" en relación de potencia es 10×log10(2)≈3dB, mientras que un \"2×\" en relación de voltaje es 20×log10(2)≈6dB. (Como duplicar el voltaje cuadruplica la potencia, el mismo cambio físico siempre da el mismo dB al calcularlo con su propia referencia — prueba a introducir \"2\" en los dos paneles de arriba para comparar.)", "zh": "提示：同样数字的\"倍数\"，按功率比还是电压比计算，dB值是不同的。例如\"2倍\"若是功率比，为10×log10(2)≈3dB；若是电压比，则为20×log10(2)≈6dB。(因为电压变为2倍时功率会变为4倍，所以物理上相同的变化用各自基准计算时dB值始终一致 — 可以在上面两个面板中都输入\"2\"来对比看看。)"}, "dbu_dbv_desc": {"ko": "dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.", "en": "dBV is referenced to 1V, and dBu to 0.775V (the voltage that produces 1mW into 600Ω). Enter any one of the three and the rest are calculated automatically.", "ja": "dBVは1V基準、dBuは0.775V(=600Ωで1mWを出す電圧)基準です。3つのうちどれかを入力すると、残りが自動的に計算されます。", "es": "dBV toma como referencia 1V, y dBu 0.775V (el voltaje que produce 1mW en 600Ω). Introduce cualquiera de los tres y el resto se calcula automáticamente.", "zh": "dBV以1V为基准，dBu以0.775V(在600Ω上产生1mW的电压)为基准。三者中输入任意一个，其余会自动计算。"}, "dbv_label": {"ko": "dBV (0dBV = 1V 기준)", "en": "dBV (0dBV = 1V reference)", "ja": "dBV (0dBV = 1V基準)", "es": "dBV (0dBV = referencia 1V)", "zh": "dBV(0dBV = 1V基准)"}, "dbu_label": {"ko": "dBu (0dBu = 0.775V 기준)", "en": "dBu (0dBu = 0.775V reference)", "ja": "dBu (0dBu = 0.775V基準)", "es": "dBu (0dBu = referencia 0.775V)", "zh": "dBu(0dBu = 0.775V基准)"}, "dbm_dbw_desc": {"ko": "dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.", "en": "dBW is referenced to 1W, and dBm to 1mW (dBW = dBm − 30). Enter any one of the three and the rest are calculated automatically.", "ja": "dBWは1W基準、dBmは1mW基準です(dBW = dBm − 30)。3つのうちどれかを入力すると、残りが自動的に計算されます。", "es": "dBW toma como referencia 1W, y dBm 1mW (dBW = dBm − 30). Introduce cualquiera de los tres y el resto se calcula automáticamente.", "zh": "dBW以1W为基准，dBm以1mW为基准(dBW = dBm − 30)。三者中输入任意一个，其余会自动计算。"}, "dbw_label": {"ko": "dBW (0dBW = 1W 기준)", "en": "dBW (0dBW = 1W reference)", "ja": "dBW (0dBW = 1W基準)", "es": "dBW (0dBW = referencia 1W)", "zh": "dBW(0dBW = 1W基准)"}, "dbm_label": {"ko": "dBm (0dBm = 1mW 기준)", "en": "dBm (0dBm = 1mW reference)", "ja": "dBm (0dBm = 1mW基準)", "es": "dBm (0dBm = referencia 1mW)", "zh": "dBm(0dBm = 1mW基准)"}, "dbu_dbm_note": {"ko": "참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.", "en": "Note: at a 600Ω reference, dBu and dBm are exactly equal (since 0.775V produces exactly 1mW into 600Ω) — this is why this reference became standard in old telephone/broadcast systems.", "ja": "参考: 600Ω基準ではdBuとdBmは正確に同じ値になります(0.775Vが600Ωでちょうど1mWを出すため) — これが昔の電話・放送システムでこの基準が定着した理由です。", "es": "Nota: con una referencia de 600Ω, dBu y dBm son exactamente iguales (ya que 0.775V produce exactamente 1mW en 600Ω) — por eso esta referencia se estableció en los antiguos sistemas telefónicos y de radiodifusión.", "zh": "提示：在600Ω基准下，dBu与dBm数值完全相等(因为0.775V在600Ω上恰好产生1mW) — 这也是早期电话/广播系统采用该基准的原因。"}, "acwave_desc": {"ko": "정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)", "en": "Based on a sine wave. Enter any one of the three and the rest are calculated automatically. (Peak = RMS × √2, P-P = 2 × Peak)", "ja": "正弦波基準です。3つのうちどれかを入力すると、残りが自動的に計算されます。(Peak = RMS × √2、P-P = 2 × Peak)", "es": "Basado en una onda seno. Introduce cualquiera de los tres y el resto se calcula automáticamente. (Peak = RMS × √2, P-P = 2 × Peak)", "zh": "以正弦波为基准。三者中输入任意一个，其余会自动计算。(Peak = RMS × √2，P-P = 2 × Peak)"}, "cable_desc": {"ko": "스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.", "en": "Enter the speaker cable gauge (AWG), length, and current to calculate the voltage drop and power loss caused by cable resistance.", "ja": "スピーカーケーブルの太さ(AWG)・長さ・電流を入力すると、ケーブル抵抗による電圧降下と電力損失を計算します。", "es": "Introduce el calibre del cable (AWG), la longitud y la corriente para calcular la caída de tensión y la pérdida de potencia causadas por la resistencia del cable.", "zh": "输入扬声器线缆的线规(AWG)、长度和电流，即可计算因线缆电阻造成的电压降与功率损耗。"}, "cable_length_label": {"ko": "Cable Length (편도, 한쪽 길이)", "en": "Cable Length (one-way)", "ja": "ケーブル長(片道)", "es": "Longitud del cable (un sentido)", "zh": "线缆长度(单程)"}, "cable_resistance_label": {"ko": "케이블 저항 (왕복)", "en": "Cable Resistance (round-trip)", "ja": "ケーブル抵抗(往復)", "es": "Resistencia del cable (ida y vuelta)", "zh": "线缆电阻(往返)"}, "voltage_drop_label": {"ko": "전압 강하", "en": "Voltage Drop", "ja": "電圧降下", "es": "Caída de tensión", "zh": "电压降"}, "power_loss_label": {"ko": "손실 전력", "en": "Power Loss", "ja": "損失電力", "es": "Pérdida de potencia", "zh": "损耗功率"}, "cable_warning_template": {"ko": "⚠️ 전압 강하가 {v}V예요 — 케이블이 얇거나 너무 길면 저역이 물러지고(damping factor 저하) 전력 손실도 커질 수 있어요. 더 굵은 케이블을 고려해보세요.", "en": "⚠️ The voltage drop is {v}V — if the cable is too thin or too long, the low end can get loose (reduced damping factor) and power loss can increase. Consider a thicker cable.", "ja": "⚠️ 電圧降下が{v}Vです — ケーブルが細すぎたり長すぎたりすると、低域が緩くなり(ダンピングファクター低下)、電力損失も大きくなることがあります。より太いケーブルの使用を検討してください。", "es": "⚠️ La caída de tensión es de {v}V — si el cable es demasiado fino o largo, los graves pueden aflojarse (menor damping factor) y la pérdida de potencia puede aumentar. Considera usar un cable más grueso.", "zh": "⚠️ 电压降为{v}V — 若线缆过细或过长，低频会变得松散(阻尼系数下降)，功率损耗也可能增大。建议考虑使用更粗的线缆。"}, "quiz_problem_title": {"ko": "문제", "en": "Question", "ja": "問題", "es": "Pregunta", "zh": "题目"}, "quiz_start_prompt": {"ko": "시작 버튼을 눌러주세요", "en": "Press Start to begin", "ja": "スタートボタンを押してください", "es": "Pulsa Iniciar para comenzar", "zh": "请点击开始按钮"}, "btn_quiz_start": {"ko": "▸ 계산 문제 시작", "en": "▸ Start Quiz", "ja": "▸ 計算問題スタート", "es": "▸ Iniciar cuestionario", "zh": "▸ 开始计算题"}, "btn_quiz_stop": {"ko": "■ 계산 문제 중단", "en": "■ Stop Quiz", "ja": "■ 計算問題を中断", "es": "■ Detener cuestionario", "zh": "■ 中止计算题"}, "speaker_n_template": {"ko": "스피커 {n}", "en": "Speaker {n}", "ja": "スピーカー{n}", "es": "Altavoz {n}", "zh": "扬声器{n}"}, "feedback_correct": {"ko": "✅ 정답이에요!", "en": "✅ Correct!", "ja": "✅ 正解です！", "es": "✅ ¡Correcto!", "zh": "✅ 答对了！"}, "feedback_wrong_template": {"ko": "❌ 오답이에요 — 정답은 {answer}이었어요", "en": "❌ Wrong — the answer was {answer}", "ja": "❌ 不正解 — 正解は{answer}でした", "es": "❌ Incorrecto — la respuesta era {answer}", "zh": "❌ 答错了 — 正确答案是{answer}"}, "quiz_finish_template": {"ko": "퀴즈 종료! {hit}/{total} 정답", "en": "Quiz complete! {hit}/{total} correct", "ja": "クイズ終了！{hit}/{total}問正解", "es": "¡Cuestionario terminado! {hit}/{total} correctas", "zh": "测验结束！答对{hit}/{total}题"}, "ohm_q_v": {"ko": "I = {I}A, R = {R}Ω 일 때, V(전압)은 몇 V인가요?", "en": "If I = {I}A and R = {R}Ω, what is V (voltage) in volts?", "ja": "I = {I}A、R = {R}Ωのとき、V(電圧)は何Vですか？", "es": "Si I = {I}A y R = {R}Ω, ¿cuál es V (voltaje) en voltios?", "zh": "当I = {I}A，R = {R}Ω时，V(电压)是多少V？"}, "ohm_q_i": {"ko": "V = {V}V, R = {R}Ω 일 때, I(전류)는 몇 A인가요?", "en": "If V = {V}V and R = {R}Ω, what is I (current) in amps?", "ja": "V = {V}V、R = {R}Ωのとき、I(電流)は何Aですか？", "es": "Si V = {V}V y R = {R}Ω, ¿cuál es I (corriente) en amperios?", "zh": "当V = {V}V，R = {R}Ω时，I(电流)是多少A？"}, "ohm_q_r": {"ko": "V = {V}V, I = {I}A 일 때, R(저항)은 몇 Ω인가요?", "en": "If V = {V}V and I = {I}A, what is R (resistance) in ohms?", "ja": "V = {V}V、I = {I}Aのとき、R(抵抗)は何Ωですか？", "es": "Si V = {V}V e I = {I}A, ¿cuál es R (resistencia) en ohmios?", "zh": "当V = {V}V，I = {I}A时，R(电阻)是多少Ω？"}, "power_q_vi": {"ko": "V = {V}V, I = {I}A 일 때, P(전력)는 몇 W인가요? (P = V×I)", "en": "If V = {V}V and I = {I}A, what is P (power) in watts? (P = V×I)", "ja": "V = {V}V、I = {I}Aのとき、P(電力)は何Wですか？(P = V×I)", "es": "Si V = {V}V e I = {I}A, ¿cuál es P (potencia) en vatios? (P = V×I)", "zh": "当V = {V}V，I = {I}A时，P(功率)是多少W？(P = V×I)"}, "power_q_i2r": {"ko": "I = {I}A, R = {R}Ω 일 때, P(전력)는 몇 W인가요? (P = I²×R)", "en": "If I = {I}A and R = {R}Ω, what is P (power) in watts? (P = I²×R)", "ja": "I = {I}A、R = {R}Ωのとき、P(電力)は何Wですか？(P = I²×R)", "es": "Si I = {I}A y R = {R}Ω, ¿cuál es P (potencia) en vatios? (P = I²×R)", "zh": "当I = {I}A，R = {R}Ω时，P(功率)是多少W？(P = I²×R)"}, "power_q_v2r": {"ko": "V = {V}V, R = {R}Ω 일 때, P(전력)는 몇 W인가요? (P = V²/R)", "en": "If V = {V}V and R = {R}Ω, what is P (power) in watts? (P = V²/R)", "ja": "V = {V}V、R = {R}Ωのとき、P(電力)は何Wですか？(P = V²/R)", "es": "Si V = {V}V y R = {R}Ω, ¿cuál es P (potencia) en vatios? (P = V²/R)", "zh": "当V = {V}V，R = {R}Ω时，P(功率)是多少W？(P = V²/R)"}, "impedance_q_template": {"ko": "{list} 스피커 {count}개를 {wiring}로 연결하면, 합성 임피던스는 몇 Ω인가요?", "en": "If you connect {count} speakers ({list}) in {wiring}, what is the total impedance in Ω?", "ja": "{list}のスピーカー{count}台を{wiring}で接続すると、合成インピーダンスは何Ωですか？", "es": "Si conectas {count} altavoces ({list}) en {wiring}, ¿cuál es la impedancia total en Ω?", "zh": "将{list}共{count}个扬声器以{wiring}方式连接，合成阻抗是多少Ω？"}, "imp_wiring_series": {"ko": "직렬(Series)", "en": "series", "ja": "直列(Series)", "es": "serie", "zh": "串联(Series)"}, "imp_wiring_parallel": {"ko": "병렬(Parallel)", "en": "parallel", "ja": "並列(Parallel)", "es": "paralelo", "zh": "并联(Parallel)"}, "db_q_from_db": {"ko": "{db}dB는 전력비(P2/P1)로 몇 배인가요?", "en": "What power ratio (P2/P1) does {db}dB correspond to?", "ja": "{db}dBは電力比(P2/P1)で何倍ですか？", "es": "¿A qué relación de potencia (P2/P1) corresponde {db}dB?", "zh": "{db}dB对应的功率比(P2/P1)是多少倍？"}, "db_q_from_ratio": {"ko": "전력비(P2/P1)가 {ratio}배이면, 몇 dB인가요?", "en": "If the power ratio (P2/P1) is {ratio}×, how many dB is that?", "ja": "電力比(P2/P1)が{ratio}倍のとき、何dBですか？", "es": "Si la relación de potencia (P2/P1) es {ratio}×, ¿cuántos dB son?", "zh": "当功率比(P2/P1)为{ratio}倍时，是多少dB？"}, "dbvolt_q_from_db": {"ko": "{db}dB는 전압비(V2/V1)로 몇 배인가요?", "en": "What voltage ratio (V2/V1) does {db}dB correspond to?", "ja": "{db}dBは電圧比(V2/V1)で何倍ですか？", "es": "¿A qué relación de voltaje (V2/V1) corresponde {db}dB?", "zh": "{db}dB对应的电压比(V2/V1)是多少倍？"}, "dbvolt_q_from_ratio": {"ko": "전압비(V2/V1)가 {ratio}배이면, 몇 dB인가요?", "en": "If the voltage ratio (V2/V1) is {ratio}×, how many dB is that?", "ja": "電圧比(V2/V1)が{ratio}倍のとき、何dBですか？", "es": "Si la relación de voltaje (V2/V1) es {ratio}×, ¿cuántos dB son?", "zh": "当电压比(V2/V1)为{ratio}倍时，是多少dB？"}, "dbudbv_q_v2dbv": {"ko": "전압이 {v}V일 때, dBV는 얼마인가요? (0dBV = 1V 기준)", "en": "If the voltage is {v}V, what is dBV? (0dBV = 1V reference)", "ja": "電圧が{v}Vのとき、dBVはいくつですか？(0dBV = 1V基準)", "es": "Si el voltaje es {v}V, ¿cuál es dBV? (0dBV = referencia 1V)", "zh": "当电压为{v}V时，dBV是多少？(0dBV = 1V基准)"}, "dbudbv_q_v2dbu": {"ko": "전압이 {v}V일 때, dBu는 얼마인가요? (0dBu = 0.775V 기준)", "en": "If the voltage is {v}V, what is dBu? (0dBu = 0.775V reference)", "ja": "電圧が{v}Vのとき、dBuはいくつですか？(0dBu = 0.775V基準)", "es": "Si el voltaje es {v}V, ¿cuál es dBu? (0dBu = referencia 0.775V)", "zh": "当电压为{v}V时，dBu是多少？(0dBu = 0.775V基准)"}, "dbudbv_q_dbm2dbw": {"ko": "{dbm}dBm은 몇 dBW인가요? (dBW = dBm − 30)", "en": "How many dBW is {dbm}dBm? (dBW = dBm − 30)", "ja": "{dbm}dBmは何dBWですか？(dBW = dBm − 30)", "es": "¿Cuántos dBW son {dbm}dBm? (dBW = dBm − 30)", "zh": "{dbm}dBm等于多少dBW？(dBW = dBm − 30)"}, "acwave_q_rms2peak": {"ko": "RMS 전압이 {rms}V일 때, Peak 전압은 몇 V인가요? (Peak = RMS × √2)", "en": "If the RMS voltage is {rms}V, what is the Peak voltage in V? (Peak = RMS × √2)", "ja": "RMS電圧が{rms}Vのとき、Peak電圧は何Vですか？(Peak = RMS × √2)", "es": "Si el voltaje RMS es {rms}V, ¿cuál es el voltaje Peak en V? (Peak = RMS × √2)", "zh": "当RMS电压为{rms}V时，Peak电压是多少V？(Peak = RMS × √2)"}, "acwave_q_peak2rms": {"ko": "Peak 전압이 {peak}V일 때, RMS 전압은 몇 V인가요? (RMS = Peak / √2)", "en": "If the Peak voltage is {peak}V, what is the RMS voltage in V? (RMS = Peak / √2)", "ja": "Peak電圧が{peak}Vのとき、RMS電圧は何Vですか？(RMS = Peak / √2)", "es": "Si el voltaje Peak es {peak}V, ¿cuál es el voltaje RMS en V? (RMS = Peak / √2)", "zh": "当Peak电压为{peak}V时，RMS电压是多少V？(RMS = Peak / √2)"}, "acwave_q_rms2pp": {"ko": "RMS 전압이 {rms}V일 때, Peak-to-Peak 전압은 몇 V인가요? (P-P = 2 × RMS × √2)", "en": "If the RMS voltage is {rms}V, what is the Peak-to-Peak voltage in V? (P-P = 2 × RMS × √2)", "ja": "RMS電圧が{rms}Vのとき、Peak-to-Peak電圧は何Vですか？(P-P = 2 × RMS × √2)", "es": "Si el voltaje RMS es {rms}V, ¿cuál es el voltaje Peak-to-Peak en V? (P-P = 2 × RMS × √2)", "zh": "当RMS电压为{rms}V时，Peak-to-Peak电压是多少V？(P-P = 2 × RMS × √2)"}, "cable_q_drop": {"ko": "{awg}AWG 케이블을 편도 {length}m 사용해서 {current}A가 흐르면, 전압 강하는 몇 V인가요? (왕복 저항 고려)", "en": "With a {awg}AWG cable, {length}m one-way, carrying {current}A, what is the voltage drop in V? (accounting for round-trip resistance)", "ja": "{awg}AWGケーブルを片道{length}m使用して{current}Aが流れる場合、電圧降下は何Vですか？(往復抵抗を考慮)", "es": "Con un cable de {awg}AWG, {length}m en un sentido, y una corriente de {current}A, ¿cuál es la caída de tensión en V? (considerando la resistencia de ida y vuelta)", "zh": "使用{awg}AWG线缆，单程{length}m，通过{current}A电流时，电压降是多少V？(考虑往返电阻)"}, "cable_q_loss": {"ko": "{awg}AWG 케이블을 편도 {length}m 사용해서 {current}A가 흐르면, 케이블에서 손실되는 전력은 몇 W인가요?", "en": "With a {awg}AWG cable, {length}m one-way, carrying {current}A, how much power in W is lost in the cable?", "ja": "{awg}AWGケーブルを片道{length}m使用して{current}Aが流れる場合、ケーブルで損失する電力は何Wですか？", "es": "Con un cable de {awg}AWG, {length}m en un sentido, y una corriente de {current}A, ¿cuánta potencia en W se pierde en el cable?", "zh": "使用{awg}AWG线缆，单程{length}m，通过{current}A电流时，线缆上损耗的功率是多少W？"}};</script>
+<script src="i18n-core.js"></script>
+</body>
+</html>

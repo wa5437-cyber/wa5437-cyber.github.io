@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Acoustics Calculator — Web Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="i18n-core.css">
+<style>
+  :root{
+    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
+    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
+    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ min-height:100%; }
+  body{
+    margin:0; background:
+      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
+    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; align-items:flex-start;
+  }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .app{ width:100%; max-width:780px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
+
+  .topbar{ display:flex; align-items:center; gap:10px; }
+  .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
+  .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
+  .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
+  .mark span:nth-child(2){ height:16px; animation-delay:-0.2s; }
+  .mark span:nth-child(3){ height:7px; animation-delay:-1.1s; }
+  @keyframes markbar{ 0%,100%{ transform:scaleY(0.5);} 50%{ transform:scaleY(1);} }
+  .topbar .title{ font-weight:700; font-size:18.5px; }
+  .topbar .title small{ display:block; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); font-weight:400; margin-top:2px; }
+  .topbar .home-link{
+    margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
+    padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
+  }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+
+  @media (max-width:480px){
+    .app{ padding:14px 14px 26px; gap:12px; }
+    .topbar{ align-items:flex-start; }
+    .topbar .title{ font-size:14.5px; }
+    .topbar .title small{ font-size:10px; }
+    .topbar .home-link{ font-size:11.5px; padding:7px 10px; margin-top:1px; }
+  }
+
+  /* ---- 탭 피커 (Frequency / Band / Delay / Volume / Room Modes) ---- */
+  .tab-picker{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:6px;
+  }
+  .tab-picker button{
+    border:none; background:transparent; color:var(--text-secondary); font-size:16.5px; font-weight:700;
+    padding:14px 4px; border-radius:9px; transition:background .15s, color .15s; line-height:1.25;
+  }
+  .tab-picker button.active{ background:#e3ddd0; color:var(--teal); }
+  .tab-picker button:disabled{ opacity:0.35; cursor:default; }
+  @media (max-width:480px){ .tab-picker button{ font-size:13px; padding:11px 2px; } }
+
+  .coming-soon{
+    text-align:center; padding:40px 20px; color:var(--text-secondary); font-size:14px; line-height:1.7;
+  }
+  .coming-soon b{ color:var(--text-secondary); display:block; font-size:16px; margin-bottom:6px; }
+
+  .panel{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:20px; }
+  .panel-title{ font-family:'IBM Plex Mono',monospace; font-size:17px; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-primary); font-weight:600; margin-bottom:14px; }
+
+  .phase-desc{ font-size:15.5px; color:var(--text-primary); opacity:0.85; line-height:1.7; margin:0; }
+  .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:var(--text-primary); opacity:0.9;
+    text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; font-weight:600;
+  }
+  .input-row{ display:flex; align-items:center; gap:8px; }
+  .input-row input[type=number], .input-row input[type=text]{
+    flex:1; background:#f1ede3; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
+  }
+  .input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--text-primary); opacity:0.75; flex-shrink:0; }
+  .speed-readout{ margin:6px 0 0; font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); }
+  .speed-readout span{ color:var(--teal); font-weight:600; }
+
+  /* ---- 결과 리스트 (스크린샷의 Frequency/Period/Wave length 줄들과 동일한 느낌) ---- */
+  .result-list{ margin-top:18px; }
+  .result-row{
+    display:flex; justify-content:space-between; align-items:baseline; padding:14px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .result-row:last-child{ border-bottom:none; }
+  .result-lbl{ font-size:15px; color:var(--text-secondary); }
+  .result-val{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:700; color:var(--amber); }
+  .result-val .unit{ font-size:13.5px; font-weight:600; color:var(--text-secondary); margin-left:6px; }
+
+  /* ---- 파형 그래프 ---- */
+  .wave-canvas-wrap{ width:100%; }
+  #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ width:100%; height:300px; display:block; border-radius:12px; }
+  #roomModeCanvas{ width:100%; height:300px; display:block; border-radius:12px; }
+  @media (max-width:480px){
+    #waveCanvas, #bandCanvas, #delayCanvas, #volumeCanvas{ height:230px; }
+    #roomModeCanvas{ height:230px; }
+  }
+
+  .room-mode-legend{ display:flex; gap:18px; margin-top:12px; font-size:13px; color:var(--text-secondary); flex-wrap:wrap; }
+  .room-mode-legend .dot{ display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+
+  /* ---- 표(Tempo/Room Modes 등에서 재사용) ---- */
+  .tempo-table{ margin-top:12px; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .tempo-row{ display:grid; grid-template-columns:0.6fr 1fr 1fr 1fr; gap:0; border-bottom:1px solid var(--line); }
+  .tempo-row:last-child{ border-bottom:none; }
+  .tempo-row.tempo-header{ background:var(--bg-panel-2); }
+  .tempo-cell{ padding:12px 8px; text-align:center; font-family:'IBM Plex Mono',monospace; }
+  .tempo-header .tempo-cell{ font-size:12.5px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.05em; font-weight:700; }
+  .tempo-row:not(.tempo-header) .tempo-cell:first-child{ color:var(--text-secondary); font-weight:600; }
+  .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ color:var(--teal); font-size:14.5px; font-weight:600; }
+  @media (max-width:480px){
+    .tempo-cell{ padding:9px 3px; font-size:12px; }
+    .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ font-size:12.5px; }
+  }
+
+  .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
+  .tool-links a{
+    font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="mark"><span></span><span></span><span></span></div>
+    <div class="title">ACOUSTICS CALCULATOR<small>Frequency · Wavelength · Period</small></div>
+    <div id="langSwitchMount"></div>
+    <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
+  </div>
+
+  <div class="tab-picker" id="tabPicker">
+    <button data-tab="frequency" class="active">Frequency</button>
+    <button data-tab="band">Band</button>
+    <button data-tab="delay">Delay</button>
+    <button data-tab="volume">Volume</button>
+    <button data-tab="roommodes">Room Modes</button>
+    <button data-tab="rt60">Reverb (RT60)</button>
+  </div>
+
+  <div id="frequencyTab">
+    <div class="panel">
+      <div class="panel-title">Frequency</div>
+      <div class="field">
+        <label data-i18n="label_temperature">Temperature (음속 계산용)</label>
+        <div class="input-row">
+          <input type="number" id="tempInput" value="15" step="1">
+          <span class="unit">°C</span>
+        </div>
+        <p class="speed-readout"><span data-i18n="label_current_speed_prefix">현재 음속: </span><span id="speedReadout">343.0</span> m/s</p>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Frequency</label>
+        <div class="input-row">
+          <input type="number" id="freqInput" value="1000" step="1" min="1">
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">Period</span>
+          <span class="result-val"><span id="periodVal">--</span><span class="unit">ms</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Wave length (λ)</span>
+          <span class="result-val"><span id="wavelengthVal">--</span><span class="unit">m</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">1/4 wave length</span>
+          <span class="result-val"><span id="quarterWaveVal">--</span><span class="unit">m</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Nearest Musical Note</span>
+          <span class="result-val"><span id="noteVal">--</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Note ↔ Frequency</div>
+      <p class="phase-desc" data-i18n="note_freq_desc">평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.</p>
+      <div class="field" style="margin-top:14px;">
+        <label>Note Name</label>
+        <div class="input-row">
+          <input type="text" id="noteInput" value="C5" placeholder="예: A4, C#3, Bb2" data-i18n-placeholder="placeholder_note_example" style="text-transform:none;">
+          <button class="upload-btn" id="noteApplyBtn" data-i18n="btn_apply" style="width:auto; flex-shrink:0; padding:12px 22px; font-size:16px; font-weight:700;">적용</button>
+        </div>
+        <p class="phase-desc" style="margin-top:8px; font-size:14.5px;" id="noteInputHint">→ 261.63Hz</p>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Waveform</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="waveCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div id="bandTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Band</div>
+      <div class="field">
+        <label>Center Frequency (F0)</label>
+        <div class="input-row">
+          <input type="number" id="bandFreqInput" value="1000" step="1" min="1">
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Bandwidth</label>
+        <div class="tab-picker" id="bandwidthPicker" style="grid-template-columns:repeat(4,1fr); margin-top:6px;">
+          <button data-oct="1">1/1 Oct</button>
+          <button data-oct="3" class="active">1/3 Oct</button>
+          <button data-oct="6">1/6 Oct</button>
+          <button data-oct="12">1/12 Oct</button>
+        </div>
+        <p class="phase-desc" style="margin-top:10px;" data-i18n="band_desc" data-i18n-html="true">F1(하한)·F2(상한)는 중심 주파수(F0) 대비 반전력점(<b style="color:var(--text-secondary);">−3dB 지점</b>)을 기준으로 계산합니다 — 필터 설계에서 흔히 쓰는 표준 정의입니다.</p>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label data-i18n="label_q_factor">Q factor (직접 입력 가능)</label>
+        <div class="input-row">
+          <input type="number" id="qFactorInput" value="4.32" step="0.01" min="0.01">
+        </div>
+        <p class="speed-readout">≈ <span id="qOctaveReadout">1/3</span> <span data-i18n="octave_suffix">옥타브에 해당</span></p>
+        <p class="phase-desc" style="margin-top:6px;" data-i18n="band_q_hint">위 프리셋 버튼을 누르면 이 값이 자동으로 채워지고, 직접 숫자를 입력하면 그 Q값 기준으로 다시 계산됩니다.</p>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">F1 · Lower band edge</span>
+          <span class="result-val"><span id="bandLowVal">--</span><span class="unit">Hz</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">F2 · Upper band edge</span>
+          <span class="result-val"><span id="bandHighVal">--</span><span class="unit">Hz</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_bandwidth_result">Bandwidth (−3dB 기준)</span>
+          <span class="result-val"><span id="bandWidthVal">--</span><span class="unit">Hz</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl">Q factor</span>
+          <span class="result-val"><span id="bandQVal">--</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Band on Spectrum (20Hz – 20kHz)</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="bandCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div id="delayTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Delay</div>
+      <p class="phase-desc" data-i18n="delay_desc">거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Temperature</label>
+        <div class="input-row">
+          <input type="number" id="delayTempInput" value="15" step="1">
+          <span class="unit">°C</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Distance</label>
+        <div class="input-row">
+          <input type="number" id="delayDistInput" value="10" step="0.1" min="0">
+          <span class="unit">m</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Delay Time</label>
+        <div class="input-row">
+          <input type="number" id="delayTimeInput" value="29.15" step="0.01" min="0">
+          <span class="unit">ms</span>
+        </div>
+      </div>
+
+      <p class="speed-readout"><span data-i18n="delay_speed_prefix">현재 음속(Frequency 탭 온도 기준): </span><span id="delaySpeedReadout">340.4</span> m/s</p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Direct vs Delayed Sound (Timeline)</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="delayCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div id="volumeTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title" data-i18n="panel_volume_title">Volume (거리에 따른 SPL 감쇠)</div>
+
+      <div class="field">
+        <label data-i18n="label_source_type">Source Type (음원 종류)</label>
+        <div class="tab-picker" id="sourceTypePicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
+          <button data-src="point" class="active" data-i18n="src_point">점음원</button>
+          <button data-src="line" data-i18n="src_line">선음원</button>
+          <button data-src="plane" data-i18n="src_plane">면음원</button>
+        </div>
+        <p class="phase-desc" style="margin-top:10px;" id="sourceTypeDesc" data-i18n="src_desc_point" data-i18n-html="true">점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style="color:var(--text-secondary);">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.</p>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Reference SPL</label>
+        <div class="input-row">
+          <input type="number" id="volRefSplInput" value="100" step="0.1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Reference Distance</label>
+        <div class="input-row">
+          <input type="number" id="volRefDistInput" value="1" step="0.1" min="0.01">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Target Distance</label>
+        <div class="input-row">
+          <input type="number" id="volTargetDistInput" value="10" step="0.1" min="0.01">
+          <span class="unit">m</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">SPL at Target Distance</span>
+          <span class="result-val"><span id="volTargetSplVal">--</span><span class="unit">dB SPL</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_loss">감쇠량</span>
+          <span class="result-val"><span id="volLossVal">--</span><span class="unit">dB</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">SPL vs Distance</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="volumeCanvas"></canvas>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title" data-i18n="panel_required_power_title">Required Power (스피커 센시티비티 기준)</div>
+      <p class="phase-desc" data-i18n="required_power_desc">스피커 센시티비티(보통 "1W/1m 기준 dB"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label>Speaker Sensitivity (@ 1W/1m)</label>
+        <div class="input-row">
+          <input type="number" id="volSensitivityInput" value="98" step="0.1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Distance</label>
+        <div class="input-row">
+          <input type="number" id="volPowerDistInput" value="10" step="0.1" min="0.01">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label>Desired SPL at that Distance</label>
+        <div class="input-row">
+          <input type="number" id="volDesiredSplInput" value="100" step="0.1">
+          <span class="unit">dB SPL</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl">Required Power</span>
+          <span class="result-val"><span id="volRequiredWattsVal">--</span><span class="unit">W</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="roomModesTab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title" data-i18n="panel_room_modes_title">Room Modes (축모드)</div>
+      <p class="phase-desc" data-i18n="room_modes_desc">가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.</p>
+
+      <div class="field" style="margin-top:14px;">
+        <label data-i18n="label_length">Length (L, 가로)</label>
+        <div class="input-row">
+          <input type="number" id="roomLengthInput" value="6" step="0.1" min="0.1">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label data-i18n="label_width">Width (W, 세로)</label>
+        <div class="input-row">
+          <input type="number" id="roomWidthInput" value="4" step="0.1" min="0.1">
+          <span class="unit">m</span>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label data-i18n="label_height">Height (H, 높이)</label>
+        <div class="input-row">
+          <input type="number" id="roomHeightInput" value="2.7" step="0.1" min="0.1">
+          <span class="unit">m</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title">Axial Mode Frequencies</div>
+      <div class="tempo-table" id="roomModeTable"></div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="roomModeWarning"></p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title" data-i18n="panel_tangential_title">Tangential Mode Frequencies (300Hz 이하)</div>
+      <p class="phase-desc" style="font-size:12.5px;" data-i18n="tangential_desc">두 방향이 동시에 작용하는 모드입니다. 축모드보다 세기는 약하지만(약 −3dB), 개수가 많아서 저역을 뿌옇게 만드는 데 영향을 줍니다.</p>
+      <div class="tempo-table" id="tangentialModeTable" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title" data-i18n="panel_oblique_title">Oblique Mode Frequencies (300Hz 이하)</div>
+      <p class="phase-desc" style="font-size:12.5px;" data-i18n="oblique_desc">세 방향이 동시에 작용하는, 가장 약한(약 −6dB) 모드입니다. 참고용으로만 봐주세요.</p>
+      <div class="tempo-table" id="obliqueModeTable" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title" data-i18n="panel_low_mode_distribution">저역 모드 분포 (20 – 300Hz)</div>
+      <div class="wave-canvas-wrap">
+        <canvas id="roomModeCanvas"></canvas>
+      </div>
+      <div class="room-mode-legend">
+        <span><i class="dot" style="background:#9c6b17;"></i><span data-i18n="legend_length_axial">Length (축모드)</span></span>
+        <span><i class="dot" style="background:#2f6d4c;"></i><span data-i18n="legend_width_axial">Width (축모드)</span></span>
+        <span><i class="dot" style="background:#33587a;"></i><span data-i18n="legend_height_axial">Height (축모드)</span></span>
+        <span><i class="dot" style="background:rgba(124,88,181,0.85);"></i><span data-i18n="legend_tangential">Tangential (접선모드)</span></span>
+        <span><i class="dot" style="background:rgba(92,87,76,0.85);"></i><span data-i18n="legend_oblique">Oblique (경사모드)</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="rt60Tab" style="display:none;">
+    <div class="panel">
+      <div class="panel-title" data-i18n="panel_rt60_title">Reverb Time (RT60, Sabine 공식)</div>
+      <p class="phase-desc" data-i18n="rt60_desc">RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.</p>
+
+      <div class="field">
+        <label>Length (L)</label>
+        <div class="input-row"><input type="number" id="rt60LengthInput" value="6" step="0.1" min="0.1"><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Width (W)</label>
+        <div class="input-row"><input type="number" id="rt60WidthInput" value="4" step="0.1" min="0.1"><span class="unit">m</span></div>
+      </div>
+      <div class="field">
+        <label>Height (H)</label>
+        <div class="input-row"><input type="number" id="rt60HeightInput" value="2.7" step="0.1" min="0.1"><span class="unit">m</span></div>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label data-i18n="label_surface_treatment">표면 처리 (평균 흡음계수 α)</label>
+        <div class="tab-picker" id="absorptionPresetPicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
+          <button data-alpha="0.05" data-i18n="absorption_hard" data-i18n-html="true">매우 단단함<br><span style="font-weight:400;font-size:10.5px;">(콘크리트·유리)</span></button>
+          <button data-alpha="0.15" class="active" data-i18n="absorption_medium" data-i18n-html="true">보통<br><span style="font-weight:400;font-size:10.5px;">(벽지·바닥재)</span></button>
+          <button data-alpha="0.35" data-i18n="absorption_soft" data-i18n-html="true">흡음 처리<br><span style="font-weight:400;font-size:10.5px;">(카펫·커튼)</span></button>
+        </div>
+        <div class="input-row" style="margin-top:10px;">
+          <input type="number" id="absorptionAlphaInput" value="0.15" step="0.01" min="0.01" max="1">
+          <span class="unit">α (0~1)</span>
+        </div>
+      </div>
+
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_room_volume">방 부피 (V)</span>
+          <span class="result-val"><span id="rt60VolumeVal">--</span><span class="unit">m³</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_total_surface">총 표면적 (S)</span>
+          <span class="result-val"><span id="rt60SurfaceVal">--</span><span class="unit">m²</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_total_absorption">총 흡음력 (A = S×α)</span>
+          <span class="result-val"><span id="rt60AbsorptionVal">--</span><span class="unit">sabins</span></span>
+        </div>
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_rt60_result">RT60 (잔향시간)</span>
+          <span class="result-val"><span id="rt60ResultVal">--</span><span class="unit" data-i18n="unit_seconds">초</span></span>
+        </div>
+      </div>
+      <p class="phase-desc" style="margin-top:12px; font-size:12.5px;" id="rt60Guideline"></p>
+    </div>
+
+    <div class="panel" style="margin-top:16px;">
+      <div class="panel-title" data-i18n="panel_critical_distance_title">Critical Distance (임계거리)</div>
+      <p class="phase-desc" data-i18n="critical_distance_desc">직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.</p>
+      <div class="field">
+        <label data-i18n="label_directivity_q">스피커 지향성 계수 (Q)</label>
+        <div class="input-row"><input type="number" id="directivityQInput" value="2" step="0.1" min="0.1"><span class="unit">Q</span></div>
+        <p class="phase-desc" style="margin-top:8px; font-size:12.5px;" data-i18n="directivity_note">참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.</p>
+      </div>
+      <div class="result-list">
+        <div class="result-row">
+          <span class="result-lbl" data-i18n="label_critical_distance_result">임계거리 (Dc)</span>
+          <span class="result-val"><span id="criticalDistVal">--</span><span class="unit">m</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="placeholderTab" class="panel" style="display:none;">
+    <div class="coming-soon">
+      <b data-i18n="coming_soon_title">🎉 모든 탭이 준비됐어요</b>
+      <span data-i18n="coming_soon_text">Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.</span>
+    </div>
+  </div>
+
+  <div class="tool-links">
+    <a href="trainer.html">🎧 Ear Trainer</a>
+    <a href="generator.html">🎛️ Generator</a>
+    <a href="rta.html">📊 RTA</a>
+    <a href="rta.html?view=spl">📟 SPL Meter</a>
+    <a href="delay-calculator.html">⏱️ Delay Calc</a>
+    <a href="effects-listening.html">🎚️ Effects Listening</a>
+    <a href="electrical-calculator.html">🔌 Electrical Calc</a>
+    <a href="tempo-pitch-calculator.html">🥁 Tempo & Pitch</a>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ✅ 요청 반영: 음속을 고정값(343) 대신 온도에 따라 계산한다.
+  // 표준 근사식: v(m/s) = 331.3 + 0.606 × 온도(°C)
+  function currentSpeedOfSound(){
+    const tempC = parseFloat(tempInput.value) || 20;
+    return 331.3 + 0.606 * tempC;
+  }
+
+  // ✅ 요청 반영: 평균율(12-tone equal temperament, A4=440Hz 기준) 주파수↔음정 변환
+  const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+  const NOTE_BASE = { C:0, D:2, E:4, F:5, G:7, A:9, B:11 };
+
+  function freqToNote(freq){
+    if (!freq || freq <= 0) return null;
+    const midi = 69 + 12 * Math.log2(freq / 440);
+    const rounded = Math.round(midi);
+    const cents = Math.round((midi - rounded) * 100);
+    const name = NOTE_NAMES[((rounded % 12) + 12) % 12];
+    const octave = Math.floor(rounded / 12) - 1;
+    return { name, octave, cents };
+  }
+
+  function noteToFreq(str){
+    const m = String(str).trim().match(/^([A-Ga-g])([#b♯♭]?)(-?\d+)$/);
+    if (!m) return null;
+    const letter = m[1].toUpperCase();
+    const accidental = m[2];
+    const octave = parseInt(m[3], 10);
+    let semitone = NOTE_BASE[letter];
+    if (accidental === '#' || accidental === '♯') semitone += 1;
+    if (accidental === 'b' || accidental === '♭') semitone -= 1;
+    const midi = (octave + 1) * 12 + semitone;
+    return 440 * Math.pow(2, (midi - 69) / 12);
+  }
+
+  const tabPicker = document.getElementById('tabPicker');
+  const frequencyTab = document.getElementById('frequencyTab');
+  const placeholderTab = document.getElementById('placeholderTab');
+  const bandTab = document.getElementById('bandTab');
+  const bandFreqInput = document.getElementById('bandFreqInput');
+  const bandwidthPicker = document.getElementById('bandwidthPicker');
+  const bandLowVal = document.getElementById('bandLowVal');
+  const bandHighVal = document.getElementById('bandHighVal');
+  const bandWidthVal = document.getElementById('bandWidthVal');
+  const bandQVal = document.getElementById('bandQVal');
+  const bandCanvas = document.getElementById('bandCanvas');
+  const bandCtx = bandCanvas.getContext('2d');
+  const delayTab = document.getElementById('delayTab');
+  const delayDistInput = document.getElementById('delayDistInput');
+  const delayTimeInput = document.getElementById('delayTimeInput');
+  const delaySpeedReadout = document.getElementById('delaySpeedReadout');
+  const delayCanvas = document.getElementById('delayCanvas');
+  const delayCtx = delayCanvas.getContext('2d');
+  const delayTempInput = document.getElementById('delayTempInput');
+  const volumeTab = document.getElementById('volumeTab');
+  const sourceTypePicker = document.getElementById('sourceTypePicker');
+  const sourceTypeDesc = document.getElementById('sourceTypeDesc');
+  const volRefSplInput = document.getElementById('volRefSplInput');
+  const volRefDistInput = document.getElementById('volRefDistInput');
+  const volTargetDistInput = document.getElementById('volTargetDistInput');
+  const volTargetSplVal = document.getElementById('volTargetSplVal');
+  const volLossVal = document.getElementById('volLossVal');
+  const volumeCanvas = document.getElementById('volumeCanvas');
+  const volumeCtx = volumeCanvas.getContext('2d');
+  const roomModesTab = document.getElementById('roomModesTab');
+  const roomLengthInput = document.getElementById('roomLengthInput');
+  const roomWidthInput = document.getElementById('roomWidthInput');
+  const roomHeightInput = document.getElementById('roomHeightInput');
+  const roomModeTable = document.getElementById('roomModeTable');
+  const roomModeWarning = document.getElementById('roomModeWarning');
+  const tangentialModeTable = document.getElementById('tangentialModeTable');
+  const obliqueModeTable = document.getElementById('obliqueModeTable');
+  const rt60Tab = document.getElementById('rt60Tab');
+  const rt60LengthInput = document.getElementById('rt60LengthInput');
+  const rt60WidthInput = document.getElementById('rt60WidthInput');
+  const rt60HeightInput = document.getElementById('rt60HeightInput');
+  const absorptionPresetPicker = document.getElementById('absorptionPresetPicker');
+  const absorptionAlphaInput = document.getElementById('absorptionAlphaInput');
+  const rt60VolumeVal = document.getElementById('rt60VolumeVal');
+  const rt60SurfaceVal = document.getElementById('rt60SurfaceVal');
+  const rt60AbsorptionVal = document.getElementById('rt60AbsorptionVal');
+  const rt60ResultVal = document.getElementById('rt60ResultVal');
+  const rt60Guideline = document.getElementById('rt60Guideline');
+  const directivityQInput = document.getElementById('directivityQInput');
+  const criticalDistVal = document.getElementById('criticalDistVal');
+  const roomModeCanvas = document.getElementById('roomModeCanvas');
+  const roomModeCtx = roomModeCanvas.getContext('2d');
+  const volSensitivityInput = document.getElementById('volSensitivityInput');
+  const volPowerDistInput = document.getElementById('volPowerDistInput');
+  const volDesiredSplInput = document.getElementById('volDesiredSplInput');
+  const volRequiredWattsVal = document.getElementById('volRequiredWattsVal');
+  const qFactorInput = document.getElementById('qFactorInput');
+  const qOctaveReadout = document.getElementById('qOctaveReadout');
+  // ✅ 요청 반영: Q를 직접 입력할 수 있게, N(옥타브 분수) 대신 Q 자체를 상태로 둔다.
+  // N → Q 변환: Q = 1 / (2^(1/(2N)) - 2^(-1/(2N)))
+  function qFromOctaveN(N){
+    const ratio = Math.pow(2, 1 / (2 * N));
+    return 1 / (ratio - 1 / ratio);
+  }
+  // ✅ 요청 반영: Q값에서 거꾸로 "대략 몇 분의 1 옥타브에 해당하는지"를 계산한다.
+  function octaveNFromQ(Q){
+    const ratio = (1 + Math.sqrt(1 + 4 * Q * Q)) / (2 * Q); // Q = 1/(r - 1/r)의 역산
+    return 1 / (2 * Math.log2(ratio));
+  }
+  function formatApproxOctave(Q){
+    const N = octaveNFromQ(Q);
+    // 흔히 쓰는 표준 분수(1, 2, 3, 6, 12, 24)에 가까우면 그 숫자로, 아니면 소수 한 자리로 표시
+    const common = [1, 2, 3, 6, 12, 24];
+    const nearest = common.reduce((a, b) => Math.abs(b - N) < Math.abs(a - N) ? b : a);
+    return Math.abs(nearest - N) < 0.15 ? `1/${nearest}` : `1/${N.toFixed(1)}`;
+  }
+  let currentQ = qFromOctaveN(3); // 기본값: 1/3 옥타브에 해당하는 Q
+
+  // ✅ Q와 중심주파수(F0)만으로 F1·F2를 계산한다 (F1×F2=F0², F2−F1=F0/Q를 만족하는 해).
+  // 옥타브 비율 방식과 수학적으로 동일하지만, 임의의 Q값(프리셋에 없는 값)도 지원한다.
+  function computeBandEdges(fc, Q){
+    const bw = fc / Q;
+    const fLow = (-bw + Math.sqrt(bw * bw + 4 * fc * fc)) / 2;
+    const fHigh = fLow + bw;
+    return { fLow, fHigh };
+  }
+  const tempInput = document.getElementById('tempInput');
+  const speedReadout = document.getElementById('speedReadout');
+  const freqInput = document.getElementById('freqInput');
+  const periodVal = document.getElementById('periodVal');
+  const wavelengthVal = document.getElementById('wavelengthVal');
+  const quarterWaveVal = document.getElementById('quarterWaveVal');
+  const noteVal = document.getElementById('noteVal');
+  const noteInput = document.getElementById('noteInput');
+  const noteApplyBtn = document.getElementById('noteApplyBtn');
+  const noteInputHint = document.getElementById('noteInputHint');
+  const waveCanvas = document.getElementById('waveCanvas');
+  const waveCtx = waveCanvas.getContext('2d');
+
+  function resizeCanvas(){
+    const rect = waveCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    waveCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    waveCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawWave(){
+    const w = waveCanvas.width, h = waveCanvas.height;
+    if (w === 0 || h === 0) return;
+    waveCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.06, marginR = w * 0.04, marginT = h * 0.12, marginB = h * 0.24;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const midY = marginT + plotH / 2;
+
+    // 축
+    waveCtx.strokeStyle = 'rgba(30,26,20,0.25)';
+    waveCtx.lineWidth = Math.max(1, w * 0.0015);
+    waveCtx.beginPath();
+    waveCtx.moveTo(marginL, marginT - h * 0.03);
+    waveCtx.lineTo(marginL, marginT + plotH + h * 0.02);
+    waveCtx.stroke();
+    waveCtx.beginPath();
+    waveCtx.moveTo(marginL, midY);
+    waveCtx.lineTo(marginL + plotW + w * 0.02, midY);
+    waveCtx.stroke();
+
+    // ✅ 요청 반영: 사이클 개수를 주파수에 따라 다르게 보여준다.
+    // 저음(20Hz)은 느긋하게 2사이클, 고음(20kHz)은 촘촘하게 8사이클 — 로그 스케일로 부드럽게 늘어난다.
+    const freq = parseFloat(freqInput.value) || 250;
+    const cycles = Math.max(2, Math.min(8, 2 + Math.log10(Math.max(freq, 20) / 20) * 2));
+    const amp = plotH * 0.42;
+    waveCtx.beginPath();
+    const steps = 400;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const x = marginL + t * plotW;
+      const y = midY - Math.sin(t * cycles * Math.PI * 2) * amp;
+      if (i === 0) waveCtx.moveTo(x, y); else waveCtx.lineTo(x, y);
+    }
+    waveCtx.strokeStyle = '#9c6b17';
+    waveCtx.lineWidth = Math.max(2, w * 0.006);
+    waveCtx.lineJoin = 'round';
+    waveCtx.lineCap = 'round';
+    waveCtx.stroke();
+
+    // ✅ 요청 반영: 첫 번째 사이클 구간에 "1λ(한 파장)"임을 표시하는 괄호 모양 주석
+    const oneCycleX0 = marginL;
+    const oneCycleX1 = marginL + plotW / cycles;
+    const bracketY = marginT + plotH + h * 0.11;
+    const tickH = h * 0.025;
+    waveCtx.strokeStyle = 'rgba(47,109,76,0.85)';
+    waveCtx.lineWidth = Math.max(1.2, w * 0.0018);
+    waveCtx.beginPath();
+    waveCtx.moveTo(oneCycleX0, bracketY - tickH);
+    waveCtx.lineTo(oneCycleX0, bracketY);
+    waveCtx.lineTo(oneCycleX1, bracketY);
+    waveCtx.lineTo(oneCycleX1, bracketY - tickH);
+    waveCtx.stroke();
+    waveCtx.fillStyle = '#2f6d4c';
+    waveCtx.font = `600 ${Math.max(12, h * 0.06)}px 'IBM Plex Mono', monospace`;
+    waveCtx.textAlign = 'center';
+    // ✅ 요청 반영: "1λ" 라벨 옆에 실제 파장 길이(m) 값도 같이 보여준다
+    const wavelengthForLabel = currentSpeedOfSound() / freq;
+    waveCtx.fillText(`1λ ≈ ${wavelengthForLabel.toFixed(3)}m`, (oneCycleX0 + oneCycleX1) / 2, bracketY + h * 0.065);
+    waveCtx.textAlign = 'left';
+
+    // 축 라벨
+    waveCtx.fillStyle = 'rgba(92,87,76,0.8)';
+    waveCtx.font = `${Math.max(11, h * 0.055)}px 'IBM Plex Mono', monospace`;
+    waveCtx.fillText('a', marginL - w * 0.01, marginT - h * 0.04);
+    waveCtx.fillText('t', marginL + plotW + w * 0.03, midY + h * 0.05);
+  }
+
+  function recalc(){
+    const speed = currentSpeedOfSound();
+    speedReadout.textContent = speed.toFixed(1);
+
+    const freq = parseFloat(freqInput.value) || 0;
+    if (freq <= 0) {
+      periodVal.textContent = '--';
+      wavelengthVal.textContent = '--';
+      quarterWaveVal.textContent = '--';
+      noteVal.textContent = '--';
+      drawWave();
+      return;
+    }
+    const periodMs = 1000 / freq;
+    const wavelengthM = speed / freq;
+    const quarterWaveM = wavelengthM / 4;
+
+    periodVal.textContent = periodMs.toFixed(2);
+    wavelengthVal.textContent = wavelengthM.toFixed(5);
+    quarterWaveVal.textContent = quarterWaveM.toFixed(5);
+
+    // ✅ 요청 반영: 현재 주파수에 가장 가까운 음정 표시
+    const note = freqToNote(freq);
+    if (note) {
+      const centsStr = note.cents === 0 ? '' : ` (${note.cents > 0 ? '+' : ''}${note.cents}c)`;
+      noteVal.textContent = `${note.name}${note.octave}${centsStr}`;
+    } else {
+      noteVal.textContent = '--';
+    }
+
+    drawWave(); // ✅ 요청 반영: 주파수가 바뀔 때마다 그래프도 다시 그린다
+  }
+
+  // -----------------------------------------------------------------
+  // Band 탭 — 중심 주파수 + 1/N 옥타브 대역폭 → 상/하한 경계, 대역폭, Q값
+  // -----------------------------------------------------------------
+  function resizeBandCanvas(){
+    const rect = bandCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    bandCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    bandCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  const BAND_FREQ_MIN = 20, BAND_FREQ_MAX = 20000;
+  function bandFreqToX(f, plotW, plotX0){
+    const t = Math.log(f / BAND_FREQ_MIN) / Math.log(BAND_FREQ_MAX / BAND_FREQ_MIN);
+    return plotX0 + Math.max(0, Math.min(1, t)) * plotW;
+  }
+
+  function drawBand(){
+    const w = bandCanvas.width, h = bandCanvas.height;
+    if (w === 0 || h === 0) return;
+    bandCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.1, marginR = w * 0.05, marginT = h * 0.28, marginB = h * 0.22;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const axisY = marginT + plotH;
+
+    const fc = parseFloat(bandFreqInput.value) || 1000;
+    // ✅ 요청 반영: 실제 대역통과 필터 응답(dB)을 그려서 -3dB 지점이 어디인지 눈으로 보여준다.
+    // Q는 이제 프리셋(1/N 옥타브) 또는 사용자가 직접 입력한 값 중 현재 선택된 것을 그대로 쓴다.
+    const Q = currentQ;
+    const { fLow, fHigh } = computeBandEdges(fc, Q);
+
+    // dB 축 범위: 0dB(피크) ~ -24dB(바닥)
+    const DB_MAX = 0, DB_MIN = -24;
+    function dbToY(db){
+      const clamped = Math.max(DB_MIN, Math.min(DB_MAX, db));
+      return axisY - ((clamped - DB_MIN) / (DB_MAX - DB_MIN)) * plotH;
+    }
+    function responseDb(f){
+      const x = f / fc;
+      return -10 * Math.log10(1 + Q * Q * Math.pow(x - 1 / x, 2));
+    }
+
+    // dB 축 눈금(0 / -3 / -6 / -12 / -24) + 가로선
+    bandCtx.font = `${Math.max(10, h * 0.04)}px 'IBM Plex Mono', monospace`;
+    bandCtx.textAlign = 'right';
+    [0, -3, -6, -12, -24].forEach(db => {
+      const y = dbToY(db);
+      bandCtx.strokeStyle = db === -3 ? 'rgba(156,107,23,0.5)' : 'rgba(30,26,20,0.08)';
+      bandCtx.setLineDash(db === -3 ? [5, 4] : []);
+      bandCtx.lineWidth = Math.max(1, w * 0.0013);
+      bandCtx.beginPath();
+      bandCtx.moveTo(marginL, y);
+      bandCtx.lineTo(marginL + plotW, y);
+      bandCtx.stroke();
+      bandCtx.setLineDash([]);
+      bandCtx.fillStyle = db === -3 ? '#9c6b17' : 'rgba(92,87,76,0.75)';
+      bandCtx.fillText(db + 'dB', marginL - w * 0.015, y + h * 0.015);
+    });
+    bandCtx.textAlign = 'left';
+
+    // 주파수 세로 기준선 + 라벨 (20/100/1k/10k/20k)
+    bandCtx.font = `${Math.max(10, h * 0.042)}px 'IBM Plex Mono', monospace`;
+    const gridFreqs = [20, 100, 1000, 10000, 20000];
+    gridFreqs.forEach((f, i) => {
+      const x = bandFreqToX(f, plotW, marginL);
+      bandCtx.strokeStyle = 'rgba(30,26,20,0.08)';
+      bandCtx.beginPath();
+      bandCtx.moveTo(x, marginT);
+      bandCtx.lineTo(x, axisY);
+      bandCtx.stroke();
+      const label = f >= 1000 ? (f/1000)+'k' : f;
+      // ✅ 로그축 특성상 10kHz·20kHz처럼 오른쪽으로 갈수록 라벨끼리 가까워져 겹치므로,
+      // 홀/짝 순서로 위아래를 번갈아 배치했다.
+      bandCtx.textAlign = (i === 0) ? 'left' : (i === gridFreqs.length - 1) ? 'right' : 'center';
+      const labelYOffset = (i % 2 === 0) ? h * 0.09 : h * 0.16;
+      bandCtx.fillText(label + 'Hz', x, axisY + labelYOffset);
+    });
+    bandCtx.textAlign = 'center';
+
+    // 밴드 구간 하이라이트(배경)
+    const xLow = bandFreqToX(fLow, plotW, marginL);
+    const xHigh = bandFreqToX(fHigh, plotW, marginL);
+    const xCenter = bandFreqToX(fc, plotW, marginL);
+    bandCtx.fillStyle = 'rgba(47,109,76,0.12)';
+    bandCtx.fillRect(xLow, marginT, xHigh - xLow, plotH);
+
+    // ✅ 필터 응답 곡선 그리기
+    bandCtx.beginPath();
+    const steps = 300;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const freq = BAND_FREQ_MIN * Math.pow(BAND_FREQ_MAX / BAND_FREQ_MIN, t);
+      const x = marginL + t * plotW;
+      const y = dbToY(responseDb(freq));
+      if (i === 0) bandCtx.moveTo(x, y); else bandCtx.lineTo(x, y);
+    }
+    bandCtx.strokeStyle = '#2f6d4c';
+    bandCtx.lineWidth = Math.max(2, w * 0.005);
+    bandCtx.lineJoin = 'round';
+    bandCtx.stroke();
+
+    // F1·F2 지점에서 곡선까지 내려오는 점선 + 교차점 표시
+    bandCtx.strokeStyle = 'rgba(47,109,76,0.6)';
+    bandCtx.setLineDash([4, 3]);
+    bandCtx.lineWidth = Math.max(1, w * 0.0016);
+    [xLow, xHigh].forEach(x => {
+      bandCtx.beginPath();
+      bandCtx.moveTo(x, dbToY(-3));
+      bandCtx.lineTo(x, axisY);
+      bandCtx.stroke();
+    });
+    bandCtx.setLineDash([]);
+    [xLow, xHigh].forEach(x => {
+      bandCtx.beginPath();
+      bandCtx.arc(x, dbToY(-3), Math.max(2.5, w * 0.006), 0, Math.PI * 2);
+      bandCtx.fillStyle = '#2f6d4c';
+      bandCtx.fill();
+    });
+
+    // 중심 주파수(F0) 점 — 곡선의 정점(0dB)
+    bandCtx.beginPath();
+    bandCtx.arc(xCenter, dbToY(0), Math.max(3, w * 0.008), 0, Math.PI * 2);
+    bandCtx.fillStyle = '#9c6b17';
+    bandCtx.fill();
+
+    // ✅ 요청 반영: F0/F1/F2를 아예 3개의 서로 다른 줄에 그려서 겹칠 수 없게 했다.
+    // 또한 실제 글자 폭(measureText)을 재서, 캔버스 좌우 경계 안으로 위치를 클램프해
+    // 가장자리에서도 잘리지 않게 했다.
+    bandCtx.font = `600 ${Math.max(11, h * 0.05)}px 'IBM Plex Mono', monospace`;
+    const rowGap = h * 0.052;
+    const f0LabelY = marginT - rowGap * 3;
+    const f1LabelY = marginT - rowGap * 2;
+    const f2LabelY = marginT - rowGap * 1;
+
+    function drawClampedLabel(text, x, y, color){
+      bandCtx.fillStyle = color;
+      bandCtx.textAlign = 'center';
+      const halfW = bandCtx.measureText(text).width / 2 + w * 0.008;
+      const clampedX = Math.max(marginL + halfW, Math.min(marginL + plotW - halfW, x));
+      bandCtx.fillText(text, clampedX, y);
+    }
+
+    drawClampedLabel(`F0 = ${Math.round(fc)}Hz`, xCenter, f0LabelY, '#9c6b17');
+    drawClampedLabel(`F1 = ${fLow.toFixed(fLow < 100 ? 1 : 0)}Hz`, xLow, f1LabelY, '#2f6d4c');
+    drawClampedLabel(`F2 = ${fHigh.toFixed(fHigh < 100 ? 1 : 0)}Hz`, xHigh, f2LabelY, '#2f6d4c');
+    bandCtx.textAlign = 'left';
+  }
+
+  function recalcBand(){
+    const fc = parseFloat(bandFreqInput.value) || 0;
+    if (fc <= 0) {
+      bandLowVal.textContent = '--'; bandHighVal.textContent = '--';
+      bandWidthVal.textContent = '--'; bandQVal.textContent = '--';
+      return;
+    }
+    const { fLow, fHigh } = computeBandEdges(fc, currentQ);
+    const bw = fHigh - fLow;
+
+    bandLowVal.textContent = fLow.toFixed(fLow < 100 ? 2 : 1);
+    bandHighVal.textContent = fHigh.toFixed(fHigh < 100 ? 2 : 1);
+    bandWidthVal.textContent = bw.toFixed(bw < 100 ? 2 : 1);
+    bandQVal.textContent = currentQ.toFixed(2);
+    qOctaveReadout.textContent = formatApproxOctave(currentQ);
+    drawBand();
+  }
+
+  bandFreqInput.addEventListener('input', recalcBand);
+  bandwidthPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const N = parseInt(btn.dataset.oct, 10);
+      currentQ = qFromOctaveN(N);
+      qFactorInput.value = currentQ.toFixed(2);
+      bandwidthPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcBand();
+    });
+  });
+  // ✅ 요청 반영: Q를 직접 입력하면 그 값 기준으로 다시 계산하고, 프리셋 버튼 선택은 해제한다
+  // (임의의 Q값은 보통 깔끔한 1/N 옥타브와 정확히 일치하지 않기 때문)
+  qFactorInput.addEventListener('input', () => {
+    const q = parseFloat(qFactorInput.value);
+    if (!isFinite(q) || q <= 0) return;
+    currentQ = q;
+    bandwidthPicker.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    recalcBand();
+  });
+  window.addEventListener('resize', () => {
+    if (bandTab.style.display !== 'none') { resizeBandCanvas(); drawBand(); }
+  });
+
+  // -----------------------------------------------------------------
+  // Delay 탭 — 거리 ↔ 시간 양방향 변환 (Frequency 탭의 온도/음속 재사용)
+  // -----------------------------------------------------------------
+  function resizeDelayCanvas(){
+    const rect = delayCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    delayCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    delayCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  function drawDelay(){
+    const w = delayCanvas.width, h = delayCanvas.height;
+    if (w === 0 || h === 0) return;
+    delayCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.08, marginR = w * 0.08, marginT = h * 0.28, marginB = h * 0.28;
+    const plotW = w - marginL - marginR;
+    const midY = h / 2;
+
+    const timeMs = parseFloat(delayTimeInput.value) || 0;
+    // 화면에는 지연시간의 2.4배 정도까지 보이도록, 너무 작거나 크면 적당히 스케일한다
+    const windowMs = Math.max(timeMs * 2.4, 5);
+
+    // 시간 축
+    delayCtx.strokeStyle = 'rgba(30,26,20,0.25)';
+    delayCtx.lineWidth = Math.max(1, w * 0.0015);
+    delayCtx.beginPath();
+    delayCtx.moveTo(marginL, midY);
+    delayCtx.lineTo(marginL + plotW, midY);
+    delayCtx.stroke();
+
+    function tToX(t){ return marginL + (t / windowMs) * plotW; }
+
+    // 직접음(Direct Sound) — t=0
+    const x0 = tToX(0);
+    delayCtx.strokeStyle = '#33587a';
+    delayCtx.lineWidth = Math.max(2.5, w * 0.007);
+    delayCtx.beginPath();
+    delayCtx.moveTo(x0, midY - h * 0.22);
+    delayCtx.lineTo(x0, midY + h * 0.22);
+    delayCtx.stroke();
+    delayCtx.fillStyle = '#33587a';
+    delayCtx.font = `600 ${Math.max(11, h * 0.075)}px 'IBM Plex Mono', monospace`;
+    delayCtx.textAlign = 'center';
+    delayCtx.fillText('Direct', x0, midY - h * 0.29);
+
+    // 지연음(Delayed Sound) — t=timeMs
+    const x1 = tToX(timeMs);
+    delayCtx.strokeStyle = '#9c6b17';
+    delayCtx.beginPath();
+    delayCtx.moveTo(x1, midY - h * 0.22);
+    delayCtx.lineTo(x1, midY + h * 0.22);
+    delayCtx.stroke();
+    delayCtx.fillStyle = '#9c6b17';
+    delayCtx.fillText('Delayed', x1, midY - h * 0.29);
+
+    // 두 펄스 사이 간격 표시(화살표 느낌의 얇은 가로선 + 시간 라벨)
+    delayCtx.strokeStyle = 'rgba(30,26,20,0.4)';
+    delayCtx.lineWidth = Math.max(1, w * 0.0013);
+    delayCtx.beginPath();
+    delayCtx.moveTo(x0, midY + h * 0.32);
+    delayCtx.lineTo(x1, midY + h * 0.32);
+    delayCtx.stroke();
+    delayCtx.fillStyle = 'rgba(92,87,76,0.9)';
+    delayCtx.font = `${Math.max(10, h * 0.065)}px 'IBM Plex Mono', monospace`;
+    delayCtx.fillText(`${timeMs.toFixed(2)}ms`, (x0 + x1) / 2, midY + h * 0.42);
+    delayCtx.textAlign = 'left';
+  }
+
+  // source: 'distance' | 'time' — 방금 사용자가 수정한 칸은 그대로 두고 나머지만 갱신한다
+  function recalcDelay(source){
+    const speed = currentSpeedOfSound();
+    delaySpeedReadout.textContent = speed.toFixed(1);
+
+    if (source === 'distance') {
+      const dist = parseFloat(delayDistInput.value) || 0;
+      delayTimeInput.value = (dist / speed * 1000).toFixed(2);
+    } else {
+      const timeMs = parseFloat(delayTimeInput.value) || 0;
+      delayDistInput.value = (timeMs / 1000 * speed).toFixed(3);
+    }
+    drawDelay();
+  }
+
+  delayDistInput.addEventListener('input', () => recalcDelay('distance'));
+  delayTimeInput.addEventListener('input', () => recalcDelay('time'));
+  // ✅ 요청 반영: Delay 탭에도 온도 입력칸을 따로 두되, Frequency 탭 온도와 서로 값이 동기화되게 한다
+  // (둘이 따로 놀면 두 탭이 다른 음속을 쓰는 것처럼 헷갈릴 수 있어서)
+  tempInput.addEventListener('input', () => {
+    delayTempInput.value = tempInput.value;
+    recalcDelay('distance');
+  });
+  delayTempInput.addEventListener('input', () => {
+    tempInput.value = delayTempInput.value;
+    recalc();
+    recalcDelay('distance');
+  });
+  window.addEventListener('resize', () => {
+    if (delayTab.style.display !== 'none') { resizeDelayCanvas(); drawDelay(); }
+  });
+
+  // -----------------------------------------------------------------
+  // Volume 탭 — 역제곱 법칙(Inverse Square Law) 기반 거리별 SPL 감쇠
+  // -----------------------------------------------------------------
+  function resizeVolumeCanvas(){
+    const rect = volumeCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    volumeCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    volumeCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  // ✅ 요청 반영: 음원 종류에 따라 거리에 따른 감쇠 기울기가 다르다.
+  // 점음원: 거리 2배당 -6dB (SPL2 = SPL1 - 20·log10(d2/d1))
+  // 선음원(라인 어레이 등): 거리 2배당 -3dB (SPL2 = SPL1 - 10·log10(d2/d1))
+  // 면음원: 근접장에서는 이론상 거리와 무관하게 감쇠가 거의 없음 (매우 제한적인 근사)
+  let currentSourceType = 'point';
+  function splAtDistance(splRef, distRef, dist, sourceType){
+    const type = sourceType || currentSourceType;
+    if (type === 'line') return splRef - 10 * Math.log10(dist / distRef);
+    if (type === 'plane') return splRef; // 근접장 근사: 감쇠 없음
+    return splRef - 20 * Math.log10(dist / distRef); // point
+  }
+
+  function drawVolume(){
+    const w = volumeCanvas.width, h = volumeCanvas.height;
+    if (w === 0 || h === 0) return;
+    volumeCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.1, marginR = w * 0.05, marginT = h * 0.12, marginB = h * 0.16;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const axisY = marginT + plotH;
+
+    const splRef = parseFloat(volRefSplInput.value) || 100;
+    const distRef = Math.max(0.01, parseFloat(volRefDistInput.value) || 1);
+    const distTarget = Math.max(0.01, parseFloat(volTargetDistInput.value) || 10);
+
+    // x축(거리) 범위: 기준/목표 거리를 모두 포함하도록 로그스케일로 넉넉히 잡는다
+    const distMin = Math.min(distRef, distTarget) / 3;
+    const distMax = Math.max(distRef, distTarget) * 3;
+    function distToX(d){
+      const t = Math.log(d / distMin) / Math.log(distMax / distMin);
+      return marginL + Math.max(0, Math.min(1, t)) * plotW;
+    }
+
+    // y축(SPL) 범위: 곡선의 최댓값(기준점)부터 최솟값(가장 먼 거리)까지 여유 있게
+    const splAtMin = splAtDistance(splRef, distRef, distMin);
+    const splAtMax = splAtDistance(splRef, distRef, distMax);
+    const dbTop = Math.ceil(Math.max(splRef, splAtMin) / 5) * 5 + 5;
+    const dbBottom = Math.floor(Math.min(splAtMax, splAtDistance(splRef, distRef, distTarget)) / 5) * 5 - 5;
+    function dbToY(db){
+      const t = (db - dbBottom) / (dbTop - dbBottom);
+      return axisY - Math.max(0, Math.min(1, t)) * plotH;
+    }
+
+    // 세로 그리드(거리) + 라벨
+    volumeCtx.font = `${Math.max(10, h * 0.045)}px 'IBM Plex Mono', monospace`;
+    volumeCtx.fillStyle = 'rgba(92,87,76,0.75)';
+    [distRef, distTarget].forEach((d, i) => {
+      const x = distToX(d);
+      volumeCtx.strokeStyle = 'rgba(30,26,20,0.1)';
+      volumeCtx.beginPath();
+      volumeCtx.moveTo(x, marginT);
+      volumeCtx.lineTo(x, axisY);
+      volumeCtx.stroke();
+    });
+
+    // 가로 그리드(dB) + 라벨
+    const dbStep = (dbTop - dbBottom) / 4;
+    for (let i = 0; i <= 4; i++) {
+      const db = dbBottom + i * dbStep;
+      const y = dbToY(db);
+      volumeCtx.strokeStyle = 'rgba(30,26,20,0.08)';
+      volumeCtx.beginPath();
+      volumeCtx.moveTo(marginL, y);
+      volumeCtx.lineTo(marginL + plotW, y);
+      volumeCtx.stroke();
+      volumeCtx.textAlign = 'right';
+      volumeCtx.fillText(Math.round(db) + 'dB', marginL - w * 0.015, y + h * 0.015);
+    }
+    volumeCtx.textAlign = 'left';
+
+    // 감쇠 곡선
+    volumeCtx.beginPath();
+    const steps = 200;
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps;
+      const d = distMin * Math.pow(distMax / distMin, t);
+      const x = marginL + t * plotW;
+      const y = dbToY(splAtDistance(splRef, distRef, d));
+      if (i === 0) volumeCtx.moveTo(x, y); else volumeCtx.lineTo(x, y);
+    }
+    volumeCtx.strokeStyle = '#2f6d4c';
+    volumeCtx.lineWidth = Math.max(2, w * 0.005);
+    volumeCtx.lineJoin = 'round';
+    volumeCtx.stroke();
+
+    // 기준점(주황) / 목표점(초록) 마커 + 라벨
+    const xRef = distToX(distRef), yRef = dbToY(splRef);
+    const xTarget = distToX(distTarget), yTarget = dbToY(splAtDistance(splRef, distRef, distTarget));
+
+    volumeCtx.beginPath();
+    volumeCtx.arc(xRef, yRef, Math.max(3, w * 0.008), 0, Math.PI * 2);
+    volumeCtx.fillStyle = '#9c6b17';
+    volumeCtx.fill();
+    volumeCtx.textAlign = 'center';
+    volumeCtx.font = `600 ${Math.max(11, h * 0.045)}px 'IBM Plex Mono', monospace`;
+    volumeCtx.fillText(`${distRef}m, ${splRef.toFixed(0)}dB`, Math.max(marginL + w*0.06, Math.min(marginL+plotW-w*0.06, xRef)), yRef - h * 0.05);
+
+    volumeCtx.beginPath();
+    volumeCtx.arc(xTarget, yTarget, Math.max(3, w * 0.008), 0, Math.PI * 2);
+    volumeCtx.fillStyle = '#2f6d4c';
+    volumeCtx.fill();
+    volumeCtx.fillText(`${distTarget}m, ${splAtDistance(splRef, distRef, distTarget).toFixed(1)}dB`, Math.max(marginL + w*0.08, Math.min(marginL+plotW-w*0.08, xTarget)), yTarget - h * 0.05);
+    volumeCtx.textAlign = 'left';
+  }
+
+  function recalcVolume(){
+    const splRef = parseFloat(volRefSplInput.value) || 0;
+    const distRef = parseFloat(volRefDistInput.value) || 0;
+    const distTarget = parseFloat(volTargetDistInput.value) || 0;
+    if (distRef <= 0 || distTarget <= 0) {
+      volTargetSplVal.textContent = '--'; volLossVal.textContent = '--';
+      return;
+    }
+    const splTarget = splAtDistance(splRef, distRef, distTarget);
+    const loss = splRef - splTarget;
+    volTargetSplVal.textContent = splTarget.toFixed(1);
+    volLossVal.textContent = (loss >= 0 ? '−' : '+') + Math.abs(loss).toFixed(1);
+    drawVolume();
+  }
+
+  [volRefSplInput, volRefDistInput, volTargetDistInput].forEach(el => {
+    el.addEventListener('input', recalcVolume);
+  });
+
+  const SOURCE_TYPE_DESC_KEYS = { point: 'src_desc_point', line: 'src_desc_line', plane: 'src_desc_plane' };
+  function updateSourceTypeDesc(){
+    if (!window.i18n) return;
+    sourceTypeDesc.innerHTML = window.i18n.t(SOURCE_TYPE_DESC_KEYS[currentSourceType]);
+  }
+  sourceTypePicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentSourceType = btn.dataset.src;
+      sourceTypePicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      updateSourceTypeDesc();
+      recalcVolume();
+    });
+  });
+
+  // ✅ 요청 반영: 스피커 센시티비티(1W/1m 기준) + 거리 + 목표 SPL → 필요 와트(W)
+  // 공식: 목표SPL = 센시티비티 - 20·log10(거리) + 10·log10(P)
+  // → P = 10^((목표SPL - 센시티비티 + 20·log10(거리)) / 10)
+  function recalcPower(){
+    const sensitivity = parseFloat(volSensitivityInput.value);
+    const dist = parseFloat(volPowerDistInput.value);
+    const desiredSpl = parseFloat(volDesiredSplInput.value);
+    if (!isFinite(sensitivity) || !isFinite(dist) || !isFinite(desiredSpl) || dist <= 0) {
+      volRequiredWattsVal.textContent = '--';
+      return;
+    }
+    const watts = Math.pow(10, (desiredSpl - sensitivity + 20 * Math.log10(dist)) / 10);
+    // ✅ 와트 값이 아주 작거나 아주 크게 나올 수 있어(예: 0.003W ~ 5000W), 크기에 맞게 자릿수를 조정한다
+    volRequiredWattsVal.textContent = watts < 1 ? watts.toFixed(3) : watts < 100 ? watts.toFixed(1) : Math.round(watts).toLocaleString();
+  }
+  [volSensitivityInput, volPowerDistInput, volDesiredSplInput].forEach(el => {
+    el.addEventListener('input', recalcPower);
+  });
+
+  window.addEventListener('resize', () => {
+    if (volumeTab.style.display !== 'none') { resizeVolumeCanvas(); drawVolume(); }
+  });
+
+  // -----------------------------------------------------------------
+  // Room Modes 탭 — 축모드(axial mode) 계산: f_n = (c × n) / (2 × L)
+  // -----------------------------------------------------------------
+  function computeAxialModes(dimension, speed, count){
+    const modes = [];
+    for (let n = 1; n <= count; n++) {
+      modes.push({ order: n, freq: (speed * n) / (2 * dimension) });
+    }
+    return modes;
+  }
+
+  // ✅ 요청 반영: 접선모드(두 방향이 동시에 작용, 축모드보다 약함) / 경사모드(세 방향 다 작용, 가장 약함)
+  // 공통 공식: f = (c/2) × √((nx/L)² + (ny/W)² + (nz/H)²)
+  function roomModeFreq(speed, L, W, H, nx, ny, nz){
+    return (speed / 2) * Math.sqrt((nx / L) ** 2 + (ny / W) ** 2 + (nz / H) ** 2);
+  }
+
+  function computeTangentialModes(speed, L, W, H, maxN, freqMax){
+    const modes = [];
+    const dims = [[L, 0], [W, 1], [H, 2]]; // [치수, 축 인덱스]
+    for (let a = 0; a < 3; a++) {
+      for (let b = a + 1; b < 3; b++) {
+        for (let na = 1; na <= maxN; na++) {
+          for (let nb = 1; nb <= maxN; nb++) {
+            const n = [0, 0, 0];
+            n[dims[a][1]] = na; n[dims[b][1]] = nb;
+            const freq = roomModeFreq(speed, L, W, H, n[0], n[1], n[2]);
+            if (freq <= freqMax) modes.push({ freq, nx: n[0], ny: n[1], nz: n[2] });
+          }
+        }
+      }
+    }
+    modes.sort((a, b) => a.freq - b.freq);
+    return modes;
+  }
+
+  function computeObliqueModes(speed, L, W, H, maxN, freqMax){
+    const modes = [];
+    for (let nx = 1; nx <= maxN; nx++) {
+      for (let ny = 1; ny <= maxN; ny++) {
+        for (let nz = 1; nz <= maxN; nz++) {
+          const freq = roomModeFreq(speed, L, W, H, nx, ny, nz);
+          if (freq <= freqMax) modes.push({ freq, nx, ny, nz });
+        }
+      }
+    }
+    modes.sort((a, b) => a.freq - b.freq);
+    return modes;
+  }
+
+  function resizeRoomModeCanvas(){
+    const rect = roomModeCanvas.getBoundingClientRect();
+    if (rect.width < 1 || rect.height < 1) return;
+    const dpr = window.devicePixelRatio || 1;
+    roomModeCanvas.width = Math.max(1, Math.round(rect.width * dpr));
+    roomModeCanvas.height = Math.max(1, Math.round(rect.height * dpr));
+  }
+
+  // ✅ 요청 반영: 방은 항상 "고정된 모양의 작은 3D 아이콘"으로만 방향 표시용으로 그리고,
+  // 실제 주파수 정보는 각 축마다 넓고 읽기 쉬운 눈금줄(ruler)로 따로 크게 보여준다.
+  function drawRoomModes(lModes, wModes, hModes, L, W, H, tangentialFreqs, obliqueFreqs){
+    const w = roomModeCanvas.width, h = roomModeCanvas.height;
+    if (w === 0 || h === 0) return;
+    roomModeCtx.clearRect(0, 0, w, h);
+
+    const marginL = w * 0.08, marginR = w * 0.05, marginT = h * 0.08, marginB = h * 0.13;
+    const plotW = w - marginL - marginR, plotH = h - marginT - marginB;
+    const FREQ_MIN = 20, FREQ_MAX = 300;
+
+    function freqToX(f){
+      const t = (f - FREQ_MIN) / (FREQ_MAX - FREQ_MIN);
+      return marginL + Math.max(0, Math.min(1, t)) * plotW;
+    }
+
+    // 축
+    roomModeCtx.strokeStyle = 'rgba(30,26,20,0.25)';
+    roomModeCtx.lineWidth = Math.max(1, w * 0.0015);
+    roomModeCtx.beginPath();
+    roomModeCtx.moveTo(marginL, marginT + plotH);
+    roomModeCtx.lineTo(marginL + plotW, marginT + plotH);
+    roomModeCtx.stroke();
+
+    // 50/100/150/200/250/300Hz 기준선
+    roomModeCtx.font = `${Math.max(10, h * 0.04)}px 'IBM Plex Mono', monospace`;
+    roomModeCtx.fillStyle = 'rgba(92,87,76,0.7)';
+    roomModeCtx.textAlign = 'center';
+    for (let f = 50; f <= 300; f += 50) {
+      const x = freqToX(f);
+      roomModeCtx.strokeStyle = 'rgba(30,26,20,0.08)';
+      roomModeCtx.beginPath();
+      roomModeCtx.moveTo(x, marginT);
+      roomModeCtx.lineTo(x, marginT + plotH);
+      roomModeCtx.stroke();
+      roomModeCtx.fillText(f + 'Hz', x, marginT + plotH + h * 0.07);
+    }
+    roomModeCtx.textAlign = 'left';
+
+    // ---- 축모드(가장 강함) — 3줄, 색깔별로, Hz 숫자 라벨 포함 ----
+    const rows = [
+      { modes: lModes, color: '#9c6b17', y0: marginT + plotH * 0.13 },
+      { modes: wModes, color: '#2f6d4c', y0: marginT + plotH * 0.36 },
+      { modes: hModes, color: '#33587a', y0: marginT + plotH * 0.59 },
+    ];
+    rows.forEach(({ modes, color, y0 }) => {
+      modes.forEach(({ freq }, i) => {
+        if (freq < FREQ_MIN || freq > FREQ_MAX) return;
+        const x = freqToX(freq);
+        roomModeCtx.strokeStyle = color;
+        roomModeCtx.lineWidth = Math.max(2, w * 0.004);
+        roomModeCtx.beginPath();
+        roomModeCtx.moveTo(x, y0 - plotH * 0.07);
+        roomModeCtx.lineTo(x, y0 + plotH * 0.07);
+        roomModeCtx.stroke();
+
+        roomModeCtx.font = `${Math.max(9, h * 0.028)}px 'IBM Plex Mono', monospace`;
+        roomModeCtx.fillStyle = color;
+        roomModeCtx.textAlign = 'center';
+        const labelY = (i % 2 === 0) ? y0 - plotH * 0.09 : y0 + plotH * 0.13;
+        roomModeCtx.fillText(`${Math.round(freq)}Hz`, x, labelY);
+      });
+    });
+
+    // ✅ 요청 반영: 접선모드(중간 세기) / 경사모드(가장 약함)를 아래에 참고용 얇은 줄로 추가한다.
+    // 개수가 많아질 수 있어서 개별 숫자 라벨 없이, 짧고 옅은 눈금으로 "밀집도"만 보여준다.
+    const tanY = marginT + plotH * 0.80;
+    const obliqueY = marginT + plotH * 0.94;
+
+    roomModeCtx.font = `600 ${Math.max(9, h * 0.032)}px 'IBM Plex Mono', monospace`;
+    roomModeCtx.fillStyle = 'rgba(124,88,181,0.85)';
+    roomModeCtx.textAlign = 'left';
+    roomModeCtx.fillText('Tangential', marginL, tanY - plotH * 0.055);
+    roomModeCtx.strokeStyle = 'rgba(124,88,181,0.6)';
+    roomModeCtx.lineWidth = Math.max(1.2, w * 0.002);
+    (tangentialFreqs || []).forEach(({ freq }) => {
+      if (freq < FREQ_MIN || freq > FREQ_MAX) return;
+      const x = freqToX(freq);
+      roomModeCtx.beginPath();
+      roomModeCtx.moveTo(x, tanY - plotH * 0.035);
+      roomModeCtx.lineTo(x, tanY + plotH * 0.035);
+      roomModeCtx.stroke();
+    });
+
+    roomModeCtx.fillStyle = 'rgba(92,87,76,0.85)';
+    roomModeCtx.fillText('Oblique', marginL, obliqueY - plotH * 0.055);
+    roomModeCtx.strokeStyle = 'rgba(92,87,76,0.5)';
+    roomModeCtx.lineWidth = Math.max(1, w * 0.0016);
+    (obliqueFreqs || []).forEach(({ freq }) => {
+      if (freq < FREQ_MIN || freq > FREQ_MAX) return;
+      const x = freqToX(freq);
+      roomModeCtx.beginPath();
+      roomModeCtx.moveTo(x, obliqueY - plotH * 0.03);
+      roomModeCtx.lineTo(x, obliqueY + plotH * 0.03);
+      roomModeCtx.stroke();
+    });
+    roomModeCtx.textAlign = 'left';
+  }
+
+  function recalcRoomModes(){
+    const speed = currentSpeedOfSound();
+    const L = parseFloat(roomLengthInput.value) || 0;
+    const W = parseFloat(roomWidthInput.value) || 0;
+    const H = parseFloat(roomHeightInput.value) || 0;
+    if (L <= 0 || W <= 0 || H <= 0) { roomModeTable.innerHTML = ''; return; }
+
+    const COUNT = 4;
+    const lModes = computeAxialModes(L, speed, COUNT);
+    const wModes = computeAxialModes(W, speed, COUNT);
+    const hModes = computeAxialModes(H, speed, COUNT);
+
+    let html = `
+      <div class="tempo-row tempo-header">
+        <div class="tempo-cell">Order</div>
+        <div class="tempo-cell">Length</div>
+        <div class="tempo-cell">Width</div>
+        <div class="tempo-cell">Height</div>
+      </div>`;
+    for (let i = 0; i < COUNT; i++) {
+      html += `
+        <div class="tempo-row">
+          <div class="tempo-cell">${i + 1}</div>
+          <div class="tempo-cell">${lModes[i].freq.toFixed(1)}Hz</div>
+          <div class="tempo-cell">${wModes[i].freq.toFixed(1)}Hz</div>
+          <div class="tempo-cell">${hModes[i].freq.toFixed(1)}Hz</div>
+        </div>`;
+    }
+    roomModeTable.innerHTML = html;
+
+    // ✅ 서로 다른 방향의 1차 모드끼리 너무 가까우면(5Hz 이내), 그 대역이 유독 과하게
+    // 부스트될 수 있다는 흔한 경험칙(rule of thumb)을 간단히 안내한다.
+    const firstOrderFreqs = [
+      { label: 'Length', freq: lModes[0].freq },
+      { label: 'Width', freq: wModes[0].freq },
+      { label: 'Height', freq: hModes[0].freq },
+    ];
+    let warning = '';
+    for (let i = 0; i < firstOrderFreqs.length; i++) {
+      for (let j = i + 1; j < firstOrderFreqs.length; j++) {
+        const diff = Math.abs(firstOrderFreqs[i].freq - firstOrderFreqs[j].freq);
+        if (diff < 5 && window.i18n) {
+          warning = window.i18n.tpl('room_mode_warning', {
+            labelA: firstOrderFreqs[i].label, freqA: firstOrderFreqs[i].freq.toFixed(1),
+            labelB: firstOrderFreqs[j].label, freqB: firstOrderFreqs[j].freq.toFixed(1),
+            diff: diff.toFixed(1)
+          });
+        }
+      }
+    }
+    roomModeWarning.textContent = warning;
+
+    const tangentialFreqs = computeTangentialModes(speed, L, W, H, 3, 300);
+    const obliqueFreqs = computeObliqueModes(speed, L, W, H, 2, 300);
+
+    // ✅ 요청 반영: 접선/경사 모드도 축모드처럼 표로 나열한다 (개수가 많을 수 있어 상위 10개까지만)
+    function renderModeTable(container, modes){
+      let html = `
+        <div class="tempo-row tempo-header" style="grid-template-columns:1fr 1fr;">
+          <div class="tempo-cell">Mode (nx,ny,nz)</div>
+          <div class="tempo-cell">Frequency</div>
+        </div>`;
+      modes.slice(0, 10).forEach(({ freq, nx, ny, nz }) => {
+        html += `
+          <div class="tempo-row" style="grid-template-columns:1fr 1fr;">
+            <div class="tempo-cell">(${nx}, ${ny}, ${nz})</div>
+            <div class="tempo-cell">${freq.toFixed(1)}Hz</div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+    renderModeTable(tangentialModeTable, tangentialFreqs);
+    renderModeTable(obliqueModeTable, obliqueFreqs);
+
+    drawRoomModes(lModes, wModes, hModes, L, W, H, tangentialFreqs, obliqueFreqs);
+  }
+
+  [roomLengthInput, roomWidthInput, roomHeightInput].forEach(el => {
+    el.addEventListener('input', recalcRoomModes);
+  });
+  tempInput.addEventListener('input', recalcRoomModes);
+  window.addEventListener('resize', () => {
+    if (roomModesTab.style.display !== 'none') {
+      resizeRoomModeCanvas();
+      recalcRoomModes();
+    }
+  });
+
+  // -----------------------------------------------------------------
+  // Reverb Time (RT60, Sabine 공식) + Critical Distance
+  // -----------------------------------------------------------------
+  // RT60 = 0.161 × V / A  (V: 부피 m³, A: 총 흡음력 sabins = 표면적 × 평균 흡음계수)
+  function computeRT60(V, S, alpha){
+    const A = S * alpha;
+    const rt60 = A > 0 ? (0.161 * V) / A : Infinity;
+    return { A, rt60 };
+  }
+  // 임계거리(반사음=직접음이 되는 거리): Dc = 0.057 × √(Q×V / RT60)
+  function computeCriticalDistance(Q, V, rt60){
+    if (!(rt60 > 0)) return NaN;
+    return 0.057 * Math.sqrt((Q * V) / rt60);
+  }
+  function rt60Guidelines(rt60){
+    if (!window.i18n) return '';
+    if (rt60 < 0.4) return window.i18n.t('rt60_very_dry');
+    if (rt60 < 0.8) return window.i18n.t('rt60_standard');
+    if (rt60 < 1.5) return window.i18n.t('rt60_living');
+    if (rt60 < 3.0) return window.i18n.t('rt60_hall_small');
+    return window.i18n.t('rt60_cathedral');
+  }
+
+  function recalcRT60(){
+    const L = parseFloat(rt60LengthInput.value) || 0;
+    const W = parseFloat(rt60WidthInput.value) || 0;
+    const H = parseFloat(rt60HeightInput.value) || 0;
+    const alpha = Math.min(1, Math.max(0.001, parseFloat(absorptionAlphaInput.value) || 0.15));
+    if (L <= 0 || W <= 0 || H <= 0) return;
+
+    const V = L * W * H;
+    const S = 2 * (L * W + L * H + W * H);
+    const { A, rt60 } = computeRT60(V, S, alpha);
+
+    rt60VolumeVal.textContent = V.toFixed(1);
+    rt60SurfaceVal.textContent = S.toFixed(1);
+    rt60AbsorptionVal.textContent = A.toFixed(2);
+    rt60ResultVal.textContent = isFinite(rt60) ? rt60.toFixed(2) : '--';
+    rt60Guideline.textContent = isFinite(rt60) ? rt60Guidelines(rt60) : '';
+
+    const Q = parseFloat(directivityQInput.value) || 1;
+    const dc = computeCriticalDistance(Q, V, rt60);
+    criticalDistVal.textContent = isFinite(dc) ? dc.toFixed(2) : '--';
+  }
+
+  [rt60LengthInput, rt60WidthInput, rt60HeightInput, absorptionAlphaInput, directivityQInput].forEach(el => {
+    el.addEventListener('input', recalcRT60);
+  });
+  absorptionPresetPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      absorptionAlphaInput.value = btn.dataset.alpha;
+      absorptionPresetPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      recalcRT60();
+    });
+  });
+  // ✅ 직접 α를 입력하면 프리셋 버튼 선택은 해제한다 (임의의 값도 지원)
+  absorptionAlphaInput.addEventListener('input', () => {
+    const val = parseFloat(absorptionAlphaInput.value);
+    const matched = Array.from(absorptionPresetPicker.querySelectorAll('button')).find(b => parseFloat(b.dataset.alpha) === val);
+    absorptionPresetPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === matched));
+  });
+
+  freqInput.addEventListener('input', recalc);
+
+  // ✅ 요청 반영: 음정을 입력하면 실시간으로 몇 Hz인지 힌트로 보여주고,
+  // "적용" 버튼을 누르면 그 값을 실제 Frequency 칸에 반영한다.
+  function updateNoteHint(){
+    const freq = noteToFreq(noteInput.value);
+    if (freq) {
+      noteInputHint.textContent = window.i18n ? window.i18n.tpl('note_valid_hint', { freq: freq.toFixed(2) }) : `→ ${freq.toFixed(2)}Hz`;
+    } else {
+      noteInputHint.textContent = window.i18n ? window.i18n.t('note_invalid_hint') : '→ 인식할 수 없는 음정이에요 (예: A4, C#3, Bb2)';
+    }
+  }
+  noteInput.addEventListener('input', updateNoteHint);
+  noteApplyBtn.addEventListener('click', () => {
+    const freq = noteToFreq(noteInput.value);
+    if (!freq) return;
+    freqInput.value = freq.toFixed(2);
+    recalc();
+  });
+  noteInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') noteApplyBtn.click();
+  });
+  updateNoteHint(); // 초기 힌트 표시
+
+  tempInput.addEventListener('input', recalc);
+  window.addEventListener('resize', () => { resizeCanvas(); drawWave(); });
+
+  // 탭 전환 (Frequency 외에는 아직 준비 중)
+  tabPicker.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      tabPicker.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      const tab = btn.dataset.tab;
+      frequencyTab.style.display = tab === 'frequency' ? 'block' : 'none';
+      bandTab.style.display = tab === 'band' ? 'block' : 'none';
+      delayTab.style.display = tab === 'delay' ? 'block' : 'none';
+      volumeTab.style.display = tab === 'volume' ? 'block' : 'none';
+      roomModesTab.style.display = tab === 'roommodes' ? 'block' : 'none';
+      rt60Tab.style.display = tab === 'rt60' ? 'block' : 'none';
+      placeholderTab.style.display = (tab !== 'frequency' && tab !== 'band' && tab !== 'delay' && tab !== 'volume' && tab !== 'roommodes' && tab !== 'rt60') ? 'block' : 'none';
+      if (tab === 'band') { resizeBandCanvas(); drawBand(); }
+      if (tab === 'delay') { resizeDelayCanvas(); drawDelay(); }
+      if (tab === 'volume') { resizeVolumeCanvas(); drawVolume(); }
+      if (tab === 'roommodes') { resizeRoomModeCanvas(); recalcRoomModes(); }
+      if (tab === 'rt60') { recalcRT60(); }
+    });
+  });
+
+  recalc();
+  recalcBand();
+  recalcDelay('distance');
+  recalcVolume();
+  recalcPower();
+  recalcRoomModes();
+  recalcRT60();
+  requestAnimationFrame(() => { resizeCanvas(); drawWave(); });
+
+  document.addEventListener('i18nchange', () => {
+    updateSourceTypeDesc();
+    recalcRoomModes();
+    recalcRT60();
+    updateNoteHint();
+  });
+})();
+</script>
+<script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "label_temperature": {"ko": "Temperature (음속 계산용)", "en": "Temperature (For Speed of Sound)", "ja": "Temperature（音速計算用）", "es": "Temperature (para calcular la velocidad del sonido)", "zh": "Temperature（用于计算声速）"}, "label_current_speed_prefix": {"ko": "현재 음속: ", "en": "Current speed of sound: ", "ja": "現在の音速: ", "es": "Velocidad del sonido actual: ", "zh": "当前声速："}, "note_freq_desc": {"ko": "평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.", "en": "Equal temperament (12-tone, based on A4 = 440Hz). Enter a note (e.g. A4, C#3, Bb2) to set the Frequency above to that pitch.", "ja": "平均律（12音階、A4 = 440Hz基準）です。音名を入力すると（例：A4, C#3, Bb2）、上のFrequencyがその音の周波数に変わります。", "es": "Temperamento igual (12 tonos, basado en A4 = 440Hz). Introduce una nota (p. ej. A4, C#3, Bb2) para ajustar la Frequency de arriba a ese tono.", "zh": "十二平均律（以 A4 = 440Hz 为基准）。输入音名（例如 A4、C#3、Bb2）即可将上方 Frequency 改为该音高对应的频率。"}, "placeholder_note_example": {"ko": "예: A4, C#3, Bb2", "en": "e.g. A4, C#3, Bb2", "ja": "例：A4, C#3, Bb2", "es": "ej. A4, C#3, Bb2", "zh": "例如：A4、C#3、Bb2"}, "btn_apply": {"ko": "적용", "en": "Apply", "ja": "適用", "es": "Aplicar", "zh": "应用"}, "note_valid_hint": {"ko": "→ {freq}Hz", "en": "→ {freq}Hz", "ja": "→ {freq}Hz", "es": "→ {freq}Hz", "zh": "→ {freq}Hz"}, "note_invalid_hint": {"ko": "→ 인식할 수 없는 음정이에요 (예: A4, C#3, Bb2)", "en": "→ Unrecognized note (e.g. A4, C#3, Bb2)", "ja": "→ 認識できない音名です（例：A4, C#3, Bb2）", "es": "→ Nota no reconocida (ej. A4, C#3, Bb2)", "zh": "→ 无法识别的音名（例如 A4、C#3、Bb2）"}, "band_desc": {"ko": "F1(하한)·F2(상한)는 중심 주파수(F0) 대비 반전력점(<b style=\"color:var(--text-secondary);\">−3dB 지점</b>)을 기준으로 계산합니다 — 필터 설계에서 흔히 쓰는 표준 정의입니다.", "en": "F1 (lower) and F2 (upper) are calculated at the half-power point (<b style=\"color:var(--text-secondary);\">the −3dB point</b>) relative to the center frequency (F0) — a standard definition commonly used in filter design.", "ja": "F1（下限）・F2（上限）は、中心周波数（F0）を基準とした半電力点（<b style=\"color:var(--text-secondary);\">−3dBポイント</b>）で計算されます — フィルター設計でよく使われる標準的な定義です。", "es": "F1 (inferior) y F2 (superior) se calculan en el punto de media potencia (<b style=\"color:var(--text-secondary);\">el punto de −3dB</b>) respecto a la frecuencia central (F0) — una definición estándar habitual en el diseño de filtros.", "zh": "F1（下限）和 F2（上限）是相对于中心频率（F0）的半功率点（<b style=\"color:var(--text-secondary);\">−3dB 点</b>）计算得出的——这是滤波器设计中常用的标准定义。"}, "label_q_factor": {"ko": "Q factor (직접 입력 가능)", "en": "Q Factor (can be entered directly)", "ja": "Q factor（直接入力可能）", "es": "Q Factor (se puede introducir directamente)", "zh": "Q Factor（可直接输入）"}, "octave_suffix": {"ko": "옥타브에 해당", "en": "octave", "ja": "オクターブに相当", "es": "de octava", "zh": "倍频程"}, "band_q_hint": {"ko": "위 프리셋 버튼을 누르면 이 값이 자동으로 채워지고, 직접 숫자를 입력하면 그 Q값 기준으로 다시 계산됩니다.", "en": "Pressing a preset button above fills this value automatically; entering a number directly recalculates based on that Q value.", "ja": "上のプリセットボタンを押すとこの値が自動的に入り、直接数値を入力するとそのQ値を基準に再計算されます。", "es": "Al pulsar un botón de preajuste de arriba, este valor se rellena automáticamente; si introduces un número directamente, se recalcula según ese valor de Q.", "zh": "点击上方的预设按钮会自动填入该数值；直接输入数字则会按该 Q 值重新计算。"}, "label_bandwidth_result": {"ko": "Bandwidth (−3dB 기준)", "en": "Bandwidth (at −3dB)", "ja": "Bandwidth（−3dB基準）", "es": "Bandwidth (en −3dB)", "zh": "Bandwidth（−3dB 基准）"}, "delay_desc": {"ko": "거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.", "en": "Enter either distance or time and the other will be calculated automatically. Temperature is linked with the Frequency tab.", "ja": "距離または時間のどちらかを入力すると、残りが自動的に計算されます。温度はFrequencyタブと連動しています。", "es": "Introduce la distancia o el tiempo y el otro valor se calculará automáticamente. La temperatura está vinculada con la pestaña Frequency.", "zh": "输入距离或时间中的任意一个，另一个会自动计算。温度与 Frequency 标签页联动。"}, "delay_speed_prefix": {"ko": "현재 음속(Frequency 탭 온도 기준): ", "en": "Current speed of sound (based on Frequency tab temperature): ", "ja": "現在の音速（Frequencyタブの温度基準）: ", "es": "Velocidad del sonido actual (según la temperatura de la pestaña Frequency): ", "zh": "当前声速（基于 Frequency 标签页的温度）："}, "panel_volume_title": {"ko": "Volume (거리에 따른 SPL 감쇠)", "en": "Volume (SPL Attenuation with Distance)", "ja": "Volume（距離によるSPL減衰）", "es": "Volume (atenuación de SPL con la distancia)", "zh": "Volume（随距离衰减的 SPL）"}, "label_source_type": {"ko": "Source Type (음원 종류)", "en": "Source Type", "ja": "Source Type（音源の種類）", "es": "Source Type (tipo de fuente)", "zh": "Source Type（声源类型）"}, "src_point": {"ko": "점음원", "en": "Point Source", "ja": "点音源", "es": "Fuente puntual", "zh": "点声源"}, "src_line": {"ko": "선음원", "en": "Line Source", "ja": "線音源", "es": "Fuente lineal", "zh": "线声源"}, "src_plane": {"ko": "면음원", "en": "Plane Source", "ja": "面音源", "es": "Fuente plana", "zh": "面声源"}, "src_desc_point": {"ko": "점음원 기준 역제곱 법칙(Inverse Square Law)입니다 — <b style=\"color:var(--text-secondary);\">거리가 2배 될 때마다 SPL이 약 6dB 줄어듭니다.</b> 자유음장(반사 없는 공간) 기준 근사치예요.", "en": "Based on the inverse square law for a point source — <b style=\"color:var(--text-secondary);\">SPL drops by about 6dB every time the distance doubles.</b> This is an approximation for a free field (a space with no reflections).", "ja": "点音源基準の逆二乗則（Inverse Square Law）です — <b style=\"color:var(--text-secondary);\">距離が2倍になるたびにSPLが約6dB下がります。</b> 自由音場（反射のない空間）を基準とした近似値です。", "es": "Basado en la ley del cuadrado inverso para una fuente puntual — <b style=\"color:var(--text-secondary);\">el SPL baja unos 6dB cada vez que se duplica la distancia.</b> Es una aproximación para un campo libre (un espacio sin reflexiones).", "zh": "基于点声源的平方反比定律——<b style=\"color:var(--text-secondary);\">距离每增加一倍，SPL 约下降 6dB。</b> 这是自由声场（无反射空间）下的近似值。"}, "src_desc_line": {"ko": "선음원(라인 어레이 스피커, 긴 도로 소음 등) 기준입니다 — <b style=\"color:var(--text-secondary);\">거리가 2배 될 때마다 SPL이 약 3dB만 줄어듭니다.</b> 점음원보다 훨씬 덜 감쇠해서, 라인 어레이가 먼 거리까지 커버하기 유리한 이유이기도 해요.", "en": "Based on a line source (line array speakers, long road noise, etc.) — <b style=\"color:var(--text-secondary);\">SPL drops by only about 3dB every time the distance doubles.</b> This attenuates much less than a point source, which is one reason line arrays can cover long distances effectively.", "ja": "線音源（ラインアレイスピーカー、長い道路騒音など）基準です — <b style=\"color:var(--text-secondary);\">距離が2倍になってもSPLは約3dBしか下がりません。</b> 点音源よりずっと減衰が少ないため、ラインアレイが遠くまでカバーしやすい理由の一つです。", "es": "Basado en una fuente lineal (altavoces de line array, ruido de carretera largo, etc.) — <b style=\"color:var(--text-secondary);\">el SPL baja solo unos 3dB cada vez que se duplica la distancia.</b> Esto atenúa mucho menos que una fuente puntual, una de las razones por las que los line arrays pueden cubrir grandes distancias eficazmente.", "zh": "基于线声源（线阵列音箱、长直道路噪声等）——<b style=\"color:var(--text-secondary);\">距离每增加一倍，SPL 仅下降约 3dB。</b> 这比点声源的衰减小得多，也是线阵列能有效覆盖远距离的原因之一。"}, "src_desc_plane": {"ko": "면음원(아주 가까운 대형 평면, 근접장) 기준입니다 — <b style=\"color:var(--text-secondary);\">이론상 거리에 따른 감쇠가 거의 없습니다.</b> 다만 이건 음원 바로 앞 근접장에서만 성립하는 특수한 경우라, 실전에서는 참고용으로만 봐주세요.", "en": "Based on a plane source (a large flat surface very close by, the near field) — <b style=\"color:var(--text-secondary);\">theoretically there is almost no attenuation with distance.</b> However, this only holds in the near field directly in front of the source, so treat it as a rough reference in practice.", "ja": "面音源（すぐ近くの大きな平面、近接場）基準です — <b style=\"color:var(--text-secondary);\">理論上、距離による減衰はほとんどありません。</b> ただしこれは音源のすぐ前の近接場でのみ成立する特殊なケースなので、実際には参考程度に見てください。", "es": "Basado en una fuente plana (una gran superficie plana muy cercana, el campo próximo) — <b style=\"color:var(--text-secondary);\">en teoría casi no hay atenuación con la distancia.</b> Sin embargo, esto solo se cumple en el campo próximo justo delante de la fuente, así que tómalo solo como referencia en la práctica.", "zh": "基于面声源（非常靠近的大型平面，近场）——<b style=\"color:var(--text-secondary);\">理论上几乎不随距离衰减。</b> 但这仅在声源正前方的近场成立，实际应用中仅供参考。"}, "label_loss": {"ko": "감쇠량", "en": "Attenuation", "ja": "減衰量", "es": "Atenuación", "zh": "衰减量"}, "panel_required_power_title": {"ko": "Required Power (스피커 센시티비티 기준)", "en": "Required Power (Based on Speaker Sensitivity)", "ja": "Required Power（スピーカー感度基準）", "es": "Required Power (según la sensibilidad del altavoz)", "zh": "Required Power（基于音箱灵敏度）"}, "required_power_desc": {"ko": "스피커 센시티비티(보통 \"1W/1m 기준 dB\"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.", "en": "Enter the speaker sensitivity (usually shown as \"dB at 1W/1m\"), the distance, and the target SPL, and this calculates the amplifier power (W) needed to produce that SPL.", "ja": "スピーカー感度（通常「1W/1m基準のdB」で表記）と距離・目標SPLを入力すると、そのSPLを出すのに必要なアンプ出力（W）を計算します。", "es": "Introduce la sensibilidad del altavoz (normalmente indicada como \"dB a 1W/1m\"), la distancia y el SPL objetivo, y esto calcula la potencia del amplificador (W) necesaria para producir ese SPL.", "zh": "输入音箱灵敏度（通常标注为\"1W/1m 下的 dB 值\"）、距离和目标 SPL，即可计算出达到该 SPL 所需的功放功率（W）。"}, "panel_room_modes_title": {"ko": "Room Modes (축모드)", "en": "Room Modes (Axial Modes)", "ja": "Room Modes（軸モード）", "es": "Room Modes (modos axiales)", "zh": "Room Modes（轴向模式）"}, "room_modes_desc": {"ko": "가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.", "en": "These are the standing-wave resonance frequencies (axial modes) that occur in the three directions: length, width, and height. It uses the temperature (speed of sound) from the Frequency tab. If several modes cluster together below 100Hz, that room can easily develop a boomy low end or dead spots where bass isn't heard at certain positions.", "ja": "縦・横・高さの3方向に生じる定在波の共振周波数（軸モード）です。Frequencyタブの温度（音速）をそのまま使用します。100Hz以下の低域に複数のモードが集中していると、その部屋では低音が特に団子状(ブーム)になったり、特定の場所で聞こえにくくなる問題が起きやすいです。", "es": "Son las frecuencias de resonancia de onda estacionaria (modos axiales) que se producen en las tres direcciones: largo, ancho y alto. Usa la temperatura (velocidad del sonido) de la pestaña Frequency. Si varios modos se agrupan por debajo de 100Hz, esa sala puede desarrollar fácilmente graves retumbantes o puntos muertos donde no se oyen los graves en ciertas posiciones.", "zh": "这是在长、宽、高三个方向上产生的驻波共振频率（轴向模式）。使用 Frequency 标签页中的温度（声速）。如果多个模式集中在 100Hz 以下的低频区域，该房间容易出现低音发闷（轰鸣）或在特定位置听不到低音的问题。"}, "label_length": {"ko": "Length (L, 가로)", "en": "Length (L)", "ja": "Length（L、奥行き）", "es": "Length (L, longitud)", "zh": "Length（L，长度）"}, "label_width": {"ko": "Width (W, 세로)", "en": "Width (W)", "ja": "Width（W、幅）", "es": "Width (W, anchura)", "zh": "Width（W，宽度）"}, "label_height": {"ko": "Height (H, 높이)", "en": "Height (H)", "ja": "Height（H、高さ）", "es": "Height (H, altura)", "zh": "Height（H，高度）"}, "panel_tangential_title": {"ko": "Tangential Mode Frequencies (300Hz 이하)", "en": "Tangential Mode Frequencies (Below 300Hz)", "ja": "Tangential Mode Frequencies（300Hz以下）", "es": "Tangential Mode Frequencies (por debajo de 300Hz)", "zh": "Tangential Mode Frequencies（300Hz 以下）"}, "tangential_desc": {"ko": "두 방향이 동시에 작용하는 모드입니다. 축모드보다 세기는 약하지만(약 −3dB), 개수가 많아서 저역을 뿌옇게 만드는 데 영향을 줍니다.", "en": "These are modes where two directions act at once. They're weaker than axial modes (about −3dB), but there are many of them, which contributes to making the low end sound smeared.", "ja": "2方向が同時に作用するモードです。軸モードより強さは弱い（約−3dB）ですが、数が多いため低域をぼやけさせる要因になります。", "es": "Son modos en los que actúan dos direcciones a la vez. Son más débiles que los modos axiales (unos −3dB), pero hay muchos, lo que contribuye a que los graves suenen difusos.", "zh": "这是两个方向同时作用产生的模式。虽然强度比轴向模式弱（约 −3dB），但数量较多，会使低频听起来模糊不清。"}, "panel_oblique_title": {"ko": "Oblique Mode Frequencies (300Hz 이하)", "en": "Oblique Mode Frequencies (Below 300Hz)", "ja": "Oblique Mode Frequencies（300Hz以下）", "es": "Oblique Mode Frequencies (por debajo de 300Hz)", "zh": "Oblique Mode Frequencies（300Hz 以下）"}, "oblique_desc": {"ko": "세 방향이 동시에 작용하는, 가장 약한(약 −6dB) 모드입니다. 참고용으로만 봐주세요.", "en": "These are the weakest modes (about −6dB), where all three directions act at once. Treat them as reference only.", "ja": "3方向すべてが同時に作用する、最も弱い（約−6dB）モードです。参考程度に見てください。", "es": "Son los modos más débiles (unos −6dB), en los que actúan las tres direcciones a la vez. Considéralos solo como referencia.", "zh": "这是三个方向同时作用产生的最弱模式（约 −6dB）。仅供参考。"}, "panel_low_mode_distribution": {"ko": "저역 모드 분포 (20 – 300Hz)", "en": "Low-Frequency Mode Distribution (20 – 300Hz)", "ja": "低域モード分布（20 – 300Hz）", "es": "Distribución de modos de baja frecuencia (20 – 300Hz)", "zh": "低频模式分布（20 – 300Hz）"}, "legend_length_axial": {"ko": "Length (축모드)", "en": "Length (Axial)", "ja": "Length（軸モード）", "es": "Length (axial)", "zh": "Length（轴向模式）"}, "legend_width_axial": {"ko": "Width (축모드)", "en": "Width (Axial)", "ja": "Width（軸モード）", "es": "Width (axial)", "zh": "Width（轴向模式）"}, "legend_height_axial": {"ko": "Height (축모드)", "en": "Height (Axial)", "ja": "Height（軸モード）", "es": "Height (axial)", "zh": "Height（轴向模式）"}, "legend_tangential": {"ko": "Tangential (접선모드)", "en": "Tangential", "ja": "Tangential（接線モード）", "es": "Tangential", "zh": "Tangential（切线模式）"}, "legend_oblique": {"ko": "Oblique (경사모드)", "en": "Oblique", "ja": "Oblique（斜めモード）", "es": "Oblique", "zh": "Oblique（斜向模式）"}, "panel_rt60_title": {"ko": "Reverb Time (RT60, Sabine 공식)", "en": "Reverb Time (RT60, Sabine Formula)", "ja": "Reverb Time（RT60、Sabineの公式）", "es": "Reverb Time (RT60, fórmula de Sabine)", "zh": "Reverb Time（RT60，Sabine 公式）"}, "rt60_desc": {"ko": "RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.", "en": "RT60 = 0.161 × V / A — calculates how long a room rings (reverberation time). V is the room volume, and A is the total absorption (sabins).", "ja": "RT60 = 0.161 × V / A — 部屋がどれくらい長く響くか（残響時間）を計算します。Vは部屋の体積、Aは総吸音力（sabins）です。", "es": "RT60 = 0.161 × V / A — calcula cuánto tiempo resuena una sala (tiempo de reverberación). V es el volumen de la sala y A es la absorción total (sabins).", "zh": "RT60 = 0.161 × V / A —— 计算房间的混响时间（声音持续回响多久）。V 是房间体积，A 是总吸声量（sabins）。"}, "label_surface_treatment": {"ko": "표면 처리 (평균 흡음계수 α)", "en": "Surface Treatment (Average Absorption Coefficient α)", "ja": "表面処理（平均吸音係数α）", "es": "Tratamiento de superficie (coeficiente de absorción medio α)", "zh": "表面处理（平均吸声系数 α）"}, "absorption_hard": {"ko": "매우 단단함<br><span style=\"font-weight:400;font-size:10.5px;\">(콘크리트·유리)</span>", "en": "Very Hard<br><span style=\"font-weight:400;font-size:10.5px;\">(Concrete/Glass)</span>", "ja": "非常に硬い<br><span style=\"font-weight:400;font-size:10.5px;\">(コンクリート・ガラス)</span>", "es": "Muy dura<br><span style=\"font-weight:400;font-size:10.5px;\">(Hormigón/Cristal)</span>", "zh": "非常坚硬<br><span style=\"font-weight:400;font-size:10.5px;\">(混凝土·玻璃)</span>"}, "absorption_medium": {"ko": "보통<br><span style=\"font-weight:400;font-size:10.5px;\">(벽지·바닥재)</span>", "en": "Average<br><span style=\"font-weight:400;font-size:10.5px;\">(Wallpaper/Flooring)</span>", "ja": "普通<br><span style=\"font-weight:400;font-size:10.5px;\">(壁紙・床材)</span>", "es": "Media<br><span style=\"font-weight:400;font-size:10.5px;\">(Papel pintado/Suelo)</span>", "zh": "中等<br><span style=\"font-weight:400;font-size:10.5px;\">(壁纸·地板)</span>"}, "absorption_soft": {"ko": "흡음 처리<br><span style=\"font-weight:400;font-size:10.5px;\">(카펫·커튼)</span>", "en": "Absorptive<br><span style=\"font-weight:400;font-size:10.5px;\">(Carpet/Curtains)</span>", "ja": "吸音処理<br><span style=\"font-weight:400;font-size:10.5px;\">(カーペット・カーテン)</span>", "es": "Absorbente<br><span style=\"font-weight:400;font-size:10.5px;\">(Alfombra/Cortinas)</span>", "zh": "吸音处理<br><span style=\"font-weight:400;font-size:10.5px;\">(地毯·窗帘)</span>"}, "label_room_volume": {"ko": "방 부피 (V)", "en": "Room Volume (V)", "ja": "部屋の体積 (V)", "es": "Volumen de la sala (V)", "zh": "房间体积 (V)"}, "label_total_surface": {"ko": "총 표면적 (S)", "en": "Total Surface Area (S)", "ja": "総表面積 (S)", "es": "Superficie total (S)", "zh": "总表面积 (S)"}, "label_total_absorption": {"ko": "총 흡음력 (A = S×α)", "en": "Total Absorption (A = S×α)", "ja": "総吸音力 (A = S×α)", "es": "Absorción total (A = S×α)", "zh": "总吸声量 (A = S×α)"}, "label_rt60_result": {"ko": "RT60 (잔향시간)", "en": "RT60 (Reverberation Time)", "ja": "RT60（残響時間）", "es": "RT60 (tiempo de reverberación)", "zh": "RT60（混响时间）"}, "unit_seconds": {"ko": "초", "en": "s", "ja": "秒", "es": "s", "zh": "秒"}, "panel_critical_distance_title": {"ko": "Critical Distance (임계거리)", "en": "Critical Distance", "ja": "Critical Distance（臨界距離）", "es": "Critical Distance (distancia crítica)", "zh": "Critical Distance（临界距离）"}, "critical_distance_desc": {"ko": "직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.", "en": "This is the distance where the direct sound and reflected (reverberant) sound are equal in level. Closer than this, direct sound dominates; farther away, reverberant sound dominates.", "ja": "直接音と反射音（残響音）の強さが等しくなる距離です。これより近ければ直接音が、遠ければ残響音が優勢になります。", "es": "Es la distancia a la que el sonido directo y el sonido reflejado (reverberante) tienen el mismo nivel. Más cerca de esta, predomina el sonido directo; más lejos, predomina el sonido reverberante.", "zh": "这是直达声与反射声（混响声）强度相等的距离。比这更近时直达声占主导，更远时混响声占主导。"}, "label_directivity_q": {"ko": "스피커 지향성 계수 (Q)", "en": "Speaker Directivity Factor (Q)", "ja": "スピーカー指向性係数 (Q)", "es": "Factor de directividad del altavoz (Q)", "zh": "音箱指向性系数 (Q)"}, "directivity_note": {"ko": "참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.", "en": "Note: Omnidirectional speakers have Q≈1, and typical directional speakers have Q≈2–6.", "ja": "参考：無指向性スピーカーはQ≈1、一般的な指向性スピーカーはQ≈2〜6程度です。", "es": "Nota: los altavoces omnidireccionales tienen Q≈1, y los altavoces direccionales típicos tienen Q≈2–6.", "zh": "提示：无指向性音箱 Q≈1，一般指向性音箱 Q≈2~6 左右。"}, "label_critical_distance_result": {"ko": "임계거리 (Dc)", "en": "Critical Distance (Dc)", "ja": "臨界距離 (Dc)", "es": "Distancia crítica (Dc)", "zh": "临界距离 (Dc)"}, "coming_soon_title": {"ko": "🎉 모든 탭이 준비됐어요", "en": "🎉 All tabs are ready", "ja": "🎉 すべてのタブが使えます", "es": "🎉 Todas las pestañas están listas", "zh": "🎉 所有标签页均已就绪"}, "coming_soon_text": {"ko": "Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.", "en": "Frequency · Band · Delay · Volume · Room Modes · Reverb (RT60) — all available to use.", "ja": "Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — すべて使用できます。", "es": "Frequency · Band · Delay · Volume · Room Modes · Reverb (RT60) — todo disponible para usar.", "zh": "Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) —— 全部可用。"}, "room_mode_warning": {"ko": "⚠️ {labelA}({freqA}Hz)와 {labelB}({freqB}Hz)의 1차 모드가 {diff}Hz밖에 안 떨어져 있어요 — 이 대역이 유독 부밍(booming)하게 들릴 수 있습니다. 방 비율을 조금 바꾸면 완화돼요.", "en": "⚠️ The first-order modes of {labelA}({freqA}Hz) and {labelB}({freqB}Hz) are only {diff}Hz apart — this range may sound especially boomy. Adjusting the room proportions a bit can ease this.", "ja": "⚠️ {labelA}（{freqA}Hz）と{labelB}（{freqB}Hz）の1次モードが{diff}Hzしか離れていません — この帯域が特にブーミー（booming）に聞こえることがあります。部屋の比率を少し変えると緩和されます。", "es": "⚠️ Los modos de primer orden de {labelA}({freqA}Hz) y {labelB}({freqB}Hz) están separados solo {diff}Hz — este rango puede sonar especialmente retumbante. Ajustar un poco las proporciones de la sala puede aliviarlo.", "zh": "⚠️ {labelA}（{freqA}Hz）和 {labelB}（{freqB}Hz）的一阶模式仅相差 {diff}Hz —— 该频段可能听起来特别轰鸣。稍微调整房间比例可以缓解这个问题。"}, "rt60_very_dry": {"ko": "📀 아주 건조한 편이에요 — 방송 부스, 보컬 부스 같은 데드(dead)한 공간에 어울려요.", "en": "📀 This is quite dry — suited to dead spaces like broadcast booths or vocal booths.", "ja": "📀 かなりデッド（乾いた）な部屋です — 放送ブースやボーカルブースのようなデッドな空間に向いています。", "es": "📀 Es bastante seco — adecuado para espacios muertos como cabinas de locución o cabinas vocales.", "zh": "📀 相当干燥——适合播音室、人声录音间等无混响空间。"}, "rt60_standard": {"ko": "🎙️ 스튜디오 컨트롤룸이나 회의실 정도의 표준적인 잔향이에요.", "en": "🎙️ This is a standard reverb level, similar to a studio control room or a meeting room.", "ja": "🎙️ スタジオのコントロールルームや会議室程度の標準的な残響です。", "es": "🎙️ Es un nivel de reverberación estándar, similar al de una sala de control de estudio o una sala de reuniones.", "zh": "🎙️ 属于典型的录音室控制间或会议室水平的混响。"}, "rt60_living": {"ko": "🏠 일반 거실/사무 공간 수준의 잔향이에요.", "en": "🏠 This is a reverb level typical of a living room or office space.", "ja": "🏠 一般的なリビングやオフィス空間くらいの残響です。", "es": "🏠 Es un nivel de reverberación típico de un salón o una oficina.", "zh": "🏠 属于一般客厅/办公空间水平的混响。"}, "rt60_hall_small": {"ko": "🎭 작은 공연장·강당 정도의 울림이에요.", "en": "🎭 This is a resonance level typical of a small performance venue or auditorium.", "ja": "🎭 小さな公演会場・講堂程度の響きです。", "es": "🎭 Es un nivel de resonancia típico de un pequeño recinto o auditorio.", "zh": "🎭 属于小型演出场地/礼堂水平的回响。"}, "rt60_cathedral": {"ko": "⛪ 성당·대형 홀처럼 아주 많이 울리는 공간이에요.", "en": "⛪ This is a very reverberant space, like a cathedral or a large hall.", "ja": "⛪ 大聖堂や大ホールのように非常によく響く空間です。", "es": "⛪ Es un espacio muy reverberante, como una catedral o una gran sala.", "zh": "⛪ 属于大教堂、大型音乐厅那样回响非常强烈的空间。"}};</script>
+<script src="i18n-core.js"></script>
+</body>
+</html>
