@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUFS·라우드니스 미터 읽는 법 — Integrated·True Peak·LRA | ML Music Studio</title>
+<meta name="description" content="Integrated·Short-term·Momentary LUFS의 차이, True Peak와 LRA의 의미, 스트리밍 플랫폼별 목표 라우드니스와 정규화 동작, 목표값에 맞춰 게인을 잡는 순서를 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/reading-lufs-loudness.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/reading-lufs-loudness.html">
+<meta property="og:title" content="LUFS·라우드니스 미터 읽는 법 — Integrated·True Peak·LRA">
+<meta property="og:description" content="LUFS 3종의 차이, True Peak·LRA, 스트리밍 플랫폼별 목표값과 정규화, 목표에 맞춰 게인 잡는 순서.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "LUFS·라우드니스 미터 읽는 법 — Integrated·True Peak·LRA",
+  "description": "Integrated·Short-term·Momentary LUFS의 차이, True Peak와 LRA의 의미, 스트리밍 플랫폼별 목표 라우드니스.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/reading-lufs-loudness.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>LUFS·라우드니스 미터 읽는 법</h1>
+  <div class="meta">믹싱·측정 · 약 7분</div>
+
+  <p class="lede">피크 미터는 "가장 큰 순간"만 보여줍니다. 사람이 느끼는 소리 크기는 <strong>일정 시간 평균</strong>에 가깝고, 저역·고역의 청감 가중까지 반영해야 합니다. 그래서 나온 단위가 LUFS(Loudness Units relative to Full Scale)입니다. ITU-R BS.1770 / EBU R128 표준으로 정의돼 있고, 요즘 스트리밍 플랫폼은 전부 이 값으로 곡을 정규화합니다.</p>
+
+  <h2>LUFS 3종: Momentary · Short-term · Integrated</h2>
+  <p>같은 LUFS라도 <strong>측정 창(window)</strong>이 다릅니다.</p>
+  <ul>
+    <li><strong>Momentary (M)</strong> — 400 ms 창. 순간 라우드니스. 보컬 한 마디, 킥 한 방의 세기를 볼 때.</li>
+    <li><strong>Short-term (S)</strong> — 3초 창. 구간 라우드니스. 벌스와 코러스의 차이, 곡 안에서 어디가 튀는지 볼 때.</li>
+    <li><strong>Integrated (I)</strong> — 곡 전체(또는 측정 시작~정지). 게이트가 걸려 무음 구간은 빼고 평균. <strong>플랫폼이 정규화 기준으로 쓰는 값</strong>이 이것.</li>
+  </ul>
+  <div class="note">Integrated에는 두 단계 게이트가 있습니다. 절대 게이트(−70 LUFS 이하 무시)로 완전 무음을 빼고, 상대 게이트(전체 평균보다 −10 LU 낮은 구간 무시)로 곡 사이 정적·페이드 꼬리를 뺍니다. 그래서 "조용한 인트로가 길어도" Integrated는 크게 흔들리지 않습니다.</div>
+
+  <h2>True Peak와 LRA</h2>
+  <p>미터에 같이 뜨는 두 값의 뜻:</p>
+  <ul>
+    <li><strong>True Peak (dBTP)</strong> — 샘플 사이를 보간해 추정한 실제 최대 전압. 일반 피크 미터는 샘플 값만 보므로 D/A 변환·인코딩 후 0 dBFS를 넘는 오버를 못 잡습니다. 목표는 보통 <strong>−1 dBTP</strong>(로시 인코딩 여유), 방송은 −2 dBTP.</li>
+    <li><strong>LRA (Loudness Range)</strong> — Short-term 라우드니스의 통계적 분포 폭(LU). 다이내믹이 큰 곡은 LRA가 크고(예: 클래식 15+ LU), 꽉 눌린 EDM은 작습니다(3~5 LU). "얼마나 압축됐나"의 지표.</li>
+  </ul>
+
+  <h2>플랫폼별 목표 라우드니스</h2>
+  <p>대부분 <strong>−14 LUFS(Integrated)</strong> 근처로 수렴했습니다. 곡이 목표보다 크면 내려서 재생하고, 작으면 (플랫폼에 따라) 올리거나 그대로 둡니다.</p>
+  <table class="data">
+<tr><th>대상</th><th>목표 Integrated</th><th>메모</th></tr>
+<tr><td>Spotify</td><td>−14 LUFS</td><td>크면 내림. 작으면 노멀 모드에선 안 올림</td></tr>
+<tr><td>YouTube</td><td>−14 LUFS</td><td>크면 내림. 작아도 올리지 않음</td></tr>
+<tr><td>Apple Music</td><td>−16 LUFS</td><td>Sound Check on 기준</td></tr>
+<tr><td>Amazon Music</td><td>−14 LUFS</td><td>−9~−13 LUFS 권장 마스터</td></tr>
+<tr><td>Tidal</td><td>−14 LUFS</td><td></td></tr>
+<tr><td>방송 (EBU R128)</td><td>−23 LUFS</td><td>±0.5 LU 허용, True Peak −1 dBTP</td></tr>
+<tr><td>방송 (미국 ATSC A/85)</td><td>−24 LKFS</td><td>LKFS = LUFS와 동일</td></tr>
+</table>
+  <div class="example">
+    <h4>정규화가 실제로 하는 일</h4>
+    <p>내 마스터가 <strong>−8 LUFS</strong>(요즘 흔한 "라우드"한 팝)라고 하면, Spotify는 재생 시 <strong>−6 dB</strong>를 그냥 깎아 −14로 맞춥니다. 옆 곡이 −14로 만든 마스터라면 <strong>둘의 재생 음량이 같아집니다.</strong> 결국 −8까지 밀어 넣느라 희생한 다이내믹·트랜지언트만 손해입니다.</p>
+    <p>반대로 −18 LUFS로 얌전하게 만들면 Spotify·YouTube는 안 올려주므로 옆 곡보다 4 dB 작게 들립니다. 목표(−14) 부근에 두는 게 안전합니다.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🎧</div>
+    <div class="body">
+      <b>AudioEngineer Ear Trainer (iOS)</b>
+      <p>1~2 dB 레벨 차, 압축 강도, 하모닉 왜곡을 귀로 구분하는 훈련. 미터 없이도 "이 곡 너무 눌렸다"를 감으로 잡는 데 도움이 됩니다.</p>
+      <a href="https://apps.apple.com/app/audioengineer-ear-trainer/id6801893036" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <h2>목표값에 맞춰 게인 잡는 순서</h2>
+  <ol>
+    <li><strong>믹스를 먼저 끝낸다.</strong> LUFS는 마스터링(또는 믹스 마지막) 단계 지표다. 믹스 중에는 −6 dBFS 정도 헤드룸을 두고 밸런스만 본다.</li>
+    <li><strong>레퍼런스 곡을 같은 미터로 잰다.</strong> 목표 장르의 상업 곡 Integrated·LRA·dBTP를 적어둔다. 이게 진짜 목표.</li>
+    <li><strong>다이내믹 처리(컴프·리미터)로 LRA를 맞춘다.</strong> 라우드니스를 리미터로 억지로 올리기 전에, 곡의 다이내믹 폭을 레퍼런스에 근접시킨다.</li>
+    <li><strong>마지막에 라우드니스를 −14(또는 목표)로.</strong> True Peak 리미터 실링을 −1 dBTP로 두고, Integrated가 목표 ±1 LU 안에 들어올 때까지 입력 게인을 조정한다.</li>
+    <li><strong>전체를 한 번 재생해 Integrated를 확정한다.</strong> Short-term으로 곡 안에서 튀는 구간이 없는지도 확인.</li>
+  </ol>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>Momentary·Short-term을 목표로 삼는다.</strong> 플랫폼 정규화는 Integrated 기준이다. 순간값은 참고용.</li>
+    <li><strong>−14를 "무조건 지켜야 하는 규칙"으로 안다.</strong> 정규화는 벌점이 아니라 재생 음량 통일이다. 장르 관습상 −9~−12로 내는 마스터도 많다. 중요한 건 옆 곡과 비교했을 때의 결과.</li>
+    <li><strong>True Peak를 무시하고 0 dBFS 샘플피크만 맞춘다.</strong> 인코딩 후 클리핑이 난다. −1 dBTP 실링.</li>
+    <li><strong>미터마다 값이 다르다고 당황한다.</strong> BS.1770 준수 미터라면 Integrated는 ±0.1 LU로 일치한다. 크게 다르면 게이트·채널 가중 설정을 확인.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>템포·딜레이·음향·전기 계산기를 인터넷 없이. 마스터링 전 딜레이·프리딜레이 타임을 곡 BPM에 맞춰 정리할 때.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

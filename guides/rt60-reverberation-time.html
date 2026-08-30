@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RT60·잔향시간 이해와 계산 — 사빈 공식과 목표값 | ML Music Studio</title>
+<meta name="description" content="RT60의 정의(−60 dB 감쇠 시간), 사빈 공식으로 잔향시간을 계산하는 법, 재료별 흡음 계수, 측정 방법(단절 소음·임펄스), 공간 용도별 목표 잔향시간과 명료도(STI)의 관계를 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/rt60-reverberation-time.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/rt60-reverberation-time.html">
+<meta property="og:title" content="RT60·잔향시간 이해와 계산 — 사빈 공식과 목표값">
+<meta property="og:description" content="RT60의 정의, 사빈 공식 계산, 재료별 흡음 계수, 측정 방법, 용도별 목표 잔향시간과 명료도의 관계.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "RT60·잔향시간 이해와 계산 — 사빈 공식과 목표값",
+  "description": "RT60의 정의, 사빈 공식으로 잔향시간 계산, 재료별 흡음 계수, 측정 방법, 용도별 목표값.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/rt60-reverberation-time.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>RT60·잔향시간 이해와 계산</h1>
+  <div class="meta">도구 가이드 · 약 7분</div>
+
+  <p class="lede">소리를 끊었을 때 공간의 에너지가 <strong>60 dB 줄어드는 데 걸리는 시간</strong>이 RT60(잔향시간)입니다. 이 값 하나로 공간이 "라이브한지 데드한지", 말이 잘 들릴지, 음악이 풍성할지가 결정됩니다. 실측 장비 없이도 공간 치수와 마감재만 알면 사빈 공식으로 근사값을 낼 수 있습니다.</p>
+
+  <h2>정의: −60 dB 감쇠 시간</h2>
+  <p>실제로는 60 dB 전부를 재기 어렵기 때문에, 초반 감쇠 기울기를 측정해 60 dB로 외삽합니다.</p>
+  <ul>
+    <li><strong>T20</strong> — −5 dB에서 −25 dB까지(20 dB 폭)를 재서 ×3</li>
+    <li><strong>T30</strong> — −5 dB에서 −35 dB까지(30 dB 폭)를 재서 ×2</li>
+    <li><strong>EDT</strong>(Early Decay Time) — 0 dB에서 −10 dB, ×6. 사람이 체감하는 "잔향감"에 가장 가깝다.</li>
+  </ul>
+  <div class="note">RT60은 주파수마다 다릅니다. 보통 125 Hz~4 kHz 옥타브 밴드별로 재고, 500 Hz와 1 kHz의 평균을 대표값으로 씁니다. 저역 잔향이 길고 고역이 짧은 게 일반적(공기 흡수 + 흡음재 특성).</div>
+
+  <h2>사빈 공식으로 계산하기</h2>
+  <p>공간 부피 V(㎥), 전체 표면적 S(㎡), 평균 흡음률 ā를 알면:</p>
+  <div class="formula">RT60 ≈ 0.161 × V ÷ (S × ā)   〔단위: 초, m〕</div>
+  <p>S × ā는 "전체 흡음량 A"(단위 sabin·㎡)입니다. 재료별 면적 × 흡음 계수를 모두 더한 값이죠.</p>
+  <div class="formula">A = Σ (재료 면적 Sₙ × 흡음계수 αₙ)<br>RT60 ≈ 0.161 × V ÷ A</div>
+
+  <table class="data">
+<tr><th>재료 (500 Hz 기준 α)</th><th>흡음계수</th></tr>
+<tr><td>콘크리트·타일·유리</td><td>0.01 ~ 0.03</td></tr>
+<tr><td>석고보드 벽</td><td>0.05 ~ 0.10</td></tr>
+<tr><td>카펫 (콘크리트 위)</td><td>0.15 ~ 0.30</td></tr>
+<tr><td>두꺼운 커튼 (주름)</td><td>0.35 ~ 0.55</td></tr>
+<tr><td>흡음 천장 타일</td><td>0.50 ~ 0.75</td></tr>
+<tr><td>50 mm 흡음폼·미네랄울</td><td>0.70 ~ 0.95</td></tr>
+<tr><td>관객 1인 (착석)</td><td>0.40 ~ 0.45 sabin/인</td></tr>
+</table>
+
+  <div class="example">
+    <h4>계산 예시 — 소규모 다목적실</h4>
+    <p>10 m × 8 m × 3.2 m 방. 부피 V = 256 ㎥.</p>
+    <p>표면적: 바닥 80 + 천장 80 + 벽 (10+8)×2×3.2 = 115.2 → 합계 S ≈ 275 ㎡.</p>
+    <p>마감이 전부 콘크리트·석고(평균 α ≈ 0.05)라면<br>
+    A = 275 × 0.05 = 13.75 → RT60 ≈ 0.161 × 256 ÷ 13.75 ≈ <strong>3.0초</strong> (말이 뭉개짐)</p>
+    <p>천장 80 ㎡에 흡음 타일(α 0.6), 바닥에 카펫(α 0.2), 커튼 20 ㎡(α 0.45)를 추가하면<br>
+    A = (80×0.6) + (80×0.2) + (20×0.45) + (95×0.05) ≈ 48 + 16 + 9 + 4.75 = 77.75<br>
+    RT60 ≈ 0.161 × 256 ÷ 77.75 ≈ <strong>0.53초</strong> (스피치에 적합)</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🧮</div>
+    <div class="body">
+      <b>음향 계산기 (무료 웹 도구)</b>
+      <p>부피·표면적·흡음 계수를 넣으면 RT60을 계산합니다. 재료를 바꿔가며 목표 잔향시간을 맞출 때.</p>
+      <a href="/acoustics-calculator.html">▸ 음향 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>측정 방법</h2>
+  <ul>
+    <li><strong>단절 소음법(interrupted noise)</strong> — 핑크노이즈를 크게 틀다가 끊고, 감쇠 곡선의 기울기를 잰다. 여러 번 평균. 간단하지만 스피커·소음원 필요.</li>
+    <li><strong>임펄스 응답법</strong> — 풍선 터뜨리기, 딱총, 또는 스윕 신호로 임펄스 응답을 얻고 역적분(Schroeder)으로 감쇠 곡선을 구한다. 반복성이 좋다.</li>
+    <li>마이크는 무지향, 여러 위치(최소 3점)에서 재고 평균. 소음원과 마이크는 1 m 이상, 벽에서 1 m 이상 띄운다.</li>
+  </ul>
+
+  <h2>용도별 목표 잔향시간 (500 Hz~1 kHz, 만석 기준)</h2>
+  <table class="data">
+<tr><th>공간</th><th>목표 RT60</th></tr>
+<tr><td>녹음 스튜디오·컨트롤룸</td><td>0.2 ~ 0.4초</td></tr>
+<tr><td>강의실·회의실·법정</td><td>0.6 ~ 0.8초</td></tr>
+<tr><td>드라마·연극 극장</td><td>0.9 ~ 1.2초</td></tr>
+<tr><td>다목적홀 (스피치+음악)</td><td>1.2 ~ 1.5초</td></tr>
+<tr><td>콘서트홀 (클래식)</td><td>1.8 ~ 2.2초</td></tr>
+<tr><td>파이프오르간·성가</td><td>2.5초 이상</td></tr>
+</table>
+
+  <h2>명료도와의 관계</h2>
+  <p>잔향이 길면 이전 음절의 꼬리가 다음 음절을 덮어 말이 뭉개집니다. 관련 지표:</p>
+  <ul>
+    <li><strong>STI</strong>(음성전달지수) — 0~1. 0.6 이상이면 "좋음", 0.45 미만이면 "나쁨". PA 시스템 납품 기준으로 흔히 STI ≥ 0.5.</li>
+    <li><strong>%ALcons</strong>(자음 손실률) — 낮을수록 좋다. 10% 이하 양호, 15% 넘으면 부적합.</li>
+    <li><strong>C50 / C80</strong>(명료도) — 초반 50 ms(스피치)·80 ms(음악) 에너지와 그 이후 에너지의 비. 양수면 명료.</li>
+  </ul>
+  <div class="note">RT60을 무조건 줄이는 게 답은 아닙니다. 너무 데드하면 음악이 빈약하고 연주자가 서로 안 들립니다. 스피치 위주 공간은 짧게, 음악 위주는 길게, 다목적은 가변 흡음(커튼·회전 패널)으로 조절합니다.</div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>빈 방에서 재고 만석으로 쓴다.</strong> 관객이 최대 흡음원이다. 만석이면 RT60이 20~40% 짧아진다. 목표는 만석 기준으로.</li>
+    <li><strong>대표값 하나만 본다.</strong> 저역이 500 Hz보다 1초 이상 길면 "웅웅"거린다. 밴드별로 확인.</li>
+    <li><strong>사빈 공식을 데드한 방에 쓴다.</strong> ā가 0.3을 넘으면 오차가 커진다. 이때는 아이링(Eyring) 공식.</li>
+    <li><strong>흡음만 하고 확산을 잊는다.</strong> 한쪽 벽만 흡음하면 반대쪽 하드월에서 플러터 에코가 남는다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>RT60·흡음량·딜레이·전기 계산을 현장에서 오프라인으로. 재료 조합을 저장해두고 시나리오를 비교할 수 있습니다.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

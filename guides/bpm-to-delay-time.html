@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPM으로 딜레이·리버브 타임 계산하기 — 음표별 ms 표 | ML Music Studio</title>
+<meta name="description" content="BPM에서 1박의 밀리초를 구하는 공식과, 8분·16분·점음표·셋잇단 등 음표별 딜레이 타임 계산법. 리버브 프리딜레이·디케이, 트레몰로·게이트 속도까지 곡 템포에 맞추는 법을 표와 예시로 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/bpm-to-delay-time.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/bpm-to-delay-time.html">
+<meta property="og:title" content="BPM으로 딜레이·리버브 타임 계산하기 — 음표별 ms 표">
+<meta property="og:description" content="BPM에서 1박 ms 구하는 공식, 음표별 딜레이 타임, 리버브 프리딜레이·디케이, 트레몰로 속도를 템포에 맞추는 법.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "BPM으로 딜레이·리버브 타임 계산하기 — 음표별 ms 표",
+  "description": "BPM에서 1박의 밀리초를 구하는 공식과 음표별 딜레이 타임, 리버브·모듈레이션을 템포에 맞추는 법.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/bpm-to-delay-time.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>BPM으로 딜레이·리버브 타임 계산하기</h1>
+  <div class="meta">믹싱·측정 · 약 6분</div>
+
+  <p class="lede">딜레이 타임을 곡 템포에 맞추면 반복음이 리듬에 얹혀 자연스럽게 묻히고, 안 맞추면 박자와 어긋나 지저분하게 들립니다. 계산은 나눗셈 하나로 끝납니다. 이 값은 딜레이뿐 아니라 리버브 프리딜레이, 트레몰로·오토팬 속도, 게이트 리듬에도 그대로 씁니다.</p>
+
+  <h2>기본 공식: 1박의 밀리초</h2>
+  <p>BPM은 분당 4분음표 개수입니다. 1분은 60,000 ms이므로:</p>
+  <div class="formula">4분음표(ms) = 60,000 ÷ BPM</div>
+  <p>여기서 음표를 나누거나 곱합니다.</p>
+  <div class="formula">
+    8분음표 = (60,000 ÷ BPM) ÷ 2<br>
+    16분음표 = (60,000 ÷ BPM) ÷ 4<br>
+    점8분음표 = 8분음표 × 1.5<br>
+    8분 셋잇단 = 4분음표 ÷ 3
+  </div>
+
+  <div class="example">
+    <h4>계산 예시 — 120 BPM</h4>
+    <p>4분음표 = 60,000 ÷ 120 = <strong>500 ms</strong></p>
+    <p>8분 = 250 ms · 16분 = 125 ms · 점8분 = 375 ms · 8분 셋잇단 ≈ 167 ms · 부점4분(점4분) = 750 ms</p>
+    <p>보컬 슬랩백은 보통 80~140 ms이므로 120 BPM에서는 <strong>32분음표(≈63 ms)나 16분음표(125 ms)</strong> 근처를 고릅니다.</p>
+  </div>
+
+  <h2>음표별 딜레이 타임 표</h2>
+  <table class="data">
+<tr><th>BPM</th><th>4분 (1/4)</th><th>점8분 (1/8·)</th><th>8분 (1/8)</th><th>16분 (1/16)</th></tr>
+<tr><td>80</td><td>750 ms</td><td>563 ms</td><td>375 ms</td><td>188 ms</td></tr>
+<tr><td>90</td><td>667 ms</td><td>500 ms</td><td>333 ms</td><td>167 ms</td></tr>
+<tr><td>100</td><td>600 ms</td><td>450 ms</td><td>300 ms</td><td>150 ms</td></tr>
+<tr><td>110</td><td>545 ms</td><td>409 ms</td><td>273 ms</td><td>136 ms</td></tr>
+<tr><td>120</td><td>500 ms</td><td>375 ms</td><td>250 ms</td><td>125 ms</td></tr>
+<tr><td>128</td><td>469 ms</td><td>352 ms</td><td>234 ms</td><td>117 ms</td></tr>
+<tr><td>140</td><td>429 ms</td><td>321 ms</td><td>214 ms</td><td>107 ms</td></tr>
+<tr><td>160</td><td>375 ms</td><td>281 ms</td><td>188 ms</td><td>94 ms</td></tr>
+<tr><td>174</td><td>345 ms</td><td>259 ms</td><td>172 ms</td><td>86 ms</td></tr>
+</table>
+  <div class="note">점8분음표 딜레이("dotted eighth")는 U2·EDM 리드에서 흔한 그 소리입니다. 8분음표 피드백과 겹치면 16분음표 그리드가 채워져 리듬이 촘촘해집니다.</div>
+
+  <div class="callout">
+    <div class="ico">🎵</div>
+    <div class="body">
+      <b>템포·피치 계산기 (무료 웹 도구)</b>
+      <p>BPM을 입력하면 모든 음표 값(점음표·셋잇단 포함)의 ms와 Hz를 한 번에. 딜레이·LFO·프리딜레이를 맞출 때.</p>
+      <a href="/tempo-pitch-calculator.html">▸ 템포·피치 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>딜레이 외의 활용</h2>
+  <ul>
+    <li><strong>리버브 프리딜레이</strong> — 8분 셋잇단~16분음표(60~120 ms) 정도로 두면 리버브가 드라이 신호와 분리돼 명료도가 산다. 발라드는 더 길게(점8분).</li>
+    <li><strong>리버브 디케이</strong> — 1박~2박 길이에서 시작. 다음 코드가 칠 때 꼬리가 정리되면 깔끔하다.</li>
+    <li><strong>트레몰로·오토팬</strong> — 속도를 Hz로 환산. 8분음표 속도(Hz) = BPM ÷ 30. 120 BPM이면 4 Hz.</li>
+    <li><strong>게이트·사이드체인</strong> — 릴리즈를 8분·16분음표 ms로. 펌핑이 그리드에 맞는다.</li>
+    <li><strong>코러스·플랜저</strong> — 기본 딜레이는 짧게 두되(1~15 ms), LFO 레이트만 템포 분수로.</li>
+  </ul>
+
+  <h2>싱크 딜레이 vs 프리 딜레이</h2>
+  <p>대부분의 DAW 딜레이 플러그인에는 "Sync" 버튼이 있어 자동으로 음표 값을 씁니다. 그래도 계산을 아는 게 유리한 경우:</p>
+  <ul>
+    <li>외장 하드웨어 딜레이(탭 템포 없는 기종)에 ms를 직접 넣을 때</li>
+    <li>템포가 흔들리는 라이브 연주 녹음 — 평균 BPM으로 한 번 계산해 고정</li>
+    <li>일부러 그리드에서 몇  ms 밀어 "느슨한" 필을 만들 때(swing feel)</li>
+    <li>테이프·아날로그 에뮬레이션에서 미세 디튠·드리프트를 감안할 때</li>
+  </ul>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>스테레오 핑퐁을 같은 값으로 둔다.</strong> L·R을 각각 점8분·8분처럼 다르게 주면 공간이 넓어진다.</li>
+    <li><strong>피드백이 너무 많다.</strong> 딜레이가 박자에 맞아도 반복이 5회 넘게 남으면 저역이 뭉친다. 피드백 딜레이 라인에 로우컷·하이컷.</li>
+    <li><strong>BPM을 반/두 배로 착각한다.</strong> 하프타임 트랩(70 BPM 표기, 실제 필은 140)에서 자주 발생. 킥 간격으로 재확인.</li>
+    <li><strong>드라이와 웨트를 같은 레벨로.</strong> 딜레이는 들릴 듯 말 듯이 기본. 발라드 서스테인 목적이면 예외.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>템포↔딜레이·음향·전기 계산기를 오프라인으로. 세션 BPM을 저장해두고 음표별 값을 바로 확인할 수 있습니다.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

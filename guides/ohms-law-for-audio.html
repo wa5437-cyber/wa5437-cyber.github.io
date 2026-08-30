@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오디오를 위한 옴의 법칙 — 전압·전류·전력과 스피커 부하 | ML Music Studio</title>
+<meta name="description" content="V=IR과 전력 공식(P=VI=I²R=V²/R)을 스피커·앰프에 적용하는 법. 임피던스가 낮아질 때 앰프 전류가 어떻게 늘어나는지, 70V/100V 정전압 라인, 케이블 손실과 댐핑 팩터, 안전한 앰프 부하 계산을 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/ohms-law-for-audio.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/ohms-law-for-audio.html">
+<meta property="og:title" content="오디오를 위한 옴의 법칙 — 전압·전류·전력과 스피커 부하">
+<meta property="og:description" content="V=IR과 전력 공식을 스피커·앰프에 적용. 임피던스와 앰프 전류, 70V/100V 라인, 케이블 손실, 안전한 부하 계산.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "오디오를 위한 옴의 법칙 — 전압·전류·전력과 스피커 부하",
+  "description": "V=IR과 전력 공식을 스피커·앰프에 적용하는 법, 임피던스와 앰프 전류, 정전압 라인, 케이블 손실.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/ohms-law-for-audio.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>오디오를 위한 옴의 법칙</h1>
+  <div class="meta">도구 가이드 · 약 7분</div>
+
+  <p class="lede">앰프가 왜 4Ω에서 8Ω보다 큰 출력을 내는지, 스피커를 병렬로 더 물리면 왜 앰프가 위험해지는지, 케이블이 굵어야 하는 이유는 무엇인지 — 전부 옴의 법칙 하나에서 나옵니다. 공식 세 개만 손에 익히면 현장 계산의 대부분이 풀립니다.</p>
+
+  <h2>기본 세 공식</h2>
+  <div class="formula">
+    V = I × R      (전압 = 전류 × 저항)<br>
+    P = V × I      (전력 = 전압 × 전류)
+  </div>
+  <p>둘을 조합하면 자주 쓰는 형태가 나옵니다.</p>
+  <div class="formula">
+    P = I² × R       (전류·저항으로 전력)<br>
+    P = V² ÷ R       (전압·저항으로 전력)
+  </div>
+  <ul>
+    <li>V — 전압, 볼트(V)</li>
+    <li>I — 전류, 암페어(A)</li>
+    <li>R(또는 Z) — 저항·임피던스, 옴(Ω)</li>
+    <li>P — 전력, 와트(W)</li>
+  </ul>
+  <div class="note">스피커는 순수 저항이 아니라 주파수에 따라 값이 변하는 <strong>임피던스(Z)</strong>입니다. "8Ω 스피커"의 8Ω은 공칭값일 뿐, 실제로는 6Ω까지 떨어지기도 하고 공진점에서 30Ω 넘게 치솟기도 합니다. 계산은 공칭값으로 하되, 앰프 부하는 여유를 둡니다.</div>
+
+  <h2>임피던스가 내려가면 전류가 올라간다</h2>
+  <p>앰프는 대략 <strong>정전압원</strong>처럼 동작합니다. 같은 입력 신호면 출력 전압이 일정하고, 부하 임피던스가 낮을수록 전류를 더 뽑아냅니다.</p>
+  <div class="example">
+    <h4>계산 예시 — 같은 앰프, 다른 부하</h4>
+    <p>앰프가 출력단에서 <strong>28.3 V</strong>(rms)를 낼 수 있다고 하면:</p>
+    <p><strong>8Ω 부하:</strong> I = 28.3 ÷ 8 = 3.54 A → P = 28.3² ÷ 8 = <strong>100 W</strong></p>
+    <p><strong>4Ω 부하:</strong> I = 28.3 ÷ 4 = 7.07 A → P = 28.3² ÷ 4 = <strong>200 W</strong></p>
+    <p><strong>2Ω 부하:</strong> I = 28.3 ÷ 2 = 14.1 A → P = 28.3² ÷ 2 = <strong>400 W</strong></p>
+    <p>이론상 임피던스가 절반이면 출력이 2배입니다. 하지만 전류도 2배로 늘어 앰프 출력단·전원부에 부담이 커지고, 실제로는 전압이 조금 내려앉아(sag) 그만큼 안 나옵니다. 그래서 스펙시트에 8Ω·4Ω·2Ω 출력이 따로 적혀 있습니다.</p>
+  </div>
+
+  <h2>스피커를 여러 개 물릴 때</h2>
+  <p>병렬로 연결하면 합성 임피던스가 내려갑니다.</p>
+  <div class="formula">
+    병렬 (같은 값 n개): Z ÷ n<br>
+    병렬 (다른 값): 1 ÷ (1/Z₁ + 1/Z₂ + …)<br>
+    직렬: Z₁ + Z₂ + …
+  </div>
+  <table class="data">
+<tr><th>연결</th><th>합성 임피던스</th><th>앰프가 봄</th></tr>
+<tr><td>8Ω 1개</td><td>8Ω</td><td>안전</td></tr>
+<tr><td>8Ω 2개 병렬</td><td>4Ω</td><td>대부분 OK</td></tr>
+<tr><td>8Ω 3개 병렬</td><td>2.7Ω</td><td>앰프 스펙 확인</td></tr>
+<tr><td>8Ω 4개 병렬</td><td>2Ω</td><td>2Ω 지원 앰프만</td></tr>
+<tr><td>8Ω 2직렬 + 2직렬을 병렬</td><td>8Ω</td><td>4개인데 안전 (직병렬)</td></tr>
+</table>
+  <div class="note">앰프의 "최소 부하"(예: "4Ω per channel")보다 낮게 물리면 보호회로가 걸리거나(음이 끊김), 오래되면 출력 TR이 터집니다. 4개 이상 물려야 하면 직병렬로 임피던스를 8Ω·4Ω로 맞추세요.</div>
+
+  <div class="callout">
+    <div class="ico">⚡</div>
+    <div class="body">
+      <b>전기 계산기 (무료 웹 도구)</b>
+      <p>옴의 법칙(V·I·R·P), 병렬·직렬 임피던스, 케이블 손실을 한 화면에서. 스피커 조합을 바꿔가며 앰프 부하를 확인할 때.</p>
+      <a href="/electrical-calculator.html">▸ 전기 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>70V / 100V 정전압 라인</h2>
+  <p>매장·안내방송처럼 스피커가 많고 배선이 긴 경우, 앰프가 높은 전압(70.7 V 또는 100 V)으로 보내고 각 스피커에 트랜스포머를 달아 탭 와트를 뽑습니다. 이 방식의 장점:</p>
+  <ul>
+    <li>전압이 높아 같은 전력에서 전류가 작다 → 얇은 케이블, 긴 거리 OK (P = V²/Z에서 Z가 커짐)</li>
+    <li>스피커를 그냥 병렬로 계속 추가 가능 — 탭 와트 합이 앰프 출력을 안 넘으면 됨</li>
+    <li>임피던스 계산 대신 <strong>와트 덧셈</strong>: 5W 탭 스피커 30개 = 150 W → 200 W 앰프면 여유 25%</li>
+  </ul>
+  <div class="example">
+    <h4>계산 예시 — 100V 라인</h4>
+    <p>100 V 라인에 10 W 탭 스피커. 스피커가 앰프에서 보는 임피던스: Z = V² ÷ P = 100² ÷ 10 = <strong>1,000Ω</strong>.</p>
+    <p>이런 스피커 20개 병렬 = 50Ω. 앰프는 100 V로 200 W(= 100²/50)를 공급. 저임피던스 방식이면 20개 병렬은 앰프를 즉사시킵니다.</p>
+  </div>
+
+  <h2>케이블 손실과 댐핑 팩터</h2>
+  <p>스피커 케이블도 저항이 있습니다(굵기·길이에 비례). 이 저항이 스피커 임피던스와 직렬로 들어가 전력을 나눠 먹고, 앰프의 제동력(댐핑 팩터)을 떨어뜨립니다.</p>
+  <div class="formula">케이블 왕복 저항 R_c 에서의 손실(dB) ≈ 10 × log₁₀( (Z + R_c) ÷ Z )</div>
+  <ul>
+    <li>손실을 <strong>0.5 dB 이내</strong>로 잡는 게 관례. 8Ω 스피커면 R_c ≤ 약 1Ω.</li>
+    <li>2.5 ㎟(≈14 AWG) 케이블의 왕복 저항은 약 15 mΩ/m. 30 m면 0.45Ω → 8Ω에서 손실 0.24 dB, 4Ω에서 0.48 dB.</li>
+    <li>저임피던스(4Ω·2Ω) + 긴 케이블은 케이블을 굵게. 정전압 라인은 이 문제에서 자유롭다.</li>
+  </ul>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>앰프 출력(W)과 스피커 정격(W)만 맞추고 임피던스를 안 본다.</strong> 부하 임피던스가 앰프 최소치보다 낮으면 W가 맞아도 위험.</li>
+    <li><strong>병렬 연결로 "더 크게" 하려다 임피던스를 2Ω로 만든다.</strong> 대부분의 설치용 앰프는 4Ω까지.</li>
+    <li><strong>피크 전압으로 rms 전력을 계산한다.</strong> 정현파에서 V_rms = V_peak ÷ √2. P 공식엔 rms를 넣는다.</li>
+    <li><strong>정전압·저임피던스 스피커를 섞어 문다.</strong> 100V 트랜스 없는 스피커를 100V 라인에 물면 스피커가 탄다.</li>
+    <li><strong>가는 번들 케이블로 저임피던스 롱런.</strong> 저역이 흐물거리고(댐핑 저하) 출력이 샌다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>옴의 법칙·임피던스·케이블·딜레이·음향 계산을 오프라인으로. 스피커 조합별 앰프 부하를 현장에서 즉시 확인.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/speaker-impedance-matching.html">스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭 <span>· 도구 가이드</span></a>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
