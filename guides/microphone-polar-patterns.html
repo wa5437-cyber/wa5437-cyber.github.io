@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마이크 지향성 패턴 이해 — 카디오이드·양지향성·무지향 | ML Music Studio</title>
+<meta name="description" content="무지향·카디오이드·슈퍼카디오이드·하이퍼카디오이드·양지향성(피그오브에이트) 패턴의 차이와 극좌표 그래프 읽는 법, 근접효과, 각 패턴이 실전(보컬·앙상블·라이브 PA)에서 어디에 쓰이는지, 무대음향 자격검정 기출에도 자주 나오는 핵심 개념을 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/microphone-polar-patterns.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/microphone-polar-patterns.html">
+<meta property="og:title" content="마이크 지향성 패턴 이해 — 카디오이드·양지향성·무지향">
+<meta property="og:description" content="무지향·카디오이드·슈퍼/하이퍼카디오이드·양지향성 패턴의 차이, 극좌표 그래프 읽는 법, 근접효과, 실전 사용처.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "마이크 지향성 패턴 이해 — 카디오이드·양지향성·무지향",
+  "description": "마이크 지향성 패턴의 차이, 극좌표 그래프 읽는 법, 근접효과, 실전 사용처.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/microphone-polar-patterns.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>마이크 지향성 패턴 이해</h1>
+  <div class="meta">도구 가이드 · 약 6분</div>
+
+  <p class="lede">같은 마이크라도 지향성 패턴을 바꾸면 완전히 다른 도구가 됩니다. 보컬 부스에서 카디오이드를 쓰는 이유, 인터뷰에서 양지향성을 쓰는 이유, 무대에서 슈퍼카디오이드를 선호하는 이유 — 전부 <strong>극좌표 그래프 하나</strong>로 설명됩니다.</p>
+
+  <h2>극좌표 그래프 읽는 법</h2>
+  <p>마이크 스펙시트의 동그란 그래프는 <strong>방향별 감도</strong>를 나타냅니다. 정면(0°, 그래프 위쪽)이 가장 민감하고, 원 안쪽으로 들어갈수록(중심에 가까울수록) 그 방향에서 오는 소리에 둔감하다는 뜻입니다. 등고선은 보통 −5 dB 간격.</p>
+  <div class="note">"카디오이드(cardioid)"라는 이름은 그래프 모양이 하트(♡)를 닮아서 붙었습니다. 정면은 활짝, 후면은 거의 안 잡히는 하트 모양.</div>
+
+  <h2>주요 패턴 5가지</h2>
+  <table class="data">
+<tr><th>패턴</th><th>정면 대비 후면 감도</th><th>특징</th></tr>
+<tr><td>무지향 (Omnidirectional)</td><td>거의 동일 (전방향 균일)</td><td>근접효과 없음. 자연스러운 룸톤 포함. 룸 앰비언스 녹음.</td></tr>
+<tr><td>카디오이드 (Cardioid)</td><td>후면 약 −15~−20 dB</td><td>가장 흔한 보컬·악기 마이크 패턴. 정면 집중, 뒤·옆 배제.</td></tr>
+<tr><td>슈퍼카디오이드 (Supercardioid)</td><td>후면 약간 열림(−9 dB 근처), 측면이 더 닫힘</td><td>카디오이드보다 정면 집중력이 강함. 라이브 무대에서 모니터 스피커 하울링 억제에 유리.</td></tr>
+<tr><td>하이퍼카디오이드 (Hypercardioid)</td><td>후면이 더 열림(측면보다 후면 감도가 큼)</td><td>가장 좁고 예리한 정면 집중. 붐 마이크(영화 현장)에 흔함.</td></tr>
+<tr><td>양지향성 (Figure-8/Bidirectional)</td><td>정면·후면 동일, 측면 거의 무음</td><td>리본 마이크 기본 패턴. 인터뷰(마주보고 앉기), 미드사이드 스테레오.</td></tr>
+</table>
+
+  <h2>근접효과 (Proximity Effect)</h2>
+  <p>지향성(무지향이 아닌) 마이크를 소스에 가까이 대면 <strong>저역이 부스트</strong>되는 현상입니다. 마이크 캡슐이 압력 구배(pressure-gradient) 방식으로 동작하기 때문에 생기며, 무지향 마이크에는 나타나지 않습니다.</p>
+  <ul>
+    <li>라디오 DJ·성우가 마이크에 바짝 붙어 낮고 풍성한 목소리를 내는 것도 근접효과.</li>
+    <li>킥 드럼에 카디오이드 마이크를 넣을 때 거리로 저역량을 조절하는 것도 같은 원리.</li>
+    <li>양지향성 리본 마이크는 근접효과가 특히 강해서, 보컬 거리 조절이 곧 톤 조절이 된다.</li>
+  </ul>
+
+  <h2>실전 선택 가이드</h2>
+  <ul>
+    <li><strong>보컬 부스(소음 없는 방)</strong> — 카디오이드가 기본. 방 반사가 문제되면 하이퍼카디오이드로 더 좁힐 수 있다.</li>
+    <li><strong>라이브 무대, 모니터 스피커 근처</strong> — 슈퍼/하이퍼카디오이드로 모니터 방향(보통 후면 측)의 감도를 낮춰 하울링 마진을 확보. 단, 하이퍼카디오이드는 정후방에 널 포인트가 없어(약간 열림) 배치에 주의.</li>
+    <li><strong>앙상블·합창·룸 사운드</strong> — 무지향으로 공간감 전체를 담거나, 여러 무지향 마이크를 배치.</li>
+    <li><strong>인터뷰·듀엣, 미드사이드 스테레오</strong> — 양지향성으로 두 방향(또는 좌우)을 분리.</li>
+    <li><strong>드럼 오버헤드 스테레오(XY)</strong> — 카디오이드 두 대를 각도 벌려 배치, 위상 문제 최소화.</li>
+  </ul>
+
+  <div class="example">
+    <h4>왜 슈퍼카디오이드가 라이브에서 유리한가</h4>
+    <p>카디오이드의 최대 억제 방향은 정확히 후면(180°)입니다. 하지만 무대 모니터는 보통 마이크 정면 아래쪽에서 약간 벗어난 각도에 놓입니다. 슈퍼카디오이드는 최대 억제점이 약 126° 부근(완전 후면이 아님)이라, 실제 모니터 배치 각도와 더 잘 맞아 하울링 전 게인 여유(Gain Before Feedback)가 카디오이드보다 큽니다.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·iPadOS·macOS)</b>
+      <p>마이크 지향성·근접효과는 무대예술전문인(음향) 필기 단골 문제입니다. 983문항 + 무제한 생성 계산문제로 대비하세요.</p>
+      <a href="https://apps.apple.com/app/id6798884217" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>카디오이드는 후면만 막으면 된다고 생각한다.</strong> 실제로는 측면도 상당히 감쇠된다 — 널 포인트 각도는 패턴마다 다르다.</li>
+    <li><strong>지향성 마이크를 무지향처럼 아무 각도로나 배치한다.</strong> 정면 각도가 틀어지면 톤이 어두워지고 감도가 떨어진다.</li>
+    <li><strong>근접효과를 EQ로만 해결하려 한다.</strong> 거리 조절이 먼저다. EQ는 미세 보정용.</li>
+    <li><strong>하울링이 나면 무조건 게인부터 내린다.</strong> 마이크 각도·패턴·스피커 배치를 먼저 점검하면 게인을 덜 희생해도 된다.</li>
+  </ul>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/frequency-and-wavelength.html">주파수와 파장 계산 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

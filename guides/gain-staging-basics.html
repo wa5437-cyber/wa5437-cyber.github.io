@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>게인 스테이징 기본 — 헤드룸과 노이즈 플로어 사이 | ML Music Studio</title>
+<meta name="description" content="게인 스테이징이 왜 중요한지, 노이즈 플로어와 헤드룸 사이에서 레벨을 잡는 이유, 아날로그·디지털 단계별(마이크 프리·컨버터·트랙·마스터 버스) 적정 레벨, dBFS·dBu 관계와 현장·믹싱 체크리스트를 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/gain-staging-basics.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/gain-staging-basics.html">
+<meta property="og:title" content="게인 스테이징 기본 — 헤드룸과 노이즈 플로어 사이">
+<meta property="og:description" content="노이즈 플로어와 헤드룸 사이에서 레벨을 잡는 이유, 단계별 적정 레벨, dBFS·dBu 관계와 체크리스트.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "게인 스테이징 기본 — 헤드룸과 노이즈 플로어 사이",
+  "description": "노이즈 플로어와 헤드룸 사이에서 레벨을 잡는 이유, 단계별 적정 레벨, dBFS·dBu 관계.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/gain-staging-basics.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>게인 스테이징 기본</h1>
+  <div class="meta">믹싱·측정 · 약 6분</div>
+
+  <p class="lede">신호가 마이크에서 스피커까지 오는 동안 여러 단계(프리앰프 → 컨버터 → 트랙 → 버스 → 마스터)를 거칩니다. 각 단계에서 레벨이 너무 낮으면 노이즈가 묻어나고, 너무 높으면 클리핑됩니다. 게인 스테이징은 <strong>매 단계에서 이 둘 사이의 적정 지점</strong>을 유지하는 작업입니다.</p>
+
+  <h2>노이즈 플로어와 헤드룸</h2>
+  <ul>
+    <li><strong>노이즈 플로어</strong> — 장비 자체가 만드는 바닥 잡음. 이보다 신호가 작으면 노이즈에 묻힌다.</li>
+    <li><strong>헤드룸</strong> — 현재 레벨에서 클리핑(0 dBFS)까지 남은 여유. 트랜지언트(순간 피크)를 담을 공간.</li>
+  </ul>
+  <p>이 둘 사이의 폭을 <strong>다이내믹 레인지</strong>라 부르고, 신호는 이 안 어딘가에 있어야 합니다. 너무 아래로 붙으면 노이즈가, 너무 위로 붙으면 클리핑이 문제가 됩니다.</p>
+  <div class="note">디지털 오디오는 아날로그와 반대 성질이 있습니다. 아날로그 테이프는 레벨을 높이면 오히려 "따뜻하게" 포화되지만, 디지털은 0 dBFS를 넘으면 <strong>즉시, 가혹하게</strong> 클리핑됩니다. 그래서 디지털 레코딩은 여유를 넉넉히(피크 −12~−18 dBFS 근처) 두고 녹음하는 게 안전합니다.</div>
+
+  <h2>단계별 적정 레벨 (가이드라인)</h2>
+  <table class="data">
+<tr><th>단계</th><th>목표 레벨</th><th>메모</th></tr>
+<tr><td>마이크 프리앰프 게인</td><td>피크 시 노이즈 플로어보다 40 dB 이상 위</td><td>프리 게인을 아끼면(너무 낮으면) 나중에 플러그인으로 올릴 때 노이즈도 같이 올라감</td></tr>
+<tr><td>레코딩 트랙 (24bit)</td><td>평균 −18 dBFS, 피크 −12~−6 dBFS</td><td>24bit는 이론상 144 dB 다이내믹 레인지 — 예전 16bit 시절의 "가능한 크게" 습관은 불필요</td></tr>
+<tr><td>믹스 채널 페이더</td><td>0 dB(유니티) 근처에서 시작</td><td>페이더를 극단으로 올리거나 내리며 믹스하면 상대 밸런스 감이 왜곡됨</td></tr>
+<tr><td>마스터 버스(믹스 합)</td><td>피크 −6 dBFS 이하 여유</td><td>마스터링 단계에서 리미팅할 헤드룸 확보</td></tr>
+<tr><td>플러그인 인풋(특히 아날로그 모델링)</td><td>제조사 권장 레벨(보통 −18 dBFS 근처가 0 VU)</td><td>새추레이션 플러그인은 인풋 레벨에 따라 소리가 크게 달라짐</td></tr>
+</table>
+
+  <h2>dBFS와 dBu — 디지털과 아날로그를 잇는 값</h2>
+  <p>아날로그 장비는 dBu(기준 0.775 V) 스케일을, 디지털은 dBFS(0 dBFS = 클리핑 지점) 스케일을 씁니다. 인터페이스·컨버터는 이 둘을 어딘가에서 맞춥니다 — 흔한 기준은 <strong>+4 dBu = −18 dBFS</strong>(EBU 관례) 또는 <strong>+4 dBu = −20 dBFS</strong>(SMPTE 관례)입니다.</p>
+  <div class="example">
+    <h4>실전 적용</h4>
+    <p>인터페이스 스펙에 "0 dBFS = +24 dBu"라고 적혀 있으면, 그 인터페이스에서 −18 dBFS는 아날로그로 +6 dBu에 해당합니다. 이 기준을 알아두면 하드웨어 프리앰프의 아날로그 미터(VU)와 DAW의 디지털 미터(피크) 사이에서 얼마나 여유가 있는지 계산할 수 있습니다.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🧮</div>
+    <div class="body">
+      <b>전기 계산기 (무료 웹 도구)</b>
+      <p>dB·전압·전력 변환을 한 화면에서. dBu·dBV·dBFS 사이를 오갈 때 빠르게 계산합니다.</p>
+      <a href="/electrical-calculator.html">▸ 전기 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>플러그인 체인에서 게인 스테이징</h2>
+  <ul>
+    <li><strong>플러그인마다 인풋 레벨을 확인한다.</strong> 컴프레서 앞에 EQ로 3 dB를 올렸다면, 컴프의 스레숄드·리덕션 양이 그만큼 달라진다.</li>
+    <li><strong>체인 끝에서 레벨을 맞추지 말고, 각 단계에서 맞춘다.</strong> "마지막에 페이더로 조정하면 되지"는 중간 플러그인들의 동작(새추레이션, 컴프레션 캐릭터)을 왜곡시킨다.</li>
+    <li><strong>유니티 게인 스테이징 습관.</strong> 인서트 전후 레벨이 크게 다르면 A/B 비교(바이패스 토글)가 레벨 차이 때문에 왜곡된다 — 레벨을 맞추고 비교.</li>
+  </ul>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>"크게 녹음해야 좋다"는 옛 습관.</strong> 16bit 시절 얘기. 24/32bit float에서는 오히려 여유를 두는 게 안전.</li>
+    <li><strong>마스터 버스에 리미터를 걸어두고 트랙 레벨을 그걸로 가린다.</strong> 개별 트랙의 게인 스테이징 문제(노이즈, 클리핑)가 숨겨질 뿐 해결되지 않는다.</li>
+    <li><strong>페이더로 프리앰프 게인 부족을 메운다.</strong> 이미 실린 노이즈까지 같이 증폭될 뿐이다. 프리 게인을 다시 잡거나 재녹음.</li>
+    <li><strong>모든 트랙 레벨을 똑같이 맞춘다.</strong> 목적은 균일함이 아니라 각 단계에서 노이즈·클리핑 사이 안전 지대를 유지하는 것.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>dB·전압·전력 변환, 딜레이·음향 계산을 오프라인으로. 세션 셋업 전 레벨 기준을 빠르게 확인.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 믹싱·측정</span></a>
+    <a href="/guides/ohms-law-for-audio.html">오디오를 위한 옴의 법칙 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

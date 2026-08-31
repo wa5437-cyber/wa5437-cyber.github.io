@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>핑크노이즈로 EQ 귀 훈련하는 법 — 밴드 부스트 구분 연습 | ML Music Studio</title>
+<meta name="description" content="핑크노이즈가 화이트노이즈 대신 EQ 훈련에 쓰이는 이유, 옥타브·1/3옥타브 밴드 부스트를 귀로 구분하는 훈련 방법, 대역별로 헷갈리기 쉬운 주파수 쌍, 훈련을 실전 믹싱 감각으로 옮기는 순서를 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/pink-noise-eq-ear-training.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/pink-noise-eq-ear-training.html">
+<meta property="og:title" content="핑크노이즈로 EQ 귀 훈련하는 법 — 밴드 부스트 구분 연습">
+<meta property="og:description" content="핑크노이즈가 EQ 훈련에 쓰이는 이유, 밴드 부스트를 귀로 구분하는 훈련법, 헷갈리기 쉬운 주파수 쌍.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "핑크노이즈로 EQ 귀 훈련하는 법 — 밴드 부스트 구분 연습",
+  "description": "핑크노이즈가 EQ 훈련에 쓰이는 이유, 밴드 부스트를 귀로 구분하는 훈련법, 헷갈리기 쉬운 주파수 쌍.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/pink-noise-eq-ear-training.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>핑크노이즈로 EQ 귀 훈련하는 법</h1>
+  <div class="meta">믹싱·측정 · 약 6분</div>
+
+  <p class="lede">"250 Hz 좀 죽여봐"라는 말을 듣고 바로 그 대역을 찾아 만지는 엔지니어와, 스펙트럼 분석기를 켜야 하는 엔지니어의 차이는 재능이 아니라 <strong>훈련량</strong>입니다. 핑크노이즈에 EQ 부스트를 걸어 어느 대역인지 맞히는 훈련은 가장 오래되고 효과적인 방법입니다.</p>
+
+  <h2>왜 화이트노이즈가 아니라 핑크노이즈인가</h2>
+  <p>화이트노이즈는 <strong>모든 주파수에 같은 에너지</strong>를 담아, 옥타브가 올라갈수록(고역으로 갈수록) 그 안에 포함된 주파수 성분 수가 기하급수적으로 늘어납니다. 사람 귀는 대략 옥타브 단위(로그 스케일)로 소리를 인식하기 때문에 화이트노이즈는 "치찰음처럼 밝게" 들립니다.</p>
+  <p>핑크노이즈는 <strong>옥타브당 같은 에너지</strong>를 갖도록 고역으로 갈수록 에너지를 깎아둔 신호입니다(−3 dB/옥타브). 그래서 사람 귀에는 "고르게 평평한" 노이즈로 들리고, 이 상태가 EQ 부스트·컷을 상대적으로 판단하는 기준선이 됩니다. 룸 튜닝·스피커 캘리브레이션에 핑크노이즈를 쓰는 이유도 같습니다.</p>
+
+  <div class="callout">
+    <div class="ico">🎚️</div>
+    <div class="body">
+      <b>31-Band Ear Trainer (무료 웹 도구)</b>
+      <p>핑크노이즈에 무작위 밴드를 부스트하고 어느 밴드인지 맞히는 훈련. 난이도(부스트 폭)를 조절하며 반복할 수 있습니다.</p>
+      <a href="/trainer.html">▸ 이어 트레이너 열기</a>
+    </div>
+  </div>
+
+  <h2>훈련 방법 — 단계별로</h2>
+  <ol>
+    <li><strong>넓은 대역, 큰 폭부터.</strong> 저역(100 Hz 이하)·중역(500 Hz~2 kHz)·고역(5 kHz 이상) 3구간을 ±6 dB로 구분하는 것부터 시작.</li>
+    <li><strong>대역을 좁혀간다.</strong> 3구간이 익숙해지면 6구간, 이후 옥타브 단위(31, 63, 125, 250 Hz…)로.</li>
+    <li><strong>부스트 폭을 줄인다.</strong> ±6 dB → ±3 dB → ±1.5 dB 순으로. 실무에서 만지는 폭(1~3 dB)에 최종적으로 맞춘다.</li>
+    <li><strong>컷도 연습한다.</strong> 부스트보다 컷을 구분하기가 미묘하게 더 어렵다. 둘 다 훈련.</li>
+    <li><strong>Q(대역폭)를 바꿔가며.</strong> 넓은 Q(쉐이핑)와 좁은 Q(서지컬 컷)는 같은 중심 주파수라도 들리는 인상이 다르다.</li>
+  </ol>
+
+  <h2>헷갈리기 쉬운 주파수 쌍</h2>
+  <table class="data">
+<tr><th>쌍</th><th>왜 헷갈리나</th></tr>
+<tr><td>250 Hz ↔ 500 Hz</td><td>둘 다 "박스 소리·먹먹함"으로 들림. 250은 더 웅웅거리고, 500은 더 콧소리에 가까움.</td></tr>
+<tr><td>1 kHz ↔ 2 kHz</td><td>둘 다 "귀에 거슬림"으로 뭉뚱그려 듣기 쉬움. 2 kHz가 더 날카롭고 존재감이 앞으로 나옴.</td></tr>
+<tr><td>3 kHz ↔ 5 kHz</td><td>보컬 존재감(3k)과 치찰음 시작(5k)의 경계. 보컬 트랙에서 특히 중요.</td></tr>
+<tr><td>8 kHz ↔ 12 kHz</td><td>둘 다 "쉬익거림"이지만 8k는 치찰음 자체, 12k+는 공기감·에어.</td></tr>
+<tr><td>60~80 Hz ↔ 100~120 Hz</td><td>전자는 파워/묵직함, 후자는 웜함. 킥·베이스 처리에서 자주 혼동.</td></tr>
+</table>
+
+  <div class="example">
+    <h4>실전으로 옮기기</h4>
+    <p>핑크노이즈 훈련에서 250 Hz를 잘 잡아낸다고 실전 믹스에서 바로 되진 않습니다. 다음 단계로: (1) 실제 악기 소스(보컬·기타·드럼)로 같은 훈련을 반복 — 소스마다 배음 구조가 달라 다르게 들립니다. (2) 믹스 중 "이 트랙이 답답하다"고 느끼면 EQ를 스윕하며 넓은 부스트를 걸어보고, 가장 거슬리는 지점을 찾은 뒤 폭을 좁힌다. (3) 조정 전후를 A/B로 반복 확인 — 조정한 걸 잊을 때쯤 다시 들어야 진짜 차이가 들린다.</p>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>스피커·헤드폰 하나로만 훈련한다.</strong> 모니터링 환경에 따라 특정 대역이 과장/축소돼 들린다. 여러 환경에서 검증하는 습관.</li>
+    <li><strong>큰 볼륨으로 오래 훈련한다.</strong> 청력 피로가 오면 고역 판단력이 먼저 떨어진다. 짧게 자주.</li>
+    <li><strong>훈련용 노이즈에서만 잘하고 실제 음악에 적용을 안 해본다.</strong> 노이즈와 실악기는 배음 구조가 다르다.</li>
+    <li><strong>정답을 맞히는 데만 집중하고 "왜 그렇게 들렸는지" 언어화를 안 한다.</strong> "먹먹함=250", "거슬림=2k"처럼 형용사와 대역을 연결해두면 실전에서 더 빨리 떠오른다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎧</div>
+    <div class="body">
+      <b>AudioEngineer Ear Trainer (iOS)</b>
+      <p>EQ 대역 구분, 레벨 차, 이펙트 종류까지 포함한 체계적 청음 훈련. 매일 조금씩 반복하는 스트릭 기능으로 감각을 유지합니다.</p>
+      <a href="https://apps.apple.com/app/audioengineer-ear-trainer/id6801893036" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/reverb-delay-chorus-explained.html">Reverb·Delay·Chorus·Flanger·Phaser 차이 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
