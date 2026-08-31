@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 사이트 기준 URL: https://wa5437-cyber.github.io (GitHub Pages). 커스텀 도메인 연결 시 교체. -->
+<!-- 사이트 기준 URL: https://mlmusicstudio.co.kr (GitHub Pages). 커스텀 도메인 연결 시 교체. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://wa5437-cyber.github.io/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 
-  <url><loc>https://wa5437-cyber.github.io/guides/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/delay-tower-alignment.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/speaker-impedance-matching.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/reading-31-band-rta.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/rt60-reverberation-time.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/ohms-law-for-audio.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/reading-lufs-loudness.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/bpm-to-delay-time.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/frequency-and-wavelength.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/reverb-delay-chorus-explained.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/daw-shortcuts-concepts.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/pro-tools-to-logic-migration.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/pink-noise-eq-ear-training.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/gain-staging-basics.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/microphone-polar-patterns.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/guides/stage-sound-cert-study-plan.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/delay-tower-alignment.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/speaker-impedance-matching.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/reading-31-band-rta.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/rt60-reverberation-time.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/ohms-law-for-audio.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/reading-lufs-loudness.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/bpm-to-delay-time.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/frequency-and-wavelength.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/reverb-delay-chorus-explained.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/daw-shortcuts-concepts.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/pro-tools-to-logic-migration.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/pink-noise-eq-ear-training.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/gain-staging-basics.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/microphone-polar-patterns.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-cert-study-plan.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-  <url><loc>https://wa5437-cyber.github.io/trainer.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/generator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/rta.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/delay-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/acoustics-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/electrical-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/tempo-pitch-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/effects-listening.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://wa5437-cyber.github.io/stage-sound-quiz.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/trainer.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/generator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/rta.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/delay-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/acoustics-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/electrical-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/tempo-pitch-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/effects-listening.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/stage-sound-quiz.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

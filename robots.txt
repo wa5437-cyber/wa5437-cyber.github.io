@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /eartrainer_prototype.html
 
-Sitemap: https://wa5437-cyber.github.io/sitemap.xml
+Sitemap: https://mlmusicstudio.co.kr/sitemap.xml
