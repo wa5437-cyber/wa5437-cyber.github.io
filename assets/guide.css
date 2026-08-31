@@ -98,3 +98,6 @@ footer .col h4{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-sp
 footer .col a{ display:block; font-size:13.5px; color:var(--text-secondary); margin-bottom:8px; }
 footer .col a:hover{ color:var(--text-primary); }
 footer .bottom{ margin-top:32px; padding-top:22px; border-top:1px solid var(--line); font-size:12.5px; color:var(--text-tertiary); }
+
+/* keycap — inline shortcut key, e.g. <kbd>Cmd+Z</kbd> */
+kbd{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:500; color:var(--text-primary); background:var(--bg-alt); border:1px solid var(--line-strong); border-bottom-width:2px; border-radius:6px; padding:2px 7px; }

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Tools에서 Logic으로 — 용어·워크플로우 대응표 | ML Music Studio</title>
+<meta name="description" content="Pro Tools 사용자가 Logic Pro로 넘어갈 때 헷갈리는 용어 대응(세션↔프로젝트, 클립게인↔게인 오토메이션, 엘라스틱 오디오↔플렉스 타임), 편집 모드·플레이리스트·버스 구조 차이, 단축키 대응표를 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/pro-tools-to-logic-migration.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/pro-tools-to-logic-migration.html">
+<meta property="og:title" content="Pro Tools에서 Logic으로 — 용어·워크플로우 대응표">
+<meta property="og:description" content="세션↔프로젝트, 클립게인↔오토메이션, 엘라스틱 오디오↔플렉스 타임 등 용어 대응과 편집 모드·단축키 차이.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Pro Tools에서 Logic으로 — 용어·워크플로우 대응표",
+  "description": "Pro Tools 사용자가 Logic Pro로 넘어갈 때 헷갈리는 용어·편집 모드·플레이리스트·버스 구조 대응표.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/pro-tools-to-logic-migration.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / DAW·워크플로우</div>
+  <h1>Pro Tools에서 Logic으로 — 용어·워크플로우 대응표</h1>
+  <div class="meta">DAW·워크플로우 · 약 7분</div>
+
+  <p class="lede">Pro Tools에 익숙한 상태로 Logic을 열면 화면은 비슷한데 개념이 자꾸 어긋납니다. 세션이 아니라 프로젝트, 클립 게인이 아니라 게인 오토메이션, 엘라스틱 오디오가 아니라 플렉스 타임. 용어만 바꿔 읽으면 워크플로우 자체는 생각보다 빨리 손에 붙습니다.</p>
+
+  <h2>용어 대응표</h2>
+  <table class="data">
+<tr><th>Pro Tools</th><th>Logic Pro</th><th>메모</th></tr>
+<tr><td>Session</td><td>Project</td><td>파일 단위</td></tr>
+<tr><td>Track</td><td>Track</td><td>동일</td></tr>
+<tr><td>Region</td><td>Region / Take</td><td>Logic은 콤핑용 Take가 별도 개념</td></tr>
+<tr><td>Clip Gain</td><td>Gain 오토메이션 (또는 Region Gain)</td><td>Logic은 리전 인스펙터에 Gain 노브가 있음</td></tr>
+<tr><td>Elastic Audio</td><td>Flex Time / Flex Pitch</td><td>타임과 피치가 Logic에서는 분리된 모드</td></tr>
+<tr><td>Bus (내부 라우팅)</td><td>Bus (동일 용어)</td><td>Aux 트랙 생성 방식은 다름</td></tr>
+<tr><td>Aux Input</td><td>Aux Channel Strip</td><td></td></tr>
+<tr><td>AudioSuite (오프라인 처리)</td><td>오프라인 바운스 / 리전 기반 처리</td><td>일부 플러그인만 오프라인 렌더 지원</td></tr>
+<tr><td>Commands Focus</td><td>Key Commands (전역 설정)</td><td>Logic은 모드 전환이 아니라 상시 배정</td></tr>
+<tr><td>Playlists (트랙별 대안 테이크)</td><td>Take Folders (콤핑)</td><td>UI·조작 방식이 많이 다름</td></tr>
+<tr><td>Memory Location</td><td>Marker</td><td></td></tr>
+<tr><td>Tab to Transient</td><td>Tab (트랜지언트 감지 필요)</td><td></td></tr>
+<tr><td>Beat Detective</td><td>Flex Time + Groove Track</td><td>1:1 대응은 아님</td></tr>
+</table>
+
+  <h2>편집 모드 차이</h2>
+  <p>Pro Tools는 네 가지 편집 모드(Slip·Shuffle·Spot·Grid)를 전환하며 작업합니다. Logic에는 이 개념이 그대로 없고, 대신 <strong>스냅(Snap) 설정 + 드래그 동작</strong>으로 비슷한 걸 구현합니다.</p>
+  <table class="data">
+<tr><th>Pro Tools 모드</th><th>Logic에서 비슷한 동작</th></tr>
+<tr><td>Slip (자유 이동)</td><td>Snap = Off</td></tr>
+<tr><td>Grid (격자 스냅)</td><td>Snap = Bar/Beat/Division 등 선택</td></tr>
+<tr><td>Shuffle (뒤 리전이 밀려 붙음)</td><td>정확히 같은 기능 없음. 수동 정렬 또는 Ripple 편집 일부 지원</td></tr>
+<tr><td>Spot (숫자 입력으로 위치 지정)</td><td>리전을 선택 후 Event List / 인스펙터에 위치 직접 입력</td></tr>
+</table>
+  <div class="note">Shuffle 모드처럼 "이전 리전 삭제하면 뒤가 자동으로 당겨 붙는" 동작은 Logic에 정확히 없습니다. 대사 편집처럼 Shuffle을 많이 쓰던 작업이라면 이 부분이 가장 적응이 필요합니다.</div>
+
+  <div class="callout">
+    <div class="ico">⌨️</div>
+    <div class="body">
+      <b>KeyMap (iOS·iPadOS)</b>
+      <p>Pro Tools 단축키를 검색하면 Logic(외 5개 DAW)의 대응 단축키를 바로 보여줍니다. 이주 초반 2주, 손이 헷갈릴 때 빠르게 찾아보기 좋습니다.</p>
+      <a href="/#apps">▸ 자세히 보기</a>
+    </div>
+  </div>
+
+  <h2>믹스 구조 차이</h2>
+  <ul>
+    <li><strong>채널 스트립 순서</strong> — Pro Tools는 인서트가 위, Logic도 비슷하지만 EQ가 기본으로 눈에 잘 띄는 위치에 있다.</li>
+    <li><strong>센드 레벨</strong> — Pro Tools 센드는 기본 −inf에서 시작, Logic은 트랙 생성 시 자동으로 0 dB 근처로 열리는 경우가 있어 초반 레벨 서프라이즈에 주의.</li>
+    <li><strong>버스 채널 수</strong> — Pro Tools는 세션 시작 시 버스 개수를 정해야 함. Logic은 Aux를 필요할 때 그때그때 만들 수 있어 더 유연.</li>
+    <li><strong>서밍 vs 그룹</strong> — Pro Tools의 VCA/Group과 Logic의 Track Stack(Summing Stack)은 비슷한 목적이지만 조작 방식이 다르다.</li>
+  </ul>
+
+  <h2>단축키 대응 (자주 쓰는 것)</h2>
+  <table class="data">
+<tr><th>동작</th><th>Pro Tools</th><th>Logic</th></tr>
+<tr><td>재생/정지</td><td><kbd>Space</kbd></td><td><kbd>Space</kbd></td></tr>
+<tr><td>녹음</td><td><kbd>Cmd+Space</kbd> / <kbd>F12</kbd></td><td><kbd>R</kbd></td></tr>
+<tr><td>재생 헤드에서 나누기</td><td><kbd>Cmd+E</kbd></td><td><kbd>Cmd+T</kbd></td></tr>
+<tr><td>실행 취소</td><td><kbd>Cmd+Z</kbd></td><td><kbd>Cmd+Z</kbd></td></tr>
+<tr><td>페이드 인/아웃</td><td><kbd>Cmd+F</kbd></td><td>드래그 핸들 (단축키 없음)</td></tr>
+<tr><td>줌 인 (수평)</td><td><kbd>Cmd+]</kbd></td><td><kbd>Cmd+오른쪽 화살표</kbd></td></tr>
+<tr><td>세션/프로젝트 저장</td><td><kbd>Cmd+S</kbd></td><td><kbd>Cmd+S</kbd></td></tr>
+</table>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>Shuffle 모드가 그리워 억지로 흉내낸다.</strong> Logic의 워크플로우(마커+드래그)로 새로 익히는 게 빠르다.</li>
+    <li><strong>Flex Time을 Elastic Audio처럼 항상 켜둔다.</strong> Logic은 Flex를 켜면 리전마다 분석 오버헤드가 있어 필요한 트랙만 켜는 게 낫다.</li>
+    <li><strong>버스 수를 Pro Tools 세션처럼 미리 다 만든다.</strong> Logic은 필요할 때 만들면 되므로 세션 시작이 오히려 더 가볍다.</li>
+    <li><strong>플러그인 레이턴시 보상 차이를 모른다.</strong> 둘 다 PDC를 지원하지만 세팅 위치가 다르니 새 프로젝트에서 확인.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>새 DAW로 옮기며 세션 세팅을 다시 잡을 때 필요한 딜레이·템포·음향 계산을 오프라인으로.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/daw-shortcuts-concepts.html">DAW 단축키, 왜 다 다르고 어떻게 외워야 할까 <span>· DAW·워크플로우</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

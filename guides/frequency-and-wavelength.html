@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주파수와 파장 계산 — 저역 룸모드·베이스트랩·마이크 위치 | ML Music Studio</title>
+<meta name="description" content="주파수와 파장을 서로 계산하는 공식, 옥타브와 주파수의 관계, 흔한 주파수의 파장 표, 베이스 트랩 두께와 룸 모드가 파장과 왜 연결되는지, 마이크 위치와 콤필터링을 파장으로 이해하는 법을 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/frequency-and-wavelength.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/frequency-and-wavelength.html">
+<meta property="og:title" content="주파수와 파장 계산 — 저역 룸모드·베이스트랩·마이크 위치">
+<meta property="og:description" content="주파수↔파장 공식, 옥타브 관계, 흔한 주파수의 파장 표, 베이스 트랩·룸 모드·콤필터링과의 관계.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "주파수와 파장 계산 — 저역 룸모드·베이스트랩·마이크 위치",
+  "description": "주파수와 파장을 계산하는 공식, 옥타브와의 관계, 베이스 트랩·룸 모드·콤필터링과의 관계.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/frequency-and-wavelength.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>주파수와 파장 계산</h1>
+  <div class="meta">도구 가이드 · 약 6분</div>
+
+  <p class="lede">저역이 방 구석에서 뭉치는 것도, 흡음재가 저역엔 안 먹히는 것도, 마이크 두 개를 세우면 소리가 얇아지는 것도 — 전부 <strong>파장</strong> 이야기입니다. 주파수(Hz)는 초당 진동 횟수, 파장(m)은 그 진동 한 번이 공간을 차지하는 물리적 길이입니다. 저역일수록 파장이 길어서 방 크기·흡음재 두께와 정면으로 부딪힙니다.</p>
+
+  <h2>기본 공식</h2>
+  <div class="formula">파장 λ(m) = 음속(m/s) ÷ 주파수(Hz)</div>
+  <p>음속은 상온(20°C)에서 약 343 m/s. 반대로 파장을 알면 주파수도 구할 수 있습니다.</p>
+  <div class="formula">주파수(Hz) = 음속(m/s) ÷ 파장(m)</div>
+
+  <div class="example">
+    <h4>계산 예시</h4>
+    <p>100 Hz의 파장: 343 ÷ 100 = <strong>3.43 m</strong></p>
+    <p>1 kHz의 파장: 343 ÷ 1000 = <strong>0.343 m</strong> (34.3 cm)</p>
+    <p>50 Hz(서브베이스 근처)의 파장: 343 ÷ 50 = <strong>6.86 m</strong> — 웬만한 방의 대각선 길이만 하다.</p>
+  </div>
+
+  <h2>흔한 주파수의 파장 표</h2>
+  <table class="data">
+<tr><th>주파수</th><th>파장 (20°C)</th><th>참고</th></tr>
+<tr><td>31.5 Hz</td><td>10.9 m</td><td>서브베이스 하한</td></tr>
+<tr><td>63 Hz</td><td>5.44 m</td><td>킥·베이스 기본음</td></tr>
+<tr><td>125 Hz</td><td>2.74 m</td><td>룸 모드가 가장 문제되는 대역</td></tr>
+<tr><td>250 Hz</td><td>1.37 m</td><td></td></tr>
+<tr><td>500 Hz</td><td>0.69 m</td><td></td></tr>
+<tr><td>1 kHz</td><td>0.34 m</td><td>귀가 가장 민감한 대역 시작</td></tr>
+<tr><td>2 kHz</td><td>0.17 m</td><td></td></tr>
+<tr><td>4 kHz</td><td>0.086 m</td><td></td></tr>
+<tr><td>8 kHz</td><td>0.043 m</td><td>흡음이 거의 모든 재질에서 쉬움</td></tr>
+<tr><td>20 kHz</td><td>0.017 m</td><td>가청 상한</td></tr>
+</table>
+
+  <h2>옥타브와의 관계</h2>
+  <p>주파수가 2배가 되면 1옥타브 위, 파장은 반대로 절반이 됩니다. 이 반비례 관계 때문에 <strong>저역은 옥타브 하나의 물리적 폭이 훨씬 넓습니다.</strong></p>
+  <ul>
+    <li>31~63 Hz (1옥타브): 파장 차이 5.5 m</li>
+    <li>1~2 kHz (1옥타브): 파장 차이 0.17 m</li>
+  </ul>
+  <p>그래서 EQ로 저역을 다룰 때 좁은 Q로도 넓은 물리적 파장을 건드리게 되고, 룸 어쿠스틱도 저역에서 훨씬 다루기 까다롭습니다.</p>
+
+  <div class="callout">
+    <div class="ico">🧮</div>
+    <div class="body">
+      <b>음향 계산기 (무료 웹 도구)</b>
+      <p>주파수↔파장 변환, RT60, 딜레이 계산을 한 화면에서. 베이스 트랩 두께나 마이크 간격을 정할 때.</p>
+      <a href="/acoustics-calculator.html">▸ 음향 계산기 열기</a>
+    </div>
+  </div>
+
+  <h2>실무에서 파장이 중요한 이유</h2>
+  <ul>
+    <li><strong>흡음재 두께</strong> — 다공성 흡음재는 파장의 <strong>1/4 두께</strong>는 돼야 저역을 효과적으로 흡수한다. 100 Hz(파장 3.43 m)를 잡으려면 이론상 86 cm 두께가 필요 — 그래서 저역은 흡음재보다 베이스 트랩(공진형)을 따로 쓴다. 벽에서 띄워 설치하면(공기층 확보) 같은 두께로 더 낮은 대역까지 흡수 가능.</li>
+    <li><strong>룸 모드(정재파)</strong> — 두 벽 사이 거리가 특정 주파수 파장의 절반(또는 배수)이면 정재파가 생겨 그 주파수가 위치에 따라 과하게 크거나 작게 들린다. 방 치수를 알면 문제 주파수를 미리 예측할 수 있다.</li>
+    <li><strong>마이크 배치와 콤필터링</strong> — 두 마이크가 같은 소스를 서로 다른 거리에서 잡으면, 그 거리차가 특정 주파수의 반파장과 맞아떨어질 때 위상 상쇄가 일어난다(3:1 룰의 물리적 근거).</li>
+    <li><strong>스피커 간격과 지향성</strong> — 스피커 두 개(어레이) 간격이 특정 주파수 파장에 가까워지면 그 대역에서 간섭 로브가 생긴다. 라인 어레이 설계에서 핵심 변수.</li>
+  </ul>
+
+  <div class="example">
+    <h4>계산 예시 — 3:1 룰</h4>
+    <p>마이크 A와 소스 거리 30 cm, 마이크 B는 90 cm(3배 이상 — 룰 충족)라면, 두 마이크가 잡는 소리의 도달 시간차는 (90−30)/100 ÷ 343 ≈ 1.75 ms. 이 시간차가 반파장과 맞는 주파수 = 1 ÷ (2 × 0.00175) ≈ <strong>286 Hz</strong>에서 상쇄가 가장 심하지만, 레벨차(3배 거리 = 약 9.5 dB 감쇠)가 충분히 커서 상쇄가 들릴 만큼 크지 않다. 거리비가 3:1보다 좁으면 상쇄가 뚜렷해진다.</p>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>고역 흡음재로 저역을 잡으려 한다.</strong> 두께가 파장의 1/4에 한참 못 미치면 저역은 그대로 통과한다.</li>
+    <li><strong>룸 모드를 EQ로만 해결한다.</strong> 한 위치에서 EQ로 깎아도 다른 위치에선 여전히 부스트돼 있다. 물리적 흡음·배치가 우선.</li>
+    <li><strong>실내 온도 변화를 무시한다.</strong> 음속이 바뀌면 파장도 바뀐다(딜레이 타워 계산과 같은 원리). 큰 차이는 아니지만 정밀 튜닝에선 고려.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🧰</div>
+    <div class="body">
+      <b>AudioEngineerToolkit (iOS·iPadOS·macOS)</b>
+      <p>주파수·파장·RT60·딜레이·전기 계산을 오프라인으로. 현장에서 방 치수를 재고 바로 문제 주파수를 확인할 수 있습니다.</p>
+      <a href="https://apps.apple.com/app/audioengineertoolkit/id6794612792" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/rt60-reverberation-time.html">RT60·잔향시간 이해와 계산 <span>· 도구 가이드</span></a>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>

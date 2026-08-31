@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reverb·Delay·Chorus·Flanger·Phaser 차이 — 시간 기반 이펙트 구분 | ML Music Studio</title>
+<meta name="description" content="딜레이·리버브·코러스·플랜저·페이저가 전부 '지연' 기반인데 왜 이렇게 다르게 들리는지, 지연 시간·피드백·모듈레이션 유무로 구분하는 법, 각 이펙트를 실전에서 언제 쓰는지 표와 함께 정리했습니다.">
+<link rel="canonical" href="https://wa5437-cyber.github.io/guides/reverb-delay-chorus-explained.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://wa5437-cyber.github.io/guides/reverb-delay-chorus-explained.html">
+<meta property="og:title" content="Reverb·Delay·Chorus·Flanger·Phaser 차이 — 시간 기반 이펙트 구분">
+<meta property="og:description" content="지연 시간·피드백·모듈레이션 유무로 딜레이·리버브·코러스·플랜저·페이저를 구분하는 법과 실전 사용처.">
+<meta property="og:image" content="https://wa5437-cyber.github.io/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Reverb·Delay·Chorus·Flanger·Phaser 차이 — 시간 기반 이펙트 구분",
+  "description": "지연 시간·피드백·모듈레이션 유무로 딜레이·리버브·코러스·플랜저·페이저를 구분하는 법.",
+  "inLanguage": "ko",
+  "image": "https://wa5437-cyber.github.io/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://wa5437-cyber.github.io/og-image.png" } },
+  "mainEntityOfPage": "https://wa5437-cyber.github.io/guides/reverb-delay-chorus-explained.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>Reverb·Delay·Chorus·Flanger·Phaser 차이</h1>
+  <div class="meta">믹싱·측정 · 약 7분</div>
+
+  <p class="lede">딜레이도, 리버브도, 코러스도, 플랜저도 — 사실 전부 원본 신호에 <strong>지연된 신호를 섞는다</strong>는 같은 원리에서 출발합니다. 다른 소리가 나는 이유는 딱 세 가지 변수 때문입니다: <strong>지연 시간이 얼마나 짧은지, 피드백(반복)이 있는지, 그 지연 시간이 계속 흔들리는지(모듈레이션)</strong>.</p>
+
+  <h2>세 변수로 구분하기</h2>
+  <table class="data">
+<tr><th>이펙트</th><th>지연 시간</th><th>피드백</th><th>모듈레이션</th></tr>
+<tr><td>Delay</td><td>50 ms ~ 수 초</td><td>있음 (반복 횟수 결정)</td><td>없음</td></tr>
+<tr><td>Reverb</td><td>수십~수천 개의 매우 조밀한 지연</td><td>매우 많음(감쇠하며 겹침)</td><td>보통 없음(일부 알고리즘 예외)</td></tr>
+<tr><td>Chorus</td><td>10 ~ 30 ms</td><td>거의 없음 또는 소량</td><td>있음 (느린 LFO, 피치도 같이 흔들림)</td></tr>
+<tr><td>Flanger</td><td>0.1 ~ 10 ms</td><td>있음 (강할수록 금속성)</td><td>있음 (빠른 LFO, 스윕감)</td></tr>
+<tr><td>Phaser</td><td>지연이 아니라 올패스 필터 단계</td><td>있음(레조넌스)</td><td>있음 (노치가 스윕)</td></tr>
+</table>
+  <div class="note">플랜저와 코러스는 원리가 사실상 같습니다(짧은 모듈레이션 딜레이). 지연 시간이 짧고 피드백이 강할수록 플랜저의 "쉭쉭"거리는 금속성 콤필터링이 들리고, 지연이 조금 더 길고 피드백이 적으면 코러스의 "두꺼워지는" 느낌이 됩니다.</div>
+
+  <h2>Delay — 또렷한 반복</h2>
+  <p>원본과 구분되는 개별 반향(echo)이 들립니다. 지연 시간이 50 ms 이상이면 뇌가 "같은 소리가 또 들렸다"고 인식합니다(그보다 짧으면 콤필터링으로 들림 → 아래 플랜저 참고).</p>
+  <ul>
+    <li>피드백을 올릴수록 반복 횟수가 늘어난다.</li>
+    <li>템포에 맞춘 딜레이 타임은 <a href="/guides/bpm-to-delay-time.html">BPM 계산 가이드</a> 참고.</li>
+    <li>디제이·보컬 애드립, 기타 슬랩백, 라이브 딜레이 타워 정렬(공간 보강용, 반복이 아니라 정렬 목적)에 사용.</li>
+  </ul>
+
+  <h2>Reverb — 공간의 잔향</h2>
+  <p>수천 개의 반사음이 시간이 지날수록 촘촘해지고 겹쳐서 개별 반향이 아니라 "공간감"으로 들립니다. 초반의 성긴 반사(Early Reflection)가 공간 크기·재질감을, 이후 조밀해지는 꼬리(Tail)가 잔향감을 만듭니다. <a href="/guides/rt60-reverberation-time.html">RT60 가이드</a>에서 실제 공간의 잔향시간 계산법을 다룹니다.</p>
+  <ul>
+    <li>알고리즘 리버브(Hall·Room·Plate·Spring 등)는 실제 공간을 수학적으로 시뮬레이션.</li>
+    <li>컨볼루션 리버브는 실제 공간의 임펄스 응답을 녹음해 그대로 적용 — 가장 사실적이지만 CPU 부담.</li>
+    <li>프리딜레이로 드라이 신호와 리버브를 시간차로 분리하면 명료도가 산다.</li>
+  </ul>
+
+  <h2>Chorus — 여러 명이 같이 연주하는 느낌</h2>
+  <p>10~30 ms 지연에 LFO로 지연 시간을 천천히(0.5~5 Hz) 흔들면, 지연된 신호의 피치가 미세하게 오르내립니다(도플러 효과와 같은 원리). 원본과 섞으면 "여러 대가 동시에 연주하는" 두께감이 생깁니다.</p>
+  <ul>
+    <li>기타·신스 패드를 넓고 두껍게 만들 때.</li>
+    <li>보컬 더블링 대신 빠르게 두께를 줄 때(다만 진짜 더블링보다는 인위적).</li>
+    <li>스테레오로 걸면(L/R 위상 반대) 폭이 크게 넓어진다.</li>
+  </ul>
+
+  <h2>Flanger — 제트기 같은 스윕</h2>
+  <p>코러스보다 지연이 훨씬 짧아(0.1~10 ms) 원본과 합치면 특정 주파수들이 상쇄·보강되는 <strong>콤필터링</strong>이 생깁니다. LFO로 지연 시간을 흔들면 그 노치들이 위아래로 쓸고 지나가며 "쉭~" 하는 제트기·비행기 소리가 됩니다. 피드백을 강하게 주면 금속성이 강해집니다.</p>
+  <ul>
+    <li>드럼버스·기타에 강조 효과, 일렉트로닉 빌드업.</li>
+    <li>테이프 플랜저(원조 방식: 테이프 두 대를 손으로 눌러 속도차를 냄)의 시뮬레이션 버전이 대부분.</li>
+  </ul>
+
+  <h2>Phaser — 지연이 아니라 필터</h2>
+  <p>플랜저와 소리가 비슷해 헷갈리지만 원리가 다릅니다. 딜레이가 아니라 <strong>올패스 필터를 여러 단 연결</strong>해 특정 주파수의 위상만 틀고, 원본과 합쳐 노치를 만듭니다. LFO로 필터 단계를 흔들면 노치가 스윕합니다.</p>
+  <ul>
+    <li>노치가 배음 관계로 일정 간격 생기는 플랜저(콤필터)와 달리, 페이저의 노치는 필터 단수만큼만 생기고 배음 간격이 아니다 — 그래서 더 "부드럽고 소용돌이치는" 느낌.</li>
+    <li>펑크·훵크 기타(예: 봉가 계열), 신스 리드에 클래식하게 사용.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎧</div>
+    <div class="body">
+      <b>이펙트 청음 훈련 (무료 웹 도구)</b>
+      <p>딜레이·리버브·코러스·플랜저·페이저를 귀로 구분하는 훈련. 파라미터를 바꿔가며 차이를 직접 들어볼 수 있습니다.</p>
+      <a href="/effects-listening.html">▸ 이펙트 청음 훈련 열기</a>
+    </div>
+  </div>
+
+  <h2>구분이 안 될 때 체크리스트</h2>
+  <ul>
+    <li><strong>또렷한 메아리가 들리나?</strong> → Delay</li>
+    <li><strong>공간에 있는 느낌, 반향이 뭉개져 하나로 들리나?</strong> → Reverb</li>
+    <li><strong>두꺼워지고 살짝 출렁이지만 금속성은 없나?</strong> → Chorus</li>
+    <li><strong>쉭쉭거리며 스윕하는 제트기 소리?</strong> → Flanger</li>
+    <li><strong>소용돌이치듯 부드럽게 스윕하는데 금속성은 약한가?</strong> → Phaser</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎧</div>
+    <div class="body">
+      <b>AudioEngineer Ear Trainer (iOS)</b>
+      <p>이펙트 종류·파라미터 구분을 포함한 청음 훈련 앱. 반복 훈련으로 몇 초 안에 구분하는 귀를 만듭니다.</p>
+      <a href="https://apps.apple.com/app/audioengineer-ear-trainer/id6801893036" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기 <span>· 믹싱·측정</span></a>
+    <a href="/guides/rt60-reverberation-time.html">RT60·잔향시간 이해와 계산 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
