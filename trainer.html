@@ -182,6 +182,13 @@
   }
   .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
 
+  /* ---- 도구 설명 ---- */
+  .explain{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:22px 22px 20px; margin-top:4px; }
+  .explain h2{ font-family:'Space Grotesk','Inter',sans-serif; font-size:17px; margin:0 0 10px; }
+  .explain p{ font-size:14.5px; line-height:1.75; color:var(--text-secondary); margin:0 0 12px; }
+  .explain p:last-child{ margin-bottom:0; }
+  .explain a{ color:var(--teal); font-weight:600; }
+
   /* ==================================================================
      모바일 전용 레이아웃 (~700px 이하 폰 화면)
      - 데스크톱용 "가로로 꽉 채우기"(aspect-ratio) 대신, 화면 높이에 맞는
@@ -337,6 +344,13 @@
   </div>
 
   <button id="startBtn" class="startbtn go" data-i18n="btn_training_start">▸ 훈련 시작</button>
+
+  <div class="explain">
+    <h2>왜 핑크노이즈로 EQ를 훈련할까요</h2>
+    <p>핑크노이즈는 옥타브당 에너지가 같도록 고역을 깎아둔 신호라, 사람 귀에는 "고르게 평평한" 기준선으로 들립니다. 여기에 EQ로 특정 밴드를 부스트하거나 컷하면, 그 변화가 상대적으로 도드라져서 "지금 어느 대역이 바뀌었는지" 감을 잡는 훈련에 적합합니다. 실제 믹싱 콘솔의 EQ, 룸 튜닝, 스피커 캘리브레이션에도 같은 원리가 쓰입니다.</p>
+    <p>이 트레이너는 <b>ISO 266 표준 1/3옥타브 밴드</b>를 기준으로 무작위 밴드를 부스트/컷한 뒤, 몇 번째 밴드인지 맞히게 합니다. <b>Pink Noise EQ Boost/Cut</b> 모드는 실전 EQ 작업과 가장 가까운 훈련이고, <b>Sine Wave Overlay</b> 모드는 순음(사인파) 하나가 노이즈 속 어디에 섞여 있는지 짚어내는 좀 더 기초적인 청음 훈련입니다. 처음이라면 넓은 대역·큰 폭(±6dB)부터 시작해서, 익숙해지면 좁은 대역·작은 폭(±1.5dB)으로 좁혀가는 걸 추천해요.</p>
+    <p>원리를 더 자세히 알고 싶다면 <a href="/guides/pink-noise-eq-ear-training.html">핑크노이즈 EQ 귀 훈련 가이드</a>에서 헷갈리기 쉬운 주파수 쌍과 단계별 훈련법을 정리해뒀습니다.</p>
+  </div>
 
   <div class="tool-links">
     <a href="generator.html">🎛️ Generator</a>
