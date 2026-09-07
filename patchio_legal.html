@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Patch &amp; I/O — 사용법 · 지원 · 개인정보처리방침</title>
+<title>Patch &amp; I/O — 사용법 · 지원 | ML Music Studio</title>
 <meta name="description" content="Patch &amp; I/O 사용법, 자주 묻는 질문, 개인정보처리방침. 인풋 리스트·패치베이·신호 도면·무대 배치도를 한 앱에서.">
 <link rel="canonical" href="https://mlmusicstudio.co.kr/patchio_legal.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -137,6 +137,30 @@
 
   footer{ border-top:1px solid var(--line); padding:28px 0; color:var(--text-tertiary); font-size:13px; }
   footer .wrap{ display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; }
+
+  /* ---------- 언어 스위처 (사이트와 같은 모양) ---------- */
+  .lang-switch{ position:relative; }
+  .lang-switch-btn{
+    display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:var(--text-secondary); background:var(--panel); border:1px solid var(--line);
+    border-radius:100px; padding:8px 14px; cursor:pointer;
+  }
+  .lang-switch-btn:hover{ color:var(--text-primary); background:var(--bg-alt); }
+  .lang-switch-menu{
+    position:absolute; top:calc(100% + 8px); right:0; min-width:160px;
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:12px;
+    box-shadow:0 12px 30px rgba(30,26,20,0.14); padding:6px; z-index:60;
+    opacity:0; transform:scale(0.95) translateY(-4px); pointer-events:none; visibility:hidden;
+    transition:opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 160ms;
+  }
+  .lang-switch-menu.open{ opacity:1; transform:scale(1) translateY(0); pointer-events:auto; visibility:visible; }
+  .lang-switch-menu button{
+    display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    font-size:13.5px; color:var(--text-secondary); padding:9px 12px; border-radius:8px;
+    font-family:inherit;
+  }
+  .lang-switch-menu button:hover{ background:var(--bg-alt); color:var(--text-primary); }
+  .lang-switch-menu button.active{ color:var(--text-primary); font-weight:600; }
 </style>
 </head>
 <body>
@@ -149,23 +173,33 @@
     </a>
     <div class="links">
       <a href="/#apps">Apps</a>
-      <a href="/guides/" class="hide-sm">Guides</a>
-      <a href="/#policy" class="hide-sm">전체 방침</a>
+      <a href="/#policy" class="hide-sm" data-i18n="nav_policy">전체 방침</a>
       <a href="https://apps.apple.com/app/id6809173652" target="_blank" rel="noopener">App Store</a>
+    </div>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-switch-btn" id="langSwitchBtn" type="button" aria-haspopup="true" aria-expanded="false">🌐 <span id="langSwitchLabel">한국어</span> ▾</button>
+      <div class="lang-switch-menu" id="langSwitchMenu">
+        <button type="button" data-lang-btn="ko">🇰🇷 한국어</button>
+        <button type="button" data-lang-btn="en">🇺🇸 English</button>
+        <button type="button" data-lang-btn="ja">🇯🇵 日本語</button>
+        <button type="button" data-lang-btn="zh">🇨🇳 简体中文</button>
+        <button type="button" data-lang-btn="es">🇪🇸 Español</button>
+        <button type="button" data-lang-btn="de">🇩🇪 Deutsch</button>
+        <button type="button" data-lang-btn="pt">🇵🇹 Português</button>
+      </div>
     </div>
   </div>
 </nav>
-
 <header class="hero">
   <div class="wrap">
     <div class="kicker">Patch &amp; I/O</div>
-    <h1>쓰는 법 · 지원 · 개인정보처리방침</h1>
-    <p>인풋 리스트·패치베이·신호 도면·무대 배치도를 한 앱에서 만듭니다. 아래는 처음 여는 사람이 30분 안에 한 공연을 끝까지 짜 보는 순서입니다. 화면은 실제 앱을 그대로 찍은 것입니다.</p>
+    <h1 data-i18n="hero_title">사용법 · 지원</h1>
+    <p data-i18n="hero_desc" data-i18n-html="true">인풋 리스트·패치베이·신호 도면·무대 배치도를 한 앱에서 만듭니다. 아래는 처음 여는 사람이 30분 안에 한 공연을 끝까지 짜 보는 순서입니다. 화면은 실제 앱을 그대로 찍은 것입니다.</p>
     <div class="jump">
-      <a href="#start">쓰는 법</a>
-      <a href="#faq">자주 묻는 질문</a>
-      <a href="#privacy">개인정보처리방침</a>
-      <a href="#contact">문의</a>
+      <a href="#start" data-i18n="jump_start">사용법</a>
+      <a href="#faq" data-i18n="jump_faq">자주 묻는 질문</a>
+      <a href="#privacy" data-i18n="jump_privacy">개인정보처리방침</a>
+      <a href="#contact" data-i18n="jump_contact">문의</a>
     </div>
   </div>
 </header>
@@ -174,146 +208,131 @@
   <div class="wrap">
 
     <section id="start">
-      <h2>쓰는 법</h2>
-      <p class="lede">앱을 처음 켜면 <b>예시 한 벌</b>(24채널 공연)이 이미 들어 있습니다. 지우고 시작해도 되고, 눌러 보며 익힌 뒤 지워도 됩니다 — 예시는 무료 사용 개수에 들어가지 않습니다.</p>
+      <h2 data-i18n="start_h2">사용법</h2>
+      <p class="lede" data-i18n="start_lede" data-i18n-html="true">앱을 처음 켜면 <b>예시 한 벌</b>(24채널 공연)이 이미 들어 있습니다. 지우고 시작해도 되고, 눌러 보며 익힌 뒤 지워도 됩니다 — 예시는 무료 사용 개수에 들어가지 않습니다.</p>
 
       <div class="step">
-        <h3><span class="num">1</span> 프로젝트 하나 = 공연 하나</h3>
-        <p>＋ 를 눌러 이름·날짜·장소를 적고 <b>라이브</b>인지 <b>레코딩</b>인지 고릅니다. 이 선택이 표의 기본 칸을 정합니다 — 라이브는 CH·SOURCE·PICK UP·STAND·48V·REMARKS, 레코딩은 PANEL·PREAMP·INSERT·DAW TRACK 이 함께 나옵니다.</p>
-        <p>채널 수는 8·16·24·32·48 중에서 고르거나 <b>직접 입력</b>에 숫자를 칩니다. 콘솔을 고르면 아웃풋 줄 이름까지 한 번에 채워집니다.</p>
-        <div class="tip"><b>날짜와 장소를 꼭 적으세요.</b> 크루에게 넘기는 PDF 머리에 그대로 인쇄됩니다.</div>
+        <h3><span class="num">1</span><span data-i18n="step1_h">프로젝트 하나 = 공연 하나</span></h3>
+        <p data-i18n="step1_p1" data-i18n-html="true">＋ 를 눌러 이름·날짜·장소를 적고 <b>라이브</b>인지 <b>레코딩</b>인지 고릅니다. 이 선택이 표의 기본 칸을 정합니다 — 라이브는 CH·SOURCE·PICK UP·STAND·48V·REMARKS, 레코딩은 PANEL·PREAMP·INSERT·DAW TRACK 이 함께 나옵니다.</p>
+        <p data-i18n="step1_p2" data-i18n-html="true">채널 수는 8·16·24·32·48 중에서 고르거나 <b>직접 입력</b>에 숫자를 칩니다. 콘솔을 고르면 아웃풋 줄 이름까지 한 번에 채워집니다.</p>
+        <div class="tip" data-i18n="step1_tip" data-i18n-html="true"><b>날짜와 장소를 꼭 적으세요.</b> 크루에게 넘기는 PDF 머리에 그대로 인쇄됩니다.</div>
       </div>
-
       <div class="step">
-        <h3><span class="num">2</span> 인풋 리스트를 적는다</h3>
-        <p>표에 소스·마이크·스탠드를 채웁니다. 스탠드는 눌러서 고르면(SHORT·TALL·CLIP…) 표기가 하나로 모여, 창고에서 챙길 수량이 정확히 세어집니다.</p>
+        <h3><span class="num">2</span><span data-i18n="step2_h">인풋 리스트를 적는다</span></h3>
+        <p data-i18n="step2_p" data-i18n-html="true">표에 소스·마이크·스탠드를 채웁니다. 스탠드는 눌러서 고르면(SHORT·TALL·CLIP…) 표기가 하나로 모여, 창고에서 챙길 수량이 정확히 세어집니다.</p>
         <ul>
-          <li><kbd>Tab</kbd> 옆 칸으로, <kbd>Shift</kbd>+<kbd>Tab</kbd> 뒤로</li>
-          <li><kbd>Enter</kbd> 같은 칸의 아래 줄로 — 한 열을 쭉 채울 때 빠릅니다</li>
-          <li>48V 는 스위치입니다. 팬텀이 필요한 마이크에 켜 두면 앱이 잘못된 자리를 짚어 줍니다</li>
-          <li>아이폰에서는 줄을 눌러 한 줄씩 편집합니다</li>
+          <li data-i18n="step2_li1" data-i18n-html="true"><kbd>Tab</kbd> 옆 칸으로, <kbd>Shift</kbd>+<kbd>Tab</kbd> 뒤로</li>
+          <li data-i18n="step2_li2" data-i18n-html="true"><kbd>Enter</kbd> 같은 칸의 아래 줄로 — 한 열을 쭉 채울 때 빠릅니다</li>
+          <li data-i18n="step2_li3" data-i18n-html="true">48V 는 스위치입니다. 팬텀이 필요한 마이크에 켜 두면 앱이 잘못된 자리를 짚어 줍니다</li>
+          <li data-i18n="step2_li4" data-i18n-html="true">아이폰에서는 줄을 눌러 한 줄씩 편집합니다</li>
         </ul>
+        <div class="tip" data-i18n="step2_tip" data-i18n-html="true">칸이 모자라거나 남으면 <b>더 보기(⋯) → 표 칸 고르기</b>에서 STAGE BOX·CONSOLE CH·CUSTOM 같은 칸을 켜고 끕니다. 켠 칸은 PDF·CSV 에도 그대로 나갑니다.</div>
         <img src="/img/patchio/io-list.jpg" alt="24채널 인풋 리스트 표" loading="lazy">
-        <div class="tip">칸이 모자라거나 남으면 <b>더 보기(⋯) → 표 칸 고르기</b>에서 STAGE BOX·CONSOLE CH·CUSTOM 같은 칸을 켜고 끕니다. 켠 칸은 PDF·CSV 에도 그대로 나갑니다.</div>
       </div>
-
       <div class="step">
-        <h3><span class="num">3</span> 무대 배치도에 채널 번호를 얹는다</h3>
-        <p><b>무대</b> 탭에서 심볼(드럼·앰프·마이크 스탠드·웨지)을 끌어다 놓고, 표의 채널을 연결하면 <span class="mono">CH 17</span> 처럼 번호가 함께 표시됩니다. 번호를 다시 매겨도 연결은 따라옵니다.</p>
+        <h3><span class="num">3</span><span data-i18n="step3_h">무대 배치도에 채널 번호를 얹는다</span></h3>
+        <p data-i18n="step3_p" data-i18n-html="true"><b>무대</b> 탭에서 심볼(드럼·앰프·마이크 스탠드·웨지)을 끌어다 놓고, 표의 채널을 연결하면 <span class="mono">CH 17</span> 처럼 번호가 함께 표시됩니다. 번호를 다시 매겨도 연결은 따라옵니다.</p>
         <img src="/img/patchio/stage.jpg" alt="채널 번호가 붙은 무대 배치도" loading="lazy">
       </div>
-
       <div class="step">
-        <h3><span class="num">4</span> 신호 도면은 저절로 그려진다</h3>
-        <p>표를 적으면 <b>도면</b> 탭에 소스 → 마이크·DI 계통이 그려집니다. 따로 그릴 필요가 없고, 표를 고치면 도면도 함께 바뀝니다. 같은 마이크를 몇 개 쓰는지(<span class="mono">×4</span>)도 함께 보입니다.</p>
+        <h3><span class="num">4</span><span data-i18n="step4_h">신호 도면은 저절로 그려진다</span></h3>
+        <p data-i18n="step4_p" data-i18n-html="true">표를 적으면 <b>도면</b> 탭에 소스 → 마이크·DI 계통이 그려집니다. 따로 그릴 필요가 없고, 표를 고치면 도면도 함께 바뀝니다. 같은 마이크를 몇 개 쓰는지(<span class="mono">×4</span>)도 함께 보입니다.</p>
         <img src="/img/patchio/diagram.jpg" alt="자동으로 그려진 신호 도면" loading="lazy">
       </div>
-
       <div class="step">
-        <h3><span class="num">5</span> 패치베이를 짜고 라벨을 실물 크기로 뽑는다</h3>
-        <p><b>패치베이</b> 탭에서 열 수(24·48·96)를 정하고 구역마다 이름·색·노멀 방식(노멀·하프노멀·스루)을 지정합니다. 라벨 띠는 <b>실물 크기</b>로 인쇄되어 오려서 그대로 붙일 수 있습니다.</p>
+        <h3><span class="num">5</span><span data-i18n="step5_h">패치베이를 짜고 라벨을 실물 크기로 뽑는다</span></h3>
+        <p data-i18n="step5_p" data-i18n-html="true"><b>패치베이</b> 탭에서 열 수(24·48·96)를 정하고 구역마다 이름·색·노멀 방식(노멀·하프노멀·스루)을 지정합니다. 라벨 띠는 <b>실물 크기</b>로 인쇄되어 오려서 그대로 붙일 수 있습니다.</p>
+        <div class="tip" data-i18n="step5_tip" data-i18n-html="true"><b>인쇄 전에 한 번 재세요.</b> 잭 피치(밴텀 48점 1U 기준 9.5mm)와 띠 높이(6mm)는 참고값입니다. 쓰시는 기종을 자로 재서 값을 넣으면 정확히 맞습니다.</div>
         <img src="/img/patchio/patchbay.jpg" alt="48포인트 패치베이 편집 화면" loading="lazy">
-        <div class="tip"><b>인쇄 전에 한 번 재세요.</b> 잭 피치(밴텀 48점 1U 기준 9.5mm)와 띠 높이(6mm)는 참고값입니다. 쓰시는 기종을 자로 재서 값을 넣으면 정확히 맞습니다.</div>
       </div>
-
       <div class="step">
-        <h3><span class="num">6</span> 크루에게 넘길 종이를 뽑는다</h3>
-        <p><b>PDF 내보내기</b>를 누르면 인풋·아웃풋 표, 마이크 리스트, 스탠드 리스트가 한 문서로 나옵니다. 저장·공유 전에 <b>실제 페이지를 미리 봅니다</b> — 종이는 되돌릴 수 없으니까요. 채널이 많으면 인풋을 두 단으로 놓고 아웃풋을 뒤로 넘깁니다.</p>
-        <p>엑셀로 이어서 작업하려면 <b>INPUT CSV 내보내기</b>, 반대로 이미 있는 시트를 가져오려면 <b>CSV 가져오기</b>를 씁니다.</p>
+        <h3><span class="num">6</span><span data-i18n="step6_h">크루에게 넘길 종이를 뽑는다</span></h3>
+        <p data-i18n="step6_p1" data-i18n-html="true"><b>PDF 내보내기</b>를 누르면 인풋·아웃풋 표, 마이크 리스트, 스탠드 리스트가 한 문서로 나옵니다. 저장·공유 전에 <b>실제 페이지를 미리 봅니다</b> — 종이는 되돌릴 수 없으니까요. 채널이 많으면 인풋을 두 단으로 놓고 아웃풋을 뒤로 넘깁니다.</p>
+        <p data-i18n="step6_p2" data-i18n-html="true">엑셀로 이어서 작업하려면 <b>INPUT CSV 내보내기</b>, 반대로 이미 있는 시트를 가져오려면 <b>CSV 가져오기</b>를 씁니다.</p>
         <img src="/img/patchio/pdf.jpg" alt="내보내기 전 PDF 미리보기" loading="lazy">
       </div>
-
       <div class="step">
-        <h3><span class="num">7</span> 모르는 커넥터는 앱 안에서 본다</h3>
-        <p><b>학습</b> 탭에 커넥터 도감과 케이블 결선도가 있습니다. XLR·TRS·TS·밴텀(TT)·RCA·Speakon·DB25 의 핀 번호와, 각 핀이 무슨 신호인지 적혀 있습니다. <b>이 부분은 전부 무료</b>입니다.</p>
+        <h3><span class="num">7</span><span data-i18n="step7_h">모르는 커넥터는 앱 안에서 본다</span></h3>
+        <p data-i18n="step7_p" data-i18n-html="true"><b>학습</b> 탭에 커넥터 도감과 케이블 결선도가 있습니다. XLR·TRS·TS·밴텀(TT)·RCA·Speakon·DB25 의 핀 번호와, 각 핀이 무슨 신호인지 적혀 있습니다. <b>이 부분은 전부 무료</b>입니다.</p>
         <img src="/img/patchio/connector.jpg" alt="커넥터 도감 — XLR 3핀 수" loading="lazy">
       </div>
     </section>
 
     <section id="faq">
-      <h2>자주 묻는 질문</h2>
-      <p class="lede">여기서 답을 못 찾으시면 아래 메일로 알려주세요. 어떤 화면에서 무엇을 누르셨는지 적어 주시면 훨씬 빨리 잡습니다.</p>
+      <h2 data-i18n="faq_h2">자주 묻는 질문</h2>
+      <p class="lede" data-i18n="faq_lede" data-i18n-html="true">여기서 답을 못 찾으시면 아래 메일로 알려주세요. 어떤 화면에서 무엇을 누르셨는지 적어 주시면 훨씬 빨리 잡습니다.</p>
 
       <div class="faq">
         <details>
-          <summary>무료로 어디까지 쓸 수 있나요?</summary>
-          <p>종류마다 프로젝트 두 개(라이브 둘·레코딩 둘)와, 프로젝트 밖 문서(패치베이·도면·무대 배치도)를 종류마다 두 개까지 만들 수 있습니다. 커넥터 도감과 케이블 결선도는 제한 없이 무료입니다. 처음 깔려 있는 예시는 이 개수에 들어가지 않습니다.</p>
+          <summary data-i18n="faq1_q">무료로 어디까지 쓸 수 있나요?</summary>
+          <p data-i18n="faq1_a" data-i18n-html="true">종류마다 프로젝트 두 개(라이브 둘·레코딩 둘)와, 프로젝트 밖 문서(패치베이·도면·무대 배치도)를 종류마다 두 개까지 만들 수 있습니다. 커넥터 도감과 케이블 결선도는 제한 없이 무료입니다. 처음 깔려 있는 예시는 이 개수에 들어가지 않습니다.</p>
         </details>
         <details>
-          <summary>평생이용권은 기기마다 따로 사야 하나요?</summary>
-          <p>아닙니다. 아이폰·아이패드·맥이 <b>하나의 앱</b>으로 묶여 있어 한 번 구입하면 같은 Apple 계정의 기기에서 모두 열립니다. 구독이 아니라 한 번 내는 평생이용권입니다. 기기를 바꾸셨다면 결제 화면의 <b>구입 복원</b>을 누르세요.</p>
+          <summary data-i18n="faq2_q">평생이용권은 기기마다 따로 사야 하나요?</summary>
+          <p data-i18n="faq2_a" data-i18n-html="true">아닙니다. 아이폰·아이패드·맥이 <b>하나의 앱</b>으로 묶여 있어 한 번 구입하면 같은 Apple 계정의 기기에서 모두 열립니다. 구독이 아니라 한 번 내는 평생이용권입니다. 기기를 바꾸셨다면 결제 화면의 <b>구입 복원</b>을 누르세요.</p>
         </details>
         <details>
-          <summary>아이폰에서 만든 것이 아이패드·맥에 안 보입니다.</summary>
-          <p>같은 Apple 계정으로 로그인되어 있고 기기의 iCloud Drive 가 켜져 있어야 합니다. 설정 → [내 이름] → iCloud 에서 확인해 주세요. 처음 동기화는 네트워크 상태에 따라 몇 분 걸릴 수 있고, 앱을 껐다 켜면 더 빨리 내려옵니다.</p>
+          <summary data-i18n="faq3_q">아이폰에서 만든 것이 아이패드·맥에 안 보입니다.</summary>
+          <p data-i18n="faq3_a" data-i18n-html="true">같은 Apple 계정으로 로그인되어 있고 기기의 iCloud Drive 가 켜져 있어야 합니다. 설정 → [내 이름] → iCloud 에서 확인해 주세요. 처음 동기화는 네트워크 상태에 따라 몇 분 걸릴 수 있고, 앱을 껐다 켜면 더 빨리 내려옵니다.</p>
         </details>
         <details>
-          <summary>패치베이 라벨이 실물 크기로 안 맞습니다.</summary>
-          <p>인쇄 대화상자에서 <b>배율 100%</b>('페이지에 맞춤' 해제)로 뽑아야 합니다. 그래도 어긋나면 쓰시는 패치베이의 잭 간격을 자로 재서 라벨 띠 설정의 <b>잭 피치</b>와 <b>띠 높이</b>에 넣어 주세요. 기본값(9.5mm / 6mm)은 참고값입니다.</p>
+          <summary data-i18n="faq4_q">패치베이 라벨이 실물 크기로 안 맞습니다.</summary>
+          <p data-i18n="faq4_a" data-i18n-html="true">인쇄 대화상자에서 <b>배율 100%</b>('페이지에 맞춤' 해제)로 뽑아야 합니다. 그래도 어긋나면 쓰시는 패치베이의 잭 간격을 자로 재서 라벨 띠 설정의 <b>잭 피치</b>와 <b>띠 높이</b>에 넣어 주세요. 기본값(9.5mm / 6mm)은 참고값입니다.</p>
         </details>
         <details>
-          <summary>엑셀 시트를 가져오면 줄이 빠집니다.</summary>
-          <p>CSV 의 머리글과 칸 수가 표와 맞아야 합니다. 합계·메모처럼 CH 칸이 비었거나 숫자가 아닌 줄은 건너뜁니다. 가져온 뒤 앱이 "몇 줄을 왜 건너뛰었는지" 알려주니 그 문장을 보고 엑셀에서 그 줄만 고치면 됩니다.</p>
+          <summary data-i18n="faq5_q">엑셀 시트를 가져오면 줄이 빠집니다.</summary>
+          <p data-i18n="faq5_a" data-i18n-html="true">CSV 의 머리글과 칸 수가 표와 맞아야 합니다. 합계·메모처럼 CH 칸이 비었거나 숫자가 아닌 줄은 건너뜁니다. 가져온 뒤 앱이 "몇 줄을 왜 건너뛰었는지" 알려주니 그 문장을 보고 엑셀에서 그 줄만 고치면 됩니다.</p>
         </details>
         <details>
-          <summary>처음 있던 예시를 지웠는데 다시 보고 싶습니다.</summary>
-          <p>그 탭의 목록을 비우면(내가 만든 것도 없는 상태) <b>예시 다시 넣기</b> 단추가 나옵니다. 예시를 지워도 다른 기기에서 되살아나지 않으니 안심하고 지우셔도 됩니다.</p>
+          <summary data-i18n="faq6_q">처음 있던 예시를 지웠는데 다시 보고 싶습니다.</summary>
+          <p data-i18n="faq6_a" data-i18n-html="true">그 탭의 목록을 비우면(내가 만든 것도 없는 상태) <b>예시 다시 넣기</b> 단추가 나옵니다. 예시를 지워도 다른 기기에서 되살아나지 않으니 안심하고 지우셔도 됩니다.</p>
         </details>
         <details>
-          <summary>여러 개를 한 번에 지우고 싶습니다.</summary>
-          <p>목록에서 <b>편집</b>을 누르면 줄마다 동그라미가 생깁니다. 줄 아무 곳이나 눌러 고른 뒤 휴지통을 누르면 한 번에 지웁니다. 맥에서는 <kbd>⌘E</kbd> 편집 · <kbd>⌘A</kbd> 모두 선택 · <kbd>⌫</kbd> 지우기 입니다.</p>
+          <summary data-i18n="faq7_q">여러 개를 한 번에 지우고 싶습니다.</summary>
+          <p data-i18n="faq7_a" data-i18n-html="true">목록에서 <b>편집</b>을 누르면 줄마다 동그라미가 생깁니다. 줄 아무 곳이나 눌러 고른 뒤 휴지통을 누르면 한 번에 지웁니다. 맥에서는 <kbd>⌘E</kbd> 편집 · <kbd>⌘A</kbd> 모두 선택 · <kbd>⌫</kbd> 지우기 입니다.</p>
         </details>
         <details>
-          <summary>앱이 한국어가 아닌 다른 말로 뜨게 하려면?</summary>
-          <p>기기 언어를 따라갑니다. 한국어·영어·일본어·중국어(간체)·스페인어를 지원하며, iOS 는 설정 → 앱 → 언어에서 이 앱만 따로 정할 수도 있습니다. 다만 <b>CSV 의 머리글은 어느 언어에서나 고정</b>입니다 — 다른 기기에서 만든 파일을 서로 읽어야 하기 때문입니다.</p>
+          <summary data-i18n="faq8_q">앱이 한국어가 아닌 다른 말로 뜨게 하려면?</summary>
+          <p data-i18n="faq8_a" data-i18n-html="true">기기 언어를 따라갑니다. 한국어·영어·일본어·중국어(간체)·스페인어를 지원하며, iOS 는 설정 → 앱 → 언어에서 이 앱만 따로 정할 수도 있습니다. 다만 <b>CSV 의 머리글은 어느 언어에서나 고정</b>입니다 — 다른 기기에서 만든 파일을 서로 읽어야 하기 때문입니다.</p>
         </details>
       </div>
     </section>
 
     <section id="privacy" class="policy">
-      <h2>개인정보처리방침</h2>
-      <p class="lede mono" style="font-size:13px;">최종 수정일: 2026년 9월 7일</p>
+      <h2 data-i18n="privacy_h2">개인정보처리방침</h2>
+      <p class="lede mono" style="font-size:13px;" data-i18n="privacy_updated">최종 수정일: 2026년 9월 7일</p>
 
-      <h3>적용 범위</h3>
-      <p>이 방침은 iOS·iPadOS·macOS 앱 <strong>Patch &amp; I/O</strong>에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href="/#policy">사이트의 전체 개인정보처리방침</a>에 있습니다.</p>
-
-      <h3>수집하는 정보</h3>
-      <p>앱은 이름·이메일 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 분석(Analytics) 도구나 광고 SDK 도 사용하지 않습니다. 저희 서버로 보내는 데이터가 없습니다.</p>
-
-      <h3>내가 만든 자료는 어디에 있나</h3>
-      <p>프로젝트·패치베이·도면·배치도는 <strong>기기 안에 저장</strong>됩니다. 기기에서 iCloud 가 켜져 있으면 Apple 의 <strong>iCloud 개인 데이터베이스</strong>를 통해 <strong>사용자 본인의 기기끼리만</strong> 동기화됩니다.</p>
+      <h3 data-i18n="p_scope_h">적용 범위</h3>
+      <p data-i18n="p_scope_p" data-i18n-html="true">이 방침은 iOS·iPadOS·macOS 앱 <strong>Patch &amp; I/O</strong>에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href="/#policy">사이트의 전체 개인정보처리방침</a>에 있습니다.</p>
+      <h3 data-i18n="p_collect_h">수집하는 정보</h3>
+      <p data-i18n="p_collect_p" data-i18n-html="true">앱은 이름·이메일 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 분석(Analytics) 도구나 광고 SDK 도 사용하지 않습니다. 저희 서버로 보내는 데이터가 없습니다.</p>
+      <h3 data-i18n="p_data_h">내가 만든 자료는 어디에 있나</h3>
+      <p data-i18n="p_data_p" data-i18n-html="true">프로젝트·패치베이·도면·배치도는 <strong>기기 안에 저장</strong>됩니다. 기기에서 iCloud 가 켜져 있으면 Apple 의 <strong>iCloud 개인 데이터베이스</strong>를 통해 <strong>사용자 본인의 기기끼리만</strong> 동기화됩니다.</p>
       <ul>
-        <li>이 데이터는 사용자의 Apple 계정에 속하며 <strong>저희는 열람할 수 없습니다.</strong></li>
-        <li>iCloud 를 끄면 동기화도 멈추고, 자료는 기기 안에만 남습니다.</li>
-        <li>앱을 지우면 기기의 자료도 함께 지워집니다. iCloud 에 있는 사본은 설정 → Apple 계정 → iCloud 에서 관리합니다.</li>
+        <li data-i18n="p_data_li1" data-i18n-html="true">이 데이터는 사용자의 Apple 계정에 속하며 <strong>저희는 열람할 수 없습니다.</strong></li>
+        <li data-i18n="p_data_li2" data-i18n-html="true">iCloud 를 끄면 동기화도 멈추고, 자료는 기기 안에만 남습니다.</li>
+        <li data-i18n="p_data_li3" data-i18n-html="true">앱을 지우면 기기의 자료도 함께 지워집니다. iCloud 에 있는 사본은 설정 → Apple 계정 → iCloud 에서 관리합니다.</li>
       </ul>
-
-      <h3>기기 권한</h3>
-      <p>마이크·위치·카메라·연락처 <strong>권한을 요청하지 않습니다.</strong> 무대 배치도에 사진을 깔 때만 사용자가 직접 고른 이미지를 읽고, 그 사진은 줄여서 문서 안에 저장됩니다.</p>
-
-      <h3>내보낸 파일</h3>
-      <p>PDF·CSV 만들기와 라벨 인쇄는 전부 기기 안에서 처리됩니다. 만들어진 파일은 <strong>사용자가 저장·공유를 직접 고를 때만</strong> 기기 밖으로 나갑니다.</p>
-
-      <h3>결제</h3>
-      <p>평생이용권(인앱 구입)의 결제는 Apple 의 StoreKit 을 통해서만 이루어집니다. 저희는 결제 수단이나 카드 정보를 <strong>전혀 수집하지 않습니다.</strong> 구입 여부만 기기에서 확인합니다.</p>
-
-      <h3>제3자 공유</h3>
-      <p>제3자와 공유하는 개인정보가 없습니다. 앱 안에 광고나 제휴 링크가 없습니다.</p>
-
-      <h3>어린이</h3>
-      <p>이 앱은 음향 실무자를 위한 도구이며, 어린이를 대상으로 하지 않고 어린이의 정보를 수집하지 않습니다.</p>
-
-      <h3>변경 사항</h3>
-      <p>방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.</p>
-
-      <h3>정확도에 대한 고지</h3>
-      <p>라벨 띠의 잭 피치·띠 높이 기본값은 실측이 아니라 <strong>참고값</strong>입니다. 인쇄 전에 쓰시는 기종을 자로 재서 값을 넣어 확인해 주세요.</p>
+      <h3 data-i18n="p_perm_h">기기 권한</h3>
+      <p data-i18n="p_perm_p" data-i18n-html="true">마이크·위치·카메라·연락처 <strong>권한을 요청하지 않습니다.</strong> 무대 배치도에 사진을 깔 때만 사용자가 직접 고른 이미지를 읽고, 그 사진은 줄여서 문서 안에 저장됩니다.</p>
+      <h3 data-i18n="p_export_h">내보낸 파일</h3>
+      <p data-i18n="p_export_p" data-i18n-html="true">PDF·CSV 만들기와 라벨 인쇄는 전부 기기 안에서 처리됩니다. 만들어진 파일은 <strong>사용자가 저장·공유를 직접 고를 때만</strong> 기기 밖으로 나갑니다.</p>
+      <h3 data-i18n="p_pay_h">결제</h3>
+      <p data-i18n="p_pay_p" data-i18n-html="true">평생이용권(인앱 구입)의 결제는 Apple 의 StoreKit 을 통해서만 이루어집니다. 저희는 결제 수단이나 카드 정보를 <strong>전혀 수집하지 않습니다.</strong> 구입 여부만 기기에서 확인합니다.</p>
+      <h3 data-i18n="p_third_h">제3자 공유</h3>
+      <p data-i18n="p_third_p" data-i18n-html="true">제3자와 공유하는 개인정보가 없습니다. 앱 안에 광고나 제휴 링크가 없습니다.</p>
+      <h3 data-i18n="p_kids_h">어린이</h3>
+      <p data-i18n="p_kids_p" data-i18n-html="true">이 앱은 음향 실무자를 위한 도구이며, 어린이를 대상으로 하지 않고 어린이의 정보를 수집하지 않습니다.</p>
+      <h3 data-i18n="p_change_h">변경 사항</h3>
+      <p data-i18n="p_change_p" data-i18n-html="true">방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.</p>
+      <h3 data-i18n="p_acc_h">정확도에 대한 고지</h3>
+      <p data-i18n="p_acc_p" data-i18n-html="true">라벨 띠의 잭 피치·띠 높이 기본값은 실측이 아니라 <strong>참고값</strong>입니다. 인쇄 전에 쓰시는 기종을 자로 재서 값을 넣어 확인해 주세요.</p>
     </section>
 
     <section id="contact">
-      <h2>문의</h2>
+      <h2 data-i18n="contact_h2">문의</h2>
       <div class="contact">
-        <p>버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 화면이었는지 적어 주시면 빠르게 답합니다.</p>
+        <p data-i18n="contact_p" data-i18n-html="true">버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 화면이었는지 적어 주시면 빠르게 답합니다.</p>
         <a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a>
       </div>
     </section>
@@ -324,9 +343,72 @@
 <footer>
   <div class="wrap">
     <span>© 2026 ML Music Studio</span>
-    <span><a href="/">mlmusicstudio.co.kr</a> · <a href="/#policy">전체 개인정보처리방침</a> · <a href="/nora_legal.html">NORA 지원</a></span>
+    <span><a href="/">mlmusicstudio.co.kr</a> · <a href="/#policy" data-i18n="footer_policy">전체 개인정보처리방침</a> · <a href="/nora_legal.html" data-i18n="footer_nora">NORA 사용법</a></span>
   </div>
 </footer>
 
+
+<script>
+  const I18N = {"nav_policy": {"ko": "전체 방침", "en": "All policies", "ja": "全体の方針", "de": "Alle Richtlinien", "pt": "Todas as políticas", "es": "Todas las políticas", "zh": "全部条款"}, "hero_title": {"ko": "사용법 · 지원", "en": "How to use it · support", "ja": "使い方 · サポート", "de": "Anleitung · Support", "pt": "Como usar · suporte", "es": "Cómo se usa · soporte", "zh": "使用方法 · 支持"}, "hero_desc": {"ko": "인풋 리스트·패치베이·신호 도면·무대 배치도를 한 앱에서 만듭니다. 아래는 처음 여는 사람이 30분 안에 한 공연을 끝까지 짜 보는 순서입니다. 화면은 실제 앱을 그대로 찍은 것입니다.", "en": "Input lists, patchbays, signal flow diagrams and stage plots in one app. Below is the order that takes a first-time user through a whole show in about 30 minutes. The screenshots are the real app.", "ja": "インプットリスト・パッチベイ・信号系統図・ステージプロットを1つのアプリで。以下は、初めての人が30分ほどで1公演を最後まで組んでみる順序です。画面は実際のアプリをそのまま撮ったものです。", "de": "Inputlisten, Patchbays, Signalflusspläne und Bühnenpläne in einer App. Unten steht die Reihenfolge, mit der man als Neuling in etwa 30 Minuten eine ganze Show durchplant. Die Screenshots zeigen die echte App.", "pt": "Listas de entrada, patchbays, diagramas de sinal e mapas de palco em um só app. Abaixo está a ordem que leva um iniciante a montar um show inteiro em cerca de 30 minutos. As telas são do app real.", "es": "Listas de entradas, patchbays, diagramas de señal y planos de escenario en una sola app. Abajo está el orden con el que alguien que empieza monta un bolo entero en unos 30 minutos. Las capturas son de la app real.", "zh": "输入清单、跳线盘、信号流程图与舞台平面图，集于一款应用。下面这个顺序能让第一次使用的人在 30 分钟内把一场演出从头排到尾。截图取自真实的应用。"}, "jump_start": {"ko": "사용법", "en": "How to use it", "ja": "使い方", "de": "Anleitung", "pt": "Como usar", "es": "Cómo se usa", "zh": "使用方法"}, "jump_faq": {"ko": "자주 묻는 질문", "en": "FAQ", "ja": "よくある質問", "de": "FAQ", "pt": "Perguntas frequentes", "es": "Preguntas frecuentes", "zh": "常见问题"}, "jump_privacy": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー", "de": "Datenschutz", "pt": "Política de privacidade", "es": "Política de privacidad", "zh": "隐私政策"}, "jump_contact": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ", "de": "Kontakt", "pt": "Contato", "es": "Contacto", "zh": "联系我们"}, "start_h2": {"ko": "사용법", "en": "How to use it", "ja": "使い方", "de": "Anleitung", "pt": "Como usar", "es": "Cómo se usa", "zh": "使用方法"}, "start_lede": {"ko": "앱을 처음 켜면 <b>예시 한 벌</b>(24채널 공연)이 이미 들어 있습니다. 지우고 시작해도 되고, 눌러 보며 익힌 뒤 지워도 됩니다 — 예시는 무료 사용 개수에 들어가지 않습니다.", "en": "The first time you open the app, an <b>example set</b> is already there — a 24-channel show. Delete it and start clean, or poke around first and delete it later. The example does not count against the free limit.", "ja": "アプリを初めて開くと、<b>サンプル一式</b>（24チャンネルの公演）が最初から入っています。消してから始めても、触って覚えてから消しても構いません — サンプルは無料枠に数えません。", "de": "Beim ersten Start liegt bereits ein <b>Beispiel</b> bereit — eine Show mit 24 Kanälen. Du kannst es sofort löschen oder erst damit herumprobieren. Das Beispiel zählt nicht auf das kostenlose Kontingent.", "pt": "Na primeira abertura já existe um <b>conjunto de exemplo</b> — um show de 24 canais. Você pode apagá-lo e começar do zero, ou explorar primeiro. O exemplo não conta no limite gratuito.", "es": "Al abrir la app por primera vez ya hay un <b>ejemplo</b> — un bolo de 24 canales. Puedes borrarlo y empezar de cero, o trastear primero y borrarlo después. El ejemplo no cuenta para el límite gratuito.", "zh": "首次打开应用时，里面已经放好一套<b>示例</b>（24 通道的演出）。可以直接删掉从零开始，也可以先点开看看再删。示例不计入免费额度。"}, "step1_h": {"ko": "프로젝트 하나 = 공연 하나", "en": "One project = one show", "ja": "プロジェクト1つ＝公演1つ", "de": "Ein Projekt = eine Show", "pt": "Um projeto = um show", "es": "Un proyecto = un bolo", "zh": "一个项目 = 一场演出"}, "step1_p1": {"ko": "＋ 를 눌러 이름·날짜·장소를 적고 <b>라이브</b>인지 <b>레코딩</b>인지 고릅니다. 이 선택이 표의 기본 칸을 정합니다 — 라이브는 CH·SOURCE·PICK UP·STAND·48V·REMARKS, 레코딩은 PANEL·PREAMP·INSERT·DAW TRACK 이 함께 나옵니다.", "en": "Tap ＋, fill in the name, date and venue, and pick <b>Live</b> or <b>Recording</b>. That choice sets the sheet's default columns — Live gives you CH · SOURCE · PICK UP · STAND · 48V · REMARKS, Recording adds PANEL · PREAMP · INSERT · DAW TRACK.", "ja": "＋ を押して名前・日付・会場を入れ、<b>ライブ</b>か<b>レコーディング</b>かを選びます。この選択が表の既定の列を決めます — ライブは CH・SOURCE・PICK UP・STAND・48V・REMARKS、レコーディングは PANEL・PREAMP・INSERT・DAW TRACK が加わります。", "de": "Auf ＋ tippen, Name, Datum und Location eintragen und <b>Live</b> oder <b>Recording</b> wählen. Diese Wahl legt die Standardspalten fest — Live: CH · SOURCE · PICK UP · STAND · 48V · REMARKS, Recording zusätzlich PANEL · PREAMP · INSERT · DAW TRACK.", "pt": "Toque em ＋, preencha nome, data e local e escolha <b>Ao vivo</b> ou <b>Gravação</b>. Essa escolha define as colunas padrão — Ao vivo: CH · SOURCE · PICK UP · STAND · 48V · REMARKS; Gravação acrescenta PANEL · PREAMP · INSERT · DAW TRACK.", "es": "Pulsa ＋, escribe nombre, fecha y sala y elige <b>Directo</b> o <b>Grabación</b>. Esa elección fija las columnas por omisión — Directo: CH · SOURCE · PICK UP · STAND · 48V · REMARKS; Grabación añade PANEL · PREAMP · INSERT · DAW TRACK.", "zh": "点 ＋ 填入名称、日期与场地，并选择<b>现场</b>或<b>录音</b>。这个选择决定表格的默认列 — 现场是 CH·SOURCE·PICK UP·STAND·48V·REMARKS，录音会加上 PANEL·PREAMP·INSERT·DAW TRACK。"}, "step1_p2": {"ko": "채널 수는 8·16·24·32·48 중에서 고르거나 <b>직접 입력</b>에 숫자를 칩니다. 콘솔을 고르면 아웃풋 줄 이름까지 한 번에 채워집니다.", "en": "Pick 8 · 16 · 24 · 32 · 48 channels, or type a number in <b>Enter manually</b>. Choosing a console fills in the output row names as well.", "ja": "チャンネル数は 8・16・24・32・48 から選ぶか、<b>手入力</b>に数字を打ちます。コンソールを選べばアウトプットの行名まで一度に埋まります。", "de": "Kanalzahl aus 8 · 16 · 24 · 32 · 48 wählen oder unter <b>Manuell eingeben</b> tippen. Wer eine Konsole wählt, bekommt auch die Namen der Output-Zeilen fertig eingetragen.", "pt": "Escolha 8 · 16 · 24 · 32 · 48 canais ou digite em <b>Inserir manualmente</b>. Ao escolher uma mesa, os nomes das linhas de saída também são preenchidos.", "es": "Elige 8 · 16 · 24 · 32 · 48 canales o escribe en <b>Introducir manualmente</b>. Si eliges una consola, también se rellenan los nombres de las líneas de salida.", "zh": "通道数可从 8·16·24·32·48 中选择，或在<b>手动输入</b>里直接打数字。选择调音台后，输出行的名称也会一次填好。"}, "step1_tip": {"ko": "<b>날짜와 장소를 꼭 적으세요.</b> 크루에게 넘기는 PDF 머리에 그대로 인쇄됩니다.", "en": "<b>Fill in the date and venue.</b> They print at the top of the PDF you hand the crew.", "ja": "<b>日付と会場は必ず入れてください。</b>クルーに渡す PDF の見出しにそのまま印刷されます。", "de": "<b>Datum und Location eintragen.</b> Beides steht oben auf dem PDF, das die Crew bekommt.", "pt": "<b>Preencha data e local.</b> Eles saem impressos no topo do PDF que você entrega à equipe.", "es": "<b>Pon la fecha y la sala.</b> Se imprimen en la cabecera del PDF que entregas al equipo.", "zh": "<b>务必填写日期与场地。</b>它们会原样印在交给团队的 PDF 抬头。"}, "step2_h": {"ko": "인풋 리스트를 적는다", "en": "Write the input list", "ja": "インプットリストを書く", "de": "Die Inputliste schreiben", "pt": "Escreva a lista de entradas", "es": "Escribe la lista de entradas", "zh": "写输入清单"}, "step2_p": {"ko": "표에 소스·마이크·스탠드를 채웁니다. 스탠드는 눌러서 고르면(SHORT·TALL·CLIP…) 표기가 하나로 모여, 창고에서 챙길 수량이 정확히 세어집니다.", "en": "Fill in source, mic and stand. Pick the stand from the list (SHORT · TALL · CLIP…) so the wording stays consistent — that is what makes the load-out count correct.", "ja": "表にソース・マイク・スタンドを入れます。スタンドは一覧から選べば表記が揃い、倉庫から出す本数が正しく数えられます。", "de": "Quelle, Mikro und Stativ eintragen. Das Stativ aus der Liste wählen (SHORT · TALL · CLIP …), damit die Schreibweise einheitlich bleibt — nur dann stimmt die Stückzahl fürs Lager.", "pt": "Preencha fonte, microfone e pedestal. Escolha o pedestal na lista (SHORT · TALL · CLIP…) para manter a grafia uniforme — é isso que faz a contagem do almoxarifado bater.", "es": "Rellena fuente, micro y pie. Elige el pie de la lista (SHORT · TALL · CLIP…) para que la escritura sea uniforme — así el recuento del almacén cuadra.", "zh": "在表格里填入音源、话筒与支架。支架从列表中选择（SHORT·TALL·CLIP…），写法统一后，仓库要带的数量才数得准。"}, "step2_li1": {"ko": "<kbd>Tab</kbd> 옆 칸으로, <kbd>Shift</kbd>+<kbd>Tab</kbd> 뒤로", "en": "<kbd>Tab</kbd> moves to the next cell, <kbd>Shift</kbd>+<kbd>Tab</kbd> goes back", "ja": "<kbd>Tab</kbd> で隣の列へ、<kbd>Shift</kbd>+<kbd>Tab</kbd> で戻る", "de": "<kbd>Tab</kbd> springt in die nächste Zelle, <kbd>Shift</kbd>+<kbd>Tab</kbd> zurück", "pt": "<kbd>Tab</kbd> vai para a próxima célula, <kbd>Shift</kbd>+<kbd>Tab</kbd> volta", "es": "<kbd>Tab</kbd> pasa a la casilla siguiente, <kbd>Shift</kbd>+<kbd>Tab</kbd> vuelve", "zh": "<kbd>Tab</kbd> 移到右边一格，<kbd>Shift</kbd>+<kbd>Tab</kbd> 回到左边"}, "step2_li2": {"ko": "<kbd>Enter</kbd> 같은 칸의 아래 줄로 — 한 열을 쭉 채울 때 빠릅니다", "en": "<kbd>Enter</kbd> drops to the same column on the next row — fast when filling one column straight down", "ja": "<kbd>Enter</kbd> で同じ列の次の行へ — 1列を上から埋めるときに速いです", "de": "<kbd>Enter</kbd> geht in derselben Spalte eine Zeile tiefer — schnell, wenn man eine Spalte durchfüllt", "pt": "<kbd>Enter</kbd> desce para a mesma coluna na linha seguinte — rápido para preencher uma coluna inteira", "es": "<kbd>Enter</kbd> baja a la misma columna en la fila siguiente — rápido para rellenar una columna entera", "zh": "<kbd>Enter</kbd> 跳到同一列的下一行 — 一列往下填时很快"}, "step2_li3": {"ko": "48V 는 스위치입니다. 팬텀이 필요한 마이크에 켜 두면 앱이 잘못된 자리를 짚어 줍니다", "en": "48V is a switch. Turn it on for mics that need phantom and the app will point out where it cannot be supplied", "ja": "48V はスイッチです。ファンタムが要るマイクでオンにしておくと、供給できない場所をアプリが指摘します", "de": "48V ist ein Schalter. Für Mikros mit Phantombedarf einschalten — die App zeigt dann, wo sie nicht geliefert werden kann", "pt": "48V é um interruptor. Ligue nos microfones que precisam de phantom e o app aponta onde ela não pode ser fornecida", "es": "48V es un interruptor. Actívalo en los micros que necesitan phantom y la app señala dónde no se puede suministrar", "zh": "48V 是开关。给需要幻象供电的话筒打开，应用会指出哪里供不上电"}, "step2_li4": {"ko": "아이폰에서는 줄을 눌러 한 줄씩 편집합니다", "en": "On iPhone you tap a row and edit it one row at a time", "ja": "iPhone では行を押して1行ずつ編集します", "de": "Auf dem iPhone tippt man eine Zeile an und bearbeitet sie einzeln", "pt": "No iPhone você toca na linha e edita uma de cada vez", "es": "En el iPhone tocas una fila y la editas de una en una", "zh": "在 iPhone 上点一行，逐行编辑"}, "step2_tip": {"ko": "칸이 모자라거나 남으면 <b>더 보기(⋯) → 표 칸 고르기</b>에서 STAGE BOX·CONSOLE CH·CUSTOM 같은 칸을 켜고 끕니다. 켠 칸은 PDF·CSV 에도 그대로 나갑니다.", "en": "Need more or fewer columns? <b>More (⋯) → Choose columns</b> turns STAGE BOX, CONSOLE CH, CUSTOM and the rest on and off. Whatever you turn on also goes into the PDF and the CSV.", "ja": "列が足りない・多いときは <b>その他(⋯) → 列を選ぶ</b> で STAGE BOX・CONSOLE CH・CUSTOM などをオン／オフします。オンにした列は PDF・CSV にもそのまま出ます。", "de": "Zu wenige oder zu viele Spalten? Unter <b>Mehr (⋯) → Spalten wählen</b> lassen sich STAGE BOX, CONSOLE CH, CUSTOM usw. ein- und ausschalten. Was an ist, steht auch im PDF und im CSV.", "pt": "Faltam ou sobram colunas? Em <b>Mais (⋯) → Escolher colunas</b> você liga e desliga STAGE BOX, CONSOLE CH, CUSTOM e outras. O que estiver ligado sai também no PDF e no CSV.", "es": "¿Faltan o sobran columnas? En <b>Más (⋯) → Elegir columnas</b> activas y desactivas STAGE BOX, CONSOLE CH, CUSTOM y demás. Lo que actives sale también en el PDF y el CSV.", "zh": "列不够或太多时，在<b>更多(⋯) → 选择列</b>里开关 STAGE BOX、CONSOLE CH、CUSTOM 等。打开的列也会出现在 PDF 与 CSV 中。"}, "step3_h": {"ko": "무대 배치도에 채널 번호를 얹는다", "en": "Put channel numbers on the stage plot", "ja": "ステージプロットにチャンネル番号を載せる", "de": "Kanalnummern in den Bühnenplan setzen", "pt": "Ponha os números de canal no mapa de palco", "es": "Pon los números de canal en el plano", "zh": "把通道号标到舞台平面图上"}, "step3_p": {"ko": "<b>무대</b> 탭에서 심볼(드럼·앰프·마이크 스탠드·웨지)을 끌어다 놓고, 표의 채널을 연결하면 <span class=\"mono\">CH 17</span> 처럼 번호가 함께 표시됩니다. 번호를 다시 매겨도 연결은 따라옵니다.", "en": "In the <b>Stage</b> tab, drag symbols (drums, amps, mic stands, wedges) into place and link them to rows in the sheet — the number then rides along, like <span class=\"mono\">CH 17</span>. Renumber the sheet and the links follow.", "ja": "<b>ステージ</b>タブでシンボル（ドラム・アンプ・マイクスタンド・ウェッジ）を置き、表のチャンネルと結ぶと <span class=\"mono\">CH 17</span> のように番号が一緒に出ます。番号を振り直しても結びつきは付いてきます。", "de": "Im Tab <b>Bühne</b> Symbole (Drums, Amps, Mikrostative, Wedges) platzieren und mit Zeilen der Liste verknüpfen — die Nummer erscheint mit, etwa <span class=\"mono\">CH 17</span>. Beim Neunummerieren bleibt die Verknüpfung erhalten.", "pt": "Na aba <b>Palco</b>, arraste os símbolos (bateria, amplificadores, pedestais, wedges) e ligue-os às linhas da lista — o número aparece junto, como <span class=\"mono\">CH 17</span>. Ao renumerar, as ligações acompanham.", "es": "En la pestaña <b>Escenario</b>, arrastra los símbolos (batería, amplis, pies de micro, monitores) y enlázalos con filas de la lista — el número aparece al lado, como <span class=\"mono\">CH 17</span>. Si renumeras, los enlaces siguen.", "zh": "在<b>舞台</b>标签里拖放符号（鼓、音箱、话筒支架、返送），再与表格中的通道关联，就会显示 <span class=\"mono\">CH 17</span> 这样的编号。重新编号后关联依然跟随。"}, "step4_h": {"ko": "신호 도면은 저절로 그려진다", "en": "The signal flow draws itself", "ja": "信号系統図は自動で描かれる", "de": "Der Signalflussplan zeichnet sich selbst", "pt": "O diagrama de sinal se desenha sozinho", "es": "El diagrama de señal se dibuja solo", "zh": "信号流程图自动生成"}, "step4_p": {"ko": "표를 적으면 <b>도면</b> 탭에 소스 → 마이크·DI 계통이 그려집니다. 따로 그릴 필요가 없고, 표를 고치면 도면도 함께 바뀝니다. 같은 마이크를 몇 개 쓰는지(<span class=\"mono\">×4</span>)도 함께 보입니다.", "en": "Fill in the sheet and the <b>Diagram</b> tab draws source → mic/DI for you. Nothing to draw by hand, and editing the sheet updates the diagram. It also shows how many of the same mic you are using (<span class=\"mono\">×4</span>).", "ja": "表を書けば <b>系統図</b> タブにソース → マイク・DI の系統が描かれます。自分で描く必要はなく、表を直せば図も変わります。同じマイクを何本使うか（<span class=\"mono\">×4</span>）も出ます。", "de": "Sobald die Liste steht, zeichnet der Tab <b>Diagramm</b> Quelle → Mikro/DI. Nichts von Hand, und Änderungen an der Liste ziehen den Plan mit. Auch die Stückzahl gleicher Mikros (<span class=\"mono\">×4</span>) steht dabei.", "pt": "Preencha a lista e a aba <b>Diagrama</b> desenha fonte → microfone/DI. Nada de desenhar à mão, e editar a lista atualiza o diagrama. Ele também mostra quantos microfones iguais você usa (<span class=\"mono\">×4</span>).", "es": "Rellena la lista y la pestaña <b>Diagrama</b> dibuja fuente → micro/DI. No hay que dibujar nada, y al editar la lista el diagrama cambia. También muestra cuántos micros iguales usas (<span class=\"mono\">×4</span>).", "zh": "把表格填好，<b>信号图</b>标签就会画出「音源 → 话筒·DI」的走向。不用手画，改表格图也跟着变。还会显示同款话筒用了几支（<span class=\"mono\">×4</span>）。"}, "step5_h": {"ko": "패치베이를 짜고 라벨을 실물 크기로 뽑는다", "en": "Lay out the patchbay and print labels at true size", "ja": "パッチベイを組み、ラベルを実寸で印刷する", "de": "Patchbay bauen und Labels in Originalgröße drucken", "pt": "Monte o patchbay e imprima as etiquetas em tamanho real", "es": "Monta el patchbay e imprime las etiquetas a tamaño real", "zh": "排跳线盘并按实际尺寸打印标签"}, "step5_p": {"ko": "<b>패치베이</b> 탭에서 열 수(24·48·96)를 정하고 구역마다 이름·색·노멀 방식(노멀·하프노멀·스루)을 지정합니다. 라벨 띠는 <b>실물 크기</b>로 인쇄되어 오려서 그대로 붙일 수 있습니다.", "en": "In the <b>Patchbay</b> tab, set the column count (24 · 48 · 96) and give each segment a name, a colour and a normalling mode (normalled, half-normalled, thru). The label strip prints at <b>true physical size</b>, so you cut it out and stick it on.", "ja": "<b>パッチベイ</b>タブで列数（24・48・96）を決め、区画ごとに名前・色・ノーマル方式（ノーマル／ハーフノーマル／スルー）を指定します。ラベル帯は<b>実寸</b>で印刷され、切ってそのまま貼れます。", "de": "Im Tab <b>Patchbay</b> die Spaltenzahl (24 · 48 · 96) festlegen und jedem Abschnitt Name, Farbe und Normalisierung (normalled, half-normalled, thru) geben. Der Labelstreifen druckt in <b>Originalgröße</b> — ausschneiden und aufkleben.", "pt": "Na aba <b>Patchbay</b>, defina o número de colunas (24 · 48 · 96) e dê a cada trecho nome, cor e tipo de normalling (normalled, half-normalled, thru). A tira de etiquetas sai em <b>tamanho real</b>: é só recortar e colar.", "es": "En la pestaña <b>Patchbay</b>, fija el número de columnas (24 · 48 · 96) y da a cada tramo nombre, color y tipo de normalling (normalled, half-normalled, thru). La tira de etiquetas se imprime a <b>tamaño real</b>: la recortas y la pegas.", "zh": "在<b>跳线盘</b>标签里设定列数（24·48·96），并为每个区段设置名称、颜色与常通方式（normalled、half-normalled、thru）。标签条按<b>实际尺寸</b>打印，剪下来即可粘贴。"}, "step5_tip": {"ko": "<b>인쇄 전에 한 번 재세요.</b> 잭 피치(밴텀 48점 1U 기준 9.5mm)와 띠 높이(6mm)는 참고값입니다. 쓰시는 기종을 자로 재서 값을 넣으면 정확히 맞습니다.", "en": "<b>Measure once before printing.</b> The jack pitch (9.5 mm for a 48-point 1U bantam bay) and strip height (6 mm) are reference values. Put a ruler on your own bay and enter what you measure.", "ja": "<b>印刷の前に一度測ってください。</b>ジャックピッチ（バンタム48点1Uで9.5mm）と帯の高さ（6mm）は参考値です。お使いの機種を定規で測って入れると正確に合います。", "de": "<b>Vor dem Drucken einmal nachmessen.</b> Jack-Abstand (9,5 mm bei einer 48-Punkt-1U-Bantam-Bay) und Streifenhöhe (6 mm) sind Richtwerte. Miss deine eigene Bay und trage die Werte ein.", "pt": "<b>Meça antes de imprimir.</b> O passo entre jacks (9,5 mm em um bantam de 48 pontos 1U) e a altura da tira (6 mm) são valores de referência. Meça o seu equipamento e insira os valores.", "es": "<b>Mide antes de imprimir.</b> El paso entre jacks (9,5 mm en un bantam de 48 puntos 1U) y la altura de la tira (6 mm) son valores de referencia. Mide tu patchbay y pon los valores reales.", "zh": "<b>打印前先量一次。</b>插孔间距（48 点 1U 小型跳线盘为 9.5mm）与标签条高度（6mm）都是参考值。用尺量一下自己的机型再填入即可完全吻合。"}, "step6_h": {"ko": "크루에게 넘길 종이를 뽑는다", "en": "Print the paper you hand the crew", "ja": "クルーに渡す紙を出す", "de": "Das Blatt für die Crew drucken", "pt": "Imprima o papel para a equipe", "es": "Imprime el papel para el equipo", "zh": "打印交给团队的纸"}, "step6_p1": {"ko": "<b>PDF 내보내기</b>를 누르면 인풋·아웃풋 표, 마이크 리스트, 스탠드 리스트가 한 문서로 나옵니다. 저장·공유 전에 <b>실제 페이지를 미리 봅니다</b> — 종이는 되돌릴 수 없으니까요. 채널이 많으면 인풋을 두 단으로 놓고 아웃풋을 뒤로 넘깁니다.", "en": "<b>Export PDF</b> puts the input and output tables, the mic list and the stand list into one document. Before saving or sharing you <b>see the actual pages</b> — paper cannot be undone. With many channels the inputs go into two columns and the outputs move to the next page.", "ja": "<b>PDF 書き出し</b>を押すと、インプット・アウトプット表、マイクリスト、スタンドリストが1つの書類になります。保存・共有の前に<b>実際のページを確認</b>できます — 紙は戻せません。チャンネルが多いときはインプットを2段にし、アウトプットを後ろに送ります。", "de": "<b>PDF exportieren</b> legt Input- und Output-Tabelle, Mikroliste und Stativliste in ein Dokument. Vor dem Sichern oder Teilen <b>siehst du die echten Seiten</b> — Papier lässt sich nicht rückgängig machen. Bei vielen Kanälen stehen die Inputs zweispaltig, die Outputs rutschen nach hinten.", "pt": "<b>Exportar PDF</b> reúne as tabelas de entrada e saída, a lista de microfones e a de pedestais em um documento. Antes de salvar ou compartilhar você <b>vê as páginas reais</b> — papel não tem desfazer. Com muitos canais, as entradas ficam em duas colunas e as saídas passam para a página seguinte.", "es": "<b>Exportar PDF</b> reúne las tablas de entrada y salida, la lista de micros y la de pies en un documento. Antes de guardar o compartir <b>ves las páginas reales</b> — el papel no tiene deshacer. Con muchos canales las entradas van a dos columnas y las salidas pasan a la página siguiente.", "zh": "点<b>导出 PDF</b>，输入表、输出表、话筒清单与支架清单会汇成一份文件。保存或分享前可以<b>看到实际页面</b> — 纸是不能撤销的。通道多时，输入排成两栏，输出移到后一页。"}, "step6_p2": {"ko": "엑셀로 이어서 작업하려면 <b>INPUT CSV 내보내기</b>, 반대로 이미 있는 시트를 가져오려면 <b>CSV 가져오기</b>를 씁니다.", "en": "To carry on in a spreadsheet use <b>Export INPUT CSV</b>; to bring an existing sheet in, use <b>Import CSV</b>.", "ja": "表計算ソフトで続けるなら <b>INPUT CSV 書き出し</b>、既存のシートを取り込むなら <b>CSV 読み込み</b> を使います。", "de": "Zum Weiterarbeiten in der Tabellenkalkulation <b>INPUT-CSV exportieren</b>; eine vorhandene Liste holst du mit <b>CSV importieren</b> herein.", "pt": "Para continuar em uma planilha use <b>Exportar CSV de INPUT</b>; para trazer uma planilha existente, <b>Importar CSV</b>.", "es": "Para seguir en una hoja de cálculo usa <b>Exportar CSV de INPUT</b>; para traer una hoja existente, <b>Importar CSV</b>.", "zh": "若要在表格软件里继续，用<b>导出 INPUT CSV</b>；要把已有表格带进来，用<b>导入 CSV</b>。"}, "step7_h": {"ko": "모르는 커넥터는 앱 안에서 본다", "en": "Look up connectors inside the app", "ja": "知らないコネクターはアプリの中で見る", "de": "Stecker in der App nachschlagen", "pt": "Consulte conectores dentro do app", "es": "Consulta los conectores dentro de la app", "zh": "不认识的接头就在应用里查"}, "step7_p": {"ko": "<b>학습</b> 탭에 커넥터 도감과 케이블 결선도가 있습니다. XLR·TRS·TS·밴텀(TT)·RCA·Speakon·DB25 의 핀 번호와, 각 핀이 무슨 신호인지 적혀 있습니다. <b>이 부분은 전부 무료</b>입니다.", "en": "The <b>Learn</b> tab holds a connector guide and cable wiring diagrams — pin numbers for XLR, TRS, TS, bantam (TT), RCA, Speakon and DB25, and what each pin carries. <b>All of this is free.</b>", "ja": "<b>学ぶ</b>タブにコネクター図鑑とケーブル結線図があります。XLR・TRS・TS・バンタム(TT)・RCA・Speakon・DB25 のピン番号と、各ピンが何の信号かが載っています。<b>ここは全部無料</b>です。", "de": "Der Tab <b>Lernen</b> enthält ein Steckerverzeichnis und Kabelbelegungen — Pinnummern für XLR, TRS, TS, Bantam (TT), RCA, Speakon und DB25 und was auf jedem Pin liegt. <b>Das ist alles kostenlos.</b>", "pt": "A aba <b>Aprender</b> traz um guia de conectores e diagramas de cabo — números de pino de XLR, TRS, TS, bantam (TT), RCA, Speakon e DB25, e o que cada pino leva. <b>Tudo isso é gratuito.</b>", "es": "La pestaña <b>Aprender</b> tiene una guía de conectores y esquemas de cable — números de pin de XLR, TRS, TS, bantam (TT), RCA, Speakon y DB25, y qué lleva cada pin. <b>Todo esto es gratis.</b>", "zh": "<b>学习</b>标签里有接头图鉴与线缆接线图 — XLR、TRS、TS、小型(TT)、RCA、Speakon、DB25 的针脚编号，以及每个针脚走什么信号。<b>这部分全部免费。</b>"}, "faq_h2": {"ko": "자주 묻는 질문", "en": "FAQ", "ja": "よくある質問", "de": "Häufige Fragen", "pt": "Perguntas frequentes", "es": "Preguntas frecuentes", "zh": "常见问题"}, "faq_lede": {"ko": "여기서 답을 못 찾으시면 아래 메일로 알려주세요. 어떤 화면에서 무엇을 누르셨는지 적어 주시면 훨씬 빨리 잡습니다.", "en": "If your answer is not here, write to the address below. Telling us which screen you were on and what you tapped gets it fixed much faster.", "ja": "ここに答えがなければ下のメールへどうぞ。どの画面で何を押したかを書いていただけると、ずっと早く直せます。", "de": "Wenn hier nichts passt, schreib an die Adresse unten. Mit Angabe von Bildschirm und Aktion lässt es sich viel schneller beheben.", "pt": "Se a resposta não estiver aqui, escreva para o e-mail abaixo. Dizer em que tela estava e o que tocou acelera muito a correção.", "es": "Si tu respuesta no está aquí, escribe al correo de abajo. Decirnos en qué pantalla estabas y qué pulsaste lo acelera mucho.", "zh": "如果这里没有答案，请写信到下面的邮箱。告诉我们当时在哪个界面、点了什么，会修得快得多。"}, "faq1_q": {"ko": "무료로 어디까지 쓸 수 있나요?", "en": "What can I do for free?", "ja": "無料でどこまで使えますか？", "de": "Was geht kostenlos?", "pt": "O que dá para fazer de graça?", "es": "¿Hasta dónde llega la versión gratuita?", "zh": "免费能用到什么程度？"}, "faq1_a": {"ko": "종류마다 프로젝트 두 개(라이브 둘·레코딩 둘)와, 프로젝트 밖 문서(패치베이·도면·무대 배치도)를 종류마다 두 개까지 만들 수 있습니다. 커넥터 도감과 케이블 결선도는 제한 없이 무료입니다. 처음 깔려 있는 예시는 이 개수에 들어가지 않습니다.", "en": "Two projects of each kind (two live, two recording), plus two of each stand-alone document (patchbay, diagram, stage plot). The connector guide and cable diagrams are free without limit. The example that ships with the app does not count.", "ja": "種類ごとにプロジェクト2つ（ライブ2・レコーディング2）と、プロジェクト外の書類（パッチベイ・系統図・ステージプロット）を種類ごとに2つまで作れます。コネクター図鑑とケーブル結線図は無制限に無料です。最初から入っているサンプルはこの数に入りません。", "de": "Zwei Projekte je Art (zwei Live, zwei Recording) und je zwei eigenständige Dokumente (Patchbay, Diagramm, Bühnenplan). Steckerverzeichnis und Kabelbelegungen sind unbegrenzt kostenlos. Das mitgelieferte Beispiel zählt nicht mit.", "pt": "Dois projetos de cada tipo (dois ao vivo, dois de gravação) e dois de cada documento avulso (patchbay, diagrama, mapa de palco). O guia de conectores e os diagramas de cabo são gratuitos sem limite. O exemplo que vem no app não conta.", "es": "Dos proyectos de cada tipo (dos de directo, dos de grabación) y dos de cada documento suelto (patchbay, diagrama, plano de escenario). La guía de conectores y los esquemas de cable son gratis sin límite. El ejemplo que viene incluido no cuenta.", "zh": "每种项目各两个（现场两个、录音两个），以及每种独立文档（跳线盘、信号图、舞台平面图）各两个。接头图鉴与线缆接线图完全免费、不限量。应用自带的示例不计入额度。"}, "faq2_q": {"ko": "평생이용권은 기기마다 따로 사야 하나요?", "en": "Do I have to buy it on each device?", "ja": "買い切りは機器ごとに必要ですか？", "de": "Muss ich für jedes Gerät kaufen?", "pt": "Preciso comprar em cada aparelho?", "es": "¿Hay que comprarlo en cada dispositivo?", "zh": "终身版需要每台设备各买一次吗？"}, "faq2_a": {"ko": "아닙니다. 아이폰·아이패드·맥이 <b>하나의 앱</b>으로 묶여 있어 한 번 구입하면 같은 Apple 계정의 기기에서 모두 열립니다. 구독이 아니라 한 번 내는 평생이용권입니다. 기기를 바꾸셨다면 결제 화면의 <b>구입 복원</b>을 누르세요.", "en": "No. iPhone, iPad and Mac are <b>one app</b>, so a single purchase unlocks every device on the same Apple Account. It is a one-time lifetime unlock, not a subscription. On a new device, tap <b>Restore purchase</b> on the paywall.", "ja": "いいえ。iPhone・iPad・Mac が<b>1つのアプリ</b>なので、一度買えば同じ Apple アカウントのすべての機器で開きます。サブスクではなく買い切りです。機器を替えたら購入画面の<b>購入を復元</b>を押してください。", "de": "Nein. iPhone, iPad und Mac sind <b>eine App</b> — ein Kauf schaltet alle Geräte mit demselben Apple-Account frei. Es ist ein einmaliger Kauf, kein Abo. Auf einem neuen Gerät im Kaufdialog <b>Kauf wiederherstellen</b> antippen.", "pt": "Não. iPhone, iPad e Mac são <b>um só app</b>: uma compra libera todos os aparelhos da mesma conta Apple. É compra única, não assinatura. Em um aparelho novo, toque em <b>Restaurar compra</b> na tela de compra.", "es": "No. iPhone, iPad y Mac son <b>una sola app</b>: con una compra se desbloquean todos los dispositivos de la misma cuenta de Apple. Es un pago único, no una suscripción. En un dispositivo nuevo, pulsa <b>Restaurar compra</b>.", "zh": "不需要。iPhone、iPad 与 Mac 是<b>同一款应用</b>，购买一次即可在同一 Apple 账户的所有设备上使用。这是一次性买断，不是订阅。换设备后，在购买页点<b>恢复购买</b>即可。"}, "faq3_q": {"ko": "아이폰에서 만든 것이 아이패드·맥에 안 보입니다.", "en": "What I made on iPhone is not showing on iPad or Mac.", "ja": "iPhone で作ったものが iPad・Mac に出ません。", "de": "Was ich am iPhone erstellt habe, fehlt auf iPad und Mac.", "pt": "O que criei no iPhone não aparece no iPad nem no Mac.", "es": "Lo que hice en el iPhone no aparece en el iPad ni en el Mac.", "zh": "在 iPhone 上做的东西，iPad 和 Mac 上看不到。"}, "faq3_a": {"ko": "같은 Apple 계정으로 로그인되어 있고 기기의 iCloud Drive 가 켜져 있어야 합니다. 설정 → [내 이름] → iCloud 에서 확인해 주세요. 처음 동기화는 네트워크 상태에 따라 몇 분 걸릴 수 있고, 앱을 껐다 켜면 더 빨리 내려옵니다.", "en": "All devices need the same Apple Account and iCloud Drive turned on. Check Settings → [your name] → iCloud. The first sync can take a few minutes depending on the network; quitting and reopening the app usually pulls it down sooner.", "ja": "すべての機器が同じ Apple アカウントで、iCloud Drive がオンである必要があります。設定 → [自分の名前] → iCloud をご確認ください。初回の同期は回線状況で数分かかることがあり、アプリを開き直すと早く降りてきます。", "de": "Alle Geräte brauchen denselben Apple-Account und aktiviertes iCloud Drive. Prüfe Einstellungen → [dein Name] → iCloud. Die erste Synchronisierung kann je nach Netz ein paar Minuten dauern; App schließen und neu öffnen holt sie meist schneller.", "pt": "Todos os aparelhos precisam da mesma conta Apple e do iCloud Drive ligado. Verifique em Ajustes → [seu nome] → iCloud. A primeira sincronização pode levar alguns minutos conforme a rede; fechar e reabrir o app costuma acelerar.", "es": "Todos los dispositivos necesitan la misma cuenta de Apple y iCloud Drive activado. Míralo en Ajustes → [tu nombre] → iCloud. La primera sincronización puede tardar unos minutos según la red; cerrar y abrir la app suele acelerarla.", "zh": "所有设备需要使用同一 Apple 账户并开启 iCloud 云盘。请在「设置 → [你的名字] → iCloud」中确认。首次同步会因网络快慢花上几分钟，退出后重新打开应用通常会更快。"}, "faq4_q": {"ko": "패치베이 라벨이 실물 크기로 안 맞습니다.", "en": "The patchbay label does not match the real size.", "ja": "パッチベイのラベルが実寸に合いません。", "de": "Das Patchbay-Label passt nicht in Originalgröße.", "pt": "A etiqueta do patchbay não bate com o tamanho real.", "es": "La etiqueta del patchbay no coincide con el tamaño real.", "zh": "跳线盘标签与实际尺寸对不上。"}, "faq4_a": {"ko": "인쇄 대화상자에서 <b>배율 100%</b>('페이지에 맞춤' 해제)로 뽑아야 합니다. 그래도 어긋나면 쓰시는 패치베이의 잭 간격을 자로 재서 라벨 띠 설정의 <b>잭 피치</b>와 <b>띠 높이</b>에 넣어 주세요. 기본값(9.5mm / 6mm)은 참고값입니다.", "en": "Print at <b>100% scale</b> with 'scale to fit' switched off. If it is still off, measure the jack spacing on your own bay and enter it as <b>jack pitch</b> and <b>strip height</b> in the label settings. The defaults (9.5 mm / 6 mm) are reference values.", "ja": "印刷ダイアログで<b>倍率100%</b>（「用紙に合わせる」をオフ）にしてください。それでもずれる場合は、お使いのパッチベイのジャック間隔を測り、ラベル設定の<b>ジャックピッチ</b>と<b>帯の高さ</b>に入れてください。既定値（9.5mm / 6mm）は参考値です。", "de": "Mit <b>100 % Skalierung</b> drucken ('An Seite anpassen' aus). Passt es dann noch nicht, den Jack-Abstand deiner Bay messen und als <b>Jack-Abstand</b> und <b>Streifenhöhe</b> eintragen. Die Vorgaben (9,5 mm / 6 mm) sind Richtwerte.", "pt": "Imprima em <b>escala 100%</b> (desligue 'ajustar à página'). Se ainda não bater, meça o espaçamento dos jacks do seu patchbay e informe em <b>passo dos jacks</b> e <b>altura da tira</b>. Os padrões (9,5 mm / 6 mm) são referência.", "es": "Imprime al <b>100%</b> (desactiva 'ajustar a la página'). Si aun así no cuadra, mide la separación de jacks de tu patchbay e introdúcela en <b>paso de jacks</b> y <b>altura de la tira</b>. Los valores por omisión (9,5 mm / 6 mm) son de referencia.", "zh": "请在打印对话框里选择<b>缩放 100%</b>（关闭「适合页面」）。若仍对不上，用尺量出自己跳线盘的插孔间距，填入标签设置的<b>插孔间距</b>与<b>标签条高度</b>。默认值（9.5mm / 6mm）只是参考。"}, "faq5_q": {"ko": "엑셀 시트를 가져오면 줄이 빠집니다.", "en": "Rows go missing when I import a spreadsheet.", "ja": "表計算のシートを取り込むと行が抜けます。", "de": "Beim Import einer Tabelle fehlen Zeilen.", "pt": "Ao importar uma planilha, faltam linhas.", "es": "Al importar una hoja se pierden filas.", "zh": "导入表格时有的行丢了。"}, "faq5_a": {"ko": "CSV 의 머리글과 칸 수가 표와 맞아야 합니다. 합계·메모처럼 CH 칸이 비었거나 숫자가 아닌 줄은 건너뜁니다. 가져온 뒤 앱이 \"몇 줄을 왜 건너뛰었는지\" 알려주니 그 문장을 보고 엑셀에서 그 줄만 고치면 됩니다.", "en": "The CSV header and column count have to match the sheet. Rows whose CH cell is empty or not a number — totals, notes — are skipped. After importing, the app tells you how many rows it skipped and why, so you can fix just those rows in the spreadsheet.", "ja": "CSV の見出しと列数が表と合っている必要があります。合計やメモのように CH 欄が空、または数字でない行は飛ばします。取り込み後にアプリが「何行をなぜ飛ばしたか」を知らせるので、その行だけ直せば済みます。", "de": "Kopfzeile und Spaltenzahl der CSV müssen zur Liste passen. Zeilen ohne Zahl in CH — Summen, Notizen — werden übersprungen. Nach dem Import sagt die App, wie viele Zeilen warum übersprungen wurden; dann korrigierst du genau diese.", "pt": "O cabeçalho e o número de colunas do CSV precisam bater com a tabela. Linhas com a célula CH vazia ou não numérica — totais, observações — são puladas. Após importar, o app informa quantas linhas pulou e por quê.", "es": "La cabecera y el número de columnas del CSV deben coincidir con la tabla. Las filas cuya casilla CH está vacía o no es un número — totales, notas — se omiten. Tras importar, la app indica cuántas filas omitió y por qué.", "zh": "CSV 的表头与列数必须与表格一致。CH 单元格为空或不是数字的行（合计、备注等）会被跳过。导入后应用会告诉你跳过了几行、原因是什么，按提示改那几行即可。"}, "faq6_q": {"ko": "처음 있던 예시를 지웠는데 다시 보고 싶습니다.", "en": "I deleted the example and want it back.", "ja": "最初のサンプルを消しましたが、また見たいです。", "de": "Ich habe das Beispiel gelöscht und hätte es gern zurück.", "pt": "Apaguei o exemplo e quero de volta.", "es": "Borré el ejemplo y quiero recuperarlo.", "zh": "我把示例删了，想再看一次。"}, "faq6_a": {"ko": "그 탭의 목록을 비우면(내가 만든 것도 없는 상태) <b>예시 다시 넣기</b> 단추가 나옵니다. 예시를 지워도 다른 기기에서 되살아나지 않으니 안심하고 지우셔도 됩니다.", "en": "Empty that tab's list — nothing of your own in it either — and an <b>Add the example back</b> button appears. Deleting the example never makes it reappear on your other devices, so it is safe to delete.", "ja": "そのタブの一覧を空にすると（自分で作ったものも無い状態）<b>サンプルを入れ直す</b>ボタンが出ます。サンプルを消しても他の機器で復活しないので、安心して消せます。", "de": "Wenn die Liste des Tabs leer ist — auch ohne eigene Einträge — erscheint <b>Beispiel zurückholen</b>. Ein gelöschtes Beispiel taucht auf anderen Geräten nicht wieder auf; du kannst es bedenkenlos löschen.", "pt": "Deixe a lista da aba vazia — sem nada seu também — e aparece o botão <b>Voltar a adicionar o exemplo</b>. Apagar o exemplo não o faz voltar nos outros aparelhos.", "es": "Deja vacía la lista de esa pestaña — tampoco nada tuyo — y aparece el botón <b>Volver a añadir el ejemplo</b>. Borrar el ejemplo no hace que reaparezca en tus otros dispositivos.", "zh": "把该标签的列表清空（也不要有自己的内容），就会出现<b>重新放入示例</b>按钮。删掉示例后不会在其他设备上复活，可以放心删除。"}, "faq7_q": {"ko": "여러 개를 한 번에 지우고 싶습니다.", "en": "I want to delete several at once.", "ja": "まとめて消したいです。", "de": "Ich möchte mehrere auf einmal löschen.", "pt": "Quero apagar vários de uma vez.", "es": "Quiero borrar varios de una vez.", "zh": "我想一次删除多个。"}, "faq7_a": {"ko": "목록에서 <b>편집</b>을 누르면 줄마다 동그라미가 생깁니다. 줄 아무 곳이나 눌러 고른 뒤 휴지통을 누르면 한 번에 지웁니다. 맥에서는 <kbd>⌘E</kbd> 편집 · <kbd>⌘A</kbd> 모두 선택 · <kbd>⌫</kbd> 지우기 입니다.", "en": "Tap <b>Edit</b> in the list and a circle appears on each row. Tap anywhere on a row to select it, then hit the trash to delete them together. On Mac: <kbd>⌘E</kbd> edit · <kbd>⌘A</kbd> select all · <kbd>⌫</kbd> delete.", "ja": "一覧で<b>編集</b>を押すと行ごとに丸が出ます。行のどこを押しても選べ、ゴミ箱を押せばまとめて消えます。Mac では <kbd>⌘E</kbd> 編集・<kbd>⌘A</kbd> 全選択・<kbd>⌫</kbd> 削除 です。", "de": "In der Liste auf <b>Bearbeiten</b> tippen — jede Zeile bekommt einen Kreis. Zeile irgendwo antippen zum Auswählen, dann Papierkorb. Am Mac: <kbd>⌘E</kbd> bearbeiten · <kbd>⌘A</kbd> alle · <kbd>⌫</kbd> löschen.", "pt": "Toque em <b>Editar</b> na lista e cada linha ganha um círculo. Toque em qualquer ponto da linha para selecionar e depois na lixeira. No Mac: <kbd>⌘E</kbd> editar · <kbd>⌘A</kbd> selecionar tudo · <kbd>⌫</kbd> apagar.", "es": "Pulsa <b>Editar</b> en la lista y cada fila muestra un círculo. Toca cualquier parte de la fila para seleccionarla y luego la papelera. En Mac: <kbd>⌘E</kbd> editar · <kbd>⌘A</kbd> seleccionar todo · <kbd>⌫</kbd> borrar.", "zh": "在列表里点<b>编辑</b>，每行会出现圆圈。点行内任意位置即可选中，再点垃圾桶一次删除。Mac 上：<kbd>⌘E</kbd> 编辑 · <kbd>⌘A</kbd> 全选 · <kbd>⌫</kbd> 删除。"}, "faq8_q": {"ko": "앱이 한국어가 아닌 다른 말로 뜨게 하려면?", "en": "How do I change the app's language?", "ja": "アプリの言語を変えるには？", "de": "Wie stelle ich die Sprache der App um?", "pt": "Como mudo o idioma do app?", "es": "¿Cómo cambio el idioma de la app?", "zh": "怎么切换应用的语言？"}, "faq8_a": {"ko": "기기 언어를 따라갑니다. 한국어·영어·일본어·중국어(간체)·스페인어를 지원하며, iOS 는 설정 → 앱 → 언어에서 이 앱만 따로 정할 수도 있습니다. 다만 <b>CSV 의 머리글은 어느 언어에서나 고정</b>입니다 — 다른 기기에서 만든 파일을 서로 읽어야 하기 때문입니다.", "en": "It follows the device language. Korean, English, Japanese, Simplified Chinese and Spanish are supported, and on iOS you can set this app alone in Settings → the app → Language. One exception: <b>the CSV header stays the same in every language</b>, so files made on one device can be read on another.", "ja": "端末の言語に従います。韓国語・英語・日本語・中国語（簡体）・スペイン語に対応し、iOS では 設定 → アプリ → 言語 でこのアプリだけ変えられます。ただし <b>CSV の見出しはどの言語でも固定</b>です — 別の端末で作ったファイルを読み合うためです。", "de": "Sie folgt der Gerätesprache. Unterstützt sind Koreanisch, Englisch, Japanisch, Chinesisch (vereinfacht) und Spanisch; unter iOS lässt sich in Einstellungen → App → Sprache nur diese App umstellen. Ausnahme: <b>die CSV-Kopfzeile bleibt in jeder Sprache gleich</b>, damit Dateien geräteübergreifend lesbar sind.", "pt": "Segue o idioma do aparelho. Há coreano, inglês, japonês, chinês simplificado e espanhol; no iOS dá para definir só este app em Ajustes → o app → Idioma. Exceção: <b>o cabeçalho do CSV é igual em todos os idiomas</b>, para que arquivos de um aparelho sejam lidos em outro.", "es": "Sigue el idioma del dispositivo. Hay coreano, inglés, japonés, chino simplificado y español; en iOS puedes fijar solo esta app en Ajustes → la app → Idioma. Excepción: <b>la cabecera del CSV es igual en todos los idiomas</b>, para que los archivos se lean entre dispositivos.", "zh": "跟随设备语言。支持韩语、英语、日语、简体中文与西班牙语；在 iOS 上可在「设置 → 该应用 → 语言」中单独设置。例外：<b>CSV 的表头在任何语言下都固定</b>，这样不同设备生成的文件才能互相读取。"}, "privacy_h2": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー", "de": "Datenschutzerklärung", "pt": "Política de privacidade", "es": "Política de privacidad", "zh": "隐私政策"}, "privacy_updated": {"ko": "최종 수정일: 2026년 9월 7일", "en": "Last updated: 7 September 2026", "ja": "最終更新日: 2026年9月7日", "de": "Zuletzt geändert: 7. September 2026", "pt": "Última atualização: 7 de setembro de 2026", "es": "Última actualización: 7 de septiembre de 2026", "zh": "最后更新：2026 年 9 月 7 日"}, "p_scope_h": {"ko": "적용 범위", "en": "Scope", "ja": "適用範囲", "de": "Geltungsbereich", "pt": "Abrangência", "es": "Ámbito", "zh": "适用范围"}, "p_scope_p": {"ko": "이 방침은 iOS·iPadOS·macOS 앱 <strong>Patch &amp; I/O</strong>에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href=\"/#policy\">사이트의 전체 개인정보처리방침</a>에 있습니다.", "en": "This policy covers the iOS, iPadOS and macOS app <strong>Patch &amp; I/O</strong>. The policy for the other ML Music Studio apps and the web tools is in the <a href=\"/#policy\">site-wide privacy policy</a>.", "ja": "この方針は iOS・iPadOS・macOS アプリ <strong>Patch &amp; I/O</strong> に適用されます。ML Music Studio の他のアプリとウェブツールについては<a href=\"/#policy\">サイト全体のプライバシーポリシー</a>をご覧ください。", "de": "Diese Erklärung gilt für die iOS-, iPadOS- und macOS-App <strong>Patch &amp; I/O</strong>. Für die übrigen Apps und Web-Tools von ML Music Studio gilt die <a href=\"/#policy\">seitenweite Datenschutzerklärung</a>.", "pt": "Esta política cobre o app <strong>Patch &amp; I/O</strong> para iOS, iPadOS e macOS. Para os demais apps e ferramentas web do ML Music Studio, veja a <a href=\"/#policy\">política geral do site</a>.", "es": "Esta política cubre la app <strong>Patch &amp; I/O</strong> para iOS, iPadOS y macOS. Para las demás apps y herramientas web de ML Music Studio está la <a href=\"/#policy\">política general del sitio</a>.", "zh": "本政策适用于 iOS、iPadOS 与 macOS 应用 <strong>Patch &amp; I/O</strong>。ML Music Studio 其他应用与网站工具的政策见<a href=\"/#policy\">站点整体隐私政策</a>。"}, "p_collect_h": {"ko": "수집하는 정보", "en": "What we collect", "ja": "収集する情報", "de": "Erhobene Daten", "pt": "O que coletamos", "es": "Qué recopilamos", "zh": "收集的信息"}, "p_collect_p": {"ko": "앱은 이름·이메일 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 분석(Analytics) 도구나 광고 SDK 도 사용하지 않습니다. 저희 서버로 보내는 데이터가 없습니다.", "en": "The app collects <strong>no personally identifying information</strong> — no name, no email. There is no sign-up, no analytics tool and no ad SDK. Nothing is sent to our servers.", "ja": "アプリは氏名やメールなど<strong>個人を特定できる情報を収集しません</strong>。アカウント登録はなく、解析ツールも広告 SDK も使いません。当方のサーバーへ送るデータはありません。", "de": "Die App erhebt <strong>keine personenbezogenen Daten</strong> — kein Name, keine E-Mail. Keine Registrierung, kein Analyse-Tool, kein Werbe-SDK. Nichts geht an unsere Server.", "pt": "O app <strong>não coleta informações que identifiquem você</strong> — nem nome, nem e-mail. Não há cadastro, ferramenta de analytics ou SDK de anúncios. Nada é enviado aos nossos servidores.", "es": "La app <strong>no recopila información que te identifique</strong> — ni nombre ni correo. No hay registro, ni analítica, ni SDK de publicidad. No se envía nada a nuestros servidores.", "zh": "应用<strong>不收集可识别个人身份的信息</strong> — 没有姓名，也没有邮箱。无需注册，不使用分析工具或广告 SDK，不向我们的服务器发送任何数据。"}, "p_data_h": {"ko": "내가 만든 자료는 어디에 있나", "en": "Where your work lives", "ja": "作った資料はどこにあるか", "de": "Wo deine Arbeit liegt", "pt": "Onde ficam os seus arquivos", "es": "Dónde vive tu trabajo", "zh": "你的内容存在哪里"}, "p_data_p": {"ko": "프로젝트·패치베이·도면·배치도는 <strong>기기 안에 저장</strong>됩니다. 기기에서 iCloud 가 켜져 있으면 Apple 의 <strong>iCloud 개인 데이터베이스</strong>를 통해 <strong>사용자 본인의 기기끼리만</strong> 동기화됩니다.", "en": "Projects, patchbays, diagrams and stage plots are <strong>stored on the device</strong>. If iCloud is on, they sync <strong>only between your own devices</strong> through Apple's <strong>private iCloud database</strong>.", "ja": "プロジェクト・パッチベイ・系統図・配置図は<strong>端末内に保存</strong>されます。iCloud がオンなら、Apple の <strong>iCloud プライベートデータベース</strong>を通じて<strong>ご自身の端末間だけ</strong>で同期されます。", "de": "Projekte, Patchbays, Diagramme und Bühnenpläne liegen <strong>auf dem Gerät</strong>. Ist iCloud aktiv, synchronisieren sie <strong>nur zwischen deinen eigenen Geräten</strong> über Apples <strong>private iCloud-Datenbank</strong>.", "pt": "Projetos, patchbays, diagramas e mapas de palco ficam <strong>no aparelho</strong>. Com o iCloud ligado, sincronizam <strong>apenas entre os seus aparelhos</strong> pelo <strong>banco privado do iCloud</strong> da Apple.", "es": "Proyectos, patchbays, diagramas y planos se <strong>guardan en el dispositivo</strong>. Con iCloud activado se sincronizan <strong>solo entre tus dispositivos</strong> mediante la <strong>base privada de iCloud</strong> de Apple.", "zh": "项目、跳线盘、信号图与舞台平面图<strong>保存在设备中</strong>。若开启 iCloud，则通过 Apple 的 <strong>iCloud 私有数据库</strong><strong>仅在你本人的设备之间</strong>同步。"}, "p_data_li1": {"ko": "이 데이터는 사용자의 Apple 계정에 속하며 <strong>저희는 열람할 수 없습니다.</strong>", "en": "The data belongs to your Apple Account and <strong>we cannot read it.</strong>", "ja": "このデータはお客様の Apple アカウントに属し、<strong>当方は閲覧できません。</strong>", "de": "Die Daten gehören zu deinem Apple-Account, <strong>wir können sie nicht einsehen.</strong>", "pt": "Os dados pertencem à sua conta Apple e <strong>nós não podemos acessá-los.</strong>", "es": "Los datos pertenecen a tu cuenta de Apple y <strong>nosotros no podemos verlos.</strong>", "zh": "这些数据属于你的 Apple 账户，<strong>我们无法查看。</strong>"}, "p_data_li2": {"ko": "iCloud 를 끄면 동기화도 멈추고, 자료는 기기 안에만 남습니다.", "en": "Turn iCloud off and syncing stops; the work stays on the device only.", "ja": "iCloud をオフにすると同期も止まり、資料は端末内だけに残ります。", "de": "Schaltest du iCloud aus, endet die Synchronisierung; alles bleibt nur auf dem Gerät.", "pt": "Se desligar o iCloud, a sincronização para e tudo fica só no aparelho.", "es": "Si desactivas iCloud, la sincronización se detiene y todo queda solo en el dispositivo.", "zh": "关闭 iCloud 后同步即停止，内容只留在设备里。"}, "p_data_li3": {"ko": "앱을 지우면 기기의 자료도 함께 지워집니다. iCloud 에 있는 사본은 설정 → Apple 계정 → iCloud 에서 관리합니다.", "en": "Deleting the app removes the copy on that device. The iCloud copy is managed in Settings → Apple Account → iCloud.", "ja": "アプリを削除すると端末内の資料も消えます。iCloud 上の控えは 設定 → Apple アカウント → iCloud で管理します。", "de": "Beim Löschen der App verschwindet die Kopie auf dem Gerät. Die iCloud-Kopie verwaltest du unter Einstellungen → Apple-Account → iCloud.", "pt": "Ao apagar o app, some a cópia daquele aparelho. A cópia no iCloud é gerenciada em Ajustes → Conta Apple → iCloud.", "es": "Al borrar la app desaparece la copia de ese dispositivo. La copia en iCloud se gestiona en Ajustes → Cuenta de Apple → iCloud.", "zh": "删除应用会一并删除该设备上的副本。iCloud 中的副本在「设置 → Apple 账户 → iCloud」中管理。"}, "p_perm_h": {"ko": "기기 권한", "en": "Device permissions", "ja": "端末の権限", "de": "Geräteberechtigungen", "pt": "Permissões do aparelho", "es": "Permisos del dispositivo", "zh": "设备权限"}, "p_perm_p": {"ko": "마이크·위치·카메라·연락처 <strong>권한을 요청하지 않습니다.</strong> 무대 배치도에 사진을 깔 때만 사용자가 직접 고른 이미지를 읽고, 그 사진은 줄여서 문서 안에 저장됩니다.", "en": "The app <strong>asks for no microphone, location, camera or contacts permission.</strong> It reads an image only when you pick one yourself as a stage-plot backdrop, and that picture is downscaled and stored inside the document.", "ja": "マイク・位置情報・カメラ・連絡先の<strong>権限を要求しません</strong>。ステージプロットの下敷きにする画像を選んだときだけそれを読み、縮小して書類の中に保存します。", "de": "Die App <strong>fragt keine Berechtigungen</strong> für Mikrofon, Ort, Kamera oder Kontakte an. Ein Bild wird nur gelesen, wenn du es selbst als Hintergrund für den Bühnenplan auswählst; es wird verkleinert im Dokument gespeichert.", "pt": "O app <strong>não pede permissão</strong> de microfone, localização, câmera ou contatos. Ele lê uma imagem apenas quando você escolhe uma como fundo do mapa de palco, e ela é reduzida e guardada dentro do documento.", "es": "La app <strong>no pide permisos</strong> de micrófono, ubicación, cámara ni contactos. Solo lee una imagen cuando tú eliges una como fondo del plano de escenario, y se guarda reducida dentro del documento.", "zh": "应用<strong>不请求</strong>麦克风、位置、相机或通讯录权限。仅当你亲自选择一张图片作为舞台平面图底图时才会读取，并会压缩后存进该文档。"}, "p_export_h": {"ko": "내보낸 파일", "en": "Exported files", "ja": "書き出したファイル", "de": "Exportierte Dateien", "pt": "Arquivos exportados", "es": "Archivos exportados", "zh": "导出的文件"}, "p_export_p": {"ko": "PDF·CSV 만들기와 라벨 인쇄는 전부 기기 안에서 처리됩니다. 만들어진 파일은 <strong>사용자가 저장·공유를 직접 고를 때만</strong> 기기 밖으로 나갑니다.", "en": "Making PDFs and CSVs and printing labels all happen on the device. A finished file leaves the device <strong>only when you choose to save or share it.</strong>", "ja": "PDF・CSV の作成とラベル印刷はすべて端末内で行われます。できたファイルは<strong>保存・共有を選んだときだけ</strong>端末の外に出ます。", "de": "PDF- und CSV-Erstellung sowie Labeldruck laufen vollständig auf dem Gerät. Eine fertige Datei verlässt es <strong>nur, wenn du sie sicherst oder teilst.</strong>", "pt": "A criação de PDF e CSV e a impressão de etiquetas acontecem no aparelho. Um arquivo pronto só sai dele <strong>quando você escolhe salvar ou compartilhar.</strong>", "es": "La creación de PDF y CSV y la impresión de etiquetas ocurren en el dispositivo. Un archivo terminado solo sale de él <strong>cuando eliges guardarlo o compartirlo.</strong>", "zh": "PDF、CSV 的生成与标签打印全部在设备内完成。生成的文件<strong>只有当你选择保存或分享时</strong>才会离开设备。"}, "p_pay_h": {"ko": "결제", "en": "Payment", "ja": "決済", "de": "Zahlung", "pt": "Pagamento", "es": "Pago", "zh": "支付"}, "p_pay_p": {"ko": "평생이용권(인앱 구입)의 결제는 Apple 의 StoreKit 을 통해서만 이루어집니다. 저희는 결제 수단이나 카드 정보를 <strong>전혀 수집하지 않습니다.</strong> 구입 여부만 기기에서 확인합니다.", "en": "The lifetime unlock is purchased through Apple's StoreKit only. We <strong>never collect payment methods or card details.</strong> The app only checks on-device whether the purchase exists.", "ja": "買い切りの決済は Apple の StoreKit のみを通じて行われます。当方が決済手段やカード情報を<strong>収集することは一切ありません</strong>。購入の有無を端末で確認するだけです。", "de": "Der Lifetime-Kauf läuft ausschließlich über Apples StoreKit. Wir <strong>erheben keine Zahlungsmittel oder Kartendaten.</strong> Die App prüft nur auf dem Gerät, ob der Kauf vorliegt.", "pt": "A compra vitalícia é feita somente pela StoreKit da Apple. <strong>Nunca coletamos meios de pagamento ou dados de cartão.</strong> O app apenas verifica no aparelho se a compra existe.", "es": "La compra de por vida se realiza solo mediante StoreKit de Apple. <strong>Nunca recopilamos métodos de pago ni datos de tarjeta.</strong> La app solo comprueba en el dispositivo si existe la compra.", "zh": "终身解锁仅通过 Apple 的 StoreKit 完成。我们<strong>绝不收集支付方式或银行卡信息</strong>，应用只在设备本地确认是否已购买。"}, "p_third_h": {"ko": "제3자 공유", "en": "Third parties", "ja": "第三者提供", "de": "Dritte", "pt": "Terceiros", "es": "Terceros", "zh": "第三方共享"}, "p_third_p": {"ko": "제3자와 공유하는 개인정보가 없습니다. 앱 안에 광고나 제휴 링크가 없습니다.", "en": "There is no personal information to share with third parties. The app carries no ads and no affiliate links.", "ja": "第三者と共有する個人情報はありません。アプリ内に広告やアフィリエイトリンクもありません。", "de": "Es gibt keine personenbezogenen Daten, die an Dritte gehen. Die App enthält keine Werbung und keine Affiliate-Links.", "pt": "Não há informações pessoais para compartilhar com terceiros. O app não tem anúncios nem links de afiliados.", "es": "No hay información personal que compartir con terceros. La app no lleva anuncios ni enlaces de afiliados.", "zh": "没有可与第三方共享的个人信息。应用内没有广告，也没有推广链接。"}, "p_kids_h": {"ko": "어린이", "en": "Children", "ja": "子ども", "de": "Kinder", "pt": "Crianças", "es": "Menores", "zh": "儿童"}, "p_kids_p": {"ko": "이 앱은 음향 실무자를 위한 도구이며, 어린이를 대상으로 하지 않고 어린이의 정보를 수집하지 않습니다.", "en": "This is a tool for working sound engineers. It is not directed at children and collects no information from them.", "ja": "本アプリは音響の実務者向けの道具であり、子どもを対象とせず、子どもの情報も収集しません。", "de": "Diese App ist ein Werkzeug für Tontechnikerinnen und Tontechniker. Sie richtet sich nicht an Kinder und erhebt keine Daten von ihnen.", "pt": "Este é um app para profissionais de áudio. Não é direcionado a crianças nem coleta informações delas.", "es": "Es una herramienta para técnicos de sonido. No está dirigida a menores ni recopila información de ellos.", "zh": "本应用面向音响从业者，不面向儿童，也不收集儿童的信息。"}, "p_change_h": {"ko": "변경 사항", "en": "Changes", "ja": "変更", "de": "Änderungen", "pt": "Alterações", "es": "Cambios", "zh": "变更"}, "p_change_p": {"ko": "방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.", "en": "If this policy changes, the page is updated and the date above changes with it.", "ja": "方針が変わればこのページに反映し、上の最終更新日を更新します。", "de": "Ändert sich diese Erklärung, wird die Seite aktualisiert und das Datum oben angepasst.", "pt": "Se a política mudar, esta página é atualizada e a data acima também.", "es": "Si la política cambia, se actualiza esta página y también la fecha de arriba.", "zh": "政策如有变更，将更新本页并同步修改上方的最后更新日期。"}, "p_acc_h": {"ko": "정확도에 대한 고지", "en": "A note on accuracy", "ja": "精度についてのお知らせ", "de": "Hinweis zur Genauigkeit", "pt": "Aviso sobre precisão", "es": "Nota sobre la precisión", "zh": "关于准确度的说明"}, "p_acc_p": {"ko": "라벨 띠의 잭 피치·띠 높이 기본값은 실측이 아니라 <strong>참고값</strong>입니다. 인쇄 전에 쓰시는 기종을 자로 재서 값을 넣어 확인해 주세요.", "en": "The default jack pitch and strip height for labels are <strong>reference values</strong>, not measurements of your gear. Measure your own bay and enter the numbers before printing.", "ja": "ラベル帯のジャックピッチと高さの既定値は実測ではなく<strong>参考値</strong>です。印刷前にお使いの機種を測って値を入れてご確認ください。", "de": "Die Vorgaben für Jack-Abstand und Streifenhöhe sind <strong>Richtwerte</strong>, keine Messung deines Geräts. Vor dem Druck bitte selbst nachmessen und eintragen.", "pt": "Os valores padrão de passo dos jacks e altura da tira são <strong>de referência</strong>, não medidas do seu equipamento. Meça e insira antes de imprimir.", "es": "Los valores por omisión de paso de jacks y altura de tira son <strong>de referencia</strong>, no medidas de tu equipo. Mide e introduce los tuyos antes de imprimir.", "zh": "标签条的插孔间距与高度默认值只是<strong>参考值</strong>，并非对你设备的实测。打印前请自行测量并填入。"}, "contact_h2": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ", "de": "Kontakt", "pt": "Contato", "es": "Contacto", "zh": "联系我们"}, "contact_p": {"ko": "버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 화면이었는지 적어 주시면 빠르게 답합니다.", "en": "Bugs, feature requests and refund questions are all welcome. Tell us the device (iPhone / iPad / Mac) and the screen you were on and we can answer faster.", "ja": "不具合・機能のご要望・返金のご相談、どれも歓迎します。どの端末（iPhone／iPad／Mac）のどの画面かを書いていただけると早く答えられます。", "de": "Fehler, Wünsche und Fragen zur Rückerstattung sind willkommen. Mit Gerät (iPhone / iPad / Mac) und Bildschirm können wir schneller antworten.", "pt": "Bugs, sugestões e dúvidas sobre reembolso são bem-vindos. Diga o aparelho (iPhone / iPad / Mac) e a tela em que estava para respondermos mais rápido.", "es": "Errores, sugerencias y dudas sobre reembolsos son bienvenidos. Dinos el dispositivo (iPhone / iPad / Mac) y la pantalla en la que estabas y responderemos antes.", "zh": "欢迎反馈问题、提出功能建议或咨询退款。说明设备（iPhone／iPad／Mac）与所在界面，我们能更快答复。"}, "footer_policy": {"ko": "전체 개인정보처리방침", "en": "Site-wide privacy policy", "ja": "サイト全体のプライバシーポリシー", "de": "Seitenweite Datenschutzerklärung", "pt": "Política de privacidade do site", "es": "Política de privacidad del sitio", "zh": "站点整体隐私政策"}, "footer_nora": {"ko": "NORA 사용법", "en": "NORA support", "ja": "NORA の使い方", "de": "NORA Support", "pt": "Suporte do NORA", "es": "Soporte de NORA", "zh": "NORA 使用方法"}};
+  const SUPPORTED_LANGS = ["ko","en","ja","de","pt","es","zh"];
+  const LANG_LABELS = {ko:"한국어", en:"English", ja:"日本語", de:"Deutsch", pt:"Português", es:"Español", zh:"简体中文"};
+
+  function applyLang(lang){
+    if (!SUPPORTED_LANGS.includes(lang)) lang = "ko";
+    document.documentElement.lang = (lang === "zh" ? "zh-Hans" : lang);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const entry = I18N[el.getAttribute('data-i18n')];
+      if (!entry) return;
+      const val = entry[lang] || entry.ko;
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+    });
+    document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang);
+    });
+    const label = document.getElementById('langSwitchLabel');
+    if (label) label.textContent = LANG_LABELS[lang];
+    // 사이트와 같은 열쇠를 쓴다 — 여기서 고른 언어가 홈에서도 이어진다.
+    try { localStorage.setItem('siteLang', lang); } catch(e) {}
+  }
+
+  function detectLang(){
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
+    } catch(e) {}
+    const nav = ((navigator.language || 'ko') + '').toLowerCase();
+    for (const code of ['ko','ja','de','pt','es','zh','en']) {
+      if (nav.indexOf(code) === 0) return code;
+    }
+    return 'ko';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('langSwitchBtn');
+    const menu = document.getElementById('langSwitchMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function(e){
+        if (!menu.contains(e.target) && e.target !== btn) {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+        b.addEventListener('click', function(){
+          applyLang(b.getAttribute('data-lang-btn'));
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+    applyLang(detectLang());
+  });
+</script>
 </body>
 </html>
