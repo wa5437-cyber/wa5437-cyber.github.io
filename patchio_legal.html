@@ -161,6 +161,15 @@
   }
   .lang-switch-menu button:hover{ background:var(--bg-alt); color:var(--text-primary); }
   .lang-switch-menu button.active{ color:var(--text-primary); font-weight:600; }
+
+  .shots{ display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; margin-top:16px; }
+  .shots figure{ margin:0; flex:1 1 320px; min-width:0; }
+  .shots figure.narrow{ flex:0 1 220px; }
+  .shots img{ margin-top:0; }
+  .shots figcaption{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--text-tertiary); margin-top:8px;
+  }
 </style>
 </head>
 <body>
@@ -227,23 +236,35 @@
           <li data-i18n="step2_li4" data-i18n-html="true">아이폰에서는 줄을 눌러 한 줄씩 편집합니다</li>
         </ul>
         <div class="tip" data-i18n="step2_tip" data-i18n-html="true">칸이 모자라거나 남으면 <b>더 보기(⋯) → 표 칸 고르기</b>에서 STAGE BOX·CONSOLE CH·CUSTOM 같은 칸을 켜고 끕니다. 켠 칸은 PDF·CSV 에도 그대로 나갑니다.</div>
-        <img src="/img/patchio/io-list.jpg" alt="24채널 인풋 리스트 표" loading="lazy">
+        <div class="shots">
+          <figure><img src="/img/patchio/io-list.jpg" alt="24채널 인풋 리스트 표" loading="lazy"><figcaption>Mac</figcaption></figure>
+          <figure class="narrow"><img src="/img/patchio/ipad-io-list.jpg" alt="아이패드의 인풋 리스트" loading="lazy"><figcaption>iPad</figcaption></figure>
+        </div>
       </div>
       <div class="step">
         <h3><span class="num">3</span><span data-i18n="step3_h">무대 배치도에 채널 번호를 얹는다</span></h3>
         <p data-i18n="step3_p" data-i18n-html="true"><b>무대</b> 탭에서 심볼(드럼·앰프·마이크 스탠드·웨지)을 끌어다 놓고, 표의 채널을 연결하면 <span class="mono">CH 17</span> 처럼 번호가 함께 표시됩니다. 번호를 다시 매겨도 연결은 따라옵니다.</p>
-        <img src="/img/patchio/stage.jpg" alt="채널 번호가 붙은 무대 배치도" loading="lazy">
+        <div class="shots">
+          <figure><img src="/img/patchio/stage.jpg" alt="채널 번호가 붙은 무대 배치도" loading="lazy"><figcaption>Mac</figcaption></figure>
+          <figure class="narrow"><img src="/img/patchio/ipad-stage.jpg" alt="아이패드의 무대 배치도" loading="lazy"><figcaption>iPad</figcaption></figure>
+        </div>
       </div>
       <div class="step">
         <h3><span class="num">4</span><span data-i18n="step4_h">신호 도면은 저절로 그려진다</span></h3>
         <p data-i18n="step4_p" data-i18n-html="true">표를 적으면 <b>도면</b> 탭에 소스 → 마이크·DI 계통이 그려집니다. 따로 그릴 필요가 없고, 표를 고치면 도면도 함께 바뀝니다. 같은 마이크를 몇 개 쓰는지(<span class="mono">×4</span>)도 함께 보입니다.</p>
-        <img src="/img/patchio/diagram.jpg" alt="자동으로 그려진 신호 도면" loading="lazy">
+        <div class="shots">
+          <figure><img src="/img/patchio/diagram.jpg" alt="자동으로 그려진 신호 도면" loading="lazy"><figcaption>Mac</figcaption></figure>
+          <figure class="narrow"><img src="/img/patchio/ipad-diagram.jpg" alt="아이패드의 신호 도면" loading="lazy"><figcaption>iPad</figcaption></figure>
+        </div>
       </div>
       <div class="step">
         <h3><span class="num">5</span><span data-i18n="step5_h">패치베이를 짜고 라벨을 실물 크기로 뽑는다</span></h3>
         <p data-i18n="step5_p" data-i18n-html="true"><b>패치베이</b> 탭에서 열 수(24·48·96)를 정하고 구역마다 이름·색·노멀 방식(노멀·하프노멀·스루)을 지정합니다. 라벨 띠는 <b>실물 크기</b>로 인쇄되어 오려서 그대로 붙일 수 있습니다.</p>
         <div class="tip" data-i18n="step5_tip" data-i18n-html="true"><b>인쇄 전에 한 번 재세요.</b> 잭 피치(밴텀 48점 1U 기준 9.5mm)와 띠 높이(6mm)는 참고값입니다. 쓰시는 기종을 자로 재서 값을 넣으면 정확히 맞습니다.</div>
-        <img src="/img/patchio/patchbay.jpg" alt="48포인트 패치베이 편집 화면" loading="lazy">
+        <div class="shots">
+          <figure><img src="/img/patchio/patchbay.jpg" alt="48포인트 패치베이 편집 화면" loading="lazy"><figcaption>Mac</figcaption></figure>
+          <figure class="narrow"><img src="/img/patchio/ipad-patchbay.jpg" alt="아이패드의 패치베이" loading="lazy"><figcaption>iPad</figcaption></figure>
+        </div>
       </div>
       <div class="step">
         <h3><span class="num">6</span><span data-i18n="step6_h">크루에게 넘길 종이를 뽑는다</span></h3>
@@ -254,7 +275,10 @@
       <div class="step">
         <h3><span class="num">7</span><span data-i18n="step7_h">모르는 커넥터는 앱 안에서 본다</span></h3>
         <p data-i18n="step7_p" data-i18n-html="true"><b>학습</b> 탭에 커넥터 도감과 케이블 결선도가 있습니다. XLR·TRS·TS·밴텀(TT)·RCA·Speakon·DB25 의 핀 번호와, 각 핀이 무슨 신호인지 적혀 있습니다. <b>이 부분은 전부 무료</b>입니다.</p>
-        <img src="/img/patchio/connector.jpg" alt="커넥터 도감 — XLR 3핀 수" loading="lazy">
+        <div class="shots">
+          <figure><img src="/img/patchio/connector.jpg" alt="커넥터 도감 — XLR 3핀 수" loading="lazy"><figcaption>Mac</figcaption></figure>
+          <figure class="narrow"><img src="/img/patchio/ipad-connector.jpg" alt="아이패드의 커넥터 도감" loading="lazy"><figcaption>iPad</figcaption></figure>
+        </div>
       </div>
     </section>
 
