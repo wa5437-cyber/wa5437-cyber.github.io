@@ -3,169 +3,301 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NORA — 지원 | ML Music Studio</title>
-<meta name="description" content="NORA 개인정보처리방침 및 고객 지원 페이지">
+<title>NORA — 사용법 · 지원 | ML Music Studio</title>
+<meta name="description" content="NORA 사용법, 자주 묻는 질문, 개인정보처리방침. 커버곡 녹음부터 믹싱·마스터링까지 맥에서.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/nora_legal.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* 사이트(index.html)와 같은 색을 쓴다 — 따로 떠 있는 페이지처럼 보이면
-     같은 곳인지 알 수 없다. 주소와 내용은 그대로 둔다. */
+  /* 사이트(index.html)와 같은 색·폰트를 쓴다 — 따로 떠 있는 페이지처럼
+     보이면 사용자가 여기가 같은 곳인지 알 수 없다. */
   :root{
-    --bg-deep:#faf8f3;
-    --bg-panel:#ffffff;
+    --bg:#faf8f3;
+    --bg-alt:#f1ede3;
+    --panel:#ffffff;
     --line: rgba(30,26,20,0.11);
     --line-strong: rgba(30,26,20,0.22);
     --teal:#2f6d4c;
     --blue:#33587a;
+    --amber:#9c6b17;
     --text-primary:#221f1a;
     --text-secondary:#5c574c;
     --text-tertiary:#8c8677;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
   body{
-    margin:0;
-    background:var(--bg-deep);
-    color:var(--text-primary);
-    font-family:'Inter', -apple-system, sans-serif;
-    -webkit-font-smoothing:antialiased;
+    margin:0; background:var(--bg); color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.7;
   }
-  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0 0 14px; letter-spacing:-0.01em; }
-  a{ color:var(--teal); text-decoration:none; }
+  h1,h2,h3,h4{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; letter-spacing:-0.01em; }
+  a{ color:var(--blue); text-decoration:none; }
   a:hover{ text-decoration:underline; }
-  .wrap{ max-width:760px; margin:0 auto; padding:0 24px; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:0 28px; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
 
-  header{
-    border-bottom:1px solid var(--line);
-    padding:32px 0;
-    position:sticky; top:0; z-index:10;
-    backdrop-filter:blur(14px);
-    background:rgba(250,248,243,0.86);
+  nav{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+    background:rgba(250,248,243,0.86); border-bottom:1px solid var(--line);
   }
-  header .wrap{ display:flex; align-items:center; justify-content:space-between; }
-  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; }
-  .brand .mark{ width:26px; height:26px; border-radius:7px; background:var(--bg-panel); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; }
-  .brand .mark span{ width:9px; height:9px; border-radius:50%; background:linear-gradient(180deg, var(--teal), var(--blue)); }
-  nav.jump{ display:flex; gap:20px; font-size:13.5px; color:var(--text-secondary); }
-
-  main{ padding:56px 0 96px; }
-  .kicker{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--teal); margin-bottom:10px; }
-  .updated{ color:var(--text-tertiary); font-size:13px; margin-bottom:40px; }
-
-  section.doc{ margin-bottom:64px; scroll-margin-top:90px; }
-  section.doc h2{ font-size:28px; margin-bottom:6px; }
-  section.doc h3{ font-size:17px; margin-top:32px; margin-bottom:10px; color:var(--text-primary); }
-  section.doc p, section.doc li{ color:var(--text-secondary); font-size:15px; line-height:1.75; }
-  section.doc ul{ padding-left:20px; margin:10px 0; }
-  section.doc li{ margin-bottom:6px; }
-
-  .card{
-    background:var(--bg-panel); border:1px solid var(--line); border-radius:14px;
-    padding:22px 24px; margin:20px 0;
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:var(--text-primary); }
+  .brand .mark{
+    width:28px; height:28px; border-radius:8px; background:var(--panel);
+    border:1px solid var(--line-strong); display:flex; align-items:center;
+    justify-content:center; gap:2px;
   }
-  .card h4{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; color:var(--teal); margin:0 0 10px; }
-  .card p{ margin:0; }
+  .brand .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); }
+  .brand .mark span:nth-child(1){ height:9px; }
+  .brand .mark span:nth-child(2){ height:15px; }
+  .brand .mark span:nth-child(3){ height:6px; }
+  nav .links{ display:flex; gap:22px; font-size:13.5px; color:var(--text-secondary); }
+  nav .links a{ color:var(--text-secondary); }
+  nav .links a:hover{ color:var(--text-primary); text-decoration:none; }
+  @media (max-width:720px){ nav .links a.hide-sm{ display:none; } }
 
-  .faq-item{ border-bottom:1px solid var(--line); padding:18px 0; }
-  .faq-item:last-child{ border-bottom:none; }
-  .faq-item h4{ font-size:15.5px; color:var(--text-primary); margin:0 0 8px; font-weight:600; }
-  .faq-item p{ margin:0; }
-
-  .contact-box{
-    border:1px solid var(--line-strong); background:var(--bg-panel);
-    border-radius:14px; padding:24px; text-align:center;
+  header.hero{ padding:64px 0 28px; }
+  .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber); margin-bottom:12px;
   }
-  .contact-box p{ color:var(--text-secondary); margin-bottom:12px; }
-  .contact-box a{ font-family:'IBM Plex Mono',monospace; font-size:15px; }
+  header.hero h1{ font-size:36px; margin-bottom:12px; }
+  header.hero p{ color:var(--text-secondary); font-size:16px; max-width:70ch; margin:0; }
+  .jump{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:24px;
+  }
+  .jump a{
+    font-size:13px; padding:8px 14px; border-radius:100px;
+    border:1px solid var(--line-strong); color:var(--text-secondary); background:var(--panel);
+  }
+  .jump a:hover{ color:var(--text-primary); text-decoration:none; background:var(--bg-alt); }
 
-  footer{ border-top:1px solid var(--line); padding:28px 0; color:var(--text-tertiary); font-size:12.5px; }
-  footer .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+  main{ padding:24px 0 96px; }
+  section{ margin-bottom:72px; scroll-margin-top:84px; }
+  section > h2{ font-size:26px; margin-bottom:8px; }
+  section > .lede{ color:var(--text-secondary); margin:0 0 28px; max-width:74ch; }
 
-  @media (max-width:600px){ nav.jump{ display:none; } }
+  .step{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:24px; margin-bottom:20px;
+  }
+  .step h3{ font-size:18px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .step h3 .num{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    width:26px; height:26px; border-radius:8px; background:var(--bg-alt);
+    color:var(--amber); display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+  }
+  .step p{ color:var(--text-secondary); margin:0 0 10px; }
+  .step ul{ color:var(--text-secondary); margin:10px 0 0; padding-left:20px; }
+  .step li{ margin-bottom:6px; }
+  .step img{
+    display:block; width:100%; height:auto; margin-top:16px;
+    border-radius:12px; border:1px solid var(--line);
+  }
+  .step img.phone{ max-width:300px; }
+  .tip{
+    margin-top:14px; padding:12px 14px; border-radius:10px;
+    background:var(--bg-alt); border:1px solid var(--line);
+    font-size:14px; color:var(--text-secondary);
+  }
+  .tip b{ color:var(--text-primary); }
+  kbd{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    padding:2px 7px; border-radius:6px; background:var(--panel);
+    border:1px solid var(--line-strong); box-shadow:0 1px 0 var(--line-strong);
+    color:var(--text-primary);
+  }
+
+  .faq{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:6px 24px; }
+  .faq details{ border-bottom:1px solid var(--line); padding:18px 0; }
+  .faq details:last-child{ border-bottom:none; }
+  .faq summary{
+    cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;
+    display:flex; justify-content:space-between; gap:16px; align-items:flex-start;
+  }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:"+"; color:var(--text-tertiary); font-family:'IBM Plex Mono',monospace; }
+  .faq details[open] summary::after{ content:"−"; }
+  .faq details p{ color:var(--text-secondary); margin:10px 0 0; font-size:15px; }
+
+  .policy h3{ font-size:17px; margin:28px 0 8px; }
+  .policy p{ color:var(--text-secondary); margin:0 0 10px; }
+  .policy ul{ color:var(--text-secondary); padding-left:20px; margin:8px 0 14px; }
+
+  .contact{
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:16px;
+    padding:24px; text-align:center; margin-top:28px;
+  }
+  .contact p{ margin:0 0 10px; color:var(--text-secondary); }
+  .contact a{ font-weight:600; font-size:16px; }
+
+  footer{ border-top:1px solid var(--line); padding:28px 0; color:var(--text-tertiary); font-size:13px; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; }
+
+  /* ---------- 언어 스위처 (사이트와 같은 모양) ---------- */
+  .lang-switch{ position:relative; }
+  .lang-switch-btn{
+    display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:var(--text-secondary); background:var(--panel); border:1px solid var(--line);
+    border-radius:100px; padding:8px 14px; cursor:pointer;
+  }
+  .lang-switch-btn:hover{ color:var(--text-primary); background:var(--bg-alt); }
+  .lang-switch-menu{
+    position:absolute; top:calc(100% + 8px); right:0; min-width:160px;
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:12px;
+    box-shadow:0 12px 30px rgba(30,26,20,0.14); padding:6px; z-index:60;
+    opacity:0; transform:scale(0.95) translateY(-4px); pointer-events:none; visibility:hidden;
+    transition:opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 160ms;
+  }
+  .lang-switch-menu.open{ opacity:1; transform:scale(1) translateY(0); pointer-events:auto; visibility:visible; }
+  .lang-switch-menu button{
+    display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    font-size:13.5px; color:var(--text-secondary); padding:9px 12px; border-radius:8px;
+    font-family:inherit;
+  }
+  .lang-switch-menu button:hover{ background:var(--bg-alt); color:var(--text-primary); }
+  .lang-switch-menu button.active{ color:var(--text-primary); font-weight:600; }
 </style>
 </head>
 <body>
 
-<header>
+<nav>
   <div class="wrap">
-    <a class="brand" href="/" style="color:var(--text-primary);">
-      <div class="mark"><span></span></div>
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
       ML MUSIC STUDIO
     </a>
-    <nav class="jump">
+    <div class="links">
       <a href="/#apps">Apps</a>
-      <a href="#privacy">Privacy</a>
-      <a href="#support">Support</a>
-    </nav>
+      <a href="/#policy" class="hide-sm" data-i18n="nav_policy">전체 방침</a>
+      <a href="https://apps.apple.com/app/id6794855195" target="_blank" rel="noopener">App Store</a>
+    </div>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-switch-btn" id="langSwitchBtn" type="button" aria-haspopup="true" aria-expanded="false">🌐 <span id="langSwitchLabel">한국어</span> ▾</button>
+      <div class="lang-switch-menu" id="langSwitchMenu">
+        <button type="button" data-lang-btn="ko">🇰🇷 한국어</button>
+        <button type="button" data-lang-btn="en">🇺🇸 English</button>
+        <button type="button" data-lang-btn="ja">🇯🇵 日本語</button>
+        <button type="button" data-lang-btn="zh">🇨🇳 简体中文</button>
+        <button type="button" data-lang-btn="es">🇪🇸 Español</button>
+        <button type="button" data-lang-btn="de">🇩🇪 Deutsch</button>
+        <button type="button" data-lang-btn="pt">🇵🇹 Português</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">NORA</div>
+    <h1 data-i18n="hero_title">사용법 · 지원</h1>
+    <p data-i18n="hero_desc" data-i18n-html="true">반주를 올리면 키와 템포를 자동으로 잡고, 부르고, 틀린 곳만 다시 녹음하고, 보컬 스타일을 골라 마스터링까지 합니다. 오디오 장비를 몰라도 커버곡 한 곡을 끝낼 수 있게 만든 맥 앱입니다. 아래는 처음 여는 사람의 순서입니다.</p>
+    <div class="jump">
+      <a href="#start" data-i18n="jump_start">사용법</a>
+      <a href="#support" data-i18n="jump_faq">자주 묻는 질문</a>
+      <a href="#privacy" data-i18n="jump_privacy">개인정보처리방침</a>
+      <a href="#contact" data-i18n="jump_contact">문의</a>
+    </div>
   </div>
 </header>
 
 <main>
   <div class="wrap">
 
-    <section class="doc" id="privacy">
-      <div class="kicker">Legal</div>
-      <h2>개인정보처리방침</h2>
-      <p class="updated">최종 수정일: 2026년 7월 28일</p>
+    <section id="start">
+      <h2 data-i18n="start_h2">사용법</h2>
+      <p class="lede" data-i18n="start_lede" data-i18n-html="true">다섯 단계면 한 곡이 끝납니다. 처음이라면 헤드폰을 꼭 끼세요 — 스피커로 들으면서 녹음하면 반주가 마이크로 다시 들어갑니다.</p>
 
-      <p>이 개인정보처리방침은 macOS 앱 <strong>NORA</strong>(이하 "앱")에 적용됩니다. NORA는 커버곡 녹음과 보컬 믹싱을 위한 도구이며, 아래 원칙에 따라 개인정보를 처리합니다.</p>
+      <div class="step">
+        <h3><span class="num">1</span><span data-i18n="n1_h">장치 진단 — 마이크를 고르고 음량을 맞춘다</span></h3>
+        <p data-i18n="n1_p" data-i18n-html="true">마이크를 고르고 한 소절 불러 음량을 맞춥니다. 지연 시간(레이턴시)과 헤드폰 연결은 NORA 가 대신 확인해 알려줍니다.</p>
+        <div class="tip" data-i18n="n1_tip" data-i18n-html="true"><b>헤드폰을 빼면 실시간 모니터링이 자동으로 꺼집니다.</b> 하울링이 나기 전에 앱이 먼저 끕니다.</div>
+      </div>
+      <div class="step">
+        <h3><span class="num">2</span><span data-i18n="n2_h">MR 업로드 — 키와 템포를 자동으로 잡는다</span></h3>
+        <p data-i18n="n2_p" data-i18n-html="true">MP3·WAV·M4A 를 올리면 키와 템포(BPM)를 분석합니다. 분석은 참고용이니 다르다 싶으면 직접 고쳐도 됩니다.</p>
+      </div>
+      <div class="step">
+        <h3><span class="num">3</span><span data-i18n="n3_h">녹음 — 틀린 구간만 다시 부른다</span></h3>
+        <p data-i18n="n3_p" data-i18n-html="true">반주에 맞춰 부릅니다. 틀린 곳이 있으면 파형에서 그 구간만 끌어 다시 녹음(펀치인)하면 앞뒤가 자연스럽게 이어집니다. 처음부터 다시 부를 필요가 없습니다.</p>
+        <div class="tip" data-i18n="n3_tip" data-i18n-html="true"><b>모니터링용 리버브는 녹음 파일에 들어가지 않습니다.</b> 부를 때는 울림을 듣고, 저장되는 소리는 항상 깨끗합니다.</div>
+      </div>
+      <div class="step">
+        <h3><span class="num">4</span><span data-i18n="n4_h">보컬 스타일 — 버튼 하나로 음색을 바꾼다</span></h3>
+        <p data-i18n="n4_p" data-i18n-html="true">샤방하게·단단하게·감성적으로·시원하게·자연스럽게 중에서 고르면 그에 맞춰 믹싱됩니다. 음정 보정도 함께 들어갑니다 — 얼마나 걸지는 조절할 수 있습니다.</p>
+      </div>
+      <div class="step">
+        <h3><span class="num">5</span><span data-i18n="n5_h">마스터링과 내보내기</span></h3>
+        <p data-i18n="n5_p" data-i18n-html="true">마스터링으로 라우드니스를 시중 음원 수준에 맞추고 MP3 또는 WAV 로 저장합니다. 저장 위치는 직접 고릅니다.</p>
+        <div class="tip" data-i18n="n5_tip" data-i18n-html="true"><b>내보낸 파일이 안 보이면</b> 저장 대화상자에서 고른 폴더를 확인해 주세요. 기본값은 보통 '다운로드' 입니다.</div>
+      </div>
 
-      <h3>수집하는 정보</h3>
-      <p>NORA는 <strong>어떠한 개인정보나 사용 데이터도 수집, 저장, 전송하지 않습니다.</strong> 회원가입이나 로그인 기능이 없으며, 서버와 통신하지 않고, 분석(Analytics) 도구나 광고 SDK를 포함하지 않습니다.</p>
-
-      <h3>기기 권한 사용</h3>
-      <ul>
-        <li><strong>마이크 접근</strong> — 보컬 녹음 기능을 위해서만 사용되며, 녹음된 오디오는 사용자의 기기 안에만 저장됩니다. 외부로 전송되지 않습니다.</li>
-        <li><strong>파일 접근</strong> — 사용자가 직접 선택한 MR 파일을 불러오거나, 완성된 결과물(WAV/MP3)을 사용자가 지정한 위치에 저장하기 위한 용도로만 사용됩니다.</li>
-      </ul>
-
-      <h3>데이터 처리 방식</h3>
-      <p>녹음, 믹싱, 마스터링을 포함한 모든 오디오 처리는 사용자의 Mac 안에서만 이루어집니다. 인터넷 연결이 필요하지 않으며, 어떤 형태의 사용자 콘텐츠도 Apple을 포함한 어떤 제3자에게도 전송되지 않습니다.</p>
-
-      <h3>제3자 공유</h3>
-      <p>NORA는 제3자와 공유하는 개인정보가 없습니다. 광고나 제휴 링크도 포함하지 않습니다.</p>
-
-      <h3>변경 사항</h3>
-      <p>이 방침이 변경될 경우 이 페이지에 업데이트된 내용을 반영합니다.</p>
-
-      <div class="contact-box">
-        <p>개인정보처리방침에 대해 궁금한 점이 있으신가요?</p>
-        <a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a>
+      <div class="step">
+        <h3><span class="num">＋</span><span data-i18n="extra_h">그밖에 알아 두면 좋은 것</span></h3>
+        <ul>
+          <li data-i18n="extra_li1" data-i18n-html="true">모든 처리는 내 Mac 안에서 이뤄집니다. 계정도, 목소리 업로드도 없습니다.</li>
+          <li data-i18n="extra_li2" data-i18n-html="true">키·템포 분석은 참고값입니다. 곡의 구조나 음질에 따라 어긋날 수 있어 직접 확인하는 편이 안전합니다.</li>
+          <li data-i18n="extra_li3" data-i18n-html="true">macOS 12.0 이상에서 동작합니다.</li>
+        </ul>
       </div>
     </section>
 
-    <section class="doc" id="support">
-      <div class="kicker">Help</div>
-      <h2>지원 (Support)</h2>
-      <p class="updated">NORA 사용 중 궁금한 점이나 문제가 있으신가요? 아래에서 답을 찾아보세요.</p>
+    <section id="support">
+      <h2 data-i18n="faq_h2">자주 묻는 질문</h2>
+      <p class="lede" data-i18n="faq_lede" data-i18n-html="true">여기서 답을 못 찾으시면 아래 메일로 알려주세요. macOS 버전과 증상을 함께 적어 주시면 빠릅니다.</p>
 
-      <h3>NORA 사용 순서</h3>
-      <div class="card">
-        <h4>Quick Start</h4>
-        <p>① 장비 설정(마이크 선택) → ② MR 업로드(키/BPM 자동 분석) → ③ 녹음 → ④ 보컬 스타일 & 믹싱 → ⑤ 마스터링 & 내보내기(WAV/MP3)</p>
+      <div class="faq">
+        <details>
+          <summary data-i18n="f1_q">녹음할 때 제 목소리가 안 들려요.</summary>
+          <p data-i18n="f1_a" data-i18n-html="true">실시간 모니터링은 헤드폰이 연결되어 있을 때만 켜집니다. 헤드폰 연결과 시스템 설정의 마이크 입력 장치를 확인해 주세요.</p>
+        </details>
+        <details>
+          <summary data-i18n="f2_q">MR 파일의 키·BPM 이 다르게 인식돼요.</summary>
+          <p data-i18n="f2_a" data-i18n-html="true">자동 분석은 참고용입니다. 곡 구조나 음질에 따라 오차가 있을 수 있으니, 필요하면 값을 직접 확인하고 고친 뒤 녹음하세요.</p>
+        </details>
+        <details>
+          <summary data-i18n="f3_q">내보내기한 파일을 찾을 수 없어요.</summary>
+          <p data-i18n="f3_a" data-i18n-html="true">내보낼 때 저장 위치를 직접 고르게 되어 있습니다. 저장 대화상자에서 선택한 폴더(기본값은 보통 '다운로드')를 확인해 주세요.</p>
+        </details>
+        <details>
+          <summary data-i18n="f4_q">앱이 실행되지 않거나 강제 종료돼요.</summary>
+          <p data-i18n="f4_a" data-i18n-html="true">macOS 버전이 12.0 이상인지 확인해 주세요. 그래도 계속되면 macOS 버전과 증상을 아래 메일로 보내주시면 빠르게 도와드리겠습니다.</p>
+        </details>
+        <details>
+          <summary data-i18n="f5_q">녹음에 반주 소리가 같이 들어갑니다.</summary>
+          <p data-i18n="f5_a" data-i18n-html="true">스피커로 반주를 들으면서 녹음하면 그 소리가 마이크로 다시 들어갑니다. 헤드폰을 끼고 녹음해 주세요.</p>
+        </details>
       </div>
+    </section>
 
-      <h3>자주 묻는 질문</h3>
-      <div class="faq-item">
-        <h4>녹음할 때 제 목소리가 안 들려요.</h4>
-        <p>실시간 모니터링은 헤드폰이 연결되어 있을 때만 자동으로 활성화됩니다. 헤드폰 연결 상태와 시스템 환경설정의 마이크 권한(개인정보 보호 및 보안 → 마이크)이 NORA에 대해 허용되어 있는지 확인해주세요.</p>
-      </div>
-      <div class="faq-item">
-        <h4>MR 파일의 키/BPM이 다르게 인식돼요.</h4>
-        <p>자동 분석은 참고용입니다. 곡의 구조나 음질에 따라 오차가 있을 수 있으니, 필요하면 수동으로 확인 후 녹음을 진행해주세요.</p>
-      </div>
-      <div class="faq-item">
-        <h4>내보내기한 파일을 찾을 수 없어요.</h4>
-        <p>내보내기 시 저장 위치를 직접 선택하도록 되어 있습니다. 저장 다이얼로그에서 선택한 폴더(기본값은 보통 '다운로드' 폴더)를 확인해주세요.</p>
-      </div>
-      <div class="faq-item">
-        <h4>앱이 실행되지 않거나 강제 종료돼요.</h4>
-        <p>macOS 버전이 12.0 이상인지 확인해주세요. 문제가 계속되면 아래 이메일로 macOS 버전과 증상을 함께 보내주시면 빠르게 도와드리겠습니다.</p>
-      </div>
+    <section id="privacy" class="policy">
+      <h2 data-i18n="privacy_h2">개인정보처리방침</h2>
+      <p class="lede mono" style="font-size:13px;" data-i18n="privacy_updated">최종 수정일: 2026년 7월 28일</p>
 
-      <div class="contact-box">
-        <p>원하는 답을 찾지 못하셨나요? 언제든 문의해주세요.</p>
+      <h3 data-i18n="p_scope_h">적용 범위</h3>
+      <p data-i18n="p_scope_p" data-i18n-html="true">이 방침은 macOS 앱 <strong>NORA</strong> 에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href="/#policy">사이트의 전체 개인정보처리방침</a>에 있습니다.</p>
+      <h3 data-i18n="p_collect_h">수집하는 정보</h3>
+      <p data-i18n="p_collect_p" data-i18n-html="true">NORA 는 <strong>어떠한 개인정보나 사용 데이터도 수집·저장·전송하지 않습니다.</strong> 회원가입이나 로그인 기능이 없고, 분석 도구나 광고 SDK 도 쓰지 않습니다.</p>
+      <h3 data-i18n="p_perm_h">기기 권한</h3>
+      <ul>
+        <li data-i18n="p_perm_li1" data-i18n-html="true"><strong>마이크</strong> — 보컬 녹음에만 씁니다. 녹음된 소리는 사용자의 Mac 안에만 저장됩니다.</li>
+        <li data-i18n="p_perm_li2" data-i18n-html="true"><strong>파일</strong> — 사용자가 직접 고른 MR 파일을 읽고, 완성한 결과물을 사용자가 지정한 위치에 저장할 때만 씁니다.</li>
+      </ul>
+      <h3 data-i18n="p_process_h">데이터 처리 방식</h3>
+      <p data-i18n="p_process_p" data-i18n-html="true">녹음·믹싱·마스터링을 포함한 모든 오디오 처리는 사용자의 Mac 안에서만 이뤄집니다. 인터넷 연결이 필요하지 않으며, 목소리가 외부로 나가지 않습니다.</p>
+      <h3 data-i18n="p_third_h">제3자 공유</h3>
+      <p data-i18n="p_third_p" data-i18n-html="true">제3자와 공유하는 개인정보가 없습니다. 광고나 제휴 링크도 없습니다.</p>
+      <h3 data-i18n="p_change_h">변경 사항</h3>
+      <p data-i18n="p_change_p" data-i18n-html="true">방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.</p>
+    </section>
+
+    <section id="contact">
+      <h2 data-i18n="contact_h2">문의</h2>
+      <div class="contact">
+        <p data-i18n="contact_p" data-i18n-html="true">버그·기능 제안 모두 환영합니다. macOS 버전과 어떤 단계에서 생긴 일인지 적어 주시면 빠르게 답합니다.</p>
         <a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a>
       </div>
     </section>
@@ -176,9 +308,71 @@
 <footer>
   <div class="wrap">
     <span>© 2026 ML Music Studio</span>
-    <span><a href="/">mlmusicstudio.co.kr</a> · <a href="/#policy">전체 개인정보처리방침</a> · <a href="/patchio_legal.html">Patch &amp; I/O 사용법</a></span>
+    <span><a href="/">mlmusicstudio.co.kr</a> · <a href="/#policy" data-i18n="footer_policy">전체 개인정보처리방침</a> · <a href="/patchio_legal.html" data-i18n="footer_patchio">Patch & I/O 사용법</a></span>
   </div>
 </footer>
 
+<script>
+  const I18N = {"nav_policy": {"ko": "전체 방침", "en": "All policies", "ja": "全体の方針", "de": "Alle Richtlinien", "pt": "Todas as políticas", "es": "Todas las políticas", "zh": "全部条款"}, "hero_title": {"ko": "사용법 · 지원", "en": "How to use it · support", "ja": "使い方 · サポート", "de": "Anleitung · Support", "pt": "Como usar · suporte", "es": "Cómo se usa · soporte", "zh": "使用方法 · 支持"}, "hero_desc": {"ko": "반주를 올리면 키와 템포를 자동으로 잡고, 부르고, 틀린 곳만 다시 녹음하고, 보컬 스타일을 골라 마스터링까지 합니다. 오디오 장비를 몰라도 커버곡 한 곡을 끝낼 수 있게 만든 맥 앱입니다. 아래는 처음 여는 사람의 순서입니다.", "en": "Load a backing track and NORA finds the key and tempo; you sing, re-record only the part you fluffed, pick a vocal style and master it. It is a Mac app built so you can finish a cover song without knowing audio gear. Below is the order for a first run.", "ja": "伴奏を入れるとキーとテンポを自動で判定し、歌って、外したところだけ録り直し、ボーカルの質感を選んでマスタリングまで行います。オーディオ機材を知らなくてもカバー曲を1曲仕上げられる Mac アプリです。以下は初めての人の順序です。", "de": "Playback laden — NORA findet Tonart und Tempo; du singst, nimmst nur die misslungene Stelle neu auf, wählst einen Vocal-Stil und masterst. Eine Mac-App, mit der man einen Coversong fertigstellt, ohne sich mit Audiotechnik auszukennen. Unten die Reihenfolge fürs erste Mal.", "pt": "Carregue o playback e o NORA acha o tom e o andamento; você canta, regrava só o trecho que errou, escolhe um estilo vocal e masteriza. É um app para Mac feito para você terminar um cover sem entender de equipamento. Abaixo, a ordem para a primeira vez.", "es": "Carga la pista y NORA detecta la tonalidad y el tempo; cantas, regrabas solo el trozo que fallaste, eliges un estilo vocal y masterizas. Es una app de Mac hecha para terminar una versión sin saber de equipos. Abajo va el orden para la primera vez.", "zh": "放入伴奏，NORA 会自动判定调性与速度；你只管唱，唱错的地方单独重录，再选一种人声风格并完成母带处理。这是一款让你不懂音频设备也能做完一首翻唱的 Mac 应用。下面是第一次使用的顺序。"}, "jump_start": {"ko": "사용법", "en": "How to use it", "ja": "使い方", "de": "Anleitung", "pt": "Como usar", "es": "Cómo se usa", "zh": "使用方法"}, "jump_faq": {"ko": "자주 묻는 질문", "en": "FAQ", "ja": "よくある質問", "de": "FAQ", "pt": "Perguntas frequentes", "es": "Preguntas frecuentes", "zh": "常见问题"}, "jump_privacy": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー", "de": "Datenschutz", "pt": "Política de privacidade", "es": "Política de privacidad", "zh": "隐私政策"}, "jump_contact": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ", "de": "Kontakt", "pt": "Contato", "es": "Contacto", "zh": "联系我们"}, "start_h2": {"ko": "사용법", "en": "How to use it", "ja": "使い方", "de": "Anleitung", "pt": "Como usar", "es": "Cómo se usa", "zh": "使用方法"}, "start_lede": {"ko": "다섯 단계면 한 곡이 끝납니다. 처음이라면 헤드폰을 꼭 끼세요 — 스피커로 들으면서 녹음하면 반주가 마이크로 다시 들어갑니다.", "en": "Five steps finish a song. Wear headphones the first time — recording with speakers on lets the backing track leak back into the mic.", "ja": "5つの手順で1曲が仕上がります。初めてならヘッドホンを必ず着けてください — スピーカーで聴きながら録ると、伴奏がマイクに回り込みます。", "de": "Fünf Schritte, ein fertiger Song. Beim ersten Mal Kopfhörer aufsetzen — über Lautsprecher landet das Playback wieder im Mikrofon.", "pt": "Cinco passos e a música fica pronta. Use fones na primeira vez — gravando com caixas ligadas, o playback volta para o microfone.", "es": "Cinco pasos y la canción está lista. Ponte auriculares la primera vez — si grabas con altavoces, la base vuelve a entrar por el micro.", "zh": "五个步骤就能做完一首歌。第一次请务必戴耳机 — 开着音箱录音会让伴奏被话筒再次收进去。"}, "n1_h": {"ko": "장치 진단 — 마이크를 고르고 음량을 맞춘다", "en": "Device check — pick the mic and set the level", "ja": "デバイス診断 — マイクを選び音量を合わせる", "de": "Geräte-Check — Mikro wählen, Pegel einstellen", "pt": "Diagnóstico — escolha o microfone e ajuste o nível", "es": "Comprobación — elige el micro y ajusta el nivel", "zh": "设备检测 — 选择话筒并调好音量"}, "n1_p": {"ko": "마이크를 고르고 한 소절 불러 음량을 맞춥니다. 지연 시간(레이턴시)과 헤드폰 연결은 NORA 가 대신 확인해 알려줍니다.", "en": "Choose your mic and sing a line to set the level. NORA checks latency and whether headphones are connected, and tells you.", "ja": "マイクを選び、一節歌って音量を合わせます。レイテンシーとヘッドホンの接続は NORA が代わりに確認して知らせます。", "de": "Mikro wählen und eine Zeile singen, um den Pegel zu setzen. Latenz und Kopfhöreranschluss prüft NORA für dich und sagt Bescheid.", "pt": "Escolha o microfone e cante um trecho para ajustar o nível. O NORA verifica a latência e se há fones conectados, e avisa.", "es": "Elige el micro y canta una frase para ajustar el nivel. NORA comprueba la latencia y si hay auriculares conectados, y te avisa.", "zh": "选择话筒并唱一句来调音量。延迟与耳机连接由 NORA 替你检查并提示。"}, "n1_tip": {"ko": "<b>헤드폰을 빼면 실시간 모니터링이 자동으로 꺼집니다.</b> 하울링이 나기 전에 앱이 먼저 끕니다.", "en": "<b>Unplug the headphones and live monitoring switches itself off.</b> The app cuts it before feedback starts.", "ja": "<b>ヘッドホンを外すとリアルタイムモニターは自動で切れます。</b>ハウリングが起きる前にアプリが止めます。", "de": "<b>Zieh die Kopfhörer ab, schaltet sich das Live-Monitoring selbst aus.</b> Die App unterbricht, bevor es pfeift.", "pt": "<b>Ao tirar os fones, o monitoramento ao vivo se desliga sozinho.</b> O app corta antes da microfonia.", "es": "<b>Si quitas los auriculares, la monitorización en directo se apaga sola.</b> La app corta antes de que aparezca el acople.", "zh": "<b>拔掉耳机后，实时监听会自动关闭。</b>在啸叫发生之前应用就先切断。"}, "n2_h": {"ko": "MR 업로드 — 키와 템포를 자동으로 잡는다", "en": "Load the backing track — key and tempo found for you", "ja": "MR を読み込む — キーとテンポを自動で判定", "de": "Playback laden — Tonart und Tempo automatisch", "pt": "Suba o playback — tom e andamento automáticos", "es": "Carga la base — tonalidad y tempo automáticos", "zh": "上传伴奏 — 自动判定调性与速度"}, "n2_p": {"ko": "MP3·WAV·M4A 를 올리면 키와 템포(BPM)를 분석합니다. 분석은 참고용이니 다르다 싶으면 직접 고쳐도 됩니다.", "en": "Drop in an MP3, WAV or M4A and NORA analyses key and tempo (BPM). The analysis is a guide — override it if it looks off.", "ja": "MP3・WAV・M4A を入れるとキーとテンポ（BPM）を解析します。解析は参考なので、違うと思えば手で直せます。", "de": "MP3, WAV oder M4A einlegen — NORA analysiert Tonart und Tempo (BPM). Die Analyse ist ein Anhaltspunkt; du kannst sie überschreiben.", "pt": "Coloque um MP3, WAV ou M4A e o NORA analisa tom e andamento (BPM). A análise é referência — corrija se parecer errada.", "es": "Suelta un MP3, WAV o M4A y NORA analiza tonalidad y tempo (BPM). El análisis es orientativo — corrígelo si no cuadra.", "zh": "放入 MP3、WAV 或 M4A，NORA 会分析调性与速度（BPM）。分析仅供参考，觉得不对可以自己改。"}, "n3_h": {"ko": "녹음 — 틀린 구간만 다시 부른다", "en": "Record — redo only the part you fluffed", "ja": "録音 — 外したところだけ録り直す", "de": "Aufnehmen — nur die misslungene Stelle neu", "pt": "Grave — regrave só o trecho que errou", "es": "Graba — regraba solo lo que fallaste", "zh": "录音 — 只重录唱错的那段"}, "n3_p": {"ko": "반주에 맞춰 부릅니다. 틀린 곳이 있으면 파형에서 그 구간만 끌어 다시 녹음(펀치인)하면 앞뒤가 자연스럽게 이어집니다. 처음부터 다시 부를 필요가 없습니다.", "en": "Sing along. If you fluff a line, drag over that stretch of the waveform and record just it (punch-in) — the edges join smoothly. No need to start over.", "ja": "伴奏に合わせて歌います。外したところは波形でその区間だけドラッグして録り直せば（パンチイン）前後が自然につながります。最初から歌い直す必要はありません。", "de": "Zum Playback singen. Bei einem Patzer die Stelle in der Wellenform markieren und nur sie neu aufnehmen (Punch-in) — die Übergänge passen. Kein kompletter Neustart nötig.", "pt": "Cante junto. Se errar, arraste esse trecho na forma de onda e regrave só ele (punch-in) — as emendas ficam naturais. Não precisa recomeçar.", "es": "Canta con la base. Si fallas, arrastra ese tramo en la onda y regraba solo eso (punch-in) — los empalmes quedan naturales. No hace falta empezar de nuevo.", "zh": "跟着伴奏唱。唱错时在波形上拖出那一段单独重录（punch-in），前后会自然衔接，不必从头再来。"}, "n3_tip": {"ko": "<b>모니터링용 리버브는 녹음 파일에 들어가지 않습니다.</b> 부를 때는 울림을 듣고, 저장되는 소리는 항상 깨끗합니다.", "en": "<b>The monitoring reverb never reaches the recording.</b> You hear the space while singing; what gets saved stays dry.", "ja": "<b>モニター用リバーブは録音ファイルに入りません。</b>歌うときは響きを聴き、保存される音は常にクリーンです。", "de": "<b>Der Monitor-Hall landet nie in der Aufnahme.</b> Beim Singen hörst du Raum, gespeichert wird trocken.", "pt": "<b>O reverb de monitoração não entra na gravação.</b> Você ouve o ambiente ao cantar, mas o arquivo fica limpo.", "es": "<b>La reverb de monitorización no entra en la grabación.</b> Oyes el espacio al cantar; lo que se guarda queda limpio.", "zh": "<b>监听用的混响不会进入录音文件。</b>唱的时候能听到空间感，保存下来的声音始终是干净的。"}, "n4_h": {"ko": "보컬 스타일 — 버튼 하나로 음색을 바꾼다", "en": "Vocal style — change the tone with one button", "ja": "ボーカルスタイル — ボタン一つで音色を変える", "de": "Vocal-Stil — Klangfarbe per Knopfdruck", "pt": "Estilo vocal — mude o timbre com um botão", "es": "Estilo vocal — cambia el timbre con un botón", "zh": "人声风格 — 一个按钮换音色"}, "n4_p": {"ko": "샤방하게·단단하게·감성적으로·시원하게·자연스럽게 중에서 고르면 그에 맞춰 믹싱됩니다. 음정 보정도 함께 들어갑니다 — 얼마나 걸지는 조절할 수 있습니다.", "en": "Pick bright, solid, emotional, open or natural, and the mix follows. Pitch correction comes with it — you decide how much.", "ja": "きらびやか・しっかり・エモーショナル・すっきり・ナチュラルから選ぶと、それに合わせてミックスされます。ピッチ補正も一緒に入り、かかり具合は調整できます。", "de": "Wähle strahlend, kompakt, emotional, offen oder natürlich — der Mix folgt. Tonhöhenkorrektur ist dabei, die Stärke bestimmst du.", "pt": "Escolha brilhante, encorpado, emotivo, aberto ou natural — a mixagem acompanha. A correção de afinação vem junto, e você decide quanto.", "es": "Elige brillante, sólido, emotivo, abierto o natural, y la mezcla se adapta. La corrección de afinación va incluida — tú decides cuánta.", "zh": "可选华丽、扎实、感性、通透、自然，混音会随之调整。音准修正也一并加入，力度可自行调节。"}, "n5_h": {"ko": "마스터링과 내보내기", "en": "Master and export", "ja": "マスタリングと書き出し", "de": "Mastern und exportieren", "pt": "Masterize e exporte", "es": "Masteriza y exporta", "zh": "母带处理与导出"}, "n5_p": {"ko": "마스터링으로 라우드니스를 시중 음원 수준에 맞추고 MP3 또는 WAV 로 저장합니다. 저장 위치는 직접 고릅니다.", "en": "Mastering brings the loudness up to commercial level, then you save as MP3 or WAV. You choose where it goes.", "ja": "マスタリングでラウドネスを市販音源の水準に合わせ、MP3 か WAV で保存します。保存先は自分で選びます。", "de": "Das Mastering hebt die Lautheit auf kommerzielles Niveau, dann speicherst du als MP3 oder WAV — den Ort wählst du selbst.", "pt": "A masterização leva a loudness ao nível comercial e você salva em MP3 ou WAV, escolhendo a pasta.", "es": "La masterización lleva la sonoridad al nivel comercial y guardas en MP3 o WAV, eligiendo tú la carpeta.", "zh": "母带处理会把响度提到市售音源的水平，然后保存为 MP3 或 WAV，保存位置由你选择。"}, "n5_tip": {"ko": "<b>내보낸 파일이 안 보이면</b> 저장 대화상자에서 고른 폴더를 확인해 주세요. 기본값은 보통 '다운로드' 입니다.", "en": "<b>Cannot find the exported file?</b> Check the folder you picked in the save dialog — it usually defaults to Downloads.", "ja": "<b>書き出したファイルが見つからないとき</b>は、保存ダイアログで選んだフォルダをご確認ください。既定はたいてい「ダウンロード」です。", "de": "<b>Datei nicht auffindbar?</b> Sieh im Ordner nach, den du im Sichern-Dialog gewählt hast — meist ist es „Downloads“.", "pt": "<b>Não acha o arquivo exportado?</b> Verifique a pasta escolhida na caixa de salvar — geralmente é “Downloads”.", "es": "<b>¿No encuentras el archivo exportado?</b> Mira en la carpeta que elegiste al guardar — suele ser “Descargas”.", "zh": "<b>找不到导出的文件？</b>请查看保存对话框里选择的文件夹，默认通常是「下载」。"}, "extra_h": {"ko": "그밖에 알아 두면 좋은 것", "en": "Worth knowing", "ja": "知っておくと良いこと", "de": "Gut zu wissen", "pt": "Bom saber", "es": "Conviene saber", "zh": "另外值得知道的"}, "extra_li1": {"ko": "모든 처리는 내 Mac 안에서 이뤄집니다. 계정도, 목소리 업로드도 없습니다.", "en": "Everything is processed on your Mac. No account, no uploading your voice.", "ja": "すべての処理はご自分の Mac 内で行われます。アカウントも、声のアップロードもありません。", "de": "Alles wird auf deinem Mac verarbeitet. Kein Konto, kein Hochladen deiner Stimme.", "pt": "Todo o processamento acontece no seu Mac. Sem conta e sem enviar sua voz.", "es": "Todo se procesa en tu Mac. Sin cuenta y sin subir tu voz.", "zh": "所有处理都在你的 Mac 上完成。没有账号，也不会上传你的声音。"}, "extra_li2": {"ko": "키·템포 분석은 참고값입니다. 곡의 구조나 음질에 따라 어긋날 수 있어 직접 확인하는 편이 안전합니다.", "en": "Key and tempo detection are a guide. Song structure and audio quality can throw them off, so it is worth checking.", "ja": "キー・テンポの解析は参考値です。曲の構成や音質によってずれることがあるので、確認しておくと安全です。", "de": "Tonart- und Tempoerkennung sind Richtwerte. Songaufbau und Klangqualität können sie verfälschen — lieber prüfen.", "pt": "A detecção de tom e andamento é referência. A estrutura da música e a qualidade do áudio podem confundi-la; vale conferir.", "es": "La detección de tonalidad y tempo es orientativa. La estructura y la calidad del audio pueden despistarla; conviene revisarla.", "zh": "调性与速度分析属于参考值。曲子结构或音质可能让它判断偏差，最好自己确认一下。"}, "extra_li3": {"ko": "macOS 12.0 이상에서 동작합니다.", "en": "Requires macOS 12.0 or later.", "ja": "macOS 12.0 以降で動作します。", "de": "Erfordert macOS 12.0 oder neuer.", "pt": "Requer macOS 12.0 ou posterior.", "es": "Requiere macOS 12.0 o posterior.", "zh": "需要 macOS 12.0 或更高版本。"}, "faq_h2": {"ko": "자주 묻는 질문", "en": "FAQ", "ja": "よくある質問", "de": "Häufige Fragen", "pt": "Perguntas frequentes", "es": "Preguntas frecuentes", "zh": "常见问题"}, "faq_lede": {"ko": "여기서 답을 못 찾으시면 아래 메일로 알려주세요. macOS 버전과 증상을 함께 적어 주시면 빠릅니다.", "en": "If the answer is not here, write to the address below. Including your macOS version and what happened speeds it up.", "ja": "ここに答えがなければ下のメールへどうぞ。macOS のバージョンと症状を書いていただけると早いです。", "de": "Steht die Antwort nicht hier, schreib an die Adresse unten. Mit macOS-Version und Fehlerbeschreibung geht es schneller.", "pt": "Se a resposta não estiver aqui, escreva para o e-mail abaixo. Informe a versão do macOS e o que aconteceu.", "es": "Si la respuesta no está aquí, escribe al correo de abajo. Indica tu versión de macOS y qué ocurrió.", "zh": "如果这里没有答案，请写信到下面的邮箱。附上 macOS 版本与具体现象会更快。"}, "f1_q": {"ko": "녹음할 때 제 목소리가 안 들려요.", "en": "I cannot hear myself while recording.", "ja": "録音中に自分の声が聞こえません。", "de": "Ich höre mich beim Aufnehmen nicht.", "pt": "Não me ouço enquanto gravo.", "es": "No me oigo mientras grabo.", "zh": "录音时听不到自己的声音。"}, "f1_a": {"ko": "실시간 모니터링은 헤드폰이 연결되어 있을 때만 켜집니다. 헤드폰 연결과 시스템 설정의 마이크 입력 장치를 확인해 주세요.", "en": "Live monitoring only runs with headphones connected. Check the headphone connection and the input device in System Settings.", "ja": "リアルタイムモニターはヘッドホン接続時のみ有効です。ヘッドホンの接続と、システム設定の入力デバイスをご確認ください。", "de": "Live-Monitoring läuft nur mit angeschlossenen Kopfhörern. Prüfe Kopfhörer und Eingabegerät in den Systemeinstellungen.", "pt": "O monitoramento ao vivo só funciona com fones conectados. Verifique os fones e o dispositivo de entrada nos Ajustes do Sistema.", "es": "La monitorización solo funciona con auriculares conectados. Revisa los auriculares y el dispositivo de entrada en Ajustes del Sistema.", "zh": "实时监听仅在连接耳机时开启。请检查耳机连接以及系统设置中的输入设备。"}, "f2_q": {"ko": "MR 파일의 키·BPM 이 다르게 인식돼요.", "en": "The key or BPM of my track is detected wrong.", "ja": "MR のキー・BPM が違って認識されます。", "de": "Tonart oder BPM werden falsch erkannt.", "pt": "O tom ou BPM do playback vem errado.", "es": "La tonalidad o el BPM salen mal.", "zh": "伴奏的调性或 BPM 识别错了。"}, "f2_a": {"ko": "자동 분석은 참고용입니다. 곡 구조나 음질에 따라 오차가 있을 수 있으니, 필요하면 값을 직접 확인하고 고친 뒤 녹음하세요.", "en": "The automatic analysis is a guide. Song structure and audio quality can throw it off — check and correct the values before you record.", "ja": "自動解析は参考です。曲の構成や音質で誤差が出ることがあるので、必要なら値を確認して直してから録音してください。", "de": "Die automatische Analyse ist ein Anhaltspunkt. Songaufbau und Klangqualität können sie verfälschen — Werte vor der Aufnahme prüfen und anpassen.", "pt": "A análise automática é referência. Estrutura e qualidade podem gerar erro — confira e ajuste os valores antes de gravar.", "es": "El análisis automático es orientativo. La estructura y la calidad pueden desviarlo — revisa y corrige los valores antes de grabar.", "zh": "自动分析仅供参考。曲子结构与音质可能造成偏差，必要时先确认并修改数值再录音。"}, "f3_q": {"ko": "내보내기한 파일을 찾을 수 없어요.", "en": "I cannot find the exported file.", "ja": "書き出したファイルが見つかりません。", "de": "Ich finde die exportierte Datei nicht.", "pt": "Não encontro o arquivo exportado.", "es": "No encuentro el archivo exportado.", "zh": "找不到导出的文件。"}, "f3_a": {"ko": "내보낼 때 저장 위치를 직접 고르게 되어 있습니다. 저장 대화상자에서 선택한 폴더(기본값은 보통 '다운로드')를 확인해 주세요.", "en": "Export asks you where to save. Look in the folder you chose in the save dialog — it usually defaults to Downloads.", "ja": "書き出し時に保存先を選ぶようになっています。保存ダイアログで選んだフォルダ（既定はたいてい「ダウンロード」）をご確認ください。", "de": "Beim Export wählst du den Speicherort. Sieh in dem Ordner nach, den du im Dialog gewählt hast — meist „Downloads“.", "pt": "A exportação pede onde salvar. Veja a pasta escolhida na caixa de diálogo — normalmente “Downloads”.", "es": "Al exportar eliges dónde guardar. Mira la carpeta que escogiste en el diálogo — suele ser “Descargas”.", "zh": "导出时需要你选择保存位置。请查看保存对话框里选择的文件夹（默认通常是「下载」）。"}, "f4_q": {"ko": "앱이 실행되지 않거나 강제 종료돼요.", "en": "The app will not start, or it quits unexpectedly.", "ja": "アプリが起動しない・強制終了します。", "de": "Die App startet nicht oder stürzt ab.", "pt": "O app não abre ou fecha sozinho.", "es": "La app no arranca o se cierra sola.", "zh": "应用打不开或闪退。"}, "f4_a": {"ko": "macOS 버전이 12.0 이상인지 확인해 주세요. 그래도 계속되면 macOS 버전과 증상을 아래 메일로 보내주시면 빠르게 도와드리겠습니다.", "en": "Check that you are on macOS 12.0 or later. If it keeps happening, email us the macOS version and what you saw and we will help.", "ja": "macOS 12.0 以降かご確認ください。それでも続く場合は、macOS のバージョンと症状を下のメールにお送りください。", "de": "Prüfe, ob macOS 12.0 oder neuer läuft. Bleibt es dabei, schick uns Version und Beschreibung per Mail.", "pt": "Verifique se está no macOS 12.0 ou posterior. Se continuar, envie a versão e o que aconteceu por e-mail.", "es": "Comprueba que tienes macOS 12.0 o posterior. Si sigue pasando, escríbenos con la versión y lo ocurrido.", "zh": "请确认 macOS 是否为 12.0 或更高版本。若仍如此，请把 macOS 版本与现象发到下面的邮箱。"}, "f5_q": {"ko": "녹음에 반주 소리가 같이 들어갑니다.", "en": "The backing track bleeds into my recording.", "ja": "録音に伴奏の音が入ってしまいます。", "de": "Das Playback landet mit in der Aufnahme.", "pt": "O playback vaza para a gravação.", "es": "La base se cuela en la grabación.", "zh": "伴奏的声音混进了录音里。"}, "f5_a": {"ko": "스피커로 반주를 들으면서 녹음하면 그 소리가 마이크로 다시 들어갑니다. 헤드폰을 끼고 녹음해 주세요.", "en": "If you monitor the backing track on speakers, the mic picks it back up. Record with headphones on.", "ja": "スピーカーで伴奏を聴きながら録ると、その音がマイクに回り込みます。ヘッドホンを着けて録音してください。", "de": "Hörst du das Playback über Lautsprecher, nimmt das Mikro es wieder auf. Bitte mit Kopfhörern aufnehmen.", "pt": "Se você ouve o playback pelas caixas, o microfone o capta de volta. Grave usando fones.", "es": "Si escuchas la base por altavoces, el micro la vuelve a captar. Graba con auriculares.", "zh": "用音箱听伴奏录音时，话筒会把伴奏再收进去。请戴耳机录音。"}, "privacy_h2": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー", "de": "Datenschutzerklärung", "pt": "Política de privacidade", "es": "Política de privacidad", "zh": "隐私政策"}, "privacy_updated": {"ko": "최종 수정일: 2026년 7월 28일", "en": "Last updated: 28 July 2026", "ja": "最終更新日: 2026年7月28日", "de": "Zuletzt geändert: 28. Juli 2026", "pt": "Última atualização: 28 de julho de 2026", "es": "Última actualización: 28 de julio de 2026", "zh": "最后更新：2026 年 7 月 28 日"}, "p_scope_h": {"ko": "적용 범위", "en": "Scope", "ja": "適用範囲", "de": "Geltungsbereich", "pt": "Abrangência", "es": "Ámbito", "zh": "适用范围"}, "p_scope_p": {"ko": "이 방침은 macOS 앱 <strong>NORA</strong> 에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href=\"/#policy\">사이트의 전체 개인정보처리방침</a>에 있습니다.", "en": "This policy covers the macOS app <strong>NORA</strong>. The policy for the other ML Music Studio apps and web tools is in the <a href=\"/#policy\">site-wide privacy policy</a>.", "ja": "この方針は macOS アプリ <strong>NORA</strong> に適用されます。ML Music Studio の他のアプリとウェブツールについては<a href=\"/#policy\">サイト全体のプライバシーポリシー</a>をご覧ください。", "de": "Diese Erklärung gilt für die macOS-App <strong>NORA</strong>. Für die übrigen Apps und Web-Tools gilt die <a href=\"/#policy\">seitenweite Datenschutzerklärung</a>.", "pt": "Esta política cobre o app <strong>NORA</strong> para macOS. Para os demais apps e ferramentas web, veja a <a href=\"/#policy\">política geral do site</a>.", "es": "Esta política cubre la app <strong>NORA</strong> para macOS. Para las demás apps y herramientas web está la <a href=\"/#policy\">política general del sitio</a>.", "zh": "本政策适用于 macOS 应用 <strong>NORA</strong>。ML Music Studio 其他应用与网站工具的政策见<a href=\"/#policy\">站点整体隐私政策</a>。"}, "p_collect_h": {"ko": "수집하는 정보", "en": "What we collect", "ja": "収集する情報", "de": "Erhobene Daten", "pt": "O que coletamos", "es": "Qué recopilamos", "zh": "收集的信息"}, "p_collect_p": {"ko": "NORA 는 <strong>어떠한 개인정보나 사용 데이터도 수집·저장·전송하지 않습니다.</strong> 회원가입이나 로그인 기능이 없고, 분석 도구나 광고 SDK 도 쓰지 않습니다.", "en": "NORA <strong>collects, stores and transmits no personal or usage data.</strong> There is no sign-up or login, and no analytics or ad SDK.", "ja": "NORA は<strong>いかなる個人情報も利用データも収集・保存・送信しません</strong>。会員登録やログインはなく、解析ツールも広告 SDK も使いません。", "de": "NORA <strong>erhebt, speichert und überträgt keine personenbezogenen oder Nutzungsdaten.</strong> Keine Registrierung, kein Login, keine Analyse- oder Werbe-SDKs.", "pt": "O NORA <strong>não coleta, armazena nem transmite dados pessoais ou de uso.</strong> Não há cadastro nem login, e nenhum SDK de analytics ou anúncios.", "es": "NORA <strong>no recopila, almacena ni transmite datos personales ni de uso.</strong> No hay registro ni inicio de sesión, ni SDK de analítica o publicidad.", "zh": "NORA <strong>不收集、不存储、不传输任何个人信息或使用数据。</strong>没有注册或登录功能，也不使用分析工具与广告 SDK。"}, "p_perm_h": {"ko": "기기 권한", "en": "Device permissions", "ja": "端末の権限", "de": "Geräteberechtigungen", "pt": "Permissões", "es": "Permisos", "zh": "设备权限"}, "p_perm_li1": {"ko": "<strong>마이크</strong> — 보컬 녹음에만 씁니다. 녹음된 소리는 사용자의 Mac 안에만 저장됩니다.", "en": "<strong>Microphone</strong> — used only to record vocals. The audio stays on your Mac.", "ja": "<strong>マイク</strong> — ボーカル録音のみに使います。録音した音はご自分の Mac 内にのみ保存されます。", "de": "<strong>Mikrofon</strong> — nur für Gesangsaufnahmen. Das Audio bleibt auf deinem Mac.", "pt": "<strong>Microfone</strong> — usado só para gravar voz. O áudio fica no seu Mac.", "es": "<strong>Micrófono</strong> — solo para grabar voz. El audio se queda en tu Mac.", "zh": "<strong>麦克风</strong> — 仅用于录制人声。录下的声音只保存在你的 Mac 上。"}, "p_perm_li2": {"ko": "<strong>파일</strong> — 사용자가 직접 고른 MR 파일을 읽고, 완성한 결과물을 사용자가 지정한 위치에 저장할 때만 씁니다.", "en": "<strong>Files</strong> — only to read a backing track you pick yourself and to save the finished file where you choose.", "ja": "<strong>ファイル</strong> — ご自身が選んだ MR を読み込み、完成物を指定の場所に保存するときにだけ使います。", "de": "<strong>Dateien</strong> — nur zum Lesen des selbst gewählten Playbacks und zum Sichern des Ergebnisses am gewünschten Ort.", "pt": "<strong>Arquivos</strong> — apenas para ler o playback que você escolhe e salvar o resultado onde você indicar.", "es": "<strong>Archivos</strong> — solo para leer la base que eliges y guardar el resultado donde indiques.", "zh": "<strong>文件</strong> — 仅用于读取你自己选择的伴奏，并把成品保存到你指定的位置。"}, "p_process_h": {"ko": "데이터 처리 방식", "en": "How processing works", "ja": "データの処理方法", "de": "Verarbeitung", "pt": "Como o processamento funciona", "es": "Cómo se procesa", "zh": "数据处理方式"}, "p_process_p": {"ko": "녹음·믹싱·마스터링을 포함한 모든 오디오 처리는 사용자의 Mac 안에서만 이뤄집니다. 인터넷 연결이 필요하지 않으며, 목소리가 외부로 나가지 않습니다.", "en": "Recording, mixing and mastering all happen on your Mac. No internet connection is needed and your voice never leaves the machine.", "ja": "録音・ミックス・マスタリングを含むすべての音声処理はご自分の Mac 内だけで行われます。インターネット接続は不要で、声が外に出ることはありません。", "de": "Aufnahme, Mischung und Mastering laufen ausschließlich auf deinem Mac. Keine Internetverbindung nötig, deine Stimme verlässt das Gerät nicht.", "pt": "Gravação, mixagem e masterização acontecem só no seu Mac. Não é preciso internet e sua voz não sai do computador.", "es": "Grabación, mezcla y masterización ocurren solo en tu Mac. No hace falta internet y tu voz no sale del equipo.", "zh": "录音、混音与母带处理全部只在你的 Mac 上完成。无需联网，你的声音不会外传。"}, "p_third_h": {"ko": "제3자 공유", "en": "Third parties", "ja": "第三者提供", "de": "Dritte", "pt": "Terceiros", "es": "Terceros", "zh": "第三方共享"}, "p_third_p": {"ko": "제3자와 공유하는 개인정보가 없습니다. 광고나 제휴 링크도 없습니다.", "en": "There is no personal information to share with third parties, and no ads or affiliate links.", "ja": "第三者と共有する個人情報はありません。広告やアフィリエイトリンクもありません。", "de": "Es gibt keine personenbezogenen Daten für Dritte, und keine Werbung oder Affiliate-Links.", "pt": "Não há informações pessoais para terceiros, nem anúncios ou links de afiliados.", "es": "No hay información personal que compartir con terceros, ni anuncios ni enlaces de afiliados.", "zh": "没有可与第三方共享的个人信息，也没有广告或推广链接。"}, "p_change_h": {"ko": "변경 사항", "en": "Changes", "ja": "変更", "de": "Änderungen", "pt": "Alterações", "es": "Cambios", "zh": "变更"}, "p_change_p": {"ko": "방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.", "en": "If this policy changes, the page is updated and the date above changes with it.", "ja": "方針が変わればこのページに反映し、上の最終更新日を更新します。", "de": "Ändert sich diese Erklärung, wird die Seite aktualisiert und das Datum oben angepasst.", "pt": "Se a política mudar, esta página é atualizada e a data acima também.", "es": "Si la política cambia, se actualiza esta página y también la fecha.", "zh": "政策如有变更，将更新本页并同步修改上方日期。"}, "contact_h2": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ", "de": "Kontakt", "pt": "Contato", "es": "Contacto", "zh": "联系我们"}, "contact_p": {"ko": "버그·기능 제안 모두 환영합니다. macOS 버전과 어떤 단계에서 생긴 일인지 적어 주시면 빠르게 답합니다.", "en": "Bugs and feature requests are welcome. Tell us your macOS version and which step it happened on and we can answer faster.", "ja": "不具合・機能のご要望を歓迎します。macOS のバージョンと、どの手順で起きたかを書いていただけると早く答えられます。", "de": "Fehler und Wünsche sind willkommen. Mit macOS-Version und Angabe des Schritts können wir schneller antworten.", "pt": "Bugs e sugestões são bem-vindos. Diga a versão do macOS e em que etapa ocorreu para respondermos mais rápido.", "es": "Errores y sugerencias son bienvenidos. Dinos tu versión de macOS y en qué paso ocurrió para responder antes.", "zh": "欢迎反馈问题与功能建议。写明 macOS 版本以及发生在哪一步，我们能更快答复。"}, "footer_policy": {"ko": "전체 개인정보처리방침", "en": "Site-wide privacy policy", "ja": "サイト全体のプライバシーポリシー", "de": "Seitenweite Datenschutzerklärung", "pt": "Política de privacidade do site", "es": "Política de privacidad del sitio", "zh": "站点整体隐私政策"}, "footer_patchio": {"ko": "Patch & I/O 사용법", "en": "Patch & I/O support", "ja": "Patch & I/O の使い方", "de": "Patch & I/O Support", "pt": "Suporte do Patch & I/O", "es": "Soporte de Patch & I/O", "zh": "Patch & I/O 使用方法"}};
+  const SUPPORTED_LANGS = ["ko","en","ja","de","pt","es","zh"];
+  const LANG_LABELS = {ko:"한국어", en:"English", ja:"日本語", de:"Deutsch", pt:"Português", es:"Español", zh:"简体中文"};
+
+  function applyLang(lang){
+    if (!SUPPORTED_LANGS.includes(lang)) lang = "ko";
+    document.documentElement.lang = (lang === "zh" ? "zh-Hans" : lang);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const entry = I18N[el.getAttribute('data-i18n')];
+      if (!entry) return;
+      const val = entry[lang] || entry.ko;
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+    });
+    document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang);
+    });
+    const label = document.getElementById('langSwitchLabel');
+    if (label) label.textContent = LANG_LABELS[lang];
+    // 사이트와 같은 열쇠를 쓴다 — 여기서 고른 언어가 홈에서도 이어진다.
+    try { localStorage.setItem('siteLang', lang); } catch(e) {}
+  }
+
+  function detectLang(){
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
+    } catch(e) {}
+    const nav = ((navigator.language || 'ko') + '').toLowerCase();
+    for (const code of ['ko','ja','de','pt','es','zh','en']) {
+      if (nav.indexOf(code) === 0) return code;
+    }
+    return 'ko';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('langSwitchBtn');
+    const menu = document.getElementById('langSwitchMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function(e){
+        if (!menu.contains(e.target) && e.target !== btn) {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+        b.addEventListener('click', function(){
+          applyLang(b.getAttribute('data-lang-btn'));
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+    applyLang(detectLang());
+  });
+</script>
 </body>
 </html>
