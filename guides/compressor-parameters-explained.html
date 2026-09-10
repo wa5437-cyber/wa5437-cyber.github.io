@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>컴프레서 파라미터 제대로 이해하기 — Threshold·Ratio·Attack·Release | ML Music Studio</title>
+<meta name="description" content="컴프레서의 Threshold·Ratio·Knee·Attack·Release·Makeup Gain이 소리에 실제로 어떤 변화를 주는지 수치 예시로 설명합니다. 게이트·더킹과의 차이, 자주 하는 실수, 악기별 시작값까지 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html">
+<meta property="og:title" content="컴프레서 파라미터 제대로 이해하기 — Threshold·Ratio·Attack·Release">
+<meta property="og:description" content="컴프레서 파라미터가 소리에 미치는 영향을 수치 예시로 설명. 게이트·더킹과의 차이와 악기별 시작값까지.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "컴프레서 파라미터 제대로 이해하기 — Threshold·Ratio·Attack·Release",
+  "description": "컴프레서 파라미터가 소리에 미치는 영향을 수치 예시로 설명. 게이트·더킹과의 차이와 악기별 시작값까지.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>컴프레서 파라미터 제대로 이해하기</h1>
+  <div class="meta">믹싱·측정 · 약 8분</div>
+
+  <p class="lede">컴프레서는 파라미터가 6개나 되고 서로 영향을 주고받아서, 처음 배울 땐 "Threshold를 내렸는데 왜 소리가 더 커지지?" 같은 혼란이 생기기 쉽습니다. 사실 컴프레서가 하는 일은 딱 하나입니다 — <strong>설정한 기준(Threshold)보다 큰 신호를 정해진 비율(Ratio)로 줄인다</strong>. 나머지 파라미터는 전부 "언제, 얼마나 빠르게, 얼마나 부드럽게" 그 일을 할지를 정할 뿐입니다.</p>
+
+  <h2>Threshold — 어디서부터 압축할지</h2>
+  <p>신호가 이 레벨(dB)을 넘으면 압축이 시작됩니다. 예를 들어 Threshold를 −20dB로 두면, −20dB 아래 소리는 그대로 통과하고 그 이상만 줄어듭니다. <strong>Threshold를 낮출수록 더 많은 신호가 압축 대상이 되어 전체적으로 더 세게 눌립니다.</strong></p>
+  <ul>
+    <li>보컬처럼 다이나믹이 큰 소스는 Threshold를 낮게(예: −24~−18dB) 잡아 넓은 구간을 살짝 눌러주는 경우가 많습니다.</li>
+    <li>피크만 잡고 싶다면 Threshold를 높게(예: −10~−6dB) 잡아 튀는 부분만 건드립니다.</li>
+  </ul>
+
+  <h2>Ratio — 얼마나 세게 누를지</h2>
+  <p>Threshold를 넘은 만큼을 몇 대 1로 줄일지 정합니다. Ratio 4:1이면, Threshold보다 4dB 넘은 신호는 1dB만 넘도록 압축됩니다. 즉 <strong>초과분을 Ratio로 나눈 만큼만 실제로 넘어가게</strong> 합니다.</p>
+  <table class="data">
+<tr><th>Ratio</th><th>느낌</th><th>주로 이럴 때</th></tr>
+<tr><td>1.5:1 ~ 2:1</td><td>가벼운 다이나믹 정리, 티 안 나게</td><td>버스 컴프레션, 마스터 글루</td></tr>
+<tr><td>3:1 ~ 6:1</td><td>확실히 눌리는 게 들림</td><td>보컬, 베이스, 드럼 개별 트랙</td></tr>
+<tr><td>8:1 이상</td><td>사실상 리미터에 가까움</td><td>피크 캐치, 리미팅</td></tr>
+<tr><td>∞:1</td><td>Threshold를 절대 못 넘음</td><td>브릭월 리미터</td></tr>
+</table>
+
+  <h2>Knee — Threshold 근처를 얼마나 부드럽게 넘어갈지</h2>
+  <p>Hard Knee는 Threshold를 넘는 순간 정해진 Ratio가 바로 적용되고, Soft Knee는 Threshold 앞뒤 구간에서 Ratio가 서서히 올라갑니다. Soft Knee가 더 자연스럽고 눈에(귀에) 덜 띄는 압축을 만들어서, 보컬이나 버스 컴프레션처럼 티 안 나게 누르고 싶을 때 자주 씁니다.</p>
+
+  <h2>Attack — 압축이 시작되기까지 걸리는 시간</h2>
+  <p>신호가 Threshold를 넘은 뒤 실제로 압축이 걸리기까지의 지연입니다. <strong>Attack이 빠르면(예: 1~5ms) 트랜지언트(어택 순간의 펀치)까지 눌러버리고, Attack이 느리면(예: 30~50ms) 트랜지언트는 그대로 통과시키고 그 뒤 지속되는 소리만 눌립니다.</strong></p>
+  <ul>
+    <li>드럼의 타격감(펀치)을 살리고 싶다면 Attack을 느리게 — 트랜지언트가 눌리기 전에 지나가게 합니다.</li>
+    <li>보컬의 사– 발음이나 튀는 자음을 확실히 잡고 싶다면 Attack을 빠르게 합니다.</li>
+    <li>너무 빠른 Attack + 낮은 Threshold + 높은 Ratio 조합은 소리를 납작하고 생기 없게 만들기 쉬운 조합입니다.</li>
+  </ul>
+
+  <h2>Release — 압축이 풀리기까지 걸리는 시간</h2>
+  <p>신호가 Threshold 아래로 내려온 뒤 게인이 원래대로 돌아오는 데 걸리는 시간입니다. <strong>Release가 너무 빠르면 압축이 걸렸다 풀렸다를 반복하며 소리가 "펌핑"하거나 지글거리고, 너무 느리면 다음 소리가 나올 때까지 게인이 회복되지 않아 답답하게 눌린 채로 남습니다.</strong></p>
+  <ul>
+    <li>베이스처럼 리듬이 일정한 소스는 곡의 템포(박자)에 Release를 맞추면 펌핑이 오히려 그루브감으로 들리기도 합니다.</li>
+    <li>확신이 안 서면 Auto Release(있는 기종에 한해)로 시작해 귀로 비교하며 수동으로 좁혀가는 편이 빠릅니다.</li>
+  </ul>
+
+  <h2>Makeup Gain — 줄어든 만큼 다시 올리기</h2>
+  <p>압축으로 전체 레벨이 내려간 만큼 보충해서 원래 음량과 비슷하게 맞추는 단계입니다. 이 단계를 빼먹고 "컴프레서 걸었더니 더 안 좋아졌다"고 느끼는 경우가 많은데, 실제로는 대부분 <strong>레벨이 작아져서 상대적으로 덜 좋게 들리는 것</strong>입니다(같은 소리도 더 크면 더 좋게 들리는 라우드니스 편향 때문). Bypass와 비교할 땐 반드시 두 상태의 레벨을 맞춘 뒤 들어야 합니다.</p>
+
+  <div class="callout">
+    <div class="ico">🎚️</div>
+    <div class="body">
+      <b>다이나믹스 청음 훈련 (무료 웹 도구)</b>
+      <p>Threshold·Ratio·Attack·Release를 직접 슬라이더로 조절하면서, 압축이 걸렸을 때와 아닐 때의 소리 차이를 실시간으로 비교해볼 수 있습니다.</p>
+      <a href="/effects-listening.html">▸ 다이나믹스 청음 훈련 열기</a>
+    </div>
+  </div>
+
+  <h2>게이트·더킹과 헷갈리지 않기</h2>
+  <p>셋 다 "레벨에 따라 게인을 자동으로 바꾼다"는 점은 같지만 방향과 목적이 다릅니다.</p>
+  <ul>
+    <li><strong>컴프레서</strong> — Threshold보다 <em>큰</em> 신호를 줄인다. 다이나믹 레인지를 좁혀 레벨을 고르게.</li>
+    <li><strong>게이트(Gate)</strong> — Threshold보다 <em>작은</em> 신호(주로 노이즈)를 차단한다. 마이크 누화·배경 잡음 제거.</li>
+    <li><strong>더킹(Ducking)</strong> — 한 소스(예: 킥드럼)가 울릴 때 다른 소스(예: 베이스)의 볼륨을 일시적으로 낮춘다. EDM 사이드체인 펌핑, 라디오 DJ 멘트 밑 음악 줄이기.</li>
+  </ul>
+
+  <h2>악기별 시작값 (참고용 — 정답은 아님)</h2>
+  <table class="data">
+<tr><th>소스</th><th>Ratio</th><th>Attack</th><th>Release</th><th>비고</th></tr>
+<tr><td>보컬</td><td>3:1 ~ 4:1</td><td>5~15ms</td><td>50~150ms</td><td>Threshold는 낮게, Soft Knee 선호</td></tr>
+<tr><td>킥·스네어</td><td>4:1 ~ 8:1</td><td>10~30ms (펀치 보존)</td><td>80~200ms</td><td>너무 빠른 Attack은 타격감을 죽임</td></tr>
+<tr><td>베이스</td><td>3:1 ~ 6:1</td><td>10~30ms</td><td>템포에 맞춤</td><td>레벨을 일정하게 유지하는 목적이 큼</td></tr>
+<tr><td>마스터 버스</td><td>1.5:1 ~ 2:1</td><td>10~30ms</td><td>Auto/느리게</td><td>1~3dB만 살짝, 티 안 나게</td></tr>
+</table>
+  <p class="note">이 표는 시작점일 뿐입니다. 곡·소스마다 다르므로 결국은 귀로 비교하며 조절해야 합니다.</p>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 <span>· 믹싱·측정</span></a>
+    <a href="/guides/reverb-delay-chorus-explained.html">Reverb·Delay·Chorus·Flanger·Phaser 차이 <span>· 믹싱·측정</span></a>
+    <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
