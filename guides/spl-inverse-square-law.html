@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPL과 역제곱 법칙 — 거리별 음압 감쇠 계산 | ML Music Studio</title>
+<meta name="description" content="거리가 2배 멀어지면 음압이 왜 6dB 떨어지는지, 역제곱 법칙 공식과 계산 예시. 자유음장과 실제 현장의 차이, 라인 어레이가 역제곱 법칙을 벗어나는 이유, 딜레이 스피커 SPL 맞추기까지 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html">
+<meta property="og:title" content="SPL과 역제곱 법칙 — 거리별 음압 감쇠 계산">
+<meta property="og:description" content="거리 2배에 −6dB. 역제곱 법칙 공식, 계산 예시, 라인 어레이가 예외인 이유, 딜레이 스피커 SPL 맞추기.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "SPL과 역제곱 법칙 — 거리별 음압 감쇠 계산",
+  "description": "거리가 2배 멀어지면 음압이 6dB 떨어지는 원리, 계산 예시, 라인 어레이가 예외인 이유, 딜레이 스피커 SPL 맞추기.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>SPL과 역제곱 법칙</h1>
+  <div class="meta">도구 가이드 · 약 6분</div>
+
+  <p class="lede">FOH에서 믹스를 다 잡아놨는데 뒷자리로 가면 소리가 확 작게 들리는 경험, 다들 있으실 거예요. 페이더를 안 건드려도 거리만 멀어지면 음압은 예측 가능한 만큼 떨어집니다. 그 법칙이 역제곱 법칙이고, 공식 하나면 몇 미터에서 몇 dB가 빠지는지 미리 계산할 수 있습니다.</p>
+
+  <h2>역제곱 법칙이란</h2>
+  <p>점음원(스피커를 한 점으로 볼 수 있을 만큼 충분히 떨어진 거리)에서 음압은 거리의 제곱에 반비례해서 줄어듭니다. dB로 바꾸면 이렇게 됩니다.</p>
+  <div class="formula">ΔSPL = 20 × log₁₀(d₁ ÷ d₂)</div>
+  <p>여기서 d₁은 기준 거리, d₂는 더 멀어진 거리입니다. 이 공식에서 나오는 가장 중요한 숫자 하나만 외우면 됩니다 — <strong>거리가 2배가 될 때마다 −6dB</strong>.</p>
+  <table class="data">
+<tr><th>거리 배수</th><th>SPL 변화</th></tr>
+<tr><td>×2</td><td>−6 dB</td></tr>
+<tr><td>×4</td><td>−12 dB</td></tr>
+<tr><td>×8</td><td>−18 dB</td></tr>
+<tr><td>×10</td><td>−20 dB</td></tr>
+</table>
+  <div class="note">전력(파워)이 아니라 <strong>음압</strong> 기준이라 20×log를 씁니다. 앰프 파워를 2배로 올릴 때 +3dB인 것과 헷갈리기 쉬운데, 완전히 다른 계산입니다 — 파워 2배는 앰프 쪽 이야기, 거리 2배는 전파 경로 쪽 이야기예요.</div>
+
+  <h2>계산 예시 — FOH 콘솔 vs 맨 뒷자리</h2>
+  <div class="example">
+    <h4>스피커에서 10m(믹스 위치)와 40m(맨 뒷자리)</h4>
+    <p>거리 배수 = 40 ÷ 10 = 4배</p>
+    <p>ΔSPL = 20 × log₁₀(4) = <strong>−12 dB</strong></p>
+    <p>FOH에서 95dB로 들리게 잡았다면, 맨 뒷자리는 이론상 83dB까지 떨어집니다. 이 차이를 메우려고 딜레이 타워를 세우는 겁니다.</p>
+  </div>
+
+  <h2>현실은 완전한 역제곱이 아니다</h2>
+  <p>이 공식은 벽·천장 반사가 없는 <strong>자유음장</strong>을 가정합니다. 실내 공연장은 반사음이 섞이면서 감쇠가 이론값보다 완만해지는 구간이 있고, 실외라도 바닥 반사(지면 반사파와 직접음의 간섭)로 특정 주파수가 더 크게 죽기도 합니다.</p>
+  <div class="note">특히 <strong>라인 어레이</strong>는 점음원이 아니라 선음원에 가깝게 설계됩니다. 근거리에서는 원통파에 가까워 거리 2배당 <strong>−3dB</strong>(점음원의 절반)만 떨어지다가, 어레이 길이보다 훨씬 멀어지면 다시 점음원처럼 −6dB/배수로 수렴합니다. 라인 어레이를 쓰는 이유 중 하나가 이 근거리 감쇠 완화입니다.</div>
+
+  <h2>실전 활용 — 딜레이 스피커 SPL 맞추기</h2>
+  <p>메인 스피커에서 25m 지점에 딜레이 타워를 세운다고 하면, 그 지점의 SPL을 먼저 역제곱 법칙으로 예측하고 딜레이 스피커의 출력을 거기에 맞춰야 자연스럽게 이어집니다.</p>
+  <ul>
+    <li>메인 스피커 1m 기준 SPL을 알고 있다면, 25m에서는 20×log₁₀(25) ≈ <strong>−28dB</strong> 지점.</li>
+    <li>딜레이 스피커는 이 지점의 예상 SPL과 비슷하게(보통 ±3dB 이내) 맞춰야 이음매가 안 느껴집니다.</li>
+    <li>타이밍은 <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법</a>에서 다룬 음속 공식으로 따로 계산합니다 — SPL과 딜레이 타임은 별개 계산입니다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎚️</div>
+    <div class="body">
+      <b>AudioEngineerKit: SPL & RTA (iOS)</b>
+      <p>실제 SPL을 측정하면서 거리별 예측값과 비교. 31밴드 RTA도 같은 앱에서 확인 가능.</p>
+      <a href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>파워 dB(10×log)와 음압 dB(20×log)를 혼동한다.</strong> 거리 감쇠는 항상 20×log.</li>
+    <li><strong>실내 반사가 많은 공간에도 자유음장 공식을 그대로 적용한다.</strong> 근사값으로만 쓰고 현장에서 실측 보정.</li>
+    <li><strong>라인 어레이 근거리 구간에 점음원 공식(−6dB/배수)을 적용해 딜레이 타워 출력을 과하게 올린다.</strong></li>
+  </ul>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
