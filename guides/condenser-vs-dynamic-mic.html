@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>콘덴서 vs 다이나믹 마이크 — 원리 차이와 용도별 선택 | ML Music Studio</title>
+<meta name="description" content="콘덴서 마이크와 다이나믹 마이크의 발전 원리 차이, 팬텀파워가 필요한 이유, 감도·주파수 응답·최대 음압레벨(SPL) 차이, 보컬 부스·라이브 무대·드럼·기타앰프 등 상황별로 어떤 마이크를 골라야 하는지 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/condenser-vs-dynamic-mic.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/condenser-vs-dynamic-mic.html">
+<meta property="og:title" content="콘덴서 vs 다이나믹 마이크 — 원리 차이와 용도별 선택">
+<meta property="og:description" content="발전 원리 차이, 팬텀파워, 감도·최대 SPL 차이, 상황별(보컬 부스·라이브·드럼·기타앰프) 선택 가이드.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "콘덴서 vs 다이나믹 마이크 — 원리 차이와 용도별 선택",
+  "description": "콘덴서 마이크와 다이나믹 마이크의 발전 원리 차이, 팬텀파워, 감도·최대 SPL 차이, 상황별 선택 가이드.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/condenser-vs-dynamic-mic.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>콘덴서 vs 다이나믹 마이크 — 원리 차이와 용도별 선택</h1>
+  <div class="meta">도구 가이드 · 약 7분</div>
+
+  <p class="lede">"콘덴서가 더 좋은 마이크"라는 말은 절반만 맞습니다. 두 마이크는 소리를 전기 신호로 바꾸는 <strong>원리 자체가 다르고</strong>, 그 원리 차이가 감도·음압 내구성·소음 특성을 결정합니다. 어떤 상황에 어떤 마이크를 써야 하는지는 이 원리를 알면 저절로 답이 나옵니다.</p>
+
+  <h2>다이나믹 마이크 — 스피커를 거꾸로 쓰는 발전기</h2>
+  <p>다이나믹 마이크는 <strong>전자기 유도</strong>로 소리를 전기로 바꿉니다. 얇은 진동판(다이어프램)에 코일이 붙어 있고, 그 코일이 영구자석 사이에서 움직이면 전압이 유도됩니다. 스피커 구조를 그대로 거꾸로 돌린 것과 같습니다.</p>
+  <ul>
+    <li>구조가 튼튼하고 습기·충격에 강함.</li>
+    <li>진동판이 무겁고 코일까지 달려 있어 <strong>고음역 응답이 상대적으로 둔함</strong>(보통 15kHz 근처에서 롤오프).</li>
+    <li>자체 발전을 하므로 <strong>외부 전원이 필요 없음</strong>.</li>
+    <li>감도가 낮아 프리앰프 게인을 더 많이 필요로 함.</li>
+  </ul>
+
+  <h2>콘덴서 마이크 — 전기용량 변화를 읽는 축전기</h2>
+  <p>콘덴서 마이크는 <strong>정전용량(커패시턴스) 변화</strong>로 소리를 읽습니다. 아주 얇은 금속 코팅 진동판과 그 뒤의 고정판(백플레이트)이 축전기(콘덴서)를 이루는데, 소리에 진동판이 움직이면 두 판 사이 거리가 변하고, 이게 정전용량 변화 → 전압 변화로 이어집니다.</p>
+  <div class="note">축전기가 신호를 만들려면 판에 전하를 미리 걸어둬야 합니다. 이 전하를 공급하는 것이 <strong>팬텀파워(+48V)</strong>입니다. 다이나믹 마이크에 팬텀파워를 걸어도 대부분 고장 나지 않지만(밸런스드 배선 기준), 콘덴서 마이크는 팬텀파워 없이는 소리가 아예 나지 않습니다.</div>
+  <ul>
+    <li>진동판이 극도로 얇고 가벼워 <strong>고음역·트랜지언트 반응이 빠름</strong>.</li>
+    <li>감도가 높아 작은 소리도 잘 잡음 — 룸 노이즈·팝 노이즈도 그만큼 잘 잡음.</li>
+    <li>내부에 프리앰프 회로가 있어 <strong>전원(팬텀파워 또는 배터리) 필수</strong>.</li>
+    <li>진동판이 얇아 강한 충격·습기에 상대적으로 취약.</li>
+  </ul>
+
+  <h2>핵심 수치 비교</h2>
+  <table class="data">
+<tr><th>항목</th><th>다이나믹</th><th>콘덴서</th></tr>
+<tr><td>발전 원리</td><td>전자기 유도(코일+자석)</td><td>정전용량 변화</td></tr>
+<tr><td>전원</td><td>불필요</td><td>팬텀파워 +48V 또는 배터리 필수</td></tr>
+<tr><td>감도</td><td>낮음 (게인 더 필요)</td><td>높음</td></tr>
+<tr><td>고음역 응답</td><td>상대적으로 둔함</td><td>빠르고 섬세함</td></tr>
+<tr><td>최대 SPL 내구성</td><td>매우 높음(킥드럼·기타앰프에도 안전)</td><td>모델별 상이, 패드 없이는 취약할 수 있음</td></tr>
+<tr><td>내구성·습기</td><td>강함</td><td>상대적으로 예민</td></tr>
+<tr><td>자가 노이즈</td><td>거의 없음(수동 소자)</td><td>내부 전자회로 노이즈 존재</td></tr>
+</table>
+
+  <div class="example">
+    <h4>왜 킥 드럼엔 다이나믹, 어쿠스틱 기타엔 콘덴서를 쓰는가</h4>
+    <p>킥 드럼 타격음은 근접에서 130dB SPL을 넘기도 합니다. 콘덴서 마이크의 얇은 진동판과 내부 회로는 이 정도 음압에서 왜곡되거나 손상될 위험이 있는 반면, 다이나믹 마이크는 구조상 훨씬 큰 음압을 버팁니다. 반대로 어쿠스틱 기타의 배음과 피킹 트랜지언트는 미세하고 빠른데, 콘덴서의 빠른 응답과 높은 감도가 이 디테일을 훨씬 잘 잡아냅니다. "어떤 마이크가 더 좋은가"가 아니라 "이 소스의 음압과 디테일에 어떤 원리가 맞는가"의 문제입니다.</p>
+  </div>
+
+  <h2>상황별 선택 가이드</h2>
+  <ul>
+    <li><strong>라이브 보컬(핸드헬드)</strong> — 다이나믹이 기본. 습기(침)·충격·피드백 내성이 필요하고, 근접해서 쓰므로 감도가 낮아도 문제없음.</li>
+    <li><strong>스튜디오 보컬 부스</strong> — 콘덴서가 기본. 조용한 환경에서 디테일과 공기감을 살림.</li>
+    <li><strong>킥·스네어·기타앰프(고음압원)</strong> — 다이나믹. 근접 마이킹 음압을 버텨야 함.</li>
+    <li><strong>드럼 오버헤드·심벌, 어쿠스틱 악기</strong> — 콘덴서. 고음역 트랜지언트 재현이 관건.</li>
+    <li><strong>라이브 무대 전반</strong> — 다이나믹 비중이 높음. 환경 소음·피드백·내구성이 콘덴서의 감도보다 우선시되는 경우가 많음.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·iPadOS·macOS)</b>
+      <p>콘덴서·다이나믹 마이크의 원리 차이와 팬텀파워는 무대예술전문인(음향) 필기 단골 문제입니다. 983문항 + 무제한 생성 계산문제로 대비하세요.</p>
+      <a href="https://apps.apple.com/app/id6798884217" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>콘덴서가 무조건 "고급"이라고 생각한다.</strong> 상황에 안 맞는 콘덴서는 다이나믹보다 못한 결과를 낸다.</li>
+    <li><strong>다이나믹 마이크에 팬텀파워를 켜는 걸 무서워한다.</strong> 대부분의 밸런스드 다이나믹 마이크는 팬텀파워에 안전하지만, 배선이 의심스러운 빈티지·리본 마이크는 확인이 필요하다.</li>
+    <li><strong>콘덴서로 고음압원을 근접 마이킹한다.</strong> 패드(pad) 스위치가 없다면 왜곡이나 손상 위험이 있다.</li>
+    <li><strong>감도 차이를 게인 스테이징에서 고려하지 않는다.</strong> 다이나믹은 콘덴서보다 훨씬 많은 프리앰프 게인이 필요하다.</li>
+  </ul>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/microphone-polar-patterns.html">마이크 지향성 패턴 이해 <span>· 도구 가이드</span></a>
+    <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
