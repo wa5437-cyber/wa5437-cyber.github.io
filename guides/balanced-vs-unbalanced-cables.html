@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XLR·TRS·TS 커넥터와 밸런스드 신호 — 왜 노이즈에 강한가 | ML Music Studio</title>
+<meta name="description" content="XLR·TRS·TS 커넥터의 구조 차이, 밸런스드 신호가 공통 모드 노이즈를 상쇄하는 원리, 핫·콜드 극성, 케이블 길이별 선택 기준과 흔한 연결 실수를 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html">
+<meta property="og:title" content="XLR·TRS·TS 커넥터와 밸런스드 신호 — 왜 노이즈에 강한가">
+<meta property="og:description" content="XLR·TRS·TS 구조 차이와 밸런스드 신호가 노이즈를 상쇄하는 원리, 케이블 선택 기준.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "XLR·TRS·TS 커넥터와 밸런스드 신호 — 왜 노이즈에 강한가",
+  "description": "XLR·TRS·TS 커넥터 구조와 밸런스드 신호의 노이즈 상쇄 원리, 실전 케이블 선택.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>XLR·TRS·TS와 밸런스드 신호</h1>
+  <div class="meta">도구 가이드 · 약 6분</div>
+
+  <p class="lede">공연장 바닥에 수십 미터씩 깔린 마이크 케이블에서 "지지직" 소리가 거의 안 나는 이유는 케이블이 두꺼워서가 아니라 <strong>신호를 둘로 나눠 보내는 밸런스드 방식</strong> 덕분입니다. 커넥터 모양만 보고 헷갈리기 쉬운 XLR·TRS·TS를 구조부터 정리합니다.</p>
+
+  <h2>커넥터 3종, 핀이 몇 개인가</h2>
+  <table class="data">
+<tr><th>커넥터</th><th>접점</th><th>신호 방식</th><th>주 용도</th></tr>
+<tr><td>XLR (캐논)</td><td>3핀: 1 그라운드(쉴드), 2 핫(+), 3 콜드(−)</td><td>밸런스드</td><td>마이크, 믹서 출력, PA 라인</td></tr>
+<tr><td>TRS (Tip-Ring-Sleeve)</td><td>팁 핫, 링 콜드, 슬리브 그라운드</td><td>밸런스드 (또는 헤드폰 스테레오)</td><td>믹서 라인 입출력, 아웃보드, 오디오 인터페이스</td></tr>
+<tr><td>TS (Tip-Sleeve)</td><td>팁 신호, 슬리브 그라운드</td><td>언밸런스드</td><td>일렉기타·베이스, 신시사이저, 페달</td></tr>
+</table>
+  <div class="note">같은 6.35mm 플러그라도 TRS는 밸런스드 모노, 또는 스테레오 헤드폰용으로 쓰입니다. 플러그 끝의 검은 링이 하나면 TS, 둘이면 TRS입니다.</div>
+
+  <h2>밸런스드는 왜 노이즈에 강한가</h2>
+  <p>밸런스드 전송은 같은 신호를 <strong>극성만 반대로 한 두 가닥(핫 +, 콜드 −)</strong>으로 보냅니다. 케이블이 길면 형광등·조광기·무선 전파 같은 노이즈가 두 가닥에 <strong>똑같이(공통 모드)</strong> 유입됩니다. 받는 쪽 차동 입력은 두 가닥의 <em>차이</em>만 증폭하므로 이렇게 됩니다.</p>
+  <div class="formula">출력 = (핫 + 노이즈) − (콜드 + 노이즈) = 핫 − 콜드</div>
+  <div class="example">
+    <h4>숫자로 보기</h4>
+    <p>신호가 핫 +1.0 V, 콜드 −1.0 V이고 두 가닥에 각각 +0.1 V 노이즈가 실렸다면, 핫은 1.1 V, 콜드는 −0.9 V입니다. 차이를 구하면 1.1 − (−0.9) = <strong>2.0 V</strong>로 노이즈는 사라지고 신호는 2배가 됩니다. 언밸런스드는 신호 1.0 V에 노이즈 0.1 V가 그대로 남아 SN비가 20 dB(=20·log 10)로 고정됩니다.</p>
+  </div>
+  <p>실제 장비에서는 두 가닥의 노이즈가 완전히 같지는 않아서, 이를 얼마나 잘 지우는지를 <strong>CMRR(공통 모드 제거비)</strong>로 표기합니다. 좋은 마이크 프리앰프는 60~80 dB 이상입니다.</p>
+
+  <h2>언밸런스드는 언제 괜찮은가</h2>
+  <ul>
+    <li><strong>짧은 거리</strong> — 기타에서 이펙터까지 몇 미터 이내는 큰 문제가 없다. 보통 3~5m 이하가 안전선으로 통한다.</li>
+    <li><strong>고출력 신호</strong> — 노이즈 대비 신호 레벨이 높을수록 영향이 작아진다. 마이크(−50 dBu 안팎)는 반드시 밸런스드, 라인 레벨(+4 dBu)은 상대적으로 여유가 있다.</li>
+    <li><strong>하이 임피던스 소스</strong> — 패시브 픽업 기타는 구조상 TS로 연결한다. 길게 끌어야 하면 DI 박스로 밸런스드로 변환해 XLR로 보내는 것이 정석.</li>
+  </ul>
+
+  <h2>DI 박스가 하는 일</h2>
+  <p>DI(Direct Box)는 <strong>언밸런스드·하이 임피던스</strong> 신호를 <strong>밸런스드·로우 임피던스</strong>로 바꿔 줍니다. 무대에서 기타 앰프 옆 DI로 신호를 만들고 30~50m 멀티코어를 타고 믹서까지 보내도 깨끗한 이유입니다. 트랜스포머 방식 DI는 접지 루프(험)를 끊는 데도 유용합니다.</p>
+
+  <h2>실전 연결 규칙</h2>
+  <ul>
+    <li><strong>밸런스드 출력 → 언밸런스드 입력</strong>은 대부분 가능하지만, 콜드 핀을 그라운드에 묶는 설계인지 확인한다. 노이즈 제거 효과는 사라진다.</li>
+    <li><strong>XLR 2번·3번 극성</strong>이 뒤집히면(한쪽만 바뀌면) 두 마이크를 합칠 때 저역이 빠져 보인다. 케이블 테스터나 폴라리티 체커로 확인.</li>
+    <li><strong>팬텀 파워(+48 V)</strong>는 XLR 2번·3번에 같은 전압을 실어 보낸다. 밸런스드 구조이기 때문에 차동으로는 상쇄되어 신호에 영향이 없다. 리본 마이크에 잘못 걸지 않도록 주의.</li>
+    <li><strong>스피커 케이블(스피콘·바나나)</strong>은 오디오 신호 케이블이 아니다. 단선 규격이 다르니 TS 케이블을 스피커 연결에 쓰지 말 것.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·iPadOS·macOS)</b>
+      <p>커넥터 핀 배열, 밸런스드 원리, 팬텀 파워는 필기·실기에서 반복되는 주제입니다. 기출문제로 정리해 두세요.</p>
+      <a href="https://apps.apple.com/app/id6798884217" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>"XLR이면 무조건 밸런스드"라고 믿는다.</strong> 케이블 배선이 잘못되면 XLR도 사실상 언밸런스드로 동작한다.</li>
+    <li><strong>TS 케이블로 밸런스드 입력에 꽂고 노이즈가 줄길 기대한다.</strong> 케이블이 언밸런스드면 전 구간이 언밸런스드다.</li>
+    <li><strong>길이만 늘리면 된다고 생각한다.</strong> 언밸런스드는 길이가 곧 안테나다. 길수록 험과 고역 손실이 커진다.</li>
+    <li><strong>험이 나면 그라운드 리프트부터 누른다.</strong> 원인(전원 분리·접지 루프)을 먼저 찾고, 안전을 위한 접지를 함부로 끊지 않는다.</li>
+  </ul>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 — 헤드룸과 노이즈 플로어 사이 <span>· 믹싱·측정</span></a>
+    <a href="/guides/microphone-polar-patterns.html">마이크 지향성 패턴 이해 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
