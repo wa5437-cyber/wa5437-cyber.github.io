@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>율 — 사용법 · 지원 · 개인정보처리방침 | ML Music Studio</title>
+<meta name="description" content="율(Yul) 국악 튜너·장단 앱 사용법, 무료·평생권 안내, 정확도 안내, 자주 묻는 질문, 개인정보처리방침. 율명으로 읽는 튜너, 정간보 장단, 국립국악원 대금·피리 기준음, 국악 이론.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/yul_legal.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* 사이트(index.html)와 같은 색·폰트를 쓴다 — 따로 떠 있는 페이지처럼
+     보이면 사용자가 여기가 같은 곳인지 알 수 없다. */
+  :root{
+    --bg:#faf8f3;
+    --bg-alt:#f1ede3;
+    --panel:#ffffff;
+    --line: rgba(30,26,20,0.11);
+    --line-strong: rgba(30,26,20,0.22);
+    --teal:#2f6d4c;
+    --blue:#33587a;
+    --amber:#9c6b17;
+    --text-primary:#221f1a;
+    --text-secondary:#5c574c;
+    --text-tertiary:#8c8677;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.7;
+  }
+  h1,h2,h3,h4{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; letter-spacing:-0.01em; }
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:0 28px; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  nav{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+    background:rgba(250,248,243,0.86); border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:var(--text-primary); }
+  .brand .mark{
+    width:28px; height:28px; border-radius:8px; background:var(--panel);
+    border:1px solid var(--line-strong); display:flex; align-items:center;
+    justify-content:center; gap:2px;
+  }
+  .brand .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); }
+  .brand .mark span:nth-child(1){ height:9px; }
+  .brand .mark span:nth-child(2){ height:15px; }
+  .brand .mark span:nth-child(3){ height:6px; }
+  nav .links{ display:flex; gap:22px; font-size:13.5px; color:var(--text-secondary); }
+  nav .links a{ color:var(--text-secondary); }
+  nav .links a:hover{ color:var(--text-primary); text-decoration:none; }
+  @media (max-width:720px){ nav .links a.hide-sm{ display:none; } }
+
+  header.hero{ padding:64px 0 28px; }
+  .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber); margin-bottom:12px;
+  }
+  header.hero h1{ font-size:36px; margin-bottom:12px; }
+  header.hero p{ color:var(--text-secondary); font-size:16px; max-width:70ch; margin:0; }
+  .jump{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:24px;
+  }
+  .jump a{
+    font-size:13px; padding:8px 14px; border-radius:100px;
+    border:1px solid var(--line-strong); color:var(--text-secondary); background:var(--panel);
+  }
+  .jump a:hover{ color:var(--text-primary); text-decoration:none; background:var(--bg-alt); }
+
+  main{ padding:24px 0 96px; }
+  section{ margin-bottom:72px; scroll-margin-top:84px; }
+  section > h2{ font-size:26px; margin-bottom:8px; }
+  section > .lede{ color:var(--text-secondary); margin:0 0 28px; max-width:74ch; }
+
+  .step{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:24px; margin-bottom:20px;
+  }
+  .step h3{ font-size:18px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .step h3 .num{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    width:26px; height:26px; border-radius:8px; background:var(--bg-alt);
+    color:var(--amber); display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+  }
+  .step p{ color:var(--text-secondary); margin:0 0 10px; }
+  .step ul{ color:var(--text-secondary); margin:10px 0 0; padding-left:20px; }
+  .step li{ margin-bottom:6px; }
+  .step img{
+    display:block; width:100%; height:auto; margin-top:16px;
+    border-radius:12px; border:1px solid var(--line);
+  }
+  .step img.phone{ max-width:300px; }
+  .tip{
+    margin-top:14px; padding:12px 14px; border-radius:10px;
+    background:var(--bg-alt); border:1px solid var(--line);
+    font-size:14px; color:var(--text-secondary);
+  }
+  .tip b{ color:var(--text-primary); }
+  kbd{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    padding:2px 7px; border-radius:6px; background:var(--panel);
+    border:1px solid var(--line-strong); box-shadow:0 1px 0 var(--line-strong);
+    color:var(--text-primary);
+  }
+
+  .faq{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:6px 24px; }
+  .faq details{ border-bottom:1px solid var(--line); padding:18px 0; }
+  .faq details:last-child{ border-bottom:none; }
+  .faq summary{
+    cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;
+    display:flex; justify-content:space-between; gap:16px; align-items:flex-start;
+  }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:"+"; color:var(--text-tertiary); font-family:'IBM Plex Mono',monospace; }
+  .faq details[open] summary::after{ content:"−"; }
+  .faq details p{ color:var(--text-secondary); margin:10px 0 0; font-size:15px; }
+
+  .policy h3{ font-size:17px; margin:28px 0 8px; }
+  .policy p{ color:var(--text-secondary); margin:0 0 10px; }
+  .policy ul{ color:var(--text-secondary); padding-left:20px; margin:8px 0 14px; }
+
+  .contact{
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:16px;
+    padding:24px; text-align:center; margin-top:28px;
+  }
+  .contact p{ margin:0 0 10px; color:var(--text-secondary); }
+  .contact a{ font-weight:600; font-size:16px; }
+
+  footer{ border-top:1px solid var(--line); padding:28px 0; color:var(--text-tertiary); font-size:13px; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; }
+
+  /* ---------- 언어 스위처 (사이트와 같은 모양) ---------- */
+  .lang-switch{ position:relative; }
+  .lang-switch-btn{
+    display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:var(--text-secondary); background:var(--panel); border:1px solid var(--line);
+    border-radius:100px; padding:8px 14px; cursor:pointer;
+  }
+  .lang-switch-btn:hover{ color:var(--text-primary); background:var(--bg-alt); }
+  .lang-switch-menu{
+    position:absolute; top:calc(100% + 8px); right:0; min-width:160px;
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:12px;
+    box-shadow:0 12px 30px rgba(30,26,20,0.14); padding:6px; z-index:60;
+    opacity:0; transform:scale(0.95) translateY(-4px); pointer-events:none; visibility:hidden;
+    transition:opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 160ms;
+  }
+  .lang-switch-menu.open{ opacity:1; transform:scale(1) translateY(0); pointer-events:auto; visibility:visible; }
+  .lang-switch-menu button{
+    display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    font-size:13.5px; color:var(--text-secondary); padding:9px 12px; border-radius:8px;
+    font-family:inherit;
+  }
+  .lang-switch-menu button:hover{ background:var(--bg-alt); color:var(--text-primary); }
+  .lang-switch-menu button.active{ color:var(--text-primary); font-weight:600; }
+
+  .shots{ display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; margin-top:16px; }
+  .shots figure{ margin:0; flex:1 1 320px; min-width:0; }
+  .shots figure.narrow{ flex:0 1 220px; }
+  .shots img{ margin-top:0; }
+  .shots figcaption{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--text-tertiary); margin-top:8px;
+  }
+  .acc{ width:100%; border-collapse:collapse; font-size:14.5px; }
+  .acc th,.acc td{ text-align:left; vertical-align:top; padding:12px 10px; border-bottom:1px solid var(--line); }
+  .acc th{ width:32%; color:var(--text-primary); font-weight:600; }
+  .acc td{ color:var(--text-secondary); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><span class="mark"><span></span><span></span><span></span></span>ML MUSIC STUDIO</a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#policy" class="hide-sm" data-i18n="nav_policy">전체 방침</a>
+      <a href="https://apps.apple.com/app/id6818832139" target="_blank" rel="noopener">App Store</a>
+    </div>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-switch-btn" id="langSwitchBtn" type="button" aria-haspopup="true" aria-expanded="false">🌐 <span id="langSwitchLabel">한국어</span> ▾</button>
+      <div class="lang-switch-menu" id="langSwitchMenu">
+        <button type="button" data-lang-btn="ko">🇰🇷 한국어</button><button type="button" data-lang-btn="en">🇺🇸 English</button><button type="button" data-lang-btn="ja">🇯🇵 日本語</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">율 (Yul)</div>
+    <h1 data-i18n="hero_title">사용법 · 지원</h1>
+    <p data-i18n="hero_desc" data-i18n-html="true">국악기를 위한 튜너와 장단 연습 앱입니다. 율명(黃·太·仲…)으로 읽는 튜너, 정간보 격자로 보고 듣는 장단, 국립국악원이 녹음한 대금·피리 기준음, 그리고 국악 이론 글을 한 앱에 담았습니다. iPhone · iPad · Mac.</p>
+    <div class="jump">
+      <a href="#start" data-i18n="jump_start">사용법</a><a href="#pricing" data-i18n="jump_pricing">무료 · 평생권</a><a href="#accuracy" data-i18n="jump_acc">정확도 안내</a><a href="#faq" data-i18n="jump_faq">자주 묻는 질문</a><a href="#privacy" data-i18n="jump_privacy">개인정보처리방침</a><a href="#contact" data-i18n="jump_contact">문의</a>
+    </div>
+  </div>
+</header>
+<main><div class="wrap">
+<section id="start">
+  <h2 data-i18n="start_h2">사용법</h2>
+  <p class="lede" data-i18n="start_lede">아래 탭은 튜너 · 장단 · 연습 · 이론 네 개입니다. 튜너는 소리를 듣고 율명을 보여 주고, 장단은 정간보 격자로 장단을 들려주며, 연습은 녹음과 연습 기록을 모아 두고, 이론은 국악 이론 글입니다.</p>
+  <div class="step">
+    <h3><span class="num">1</span><span data-i18n="s1_h">튜너</span></h3>
+    <p data-i18n="s1_p" data-i18n-html="true"><b>듣기</b>를 누르면 마이크로 소리를 듣고 가장 가까운 율명과 센트(¢) 편차를 보여 줍니다. 바늘이 초록 영역(±5¢) 안에 들면 맞은 것입니다.</p>
+    <ul>
+      <li data-i18n="s1_l1" data-i18n-html="true">① 녹음 ② 연습(롱톤·음정 드릴) ③ 시김새 수치 ④ 설정(황종 기준 Hz, 삼분손익/평균율, 현악기 조율, 관악 취법)</li>
+      <li data-i18n="s1_l2" data-i18n-html="true">⑤ 율명·옥타브·서양 음이름 ⑥ 게이지와 센트 숫자 ⑦ 기준음(율·옥타브·대금/피리, 스피커로 켜고 끄기) ⑧ 듣기/멈춤</li>
+      <li data-i18n="s1_l3" data-i18n-html="true">황종 기준은 정악(Eb4) 외에 Hz를 직접 넣거나 <b>내 소리로 청 잡기</b>로 지금 부는 음을 기준으로 삼을 수 있습니다. 기준음은 국립국악원이 녹음한 실제 대금·피리 소리입니다.</li>
+    </ul>
+    <div class="shots"><figure class="narrow"><img src="/img/yul/guide_tuner.png" alt="율 튜너 화면과 번호 설명" loading="lazy"><figcaption data-i18n="cap_tuner">튜너</figcaption></figure></div>
+  </div>
+  <div class="step">
+    <h3><span class="num">2</span><span data-i18n="s2_h">장단</span></h3>
+    <p data-i18n="s2_p" data-i18n-html="true">목록에서 장단을 고르면 정간보 격자가 나옵니다. 세로 배치는 전통 정간보처럼 오른쪽 열에서 왼쪽으로, 위에서 아래로 읽습니다. 굵은 테두리는 강박, 오른쪽 아래 점은 징. <b>재생</b>을 누르면 현재 칸이 파랗게 따라갑니다.</p>
+    <ul>
+      <li data-i18n="s2_l1" data-i18n-html="true">① 설정(악기 장구·북·징·꽹과리·클릭, 여음, 격자 배치, 징, 예비박) ② ⓘ 장단 해설 카드 ③ 편집</li>
+      <li data-i18n="s2_l2" data-i18n-html="true">④ 격자 ⑤ BPM(−5/−1/+1/+5, 슬라이더) ⑥ 재생/정지. <b>편집</b>을 켜고 칸을 누르면 구음이 바뀌고 소리로 들립니다. 주황 칸은 원본과 다른 곳입니다.</li>
+      <li data-i18n="s2_l3" data-i18n-html="true">목록의 <b>체인</b>(진양조→중모리→…)은 여러 장단을 이어 재생하고, 내 체인도 만들 수 있습니다. 소리는 국립국악원 녹음 장구·북·징·꽹과리입니다.</li>
+    </ul>
+    <div class="shots"><figure class="narrow"><img src="/img/yul/guide_jangdan.png" alt="율 장단 상세 화면과 번호 설명" loading="lazy"><figcaption data-i18n="cap_jangdan">장단 상세</figcaption></figure><figure class="narrow"><img src="/img/yul/guide_card.png" alt="장단 해설 카드" loading="lazy"><figcaption data-i18n="cap_card">장단 카드</figcaption></figure></div>
+  </div>
+  <div class="step">
+    <h3><span class="num">3</span><span data-i18n="s3_h">이론</span></h3>
+    <p data-i18n="s3_p" data-i18n-html="true">12율과 음률, 장단, 조와 토리, 시김새, 악기와 조율, 정간보·오선보·구음·율자보 읽는 법 아홉 편과 장단마다 해설 카드가 그림과 함께 한국어·영어·일본어로 들어 있습니다. 글 속 파란 글자는 다른 글이나 카드로 바로 이어집니다. 앱 사용법도 이론 탭 맨 위에 있습니다.</p>
+    <div class="shots"><figure class="narrow"><img src="/img/yul/theory.jpg" alt="이론 탭 색인" loading="lazy"><figcaption data-i18n="cap_theory">이론 색인</figcaption></figure><figure class="narrow"><img src="/img/yul/yul12.jpg" alt="12율과 음률 글" loading="lazy"><figcaption data-i18n="cap_yul12">12율과 음률</figcaption></figure></div>
+  </div>
+  <div class="step">
+    <h3><span class="num">4</span><span data-i18n="s4_h">녹음 · 연습 (평생권)</span></h3>
+    <p data-i18n="s4_p" data-i18n-html="true">튜너의 ● 로 연주를 녹음하면 연습 탭에서 피치 곡선과 함께 다시 들을 수 있습니다. ♪ 연습 시트의 <b>롱톤</b>은 길게 낸 소리의 안정도를, <b>음정 드릴</b>은 기준음을 듣고 맞춘 정확도를 점수로 남깁니다. ∿ 시김새는 요성·퇴성의 떨림·폭을 수치로 보여 주고 기준값과 비교합니다.</p>
+    <div class="shots"><figure><img src="/img/yul/mac.jpg" alt="맥에서 튜너와 장단을 나란히" loading="lazy"><figcaption data-i18n="cap_mac">Mac · iPad 가로: 튜너와 장단을 나란히</figcaption></figure></div>
+  </div>
+</section>
+<section id="pricing">
+  <h2 data-i18n="pr_h2">무료 · 평생권</h2>
+  <p class="lede" data-i18n="pr_lede" data-i18n-html="true">출시 기념으로 <b>2주간 모든 기능이 무료</b>입니다. 그 뒤에도 아래 왼쪽은 계속 무료이고, 오른쪽은 평생권(₩6,600, 한 번 구매, 구독 아님)입니다.</p>
+  <table class="acc"><tr><th data-i18n="pr0_k">계속 무료</th><td data-i18n="pr0_v">튜너(율명·센트·기준음 대금/피리·황종 설정), 장단 전부(모든 장단·악기·편집·BPM·체인), 이론 전부, 녹음 목록 보기, 가야금 산조 12현 조율</td></tr><tr><th data-i18n="pr1_k">평생권</th><td data-i18n="pr1_v">녹음과 피치 곡선 다시 보기, 시김새 분석·기준값 비교·따라하기, 롱톤·음정 드릴 점수 기록, 현악기 조율 프리셋 전체(거문고·해금·아쟁·25현 등)</td></tr></table>
+</section>
+<section id="accuracy">
+  <h2 data-i18n="acc_h2">정확도 안내 — 구매 전에 읽어 주세요</h2>
+  <p class="lede" data-i18n="acc_lede" data-i18n-html="true">튜너와 시김새 수치는 마이크 환경(거리·소음·기기)에 따라 달라지는 <b>참고용</b> 값입니다. 무료 기간 동안 내 악기로 직접 확인해 보고 결정해 주세요.</p>
+  <table class="acc"><tr><th data-i18n="acc0_k">튜너</th><td data-i18n="acc0_v">조용한 곳에서 지속음은 ±2¢ 안쪽. 어택이 강한 타현음·낮은 음(100 Hz 아래)·여러 소리가 섞일 때는 흔들릴 수 있습니다.</td></tr><tr><th data-i18n="acc1_k">기준음</th><td data-i18n="acc1_v">국립국악원 녹음을 목표 음정으로 리샘플한 것이라 음정은 정확하지만, 옥타브 2·6 처럼 녹음 범위 밖은 음색이 어두워지거나 얇아집니다.</td></tr><tr><th data-i18n="acc2_k">시김새 수치</th><td data-i18n="acc2_v">떨림 빈도·폭은 자동 분석이며 기준값은 공개 음원(AI Hub)에서 뽑은 통계입니다. 연주의 좋고 나쁨을 판정하지 않습니다.</td></tr></table>
+</section>
+<section id="faq">
+  <h2 data-i18n="faq_h2">자주 묻는 질문</h2>
+  <div class="faq">
+    <details><summary data-i18n="faq0_q">황종이 E♭이 아닌 음으로 잡혀요.</summary><p data-i18n="faq0_a" data-i18n-html="true">설정 → 황종 기준에서 정악(Eb4)·직접 입력·내 소리로 청 잡기 중 하나를 고릅니다. 민속악처럼 C 근처로 잡는 연주라면 "내 소리로 청 잡기"로 지금 부는 음을 기준으로 삼으세요.</p></details>
+    <details><summary data-i18n="faq1_q">기준음이 작게 들려요 / 떨려요.</summary><p data-i18n="faq1_a">기기 볼륨과 앱의 장단 설정 볼륨을 확인하세요. 떨림이 느껴지면 앱 버전을 알려 주세요. 1.0 에서 루프 이음매를 다듬었습니다.</p></details>
+    <details><summary data-i18n="faq2_q">장단을 고쳤는데 되돌리고 싶어요.</summary><p data-i18n="faq2_a">장단 상세 → 편집 → 원본 복원. 원본과 다른 칸은 주황으로 표시됩니다.</p></details>
+    <details><summary data-i18n="faq3_q">환불은 어떻게 하나요?</summary><p data-i18n="faq3_a" data-i18n-html="true">인앱 구입은 Apple 이 처리합니다. <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> 에서 신청하거나, 아래 메일로 알려 주시면 안내해 드립니다.</p></details>
+    <details><summary data-i18n="faq4_q">맥에서도 쓸 수 있나요?</summary><p data-i18n="faq4_a">네. 한 번 구매로 iPhone·iPad·Mac 에서 같은 Apple ID 로 쓸 수 있습니다. 맥에서는 튜너와 장단이 나란히 두 패널로 열립니다.</p></details>
+  </div>
+</section>
+<section id="privacy" class="policy">
+  <h2 data-i18n="privacy_h2">개인정보처리방침</h2>
+  <p class="lede mono" style="font-size:13px;" data-i18n="privacy_updated">최종 수정일: 2026년 10월 4일</p>
+  <h3 data-i18n="p_scope_h">적용 범위</h3>
+  <p data-i18n="p_scope_p" data-i18n-html="true">이 방침은 iOS·iPadOS·macOS 앱 <strong>율(Yul)</strong>에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href="/#policy">사이트의 전체 개인정보처리방침</a>을 보세요.</p>
+  <h3 data-i18n="p_collect_h">수집하는 정보</h3>
+  <p data-i18n="p_collect_p" data-i18n-html="true">앱은 이름·이메일 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 서버 통신·분석(Analytics) 도구·광고 SDK 를 사용하지 않습니다. 인터넷 연결 없이 동작합니다.</p>
+  <h3 data-i18n="p_mic_h">마이크</h3>
+  <p data-i18n="p_mic_p" data-i18n-html="true">마이크는 사용자가 튜너의 <strong>듣기</strong>를 누르거나 녹음·연습을 시작할 때만 켜지며, 소리는 기기 안에서 음높이를 계산하는 데만 쓰입니다. 녹음 기능을 쓰지 않으면 소리는 저장되지 않습니다.</p>
+  <h3 data-i18n="p_data_h">내 녹음과 기록은 어디에 있나</h3>
+  <p data-i18n="p_data_p" data-i18n-html="true">녹음 파일(m4a)·피치 곡선·연습 점수·편집한 장단·체인·설정은 <strong>기기 안</strong>에만 저장됩니다. 외부로 전송되지 않으며, 녹음은 설정한 보관 기간 뒤 또는 사용자가 지울 때 삭제됩니다. 녹음을 공유할 때만 사용자가 고른 곳으로 나갑니다.</p>
+  <h3 data-i18n="p_pay_h">결제</h3>
+  <p data-i18n="p_pay_p" data-i18n-html="true">평생권(비소모성 인앱 구입)의 결제는 Apple 의 StoreKit 을 통해서만 이루어집니다. 저희는 결제 수단이나 카드 정보를 <strong>전혀 수집하지 않습니다.</strong> 구매 복원도 Apple ID 로 처리됩니다.</p>
+  <h3 data-i18n="p_third_h">제3자 공유 · 음원 출처</h3>
+  <p data-i18n="p_third_p" data-i18n-html="true">제3자와 공유하는 개인정보가 없고, 앱 안에 광고나 제휴 링크가 없습니다. 타악기·대금·피리 음원은 국립국악원 「국악기 디지털 음원」(공공누리 제1유형)이고, 시김새 기준값은 AI Hub 공개 데이터의 통계입니다.</p>
+  <h3 data-i18n="p_kids_h">어린이</h3>
+  <p data-i18n="p_kids_p">이 앱은 음악을 배우고 연주하는 사람을 위한 도구이며, 어린이를 대상으로 하지 않고 어린이의 정보를 수집하지 않습니다.</p>
+  <h3 data-i18n="p_change_h">변경 사항</h3>
+  <p data-i18n="p_change_p">방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.</p>
+</section>
+<section id="contact">
+  <h2 data-i18n="contact_h2">문의</h2>
+  <div class="contact"><p data-i18n="contact_p">버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 악기였는지 적어 주시면 빠르게 답합니다. 이론 글에 틀린 곳이 있으면 꼭 알려 주세요.</p><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></div>
+</section>
+</div></main>
+<footer><div class="wrap"><span>© 2026 ML Music Studio</span><span><a href="/">mlmusicstudio.co.kr</a> · <a href="/#policy" data-i18n="footer_policy">전체 개인정보처리방침</a></span></div></footer>
+
+<script>
+  const I18N = {"nav_policy": {"ko": "전체 방침", "en": "Site policy", "ja": "サイト全体の方針"}, "hero_title": {"ko": "사용법 · 지원", "en": "How to use · Support", "ja": "使い方 · サポート"}, "hero_desc": {"ko": "국악기를 위한 튜너와 장단 연습 앱입니다. 율명(黃·太·仲…)으로 읽는 튜너, 정간보 격자로 보고 듣는 장단, 국립국악원이 녹음한 대금·피리 기준음, 그리고 국악 이론 글을 한 앱에 담았습니다. iPhone · iPad · Mac.", "en": "A tuner and rhythm trainer for Korean traditional instruments: a tuner that reads in yul names (黃·太·仲…), jangdan on a jeongganbo grid, real daegeum and piri reference tones recorded by the National Gugak Center, and theory articles. iPhone · iPad · Mac.", "ja": "韓国伝統楽器のためのチューナーとリズム練習アプリ。律名（黃・太・仲…）で読むチューナー、井間譜の格子で見て聞く長短、国立国楽院が録音した大笒・觱篥の基準音、そして理論の記事を一つに。iPhone · iPad · Mac。"}, "jump_start": {"ko": "사용법", "en": "How to use", "ja": "使い方"}, "jump_pricing": {"ko": "무료 · 평생권", "en": "Free · Lifetime", "ja": "無料 · 買い切り"}, "jump_acc": {"ko": "정확도 안내", "en": "Accuracy", "ja": "精度について"}, "jump_faq": {"ko": "자주 묻는 질문", "en": "FAQ", "ja": "よくある質問"}, "jump_privacy": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー"}, "jump_contact": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ"}, "start_h2": {"ko": "사용법", "en": "How to use", "ja": "使い方"}, "start_lede": {"ko": "아래 탭은 튜너 · 장단 · 연습 · 이론 네 개입니다. 튜너는 소리를 듣고 율명을 보여 주고, 장단은 정간보 격자로 장단을 들려주며, 연습은 녹음과 연습 기록을 모아 두고, 이론은 국악 이론 글입니다.", "en": "The bottom bar has four tabs: Tuner · Jangdan · Practice · Theory. The tuner listens and shows the yul name, Jangdan plays rhythms on a jeongganbo grid, Practice keeps recordings and practice logs, and Theory holds the articles.", "ja": "下のタブはチューナー · 長短 · 練習 · 理論の四つです。チューナーは音を聞いて律名を表示し、長短は井間譜の格子でリズムを鳴らし、練習は録音と記録をまとめ、理論は記事です。"}, "s1_h": {"ko": "튜너", "en": "Tuner", "ja": "チューナー"}, "s1_p": {"ko": "<b>듣기</b>를 누르면 마이크로 소리를 듣고 가장 가까운 율명과 센트(¢) 편차를 보여 줍니다. 바늘이 초록 영역(±5¢) 안에 들면 맞은 것입니다.", "en": "Tap <b>Listen</b>. The app hears through the microphone and shows the nearest yul and the deviation in cents. When the needle sits in the green zone (±5¢) you are in tune.", "ja": "<b>聞く</b>を押すとマイクで音を拾い、最も近い律名とセント（¢）のずれを表示します。針が緑の範囲（±5¢）に入れば合っています。"}, "s1_l1": {"ko": "① 녹음 ② 연습(롱톤·음정 드릴) ③ 시김새 수치 ④ 설정(황종 기준 Hz, 삼분손익/평균율, 현악기 조율, 관악 취법)", "en": "① Record ② Practice (long tone, pitch drill) ③ Sigimsae readings ④ Settings (hwangjong Hz, sambunsonik or equal temperament, string tunings, wind fingerings)", "ja": "① 録音 ② 練習（ロングトーン・音程ドリル） ③ シギムセの数値 ④ 設定（黃鐘の基準 Hz、三分損益／平均律、弦楽器の調弦、管楽器の運指）"}, "s1_l2": {"ko": "⑤ 율명·옥타브·서양 음이름 ⑥ 게이지와 센트 숫자 ⑦ 기준음(율·옥타브·대금/피리, 스피커로 켜고 끄기) ⑧ 듣기/멈춤", "en": "⑤ Yul, octave and Western note ⑥ Gauge and cents ⑦ Reference tone (yul, octave, daegeum/piri, speaker toggle) ⑧ Listen/Stop", "ja": "⑤ 律名・オクターブ・西洋音名 ⑥ ゲージとセント ⑦ 基準音（律・オクターブ・大笒／觱篥、スピーカーでオン・オフ） ⑧ 聞く／停止"}, "s1_l3": {"ko": "황종 기준은 정악(Eb4) 외에 Hz를 직접 넣거나 <b>내 소리로 청 잡기</b>로 지금 부는 음을 기준으로 삼을 수 있습니다. 기준음은 국립국악원이 녹음한 실제 대금·피리 소리입니다.", "en": "Besides the court-music standard (Eb4) you can type a Hz value or use <b>Set from my sound</b>. Reference tones are real daegeum and piri recordings from the National Gugak Center.", "ja": "基準は正楽の Eb4 のほか、Hz を直接入力するか<b>自分の音で基準を取る</b>こともできます。基準音は国立国楽院が録音した本物の大笒・觱篥です。"}, "cap_tuner": {"ko": "튜너", "en": "Tuner", "ja": "チューナー"}, "s2_h": {"ko": "장단", "en": "Jangdan", "ja": "長短"}, "s2_p": {"ko": "목록에서 장단을 고르면 정간보 격자가 나옵니다. 세로 배치는 전통 정간보처럼 오른쪽 열에서 왼쪽으로, 위에서 아래로 읽습니다. 굵은 테두리는 강박, 오른쪽 아래 점은 징. <b>재생</b>을 누르면 현재 칸이 파랗게 따라갑니다.", "en": "Pick a jangdan to see its grid. In the vertical layout read like a traditional jeongganbo: right column to left, top to bottom. A thick border is a strong beat, the corner dot is the jing. Press <b>Play</b> and the current cell lights up blue.", "ja": "一覧から長短を選ぶと格子が出ます。縦配置は伝統的な井間譜と同じく右の列から左へ、上から下へ読みます。太い枠は強拍、隅の点はチン。<b>再生</b>を押すと現在の枠が青く進みます。"}, "s2_l1": {"ko": "① 설정(악기 장구·북·징·꽹과리·클릭, 여음, 격자 배치, 징, 예비박) ② ⓘ 장단 해설 카드 ③ 편집", "en": "① Settings (janggu, buk, jing, kkwaenggwari, click; ring-out; layout; jing layer; count-in) ② ⓘ explanation card ③ Edit", "ja": "① 設定（チャング・プク・チン・ケンガリ・クリック、余韻、配置、チン、カウントイン） ② ⓘ 解説カード ③ 編集"}, "s2_l2": {"ko": "④ 격자 ⑤ BPM(−5/−1/+1/+5, 슬라이더) ⑥ 재생/정지. <b>편집</b>을 켜고 칸을 누르면 구음이 바뀌고 소리로 들립니다. 주황 칸은 원본과 다른 곳입니다.", "en": "④ Grid ⑤ BPM (−5/−1/+1/+5, slider) ⑥ Play/Stop. Turn on <b>Edit</b> and tap a cell to change its stroke; you hear it right away. Orange cells differ from the original.", "ja": "④ 格子 ⑤ BPM（−5/−1/+1/+5、スライダー） ⑥ 再生／停止。<b>編集</b>をオンにして枠を叩くと口音が変わり、すぐ音で確認できます。オレンジの枠は原本と違う所です。"}, "s2_l3": {"ko": "목록의 <b>체인</b>(진양조→중모리→…)은 여러 장단을 이어 재생하고, 내 체인도 만들 수 있습니다. 소리는 국립국악원 녹음 장구·북·징·꽹과리입니다.", "en": "<b>Chains</b> in the list (jinyangjo → jungmori → …) play several jangdan in a row, and you can build your own. Sounds are janggu, buk, jing and kkwaenggwari recorded by the National Gugak Center.", "ja": "一覧の<b>チェーン</b>（진양조→중모리→…）は複数の長短を続けて再生し、自分でも作れます。音は国立国楽院録音のチャング・プク・チン・ケンガリです。"}, "cap_jangdan": {"ko": "장단 상세", "en": "Jangdan detail", "ja": "長短の詳細"}, "cap_card": {"ko": "장단 카드", "en": "Jangdan card", "ja": "長短カード"}, "s3_h": {"ko": "이론", "en": "Theory", "ja": "理論"}, "s3_p": {"ko": "12율과 음률, 장단, 조와 토리, 시김새, 악기와 조율, 정간보·오선보·구음·율자보 읽는 법 아홉 편과 장단마다 해설 카드가 그림과 함께 한국어·영어·일본어로 들어 있습니다. 글 속 파란 글자는 다른 글이나 카드로 바로 이어집니다. 앱 사용법도 이론 탭 맨 위에 있습니다.", "en": "Nine illustrated articles in Korean, English and Japanese: the 12 yul and tuning, jangdan, jo and tori, sigimsae, instruments and tuning, and how to read jeongganbo, staff notation, gueum and yuljabo, plus a card for every jangdan. Blue text jumps to another article or card. The app guide sits at the top of the Theory tab.", "ja": "12律と音律、長短、調とトリ、シギムセ、楽器と調弦、井間譜・五線譜・口音・律字譜の読み方の九編と各長短の解説カードが、図とともに韓国語・英語・日本語で入っています。青い文字は別の記事やカードへつながります。アプリの使い方も理論タブの一番上にあります。"}, "cap_theory": {"ko": "이론 색인", "en": "Theory index", "ja": "理論の索引"}, "cap_yul12": {"ko": "12율과 음률", "en": "The twelve yul", "ja": "12律と音律"}, "s4_h": {"ko": "녹음 · 연습 (평생권)", "en": "Recording · Practice (Lifetime)", "ja": "録音 · 練習（買い切り）"}, "s4_p": {"ko": "튜너의 ● 로 연주를 녹음하면 연습 탭에서 피치 곡선과 함께 다시 들을 수 있습니다. ♪ 연습 시트의 <b>롱톤</b>은 길게 낸 소리의 안정도를, <b>음정 드릴</b>은 기준음을 듣고 맞춘 정확도를 점수로 남깁니다. ∿ 시김새는 요성·퇴성의 떨림·폭을 수치로 보여 주고 기준값과 비교합니다.", "en": "Record with ● in the tuner and listen back with the pitch curve in the Practice tab. In the ♪ practice sheet, <b>Long tone</b> scores the stability of a held note and <b>Pitch drill</b> scores how well you match a reference. ∿ Sigimsae shows the rate and width of vibrato-like ornaments against reference values.", "ja": "チューナーの ● で演奏を録音すると、練習タブでピッチ曲線と一緒に聞き直せます。♪ 練習シートの<b>ロングトーン</b>は長く出した音の安定度を、<b>音程ドリル</b>は基準音に合わせた正確さを点数にします。∿ シギムセは揺れの速さと幅を数値で示し基準値と比べます。"}, "cap_mac": {"ko": "Mac · iPad 가로: 튜너와 장단을 나란히", "en": "Mac · iPad landscape: tuner and jangdan side by side", "ja": "Mac · iPad 横向き：チューナーと長短を並べて"}, "pr_h2": {"ko": "무료 · 평생권", "en": "Free · Lifetime", "ja": "無料 · 買い切り"}, "pr_lede": {"ko": "출시 기념으로 <b>2주간 모든 기능이 무료</b>입니다. 그 뒤에도 아래 왼쪽은 계속 무료이고, 오른쪽은 평생권(₩6,600, 한 번 구매, 구독 아님)입니다.", "en": "<b>Every feature is free for the first two weeks</b> after launch. After that, the left column stays free and the right column is the Lifetime purchase (one-time, no subscription).", "ja": "リリース記念で<b>2週間はすべて無料</b>です。その後も左は無料のまま、右は買い切り（一度の購入、サブスクではありません）です。"}, "pr0_k": {"ko": "계속 무료", "en": "Always free", "ja": "ずっと無料"}, "pr0_v": {"ko": "튜너(율명·센트·기준음 대금/피리·황종 설정), 장단 전부(모든 장단·악기·편집·BPM·체인), 이론 전부, 녹음 목록 보기, 가야금 산조 12현 조율", "en": "Tuner (yul, cents, daegeum/piri reference tone, hwangjong settings), all jangdan (every rhythm, instrument, editing, BPM, chains), all theory, viewing the recordings list, gayageum sanjo 12-string tuning", "ja": "チューナー（律名・セント・大笒／觱篥の基準音・黃鐘の設定）、長短すべて（全長短・楽器・編集・BPM・チェーン）、理論すべて、録音一覧の閲覧、伽倻琴散調12弦の調弦"}, "pr1_k": {"ko": "평생권", "en": "Lifetime", "ja": "買い切り"}, "pr1_v": {"ko": "녹음과 피치 곡선 다시 보기, 시김새 분석·기준값 비교·따라하기, 롱톤·음정 드릴 점수 기록, 현악기 조율 프리셋 전체(거문고·해금·아쟁·25현 등)", "en": "Recordings with pitch-curve playback, sigimsae analysis with reference comparison, long-tone and pitch-drill scores, all string-tuning presets (geomungo, haegeum, ajaeng, 25-string and more)", "ja": "録音とピッチ曲線の再生、シギムセ分析・基準値比較、ロングトーン・音程ドリルの点数記録、弦楽器調弦プリセット全て（玄琴・奚琴・牙箏・25弦など）"}, "acc_h2": {"ko": "정확도 안내 — 구매 전에 읽어 주세요", "en": "About accuracy — please read before buying", "ja": "精度について — 購入前にお読みください"}, "acc_lede": {"ko": "튜너와 시김새 수치는 마이크 환경(거리·소음·기기)에 따라 달라지는 <b>참고용</b> 값입니다. 무료 기간 동안 내 악기로 직접 확인해 보고 결정해 주세요.", "en": "Tuner and sigimsae readings depend on the microphone, distance, noise and device and are <b>for reference</b>. Try the app with your own instrument during the free period before deciding.", "ja": "チューナーとシギムセの数値はマイク環境（距離・騒音・機種）によって変わる<b>参考値</b>です。無料期間中にご自分の楽器で確かめてからお決めください。"}, "acc0_k": {"ko": "튜너", "en": "Tuner", "ja": "チューナー"}, "acc0_v": {"ko": "조용한 곳에서 지속음은 ±2¢ 안쪽. 어택이 강한 타현음·낮은 음(100 Hz 아래)·여러 소리가 섞일 때는 흔들릴 수 있습니다.", "en": "Within ±2¢ on sustained notes in a quiet room. Strong attacks, very low notes (under 100 Hz) and mixed sources can make it waver.", "ja": "静かな場所の持続音で ±2¢ 以内。アタックの強い音、低い音（100 Hz 未満）、複数の音が混じるときは揺れることがあります。"}, "acc1_k": {"ko": "기준음", "en": "Reference tone", "ja": "基準音"}, "acc1_v": {"ko": "국립국악원 녹음을 목표 음정으로 리샘플한 것이라 음정은 정확하지만, 옥타브 2·6 처럼 녹음 범위 밖은 음색이 어두워지거나 얇아집니다.", "en": "National Gugak Center recordings resampled to the target pitch, so the pitch is exact, but octaves 2 and 6 fall outside the recorded range and sound darker or thinner.", "ja": "国立国楽院の録音を目標の音程にリサンプルしているので音程は正確ですが、オクターブ 2・6 のように録音範囲外は音色が暗くなったり細くなったりします。"}, "acc2_k": {"ko": "시김새 수치", "en": "Sigimsae readings", "ja": "シギムセの数値"}, "acc2_v": {"ko": "떨림 빈도·폭은 자동 분석이며 기준값은 공개 음원(AI Hub)에서 뽑은 통계입니다. 연주의 좋고 나쁨을 판정하지 않습니다.", "en": "Vibrato rate and width are automatic estimates; reference values are statistics from public AI Hub recordings. They do not judge whether a performance is good.", "ja": "揺れの速さ・幅は自動推定で、基準値は公開データ（AI Hub）の統計です。演奏の良し悪しを判定するものではありません。"}, "faq_h2": {"ko": "자주 묻는 질문", "en": "FAQ", "ja": "よくある質問"}, "faq0_q": {"ko": "황종이 E♭이 아닌 음으로 잡혀요.", "en": "Hwangjong is detected as a note other than Eb.", "ja": "黃鐘が Eb 以外の音で認識されます。"}, "faq0_a": {"ko": "설정 → 황종 기준에서 정악(Eb4)·직접 입력·내 소리로 청 잡기 중 하나를 고릅니다. 민속악처럼 C 근처로 잡는 연주라면 \"내 소리로 청 잡기\"로 지금 부는 음을 기준으로 삼으세요.", "en": "In Settings → Hwangjong reference choose court music (Eb4), a typed Hz value, or Set from my sound. For folk styles pitched near C, use Set from my sound to take your own note as the reference.", "ja": "設定 → 黃鐘の基準で、正楽（Eb4）・直接入力・自分の音で基準を取る、のいずれかを選びます。C 付近に取る民俗楽の演奏なら「自分の音で基準を取る」で今吹いている音を基準にしてください。"}, "faq1_q": {"ko": "기준음이 작게 들려요 / 떨려요.", "en": "The reference tone is quiet or wobbles.", "ja": "基準音が小さい／揺れます。"}, "faq1_a": {"ko": "기기 볼륨과 앱의 장단 설정 볼륨을 확인하세요. 떨림이 느껴지면 앱 버전을 알려 주세요. 1.0 에서 루프 이음매를 다듬었습니다.", "en": "Check the device volume and the volume in the jangdan settings. If you still hear wobble, tell us your app version; 1.0 smoothed the loop seams.", "ja": "端末の音量とアプリの長短設定の音量を確認してください。それでも揺れるならアプリのバージョンをお知らせください。1.0 でループのつなぎ目を整えました。"}, "faq2_q": {"ko": "장단을 고쳤는데 되돌리고 싶어요.", "en": "I edited a jangdan and want it back.", "ja": "長短を編集したものを戻したい。"}, "faq2_a": {"ko": "장단 상세 → 편집 → 원본 복원. 원본과 다른 칸은 주황으로 표시됩니다.", "en": "Jangdan detail → Edit → Restore original. Cells that differ from the original are shown in orange.", "ja": "長短の詳細 → 編集 → 原本に戻す。原本と違う枠はオレンジで表示されます。"}, "faq3_q": {"ko": "환불은 어떻게 하나요?", "en": "How do refunds work?", "ja": "返金はどうすればいいですか？"}, "faq3_a": {"ko": "인앱 구입은 Apple 이 처리합니다. <a href=\"https://reportaproblem.apple.com\" target=\"_blank\" rel=\"noopener\">reportaproblem.apple.com</a> 에서 신청하거나, 아래 메일로 알려 주시면 안내해 드립니다.", "en": "In-app purchases are handled by Apple. Request at <a href=\"https://reportaproblem.apple.com\" target=\"_blank\" rel=\"noopener\">reportaproblem.apple.com</a>, or email us below and we will guide you.", "ja": "アプリ内課金は Apple が処理します。<a href=\"https://reportaproblem.apple.com\" target=\"_blank\" rel=\"noopener\">reportaproblem.apple.com</a> から申請するか、下のメールにご連絡ください。"}, "faq4_q": {"ko": "맥에서도 쓸 수 있나요?", "en": "Does it work on Mac?", "ja": "Mac でも使えますか？"}, "faq4_a": {"ko": "네. 한 번 구매로 iPhone·iPad·Mac 에서 같은 Apple ID 로 쓸 수 있습니다. 맥에서는 튜너와 장단이 나란히 두 패널로 열립니다.", "en": "Yes. One purchase works on iPhone, iPad and Mac with the same Apple ID. On Mac the tuner and jangdan open side by side.", "ja": "はい。一度の購入で同じ Apple ID の iPhone・iPad・Mac で使えます。Mac ではチューナーと長短が二つのパネルで並びます。"}, "privacy_h2": {"ko": "개인정보처리방침", "en": "Privacy Policy", "ja": "プライバシーポリシー"}, "privacy_updated": {"ko": "최종 수정일: 2026년 10월 4일", "en": "Last updated: October 4, 2026", "ja": "最終更新日: 2026年10月4日"}, "p_scope_h": {"ko": "적용 범위", "en": "Scope", "ja": "適用範囲"}, "p_scope_p": {"ko": "이 방침은 iOS·iPadOS·macOS 앱 <strong>율(Yul)</strong>에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트 도구에 대한 방침은 <a href=\"/#policy\">사이트의 전체 개인정보처리방침</a>을 보세요.", "en": "This policy applies to the iOS, iPadOS and macOS app <strong>Yul</strong>. For other ML Music Studio apps and website tools see the <a href=\"/#policy\">site-wide privacy policy</a>.", "ja": "本ポリシーは iOS・iPadOS・macOS アプリ <strong>율（Yul）</strong>に適用されます。ML Music Studio の他のアプリとウェブサイトのツールについては<a href=\"/#policy\">サイト全体のプライバシーポリシー</a>をご覧ください。"}, "p_collect_h": {"ko": "수집하는 정보", "en": "Information we collect", "ja": "収集する情報"}, "p_collect_p": {"ko": "앱은 이름·이메일 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 서버 통신·분석(Analytics) 도구·광고 SDK 를 사용하지 않습니다. 인터넷 연결 없이 동작합니다.", "en": "The app <strong>does not collect personally identifiable information</strong> such as names or email addresses. There is no account, no server communication, no analytics tool and no advertising SDK. It works without an internet connection.", "ja": "アプリは氏名・メールアドレスなど<strong>個人を特定できる情報を収集しません。</strong>アカウント登録はなく、サーバー通信・分析ツール・広告 SDK も使いません。インターネット接続なしで動作します。"}, "p_mic_h": {"ko": "마이크", "en": "Microphone", "ja": "マイク"}, "p_mic_p": {"ko": "마이크는 사용자가 튜너의 <strong>듣기</strong>를 누르거나 녹음·연습을 시작할 때만 켜지며, 소리는 기기 안에서 음높이를 계산하는 데만 쓰입니다. 녹음 기능을 쓰지 않으면 소리는 저장되지 않습니다.", "en": "The microphone is used only when you tap <strong>Listen</strong> in the tuner or start a recording or practice session, and the audio is used solely on the device to compute pitch. Unless you use the recording feature, no audio is stored.", "ja": "マイクはチューナーの<strong>聞く</strong>を押すか録音・練習を始めたときだけオンになり、音は端末内で音高を計算するためだけに使われます。録音機能を使わない限り音は保存されません。"}, "p_data_h": {"ko": "내 녹음과 기록은 어디에 있나", "en": "Where your recordings and logs live", "ja": "録音と記録の保存場所"}, "p_data_p": {"ko": "녹음 파일(m4a)·피치 곡선·연습 점수·편집한 장단·체인·설정은 <strong>기기 안</strong>에만 저장됩니다. 외부로 전송되지 않으며, 녹음은 설정한 보관 기간 뒤 또는 사용자가 지울 때 삭제됩니다. 녹음을 공유할 때만 사용자가 고른 곳으로 나갑니다.", "en": "Recordings (m4a), pitch curves, practice scores, edited jangdan, chains and settings are stored <strong>on the device only</strong>. They are never transmitted; recordings are deleted after the retention period you set or when you delete them. A recording leaves the device only when you share it to a destination you choose.", "ja": "録音ファイル（m4a）・ピッチ曲線・練習の点数・編集した長短・チェーン・設定は<strong>端末内</strong>にのみ保存されます。外部に送信されず、録音は設定した保存期間後またはご自身で削除したときに消えます。録音を共有するときだけ、選んだ先に出ます。"}, "p_pay_h": {"ko": "결제", "en": "Payments", "ja": "決済"}, "p_pay_p": {"ko": "평생권(비소모성 인앱 구입)의 결제는 Apple 의 StoreKit 을 통해서만 이루어집니다. 저희는 결제 수단이나 카드 정보를 <strong>전혀 수집하지 않습니다.</strong> 구매 복원도 Apple ID 로 처리됩니다.", "en": "The Lifetime purchase (non-consumable in-app purchase) is processed solely through Apple's StoreKit. We <strong>never collect payment or card details.</strong> Restoring purchases is handled by your Apple ID.", "ja": "買い切り（非消耗型アプリ内課金）の決済は Apple の StoreKit のみで行われます。私たちは決済手段やカード情報を<strong>一切収集しません。</strong>購入の復元も Apple ID で処理されます。"}, "p_third_h": {"ko": "제3자 공유 · 음원 출처", "en": "Third parties · sound sources", "ja": "第三者提供 · 音源の出典"}, "p_third_p": {"ko": "제3자와 공유하는 개인정보가 없고, 앱 안에 광고나 제휴 링크가 없습니다. 타악기·대금·피리 음원은 국립국악원 「국악기 디지털 음원」(공공누리 제1유형)이고, 시김새 기준값은 AI Hub 공개 데이터의 통계입니다.", "en": "No personal data is shared with third parties, and the app contains no ads or affiliate links. Percussion, daegeum and piri samples are from the National Gugak Center's Digital Sound Sources of Korean Instruments (KOGL Type 1); sigimsae reference values are statistics from public AI Hub data.", "ja": "第三者と共有する個人情報はなく、アプリ内に広告やアフィリエイトリンクもありません。打楽器・大笒・觱篥の音源は国立国楽院「国楽器デジタル音源」（公共ヌリ第1類型）、シギムセの基準値は AI Hub 公開データの統計です。"}, "p_kids_h": {"ko": "어린이", "en": "Children", "ja": "子ども"}, "p_kids_p": {"ko": "이 앱은 음악을 배우고 연주하는 사람을 위한 도구이며, 어린이를 대상으로 하지 않고 어린이의 정보를 수집하지 않습니다.", "en": "The app is a tool for people learning and playing music; it is not directed at children and collects no information from them.", "ja": "本アプリは音楽を学び演奏する人のためのツールで、子どもを対象とせず、子どもの情報を収集しません。"}, "p_change_h": {"ko": "변경 사항", "en": "Changes", "ja": "変更"}, "p_change_p": {"ko": "방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.", "en": "If this policy changes, the page is updated and the date above is revised.", "ja": "ポリシーが変わればこのページに反映し、上の最終更新日を更新します。"}, "contact_h2": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ"}, "contact_p": {"ko": "버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 악기였는지 적어 주시면 빠르게 답합니다. 이론 글에 틀린 곳이 있으면 꼭 알려 주세요.", "en": "Bugs, feature requests and refund questions are all welcome. Tell us the device (iPhone/iPad/Mac) and the instrument so we can answer quickly. If you find an error in a theory article, please let us know.", "ja": "バグ・機能のご提案・返金のご相談はどれも歓迎です。機種（iPhone/iPad/Mac）と楽器を書き添えていただけると早くお答えできます。理論の記事に誤りがあればぜひお知らせください。"}, "footer_policy": {"ko": "전체 개인정보처리방침", "en": "Site-wide privacy policy", "ja": "サイト全体のプライバシーポリシー"}};
+  const SUPPORTED_LANGS = ["ko","en","ja"];
+  const LANG_LABELS = {ko:"한국어", en:"English", ja:"日本語", de:"Deutsch", pt:"Português", es:"Español", zh:"简体中文"};
+
+  function applyLang(lang){
+    if (!SUPPORTED_LANGS.includes(lang)) lang = "ko";
+    document.documentElement.lang = (lang === "zh" ? "zh-Hans" : lang);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const entry = I18N[el.getAttribute('data-i18n')];
+      if (!entry) return;
+      const val = entry[lang] || entry.ko;
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+    });
+    document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang);
+    });
+    const label = document.getElementById('langSwitchLabel');
+    if (label) label.textContent = LANG_LABELS[lang];
+    // 사이트와 같은 열쇠를 쓴다 — 여기서 고른 언어가 홈에서도 이어진다.
+    try { localStorage.setItem('siteLang', lang); } catch(e) {}
+  }
+
+  function detectLang(){
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
+    } catch(e) {}
+    const nav = ((navigator.language || 'ko') + '').toLowerCase();
+    for (const code of ['ko','ja','en']) {
+      if (nav.indexOf(code) === 0) return code;
+    }
+    return 'ko';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('langSwitchBtn');
+    const menu = document.getElementById('langSwitchMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function(e){
+        if (!menu.contains(e.target) && e.target !== btn) {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+        b.addEventListener('click', function(){
+          applyLang(b.getAttribute('data-lang-btn'));
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+    applyLang(detectLang());
+  });
+</script>
+</body>
+</html>
