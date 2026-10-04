@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQ 종류와 Q값 — 그래픽·파라메트릭·셸빙, 대역폭 계산 | ML Music Studio</title>
+<meta name="description" content="그래픽·파라메트릭·세미 파라메트릭·셸빙/필터의 차이, Q값과 대역폭의 관계(Q=중심 주파수÷대역폭), 하울링·음색·저음 정리에서의 Q 선택 기준을 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/eq-types-and-q.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/eq-types-and-q.html">
+<meta property="og:title" content="EQ 종류와 Q값 — 그래픽·파라메트릭·셸빙, 대역폭 계산">
+<meta property="og:description" content="EQ 종류 4가지와 Q값·대역폭 계산, 상황별 Q 선택.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "EQ 종류와 Q값 — 그래픽·파라메트릭·셸빙, 대역폭 계산",
+  "description": "EQ 종류와 Q값, 대역폭 계산.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/eq-types-and-q.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>EQ 종류와 Q값</h1>
+  <div class="meta">도구 가이드 · 약 5분</div>
+
+  <p class="lede">EQ를 올렸는데 소리가 오히려 지저분해졌다면 대개 <strong>EQ의 종류와 Q값</strong>을 구분하지 않고 만진 경우입니다. 종류별 역할과, 한 번에 만지는 폭을 정하는 Q값을 숫자로 정리합니다.</p>
+
+  <h2>EQ 종류 4가지</h2>
+  <table class="data">
+<tr><th>종류</th><th>조절 항목</th><th>주 용도</th></tr>
+<tr><td>그래픽 EQ</td><td>주파수 고정, 슬라이더로 게인만 조절</td><td>스피커 시스템 튜닝, 하울링 대응 (31밴드 = 20Hz~20kHz를 1/3옥타브 간격으로 분할)</td></tr>
+<tr><td>파라메트릭 EQ</td><td>주파수·게인·Q 모두 조절</td><td>채널 EQ 기본, 정밀한 보정</td></tr>
+<tr><td>세미 파라메트릭</td><td>주파수·게인 조절, Q 고정</td><td>소형 믹서 채널</td></tr>
+<tr><td>셸빙·HPF/LPF</td><td>기준 주파수 이하(이상) 전체를 올림·내림 또는 차단</td><td>저역 정리, 전체 톤 보정</td></tr>
+</table>
+
+  <h2>Q값과 대역폭</h2>
+  <div class="formula">Q = 중심 주파수 ÷ 대역폭</div>
+  <p>Q가 클수록 좁고 뾰족하게, 작을수록 넓고 완만하게 걸립니다. 정의 방식(대역폭을 재는 기준)은 제품마다 조금씩 다를 수 있습니다.</p>
+  <div class="example">
+    <h4>숫자로 보기 (중심 1 kHz)</h4>
+    <p>Q = 1이면 대역폭 약 <strong>1,000 Hz</strong>, Q = 4이면 약 <strong>250 Hz</strong>, Q = 10이면 약 <strong>100 Hz</strong>입니다. 1옥타브 폭은 Q ≈ 1.41, 1/3옥타브 폭은 Q ≈ 4.3이므로, 31밴드 그래픽 EQ 슬라이더 하나는 대략 Q 4 정도의 폭입니다.</p>
+  </div>
+
+  <h2>상황별 Q 선택</h2>
+  <ul>
+    <li><strong>하울링 억제</strong> — Q를 높여 좁게 깎는다. 해당 주파수만 줄어 음색 손상이 적다.</li>
+    <li><strong>음색 만들기</strong> — Q를 낮춰 넓고 부드럽게 만진다.</li>
+    <li><strong>저역 정리</strong> — 마이크 채널은 HPF로 불필요한 저역(무대 울림·핸들링 노이즈)을 자른다.</li>
+  </ul>
+
+  <h2>흔한 실수</h2>
+  <ul>
+    <li><strong>답답하다고 고음부터 올린다.</strong> 노이즈·치찰음·하울링 위험이 같이 커진다. 탁한 대역(대개 200~500 Hz 부근)을 먼저 줄여 본다.</li>
+    <li><strong>좁은 Q로 크게 올린다.</strong> 링잉이 생겨 부자연스럽다. 흔히 올릴 때는 넓게, 줄일 때는 좁게 만진다.</li>
+    <li><strong>부스트부터 시작한다.</strong> 전체 레벨이 올라 헤드룸이 줄어든다. 컷으로 해결되는지 먼저 확인한다.</li>
+    <li><strong>모든 채널에 같은 EQ를 건다.</strong> 소스마다 문제 대역이 다르다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·Android)</b>
+      <p>2009~2026년 필기 기출 51회분(3,045문항) 집계에서 EQ·필터는 61문항(약 2.1%)입니다. 비중은 크지 않지만 믹싱·하울링 문제로 이어지는 기본 개념입니다.</p>
+      <a href="https://apps.apple.com/app/id6798884217" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+      <a href="https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam" target="_blank" rel="noopener">▸ Google Play에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/pink-noise-eq-ear-training.html">핑크 노이즈로 EQ 귀 훈련하기 <span>· 가이드</span></a>
+    <a href="/guides/frequency-and-wavelength.html">주파수와 파장 계산 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
