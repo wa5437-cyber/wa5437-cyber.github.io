@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>31밴드 그래픽 EQ 표준 주파수 — 1/3옥타브 중심주파수 표와 계산 | ML Music Studio</title>
+<meta name="description" content="31밴드 그래픽 EQ·RTA의 표준 중심주파수 31개(ISO 266·IEC 61260) 표, 1/3옥타브 계산식(×1.26), 공칭값과 정확값의 차이, 슬라이더 하나의 대역폭, 10밴드·15밴드와의 관계를 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/31-band-eq-standard-frequencies.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/31-band-eq-standard-frequencies.html">
+<meta property="og:title" content="31밴드 그래픽 EQ 표준 주파수 — 1/3옥타브 중심주파수 표와 계산">
+<meta property="og:description" content="1/3옥타브 표준 중심주파수 31개 표, 계산식, 공칭값 vs 정확값, 슬라이더 대역폭.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "31밴드 그래픽 EQ 표준 주파수 — 1/3옥타브 중심주파수 표와 계산",
+  "description": "1/3옥타브 표준 중심주파수 31개 표와 계산.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/31-band-eq-standard-frequencies.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>31밴드 그래픽 EQ 표준 주파수</h1>
+  <div class="meta">도구 가이드 · 약 5분</div>
+
+  <p class="lede">그래픽 EQ와 RTA의 슬라이더 라벨(20, 25, 31.5, 40 … 20k)은 국제 규격 <strong>ISO 266 · IEC 61260</strong>이 정한 1/3옥타브 표준 중심주파수입니다. 31개 표와 그 숫자가 나오는 계산, 라벨과 실제 값의 차이를 한 페이지에 모았습니다.</p>
+
+  <h2>표준 중심주파수 31개</h2>
+  <table class="data">
+<tr><th>대역</th><th>중심주파수 (Hz)</th><th>개수</th></tr>
+<tr><td>20~80 Hz</td><td>20 · 25 · 31.5 · 40 · 50 · 63 · 80</td><td>7</td></tr>
+<tr><td>100~800 Hz</td><td>100 · 125 · 160 · 200 · 250 · 315 · 400 · 500 · 630 · 800</td><td>10</td></tr>
+<tr><td>1~8 kHz</td><td>1k · 1.25k · 1.6k · 2k · 2.5k · 3.15k · 4k · 5k · 6.3k · 8k</td><td>10</td></tr>
+<tr><td>10~20 kHz</td><td>10k · 12.5k · 16k · 20k</td><td>4</td></tr>
+</table>
+  <p>라벨의 열 개 패턴 <strong>1 · 1.25 · 1.6 · 2 · 2.5 · 3.15 · 4 · 5 · 6.3 · 8</strong>이 10배 단위로 반복됩니다. 세 개마다 하나를 고르면 1옥타브 밴드(31.5 · 63 · 125 · 250 · 500 · 1k · 2k · 4k · 8k · 16k), 두 개마다 하나를 고르면 15밴드 2/3옥타브 EQ(25 · 40 · 63 · 100 · 160 · 250 · 400 · 630 · 1k · 1.6k · 2.5k · 4k · 6.3k · 10k · 16k)가 됩니다.</p>
+
+  <h2>왜 31개인가</h2>
+  <div class="formula">f(n) = 1000 × 2^(n/3)  (n = −17 … +13)</div>
+  <p>옥타브는 주파수 2배 간격이고 20 Hz에서 20 kHz까지는 약 10옥타브입니다. 옥타브를 셋으로 나누면 30칸, 경계점은 31개가 됩니다. 기준 1 kHz에서 한 칸은 2의 세제곱근, 약 <strong>1.26배</strong>입니다.</p>
+
+  <h2>공칭값과 정확값</h2>
+  <div class="example">
+    <h4>31.5 Hz 라벨의 실제 값</h4>
+    <p>2 기준(2^(n/3))으로는 <strong>31.25 Hz</strong>, IEC 61260이 기본으로 두는 10 기준(10^(n/10))으로는 <strong>31.62 Hz</strong>입니다. 같은 방식으로 63 → 62.5 / 63.1, 3.15k → 3,175 / 3,162, 12.5k → 12,699 / 12,589 Hz. 두 기준의 차이는 1% 안팎이라 라벨은 하나로 통일되어 있습니다.</p>
+  </div>
+
+  <h2>슬라이더 하나의 대역폭</h2>
+  <p>−3 dB 기준으로 한 칸의 폭은 중심주파수의 약 23%(위아래 약 ±12%)입니다. 2 기준으로 계산하면 다음과 같습니다.</p>
+  <table class="data">
+<tr><th>중심</th><th>하한~상한</th><th>폭</th></tr>
+<tr><td>63 Hz</td><td>약 56~71 Hz</td><td>약 15 Hz</td></tr>
+<tr><td>1 kHz</td><td>약 891~1,122 Hz</td><td>약 232 Hz</td></tr>
+<tr><td>8 kHz</td><td>약 7,127~8,980 Hz</td><td>약 1,850 Hz</td></tr>
+</table>
+  <p>비율은 모두 같지만 Hz 단위로는 저역이 좁고 고역이 넓습니다. 룸 모드나 피드백 주파수가 두 슬라이더 사이에 놓이면 양쪽을 함께 내려야 하므로, 한 주파수만 정밀하게 다룰 때는 Q를 직접 정하는 파라메트릭 EQ가 적합합니다. 또한 실제 제품은 인접 밴드의 곡선이 겹치고 constant Q·proportional Q 방식이 달라 표시 dB와 결과가 다를 수 있습니다.</p>
+
+  <div class="note">
+    <p>RTA 31밴드는 같은 중심주파수를 쓰므로 분석기에서 튀는 밴드와 그래픽 EQ 슬라이더가 1:1로 대응합니다. 읽는 법은 <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법</a>을 참고하세요.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·Android)</b>
+      <p>2009~2026년 필기 기출 51회분(3,045문항) 집계에서 EQ·필터는 61문항(약 2.1%), 음향 측정·분석은 52문항(약 1.7%)입니다. 옥타브 밴드와 EQ는 꾸준히 나오는 기본 개념입니다.</p>
+      <a href="https://apps.apple.com/app/id6798884217?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+      <a href="https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam" target="_blank" rel="noopener">▸ Google Play에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/eq-types-and-q.html">EQ 종류와 Q값 <span>· 도구 가이드</span></a>
+    <a href="/guides/pink-noise-eq-ear-training.html">핑크 노이즈로 EQ 귀 훈련하기 <span>· 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
