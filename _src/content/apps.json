@@ -226,14 +226,14 @@
           "등급별 모의고사, 100분 타이머",
           "표준교재 3권 요약노트",
           "실기 기출문제 2010~2026",
-          "오답노트·즐겨찾기·회차별 점수 추이"
+          "오답노트·북마크와 필기 출제 경향"
         ],
         "en": [
           "2,174 written-exam questions (sound, regulations, general) and unlimited calculation problems",
           "Mock exams by grade with a 100-minute timer",
           "Summary notes for the 3 standard textbooks",
           "Practical-exam past papers 2010–2026",
-          "Wrong-answer notes, bookmarks and score trends"
+          "Wrong-answer notes, bookmarks and exam-trend statistics"
         ]
       },
       "facts": {
@@ -269,16 +269,16 @@
         {
           "img": "05_trend.jpg",
           "alt": {
-            "ko": "점수 추이 화면",
-            "en": "Score trend screen"
+            "ko": "필기 출제 경향 화면",
+            "en": "Past-exam topic frequency screen"
           },
           "title": {
-            "ko": "점수 추이로 약점 확인",
-            "en": "See your weak spots in score trends"
+            "ko": "자주 나오는 주제부터",
+            "en": "Start with the most frequent topics"
           },
           "text": {
-            "ko": "회차별 점수가 그래프로 쌓여서 어느 분야가 약한지 한눈에 보입니다.",
-            "en": "Scores per attempt build up into a chart so you can see which area is weak."
+            "ko": "역대 필기 기출을 주제별 빈도로 정리한 출제 경향에서 자주 나오는 주제 Top 15를 확인할 수 있습니다.",
+            "en": "The exam-trend screen ranks the most frequent topics from past written exams (Top 15)."
           }
         },
         {
@@ -288,12 +288,12 @@
             "en": "Wrong-answer notes screen"
           },
           "title": {
-            "ko": "오답노트와 요약노트",
-            "en": "Wrong-answer notes and summaries"
+            "ko": "오답노트와 북마크",
+            "en": "Wrong-answer notes and bookmarks"
           },
           "text": {
-            "ko": "틀린 문제는 오답노트에 모이고, 표준교재 요약노트로 바로 복습할 수 있습니다.",
-            "en": "Missed questions collect in the notes, and the textbook summaries are one tap away for review."
+            "ko": "틀린 문제는 오답노트에 모이고, 북마크한 문제와 함께 다시 풀 수 있습니다.",
+            "en": "Missed questions collect in the notes, and you can redo them together with your bookmarks."
           }
         }
       ],
@@ -308,8 +308,8 @@
             "d": "100분 모의고사 또는 분야별 문제로 연습합니다."
           },
           {
-            "t": "오답과 점수 추이를 봅니다",
-            "d": "틀린 문제와 점수 변화를 확인하고 요약노트로 복습합니다."
+            "t": "오답노트와 출제 경향을 봅니다",
+            "d": "틀린 문제는 오답노트에서 다시 풀고, 출제 경향에서 자주 나오는 주제를 확인합니다."
           }
         ],
         "en": [
@@ -322,8 +322,8 @@
             "d": "Use the 100-minute mock exam or topic-by-topic practice."
           },
           {
-            "t": "Review mistakes and score trends",
-            "d": "Check missed questions and score changes, then review with the summaries."
+            "t": "Review mistakes and exam trends",
+            "d": "Redo missed questions from the notes and check which topics appear most often."
           }
         ]
       },

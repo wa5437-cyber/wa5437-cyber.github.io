@@ -83,6 +83,12 @@ class AppsTests(unittest.TestCase):
         for banned in ("광고 없음", "오프라인", "No ads", "offline"):
             self.assertNotIn(banned, html)
 
+    def test_stage_sound_pages_make_no_score_trend_claim(self):
+        for lang in ("ko", "en"):
+            _, html = pages.app_page(lang, "stage-sound")
+            self.assertNotIn("점수 추이", html, lang)
+            self.assertNotIn("score trend", html.lower(), lang)
+
     def test_stage_sound_page_en_exists_with_alternates(self):
         path, html = pages.app_page("en", "stage-sound")
         self.assertEqual(path, "/en/apps/stage-sound/")
