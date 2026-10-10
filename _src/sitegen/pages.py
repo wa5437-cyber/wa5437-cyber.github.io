@@ -165,6 +165,21 @@ def app_page(lang, slug):
     return path, kit.page(lang, path, title, short(app["tagline"][lang], 150), body, alts_for(f"/apps/{slug}/"))
 
 
+def update_sitemap(root, new_paths):
+    f = pathlib.Path(root) / "sitemap.xml"
+    if not f.exists():          # 임시 폴더 테스트 등
+        return
+    text = f.read_text(encoding="utf-8")
+    add = ""
+    for p in dict.fromkeys(new_paths):
+        loc = f"<loc>{kit.BASE}{p}</loc>"
+        if loc not in text:
+            add += f"<url>{loc}</url>\n"
+    if add:
+        text = text.replace("</urlset>", add + "</urlset>")
+        f.write_text(text, encoding="utf-8")
+
+
 def build_all(root):
     root = pathlib.Path(root)
     d = load("apps.json")
@@ -176,3 +191,8 @@ def build_all(root):
             if a.get("detail"):
                 path, html = app_page(lang, a["slug"])
                 kit.write(root, path, html)
+    made = []
+    for lang in ("ko", "en"):
+        made += [url(lang, "/"), url(lang, "/tools/"), url(lang, "/apps/")]
+        made += [url(lang, "/apps/" + a["slug"] + "/") for a in d["apps"] if a.get("detail")]
+    update_sitemap(root, made)

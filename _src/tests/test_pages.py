@@ -95,5 +95,19 @@ class AppsTests(unittest.TestCase):
         self.assertIn('hreflang="ko" href="https://mlmusicstudio.co.kr/apps/stage-sound/"', html)
 
 
+class SitemapTests(unittest.TestCase):
+    def test_update_adds_missing_urls_once_and_keeps_existing(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            (root / "sitemap.xml").write_text(
+                '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                '<url><loc>https://mlmusicstudio.co.kr/guides/</loc></url>\n</urlset>\n', encoding="utf-8")
+            pages.update_sitemap(root, ["/", "/apps/", "/apps/"])
+            text = (root / "sitemap.xml").read_text(encoding="utf-8")
+            self.assertEqual(text.count("<loc>https://mlmusicstudio.co.kr/apps/</loc>"), 1)
+            self.assertIn("<loc>https://mlmusicstudio.co.kr/guides/</loc>", text)
+            self.assertIn("<loc>https://mlmusicstudio.co.kr/</loc>", text)
+
+
 if __name__ == "__main__":
     unittest.main()
