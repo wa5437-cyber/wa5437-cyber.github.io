@@ -17,7 +17,9 @@ def main():
             print(" ✗", e)
         print("점검 통과" if not errors else f"점검 실패 {len(errors)}건")
         sys.exit(1 if errors else 0)
-    print("생성 단계는 Task 3 이후에 추가됩니다.")
+    from sitegen import pages
+    pages.build_all(ROOT)
+    print("생성 완료")
 
 
 if __name__ == "__main__":
