@@ -20,22 +20,42 @@ class KitTests(unittest.TestCase):
             kit.write(root, "/policy.html", "<p>y</p>")
             self.assertTrue((root / "policy.html").exists())
 
-
     def test_header_lists_nav_and_only_existing_language_alternates(self):
         h = kit.header("ko", "/tools/", {"ko": "/tools/", "en": "/en/tools/"})
         for label in ("앱", "웹 도구", "플러그인", "녹음실", "가이드"):
             self.assertIn(label, h)
         self.assertIn('href="/en/tools/"', h)
-        self.assertNotIn("/ja/", h)
+
+    def test_header_hides_language_menu_with_zero_or_one_alternate(self):
+        self.assertNotIn('class="lang"', kit.header("ko", "/x/", {"ko": "/x/"}))
+        self.assertNotIn('class="lang"', kit.header("ko", "/x/", {}))
+
+    def test_english_header_uses_en_prefix_and_keeps_guides_korean_only(self):
+        h = kit.header("en", "/en/", {"ko": "/", "en": "/en/"})
+        self.assertIn('href="/en/apps/"', h)
+        self.assertIn('href="/guides/"', h)
+        self.assertIn("Apps", h)
+        self.assertIn('class="lang"', h)
+
+    def test_footer_has_contact_links(self):
+        f = kit.footer("ko")
+        self.assertIn('href="https://open.kakao.com/o/sQhjCeZb"', f)
+        self.assertIn('href="mailto:wa547@hanmail.net"', f)
+
+    def test_page_escapes_title_and_description(self):
+        html = kit.page("ko", "/x/", 'T "q" <b>', "D & d", "<p>x</p>", {"ko": "/x/"})
+        self.assertIn("<title>T &quot;q&quot; &lt;b&gt;</title>", html)
+        self.assertIn('content="D &amp; d"', html)
+        self.assertNotIn("<b>", html)
 
     def test_page_has_hreflang_canonical_and_skip_link(self):
-        html = kit.page("en", "/en/", "T", "D", "<main>b</main>", {"ko": "/", "en": "/en/"})
+        html = kit.page("en", "/en/", "T", "D", "<p>b</p>", {"ko": "/", "en": "/en/"})
         self.assertIn('<html lang="en">', html)
         self.assertIn('rel="canonical" href="https://mlmusicstudio.co.kr/en/"', html)
         self.assertIn('hreflang="ko" href="https://mlmusicstudio.co.kr/"', html)
         self.assertIn('hreflang="x-default"', html)
         self.assertIn("#main", html)
-
+        self.assertIn('<main id="main"><p>b</p></main>', html)
 
 if __name__ == "__main__":
     unittest.main()
