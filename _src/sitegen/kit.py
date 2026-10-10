@@ -78,10 +78,11 @@ def page(lang, path, title, description, body, alts, extra_head=""):
     alt_tags = "".join(
         f'<link rel="alternate" hreflang="{code}" href="{BASE}{p}">' for code, p in alts.items())
     xdef = f'<link rel="alternate" hreflang="x-default" href="{BASE}{alts.get("ko", path)}">' if alts else ""
+    verif = "".join(tag + "\n" for tag in SITE["verification_meta"])
     return (f'<!DOCTYPE html>\n<html lang="{lang}">\n<head>\n<meta charset="UTF-8">\n'
             f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             f'<title>{esc(title)}</title>\n<meta name="description" content="{esc(description)}">\n'
-            f'<link rel="canonical" href="{BASE}{path}">\n{alt_tags}{xdef}\n'
+            f'<link rel="canonical" href="{BASE}{path}">\n{alt_tags}{xdef}\n{verif}'
             f'<meta name="theme-color" content="#f6f0e6">\n<link rel="icon" href="/favicon.svg" type="image/svg+xml">\n'
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="{esc(SITE["brand"])}">\n'
             f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}">\n'

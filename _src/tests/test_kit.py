@@ -1,4 +1,4 @@
-import pathlib, sys, tempfile, unittest
+import pathlib, re, sys, tempfile, unittest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from sitegen import kit
 
@@ -56,6 +56,16 @@ class KitTests(unittest.TestCase):
         self.assertIn('hreflang="x-default"', html)
         self.assertIn("#main", html)
         self.assertIn('<main id="main"><p>b</p></main>', html)
+    def test_page_emits_google_site_verification_tags_from_policy(self):
+        # 기대값은 policy.html(옛 홈)의 <head> 에서 직접 읽는다. site.json 과 어긋나면 실패한다.
+        pol = (pathlib.Path(__file__).resolve().parents[2] / "policy.html").read_text(encoding="utf-8")
+        expected = re.findall(r'<meta name="google-site-verification" content="[^"]+" />', pol)
+        self.assertEqual(len(expected), 2)
+        html = kit.page("ko", "/x/", "T", "D", "<p>b</p>", {"ko": "/x/"})
+        for tag in expected:
+            self.assertIn(tag, html)
+        self.assertEqual(html.count('name="google-site-verification"'), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

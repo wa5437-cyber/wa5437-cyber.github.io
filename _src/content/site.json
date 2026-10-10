@@ -7,5 +7,9 @@
     "address_en": "3F, 120-3 Wonhyoro 4-ga, Yongsan-gu, Seoul"
   },
   "pt": "129167489",
-  "play_stage": "https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam"
+  "play_stage": "https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam",
+  "verification_meta": [
+    "<meta name=\"google-site-verification\" content=\"nFELUuaO_o0ygCybO6nD3mEM6w6qoJ_7bWdH3Yt6dew\" />",
+    "<meta name=\"google-site-verification\" content=\"O-f5-T_yerPKwXIlQD-qd9mcoOO_0Ba7DrMiWOqUU8Y\" />"
+  ]
 }

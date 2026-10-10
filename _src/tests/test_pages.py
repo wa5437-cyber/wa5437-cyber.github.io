@@ -1,4 +1,4 @@
-import pathlib, sys, tempfile, unittest
+import pathlib, re, sys, tempfile, unittest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from sitegen import pages
 
@@ -23,6 +23,16 @@ class HomeTests(unittest.TestCase):
         _, html = pages.home("ko")
         for href in ('href="/apps/"', 'href="/studio/"', 'href="/tools/"'):
             self.assertIn(href, html)
+
+    def test_home_ko_and_en_keep_google_site_verification_tags(self):
+        pol = (pathlib.Path(__file__).resolve().parents[2] / "policy.html").read_text(encoding="utf-8")
+        expected = re.findall(r'<meta name="google-site-verification" content="[^"]+" />', pol)
+        self.assertEqual(len(expected), 2)
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            for tag in expected:
+                self.assertIn(tag, html, lang)
+            self.assertEqual(html.count('name="google-site-verification"'), 2, lang)
 
     def test_build_all_writes_home_files(self):
         with tempfile.TemporaryDirectory() as td:
