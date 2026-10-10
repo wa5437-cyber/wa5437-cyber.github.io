@@ -26,7 +26,7 @@ def guide_title(slug):
     h1 = re.search(r"<h1[^>]*>(.*?)</h1>", text, re.S)
     lede = re.search(r'<p class="lede">(.*?)</p>', text, re.S)
     strip = lambda s: re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s)).strip()
-    return (strip(h1.group(1)) if h1 else slug, strip(lede.group(1))[:110] if lede else "")
+    return (strip(h1.group(1)) if h1 else slug, short(strip(lede.group(1))) if lede else "")
 
 
 def alts_for(path_ko, langs=("ko", "en")):
@@ -36,6 +36,18 @@ def alts_for(path_ko, langs=("ko", "en")):
 def app_href(lang, app):
     """상세 페이지가 있으면 그 주소, 없으면 앱 목록(깨진 링크 방지)."""
     return url(lang, "/apps/" + app["slug"] + "/") if app.get("detail") else url(lang, "/apps/")
+
+
+def json_ld(lang):
+    """홈의 구조화 데이터(Organization + WebSite). 값은 json.dumps 로만 만든다."""
+    data = [
+        {"@context": "https://schema.org", "@type": "Organization", "name": kit.SITE["brand"],
+         "url": kit.BASE + "/", "logo": kit.BASE + "/og-image.png"},
+        {"@context": "https://schema.org", "@type": "WebSite", "name": kit.SITE["brand"],
+         "url": kit.BASE + "/", "inLanguage": lang},
+    ]
+    text = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    return '<script type="application/ld+json">' + text + "</script>"
 
 
 def home(lang):
@@ -70,7 +82,7 @@ def home(lang):
         + f'<div class="wrap"><p class="trust">{esc(c["trust"])}</p></div>')
     path = url(lang, "/")
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/"),
-                          extra_head=HASH_KEEP if lang == "ko" else "")
+                          extra_head=(HASH_KEEP if lang == "ko" else "") + json_ld(lang))
 
 
 def tools(lang):
@@ -96,8 +108,15 @@ CAMPAIGN = "?pt=129167489&amp;ct=homepage&amp;mt=8"
 
 
 def short(s, n=110):
+    """n 자를 넘으면 n 자 안의 마지막 공백에서 자르고(공백이 없으면 그냥 n 자), 끝 문장부호를 떼고 … 를 붙인다."""
     s = re.sub(r"\s+", " ", s).strip()
-    return s if len(s) <= n else s[:n].rstrip() + "…"
+    if len(s) <= n:
+        return s
+    cut = s[:n]
+    # 다음 글자가 공백이면 cut 이 이미 낱말 경계에서 끝난 것이다.
+    if s[n] != " " and " " in cut:
+        cut = cut[:cut.rindex(" ")]
+    return cut.rstrip(" ,.;:!?·-—") + "…"
 
 
 def store_buttons(app, lang):
@@ -153,7 +172,7 @@ def app_page(lang, slug):
     body = (
         f'<section class="hero"><div class="wrap"><div class="grid"><div>'
         f'<span class="pill">{esc(det["platforms"][lang])}</span>'
-        f'<h1>{esc(app["name"][lang])}</h1><p class="sub">{esc(short(app["tagline"][lang], 160))}</p>'
+        f'<h1>{esc(app["name"][lang])}</h1><p class="sub">{esc(det["lead"][lang] if det.get("lead") else short(app["tagline"][lang], 160))}</p>'
         f'<ul class="bullets">{bullets}</ul>'
         f'<div class="row">{store_buttons(app, lang)}<span class="pill" style="align-self:center">{esc(det["price"][lang])}</span></div>'
         f'</div><div><img class="shot" src="{img_dir}01_home.jpg" alt="{esc(app["name"][lang])}"></div></div></div></section>'

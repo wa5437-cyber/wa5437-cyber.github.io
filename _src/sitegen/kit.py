@@ -9,6 +9,7 @@ SITE = json.loads((SRC / "content" / "site.json").read_text(encoding="utf-8"))
 BASE = "https://mlmusicstudio.co.kr"
 FONTS = ("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700"
          "&family=Noto+Serif+KR:wght@600;700&display=swap")
+OG_LOCALE = {"ko": "ko_KR", "en": "en_US"}
 ADS = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'
        '?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>')
 
@@ -87,6 +88,9 @@ def page(lang, path, title, description, body, alts, extra_head=""):
             f'<meta property="og:type" content="website"><meta property="og:site_name" content="{esc(SITE["brand"])}">\n'
             f'<meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(description)}">\n'
             f'<meta property="og:url" content="{BASE}{path}"><meta property="og:image" content="{BASE}/og-image.png">\n'
+            f'<meta property="og:locale" content="{OG_LOCALE.get(lang, "en_US")}">\n'
+            f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{esc(title)}">\n'
+            f'<meta name="twitter:description" content="{esc(description)}"><meta name="twitter:image" content="{BASE}/og-image.png">\n'
             f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
             f'<link href="{FONTS}" rel="stylesheet"><link rel="stylesheet" href="/assets/site.css">\n'
             f'{ADS}\n{extra_head}\n</head>\n<body>\n'

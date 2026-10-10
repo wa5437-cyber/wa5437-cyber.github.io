@@ -48,6 +48,16 @@ class KitTests(unittest.TestCase):
         self.assertIn('content="D &amp; d"', html)
         self.assertNotIn("<b>", html)
 
+    def test_page_has_og_locale_and_twitter_card_mirroring_og(self):
+        ko = kit.page("ko", "/x/", 'T "q"', "D & d", "<p>b</p>", {"ko": "/x/"})
+        self.assertIn('<meta property="og:locale" content="ko_KR">', ko)
+        self.assertIn('<meta name="twitter:card" content="summary_large_image">', ko)
+        self.assertIn('<meta name="twitter:title" content="T &quot;q&quot;">', ko)
+        self.assertIn('<meta name="twitter:description" content="D &amp; d">', ko)
+        self.assertIn('<meta name="twitter:image" content="https://mlmusicstudio.co.kr/og-image.png">', ko)
+        en = kit.page("en", "/en/x/", "T", "D", "<p>b</p>", {"en": "/en/x/"})
+        self.assertIn('<meta property="og:locale" content="en_US">', en)
+
     def test_page_has_hreflang_canonical_and_skip_link(self):
         html = kit.page("en", "/en/", "T", "D", "<p>b</p>", {"ko": "/", "en": "/en/"})
         self.assertIn('<html lang="en">', html)

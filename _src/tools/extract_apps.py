@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""policy.html(옛 홈)의 앱 카드에서 앱 목록을 뽑아 content/apps.json 으로 쓴다. 한 번만 쓰는 도구."""
+"""policy.html(옛 홈)의 앱 카드에서 앱 목록을 뽑아 content/apps.json 으로 쓴다. 처음 한 번 목록을 만드는 도구(이미 apps.json 이 있으면 --force 없이는 실행되지 않음)."""
 import json, pathlib, re, sys, html as H
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]

@@ -216,6 +216,10 @@
         "ko": "평생 이용권 ₩9,900 · 카테고리별 첫 회차 무료",
         "en": "Lifetime unlock ₩9,900 · first round of each category free"
       },
+      "lead": {
+        "ko": "무대예술전문인(음향) 1·2·3급 필기시험을 기출문제로 준비하는 앱입니다.",
+        "en": "An app for preparing for Korea's stage-sound certification written exams (grades 1-3) with past-exam questions."
+      },
       "platforms": {
         "ko": "iOS · Android",
         "en": "iOS · Android"
@@ -292,8 +296,8 @@
             "en": "Wrong-answer notes and bookmarks"
           },
           "text": {
-            "ko": "틀린 문제는 오답노트에 모이고, 북마크한 문제와 함께 다시 풀 수 있습니다.",
-            "en": "Missed questions collect in the notes, and you can redo them together with your bookmarks."
+            "ko": "오답은 다시 풀고, 북마크한 문제는 따로 모아 볼 수 있습니다.",
+            "en": "Redo your missed questions, and keep bookmarked ones together in one place."
           }
         }
       ],
