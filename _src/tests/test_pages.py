@@ -58,6 +58,36 @@ class ToolsTests(unittest.TestCase):
         self.assertEqual(pages.tools("ko")[0], "/tools/")
         self.assertEqual(pages.tools("en")[0], "/en/tools/")
 
+    def test_tools_links_exam_to_detail_page_and_others_to_apps_index(self):
+        for lang, pre in (("ko", ""), ("en", "/en")):
+            _, html = pages.tools(lang)
+            self.assertIn(f'href="{pre}/apps/stage-sound/"', html, lang)
+            self.assertIn(f'href="{pre}/apps/"', html, lang)
+            for slug in ("spl-rta", "ear-trainer", "toolkit"):
+                self.assertNotIn(f'href="{pre}/apps/{slug}/"', html, lang)
+
+
+class AppsTests(unittest.TestCase):
+    def test_apps_index_lists_all_apps_with_pages_only_for_detailed_ones(self):
+        _, html = pages.apps_index("ko")
+        self.assertIn("무대음향 자격증 기출문제", html)
+        self.assertIn('href="/apps/stage-sound/"', html)
+        self.assertNotIn('href="/apps/spl-rta/"', html)   # 상세 페이지는 아직 없음
+
+    def test_stage_sound_page_uses_only_known_facts_and_campaign_links(self):
+        path, html = pages.app_page("ko", "stage-sound")
+        self.assertEqual(path, "/apps/stage-sound/")
+        self.assertIn("2,174", html)
+        self.assertIn("pt=129167489&amp;ct=homepage&amp;mt=8", html)
+        self.assertIn("play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam", html)
+        for banned in ("광고 없음", "오프라인", "No ads", "offline"):
+            self.assertNotIn(banned, html)
+
+    def test_stage_sound_page_en_exists_with_alternates(self):
+        path, html = pages.app_page("en", "stage-sound")
+        self.assertEqual(path, "/en/apps/stage-sound/")
+        self.assertIn('hreflang="ko" href="https://mlmusicstudio.co.kr/apps/stage-sound/"', html)
+
 
 if __name__ == "__main__":
     unittest.main()

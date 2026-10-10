@@ -48,7 +48,7 @@ def home(lang):
         f'<p>{esc(x["text"])}</p><span class="more">{esc(x["more"])} →</span></a>' for x in c["cards"])
     feat = "".join(
         f'<a class="card" href="{esc(app_href(lang, apps[s]))}" style="text-decoration:none;color:inherit">'
-        f'<h3>{esc(apps[s]["name"][lang])}</h3><p>{esc(apps[s]["tagline"][lang])}</p></a>'
+        f'<h3>{esc(apps[s]["name"][lang])}</h3><p>{esc(short(apps[s]["tagline"][lang]))}</p></a>'
         for s in h["featured_apps"] if s in apps)
     guides = ""
     for slug in h["latest_guides"]:
@@ -92,9 +92,87 @@ def tools(lang):
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/tools/"))
 
 
+CAMPAIGN = "?pt=129167489&amp;ct=homepage&amp;mt=8"
+
+
+def short(s, n=110):
+    s = re.sub(r"\s+", " ", s).strip()
+    return s if len(s) <= n else s[:n].rstrip() + "…"
+
+
+def store_buttons(app, lang):
+    out = [f'<a class="btn primary" href="{esc(app["appstore"])}{CAMPAIGN}" target="_blank" rel="noopener">App Store</a>']
+    if app.get("play"):
+        out.append(f'<a class="btn" href="{esc(app["play"])}" target="_blank" rel="noopener">Google Play</a>')
+    return "".join(out)
+
+
+def apps_index(lang):
+    d = load("apps.json")
+    cards = ""
+    for a in d["apps"]:
+        link = ""
+        if a.get("detail"):
+            link = f'<a class="more" href="{esc(url(lang, "/apps/" + a["slug"] + "/"))}">{"자세히 보기" if lang == "ko" else "Details"} →</a>'
+        pill = f'<span class="pill">{esc(a["badge"][lang])}</span>' if a["badge"][lang] else ""
+        cards += (f'<div class="card">{pill}'
+                  f'<h3>{esc(a["name"][lang])}</h3><p>{esc(short(a["tagline"][lang]))}</p>'
+                  f'<div class="row">{store_buttons(a, lang)}</div>{link}</div>')
+    title = "앱 | ML Music Studio" if lang == "ko" else "Apps | ML Music Studio"
+    h1 = "앱" if lang == "ko" else "Apps"
+    sub = ("사운드 엔지니어가 현장에서 쓰려고 만든 앱입니다." if lang == "ko"
+           else "Apps built by a sound engineer for real-world use.")
+    body = (f'<section class="hero"><div class="wrap"><h1>{h1}</h1><p class="sub">{sub}</p></div></section>'
+            f'<section class="band"><div class="wrap"><div class="cards c3">{cards}</div></div></section>')
+    path = url(lang, "/apps/")
+    return path, kit.page(lang, path, title, sub, body, alts_for("/apps/"))
+
+
+def app_page(lang, slug):
+    d = load("apps.json")
+    app = next(a for a in d["apps"] if a["slug"] == slug)
+    det = d["details"][slug]
+    img_dir = f"/img/apps/{slug}/"
+    bullets = "".join(f"<li>{esc(b)}</li>" for b in det["bullets"][lang])
+    facts = "".join(f"<li>{esc(f)}</li>" for f in det["facts"][lang])
+    blocks = ""
+    for i, b in enumerate(det["blocks"]):
+        blocks += (f'<div class="alt{" rev" if i % 2 else ""}"><div class="alt-img">'
+                   f'<img class="shot" src="{img_dir}{esc(b["img"])}" alt="{esc(b["alt"][lang])}" loading="lazy"></div>'
+                   f'<div><h3>{esc(b["title"][lang])}</h3><p>{esc(b["text"][lang])}</p></div></div>')
+    steps = "".join(f'<li><strong>{esc(s["t"])}</strong><br>{esc(s["d"])}</li>' for s in det["steps"][lang])
+    howto = "사용법" if lang == "ko" else "How to use"
+    guides = ""
+    for g in det.get("related", []):
+        info = guide_title(g)
+        if info:
+            guides += f'<li><a href="/guides/{esc(g)}.html">{esc(info[0])}</a></li>'
+    rel = (f'<section class="band"><div class="wrap"><h2>{"관련 가이드" if lang == "ko" else "Related guides (Korean)"}</h2>'
+           f'<ul class="bullets">{guides}</ul></div></section>') if guides else ""
+    privacy = (f'<p><a href="/policy.html#policy">{"개인정보처리방침" if lang == "ko" else "Privacy policy (Korean)"}</a></p>')
+    body = (
+        f'<section class="hero"><div class="wrap"><div class="grid"><div>'
+        f'<span class="pill">{esc(det["platforms"][lang])}</span>'
+        f'<h1>{esc(app["name"][lang])}</h1><p class="sub">{esc(short(app["tagline"][lang], 160))}</p>'
+        f'<ul class="bullets">{bullets}</ul>'
+        f'<div class="row">{store_buttons(app, lang)}<span class="pill" style="align-self:center">{esc(det["price"][lang])}</span></div>'
+        f'</div><div><img class="shot" src="{img_dir}01_home.jpg" alt="{esc(app["name"][lang])}"></div></div></div></section>'
+        f'<section class="band"><div class="wrap">{blocks}</div></section>'
+        f'<section class="band"><div class="wrap"><h2>{howto}</h2><ol class="steps">{steps}</ol></div></section>'
+        f'<section class="band"><div class="wrap"><ul class="facts">{facts}</ul>{privacy}</div></section>{rel}')
+    path = url(lang, f"/apps/{slug}/")
+    title = f'{app["name"][lang]} | ML Music Studio'
+    return path, kit.page(lang, path, title, short(app["tagline"][lang], 150), body, alts_for(f"/apps/{slug}/"))
+
+
 def build_all(root):
     root = pathlib.Path(root)
+    d = load("apps.json")
     for lang in ("ko", "en"):
-        for fn in (home, tools):
+        for fn in (home, tools, apps_index):
             path, html = fn(lang)
             kit.write(root, path, html)
+        for a in d["apps"]:
+            if a.get("detail"):
+                path, html = app_page(lang, a["slug"])
+                kit.write(root, path, html)

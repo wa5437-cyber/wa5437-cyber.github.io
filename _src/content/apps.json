@@ -1,1 +1,336 @@
-{"apps": []}
+{
+  "apps": [
+    {
+      "slug": "stage-sound",
+      "name": {
+        "ko": "무대음향 자격증 기출문제",
+        "en": "Stage Sound Exam Prep (Korea)"
+      },
+      "tagline": {
+        "ko": "음향·법규·일반 2,174문항 + 계산문제 무제한 생성, 등급별 모의고사(100분 타이머), 3개 표준교재 요약노트, 실기 기출문제(2010~2026)까지. 카테고리별 첫 회차는 무료.",
+        "en": "2,174 multiple-choice questions across sound, regulations, and general topics, plus unlimited randomly generated calculation problems, graded mock exams with a 100-minute timer, summary notes from 3 official textbooks, and practical exam questions (2010–2026). The first round in each category is free."
+      },
+      "badge": {
+        "ko": "iOS · Android · 무대예술전문인 1·2·3급 필기 대비",
+        "en": "iOS · Android · Stage Arts Professional Level 1–3 Written Exam Prep"
+      },
+      "appstore": "https://apps.apple.com/app/%EB%AC%B4%EB%8C%80%EC%9D%8C%ED%96%A5-%EC%9E%90%EA%B2%A9%EC%A6%9D-%EA%B8%B0%EC%B6%9C%EB%AC%B8%EC%A0%9C/id6798884217",
+      "play": "https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam",
+      "legal": null,
+      "detail": true
+    },
+    {
+      "slug": "ear-trainer",
+      "name": {
+        "ko": "AudioEngineer Ear Trainer",
+        "en": "AudioEngineer Ear Trainer"
+      },
+      "tagline": {
+        "ko": "EQ 주파수(핑크노이즈·사인파 31밴드)·노이즈(종류·험·노이즈 플로어)·이펙트(Reverb·Delay·Chorus 등)를 귀로 맞히는 청음 훈련 앱. 양쪽 귀 따로 훈련, 이펙트 강도 A/B 비교, 10문제 모의고사(S~D 등급)까지. 내 음악으로도 훈련할 수 있어요. 8개 언어 지원(독일어·포르투갈어·프랑스어는 1.1.1부터).",
+        "en": "Ear training for audio engineers: EQ frequencies (31 bands on pink noise or a sine), noise (type, hum, noise floor) and effects (Reverb, Delay, Chorus and more). Train each ear separately, compare effect intensity A/B, and take a 10-question mock test graded S–D. Train with your own music, too. 8 languages (German, Portuguese and French from 1.1.1)."
+      },
+      "badge": {
+        "ko": "iOS · iPadOS · macOS",
+        "en": "iOS · iPadOS · macOS"
+      },
+      "appstore": "https://apps.apple.com/app/audioengineer-ear-trainer/id6801893036",
+      "play": null,
+      "legal": null,
+      "detail": false
+    },
+    {
+      "slug": "spl-rta",
+      "name": {
+        "ko": "AudioEngineerKit: SPL & RTA",
+        "en": "AudioEngineerKit: SPL & RTA"
+      },
+      "tagline": {
+        "ko": "전문가용 SPL 미터와 실시간 스펙트럼 분석기(RTA)를 한 앱에. 마이크 교정, A/C 가중치, LUFS, RT60 잔향시간, 딜레이 파인더, 소음원 자동 분류(참고용)까지 — 현장용 정밀 측정 도구. 곧 나올 1.2 업데이트: 공연 중 하울링을 감시해 울리는 주파수와 깎을 GEQ 밴드를 알려 주는 하울링 탭(참고용), 화면을 꺼도 이어지는 백그라운드 측정, 층간소음·WHO 기준 비교(참고용). 8개 언어 지원(독일어·포르투갈어·프랑스어는 1.2부터).",
+        "en": "A professional SPL meter and real-time spectrum analyzer (RTA) in one app. Mic calibration, A/C weighting, LUFS, RT60 reverb time, a delay finder and noise-source tagging (for reference only) — precision measurement tools built for the field. Coming in 1.2: a Feedback tab that watches for howling during a show and tells you the ringing frequency and the GEQ band to cut (for reference only), background measurement with the screen off, and noise-limit comparison (for reference only). 8 languages (German, Portuguese and French from 1.2)."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS · macOS",
+        "en": "Live · iOS · iPadOS · macOS"
+      },
+      "appstore": "https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086",
+      "play": null,
+      "legal": null,
+      "detail": false
+    },
+    {
+      "slug": "toolkit",
+      "name": {
+        "ko": "AudioEngineerToolkit",
+        "en": "AudioEngineerToolkit"
+      },
+      "tagline": {
+        "ko": "딜레이, 음향, 전기(Ohm's Law/Power/Impedance/dB), 템포·피치 계산기를 인터넷 없이도 빠르게. 자주 쓰는 계산기는 즐겨찾기로, 연습 퀴즈도 들어 있어요. 한국어·영어·일본어·스페인어·중국어·독일어·포르투갈어·프랑스어 지원(독일어·포르투갈어·프랑스어는 1.1.2부터).",
+        "en": "Delay, acoustics, electrical (Ohm's Law/Power/Impedance/dB), and tempo/pitch calculators — fast, and fully offline. Pin your go-to tools to Favorites and practice with the built-in quiz. Supports Korean, English, Japanese, Spanish, Chinese, German, Portuguese and French (German, Portuguese and French from 1.1.2)."
+      },
+      "badge": {
+        "ko": "iOS · iPadOS · macOS · Vision Pro",
+        "en": "iOS · iPadOS · macOS · Vision Pro"
+      },
+      "appstore": "https://apps.apple.com/app/audioengineertoolkit/id6794612792",
+      "play": null,
+      "legal": null,
+      "detail": false
+    },
+    {
+      "slug": "aet-quiz",
+      "name": {
+        "ko": "AET Quiz",
+        "en": "AET Quiz"
+      },
+      "tagline": {
+        "ko": "전기·딜레이·음향·템포&피치 계산을 랜덤 문제로 반복 연습. 정답마다 공식 해설 제공. 한국어·영어·일본어·스페인어·중국어·독일어·포르투갈어·프랑스어 지원(독일어·포르투갈어·프랑스어는 1.0.1부터).",
+        "en": "Practice electrical, delay, acoustics, and tempo/pitch calculations with random questions. Every answer comes with a formula explanation. Supports Korean, English, Japanese, Spanish, Chinese, German, Portuguese, and French (German, Portuguese, and French from 1.0.1)."
+      },
+      "badge": {
+        "ko": "무료 · iOS · iPadOS · macOS · Vision Pro",
+        "en": "Free · iOS · iPadOS · macOS · Vision Pro"
+      },
+      "appstore": "https://apps.apple.com/app/aet-quiz/id6797225714",
+      "play": null,
+      "legal": null,
+      "detail": false
+    },
+    {
+      "slug": "keymap",
+      "name": {
+        "ko": "DAW 단축키 — KeyMap",
+        "en": "DAW Shortcuts — KeyMap"
+      },
+      "tagline": {
+        "ko": "Pro Tools · Logic · Ableton · FL Studio · Studio One · Cubase 6개 DAW의 모든 키보드 단축키를 한곳에서 검색. DAW 간 단축키 번역과 간격 반복(SRS) 훈련까지. 한국어·영어·일본어·독일어·포르투갈어·스페인어·프랑스어·중국어 검색 지원(프랑스어·중국어는 1.1.2부터).",
+        "en": "Every keyboard shortcut for six DAWs — Pro Tools, Logic, Ableton, FL Studio, Studio One, Cubase — searchable in one place. Translate shortcuts across DAWs and drill them with spaced repetition. Search in English, Korean, Japanese, German, Portuguese, Spanish, French and Chinese (French and Chinese from 1.1.2)."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS",
+        "en": "Live · iOS · iPadOS"
+      },
+      "appstore": "https://apps.apple.com/kr/app/daw-%EB%8B%A8%EC%B6%95%ED%82%A4-%ED%82%A4%EB%A7%B5/id6806570824",
+      "play": null,
+      "legal": null,
+      "detail": false
+    },
+    {
+      "slug": "patchio",
+      "name": {
+        "ko": "Patch & I/O",
+        "en": "Patch & I/O"
+      },
+      "tagline": {
+        "ko": "인풋 리스트·패치베이·신호 도면·무대 배치도를 한 앱에서. 표를 적으면 신호 도면이 자동으로 그려지고, 팬텀·레벨·커넥터 실수를 앱이 먼저 짚어줍니다. 패치베이 라벨은 실물 크기로 인쇄. 한국어·영어·일본어·중국어·스페인어·독일어·포르투갈어·프랑스어 지원(독일어·포르투갈어·프랑스어는 1.2.2부터).",
+        "en": "Input lists, patchbays, signal flow diagrams and stage plots in one app. Fill in the table and the signal flow draws itself, while the app flags phantom, level and connector mistakes before they reach the stage. Patchbay labels print at true physical size. Available in Korean, English, Japanese, Chinese, Spanish, German, Portuguese and French (German, Portuguese and French from 1.2.2)."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS · macOS",
+        "en": "Live · iOS · iPadOS · macOS"
+      },
+      "appstore": "https://apps.apple.com/app/patch-i-o-%EC%9D%B8%EC%95%84%EC%9B%83-%EB%A6%AC%EC%8A%A4%ED%8A%B8/id6809173652",
+      "play": null,
+      "legal": "/patchio_legal.html",
+      "detail": false
+    },
+    {
+      "slug": "nora",
+      "name": {
+        "ko": "NORA — 커버곡 노래 녹음",
+        "en": "NORA — Cover Song Recording"
+      },
+      "tagline": {
+        "ko": "MR에 맞춰 노래를 녹음하고, 버튼 하나로 보컬 스타일(EQ·컴프·리버브)을 입혀 마스터링까지 끝냅니다. 키·템포 자동 분석, 틀린 구간만 다시 녹음, 보컬만 따로 WAV로 내보내 DAW에서 이어 작업까지. 10개 언어 지원.",
+        "en": "Sing over a backing track, then add a vocal style (EQ, compression, reverb) and master it with one tap. Automatic key/tempo detection, punch-in re-recording of just the bad part, and vocal-only WAV export to keep working in your DAW. Available in 10 languages."
+      },
+      "badge": {
+        "ko": "출시 · macOS",
+        "en": "Available · macOS"
+      },
+      "appstore": "https://apps.apple.com/app/nora-%EC%BB%A4%EB%B2%84%EA%B3%A1-%EB%85%B8%EB%9E%98-%EB%85%B9%EC%9D%8C/id6794855195",
+      "play": null,
+      "legal": "/nora_legal.html",
+      "detail": false
+    },
+    {
+      "slug": "yul",
+      "name": {
+        "ko": "율 — 국악 튜너 & 장단",
+        "en": "Yul — Gugak Tuner & Janggu Rhythm"
+      },
+      "tagline": {
+        "ko": "국악기를 위한 튜너와 장단 연습 앱. 율명(黃·太·仲…)으로 읽는 튜너, 황종 기준 Hz·삼분손익/평균율·내 소리로 청 잡기, 국립국악원이 녹음한 대금·피리 기준음. 정악·민속악·풍물·굿 장단 수십 종을 정간보 격자로 보고 국립국악원 장구·북·징·꽹과리 소리로 들으며, 칸을 눌러 나만의 장단으로 고치고 체인으로 이어 재생. 12율·장단·조와 토리·시김새·정간보·구음 등 이론 글 아홉 편(한·영·일). 튜너·장단·이론은 무료, 녹음·시김새 분석·연습 점수는 평생권 한 번 구매. 출시 기념 2주 전부 무료.",
+        "en": "A tuner and rhythm trainer for Korean traditional instruments. Reads pitch in yul names (黃·太·仲…), with hwangjong reference Hz, sambunsonik or equal temperament, set-from-my-sound, and real daegeum and piri reference tones recorded by the National Gugak Center. Dozens of court, folk, pungmul and gut jangdan on a jeongganbo grid with National Gugak Center janggu, buk, jing and kkwaenggwari samples; tap cells to make your own pattern and chain rhythms together. Nine illustrated theory articles (Korean, English, Japanese). Tuner, jangdan and theory are free; recording, sigimsae analysis and practice scores are a one-time Lifetime purchase. Everything free for two weeks after launch."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS · macOS",
+        "en": "Live · iOS · iPadOS · macOS"
+      },
+      "appstore": "https://apps.apple.com/app/id6818832139",
+      "play": null,
+      "legal": "/yul_legal.html",
+      "detail": false
+    },
+    {
+      "slug": "sheetscope",
+      "name": {
+        "ko": "SheetScope",
+        "en": "SheetScope"
+      },
+      "tagline": {
+        "ko": "악보 PDF·사진·스캔을 넣으면 편집할 수 있는 악보(MusicXML)·미디·PDF 로, 미디 파일을 넣으면 악보로(2성부 피아노까지 정확). 리드시트·피아노·합창·드럼 악보를 읽고, 음표 추가·삭제·음가 변경과 도돌이표·괄호 직접 편집, 인식은 전부 기기 안에서(서버 없음). 첫 페이지 무료, 내보내기는 평생이용권 한 번 구매. 정확도는 악보 종류에 따라 80~99% 이며 참고용 항목은 앱과 지원 페이지에 표시. 8개 언어 지원(프랑스어는 1.2부터).",
+        "en": "Turn a sheet-music PDF, photo or scan into an editable score (MusicXML), MIDI or PDF — and a MIDI file into sheet music (accurate up to two-voice piano). Reads lead sheets, piano, choir and drum notation; edit by adding or deleting notes, changing durations and setting repeats and endings by hand. Entirely on device (no server). First page free; export is a one-time lifetime purchase. Accuracy is 80–99% depending on the score, with guide-only items disclosed in the app and support page. 8 languages (French from 1.2)."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS · macOS",
+        "en": "Live · iOS · iPadOS · macOS"
+      },
+      "appstore": "https://apps.apple.com/app/sheetscope/id6816556287",
+      "play": null,
+      "legal": "/sheetscope_legal.html",
+      "detail": false
+    },
+    {
+      "slug": "temposcope",
+      "name": {
+        "ko": "TempoScope",
+        "en": "TempoScope"
+      },
+      "tagline": {
+        "ko": "마이크로 들으면 템포와 키를 실시간으로, 음원 파일을 넣으면 템포·키·코드 진행까지 자동으로 찾아줍니다. 검출한 BPM에 맞는 딜레이·리버브 타임도 바로 계산해 보여줍니다. 코드 분석은 참고용입니다 — 템포·키보다 정확도가 낮고, 화음이 겹치는 발라드에서 특히 자주 어긋납니다. 분석은 전부 기기 안에서 이뤄지며 인터넷이 필요 없습니다. 마이크 실시간 감지와 메트로놈은 무료이고, 곡 전체 분석·기록 저장·셋리스트는 평생이용권입니다. 드럼 패턴이 들어간 메트로놈도 함께 있습니다. 1.4부터 클릭에 맞춰 드럼이나 악기 하나를 녹음하면 MIDI로 바꿔 주는 「녹음해서 MIDI 로」(아이폰·아이패드, 참고용)도 있습니다 — 녹음하고 결과 보기는 무료, MIDI 파일 내보내기는 평생이용권입니다. 한국어·영어·일본어·스페인어·중국어·독일어·포르투갈어·프랑스어 지원(프랑스어는 1.4부터).",
+        "en": "Detects tempo and key live from the microphone, and tempo, key, and chord progressions from audio files. It also works out the delay and reverb times that match the detected BPM. Chord detection is a reference aid: it is less accurate than tempo and key, and often goes wrong on ballads with dense harmony. All analysis runs on your device — no internet needed. Live microphone detection and the metronome are free; full-song analysis, saved records, and setlists are a one-time lifetime purchase. It also includes a metronome with drum patterns. From 1.4, Record to MIDI (iPhone and iPad, reference only) turns drums or a single instrument recorded to the click into MIDI — recording and viewing the result are free, exporting the MIDI file is part of the lifetime purchase. Available in Korean, English, Japanese, Spanish, Chinese, German, Portuguese and French (French from 1.4)."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS",
+        "en": "Live · iOS · iPadOS"
+      },
+      "appstore": "https://apps.apple.com/kr/app/temposcope/id6808620681",
+      "play": null,
+      "legal": null,
+      "detail": false
+    }
+  ],
+  "details": {
+    "stage-sound": {
+      "price": {
+        "ko": "평생 이용권 ₩9,900 · 카테고리별 첫 회차 무료",
+        "en": "Lifetime unlock ₩9,900 · first round of each category free"
+      },
+      "platforms": {
+        "ko": "iOS · Android",
+        "en": "iOS · Android"
+      },
+      "bullets": {
+        "ko": [
+          "필기 2,174문항(음향·법규·일반)과 무제한 계산문제",
+          "등급별 모의고사, 100분 타이머",
+          "표준교재 3권 요약노트",
+          "실기 기출문제 2010~2026",
+          "오답노트·즐겨찾기·회차별 점수 추이"
+        ],
+        "en": [
+          "2,174 written-exam questions (sound, regulations, general) and unlimited calculation problems",
+          "Mock exams by grade with a 100-minute timer",
+          "Summary notes for the 3 standard textbooks",
+          "Practical-exam past papers 2010–2026",
+          "Wrong-answer notes, bookmarks and score trends"
+        ]
+      },
+      "facts": {
+        "ko": [
+          "iOS · Android",
+          "한국어 앱",
+          "필기 2,174문항",
+          "평생 이용권 ₩9,900"
+        ],
+        "en": [
+          "iOS · Android",
+          "Korean-language app",
+          "2,174 written questions",
+          "Lifetime unlock ₩9,900"
+        ]
+      },
+      "blocks": [
+        {
+          "img": "03_exam_grade.jpg",
+          "alt": {
+            "ko": "등급 선택 화면",
+            "en": "Grade selection screen"
+          },
+          "title": {
+            "ko": "등급별 모의고사",
+            "en": "Mock exams by grade"
+          },
+          "text": {
+            "ko": "1·2·3급을 고르면 실제 시험처럼 100분 타이머가 돌아가는 모의고사를 볼 수 있습니다.",
+            "en": "Pick grade 1, 2 or 3 and take a mock exam with a 100-minute timer, just like the real one."
+          }
+        },
+        {
+          "img": "05_trend.jpg",
+          "alt": {
+            "ko": "점수 추이 화면",
+            "en": "Score trend screen"
+          },
+          "title": {
+            "ko": "점수 추이로 약점 확인",
+            "en": "See your weak spots in score trends"
+          },
+          "text": {
+            "ko": "회차별 점수가 그래프로 쌓여서 어느 분야가 약한지 한눈에 보입니다.",
+            "en": "Scores per attempt build up into a chart so you can see which area is weak."
+          }
+        },
+        {
+          "img": "06_wrongnote.jpg",
+          "alt": {
+            "ko": "오답노트 화면",
+            "en": "Wrong-answer notes screen"
+          },
+          "title": {
+            "ko": "오답노트와 요약노트",
+            "en": "Wrong-answer notes and summaries"
+          },
+          "text": {
+            "ko": "틀린 문제는 오답노트에 모이고, 표준교재 요약노트로 바로 복습할 수 있습니다.",
+            "en": "Missed questions collect in the notes, and the textbook summaries are one tap away for review."
+          }
+        }
+      ],
+      "steps": {
+        "ko": [
+          {
+            "t": "등급을 고릅니다",
+            "d": "1·2·3급 중 준비하는 등급을 선택합니다."
+          },
+          {
+            "t": "모의고사나 분야별 문제를 풉니다",
+            "d": "100분 모의고사 또는 분야별 문제로 연습합니다."
+          },
+          {
+            "t": "오답과 점수 추이를 봅니다",
+            "d": "틀린 문제와 점수 변화를 확인하고 요약노트로 복습합니다."
+          }
+        ],
+        "en": [
+          {
+            "t": "Pick your grade",
+            "d": "Choose grade 1, 2 or 3."
+          },
+          {
+            "t": "Take a mock exam or practice by topic",
+            "d": "Use the 100-minute mock exam or topic-by-topic practice."
+          },
+          {
+            "t": "Review mistakes and score trends",
+            "d": "Check missed questions and score changes, then review with the summaries."
+          }
+        ]
+      },
+      "related": [
+        "stage-sound-cert-study-plan",
+        "stage-sound-exam-scoring"
+      ]
+    }
+  }
+}
