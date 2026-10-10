@@ -73,8 +73,28 @@ def home(lang):
                           extra_head=HASH_KEEP if lang == "ko" else "")
 
 
+def tools(lang):
+    c = load("tools.json")[lang]
+    apps = {a["slug"]: a for a in load("apps.json")["apps"]}
+    groups = ""
+    for g in c["groups"]:
+        items = ""
+        for it in g["items"]:
+            app = apps.get(it["app"])
+            link = (f' <a class="more" href="{esc(app_href(lang, app))}">'
+                    f'{esc(c["app_label"])}: {esc(app["name"][lang])} →</a>') if app else ""
+            items += (f'<li><a href="{esc(it["href"])}">{esc(it["name"])}</a>'
+                      f'<p>{esc(it["text"])}{link}</p></li>')
+        groups += f'<section class="band"><div class="wrap"><h2>{esc(g["title"])}</h2><ul class="tool-list">{items}</ul></div></section>'
+    body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
+            f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
+    path = url(lang, "/tools/")
+    return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/tools/"))
+
+
 def build_all(root):
     root = pathlib.Path(root)
     for lang in ("ko", "en"):
-        path, html = home(lang)
-        kit.write(root, path, html)
+        for fn in (home, tools):
+            path, html = fn(lang)
+            kit.write(root, path, html)

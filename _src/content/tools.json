@@ -1,0 +1,54 @@
+{
+  "ko": {
+    "title": "웹 도구 — 무료 음향 도구 모음 | ML Music Studio",
+    "description": "RTA 실시간 분석기, 신호 발생기, 31밴드 귀 훈련, 딜레이·음향·전기·템포 계산기를 브라우저에서 무료로 쓰세요.",
+    "h1": "무료 웹 도구",
+    "sub": "설치 없이 브라우저에서 바로 쓰는 음향 도구입니다. 더 많은 기능은 같은 이름의 앱에서 쓸 수 있어요.",
+    "groups": [
+      {"title": "측정·신호", "items": [
+        {"href": "/rta.html", "name": "RTA 실시간 분석기", "text": "기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다.", "app": "spl-rta"},
+        {"href": "/generator.html", "name": "신호 발생기", "text": "핑크·화이트 노이즈, 사인·사각·삼각파, 험·버즈·히스 신호를 내서 스피커와 신호 체인을 점검합니다.", "app": "spl-rta"}
+      ]},
+      {"title": "귀 훈련", "items": [
+        {"href": "/trainer.html", "name": "31밴드 이어 트레이너", "text": "핑크노이즈에서 어느 주파수 대역이 올라가거나 깎였는지 귀로 맞히는 훈련입니다. 내 음악으로도 할 수 있어요.", "app": "ear-trainer"},
+        {"href": "/effects-listening.html", "name": "이펙트 청음", "text": "Reverb·Delay·Chorus 등 이펙트와 컴프레서·게이트·더킹을 켜고 끄며 비교해 들어봅니다.", "app": "ear-trainer"}
+      ]},
+      {"title": "계산기", "items": [
+        {"href": "/delay-calculator.html", "name": "딜레이 계산기", "text": "딜레이 시간·거리·주파수·위상을 서로 환산하고 스피커 정렬을 점검합니다.", "app": "toolkit"},
+        {"href": "/acoustics-calculator.html", "name": "음향 계산기", "text": "주파수·파장·주기와 음정, 룸 모드, 잔향(RT60)을 계산합니다.", "app": "toolkit"},
+        {"href": "/electrical-calculator.html", "name": "전기 계산기", "text": "옴의 법칙, 전력, 임피던스, dB와 전력 환산, 케이블 전압 강하를 계산합니다.", "app": "toolkit"},
+        {"href": "/tempo-pitch-calculator.html", "name": "템포·피치 계산기", "text": "탭 템포, BPM별 음표 길이, 속도와 피치, 루프 BPM을 계산합니다.", "app": "toolkit"}
+      ]},
+      {"title": "시험", "items": [
+        {"href": "/stage-sound-quiz.html", "name": "무대예술전문인(음향) 3급 문제풀이", "text": "표준교재 14개 장 객관식 문제와 계산문제를 웹에서 풀어 봅니다.", "app": "stage-sound"}
+      ]}
+    ],
+    "app_label": "앱으로 이어서"
+  },
+  "en": {
+    "title": "Web Tools — Free Audio Tools | ML Music Studio",
+    "description": "Use the RTA analyzer, signal generator, 31-band ear trainer and delay, acoustics, electrical and tempo calculators free in your browser.",
+    "h1": "Free web tools",
+    "sub": "Audio tools you can use in the browser with no install. The apps with the same names go further.",
+    "groups": [
+      {"title": "Measurement & signals", "items": [
+        {"href": "/rta.html", "name": "RTA real-time analyzer", "text": "Shows the sound coming into your device microphone as a 31-band (ISO 266) spectrum in real time.", "app": "spl-rta"},
+        {"href": "/generator.html", "name": "Signal generator", "text": "Pink and white noise, sine, square and triangle waves, hum, buzz and hiss for checking speakers and signal chains.", "app": "spl-rta"}
+      ]},
+      {"title": "Ear training", "items": [
+        {"href": "/trainer.html", "name": "31-band ear trainer", "text": "Train your ear to hear which frequency band was boosted or cut in pink noise — with your own music too.", "app": "ear-trainer"},
+        {"href": "/effects-listening.html", "name": "Effects listening", "text": "Compare reverb, delay, chorus and more, plus compressor, gate and ducking, with the effect on and off.", "app": "ear-trainer"}
+      ]},
+      {"title": "Calculators", "items": [
+        {"href": "/delay-calculator.html", "name": "Delay calculator", "text": "Convert delay time, distance, frequency and phase, and check speaker alignment.", "app": "toolkit"},
+        {"href": "/acoustics-calculator.html", "name": "Acoustics calculator", "text": "Frequency, wavelength and period, notes, room modes and reverb time (RT60).", "app": "toolkit"},
+        {"href": "/electrical-calculator.html", "name": "Electrical calculator", "text": "Ohm's law, power, impedance, dB-to-power conversion and cable voltage drop.", "app": "toolkit"},
+        {"href": "/tempo-pitch-calculator.html", "name": "Tempo & pitch calculator", "text": "Tap tempo, note lengths per BPM, speed and pitch, and loop BPM.", "app": "toolkit"}
+      ]},
+      {"title": "Exam", "items": [
+        {"href": "/stage-sound-quiz.html", "name": "Stage-sound certification quiz (Korean, level 3)", "text": "Multiple-choice questions from 14 chapters of the standard textbook, plus calculation problems. (Korean only.)", "app": "stage-sound"}
+      ]}
+    ],
+    "app_label": "Continue in the app"
+  }
+}

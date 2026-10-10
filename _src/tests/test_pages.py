@@ -42,5 +42,22 @@ class HomeTests(unittest.TestCase):
             self.assertTrue((root / "en/index.html").exists())
 
 
+class ToolsTests(unittest.TestCase):
+    def test_tools_lists_every_existing_tool_page_once(self):
+        _, html = pages.tools("ko")
+        for f in ("/rta.html", "/generator.html", "/trainer.html", "/effects-listening.html",
+                  "/delay-calculator.html", "/acoustics-calculator.html",
+                  "/electrical-calculator.html", "/tempo-pitch-calculator.html", "/stage-sound-quiz.html"):
+            self.assertEqual(html.count(f'href="{f}"'), 1, f)
+
+    def test_prototype_page_is_not_listed(self):
+        _, html = pages.tools("en")
+        self.assertNotIn("eartrainer_prototype", html)
+
+    def test_tools_paths(self):
+        self.assertEqual(pages.tools("ko")[0], "/tools/")
+        self.assertEqual(pages.tools("en")[0], "/en/tools/")
+
+
 if __name__ == "__main__":
     unittest.main()
