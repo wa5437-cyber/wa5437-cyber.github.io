@@ -11,6 +11,9 @@ S = {
     "footer_privacy": {"ko": "개인정보처리방침", "en": "Privacy Policy"},
     "footer_contact": {"ko": "문의", "en": "Contact"},
     "footer_tag": {"ko": "사운드 엔지니어를 위한 앱·웹 도구·녹음실", "en": "Apps, web tools and a recording studio for sound people"},
+    "footer_products": {"ko": "제품", "en": "Products"},
+    "footer_studio": {"ko": "녹음실", "en": "Studio"},
+    "footer_support": {"ko": "지원", "en": "Support"},
     "chat": {"ko": "카카오톡으로 문의", "en": "Contact on KakaoTalk"},
     "mail": {"ko": "이메일 보내기", "en": "Send an email"},
 }

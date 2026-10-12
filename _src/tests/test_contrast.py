@@ -23,21 +23,65 @@ def tokens():
     return {name: "#" + hexv for name, hexv in re.findall(r"--([a-z0-9-]+):\s*#([0-9a-fA-F]{6})", css)}
 
 
+GUIDE_CSS = CSS.parent / "guide.css"
+
+
+def guide_tokens():
+    css = GUIDE_CSS.read_text(encoding="utf-8")
+    return {name: "#" + hexv for name, hexv in re.findall(r"--([a-z0-9-]+):\s*#([0-9a-fA-F]{6})", css)}
+
+
+class GuideContrastTests(unittest.TestCase):
+    def test_guide_text_pairs_meet_wcag_aa(self):
+        t = guide_tokens()
+        for fg in ("text-primary", "text-secondary", "text-tertiary", "teal"):
+            for bg in ("bg", "bg-alt", "panel", "soft"):
+                self.assertGreaterEqual(ratio(t[fg], t[bg]), 4.5, f"guide --{fg} on --{bg}")
+        self.assertGreaterEqual(ratio("#ffffff", t["teal"]), 4.5, "white on guide --teal")
+
+    def test_old_low_contrast_grey_is_gone(self):
+        self.assertNotIn("#8c8677", GUIDE_CSS.read_text(encoding="utf-8").lower())
+
+    def test_guide_tokens_follow_site_tokens(self):
+        g, s = guide_tokens(), tokens()
+        for gk, sk in (("bg", "bg"), ("panel", "panel"), ("line", "line"), ("teal", "accent"),
+                       ("text-primary", "ink"), ("text-secondary", "ink2")):
+            self.assertEqual(g[gk].lower(), s[sk].lower(), gk)
+
+
 class ContrastTests(unittest.TestCase):
     def test_documented_tokens_match_plan(self):
         t = tokens()
-        expected = {"bg": "#f6f0e6", "ink": "#13363a", "ink2": "#47605f",
-                    "accent": "#b8501a", "accent-ink": "#9c430f"}
+        expected = {"bg": "#f4f5f3", "panel": "#ffffff", "ink": "#202426", "ink2": "#5b6468",
+                    "accent": "#23695c", "accent-hover": "#194e45", "accent-ink": "#23695c",
+                    "line": "#d5dadb", "control": "#7a858a",
+                    "dark": "#171d20", "dark-ink": "#f4f5f3", "dark-muted": "#b5c0c4", "dark-link": "#8dd7bd"}
         for name, value in expected.items():
             self.assertEqual(t.get(name, "").lower(), value, f"--{name}")
 
     def test_text_pairs_meet_wcag_aa(self):
         t = tokens()
-        pairs = [("ink", "bg"), ("ink2", "bg"), ("ink2", "panel"), ("accent-ink", "bg"),
-                 ("accent-ink", "soft"), ("ink", "soft")]
+        pairs = [("ink", "bg"), ("ink2", "bg"), ("ink2", "panel"), ("ink2", "stage"), ("ink2", "soft"),
+                 ("accent-ink", "bg"), ("accent-ink", "panel"), ("accent-ink", "soft"), ("accent-hover", "bg"),
+                 ("ink", "soft"), ("ink", "stage"),
+                 # 어두운 띠(녹음실): 본문·보조문자·링크
+                 ("dark-ink", "dark"), ("dark-muted", "dark"), ("dark-link", "dark")]
         for fg, bg in pairs:
             self.assertGreaterEqual(ratio(t[fg], t[bg]), 4.5, f"--{fg} on --{bg}")
         self.assertGreaterEqual(ratio("#ffffff", t["accent"]), 4.5, "white on --accent")
+        self.assertGreaterEqual(ratio("#ffffff", t["accent-hover"]), 4.5, "white on --accent-hover")
+
+    def test_control_borders_meet_non_text_contrast(self):
+        # 조작 경계(버튼·메뉴 테두리)는 WCAG 1.4.11 의 3:1. 장식 경계 --line 은 조작 경계에 쓰지 않는다.
+        t = tokens()
+        for bg in ("bg", "panel", "dark"):
+            self.assertGreaterEqual(ratio(t["control"], t[bg]), 3.0, f"--control on --{bg}")
+
+    def test_theme_color_matches_background(self):
+        import sys
+        sys.path.insert(0, str(CSS.parents[1] / "_src"))
+        from sitegen import kit
+        self.assertEqual(kit.THEME_COLOR.lower(), tokens()["bg"])
 
 
 if __name__ == "__main__":

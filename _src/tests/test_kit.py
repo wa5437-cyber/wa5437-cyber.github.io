@@ -142,5 +142,47 @@ class KitTests(unittest.TestCase):
         self.assertEqual(html.count('name="google-site-verification"'), 2)
 
 
+class FooterAndHeaderTests(unittest.TestCase):
+    def test_footer_has_three_groups_products_studio_support(self):
+        f = kit.footer("ko")
+        self.assertEqual(re.findall(r'<p class="foot-h">(.*?)</p>', f), ["제품", "녹음실", "지원"])
+        for href in ('href="/apps/"', 'href="/tools/"', 'href="/plugins/"', 'href="/guides/"', 'href="/studio/"',
+                     'href="/about/"', 'href="/contact/"', 'href="/privacy/"'):
+            self.assertIn(href, f)
+        en = kit.footer("en")
+        self.assertEqual(re.findall(r'<p class="foot-h">(.*?)</p>', en), ["Products", "Studio", "Support"])
+        self.assertIn('href="/en/studio/"', en)
+        self.assertNotIn("/policy.html", en)
+
+    def test_header_marks_current_section(self):
+        h = kit.header("ko", {}, "/apps/keymap/")
+        self.assertEqual(h.count('aria-current="page"'), 2)          # 넓은 메뉴 + 접는 메뉴
+        self.assertIn('<a href="/apps/" aria-current="page">', h)
+        self.assertNotIn('aria-current', kit.header("ko", {}, "/"))
+        self.assertIn('<a href="/en/studio/" aria-current="page">', kit.header("en", {}, "/en/studio/"))
+
+    def test_page_uses_new_fonts_and_theme_color(self):
+        html = kit.page("ko", "/x/", "T", "D", "<p>b</p>", {"ko": "/x/"})
+        self.assertIn("family=Inter:wght@400;500;600;700", html)
+        self.assertIn("family=Noto+Sans+KR:wght@400;500;600;700", html)
+        self.assertNotIn("Serif", html)
+        self.assertIn('<meta name="theme-color" content="#f4f5f3">', html)
+
+
+class ImageSizeTests(unittest.TestCase):
+    def test_reads_jpeg_sizes_and_shapes(self):
+        self.assertEqual(kit.img_size("/img/apps/spl-rta/01_spl_ko.jpg"), (736, 1600))
+        self.assertEqual(kit.img_size("/img/apps/keymap/01_translate_ko.jpg"), (1199, 1600))
+        self.assertEqual(kit.img_size("/img/apps/nora/01_device_ko.jpg"), (1600, 1000))
+        self.assertEqual(kit.img_size("/og-image.png")[0] > 0, True)
+        self.assertIsNone(kit.img_size("/img/no-such.jpg"))
+        self.assertEqual(kit.shape((736, 1600)), "phone")
+        self.assertEqual(kit.shape((1199, 1600)), "tablet")
+        self.assertEqual(kit.shape((1600, 1000)), "wide")
+        self.assertEqual(kit.shape(None), "phone")
+        self.assertEqual(kit.img_attrs("/img/apps/spl-rta/01_spl_ko.jpg"), ' width="736" height="1600"')
+        self.assertEqual(kit.img_attrs("/img/no-such.jpg"), "")
+
+
 if __name__ == "__main__":
     unittest.main()

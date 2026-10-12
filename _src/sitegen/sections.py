@@ -3,8 +3,10 @@ from . import kit
 from .kit import esc
 
 
-def _wrap(inner):
-    return f'<section class="band"><div class="wrap">{inner}</div></section>'
+def _wrap(inner, sec=None):
+    """구역 하나. 구역에 "tone": "dark" 가 있으면 어두운 띠로 그린다."""
+    dark = " dark" if sec and sec.get("tone") == "dark" else ""
+    return f'<section class="band{dark}"><div class="wrap">{inner}</div></section>'
 
 
 def _h2(sec):
@@ -15,7 +17,7 @@ def _prose(sec, lang, ctx):
     paras = "".join(f"<p>{esc(p)}</p>" for p in sec.get("paragraphs", []))
     links = "".join(f'<p><a href="{esc(l["href"])}" rel="noopener">{esc(l["text"])}</a></p>'
                     for l in sec.get("links", []))
-    return _wrap(_h2(sec) + paras + links)
+    return _wrap(_h2(sec) + paras + links, sec)
 
 
 def _list(sec, lang, ctx):
@@ -30,12 +32,13 @@ def _cards(sec, lang, ctx):
             return f'<a class="card" href="{esc(i["href"])}">{inner}</a>'
         return f'<div class="card">{inner}</div>'
     cards = "".join(card(i) for i in sec["items"])
-    return _wrap(_h2(sec) + f'<div class="cards c3">{cards}</div>')
+    cols = "c4" if len(sec["items"]) == 4 else "c3"          # 4개는 2×2 / 한 줄 4칸(마지막 칸만 외톨이가 되지 않게)
+    return _wrap(_h2(sec) + f'<div class="cards {cols}">{cards}</div>', sec)
 
 
 def _steps(sec, lang, ctx):
     items = "".join(f'<li><strong>{esc(i["t"])}</strong><br>{esc(i["d"])}</li>' for i in sec["items"])
-    return _wrap(_h2(sec) + f'<ol class="steps">{items}</ol>')
+    return _wrap(_h2(sec) + f'<ol class="steps">{items}</ol>', sec)
 
 
 def _contact(sec, lang, ctx):
@@ -52,15 +55,15 @@ def _contact(sec, lang, ctx):
         link = c.get("map")
         inner = f'<a href="{esc(link)}" rel="noopener">{esc(a)}</a>' if link else esc(a)
         addr = f'<p class="addr">{inner}</p>'
-    return _wrap(_h2(sec) + text + row + addr)
+    return _wrap(_h2(sec) + text + row + addr, sec)
 
 
 def _photos(sec, lang, ctx):
     shown = [i for i in sec["items"] if ctx["img_exists"](i["src"])]
     if not shown:
         return ""
-    imgs = "".join(f'<img class="shot" src="{esc(i["src"])}" alt="{esc(i["alt"])}" loading="lazy">'
-                   for i in shown)
+    imgs = "".join(f'<img class="shot {kit.shape(kit.img_size(i["src"]))}" src="{esc(i["src"])}" alt="{esc(i["alt"])}"'
+                   f'{kit.img_attrs(i["src"])} loading="lazy">' for i in shown)
     return _wrap(_h2(sec) + f'<div class="shots">{imgs}</div>')
 
 
