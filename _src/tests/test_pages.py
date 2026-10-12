@@ -142,12 +142,21 @@ class ToolsTests(unittest.TestCase):
         self.assertEqual(pages.tools("en")[0], "/en/tools/")
 
     def test_tools_links_exam_to_detail_page_and_others_to_apps_index(self):
+        tools_data = pages.load("tools.json")
         for lang, pre in (("ko", ""), ("en", "/en")):
             _, html = pages.tools(lang)
-            self.assertIn(f'href="{pre}/apps/stage-sound/"', html, lang)
-            self.assertIn(f'href="{pre}/apps/"', html, lang)
-            for slug in ("spl-rta", "ear-trainer", "toolkit"):
-                self.assertNotIn(f'href="{pre}/apps/{slug}/"', html, lang)
+            slugs = {it["app"] for g in tools_data[lang]["groups"] for it in g["items"] if it.get("app")}
+            self.assertIn("stage-sound", slugs)
+            self.assertTrue(pages.has_detail("stage-sound"))
+            for slug in slugs:
+                detail = f'href="{pre}/apps/{slug}/"'
+                if pages.has_detail(slug):
+                    self.assertIn(detail, html, (lang, slug))     # 상세 페이지가 있으면 거기로
+                else:
+                    self.assertNotIn(detail, html, (lang, slug))  # 없으면 깨진 링크 대신 앱 목록으로
+                    self.assertIn(f'href="{pre}/apps/"', html, (lang, slug))
+            if not all(pages.has_detail(sl) for sl in slugs):
+                self.assertIn(f'href="{pre}/apps/"', html, lang)
 
 
 class AppsTests(unittest.TestCase):
@@ -155,7 +164,12 @@ class AppsTests(unittest.TestCase):
         _, html = pages.apps_index("ko")
         self.assertIn("무대음향 자격증 기출문제", html)
         self.assertIn('href="/apps/stage-sound/"', html)
-        self.assertNotIn('href="/apps/spl-rta/"', html)   # 상세 페이지는 아직 없음
+        for a in pages.load("apps.json")["apps"]:
+            link = f'href="/apps/{a["slug"]}/"'
+            if pages.has_detail(a["slug"]):
+                self.assertIn(link, html, a["slug"])
+            else:
+                self.assertNotIn(link, html, a["slug"])      # 상세 페이지가 없으면 링크도 없다
 
     def test_stage_sound_page_uses_only_known_facts_and_campaign_links(self):
         path, html = pages.app_page("ko", "stage-sound")

@@ -246,12 +246,14 @@ def _app_page_full(lang, app, det, slug):
     rel = (f'<section class="band"><div class="wrap"><h2>{esc(ui["related"][lang])}</h2>'
            f'<ul class="bullets">{guides}</ul></div></section>') if guides else ""
     privacy = f'<p><a href="{esc(privacy_href(app))}">{esc(ui["privacy"][lang])}</a></p>'
+    price = (det.get("price") or {}).get(lang)
+    price_pill = f'<span class="pill" style="align-self:center">{esc(price)}</span>' if price else ""
     body = (
         f'<section class="hero"><div class="wrap"><div class="grid"><div>'
         f'<span class="pill">{esc(det["platforms"][lang])}</span>'
         f'<h1>{esc(app["name"][lang])}</h1><p class="sub">{esc(det["lead"][lang] if det.get("lead") else short(app["tagline"][lang], 160))}</p>'
         f'<ul class="bullets">{bullets}</ul>'
-        f'<div class="row">{store_buttons(app, lang)}<span class="pill" style="align-self:center">{esc(det["price"][lang])}</span></div>'
+        f'<div class="row">{store_buttons(app, lang)}{price_pill}</div>'
         f'</div><div><img class="shot" src="{img_dir}{esc(pick_img(det["hero_img"], lang))}" alt="{esc(app["name"][lang])}"></div></div></div></section>'
         f'<section class="band"><div class="wrap">{blocks}</div></section>'
         f'<section class="band"><div class="wrap"><h2>{esc(ui["howto"][lang])}</h2><ol class="steps">{steps}</ol></div></section>'

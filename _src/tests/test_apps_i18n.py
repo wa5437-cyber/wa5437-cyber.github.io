@@ -199,6 +199,43 @@ class PageLangTests(unittest.TestCase):
         self.assertTrue((root / "apps" / "stage-sound" / "index.html").exists())
 
 
+class PricePillTests(unittest.TestCase):
+    """가격은 선택 항목: 있을 때만 알약을 그린다."""
+    def setUp(self):
+        self._load_app = pages.load_app
+        self.det = json.loads(json.dumps(self._load_app("stage-sound")["detail"]))   # 깊은 복사
+        pages.load_app = lambda slug: ({"detail": self.det, "store": {}} if slug == "stage-sound"
+                                       else self._load_app(slug))
+
+    def tearDown(self):
+        pages.load_app = self._load_app
+
+    def _hero_row(self, lang="ko"):
+        _, html = pages.app_page(lang, "stage-sound")
+        return html.split('<div class="row">', 1)[1].split("</div>", 1)[0]
+
+    def test_price_pill_present_when_price_given(self):
+        self.det["price"] = {"ko": "평생 이용권 ₩9,900", "en": "Lifetime ₩9,900"}
+        self.assertIn('<span class="pill" style="align-self:center">평생 이용권 ₩9,900</span>', self._hero_row("ko"))
+        self.assertIn("Lifetime ₩9,900", self._hero_row("en"))
+
+    def test_no_price_key_renders_without_price_pill(self):
+        self.det.pop("price", None)
+        row = self._hero_row("ko")
+        self.assertNotIn('class="pill"', row)
+        _, html = pages.app_page("ko", "stage-sound")
+        self.assertIn('<span class="pill">', html)            # 플랫폼 알약은 그대로
+        self.assertNotIn("align-self:center", html)
+
+    def test_price_dict_lacking_lang_renders_no_pill(self):
+        self.det["price"] = {"ko": "평생 이용권 ₩9,900"}
+        row = self._hero_row("en")
+        self.assertNotIn('class="pill"', row)
+        self.assertNotIn("9,900", row)
+        self.det["price"] = {"ko": "", "en": ""}
+        self.assertNotIn('class="pill"', self._hero_row("ko"))
+
+
 class ImgAndLegalTests(unittest.TestCase):
     def setUp(self):
         self._load_app, self._load = pages.load_app, pages.load
