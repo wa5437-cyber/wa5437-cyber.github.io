@@ -222,3 +222,23 @@ class ImgAndLegalTests(unittest.TestCase):
         for lang in ("ko", "en", "ja"):
             _, html = pages.app_page(lang, "stage-sound")
             self.assertIn('href="/policy.html#policy"', html, lang)
+
+
+class PrepShotTests(unittest.TestCase):
+    def test_prepare_resizes_to_jpeg(self):
+        import prep_shot, subprocess
+        with tempfile.TemporaryDirectory() as d:
+            src = pathlib.Path(d) / "a.png"
+            # 1x1 PNG
+            import base64
+            src.write_bytes(base64.b64decode(
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="))
+            dst = pathlib.Path(d) / "out" / "a.jpg"
+            prep_shot.prepare(src, dst)
+            self.assertTrue(dst.exists())
+            self.assertEqual(dst.read_bytes()[:2], b"\xff\xd8")
+
+    def test_missing_source_raises(self):
+        import prep_shot
+        with self.assertRaises(RuntimeError):
+            prep_shot.prepare("/no/such.png", "/tmp/never.jpg")
