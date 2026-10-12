@@ -13,7 +13,9 @@ def _h2(sec):
 
 def _prose(sec, lang, ctx):
     paras = "".join(f"<p>{esc(p)}</p>" for p in sec.get("paragraphs", []))
-    return _wrap(_h2(sec) + paras)
+    links = "".join(f'<p><a href="{esc(l["href"])}" rel="noopener">{esc(l["text"])}</a></p>'
+                    for l in sec.get("links", []))
+    return _wrap(_h2(sec) + paras + links)
 
 
 def _list(sec, lang, ctx):
@@ -22,8 +24,12 @@ def _list(sec, lang, ctx):
 
 
 def _cards(sec, lang, ctx):
-    cards = "".join(f'<div class="card"><h3>{esc(i["title"])}</h3><p>{esc(i["text"])}</p></div>'
-                    for i in sec["items"])
+    def card(i):
+        inner = f'<h3>{esc(i["title"])}</h3><p>{esc(i["text"])}</p>'
+        if i.get("href"):
+            return f'<a class="card" href="{esc(i["href"])}">{inner}</a>'
+        return f'<div class="card">{inner}</div>'
+    cards = "".join(card(i) for i in sec["items"])
     return _wrap(_h2(sec) + f'<div class="cards c3">{cards}</div>')
 
 
@@ -76,6 +82,9 @@ def _works(sec, lang, ctx):
         cells = ""
         for key, label in zip(keys, ui["cols"]):
             val = "" if w.get(key) is None else esc(w[key])
+            if key == "title" and w.get("album"):      # 곡명 다음에 앨범/구분(없으면 앨범만)
+                album = f'<span class="album">{esc(w["album"])}</span>'
+                val = f"{val} {album}" if val else album
             if key == "artist" and w.get("church"):
                 val += f' <span class="pill">{esc(ui["church"])}</span>'
             cells += f'<td data-label="{esc(label)}">{val}</td>'

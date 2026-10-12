@@ -55,9 +55,9 @@ class PluginsPageTests(unittest.TestCase):
 
 
 CAREER = {"works": [
-    {"year": 2020, "artist": "A", "title": "T1", "role": "믹싱", "church": False},
-    {"year": 2021, "artist": "B", "title": None, "role": "녹음", "church": True},
-    {"year": 2022, "artist": "C <b>&", "title": "X <b>&", "role": "마스터링", "church": False},
+    {"year": 2020, "artist": "A", "title": "T1", "album": None, "role": "믹싱", "church": False},
+    {"year": 2021, "artist": "B", "title": None, "album": None, "role": "녹음", "church": True},
+    {"year": 2022, "artist": "C <b>&", "title": "X <b>&", "album": None, "role": "마스터링", "church": False},
 ]}
 
 
@@ -107,6 +107,36 @@ class MoreSectionTests(unittest.TestCase):
         for label in ("Year", "Artist", "Work", "Role"):
             self.assertIn(f"<th>{label}</th>", en)
         self.assertIn("Worship", en)
+
+
+class WorksAlbumAndLinksTests(unittest.TestCase):
+    def _works(self, *rows):
+        base = {"year": 2020, "artist": "A", "title": None, "album": None, "role": "믹싱", "church": False}
+        ctx = dict(CTX, career={"works": [dict(base, **r) for r in rows]})
+        return sections.render([{"type": "works", "title": "t"}], "ko", ctx)
+
+    def test_title_and_album_both_shown_with_album_span(self):
+        html = self._works({"title": "곡명", "album": "앨범 <i>&"})
+        self.assertIn('<td data-label="작품">곡명 <span class="album">앨범 &lt;i&gt;&amp;</span></td>', html)
+
+    def test_album_only_row_shows_album_alone(self):
+        html = self._works({"title": None, "album": "EP 첫 번째"})
+        self.assertIn('<td data-label="작품"><span class="album">EP 첫 번째</span></td>', html)
+
+    def test_title_only_and_neither(self):
+        html = self._works({"title": "T"}, {"title": None, "album": None})
+        self.assertIn('<td data-label="작품">T</td>', html)
+        self.assertIn('<td data-label="작품"></td>', html)
+
+    def test_prose_links_escape_and_card_href(self):
+        html = sections.render([
+            {"type": "prose", "title": None, "paragraphs": ["p"],
+             "links": [{"text": "A <b>", "href": "http://x.example/?a=1&b=2"}]},
+            {"type": "cards", "title": None, "items": [
+                {"title": "C1", "text": "t1", "href": "/apps/"}, {"title": "C2", "text": "t2"}]}], "ko", CTX)
+        self.assertIn('<a href="http://x.example/?a=1&amp;b=2" rel="noopener">A &lt;b&gt;</a>', html)
+        self.assertIn('<a class="card" href="/apps/"><h3>C1</h3><p>t1</p></a>', html)
+        self.assertIn('<div class="card"><h3>C2</h3><p>t2</p></div>', html)
 
 
 class SitemapAndBuildTests(unittest.TestCase):

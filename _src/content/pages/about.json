@@ -1,0 +1,62 @@
+{
+  "ko": {
+    "title": "소개 | ML Music Studio",
+    "description": "사운드 엔지니어 이효섭과 ML Music Studio를 소개합니다. 믹싱·마스터링·녹음 작업, 그리고 앱과 웹 도구.",
+    "h1": "이효섭",
+    "sub": "사운드 엔지니어, ML Music Studio 운영",
+    "sections": [
+      {"type": "photos", "title": null,
+       "items": [{"src": "/img/about/profile.jpg", "alt": "이효섭"}]},
+      {"type": "prose", "title": "소개",
+       "paragraphs": [
+         "믹싱·마스터링·녹음을 하는 사운드 엔지니어입니다. 서울 용산의 작업실에서 ML Music Studio를 운영합니다.",
+         "무대·공연 음향 현장에서 일한 경험을 바탕으로, 현장에서 실제로 쓰게 되는 계산·측정·학습 도구를 앱과 웹 도구로 만들고 있습니다."],
+       "links": [{"text": "Moon Studio 팀 페이지", "href": "http://moonstudiorecording.com/sub/team_HS.html"}]},
+      {"type": "facts",
+       "items": [
+         "{since}년부터 작업을 기록해 두었습니다.",
+         "기록된 작업 {total}건",
+         "그중 마스터링 {mastering}건 · 믹싱 {mixing}건 · 녹음 {recording}건 (한 작업에 여러 역할이 겹칩니다)"]},
+      {"type": "cards", "title": "만든 것",
+       "items": [
+         {"title": "앱", "text": "무대음향 시험 대비, SPL·RTA 측정, 귀 훈련, DAW 단축키, 악보 변환까지. 현장에서 쓰려고 만든 앱입니다.", "href": "/apps/"},
+         {"title": "웹 도구", "text": "RTA 분석기, 신호 발생기, 귀 훈련, 딜레이·음향·전기·템포 계산기를 브라우저에서 바로 쓸 수 있습니다.", "href": "/tools/"},
+         {"title": "가이드", "text": "딜레이 타워 정렬, 임피던스, RTA 해석, 자격증 대비 같은 실무 글입니다.", "href": "/guides/"}]},
+      {"type": "works", "title": "대표 작업",
+       "note": "파일 정리 기준 2024년까지 · 일부만 실었습니다"},
+      {"type": "prose", "title": "원칙",
+       "paragraphs": ["현장에서 바로 쓰이는 것을 만듭니다."]},
+      {"type": "contact", "title": "문의", "text": null}
+    ]
+  },
+  "en": {
+    "title": "About | ML Music Studio",
+    "description": "About Hyoseop Lee and ML Music Studio: mixing, mastering and recording work, plus apps and web tools.",
+    "h1": "Hyoseop Lee",
+    "sub": "Sound engineer, runs ML Music Studio",
+    "sections": [
+      {"type": "photos", "title": null,
+       "items": [{"src": "/img/about/profile.jpg", "alt": "Hyoseop Lee"}]},
+      {"type": "prose", "title": "About",
+       "paragraphs": [
+         "I am a sound engineer who does mixing, mastering and recording, and I run ML Music Studio from a studio in Yongsan, Seoul.",
+         "Based on my experience in stage and live sound, I build apps and web tools for the calculating, measuring and learning that people actually do on the job."],
+       "links": [{"text": "Moon Studio team page", "href": "http://moonstudiorecording.com/sub/team_HS.html"}]},
+      {"type": "facts",
+       "items": [
+         "Work on record since {since}.",
+         "{total} credits on record",
+         "Of those: {mastering} with mastering, {mixing} with mixing and {recording} with recording (one credit can cover several roles)"]},
+      {"type": "cards", "title": "What I have made",
+       "items": [
+         {"title": "Apps", "text": "Exam prep for stage-sound certification, SPL and RTA measurement, ear training, DAW shortcuts and score conversion — built for real work.", "href": "/en/apps/"},
+         {"title": "Web tools", "text": "An RTA analyzer, signal generator, ear trainers and delay, acoustics, electrical and tempo calculators, right in your browser.", "href": "/en/tools/"},
+         {"title": "Guides", "text": "Practical articles on aligning delay towers, impedance, reading an RTA and preparing for certification. The guides are in Korean.", "href": "/guides/"}]},
+      {"type": "works", "title": "Selected work",
+       "note": "From records through 2024; a selection."},
+      {"type": "prose", "title": "Principle",
+       "paragraphs": ["I make things that can be used on the spot, at the venue."]},
+      {"type": "contact", "title": "Contact", "text": null}
+    ]
+  }
+}

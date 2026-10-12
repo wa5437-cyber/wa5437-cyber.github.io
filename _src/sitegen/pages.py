@@ -141,14 +141,29 @@ def load_page(name):
     return json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
 
 
+def fill_facts(secs, career):
+    """facts 구역의 항목 문자열 자리표시자({since} {total} {mastering} {mixing} {recording})를 career.json 으로 채운다.
+    모르는 자리표시자는 KeyError 로 빌드를 멈춘다. 다른 구역은 그대로 둔다."""
+    values = {"since": career["since"], "total": career["total"],
+              "mastering": career["roles"]["마스터링"], "mixing": career["roles"]["믹싱"],
+              "recording": career["roles"]["녹음"]}
+    out = []
+    for sec in secs:
+        if sec.get("type") == "facts":
+            sec = dict(sec, items=[i.format_map(values) for i in sec["items"]])
+        out.append(sec)
+    return out
+
+
 def simple_page(lang, name):
     """content/pages/<name>.json 의 hero + 구역들로 만든 단순 페이지."""
     c = load_page(name)[lang]
-    ctx = {"contact": kit.SITE["contact"], "career": None,
+    career = load("career.json")
+    ctx = {"contact": kit.SITE["contact"], "career": career,
            "img_exists": lambda p: (ROOT / p.lstrip("/")).exists()}
     body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
             f'<p class="sub">{esc(c["sub"])}</p></div></section>'
-            + sections.render(c["sections"], lang, ctx))
+            + sections.render(fill_facts(c["sections"], career), lang, ctx))
     path = url(lang, f"/{name}/")
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for(f"/{name}/"))
 

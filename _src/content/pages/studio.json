@@ -1,0 +1,66 @@
+{
+  "ko": {
+    "title": "녹음실 | ML Music Studio",
+    "description": "서울 용산의 작업실에서 녹음·믹싱·마스터링을 합니다. 하는 일, 진행 방법, 대표 작업과 위치, 문의 방법을 안내합니다.",
+    "h1": "ML Music Studio 녹음실",
+    "sub": "서울 용산의 작업실에서 녹음·믹싱·마스터링을 합니다.",
+    "sections": [
+      {"type": "cards", "title": "하는 일",
+       "items": [
+         {"title": "녹음", "text": "악기와 보컬을 녹음합니다."},
+         {"title": "믹싱", "text": "녹음된 소리를 한 곡으로 모아 균형을 맞춥니다."},
+         {"title": "마스터링", "text": "믹스를 음원으로 내보낼 수 있도록 마무리합니다."},
+         {"title": "무대음향", "text": "공연과 행사 현장의 음향 작업을 합니다."}]},
+      {"type": "steps", "title": "진행 방법",
+       "items": [
+         {"t": "문의", "d": "카카오톡 오픈채팅이나 이메일로 연락해 주세요."},
+         {"t": "상담", "d": "원하는 작업과 일정, 참고곡을 함께 정리합니다."},
+         {"t": "작업", "d": "정리한 내용에 따라 작업을 진행합니다."},
+         {"t": "전달", "d": "완성한 결과물을 전달합니다."}]},
+      {"type": "photos", "title": "작업실",
+       "items": [
+         {"src": "/img/studio/room-01.jpg", "alt": "ML Music Studio 작업실"},
+         {"src": "/img/studio/room-02.jpg", "alt": "ML Music Studio 작업실"},
+         {"src": "/img/studio/room-03.jpg", "alt": "ML Music Studio 작업실"}]},
+      {"type": "works", "title": "대표 작업",
+       "note": "파일 정리 기준 2024년까지 · 일부만 실었습니다"},
+      {"type": "contact", "title": "위치",
+       "text": "운영 시간은 따로 없고 예약제입니다. 카카오톡으로 먼저 문의해 주세요."},
+      {"type": "prose", "title": "Moon Studio 팀과 함께 합니다",
+       "paragraphs": ["Moon Studio는 작곡가와 엔지니어로 이루어진 팀으로, 작곡·편곡·녹음·믹싱·마스터링을 합니다. 영화, 연극, 뮤지컬, 음반, 오디오북의 음악을 다룹니다."],
+       "links": [{"text": "Moon Studio 사이트", "href": "http://moonstudiorecording.com/"}]}
+    ]
+  },
+  "en": {
+    "title": "Recording Studio | ML Music Studio",
+    "description": "Recording, mixing and mastering at a studio in Yongsan, Seoul. What we do, how it works, selected work, location and how to get in touch.",
+    "h1": "ML Music Studio Recording",
+    "sub": "Recording, mixing and mastering at a studio in Yongsan, Seoul.",
+    "sections": [
+      {"type": "cards", "title": "What we do",
+       "items": [
+         {"title": "Recording", "text": "We record instruments and vocals."},
+         {"title": "Mixing", "text": "We bring the recorded sounds together into one song and balance them."},
+         {"title": "Mastering", "text": "We finish the mix so that it is ready to be released as a track."},
+         {"title": "Stage sound", "text": "We handle sound at live performances and events."}]},
+      {"type": "steps", "title": "How it works",
+       "items": [
+         {"t": "Inquiry", "d": "Contact us through the KakaoTalk open chat or by email."},
+         {"t": "Consultation", "d": "We sort out the work you want, the schedule and your reference tracks together."},
+         {"t": "Work", "d": "We carry out the work as agreed."},
+         {"t": "Delivery", "d": "We hand over the finished result."}]},
+      {"type": "photos", "title": "The studio",
+       "items": [
+         {"src": "/img/studio/room-01.jpg", "alt": "ML Music Studio control room"},
+         {"src": "/img/studio/room-02.jpg", "alt": "ML Music Studio control room"},
+         {"src": "/img/studio/room-03.jpg", "alt": "ML Music Studio control room"}]},
+      {"type": "works", "title": "Selected work",
+       "note": "From records through 2024; a selection."},
+      {"type": "contact", "title": "Location",
+       "text": "There are no fixed opening hours; the studio works by appointment. Please message us on KakaoTalk first."},
+      {"type": "prose", "title": "Working with the Moon Studio team",
+       "paragraphs": ["Moon Studio is a team of composers and engineers that does composition, arrangement, recording, mixing and mastering. They work on music for movies, plays, musicals, albums and audiobooks."],
+       "links": [{"text": "Moon Studio website", "href": "http://moonstudiorecording.com/"}]}
+    ]
+  }
+}

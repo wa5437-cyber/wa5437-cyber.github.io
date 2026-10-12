@@ -3,7 +3,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://mlmusicstudio.co.kr/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/yul_legal.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
 
   <url><loc>https://mlmusicstudio.co.kr/guides/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/delay-tower-alignment.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -125,4 +124,10 @@
 <url><loc>https://mlmusicstudio.co.kr/pt-BR/apps/temposcope/</loc></url>
 <url><loc>https://mlmusicstudio.co.kr/plugins/</loc></url>
 <url><loc>https://mlmusicstudio.co.kr/en/plugins/</loc></url>
+<url><loc>https://mlmusicstudio.co.kr/studio/</loc></url>
+<url><loc>https://mlmusicstudio.co.kr/en/studio/</loc></url>
+<url><loc>https://mlmusicstudio.co.kr/about/</loc></url>
+<url><loc>https://mlmusicstudio.co.kr/en/about/</loc></url>
+<url><loc>https://mlmusicstudio.co.kr/contact/</loc></url>
+<url><loc>https://mlmusicstudio.co.kr/en/contact/</loc></url>
 </urlset>

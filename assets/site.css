@@ -102,3 +102,6 @@ html:lang(de) body,html:lang(es) body,html:lang(fr) body,html:lang(pt-BR) body{h
 .works td::before{content:attr(data-label);display:inline-block;min-width:4.5em;margin-right:8px;color:var(--ink2);font-size:13px;font-weight:700}
 .works td:empty{display:none}
 }
+a.card{text-decoration:none;color:inherit}
+a.card:hover{border-color:var(--accent)}
+.works .album{font-size:13px;color:var(--ink2)}
