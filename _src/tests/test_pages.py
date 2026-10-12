@@ -94,13 +94,79 @@ class HomeExtrasTests(unittest.TestCase):
         _, html = pages.home("en")
         self.assertIn("Latest guides (in Korean)", html)
 
-    def test_home_guide_cards_end_with_ellipsis_when_truncated(self):
+    def test_home_guide_list_has_short_one_line_ledes(self):
         _, html = pages.home("ko")
-        ps = re.findall(r'<a class="card" href="/guides/[^"]+"[^>]*><h3>.*?</h3><p>(.*?)</p>', html, re.S)
-        self.assertTrue(ps)
-        for p in ps:
-            self.assertLessEqual(len(p), 111)
-        self.assertTrue(any(p.endswith("…") for p in ps))
+        items = re.findall(r'<li><a href="/guides/([^"]+)\.html">(.*?)</a><p>(.*?)</p></li>', html, re.S)
+        self.assertEqual([i[0] for i in items], pages.load("home.json")["latest_guides"])
+        for _, title, p in items:
+            self.assertTrue(title)
+            self.assertLessEqual(len(p), 71)
+        self.assertTrue(any(p.endswith("…") for _, _, p in items))
+
+
+class HomeLayoutTests(unittest.TestCase):
+    """홈: 실제 앱 화면 히어로 → 대표 앱 3(화면 무대) → 녹음실 어두운 띠 → 플러그인 띠 → 웹 도구·가이드 목록."""
+    def test_hero_shows_two_real_screenshots_first_eager_with_size(self):
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            stage = re.search(r'<div class="hero-stage">(.*?)</div></div></div></section>', html, re.S).group(1)
+            imgs = re.findall(r"<img [^>]+>", stage)
+            self.assertEqual(len(imgs), 2, lang)
+            self.assertIn("/img/apps/spl-rta/", imgs[0])
+            self.assertIn("fetchpriority=\"high\"", imgs[0])
+            self.assertNotIn('loading="lazy"', imgs[0])
+            self.assertIn('loading="lazy"', imgs[1])
+            for img in imgs:
+                self.assertRegex(img, r'width="\d+" height="\d+"')
+                src = re.search(r'src="([^"]+)"', img).group(1)
+                self.assertTrue((pages.ROOT / src.lstrip("/")).exists(), src)
+
+    def test_headline_and_ctas(self):
+        _, ko = pages.home("ko")
+        self.assertIn('<h1><span class="line">소리를 다루는 도구,</span> <span class="line">직접 만드는 엔지니어.</span></h1>', ko)
+        self.assertIn('<a class="btn primary" href="/apps/">앱 둘러보기</a>', ko)
+        self.assertIn('<a class="btn" href="/studio/">녹음실 보기</a>', ko)
+        _, en = pages.home("en")
+        self.assertIn("Tools for sound,</span>", en)
+        self.assertIn('<a class="btn primary" href="/en/apps/">', en)
+
+    def test_featured_apps_are_product_cards_with_image_stage(self):
+        h = pages.load("home.json")
+        _, html = pages.home("ko")
+        cards = re.findall(r'<a class="card product" href="([^"]+)"><div class="stage"><img [^>]+></div>', html)
+        self.assertEqual(len(cards), 3)
+        self.assertEqual(cards, [f"/apps/{s}/" for s in h["featured_apps"]])
+        n = len(pages.load("apps.json")["apps"])
+        self.assertIn(f"전체 앱 보기 ({n}) →", html)
+
+    def test_old_three_cards_and_empty_tools_band_are_gone(self):
+        _, html = pages.home("ko")
+        self.assertNotIn("곧 선보일 오디오 플러그인", html)
+        self.assertNotIn('style="text-decoration:none', html)
+        self.assertNotIn("브라우저에서 바로 쓰세요", html)
+
+    def test_dark_studio_band_has_facts_from_career_and_trust_line(self):
+        career = pages.load("career.json")
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            band = re.search(r'<section class="band dark">(.*?)</section>', html, re.S).group(1)
+            self.assertIn(pages.load("home.json")[lang]["trust"], band)
+            self.assertIn(f'<dd>{career["total"]}</dd>', band)
+            self.assertIn(f'<dd>{career["roles"]["마스터링"]}</dd>', band)
+            self.assertIn(f'href="{kit.url(lang, "/studio/")}"', band)
+        self.assertIn("서울 용산", pages.home("ko")[1])
+
+    def test_plugin_strip_and_compact_tool_links(self):
+        _, html = pages.home("ko")
+        strip = re.search(r'<section class="strip">(.*?)</section>', html, re.S).group(1)
+        self.assertIn('href="/plugins/"', strip)
+        self.assertIn("VST3 · AU 개발 중", strip)
+        tools = re.search(r'<ul class="link-list">(.*?)</ul>', html, re.S).group(1)
+        hrefs = re.findall(r'href="([^"]+)"', tools)
+        self.assertTrue(3 <= len(hrefs) <= 4)
+        from sitegen import check
+        for href in hrefs:
+            self.assertTrue(check.exists(pages.ROOT, href), href)
 
 
 class ShortTests(unittest.TestCase):
@@ -250,6 +316,44 @@ class AppFilesTests(unittest.TestCase):
         _, html = pages.app_page("ko", "stage-sound")
         self.assertIn("/img/apps/stage-sound/01_home.jpg", html)
         self.assertIn("평생 이용권 ₩9,900", html)
+
+
+class AppImageTests(unittest.TestCase):
+    def test_every_shot_has_size_and_shape_class(self):
+        for slug, langs in (("keymap", ("ko", "en", "ja")), ("nora", ("ko",)), ("spl-rta", ("ko", "ja"))):
+            for lang in langs:
+                if lang not in pages.app_langs(slug):
+                    continue
+                _, html = pages.app_page(lang, slug)
+                shots = re.findall(r'<img class="shot [^"]*"[^>]*>', html)
+                self.assertTrue(shots, (slug, lang))
+                for img in shots:
+                    self.assertRegex(img, r'class="shot (phone|tablet|wide)"')
+                    self.assertRegex(img, r'width="\d+" height="\d+"')
+                self.assertNotIn('<img class="shot" ', html)
+
+    def test_tablet_and_mac_screens_are_not_phone_sized(self):
+        _, html = pages.app_page("ko", "keymap")
+        self.assertIn('class="shot tablet" src="/img/apps/keymap/01_translate_ko.jpg"', html)
+        _, html = pages.app_page("ko", "nora")
+        self.assertIn('class="shot wide"', html)
+        css = (pages.ROOT / "assets" / "site.css").read_text(encoding="utf-8")
+        self.assertIn(".shot.phone{max-width:340px}", css)
+        self.assertIn(".shot.tablet,.shot.wide{max-width:560px", css)
+        self.assertNotRegex(css, r"\.shot\{[^}]*max-width:300px")
+
+    def test_only_hero_image_loads_eagerly(self):
+        _, html = pages.app_page("ko", "spl-rta")
+        hero = re.search(r'<div class="hero-shot">(<img[^>]+>)', html).group(1)
+        self.assertIn('fetchpriority="high"', hero)
+        self.assertEqual(html.count('fetchpriority="high"'), 1)
+
+    def test_apps_index_cards_have_screenshot_stage(self):
+        n = len(pages.load("apps.json")["apps"])
+        for lang in ("ko", "en"):
+            _, html = pages.apps_index(lang)
+            self.assertEqual(html.count('<div class="card product">'), n)
+            self.assertEqual(html.count('<div class="stage"><img class="stage-img'), n)
 
 
 if __name__ == "__main__":

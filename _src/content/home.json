@@ -2,41 +2,82 @@
   "ko": {
     "title": "ML Music Studio — 앱, 웹 도구, 녹음실",
     "description": "사운드 엔지니어를 위한 앱과 무료 웹 도구, 그리고 용산의 녹음·믹싱·마스터링 스튜디오.",
-    "h1": "소리를 위한 도구와, 엔지니어가 운영하는 녹음실",
+    "h1": "소리를 다루는 도구, 직접 만드는 엔지니어.",
     "sub": "사운드 엔지니어가 직접 만든 앱과 웹 도구, 그리고 녹음·믹싱·마스터링을 하는 작은 스튜디오입니다.",
     "cta_apps": "앱 둘러보기",
     "cta_studio": "녹음실 보기",
-    "cards": [
-      {"title": "앱", "text": "무대음향 시험 대비, SPL·RTA 측정, 귀 훈련, DAW 단축키, 악보 변환까지. 현장에서 쓰려고 만든 앱입니다.", "href": "/apps/", "more": "앱 보기"},
-      {"title": "플러그인", "badge": "준비 중", "text": "곧 선보일 오디오 플러그인(VST3·AU)을 준비하고 있습니다.", "href": "/plugins/", "more": "자세히"},
-      {"title": "녹음실", "text": "녹음·믹싱·마스터링·무대음향. 서울 용산의 작업실에서 엔지니어가 직접 작업합니다.", "href": "/studio/", "more": "녹음실 보기"}
-    ],
+    "shot_alt": "{name} 앱 화면",
     "featured_title": "대표 앱",
+    "all_apps": "전체 앱 보기",
+    "details": "자세히 보기",
+    "studio_kicker": "녹음실",
+    "studio_title": "ML Music Studio 녹음실",
+    "studio_text": "서울 용산의 작업실에서 녹음·믹싱·마스터링·무대음향 작업을 엔지니어가 직접 합니다.",
+    "stats": {
+      "total": "기록된 작업",
+      "mastering": "마스터링",
+      "mixing": "믹싱",
+      "recording": "녹음"
+    },
+    "trust": "2009년부터 2024년까지 기록된 앨범·영화·공연 작업 111건에 레코딩·믹싱·마스터링·무대음향으로 참여했습니다.",
+    "plugins_label": "플러그인",
+    "plugins_text": "VST3 · AU 개발 중",
     "tools_title": "무료 웹 도구",
-    "tools_text": "RTA 분석기, 신호 발생기, 귀 훈련, 딜레이·음향·전기·템포 계산기를 브라우저에서 바로 쓰세요.",
-    "tools_more": "웹 도구 모두 보기",
+    "tools_more": "모두 보기",
     "guides_title": "최신 가이드",
-    "trust": "2009년부터 2024년까지 기록된 앨범·영화·공연 작업 111건에 레코딩·믹싱·마스터링·무대음향으로 참여했습니다."
+    "guides_more": "모두 보기"
   },
   "en": {
     "title": "ML Music Studio — Apps, Web Tools and a Recording Studio",
     "description": "Apps and free web tools for sound engineers, plus a recording, mixing and mastering studio in Yongsan, Seoul.",
-    "h1": "Sound tools, and a recording studio run by an engineer",
+    "h1": "Tools for sound, built by an engineer.",
     "sub": "Apps and web tools made by a working sound engineer, and a small studio for recording, mixing and mastering.",
     "cta_apps": "Explore the apps",
     "cta_studio": "Visit the studio",
-    "cards": [
-      {"title": "Apps", "text": "Exam prep for stage-sound certification, SPL and RTA measurement, ear training, DAW shortcuts and score conversion — built for real work.", "href": "/apps/", "more": "View apps"},
-      {"title": "Plugins", "badge": "Coming soon", "text": "Audio plugins (VST3 and AU) are in the works.", "href": "/plugins/", "more": "Learn more"},
-      {"title": "Studio", "text": "Recording, mixing, mastering and stage sound, done by an engineer in a studio in Yongsan, Seoul.", "href": "/studio/", "more": "Visit the studio"}
-    ],
+    "shot_alt": "{name} app screen",
     "featured_title": "Featured apps",
+    "all_apps": "See all apps",
+    "details": "Details",
+    "studio_kicker": "Studio",
+    "studio_title": "ML Music Studio Recording",
+    "studio_text": "Recording, mixing, mastering and stage sound, done by an engineer in a studio in Yongsan, Seoul.",
+    "stats": {
+      "total": "recorded credits",
+      "mastering": "Mastering",
+      "mixing": "Mixing",
+      "recording": "Recording"
+    },
+    "trust": "From 2009 to 2024: 111 recorded credits on albums, films and stage productions — recording, mixing, mastering and stage sound.",
+    "plugins_label": "Plugins",
+    "plugins_text": "VST3 · AU in development",
     "tools_title": "Free web tools",
-    "tools_text": "Use the RTA analyzer, signal generator, ear trainers and delay, acoustics, electrical and tempo calculators right in your browser.",
-    "tools_more": "See all web tools",
+    "tools_more": "See all",
     "guides_title": "Latest guides (in Korean)",
-    "trust": "From 2009 to 2024: 111 recorded credits on albums, films and stage productions — recording, mixing, mastering and stage sound."
+    "guides_more": "See all"
   },
-  "featured_apps": ["stage-sound", "spl-rta", "ear-trainer"],
-  "latest_guides": ["31-band-eq-standard-frequencies", "eq-types-and-q", "line-array-basics"]
+  "hero_shots": [
+    {
+      "app": "spl-rta"
+    },
+    {
+      "app": "keymap",
+      "img": "02_search.jpg"
+    }
+  ],
+  "featured_apps": [
+    "stage-sound",
+    "spl-rta",
+    "ear-trainer"
+  ],
+  "featured_tools": [
+    "/rta.html",
+    "/generator.html",
+    "/trainer.html",
+    "/delay-calculator.html"
+  ],
+  "latest_guides": [
+    "31-band-eq-standard-frequencies",
+    "eq-types-and-q",
+    "line-array-basics"
+  ]
 }

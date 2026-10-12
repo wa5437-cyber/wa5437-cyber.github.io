@@ -240,7 +240,8 @@ class PageLangTests(unittest.TestCase):
         self.assertIn("プライバシーポリシー", html)
         self.assertIn('<ul class="bullets"><li>項目</li></ul>', html)
         self.assertNotIn("평생 이용권", html)                # 가격 알약 없음
-        self.assertNotIn("/guides/", html.split("<main", 1)[1])  # 관련 가이드(한국어 전용) 없음
+        main = html.split("<main", 1)[1].split("</main>", 1)[0]
+        self.assertNotIn("/guides/", main)                   # 본문에 관련 가이드(한국어 전용) 없음(푸터 메뉴는 별개)
         self.assertIn('hreflang="ja"', html)
         self.assertNotIn('hreflang="de"', html)
         self.assertIn('"@type": "SoftwareApplication"', html)

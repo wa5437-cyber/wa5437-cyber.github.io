@@ -78,36 +78,99 @@ def json_ld(lang):
     return '<script type="application/ld+json">' + text + "</script>"
 
 
+def first_sentence(text):
+    """첫 문장(마침표·물음표·느낌표 + 공백까지). 문장이 하나면 그대로."""
+    m = re.match(r"(.+?[.?!])(\s|$)", text.strip())
+    return m.group(1) if m else text.strip()
+
+
+def app_shot(app, lang, img=None):
+    """앱의 대표 화면(사이트 루트 기준 주소). img 를 주면 그 파일, 아니면 상세의 hero_img. 상세가 없으면 None."""
+    data = load_app(app["slug"])
+    det = (data or {}).get("detail")
+    if not img and not det:
+        return None
+    return f'/img/apps/{app["slug"]}/{pick_img(img or det["hero_img"], lang)}'
+
+
+def shot_img(src, alt, cls="", eager=False):
+    """width·height 와 모양(phone/tablet/wide) 클래스를 붙인 <img>."""
+    shape = kit.shape(kit.img_size(src))
+    load = ' fetchpriority="high"' if eager else ' loading="lazy"'
+    klass = f"{cls} {shape}".strip()
+    return f'<img class="{klass}" src="{esc(src)}" alt="{esc(alt)}"{kit.img_attrs(src)}{load}>'
+
+
+def app_card(app, lang, line, more):
+    """제품 카드: 위는 화면 무대, 아래는 이름·한 줄·플랫폼."""
+    src = app_shot(app, lang)
+    stage = f'<div class="stage">{shot_img(src, "", "stage-img")}</div>' if src else ""
+    det = (load_app(app["slug"]) or {}).get("detail") or {}
+    plat = (det.get("platforms") or {}).get(lang) or app["badge"][lang]
+    return (f'<a class="card product" href="{esc(app_href(lang, app))}">{stage}'
+            f'<div class="product-body"><h3>{esc(app["name"][lang])}</h3><p>{esc(line)}</p>'
+            f'<span class="platforms">{esc(plat)}</span><span class="more">{esc(more)} →</span></div></a>')
+
+
 def home(lang):
     h = load("home.json")
     c = h[lang]
-    apps = {a["slug"]: a for a in load("apps.json")["apps"]}
-    cards = "".join(
-        f'<a class="card" href="{esc(url(lang, x["href"]))}" style="text-decoration:none;color:inherit">'
-        f'<h3>{esc(x["title"])}{(" <span class=pill>" + esc(x["badge"]) + "</span>") if x.get("badge") else ""}</h3>'
-        f'<p>{esc(x["text"])}</p><span class="more">{esc(x["more"])} →</span></a>' for x in c["cards"])
-    feat = "".join(
-        f'<a class="card" href="{esc(app_href(lang, apps[s]))}" style="text-decoration:none;color:inherit">'
-        f'<h3>{esc(apps[s]["name"][lang])}</h3><p>{esc(short(apps[s]["tagline"][lang]))}</p></a>'
-        for s in h["featured_apps"] if s in apps)
+    all_apps = load("apps.json")["apps"]
+    apps = {a["slug"]: a for a in all_apps}
+    career = load("career.json")
+    # 히어로: 실제 앱 화면 두 장(첫 장만 바로 읽는다)
+    shots = ""
+    for i, s in enumerate(h["hero_shots"]):
+        app = apps[s["app"]]
+        src = app_shot(app, lang, s.get("img"))
+        alt = c["shot_alt"].format(name=app["name"][lang])
+        shots += (f'<div class="device{" lead" if i == 0 else " back"}">'
+                  f'{shot_img(src, alt, eager=(i == 0))}</div>')
+    lines = c["h1"].split(", ", 1)
+    h1 = (f'<span class="line">{esc(lines[0])},</span> <span class="line">{esc(lines[1])}</span>'
+          if len(lines) == 2 else esc(c["h1"]))
+    hero = (f'<section class="hero home-hero"><div class="wrap"><div class="grid">'
+            f'<div class="hero-copy"><h1>{h1}</h1><p class="sub">{esc(c["sub"])}</p>'
+            f'<div class="row"><a class="btn primary" href="{esc(url(lang, "/apps/"))}">{esc(c["cta_apps"])}</a>'
+            f'<a class="btn" href="{esc(url(lang, "/studio/"))}">{esc(c["cta_studio"])}</a></div></div>'
+            f'<div class="hero-stage">{shots}</div></div></div></section>')
+    # 대표 앱 3
+    def line(a):
+        det = (load_app(a["slug"]) or {}).get("detail") or {}
+        lead = (det.get("lead") or {}).get(lang)
+        return first_sentence(lead) if lead else short(a["tagline"][lang], 80)
+    feat = "".join(app_card(apps[s], lang, line(apps[s]), c["details"]) for s in h["featured_apps"] if s in apps)
+    featured = (f'<section class="band"><div class="wrap"><div class="band-head"><h2>{esc(c["featured_title"])}</h2>'
+                f'<a class="more" href="{esc(url(lang, "/apps/"))}">{esc(c["all_apps"])} ({len(all_apps)}) →</a></div>'
+                f'<div class="cards c3">{feat}</div></div></section>')
+    # 녹음실(어두운 띠)
+    st = c["stats"]
+    stats = "".join(f'<div class="stat"><dt>{esc(label)}</dt><dd>{esc(value)}</dd></div>' for value, label in (
+        (career["total"], st["total"]), (career["roles"]["마스터링"], st["mastering"]),
+        (career["roles"]["믹싱"], st["mixing"]), (career["roles"]["녹음"], st["recording"])))
+    studio = (f'<section class="band dark"><div class="wrap split studio-band"><div>'
+              f'<p class="kicker">{esc(c["studio_kicker"])}</p><h2>{esc(c["studio_title"])}</h2>'
+              f'<p class="sub">{esc(c["studio_text"])}</p><p class="trust">{esc(c["trust"])}</p>'
+              f'<div class="row"><a class="btn primary" href="{esc(url(lang, "/studio/"))}">{esc(c["cta_studio"])}</a></div></div>'
+              f'<dl class="stats">{stats}</dl></div></section>')
+    # 플러그인(얇은 띠)
+    plugins = (f'<section class="strip"><div class="wrap strip-row"><span class="kicker">{esc(c["plugins_label"])}</span>'
+               f'<a href="{esc(url(lang, "/plugins/"))}">{esc(c["plugins_text"])} →</a></div></section>')
+    # 웹 도구(이름만) + 최신 가이드(제목 + 한 줄)
+    names = {it["href"]: it["name"] for g in load("tools.json")[lang]["groups"] for it in g["items"]}
+    tools = "".join(f'<li><a href="{esc(href)}">{esc(names[href])}</a></li>' for href in h["featured_tools"] if href in names)
     guides = ""
     for slug in h["latest_guides"]:
         g = guide_title(slug)
         if g:
-            guides += (f'<a class="card" href="/guides/{esc(slug)}.html" style="text-decoration:none;color:inherit">'
-                       f'<h3>{esc(g[0])}</h3><p>{esc(g[1])}</p></a>')
-    body = (
-        f'<section class="hero"><div class="wrap"><div class="grid"><div>'
-        f'<h1>{esc(c["h1"])}</h1><p class="sub">{esc(c["sub"])}</p>'
-        f'<div class="row"><a class="btn primary" href="{esc(url(lang, "/apps/"))}">{esc(c["cta_apps"])}</a>'
-        f'<a class="btn" href="{esc(url(lang, "/studio/"))}">{esc(c["cta_studio"])}</a></div></div>'
-        f'<div class="cards" style="grid-template-columns:1fr">{feat}</div></div></div></section>'
-        f'<section class="band"><div class="wrap"><div class="cards c3">{cards}</div></div></section>'
-        f'<section class="band"><div class="wrap"><h2>{esc(c["tools_title"])}</h2>'
-        f'<p class="sub">{esc(c["tools_text"])}</p>'
-        f'<div class="row"><a class="btn" href="{esc(url(lang, "/tools/"))}">{esc(c["tools_more"])}</a></div></div></section>'
-        + (f'<section class="band"><div class="wrap"><h2>{esc(c["guides_title"])}</h2><div class="cards c3">{guides}</div></div></section>' if guides else "")
-        + f'<div class="wrap"><p class="trust">{esc(c["trust"])}</p></div>')
+            guides += (f'<li><a href="/guides/{esc(slug)}.html">{esc(g[0])}</a>'
+                       f'<p>{esc(short(g[1], 70))}</p></li>')
+    tools_col = (f'<div><h2>{esc(c["tools_title"])}</h2><ul class="link-list">{tools}</ul>'
+                 f'<a class="more" href="{esc(url(lang, "/tools/"))}">{esc(c["tools_more"])} →</a></div>')
+    guides_col = (f'<div><h2>{esc(c["guides_title"])}</h2><ul class="link-list guide-links">{guides}</ul>'
+                  f'<a class="more" href="/guides/">{esc(c["guides_more"])} →</a></div>') if guides else ""
+    more = f'<section class="band"><div class="wrap split">{tools_col}{guides_col}</div></section>'
+    body = hero + featured + studio + plugins + more
     path = url(lang, "/")
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/"),
                           extra_head=(HASH_KEEP if lang == "ko" else "") + json_ld(lang))
@@ -211,13 +274,20 @@ def apps_index(lang):
     d = load("apps.json")
     cards = ""
     for a in d["apps"]:
-        link = ""
+        name = esc(a["name"][lang])
+        src = app_shot(a, lang)
+        stage = f'<div class="stage">{shot_img(src, "", "stage-img")}</div>' if src else ""
         if has_detail(a["slug"]):
-            link = f'<a class="more" href="{esc(url(lang, "/apps/" + a["slug"] + "/"))}">{"자세히 보기" if lang == "ko" else "Details"} →</a>'
+            href = esc(url(lang, "/apps/" + a["slug"] + "/"))
+            stage = f'<a class="stage-link" href="{href}" tabindex="-1" aria-hidden="true">{stage}</a>' if stage else ""
+            title = f'<h3><a href="{href}">{name}</a></h3>'
+            link = f'<a class="more" href="{href}">{esc(strings.APP_UI["details"][lang])} →</a>'
+        else:
+            title, link = f"<h3>{name}</h3>", ""
         pill = f'<span class="pill">{esc(a["badge"][lang])}</span>' if a["badge"][lang] else ""
-        cards += (f'<div class="card">{pill}'
-                  f'<h3>{esc(a["name"][lang])}</h3><p>{esc(short(a["tagline"][lang]))}</p>'
-                  f'<div class="row">{store_buttons(a, lang)}</div>{link}</div>')
+        cards += (f'<div class="card product">{stage}<div class="product-body">{pill}'
+                  f'{title}<p>{esc(short(a["tagline"][lang]))}</p>'
+                  f'<div class="row">{store_buttons(a, lang)}</div>{link}</div></div>')
     title = "앱 | ML Music Studio" if lang == "ko" else "Apps | ML Music Studio"
     h1 = "앱" if lang == "ko" else "Apps"
     sub = ("사운드 엔지니어가 현장에서 쓰려고 만든 앱입니다." if lang == "ko"
@@ -301,8 +371,8 @@ def _app_page_full(lang, app, det, slug):
     blocks = ""
     for i, b in enumerate(det["blocks"]):
         blocks += (f'<div class="alt{" rev" if i % 2 else ""}"><div class="alt-img">'
-                   f'<img class="shot" src="{img_dir}{esc(pick_img(b["img"], lang))}" alt="{esc(b["alt"][lang])}" loading="lazy"></div>'
-                   f'<div><h3>{esc(b["title"][lang])}</h3><p>{esc(b["text"][lang])}</p></div></div>')
+                   f'{shot_img(img_dir + pick_img(b["img"], lang), b["alt"][lang], "shot")}</div>'
+                   f'<div class="alt-text"><h3>{esc(b["title"][lang])}</h3><p>{esc(b["text"][lang])}</p></div></div>')
     steps = "".join(f'<li><strong>{esc(s["t"])}</strong><br>{esc(s["d"])}</li>' for s in det["steps"][lang])
     guides = ""
     for g in det.get("related", []):
@@ -315,12 +385,12 @@ def _app_page_full(lang, app, det, slug):
     price = (det.get("price") or {}).get(lang)
     price_pill = f'<span class="pill" style="align-self:center">{esc(price)}</span>' if price else ""
     body = (
-        f'<section class="hero"><div class="wrap"><div class="grid"><div>'
+        f'<section class="hero app-hero"><div class="wrap"><div class="grid"><div>'
         f'<span class="pill">{esc(det["platforms"][lang])}</span>'
         f'<h1>{esc(app["name"][lang])}</h1><p class="sub">{esc(det["lead"][lang] if det.get("lead") else short(app["tagline"][lang], 160))}</p>'
         f'<ul class="bullets">{bullets}</ul>'
         f'<div class="row">{store_buttons(app, lang)}{price_pill}</div>'
-        f'</div><div><img class="shot" src="{img_dir}{esc(pick_img(det["hero_img"], lang))}" alt="{esc(app["name"][lang])}"></div></div></div></section>'
+        f'</div><div class="hero-shot">{shot_img(img_dir + pick_img(det["hero_img"], lang), app["name"][lang], "shot", eager=True)}</div></div></div></section>'
         f'<section class="band"><div class="wrap">{blocks}</div></section>'
         f'<section class="band"><div class="wrap"><h2>{esc(ui["howto"][lang])}</h2><ol class="steps">{steps}</ol></div></section>'
         f'<section class="band"><div class="wrap"><ul class="facts">{facts}</ul>{privacy}</div></section>{rel}')
@@ -332,14 +402,12 @@ def _app_page_store(lang, app, det, s, slug):
     """앱스토어 문구만으로 만든 상세(그 밖의 언어): 이름·부제·스토어 버튼 -> 화면 3장 -> 설명 -> 개인정보."""
     img_dir = f"/img/apps/{slug}/"
     name = s["name"]
-    shots = "".join(
-        f'<img class="shot" src="{img_dir}{esc(pick_img(b["img"], lang))}" alt="{esc(name)}" loading="lazy">'
-        for b in det["blocks"][:3])
+    shots = "".join(shot_img(img_dir + pick_img(b["img"], lang), name, "shot") for b in det["blocks"][:3])
     body = (
-        f'<section class="hero"><div class="wrap"><div class="grid"><div>'
+        f'<section class="hero app-hero"><div class="wrap"><div class="grid"><div>'
         f'<h1>{esc_mixed(name)}</h1><p class="sub">{esc_mixed(s.get("subtitle", ""))}</p>'
         f'<div class="row">{store_buttons(app, lang)}</div></div>'
-        f'<div><img class="shot" src="{img_dir}{esc(pick_img(det["hero_img"], lang))}" alt="{esc(name)}"></div></div></div></section>'
+        f'<div class="hero-shot">{shot_img(img_dir + pick_img(det["hero_img"], lang), name, "shot", eager=True)}</div></div></div></section>'
         f'<section class="band"><div class="wrap"><h2>{esc(strings.APP_UI["screens"][lang])}</h2>'
         f'<div class="shots">{shots}</div></div></section>'
         f'<section class="band"><div class="wrap">{render_store_text(s["description"])}'
