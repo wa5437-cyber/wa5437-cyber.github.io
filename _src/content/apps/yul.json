@@ -18,5 +18,148 @@
    "promo": "リリース記念で2週間すべて無料。その後もチューナー・長短・理論は無料のまま。録音・シギムセ分析・練習記録は買い切り（サブスクではありません）。",
    "description": "韓国伝統楽器のためのチューナーとリズム練習アプリです。律名（黃・太・仲…）で読むチューナー、井間譜の格子で見て聞く長短、そして理論の記事を一つにまとめました。\n\n■ チューナー\n音を出すと最も近い律名とセントのずれをすぐ表示します。黃鐘の基準は正楽の Eb のほか、Hz を直接入力するか自分の音から取れます。三分損益と平均律を選べます。基準音は国立国楽院が録音した本物の大笒・觱篥です。伽倻琴・玄琴・奚琴・牙箏は弦ごとの調弦、大笒・小笒・觱篥は運指ごとに確認できます。\n\n■ 長短\n正楽・民俗楽・風物・クッの長短数十種を井間譜の格子で表示し、国立国楽院が録音したチャング・プク・チン・ケンガリの音で鳴らします。再生中は現在の枠が進み、BPM を変え、枠を叩いて自分の長短に直せます。진양조→중모리→… のように複数の長短をつなぐチェーンも作れます。\n\n■ 理論\n12律と音律、長短、調とトリ、シギムセ、楽器と調弦、井間譜・五線譜・口音・律字譜の読み方を図とともに韓国語・英語・日本語で解説します。長短ごとに解説カードがあり、アプリの使い方も載っています。\n\n■ 録音・シギムセ・練習（買い切り）\n演奏を録音してピッチ曲線と一緒に聞き直し、揺れ（シギムセ）の速さと幅を数値で基準値と比べ、ロングトーンや音程練習の点数を残します。一度の購入でずっと使えます。サブスクではありません。\n\n■ 精度について\nチューナーとシギムセの数値はマイクや部屋によって変わる参考値です。購入前に無料期間中にご自分の楽器で確かめてください。\n\n音源: 国立国楽院「国楽器デジタル音源」（公共ヌリ第1類型）\niPhone・iPad・Mac で使えます。"
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "튜너·장단·이론 무료 · 녹음·시김새·연습 평생권 ₩6,600",
+   "en": "Tuner, jangdan and theory free · recording, sigimsae and practice: one-time purchase (₩6,600 on the Korean store)"
+  },
+  "lead": {
+   "ko": "국악기를 위한 튜너와 장단 연습 앱입니다. 율명으로 읽는 튜너, 정간보로 보고 듣는 장단, 국악 이론 글을 한 앱에 담았습니다.",
+   "en": "A tuner and rhythm trainer for Korean traditional instruments, with a yul-name tuner, jangdan on a jeongganbo grid, and theory articles in one app."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
+  },
+  "bullets": {
+   "ko": [
+    "율명(黃·太·仲…)과 센트 편차를 바로 보여 주는 튜너",
+    "국립국악원이 녹음한 실제 대금·피리 기준음(드론)",
+    "정악·민속악·풍물·굿 장단 수십 종을 정간보 격자로 재생",
+    "여러 장단을 이어 재생하는 체인과 나만의 장단 만들기",
+    "한국어·영어·일본어 이론 글, 장단 해설 카드, 녹음·시김새·연습(평생권)"
+   ],
+   "en": [
+    "A tuner that shows the nearest yul name (黃, 太, 仲 …) and the deviation in cents",
+    "Reference tones from real daegeum and piri recorded by the National Gugak Center",
+    "Dozens of court, folk, pungmul and gut rhythms played on a jeongganbo grid",
+    "Chain rhythms together and tap cells to make your own pattern",
+    "Theory articles in Korean, English and Japanese, jangdan explanation cards, and recording, sigimsae and practice (one-time purchase)"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac",
+    "이론 글 한·영·일",
+    "국립국악원 「국악기 디지털 음원」 사용",
+    "튜너·시김새 수치는 참고용"
+   ],
+   "en": [
+    "iPhone · iPad · Mac",
+    "Theory articles in ko, en, ja",
+    "Samples: National Gugak Center digital sound sources",
+    "Tuner and sigimsae readings are for reference"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_tuner_ko.jpg",
+   "en": "01_tuner_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_jangdan_ko.jpg",
+     "en": "02_jangdan_en.jpg"
+    },
+    "alt": {
+     "ko": "중모리 장단을 정간보 격자로 재생하는 화면",
+     "en": "Jungmori rhythm playing on a jeongganbo grid"
+    },
+    "title": {
+     "ko": "정간보 격자로 보고 듣는 장단",
+     "en": "Jangdan you can see and hear"
+    },
+    "text": {
+     "ko": "재생 중 현재 칸이 따라가고, BPM을 바꾸거나 칸을 눌러 나만의 장단으로 고칠 수 있습니다.",
+     "en": "The current cell follows along as it plays. Change the BPM or tap cells to make your own pattern."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_chain_ko.jpg",
+     "en": "03_chain_en.jpg"
+    },
+    "alt": {
+     "ko": "장단 목록과 산조 체인 화면",
+     "en": "Jangdan list with the Sanjo chain"
+    },
+    "title": {
+     "ko": "장단을 이어 재생하는 체인",
+     "en": "Chain rhythms together"
+    },
+    "text": {
+     "ko": "진양조에서 중모리, 중중모리, 자진모리, 휘모리로 이어지는 산조처럼 여러 장단을 차례로 재생합니다.",
+     "en": "Play several jangdan in sequence, such as the Sanjo chain from jinyangjo through jungmori, jungjungmori and jajinmori to hwimori."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_theory_ko.jpg",
+     "en": "04_theory_en.jpg"
+    },
+    "alt": {
+     "ko": "12율과 음률 이론 글 화면",
+     "en": "Theory article on the twelve yul and temperament"
+    },
+    "title": {
+     "ko": "그림과 함께 읽는 국악 이론",
+     "en": "Theory articles with illustrations"
+    },
+    "text": {
+     "ko": "12율, 조와 토리, 시김새, 악기와 조율, 정간보 읽는 법을 한국어·영어·일본어로 설명합니다.",
+     "en": "Read about the twelve yul, jo and tori, sigimsae, instruments and tuning, and how to read jeongganbo, in Korean, English and Japanese."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "튜너에서 소리를 냅니다",
+     "d": "악기를 연주하면 가장 가까운 율명과 센트 편차가 표시됩니다. 황종 기준은 정악(Eb)이나 직접 넣은 Hz로 정할 수 있습니다."
+    },
+    {
+     "t": "기준음을 들으며 맞춥니다",
+     "d": "국립국악원이 녹음한 대금·피리 기준음을 들으며 가야금·거문고·해금·아쟁은 현별로 조율합니다."
+    },
+    {
+     "t": "장단을 골라 재생합니다",
+     "d": "장단 탭에서 장단을 고르고 BPM을 맞춰 정간보 격자를 따라 연습합니다."
+    },
+    {
+     "t": "이론 글로 배경을 익힙니다",
+     "d": "이론 탭의 글과 장단별 해설 카드로 율, 조, 시김새와 정간보 읽는 법을 확인합니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Play a note into the tuner",
+     "d": "The nearest yul name and the deviation in cents appear. Set hwangjong to the court-music standard (Eb) or to any Hz you type."
+    },
+    {
+     "t": "Tune against the reference tone",
+     "d": "Listen to the daegeum or piri reference recorded by the National Gugak Center, and tune gayageum, geomungo, haegeum and ajaeng string by string."
+    },
+    {
+     "t": "Pick a jangdan and play it",
+     "d": "Choose a rhythm in the Jangdan tab, set the BPM and follow the jeongganbo grid."
+    },
+    {
+     "t": "Read the theory behind it",
+     "d": "Use the Theory tab and each jangdan's explanation card to learn yul, jo, sigimsae and how to read jeongganbo."
+    }
+   ]
+  },
+  "related": []
  }
 }

@@ -48,5 +48,150 @@
    "promo": "Patchbay-Beschriftungen in Desktop-Software, Bühnenpläne in einer anderen App? Hier ist beides in einem. Ein Lifetime-Zugang gilt für iPhone, iPad und Mac. Kein Abo.",
    "description": "Inputliste, Patchbay und Bühnenplan in einer App. Du füllst die Tabelle aus, und das Signalfluss-Diagramm zeichnet sich von selbst. Außerdem weist dich die App darauf hin, wenn ein Mikrofon, das Phantomspeisung braucht, an einem Eingang hängt, der keine liefert.\n\nEine Show ist ein Projekt. Kanaltabelle ausfüllen, Patchbay belegen, Bühnenplan zeichnen und die Unterlagen für die Crew ausdrucken – alles in einer App.\n\n\n■ I/O-LISTE\n\nCH · SOURCE · PICK UP · STAND · REMARKS – so, wie das Blatt vor Ort aussieht. Live und Aufnahme brauchen unterschiedliche Spalten, deshalb sind es getrennte Typen – bei Aufnahme kommen PREAMP, INSERT und DAW TRACK dazu.\n\nMikrofone und Stative werden nach Modell in eigenen Listen gezählt. Beim Packen im Lager musst du nicht mehr zählen.\n\n\n■ WORAUF DIE APP HINWEIST\n\n- Eine Quelle, die 48V-Phantomspeisung braucht, hängt an einem Eingang, der sie nicht liefern kann\n- Phantomspeisung liegt an einem Bändchenmikrofon oder anderem Gerät an, das dadurch Schaden nehmen kann\n- Ein Ausgang mit Lautsprecherpegel geht auf einen Line-Eingang\n- Dieselbe Kanalnummer steht in zwei Zeilen\n- Stecker, die nicht zusammenpassen – ein Adapter ist nötig\n\n\n■ SIGNALFLUSS\n\nDie Quellen und Mikrofone, die du eingetragen hast, werden zum Diagramm. Identische Modelle werden zusammengefasst und gezählt (×4), und ein Tipp auf einen Kanal verfolgt nur diesen Weg.\n\nSignalwege, die nicht in eine Kanaltabelle passen – Ausgänge und Monitorwege, Clock, Strom – zeichnest du von Hand. Zieh von Block zu Block, um sie zu verbinden, oder zeichne die Linie mit dem Apple Pencil.\n\n\n■ PATCHBAY\n\n24, 48 oder 96 Spalten. Zieh einen Abschnitt auf, und die Buchsen in diesem Bereich bekommen Namen und Nummern; auch das Normalling legst du pro Abschnitt fest – Vollnormal, Halbnormal, Thru.\n\nDie Beschriftungsstreifen werden in Originalgröße gedruckt. Das ist das Papier, das du ausschneidest und ins Fenster des Patchbays schiebst. Der Buchsenabstand ist je nach Modell verschieden, deshalb misst du ihn nach und trägst ihn ein; auf dem Blatt steht eine Lineal-Markierung, an der du prüfst, ob der Drucker die Seite skaliert hat. Sind es keine 100 mm, drucke noch einmal.\n\nHinweis: Der voreingestellte Abstand (9,5 mm bei einem 48-Punkt-1-HE-Bantam-Feld) ist ein Richtwert. Miss dein eigenes Feld nach, bevor du druckst.\n\n\n■ BÜHNENPLAN\n\nPlatziere, drehe und skaliere Drums, Verstärker, Wedges und Stative. Stelle Dinge auf Podeste und hänge Kanalnummern aus der I/O-Liste an jedes Symbol. Zeichne den Standardaufbau der Location einmal und kopiere ihn für jede Show.\n\nMit dem Apple Pencil kannst du handschriftlich markieren (auf dem Mac nur zur Ansicht).\n\n\n■ AUF PAPIER\n\nI/O-Liste, Patchbay-Blatt, Beschriftungsstreifen, Signalfluss, Bühnenplan – alles lässt sich als PDF exportieren. Lange Kanallisten werden auf mehrere Seiten verteilt, und wenn die Inputs überlaufen, laufen sie in zwei Spalten weiter, das spart Papier.\n\n\n■ LERNEN (ALLES KOSTENLOS)\n\nFotos und Pin-Tabellen für neun Stecker: XLR, TRS, TS, Bantam, RCA, Speakon und DB25. Verdrahtungspläne für Kabel und ein Übungsmodus, in dem du die Pins an beiden Enden selbst verbindest.\n\nWas vor Ort gern zum Stolperstein wird, ist aufgeschrieben – etwa, wie man Pin 3 (Cold) bei einem Insert-Y-Kabel behandelt.\n\n\n■ WAS DIE KOSTENLOSE VERSION KANN\n\n- Alle Bildschirme anlegen und ansehen. Keine Begrenzung der Kanalzahl\n- Je zwei: Live-Projekte, Aufnahme-Projekte, Patchbays, Diagramme, Bühnenpläne\n- PDF-Export funktioniert (mit Wasserzeichen)\n- Alles in „Lernen“\n- iCloud-Sync ist ebenfalls kostenlos. Beim Gerätewechsel ist alles noch da\n\nDer Lifetime-Zugang hebt die Dokumentgrenzen und das Wasserzeichen auf und ergänzt CSV-Import/-Export sowie das Drucken der Beschriftungsstreifen in Originalgröße.\n\nEs ist kein Abo. Einmal kaufen, und es funktioniert auf iPhone, iPad und Mac mit demselben Apple Account.\n\n\n■ VOM ENTWICKLER\n\nGebaut für den Einsatz im Job. Wenn etwas fehlt oder nicht stimmt, sag mir Bescheid."
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "평생이용권(구독 아님) · 무료로 먼저 사용",
+   "en": "Lifetime unlock (not a subscription) · free to start"
+  },
+  "lead": {
+   "ko": "인풋 리스트, 신호 도면, 패치베이, 무대 배치도를 앱 하나에서 만들고 PDF로 내보내는 현장용 앱입니다.",
+   "en": "A field app for building an input list, signal flow diagram, patchbay sheet and stage plot in one place, then exporting them as PDF."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
+  },
+  "bullets": {
+   "ko": [
+    "I/O 리스트: CH·SOURCE·PICK UP·STAND·REMARKS, 라이브와 레코딩 구분",
+    "팬텀 전원 누락·채널 번호 중복·커넥터 불일치 짚어 주기",
+    "리스트에서 자동으로 그려지는 신호 도면",
+    "24·48·96열 패치베이와 실물 크기 라벨 띠 인쇄(평생이용권)",
+    "무대 배치도, PDF 내보내기, 커넥터 9종 학습(무료)"
+   ],
+   "en": [
+    "I/O list with CH, SOURCE, PICK UP, STAND and REMARKS, separate live and recording types",
+    "Flags missing phantom power, duplicate channel numbers and mismatched connectors",
+    "Signal flow diagram drawn from your list",
+    "24, 48 or 96-column patchbay with actual-size label strips (lifetime unlock)",
+    "Stage plot, PDF export and a free guide to 9 connector types"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac",
+    "한국어 외 7개 언어",
+    "iCloud 동기화 무료",
+    "평생이용권 · 구독 아님"
+   ],
+   "en": [
+    "iPhone · iPad · Mac",
+    "8 languages",
+    "Free iCloud sync",
+    "Lifetime unlock, not a subscription"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_inputlist_ko.jpg",
+   "en": "01_inputlist_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_stage_ko.jpg",
+     "en": "02_stage_en.jpg"
+    },
+    "alt": {
+     "ko": "채널 번호가 붙은 무대 배치도 화면",
+     "en": "Stage plot screen with channel numbers"
+    },
+    "title": {
+     "ko": "무대 배치도에 채널 번호까지",
+     "en": "Stage plot with channel numbers"
+    },
+    "text": {
+     "ko": "드럼·앰프·모니터·스탠드를 놓고 돌리고 키우며, I/O 리스트의 채널 번호를 심볼에 붙일 수 있습니다.",
+     "en": "Place, rotate and resize drums, amps, wedges and stands, and attach channel numbers from the I/O list to any symbol."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_patchbay_ko.jpg",
+     "en": "03_patchbay_en.jpg"
+    },
+    "alt": {
+     "ko": "패치베이 구역 편집 화면",
+     "en": "Patchbay segment editing screen"
+    },
+    "title": {
+     "ko": "패치베이 라벨을 실물 크기로",
+     "en": "Patchbay labels at actual size"
+    },
+    "text": {
+     "ko": "구역을 그으면 잭에 이름과 번호가 붙습니다. 라벨 띠 실물 크기 인쇄는 평생이용권에서 열리며, 잭 간격은 직접 재서 넣습니다.",
+     "en": "Draw a segment to name and number its jacks. Actual-size label strip printing is part of the lifetime unlock, and you measure and enter the jack pitch yourself."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_connectors_ko.jpg",
+     "en": "04_connectors_en.jpg"
+    },
+    "alt": {
+     "ko": "XLR 3핀 수 커넥터 핀 표 화면",
+     "en": "XLR 3-pin male connector pin table screen"
+    },
+    "title": {
+     "ko": "커넥터와 결선 학습은 전부 무료",
+     "en": "Connector and wiring guide is all free"
+    },
+    "text": {
+     "ko": "XLR·TRS·TS·밴텀·RCA·스피콘·DB25 등 9종의 사진과 핀 표, 결선도와 연습 모드가 들어 있습니다.",
+     "en": "Photos and pin tables for nine connectors including XLR, TRS, TS, bantam, RCA, Speakon and DB25, plus wiring diagrams and a practice mode."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "공연 프로젝트를 만듭니다",
+     "d": "라이브 또는 레코딩 중 종류를 골라 프로젝트를 만듭니다."
+    },
+    {
+     "t": "인풋 리스트를 적습니다",
+     "d": "채널·소스·마이크·스탠드를 적으면 마이크와 스탠드 수량이 모이고 신호 도면이 따라 그려집니다."
+    },
+    {
+     "t": "패치베이와 무대 배치도를 만듭니다",
+     "d": "패치베이 구역에 이름을 붙이고, 무대 배치도에 채널 번호를 붙입니다."
+    },
+    {
+     "t": "PDF로 내보냅니다",
+     "d": "I/O 리스트, 패치베이 시트, 라벨 띠(평생이용권), 신호 도면, 무대 배치도를 종이로 뽑아 크루에게 넘깁니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Create a show project",
+     "d": "Choose live or recording and create the project."
+    },
+    {
+     "t": "Fill in the input list",
+     "d": "Enter channel, source, mic and stand. Mic and stand counts are tallied and the signal flow diagram draws itself."
+    },
+    {
+     "t": "Build the patchbay and stage plot",
+     "d": "Name the patchbay segments and attach channel numbers to the stage plot."
+    },
+    {
+     "t": "Export to PDF",
+     "d": "Print the I/O list, patchbay sheet, label strip (lifetime unlock), signal flow and stage plot for the crew."
+    }
+   ]
+  },
+  "related": [
+   "balanced-vs-unbalanced-cables"
+  ]
  }
 }

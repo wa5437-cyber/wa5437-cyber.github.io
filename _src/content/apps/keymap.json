@@ -48,5 +48,146 @@
    "promo": "Cherchez, traduisez, mémorisez les raccourcis de Pro Tools, Logic, Ableton, FL Studio, Studio One et Cubase. Touches Mac ou Windows. Pro : achat unique, sans abonnement.",
    "description": "Fini la chasse aux antisèches en PDF. KeyMap réunit tous les raccourcis clavier de six grandes DAW au même endroit, avec une recherche rapide — Pro Tools, Logic Pro, Ableton Live, FL Studio, Studio One et Cubase.\n\nRECHERCHE\n• Des milliers de raccourcis, indexés par nom, action et touche. Tapez « diviser », « bounce » ou un terme dans votre langue et obtenez la réponse instantanément — la recherche fonctionne en français, anglais, coréen, japonais, allemand, portugais, espagnol et chinois.\n• Toutes les touches associées à une commande, pas seulement la principale. L’enregistrement dans Pro Tools affiche ⌘Espace, F12 et 3 du pavé numérique.\n• Parcourez par catégorie ou par DAW.\n\nTRADUCTION ENTRE DAW\n• Vous connaissez un raccourci dans une DAW et il vous le faut dans une autre ? KeyMap associe la même action aux six DAW. Que vous passiez de Logic à Pro Tools ou que vous soyez simplement curieux de savoir comment Ableton s’y prend, l’équivalent est à portée de doigt.\n\nENTRAÎNEZ VOTRE MÉMOIRE MUSCULAIRE\n• Des exercices à répétition espacée conçus pour les raccourcis. Le mode cartes mémoire vous demande d’abord de vous rappeler, puis de vous auto-évaluer ; le mode QCM vous teste avec de vraies touches, plausibles mais fausses.\n• Des séries d’exercices par catégorie, un compteur de jours consécutifs et un planificateur qui vous repropose ce que vous ratez sans cesse.\n\nGRATUIT ET PRO\n• Gratuit : accès complet à la DAW de votre choix, plus un entraînement quotidien.\n• Pro : les six DAW, la traduction entre DAW et un entraînement illimité — un achat unique, à vie. Sans abonnement.\n\nFonctionne entièrement hors ligne. Aucun compte requis."
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "무료 · Pro 평생 이용권(구독 없음)",
+   "en": "Free · Pro is a one-time unlock, no subscription"
+  },
+  "lead": {
+   "ko": "Pro Tools·Logic·Ableton·FL Studio·Studio One·Cubase 6개 DAW의 단축키를 검색하고, DAW끼리 번역하고, 훈련으로 손에 익히는 앱입니다.",
+   "en": "An app to search, translate and drill keyboard shortcuts across six DAWs: Pro Tools, Logic Pro, Ableton Live, FL Studio, Studio One and Cubase."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad",
+   "en": "iPhone · iPad"
+  },
+  "bullets": {
+   "ko": [
+    "6개 DAW의 단축키를 이름·동작·키로 검색(8개 언어 검색 지원)",
+    "한 명령에 걸린 모든 키 표시, Mac·Windows 표기 지원",
+    "한 DAW의 단축키를 나머지 5개 DAW의 같은 동작으로 번역",
+    "간격 반복 훈련: 플래시카드·객관식, 카테고리별 연습 세트와 일일 스트릭",
+    "완전 오프라인 작동, 계정 불필요"
+   ],
+   "en": [
+    "Search shortcuts for six DAWs by name, action or key, in 8 languages",
+    "Shows every key bound to a command, with Mac or Windows key labels",
+    "Translate a shortcut from one DAW to the same action in the other five",
+    "Spaced-repetition drills: flashcards and multiple choice, practice sets by category, daily streak",
+    "Works fully offline, no account required"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad",
+    "6개 DAW 단축키",
+    "8개 언어 검색",
+    "완전 오프라인 · 계정 불필요"
+   ],
+   "en": [
+    "iPhone · iPad",
+    "Shortcuts for 6 DAWs",
+    "Search in 8 languages",
+    "Fully offline · no account"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_translate_ko.jpg",
+   "en": "01_translate_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": "02_search.jpg",
+    "alt": {
+     "ko": "단축키 검색 화면",
+     "en": "Shortcut search screen"
+    },
+    "title": {
+     "ko": "이름·동작·키로 바로 검색",
+     "en": "Search by name, action or key"
+    },
+    "text": {
+     "ko": "수천 개의 단축키를 이름, 동작, 키로 찾을 수 있고 카테고리별·DAW별로 둘러볼 수도 있습니다.",
+     "en": "Find any of thousands of shortcuts by name, action or key, or browse by category and by DAW."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_train_ko.jpg",
+     "en": "03_train_en.jpg"
+    },
+    "alt": {
+     "ko": "단축키 훈련 화면",
+     "en": "Shortcut training screen"
+    },
+    "title": {
+     "ko": "손에 익히는 간격 반복 훈련",
+     "en": "Spaced-repetition training"
+    },
+    "text": {
+     "ko": "플래시카드는 먼저 떠올린 뒤 자가 체크하고, 객관식은 실제로 헷갈리는 키로 시험합니다. 계속 틀리는 항목은 다시 꺼내 줍니다.",
+     "en": "Flashcards ask you to recall first, then self-check; multiple choice tests you against plausible wrong keys. Items you keep missing come back."
+    }
+   },
+   {
+    "img": "04_free_pro.jpg",
+    "alt": {
+     "ko": "주로 쓰는 DAW 선택 화면",
+     "en": "Choose your main DAW screen"
+    },
+    "title": {
+     "ko": "쓰는 DAW 하나는 무료",
+     "en": "Your main DAW is free"
+    },
+    "text": {
+     "ko": "고른 DAW의 단축키는 전부 무료입니다. Pro는 6개 DAW 전체와 DAW 간 번역, 무제한 훈련을 한 번 구매로 열어 줍니다.",
+     "en": "All shortcuts for the DAW you pick are free. Pro unlocks all six DAWs, cross-DAW translation and unlimited training in one purchase."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "주로 쓰는 DAW를 고릅니다",
+     "d": "처음 열면 6개 DAW 중 하나를 고릅니다. 그 DAW의 단축키는 모두 무료입니다."
+    },
+    {
+     "t": "단축키를 검색하거나 둘러봅니다",
+     "d": "이름·동작·키로 검색하거나 카테고리·DAW별로 둘러봅니다."
+    },
+    {
+     "t": "다른 DAW에서는 어떤 키인지 확인합니다",
+     "d": "같은 동작이 다른 DAW에서는 어떤 키인지 한 번 탭으로 봅니다(DAW 간 번역은 Pro)."
+    },
+    {
+     "t": "훈련으로 익힙니다",
+     "d": "플래시카드나 객관식으로 연습하고, 매일 이어 가며 스트릭을 쌓습니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Pick your main DAW",
+     "d": "On first launch choose one of the six DAWs. All its shortcuts are free."
+    },
+    {
+     "t": "Search or browse shortcuts",
+     "d": "Search by name, action or key, or browse by category and by DAW."
+    },
+    {
+     "t": "See the key in other DAWs",
+     "d": "One tap shows what the same action is called in other DAWs (cross-DAW translation is Pro)."
+    },
+    {
+     "t": "Train until it sticks",
+     "d": "Practice with flashcards or multiple choice and keep a daily streak."
+    }
+   ]
+  },
+  "related": [
+   "daw-shortcuts-concepts",
+   "pro-tools-to-logic-migration",
+   "ableton-fl-studio-workflow"
+  ]
  }
 }

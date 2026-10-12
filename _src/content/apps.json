@@ -21,8 +21,8 @@
     {
       "slug": "ear-trainer",
       "name": {
-        "ko": "AudioEngineer Ear Trainer",
-        "en": "AudioEngineer Ear Trainer"
+        "ko": "EAR Trainer 귀훈련",
+        "en": "AudioEngineer EAR Trainer"
       },
       "tagline": {
         "ko": "EQ 주파수(핑크노이즈·사인파 31밴드)·노이즈(종류·험·노이즈 플로어)·이펙트(Reverb·Delay·Chorus 등)를 귀로 맞히는 청음 훈련 앱. 양쪽 귀 따로 훈련, 이펙트 강도 A/B 비교, 10문제 모의고사(S~D 등급)까지. 내 음악으로도 훈련할 수 있어요. 8개 언어 지원(독일어·포르투갈어·프랑스어는 1.1.1부터).",
@@ -57,7 +57,7 @@
     {
       "slug": "toolkit",
       "name": {
-        "ko": "AudioEngineerToolkit",
+        "ko": "AudioEngineerToolkit-오디오엔지니어",
         "en": "AudioEngineerToolkit"
       },
       "tagline": {
@@ -93,7 +93,7 @@
     {
       "slug": "keymap",
       "name": {
-        "ko": "DAW 단축키 — KeyMap",
+        "ko": "DAW 단축키 — 키맵",
         "en": "DAW Shortcuts — KeyMap"
       },
       "tagline": {
@@ -111,8 +111,8 @@
     {
       "slug": "patchio",
       "name": {
-        "ko": "Patch & I/O",
-        "en": "Patch & I/O"
+        "ko": "Patch & I/O — 인아웃 리스트",
+        "en": "Patch & I/O — Stage I/O List"
       },
       "tagline": {
         "ko": "인풋 리스트·패치베이·신호 도면·무대 배치도를 한 앱에서. 표를 적으면 신호 도면이 자동으로 그려지고, 팬텀·레벨·커넥터 실수를 앱이 먼저 짚어줍니다. 패치베이 라벨은 실물 크기로 인쇄. 한국어·영어·일본어·중국어·스페인어·독일어·포르투갈어·프랑스어 지원(독일어·포르투갈어·프랑스어는 1.2.2부터).",
@@ -129,8 +129,8 @@
     {
       "slug": "nora",
       "name": {
-        "ko": "NORA — 커버곡 노래 녹음",
-        "en": "NORA — Cover Song Recording"
+        "ko": "NORA - 커버곡 노래 녹음",
+        "en": "NORA: Cover Song Studio"
       },
       "tagline": {
         "ko": "MR에 맞춰 노래를 녹음하고, 버튼 하나로 보컬 스타일(EQ·컴프·리버브)을 입혀 마스터링까지 끝냅니다. 키·템포 자동 분석, 틀린 구간만 다시 녹음, 보컬만 따로 WAV로 내보내 DAW에서 이어 작업까지. 10개 언어 지원.",
@@ -148,7 +148,7 @@
       "slug": "yul",
       "name": {
         "ko": "율 — 국악 튜너 & 장단",
-        "en": "Yul — Gugak Tuner & Janggu Rhythm"
+        "en": "Yul — Gugak Tuner & Jangdan"
       },
       "tagline": {
         "ko": "국악기를 위한 튜너와 장단 연습 앱. 율명(黃·太·仲…)으로 읽는 튜너, 황종 기준 Hz·삼분손익/평균율·내 소리로 청 잡기, 국립국악원이 녹음한 대금·피리 기준음. 정악·민속악·풍물·굿 장단 수십 종을 정간보 격자로 보고 국립국악원 장구·북·징·꽹과리 소리로 들으며, 칸을 눌러 나만의 장단으로 고치고 체인으로 이어 재생. 12율·장단·조와 토리·시김새·정간보·구음 등 이론 글 아홉 편(한·영·일). 튜너·장단·이론은 무료, 녹음·시김새 분석·연습 점수는 평생권 한 번 구매. 출시 기념 2주 전부 무료.",

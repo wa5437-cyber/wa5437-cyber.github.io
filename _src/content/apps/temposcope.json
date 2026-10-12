@@ -48,5 +48,151 @@
    "promo": "Novidade: grave o que você toca no clique e transforme em MIDI (referência). Gravar e ver o resultado é grátis.",
    "description": "Aponte o telefone para a música e ele encontra o andamento e a tonalidade em tempo real. Carregue um arquivo de áudio e ele extrai andamento, tonalidade e progressão de acordes de uma vez.\n\n■ Grátis\n\n· Detecção ao vivo — andamento (BPM) e tonalidade pelo microfone, enquanto toca\n· Tempos de delay e reverb — milissegundos calculados a partir do BPM detectado. Reto, pontuado, tercina\n· O metrônomo inteiro — 30-300 BPM, 2/4, 3/4, 4/4, 6/8, 12/8\n· Mapas de compasso — monte uma música que muda de andamento ou fórmula no meio e toque inteira. Com repetição de trechos\n· Seis sons — bipe eletrônico, tique-taque, bloco de madeira, cowbell, clave, rimshot\n· Subdivisões — colcheias, tercinas, semicolcheias, colcheias com swing, colcheia pontuada + semicolcheia, sextinas, polirritmo 3:2\n· 59 presets de estilos de bateria com grade de padrão\n· Tempo marcado por vibração (iPhone)\n· Reprodução em segundo plano — continua tocando enquanto você lê uma partitura ou com a tela bloqueada\n· Gravar para MIDI — grave o que você toca no clique e as notas são transcritas em um piano roll (iPhone e iPad, como referência)\n\n■ Pro (compra única vitalícia, não é assinatura)\n\n· Análise da música inteira — grátis cobre os primeiros 60 segundos\n· Salve e revise suas análises\n· Setlist — coloque as músicas na ordem do show e no palco basta apertar Próxima. Andamento, compasso e padrão mudam juntos. O modo de prática permite salvar na música o andamento que você encontrar.\n· Detecção na reprodução — deixe escutando e ele acha onde as músicas mudam, separando cada uma numa lista. Salvar à mão a que está tocando é grátis nas três primeiras\n· Exportar MIDI — salve o resultado do Gravar para MIDI como arquivo MIDI, pronto para a sua DAW\n\n■ Sobre a precisão\n\nMedido em 13 faixas com resposta conhecida: o andamento acertou em 13 e o tom em 12. Amostra pequena, use como orientação. A detecção de acordes é uma referência: menos precisa que andamento e tonalidade, e erra mais em baladas com harmonia densa. Confira com os 60 segundos grátis antes de decidir.\n\nGravar para MIDI também é uma referência. Em um teste — 14 compassos de um groove de colcheias na bateria, gravados em uma casa de shows com o iPhone na estante de partitura — acertou bumbo e caixa em 13 de 14 compassos e pegou 43 de 56 batidas de chimbal. Gravar e ver o resultado é grátis, então teste primeiro com o que você toca.\n\n■ Não precisa de internet\n\nToda a análise é feita no dispositivo. Sem conta, sem servidor, sem anúncios. O áudio do microfone nunca sai do dispositivo. A única gravação guardada é a última que você mesmo faz no Gravar para MIDI, e ela também fica só no dispositivo.\n\n■ Feito para\n\n· Técnicos de som que precisam do andamento de uma música na hora\n· Engenheiros de mixagem que precisam de delay e reverb casados com o BPM\n· Músicos que trocam de andamento música a música no set\n· Bateristas que estudam tercinas e polirritmias"
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "무료로 시작 · Pro 는 평생 이용권(한 번 구매, 구독 아님)",
+   "en": "Free to start · Pro is a one-time lifetime purchase (not a subscription)"
+  },
+  "lead": {
+   "ko": "마이크로 들려주면 템포와 키를 실시간으로 찾아주고, 메트로놈과 딜레이·리버브 타임 계산까지 한 앱에서 쓰는 템포 도구입니다.",
+   "en": "A tempo tool that finds tempo and key in real time from the microphone, with a full metronome and delay and reverb time calculation in one app."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad",
+   "en": "iPhone · iPad"
+  },
+  "bullets": {
+   "ko": [
+    "마이크로 템포(BPM)와 키를 실시간 감지 (키는 참고용)",
+    "찾은 BPM 에 맞는 딜레이·리버브 타임을 ms 로 계산",
+    "30~300 BPM 메트로놈, 마디 맵, 드럼 스타일 프리셋 59종",
+    "음원 파일 분석: 템포·키·코드 진행 (코드는 참고용)",
+    "클릭에 맞춰 녹음해 MIDI 로 변환 (참고용), 분석은 전부 기기 안에서"
+   ],
+   "en": [
+    "Live tempo (BPM) and key detection from the microphone (key is for reference)",
+    "Delay and reverb times in ms, worked out from the detected BPM",
+    "30–300 BPM metronome, bar maps and 59 drum style presets",
+    "Audio file analysis: tempo, key and chord progression (chords are for reference)",
+    "Record to the click and convert to MIDI (for reference); all analysis stays on your device"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad",
+    "메트로놈은 전부 무료",
+    "인터넷·계정·광고 없음 (분석은 기기 안에서)",
+    "정답을 아는 13곡 중 템포 13곡 일치 (표본 작음, 키·코드는 참고용)"
+   ],
+   "en": [
+    "iPhone · iPad",
+    "The metronome is entirely free",
+    "No internet, account or ads (analysis runs on your device)",
+    "Tempo matched on all 13 known-answer tracks (small sample; key and chords are for reference)"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_live_ko.jpg",
+   "en": "01_live_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_file_ko.jpg",
+     "en": "02_file_en.jpg"
+    },
+    "alt": {
+     "ko": "파일 분석 화면: 템포, 키, 코드 진행",
+     "en": "File analysis screen: tempo, key and chord progression"
+    },
+    "title": {
+     "ko": "음원 파일을 한 번에 분석",
+     "en": "Analyze a whole audio file"
+    },
+    "text": {
+     "ko": "음원 파일을 넣으면 템포·키·코드 진행을 한 번에 뽑습니다. 코드 분석은 참고용이며, 곡 전체 분석은 Pro 이고 무료는 앞 60초까지입니다.",
+     "en": "Drop in an audio file to get tempo, key and chord progression in one pass. Chords are for reference only; full-song analysis is Pro, and free covers the first 60 seconds."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_midi_ko.jpg",
+     "en": "03_midi_en.jpg"
+    },
+    "alt": {
+     "ko": "녹음해서 MIDI 로 변환한 피아노롤 화면",
+     "en": "Record to MIDI piano-roll result"
+    },
+    "title": {
+     "ko": "녹음해서 MIDI 로",
+     "en": "Record to MIDI"
+    },
+    "text": {
+     "ko": "클릭에 맞춰 연주를 녹음하면 음을 받아 적어 피아노롤로 보여 줍니다. 참고용이며, 녹음하고 결과 보기는 무료, MIDI 내보내기는 Pro 입니다.",
+     "en": "Record your playing to the click and it writes the notes down as a piano roll. It is for reference; recording and viewing are free, and exporting MIDI is Pro."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_metronome_ko.jpg",
+     "en": "04_metronome_en.jpg"
+    },
+    "alt": {
+     "ko": "메트로놈 화면",
+     "en": "Metronome screen"
+    },
+    "title": {
+     "ko": "메트로놈은 전부 무료",
+     "en": "The whole metronome is free"
+    },
+    "text": {
+     "ko": "30~300 BPM, 여러 박자, 박 나누기와 6가지 음색을 쓸 수 있고 백그라운드에서도 계속 울립니다.",
+     "en": "30–300 BPM, several meters, subdivisions and six sounds, and it keeps clicking in the background."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "마이크로 들려줍니다",
+     "d": "라이브 탭에서 음악을 들려주면 템포와 키가 표시되고 딜레이·리버브 타임이 바로 계산됩니다."
+    },
+    {
+     "t": "파일로 분석합니다",
+     "d": "파일 분석 탭에서 음원 파일을 열면 템포·키·코드 진행을 볼 수 있습니다."
+    },
+    {
+     "t": "메트로놈으로 이어 씁니다",
+     "d": "찾은 템포로 메트로놈을 켜고 연주합니다."
+    },
+    {
+     "t": "연주를 녹음해 MIDI 로 바꿉니다",
+     "d": "클릭에 맞춰 한 악기씩 녹음하면 피아노롤로 확인할 수 있습니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Let it listen",
+     "d": "On the Live tab, play music near the phone to see tempo and key, with delay and reverb times calculated right away."
+    },
+    {
+     "t": "Analyze a file",
+     "d": "Open an audio file on the File analysis tab to see tempo, key and chord progression."
+    },
+    {
+     "t": "Carry on with the metronome",
+     "d": "Start the metronome at the tempo you found and play along."
+    },
+    {
+     "t": "Record your playing to MIDI",
+     "d": "Record one instrument at a time to the click and check the result as a piano roll."
+    }
+   ]
+  },
+  "related": [
+   "bpm-to-delay-time",
+   "reverb-delay-chorus-explained"
+  ]
  }
 }

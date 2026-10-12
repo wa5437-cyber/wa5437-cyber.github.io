@@ -48,5 +48,140 @@
    "promo": "Transformez un PDF ou une photo de partition en partition modifiable (MusicXML), MIDI ou PDF. Un fichier MIDI devient une partition. Sur l’appareil, achat unique.",
    "description": "Transformez un PDF, une photo ou un scan de partition en partition numérique modifiable. Importez un fichier MIDI et obtenez une partition dans l’autre sens. La reconnaissance s’effectue entièrement sur votre iPhone, votre iPad ou votre Mac, et les résultats s’exportent en MusicXML, MIDI et PDF.\n\n■ Gratuit\n\n· Reconnaissance de partition — la première page d’un PDF, d’une photo ou d’un scan par l’appareil photo, affichée à l’écran pour être vérifiée et corrigée\n· MIDI → partition — les fichiers MIDI exportés d’une DAW deviennent des partitions, sans limite de mesures\n· Édition — sélectionnez des notes, montez-les ou descendez-les, corrigez les altérations, écoutez le résultat\n· Ajout et suppression de notes, changement de valeur, conversion silence ↔ note, saisie manuelle des reprises et des 1re/2e fins (voltas)\n· Lecture — écoutez tout de suite la partition reconnue\n\n■ Pro (achat unique à vie, pas un abonnement)\n\n· Reconnaissance de toutes les pages d’un document\n· Export — MusicXML (s’ouvre dans MuseScore, Sibelius, Finale et d’autres), MIDI, PDF\n\n■ Partitions prises en charge\n\n· Lead sheets et mélodies seules avec symboles d’accords\n· Piano (deux portées)\n· Chœur SATB, plusieurs portées\n· Notation de batterie\n· Armures, indications de mesure, liaisons de prolongation, liaisons d’expression, triolets, symboles d’accords\n· Barres de reprise (les 1re/2e fins, le D.C. et la coda ne sont pas lus automatiquement — les fins peuvent être saisies à la main dans l’éditeur)\n\n■ À propos de la précision — à lire avant d’acheter\n\nMesurée sur des partitions dont le résultat est connu (nos propres tests, septembre 2026).\n· Lead sheets imprimées propres : notes (hauteur et durée) 90–99 %. Environ 80 % pour les morceaux riches en doubles croches\n· Chœur SATB : environ 93 %\n· Piano : morceaux simples 95 % et plus, morceaux complexes environ 80 % — à titre indicatif\n· Batterie : charleston et caisse claire presque exacts ; la grosse caisse rate environ un coup sur deux dans les mesures chargées — à titre indicatif\n· Liaisons de prolongation environ 87 %, liaisons d’expression environ 60 %\n· Photos : les photos prises de face et bien éclairées donnent des résultats équivalents à ceux d’un PDF ; les photos inclinées ou floues les dégradent fortement\n· Les partitions manuscrites et les tablatures ne sont pas prises en charge\n· MIDI → partition : le MIDI quantifié est exact. Le piano jusqu’à deux voix est exact ; à partir de trois voix et pour le MIDI joué (non quantifié) : à titre indicatif\n\nLa reconnaissance automatique est un premier jet. L’app est conçue pour vérifier et corriger dans l’éditeur, et elle vous évite l’essentiel du temps passé à saisir les notes à la main. Essayez vos propres partitions dans la version gratuite avant de vous décider.\n\n■ Aucune connexion internet nécessaire\n\nLa reconnaissance, l’édition et l’export se font entièrement sur votre appareil. Les images de partitions ne sont jamais envoyées. Aucun compte, aucune publicité.\n\n■ Droits d’auteur\n\nNe convertissez que des partitions dont vous détenez les droits, des partitions du domaine public ou des partitions dont l’utilisation vous est autorisée. L’app est conçue pour l’étude et la pratique personnelles et n’a aucune fonction de partage ni d’envoi.\n\n■ Pour qui ?\n\n· Instrumentistes et arrangeurs qui veulent passer leurs partitions papier en fichiers modifiables\n· Producteurs qui transforment des lead sheets en MIDI pour une DAW\n· Chefs de chœur et choristes qui préparent des pistes pour travailler leur pupitre\n· Compositeurs qui mettent au propre leurs esquisses MIDI en notation"
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "무료로 시작 · Pro 는 한 번 구매하는 평생 이용권(구독 아님)",
+   "en": "Free to start · Pro is a one-time lifetime purchase (not a subscription)"
+  },
+  "lead": {
+   "ko": "악보 PDF·사진을 편집할 수 있는 악보로, 미디 파일을 악보로 바꿔 주는 앱입니다. 인식 결과는 초안이므로 편집 화면에서 확인하고 고쳐 씁니다.",
+   "en": "An app that turns a sheet-music PDF or photo into an editable score, and a MIDI file into sheet music. Results are a first draft to check and correct in the editor."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
+  },
+  "bullets": {
+   "ko": [
+    "악보 PDF·사진·카메라 스캔을 편집 가능한 악보로 (참고용 초안) (무료는 첫 페이지, 전 페이지는 Pro)",
+    "미디 파일을 악보로, 마디 수 제한 없음 (정량화된 미디 기준)",
+    "음 높이·음가·임시표 수정과 바로 듣기",
+    "MusicXML·미디·PDF 로 내보내기(Pro)",
+    "인식·편집·내보내기 전부 기기 안에서, 계정·광고 없음"
+   ],
+   "en": [
+    "Turn sheet-music PDFs, photos or camera scans into an editable score (a first draft, for reference) (free: first page; all pages: Pro)",
+    "Turn MIDI files into sheet music, with no bar limit (quantised MIDI)",
+    "Fix pitches, durations and accidentals, and listen right away",
+    "Export to MusicXML, MIDI and PDF (Pro)",
+    "Recognition, editing and export all on your device, no account, no ads"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac",
+    "무료 구간에서 내 악보로 먼저 확인",
+    "기기 안에서 처리, 인터넷 불필요",
+    "인식 결과는 참고용 초안"
+   ],
+   "en": [
+    "iPhone · iPad · Mac",
+    "Try your own scores in the free tier first",
+    "On-device, no internet needed",
+    "Recognition results are a first draft, for reference"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_jig_ko.jpg",
+   "en": "01_jig_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_piano_ko.jpg",
+     "en": "02_piano_en.jpg"
+    },
+    "alt": {
+     "ko": "인식한 피아노 큰보표 악보 화면",
+     "en": "Recognised piano grand-staff score"
+    },
+    "title": {
+     "ko": "피아노 큰보표도 읽습니다",
+     "en": "Reads piano grand staff too"
+    },
+    "text": {
+     "ko": "리드시트와 단선율, 피아노 큰보표, 드럼 악보를 인식합니다. 복잡한 피아노곡과 드럼은 정확도가 낮아 참고용입니다. 화면은 복잡한 곡의 인식 예시입니다.",
+     "en": "It reads lead sheets, single-line melodies, piano grand staff and drum notation. Complex piano pieces and drums are less accurate, so treat them as a guide. The screen shows a complex piece."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_midi_ko.jpg",
+     "en": "03_midi_en.jpg"
+    },
+    "alt": {
+     "ko": "연주를 녹음한 미디(참고용)를 변환한 악보 화면",
+     "en": "Score converted from performed MIDI (for reference)"
+    },
+    "title": {
+     "ko": "미디 파일을 악보로",
+     "en": "MIDI file to sheet music"
+    },
+    "text": {
+     "ko": "DAW 에서 내보낸 미디 파일을 마디 수 제한 없이 악보로 바꿉니다. 정량화된 미디는 정확하고, 이 화면처럼 연주를 녹음한 미디나 3성부 이상은 참고용입니다.",
+     "en": "MIDI files exported from a DAW become sheet music with no bar limit. Quantised MIDI is exact; performed (unquantised) MIDI like the example shown here, and three or more voices, are for reference only."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_choir_ko.jpg",
+     "en": "04_choir_en.jpg"
+    },
+    "alt": {
+     "ko": "합창 SATB 악보 화면",
+     "en": "SATB choir score"
+    },
+    "title": {
+     "ko": "합창 SATB 다단 악보",
+     "en": "SATB choir systems"
+    },
+    "text": {
+     "ko": "합창 SATB 악보를 인식합니다. 결과는 편집 화면에서 음을 골라 올리고 내리며 고칠 수 있습니다.",
+     "en": "SATB choir scores are recognised, and you can select notes in the editor and move them up or down to correct the result."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "악보를 가져옵니다",
+     "d": "PDF·사진·카메라 스캔을 넣거나 DAW 에서 내보낸 미디 파일을 넣습니다."
+    },
+    {
+     "t": "인식 결과를 확인하고 고칩니다",
+     "d": "초안으로 나온 악보에서 음 높이·음가·임시표를 고치고 재생해 들어 봅니다."
+    },
+    {
+     "t": "내보냅니다",
+     "d": "Pro 에서는 MusicXML·미디·PDF 로 내보내 MuseScore·Sibelius·Finale 등에서 열 수 있습니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Bring in a score",
+     "d": "Add a PDF, photo or camera scan, or a MIDI file exported from your DAW."
+    },
+    {
+     "t": "Check and correct the draft",
+     "d": "Fix pitches, durations and accidentals in the draft, and play it back to listen."
+    },
+    {
+     "t": "Export",
+     "d": "With Pro, export MusicXML, MIDI or PDF and open it in MuseScore, Sibelius, Finale and others."
+    }
+   ]
+  },
+  "related": []
  }
 }

@@ -48,5 +48,156 @@
    "promo": "",
    "description": "NORA 是一个让你无需懂录音设备也能完成翻唱作品的工作室。\n\n五步即可完成:\n\n1. 设备检测 — 选择麦克风、调好音量,NORA 会替你检查延迟和耳机连接。\n2. 上传伴奏 — 上传 MP3、WAV 或 M4A,自动分析调性(Key)和速度(BPM)。\n3. 录音 — 跟着伴奏演唱。唱错了?在波形上拖选那一段重新录制(打孔录音),会自动无缝衔接。\n4. 人声风格 — 一键切换音色:闪亮、厚实、感性、清爽、自然,按曲风调校。可一边听一边调整人声与伴奏的平衡和空间感。\n5. 导出 — 用母带处理把响度调整到商业发行水准,保存为 MP3 或 WAV。\n\n· 单独导出人声 — 可选原声 / 仅均衡与压缩 / 全部效果,保存为与伴奏对齐的 WAV,直接在 DAW 中继续制作\n· 耳机实时监听,拔掉耳机自动关闭以防啸叫\n· 仅监听用的混响 — 录音文件始终干净\n· 所有处理都在你的 Mac 上完成。无需账号,不上传你的声音。\n\n为第一次录歌的人而做。"
   }
+ },
+ "detail": {
+  "lead": {
+   "ko": "오디오 장비를 몰라도 5단계로 커버곡을 녹음하고 믹싱·마스터링까지 끝내는 Mac 앱입니다.",
+   "en": "A Mac app that takes you from recording to mixing and mastering a cover song in five steps, with no studio know-how needed."
+  },
+  "platforms": {
+   "ko": "macOS",
+   "en": "macOS"
+  },
+  "bullets": {
+   "ko": [
+    "MP3·WAV·M4A 반주를 올리면 키와 템포(BPM)를 자동으로 분석",
+    "틀린 구간만 드래그해 다시 녹음하는 펀치인",
+    "샤방하게·단단하게·감성적으로·시원하게·자연스럽게, 버튼 하나로 바뀌는 보컬 스타일",
+    "마스터링 후 MP3 또는 WAV로 저장, 보컬만 따로 내보내기도 가능",
+    "모든 처리는 내 Mac에서, 계정도 목소리 업로드도 없음"
+   ],
+   "en": [
+    "Upload an MP3, WAV or M4A backing track and NORA detects its key and tempo (BPM)",
+    "Punch-in: drag over a mistake and re-record just that part",
+    "Five vocal styles (Sparkly, Solid, Emotional, Crisp, Natural), one tap each",
+    "Master and save as MP3 or WAV, or export the vocal on its own",
+    "Everything runs on your Mac: no account, no upload of your voice"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "macOS",
+    "5단계 녹음·믹싱·마스터링",
+    "MP3·WAV·M4A 반주 지원",
+    "계정 없음, 목소리 업로드 없음"
+   ],
+   "en": [
+    "macOS",
+    "5 steps: record, mix, master",
+    "MP3, WAV and M4A backing tracks",
+    "No account, no voice upload"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_device_ko.jpg",
+   "en": "01_device_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "03_record_ko.jpg",
+     "en": "03_record_en.jpg"
+    },
+    "alt": {
+     "ko": "반주에 맞춰 녹음하는 화면",
+     "en": "Recording screen with the vocal waveform"
+    },
+    "title": {
+     "ko": "틀린 부분만 다시 녹음",
+     "en": "Re-record only the mistake"
+    },
+    "text": {
+     "ko": "파형에서 틀린 구간만 드래그해 다시 녹음하면 자연스럽게 이어붙습니다. 헤드폰을 연결하면 내 목소리를 실시간으로 들을 수 있고, 빼면 자동으로 꺼져 하울링을 막습니다.",
+     "en": "Drag across the waveform and re-record just that part; it stitches back in seamlessly. Plug in headphones to hear yourself live, and unplug to switch it off automatically so it can't feed back."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_style_ko.jpg",
+     "en": "04_style_en.jpg"
+    },
+    "alt": {
+     "ko": "보컬 스타일 선택 화면",
+     "en": "Vocal style selection screen"
+    },
+    "title": {
+     "ko": "버튼 하나로 바뀌는 보컬 스타일",
+     "en": "Vocal styles in one tap"
+    },
+    "text": {
+     "ko": "샤방하게·단단하게·감성적으로·시원하게·자연스럽게 중에서 고르면 장르에 맞춰 음색이 바뀝니다. 들으면서 보컬과 반주의 밸런스, 공간감도 조절합니다.",
+     "en": "Pick Sparkly, Solid, Emotional, Crisp or Natural and the sound changes, tuned per genre. Adjust the vocal and track balance and the reverb while you listen."
+    }
+   },
+   {
+    "img": {
+     "ko": "05_export_ko.jpg",
+     "en": "05_export_en.jpg"
+    },
+    "alt": {
+     "ko": "내보내기 화면",
+     "en": "Export screen"
+    },
+    "title": {
+     "ko": "마스터링하고 내보내기",
+     "en": "Master and export"
+    },
+    "text": {
+     "ko": "마스터링으로 라우드니스를 시중 음원 수준에 맞춰 MP3 또는 WAV로 저장합니다. 보컬만 따로 내보내 DAW에서 이어 작업할 수도 있습니다.",
+     "en": "Mastering matches the loudness of commercial releases, and you save as MP3 or WAV. You can also export the vocal alone to keep working in your DAW."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "장치를 확인합니다",
+     "d": "마이크를 고르고 음량을 맞추면 지연 시간과 헤드폰 연결을 NORA가 대신 확인합니다."
+    },
+    {
+     "t": "반주를 올립니다",
+     "d": "MP3·WAV·M4A 파일을 올리면 키와 템포(BPM)를 자동으로 분석합니다."
+    },
+    {
+     "t": "녹음합니다",
+     "d": "반주에 맞춰 부르고, 틀린 구간은 드래그해서 그 부분만 다시 녹음합니다."
+    },
+    {
+     "t": "보컬 스타일을 고릅니다",
+     "d": "스타일 버튼으로 음색을 바꾸고 보컬과 반주 밸런스, 공간감을 조절합니다."
+    },
+    {
+     "t": "마스터링하고 저장합니다",
+     "d": "라우드니스를 맞춘 뒤 MP3 또는 WAV로 내보냅니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Check your devices",
+     "d": "Pick your mic and set the level; NORA checks latency and your headphones for you."
+    },
+    {
+     "t": "Upload a backing track",
+     "d": "Add an MP3, WAV or M4A file and NORA detects the key and tempo (BPM)."
+    },
+    {
+     "t": "Record",
+     "d": "Sing along to the track, and drag over any mistake to re-record just that part."
+    },
+    {
+     "t": "Choose a vocal style",
+     "d": "Switch the sound with a style button and adjust vocal/track balance and reverb."
+    },
+    {
+     "t": "Master and save",
+     "d": "Match the loudness, then export as MP3 or WAV."
+    }
+   ]
+  },
+  "related": [
+   "reading-lufs-loudness",
+   "reverb-delay-chorus-explained",
+   "compressor-parameters-explained"
+  ]
  }
 }
