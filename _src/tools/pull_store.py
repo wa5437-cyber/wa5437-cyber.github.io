@@ -50,8 +50,9 @@ def collect(app_id, get=None):
     def is_live(i):
         at = i["attributes"]
         return "READY_FOR_SALE" in (at.get("state"), at.get("appStoreState"))
-    live = [i for i in infos if is_live(i)] or infos[:1]
-    for info in live[:1]:
+    # 공개 중인 appInfo 만 쓴다. 하나뿐일 때만 상태와 무관하게 쓴다(여럿인데 공개 표시가 없으면 초안일 수 있어 쓰지 않는다).
+    live = [i for i in infos if is_live(i)][:1] or (infos if len(infos) == 1 else [])
+    for info in live:
         for loc in get(f"/appInfos/{info['id']}/appInfoLocalizations", limit=50)["data"]:
             a = loc["attributes"]
             lang = map_locale(a["locale"])

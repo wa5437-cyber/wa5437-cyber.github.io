@@ -196,6 +196,9 @@ def alts_for_app(slug):
     return {l: url(l, f"/apps/{slug}/") for l in app_langs(slug)}
 
 
+BULLET_RE = re.compile(r"([•・]|-\s)\s*")
+
+
 def render_store_text(text):
     """앱스토어 설명문을 HTML 로. 빈 줄=문단, •/-/・ 로 시작하는 줄만 이어지면 목록, 문단 안 줄바꿈=<br>."""
     out = []
@@ -203,8 +206,9 @@ def render_store_text(text):
         lines = [l.strip() for l in block.splitlines() if l.strip()]
         if not lines:
             continue
-        if all(l[:1] in "•-・" for l in lines):
-            out.append('<ul class="bullets">' + "".join(f"<li>{esc(l[1:].strip())}</li>" for l in lines) + "</ul>")
+        if all(BULLET_RE.match(l) and BULLET_RE.sub("", l, count=1).strip() for l in lines):
+            out.append('<ul class="bullets">' + "".join(
+                f"<li>{esc(BULLET_RE.sub('', l, count=1).strip())}</li>" for l in lines) + "</ul>")
         else:
             out.append("<p>" + "<br>".join(esc(l) for l in lines) + "</p>")
     return "".join(out)

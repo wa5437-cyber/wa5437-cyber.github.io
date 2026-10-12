@@ -58,7 +58,49 @@ class PullStoreTests(unittest.TestCase):
         self.assertEqual(out["ja"], {"name": "名前", "subtitle": "副題", "promo": "プロモ", "description": "説明"})
 
 
+class CollectSafetyTests(unittest.TestCase):
+    V = [{"id": "v1", "attributes": {"platform": "IOS", "appStoreState": "READY_FOR_SALE", "versionString": "1.1"}},
+         {"id": "v10", "attributes": {"platform": "IOS", "appStoreState": "READY_FOR_SALE", "versionString": "1.10"}}]
+
+    def test_two_appinfos_uses_live_one_even_when_draft_is_listed_first(self):
+        draft = {"id": "d", "attributes": {"state": "PREPARE_FOR_SUBMISSION"}}
+        live = {"id": "l", "attributes": {"state": "READY_FOR_SALE"}}
+
+        class Get(FakeAsc):
+            def __call__(self, path, **params):
+                if "/appInfoLocalizations" in path:
+                    return {"data": [iloc("ja", "DRAFT" if "/d/" in path else "公開名", "副")]}
+                return super().__call__(path, **params)
+        out = pull_store.collect("1", get=Get(self.V, {"v1": [], "v10": [vloc("ja", "説明")]}, [draft, live], []))
+        self.assertEqual(out["ja"]["name"], "公開名")
+
+    def test_two_appinfos_none_live_yields_nothing(self):
+        a = {"id": "a", "attributes": {"state": "PREPARE_FOR_SUBMISSION"}}
+        b = {"id": "b", "attributes": {"state": "WAITING_FOR_REVIEW"}}
+        get = FakeAsc(self.V, {"v1": [], "v10": [vloc("ja", "説明")]}, [a, b], [iloc("ja", "DRAFT")])
+        self.assertEqual(pull_store.collect("1", get=get), {})
+
+    def test_single_appinfo_is_used_regardless_of_state(self):
+        a = {"id": "a", "attributes": {"state": "PREPARE_FOR_SUBMISSION"}}
+        get = FakeAsc(self.V, {"v1": [], "v10": [vloc("ja", "説明")]}, [a], [iloc("ja", "名前")])
+        self.assertEqual(pull_store.collect("1", get=get)["ja"]["name"], "名前")
+
+    def test_highest_numeric_version_wins(self):
+        get = FakeAsc(self.V, {"v1": [vloc("ja", "OLD")], "v10": [vloc("ja", "NEW")]},
+                      [{"id": "i", "attributes": {"state": "READY_FOR_SALE"}}], [iloc("ja", "名前")])
+        self.assertEqual(pull_store.collect("1", get=get)["ja"]["description"], "NEW")
+
+
 class RenderTests(unittest.TestCase):
+    def test_dash_bullets_need_whitespace_after_marker(self):
+        self.assertIn('<ul class="bullets"><li>a</li><li>b</li></ul>', pages.render_store_text("- a\n- b"))
+        html = pages.render_store_text("-3 dB\nnote")
+        self.assertEqual(html, "<p>-3 dB<br>note</p>")
+        self.assertNotIn("<li></li>", pages.render_store_text("-"))
+        self.assertNotIn("<li>", pages.render_store_text("-"))
+        self.assertNotIn("<li></li>", pages.render_store_text("•"))
+        self.assertIn("<li>x</li>", pages.render_store_text("・x"))
+
     def test_render_store_text_paragraphs_lists_and_escape(self):
         html = pages.render_store_text("A & B <script>\n둘째 줄\n\n• one\n• two\n\nlast")
         self.assertIn("<p>A &amp; B &lt;script&gt;<br>둘째 줄</p>", html)
@@ -108,6 +150,12 @@ class PageLangTests(unittest.TestCase):
         self.assertIn('"@type": "SoftwareApplication"', html)
         self.assertIn('"inLanguage": "ja"', html)
         self.assertIn("apps.apple.com", html)
+
+    def test_ja_main_has_no_hangul(self):
+        import re
+        _, html = pages.app_page("ja", "stage-sound")
+        main = html.split("<main", 1)[1].split("</main>", 1)[0]
+        self.assertIsNone(re.search("[\uac00-\ud7a3]", main))
 
     def test_full_layout_labels_follow_language(self):
         _, ko = pages.app_page("ko", "stage-sound")
