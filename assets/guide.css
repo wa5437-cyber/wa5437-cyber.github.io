@@ -36,11 +36,21 @@ nav .links a:hover{ color:var(--text-primary); }
 nav .links a[aria-current="page"]{ color:var(--text-primary); font-weight:600; }
 .navcta{ padding:8px 16px; border-radius:100px; font-size:13px; font-weight:600; background:var(--text-primary); color:var(--bg)!important; display:inline-flex; }
 .navcta:hover{ opacity:.85; }
-/* 좁은 화면: 메뉴를 두 번째 줄에서 가로 스크롤 */
+/* 좁은 화면: 메뉴를 가로 스크롤 행으로(오른쪽 끝은 흐리게 — 더 있다는 표시) */
 @media (max-width:600px){
   nav .wrap-wide{ flex-wrap:wrap; height:auto; min-height:56px; padding-top:8px; padding-bottom:0; }
-  nav .links{ order:3; flex:0 0 100%; gap:20px; overflow-x:auto; white-space:nowrap; padding:10px 0 12px; scrollbar-width:none; }
+  nav .links{ order:3; flex:0 0 100%; gap:16px; overflow-x:auto; white-space:nowrap; scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); }
   nav .links::-webkit-scrollbar{ display:none; }
+  nav .links a{ flex:none; padding:10px 0; }
+}
+/* 아주 좁은 화면: 한 줄(로고 마크 + 메뉴)로 줄여 고정 막대가 64px 를 넘지 않게 */
+@media (max-width:480px){
+  nav .wrap-wide{ flex-wrap:nowrap; height:64px; min-height:0; padding-top:0; gap:14px; }
+  .brand{ font-size:0; flex:none; }
+  nav .links{ order:0; flex:1 1 auto; min-width:0; }
+  nav .links a{ padding:13px 0; }
+  .navcta{ display:none; }
 }
 
 /* article */
@@ -75,6 +85,12 @@ table.data th{ background:var(--bg-alt); font-family:'IBM Plex Mono',monospace; 
 .callout .body p{ font-size:13.5px; color:var(--text-secondary); margin:0 0 10px; line-height:1.6; }
 .callout .body a{ font-size:13px; font-weight:600; color:var(--teal); display:inline-flex; align-items:center; gap:5px; }
 
+/* 좁은 화면 넘침 방지 */
+.article h1,.article h2{ overflow-wrap:anywhere; }
+@media (max-width:700px){
+  .article table.data{ display:block; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
+}
+
 /* related */
 .related{ border-top:1px solid var(--line); margin-top:44px; padding-top:26px; }
 .related h4{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:14px; }
@@ -98,7 +114,8 @@ table.data th{ background:var(--bg-alt); font-family:'IBM Plex Mono',monospace; 
 .hub-hero p{ font-size:16px; line-height:1.7; color:var(--text-secondary); max-width:620px; }
 .guide-group{ margin-top:40px; }
 .guide-group > h2{ font-size:15px; font-family:'IBM Plex Mono',monospace; letter-spacing:.06em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:16px; }
-.guide-list{ display:grid; gap:14px; }
+.guide-list{ display:grid; grid-template-columns:minmax(0,1fr); gap:14px; }
+.guide-list a{ overflow-wrap:anywhere; }
 .guide-list a{ display:block; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px; transition:transform 180ms var(--ease-out),border-color 180ms var(--ease-out); }
 @media (hover:hover) and (pointer:fine){ .guide-list a:hover{ transform:translateY(-2px); border-color:var(--line-strong); } }
 .guide-list a h3{ font-size:17px; font-weight:600; margin-bottom:6px; }

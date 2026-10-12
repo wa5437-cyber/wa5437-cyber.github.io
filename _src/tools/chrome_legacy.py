@@ -127,7 +127,7 @@ def _author_box(published, modified):
         "  <!-- author-box -->",
         '  <aside class="author-box" aria-label="글쓴이">',
         '    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>',
-        "    <p>%d년부터 믹싱·마스터링·녹음 작업을 하고 있으며(기록된 작업 %d건), 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>"
+        "    <p>%d년부터의 작업 기록이 있으며(기록된 작업 %d건), 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>"
         % (c["since"], c["total"]),
         '    <p class="meta"><a href="/about/">글쓴이 소개</a> · %s</p>' % when,
         "  </aside>",

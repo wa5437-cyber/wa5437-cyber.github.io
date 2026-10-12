@@ -88,7 +88,7 @@ class TransformSampleTests(unittest.TestCase):
         self.assertEqual(self.out.count("<!-- author-box -->"), 1)
         self.assertEqual(self.out.count("<!-- /author-box -->"), 1)
         box = re.search(r"<!-- author-box -->.*?<!-- /author-box -->", self.out, re.S).group(0)
-        self.assertIn("%d년부터" % CAREER["since"], box)
+        self.assertIn("%d년부터의 작업 기록이 있으며" % CAREER["since"], box)
         self.assertIn("기록된 작업 %d건" % CAREER["total"], box)
         self.assertIn('<a href="/about/">글쓴이 소개</a>', box)
         self.assertLess(self.out.index("<!-- /author-box -->"), self.out.index("</article>"))
@@ -116,6 +116,15 @@ class TransformSampleTests(unittest.TestCase):
         self.assertEqual(after["author"], {"@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/"})
         self.assertEqual(after["@type"], "Article")
         self.assertEqual(self.out.count('<script type="application/ld+json">'), 1)
+
+    def test_missing_navcta_product_column_and_json_ld_raise(self):
+        cases = (self.raw.replace('class="navcta"', 'class="cta"'),
+                 self.raw.replace("<h4>Product</h4>", "<h4>Products</h4>"),
+                 self.raw.replace('<script type="application/ld+json">', '<script type="text/plain">'),
+                 self.raw.replace('"@type": "Article"', '"@type": "BlogPosting"'))
+        for broken in cases:
+            with self.assertRaises(ValueError):
+                chrome_legacy.transform(broken, "guide")
 
     def test_missing_date_entry_raises(self):
         with self.assertRaises(ValueError):
@@ -194,21 +203,62 @@ class AllGuidesTests(unittest.TestCase):
                              set(re.findall(r'href="(/guides/[^"]+)"', out)) - {"/guides/"}, f)
 
 
+def strip_chrome(text):
+    """메뉴 링크·푸터·글쓴이 박스·JSON-LD 를 걷어내고 옛 홈 앵커를 새 주소로 맞춘 본문 비교용 문자열."""
+    text = re.sub(r'<div class="links">.*?</div>', "", text, flags=re.S)
+    text = re.sub(r"<footer.*?</footer>", "", text, flags=re.S)
+    text = re.sub(r"\n\n?[ \t]*<!-- author-box -->.*?<!-- /author-box -->", "", text, flags=re.S)
+    text = re.sub(r'<script type="application/ld\+json">.*?</script>', "", text, flags=re.S)
+    return text.replace('href="/#apps"', 'href="/apps/"').replace('href="/#tools"', 'href="/tools/"')
+
+
+class BodyAndDatesTests(unittest.TestCase):
+    def test_meta_line_and_json_ld_match_guide_dates_for_all_guides(self):
+        for slug, d in DATES.items():
+            text = src(slug + ".html")
+            want = "게시 %s" % d["published"]
+            if d["modified"] != d["published"]:
+                want += " · 최종 수정 %s" % d["modified"]
+            self.assertIn('<a href="/about/">글쓴이 소개</a> · %s</p>' % want, text, slug)
+            ld = ld_of(text)
+            self.assertEqual((ld["datePublished"], ld["dateModified"]), (d["published"], d["modified"]), slug)
+
+    def test_only_chrome_changed_versus_pre_transform_commit(self):
+        """변환 전 커밋(09605f1 의 부모)과 비교: 메뉴·푸터·박스·JSON-LD 를 걷어내면 본문이 같다."""
+        for f in guide_files():
+            name = pathlib.Path(f).name
+            r = subprocess.run(["git", "show", "09605f1~1:guides/" + name], cwd=str(ROOT),
+                               capture_output=True, text=True)
+            if r.returncode != 0:
+                self.skipTest("git 기록에서 변환 전 파일을 읽을 수 없음")
+            self.assertEqual(strip_chrome(src(name)), strip_chrome(r.stdout), name)
+
+
 class GuideDatesTests(unittest.TestCase):
     def test_pick_dates(self):
         import guide_dates
-        added = [("2026-09-02", "가이드 추가"), ("2026-09-01", "가이드 3편 추가")]
-        touched = [("2026-10-12", "기존 가이드 25개에 새 메뉴·푸터 링크·글쓴이 박스 추가"),
-                   ("2026-10-05", "앱스토어 링크에 캠페인 표시"),
-                   ("2026-10-02", "무대음향 앱 1.2 반영"),
-                   ("2026-09-01", "가이드 3편 추가")]
+        added = [("2026-09-02", "가이드 추가", 1), ("2026-09-01", "가이드 3편 추가", 3)]
+        touched = [("2026-10-12", "기존 가이드 25개에 새 메뉴·푸터 링크·글쓴이 박스 추가", 25),
+                   ("2026-10-05", "앱스토어 링크에 캠페인 표시", 3),
+                   ("2026-10-02", "컴프레서 설명 보강", 1),
+                   ("2026-09-01", "가이드 3편 추가", 3)]
         self.assertEqual(guide_dates.pick_dates(added, touched), ("2026-09-01", "2026-10-02"))
 
     def test_pick_dates_all_mechanical_falls_back_to_published(self):
         import guide_dates
-        added = [("2026-09-01", "커스텀 도메인 연결")]
-        touched = [("2026-10-05", "앱스토어 링크에 캠페인 표시"), ("2026-09-01", "커스텀 도메인 연결")]
+        added = [("2026-09-01", "커스텀 도메인 연결", 5)]
+        touched = [("2026-10-05", "앱스토어 링크에 캠페인 표시", 3), ("2026-09-01", "커스텀 도메인 연결", 5)]
         self.assertEqual(guide_dates.pick_dates(added, touched), ("2026-09-01", "2026-09-01"))
+
+    def test_mechanical_marker_and_bulk_size_and_promo_subject(self):
+        import guide_dates
+        added = [("2026-09-01", "가이드 추가", 1)]
+        base = ("2026-09-01", "가이드 추가", 1)
+        for subject, n in (("링크 정리 [mechanical]", 1), ("그냥 수정", 15), ("무대음향 앱 1.2 반영: 문항수", 2)):
+            self.assertEqual(guide_dates.pick_dates(added, [("2026-10-01", subject, n), base]),
+                             ("2026-09-01", "2026-09-01"), subject)
+        self.assertEqual(guide_dates.pick_dates(added, [("2026-10-01", "그냥 수정", 14), base]),
+                         ("2026-09-01", "2026-10-01"))
 
     def test_json_covers_every_guide_with_valid_dates(self):
         import datetime
