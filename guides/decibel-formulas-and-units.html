@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데시벨 공식과 단위 총정리 — 10log·20log, dBu·dBV·dBFS·dB SPL | ML Music Studio</title>
+<meta name="description" content="파워 비교의 10log와 진폭 비교의 20log가 갈리는 이유, +3·+6·+10dB 환산표, dBu·dBV·dBFS·dB SPL·dBm의 기준값, dB 레벨을 합산하는 법을 계산 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/decibel-formulas-and-units.html">
+<meta name="theme-color" content="#faf8f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/decibel-formulas-and-units.html">
+<meta property="og:title" content="데시벨 공식과 단위 총정리 — 10log·20log, dBu·dBV·dBFS·dB SPL">
+<meta property="og:description" content="10log vs 20log, 단위별 기준값, dB 합산 계산.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "데시벨 공식과 단위 총정리 — 10log·20log, dBu·dBV·dBFS·dB SPL",
+  "description": "10log·20log 구분, 단위별 기준값, dB 합산 계산.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "author": { "@type": "Organization", "name": "ML Music Studio" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/decibel-formulas-and-units.html"
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap-wide">
+    <a class="brand" href="/">
+      <span class="mark"><span></span><span></span><span></span></span>
+      ML MUSIC STUDIO
+    </a>
+    <div class="links">
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/" aria-current="page">Guides</a>
+      <a href="/about.html">About</a>
+    </div>
+    <a class="navcta" href="/#apps">▸ Our Apps</a>
+  </div>
+</nav>
+
+<main class="wrap">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 기초 가이드</div>
+  <h1>데시벨 공식과 단위 총정리</h1>
+  <div class="meta">기초 가이드 · 약 5분</div>
+
+  <p class="lede">dB는 단위가 아니라 <strong>기준값 대비 비율을 로그로 나타내는 방식</strong>입니다. 파워를 비교하면 10log, 전압·음압 같은 진폭을 비교하면 20log를 쓰고, 단위 뒤에 붙은 글자(u, V, FS, SPL)가 기준값을 알려 줍니다.</p>
+
+  <h2>10log와 20log가 갈리는 이유</h2>
+  <div class="formula">파워: dB = 10 × log₁₀(P₁ / P₀)<br>진폭: dB = 20 × log₁₀(V₁ / V₀)</div>
+  <p>같은 저항에서 전력은 전압의 제곱에 비례합니다(P = V²/R). 로그 안의 제곱이 앞으로 나오면서 계수가 10에서 20으로 바뀝니다. 그래서 같은 "2배"라도 파워는 약 3dB, 진폭은 약 6dB입니다.</p>
+
+  <h2>배수와 dB 환산표</h2>
+  <table class="data">
+<tr><th>배수</th><th>파워 (10log)</th><th>진폭 (20log)</th></tr>
+<tr><td>2배</td><td>+3.01 dB</td><td>+6.02 dB</td></tr>
+<tr><td>4배</td><td>+6.02 dB</td><td>+12.04 dB</td></tr>
+<tr><td>10배</td><td>+10 dB</td><td>+20 dB</td></tr>
+<tr><td>100배</td><td>+20 dB</td><td>+40 dB</td></tr>
+<tr><td>1/2배</td><td>−3.01 dB</td><td>−6.02 dB</td></tr>
+</table>
+  <p>실무에서는 3dB와 6dB로 반올림해 씁니다. 파워가 2배인 앰프 업그레이드(100W → 200W)는 +3dB, 마이크 신호 전압이 2배가 되는 게인 조정은 +6dB입니다.</p>
+
+  <h2>단위별 기준값</h2>
+  <table class="data">
+<tr><th>단위</th><th>기준</th><th>쓰이는 곳</th></tr>
+<tr><td>dB SPL</td><td>20 µPa</td><td>공기 중 음압, 소음계</td></tr>
+<tr><td>dBu</td><td>0.7746 V (rms)</td><td>프로 오디오 아날로그 레벨 (공칭 +4 dBu)</td></tr>
+<tr><td>dBV</td><td>1 V</td><td>민수용 기기 (공칭 −10 dBV)</td></tr>
+<tr><td>dBm</td><td>1 mW</td><td>전력, 무선 장비</td></tr>
+<tr><td>dBFS</td><td>디지털 풀스케일</td><td>DAW·디지털 믹서 미터 (최대 0 dBFS)</td></tr>
+</table>
+
+  <div class="example">
+    <h4>+4 dBu와 −10 dBV 비교</h4>
+    <p>+4 dBu = 0.7746 × 10^(4/20) ≈ <strong>1.228 V</strong>, −10 dBV = 10^(−10/20) ≈ <strong>0.316 V</strong>입니다. 비율은 20 × log(0.316 / 1.228) ≈ <strong>−11.8 dB</strong>. 서로 기준이 다른 단위는 전압으로 바꾼 뒤 비교해야 합니다. 참고로 0 dBV는 약 +2.2 dBu입니다.</p>
+  </div>
+
+  <h2>dB 레벨 합산</h2>
+  <p>dB는 로그 값이라 그냥 더하면 안 됩니다. 파워로 되돌려 합친 뒤 다시 dB로 바꿉니다.</p>
+  <div class="formula">L = 10 × log₁₀(10^(L₁/10) + 10^(L₂/10) + …)</div>
+  <p>80 dB 음원 둘은 약 83 dB, 넷은 약 86 dB입니다. 80 dB와 70 dB의 합은 약 80.4 dB로, 10 dB 이상 작은 소리는 거의 영향을 주지 못합니다. 이 계산은 서로 상관없는 소리 기준이며, 같은 신호를 내는 스피커끼리는 위상과 위치에 따라 달라집니다.</p>
+
+  <div class="note">
+    <p>거리 감쇠도 20log입니다. 열린 공간에서 점음원은 거리가 2배가 될 때 −6 dB, 10배가 될 때 −20 dB입니다. 자세한 계산은 <a href="/guides/spl-inverse-square-law.html">SPL과 역제곱 법칙</a>을 참고하세요.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ico">🎓</div>
+    <div class="body">
+      <b>무대음향 자격증 기출문제 (iOS·Android)</b>
+      <p>2009~2026년 필기 기출 51회분 집계에서 "데시벨·레벨"은 224문항(약 7.6%)으로 전체 주제 중 1위입니다. 10log와 20log를 구분하는 문제는 직접 풀어 봐야 몸에 붙습니다.</p>
+      <a href="https://apps.apple.com/app/id6798884217?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+      <a href="https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam" target="_blank" rel="noopener">▸ Google Play에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h4>이어서 읽기</h4>
+    <a href="/guides/spl-inverse-square-law.html">SPL과 역제곱 법칙 <span>· 도구 가이드</span></a>
+    <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 <span>· 가이드</span></a>
+    <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+</article>
+</main>
+
+<footer>
+  <div class="wrap-wide">
+    <div class="col" style="max-width:320px">
+      <h4>ML MUSIC STUDIO</h4>
+      <a href="/" style="color:var(--text-tertiary);">사운드 엔지니어를 위한 iOS 앱과 무료 웹 도구</a>
+    </div>
+    <div class="col">
+      <h4>Product</h4>
+      <a href="/#apps">Apps</a>
+      <a href="/#tools">Tools</a>
+      <a href="/guides/">Guides</a>
+    </div>
+    <div class="col">
+      <h4>Company</h4>
+      <a href="/about.html">About</a>
+      <a href="/#policy">Privacy Policy</a>
+      <a href="mailto:wa547@hanmail.net">Contact</a>
+    </div>
+  </div>
+  <div class="wrap-wide bottom">© 2026 ML Music Studio. Built for sound engineers.</div>
+</footer>
+
+</body>
+</html>
