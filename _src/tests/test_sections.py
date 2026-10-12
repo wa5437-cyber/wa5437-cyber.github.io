@@ -1,4 +1,4 @@
-import pathlib, sys, tempfile, unittest
+import pathlib, re, sys, tempfile, unittest
 from unittest import mock
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from sitegen import sections, pages
@@ -52,6 +52,57 @@ class PluginsPageTests(unittest.TestCase):
         self.assertIn('rel="canonical" href="https://mlmusicstudio.co.kr/about/"', text)
         self.assertIn('http-equiv="refresh"', text)
         self.assertIn('href="/about/"', text)
+        self.assertNotIn("adsbygoogle", text)       # 넘기기만 하는 페이지에는 광고를 넣지 않는다
+        self.assertNotIn("noindex", text)           # 옛 주소의 색인을 새 주소로 넘기려면 noindex 가 없어야 한다
+
+    def test_plugins_is_noindex_without_ads_and_not_in_sitemap(self):
+        self.assertTrue(pages.is_noindex("plugins"))
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "plugins")
+            self.assertIn('<meta name="robots" content="noindex,follow">', html)
+            self.assertNotIn("adsbygoogle", html)
+            self.assertIn('rel="canonical"', html)
+        sm = (pages.ROOT / "sitemap.xml").read_text(encoding="utf-8")
+        self.assertNotIn("/plugins/<", sm)
+        self.assertNotIn("/en/plugins/<", sm)
+
+    def test_other_pages_stay_indexable_with_ads(self):
+        for name in ("studio", "about", "contact", "privacy"):
+            self.assertFalse(pages.is_noindex(name), name)
+            for lang in ("ko", "en"):
+                _, html = pages.simple_page(lang, name)
+                self.assertNotIn('name="robots"', html, (lang, name))
+                self.assertIn("adsbygoogle", html, (lang, name))
+
+    def test_noindex_flag_is_top_level_and_shared_by_both_languages(self):
+        d = pages.load_page("plugins")
+        self.assertIs(d["noindex"], True)
+        self.assertNotIn("noindex", d["ko"])
+        self.assertNotIn("noindex", d["en"])
+
+    def test_about_profile_page_json_ld(self):
+        import json, re
+        guide = (pages.ROOT / "guides" / "gain-staging-basics.html").read_text(encoding="utf-8")
+        author = json.loads(re.search(r'<script type="application/ld\+json">\n(.*?)\n</script>', guide, re.S).group(1))["author"]
+        for lang, job in (("ko", "사운드 엔지니어"), ("en", "Sound engineer")):
+            _, html = pages.simple_page(lang, "about")
+            raw = re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1)
+            ld = json.loads(raw)
+            self.assertEqual(ld["@type"], "ProfilePage")
+            person = ld["mainEntity"]
+            self.assertEqual(person["@type"], "Person")
+            self.assertEqual(person["name"], author["name"])
+            self.assertEqual(person["alternateName"], "Hyoseop Lee")
+            self.assertEqual(person["jobTitle"], job)
+            self.assertEqual(person["url"], "https://mlmusicstudio.co.kr/about/")
+            self.assertEqual(person["sameAs"], ["http://moonstudiorecording.com/sub/team_HS.html"])
+        for name in ("studio", "contact", "privacy", "plugins"):
+            _, html = pages.simple_page("ko", name)
+            self.assertNotIn("ProfilePage", html, name)
+
+    def test_profile_ld_escapes_script_end(self):
+        out = pages.profile_ld("ko", {"name": "a</script>", "alternateName": "b", "jobTitle": {"ko": "c"}, "sameAs": []})
+        self.assertEqual(out.count("</script>"), 1)
 
 
 CAREER = {"works": [
@@ -111,6 +162,76 @@ class MoreSectionTests(unittest.TestCase):
         self.assertIn("Worship", en)
 
 
+def _en_roles(html):
+    return re.findall(r'<td data-label="Role">(.*?)</td>', html)
+
+
+def _strip_ko_spans(html):
+    return re.sub(r'<span lang="ko">.*?</span>', "", html)
+
+
+class EnglishWorksTableTests(unittest.TestCase):
+    def _render(self, lang, *rows):
+        base = {"year": 2020, "artist": "A", "title": None, "album": None, "role": "믹싱", "church": False}
+        ctx = dict(CTX, career={"works": [dict(base, **r) for r in rows]})
+        return sections.render([{"type": "works", "title": "t"}], lang, ctx)
+
+    def test_role_mapping_single_multi_and_phrases(self):
+        roles = ["마스터링", "믹싱", "녹음", "레코딩", "음악믹싱", "음악 믹싱", "믹싱 스튜디오",
+                 "믹싱 마스터링", "녹음 믹싱 마스터링", "레코딩 믹싱 마스터링"]
+        html = self._render("en", *[{"role": r} for r in roles])
+        self.assertEqual(_en_roles(html), [
+            "Mastering", "Mixing", "Recording", "Recording", "Score mixing", "Score mixing", "Mixing (studio)",
+            "Mixing, Mastering", "Recording, Mixing, Mastering", "Recording, Mixing, Mastering"])
+
+    def test_unknown_role_token_kept_in_ko_span(self):
+        html = self._render("en", {"role": "믹싱 편곡"})
+        self.assertEqual(_en_roles(html), ['Mixing, <span lang="ko">편곡</span>'])
+
+    def test_albums_and_korean_names_are_marked(self):
+        html = self._render("en",
+                            {"title": "곡명", "album": "싱글"},
+                            {"title": None, "album": "EP 첫 번째"},
+                            {"title": None, "album": "EP 두 번째"},
+                            {"artist": "배이성", "title": "Walk", "album": "성장통"})
+        self.assertIn('<span lang="ko">곡명</span> <span class="album">Single</span>', html)
+        self.assertIn('<td data-label="Work">EP no.1</td>', html)
+        self.assertIn('<td data-label="Work">EP no.2</td>', html)
+        self.assertIn('<td data-label="Artist"><span lang="ko">배이성</span></td>', html)
+        self.assertIn('<span class="album"><span lang="ko">성장통</span></span>', html)
+
+    def test_no_hangul_outside_ko_spans_in_the_real_english_table(self):
+        import json
+        career = json.loads((pages.ROOT / "_src" / "content" / "career.json").read_text(encoding="utf-8"))
+        html = sections.render([{"type": "works", "title": "t"}], "en", dict(CTX, career=career))
+        self.assertNotRegex(_strip_ko_spans(html), r"[가-힣]")
+        for cell in _en_roles(html):
+            self.assertNotRegex(_strip_ko_spans(cell), r"[가-힣]")
+        for lang in ("en",):
+            for name in ("studio", "about"):
+                _, page = pages.simple_page(lang, name)
+                main = re.search(r"<main.*?</main>", page, re.S).group(0)
+                self.assertNotRegex(_strip_ko_spans(main), r"[가-힣]", name)
+
+    def test_ko_table_is_unchanged(self):
+        html = self._render("ko", {"role": "음악 믹싱 마스터링"}, {"title": "곡", "album": "싱글"})
+        self.assertIn('<td data-label="역할">음악 믹싱 마스터링</td>', html)
+        self.assertIn('<td data-label="작품">곡 <span class="album">싱글</span></td>', html)
+        self.assertNotIn('lang="ko"', html)
+
+    def test_title_contained_in_artist_shows_dash_or_album(self):
+        for lang in ("ko", "en"):
+            html = self._render(lang, {"artist": "영화 극한직업", "title": "극한직업"})
+            self.assertIn("—</td>", html, lang)
+            self.assertEqual(html.count("극한직업"), 1, lang)      # 아티스트 칸에만
+            html = self._render(lang, {"artist": "뮤지컬 보이A", "title": "보이A", "album": "OST"})
+            self.assertNotIn("—", html, lang)
+            self.assertIn("OST</td>", html, lang)
+            self.assertEqual(html.count("보이"), 1, lang)
+        html = self._render("ko", {"artist": "A", "title": "T"})          # 겹치지 않으면 그대로
+        self.assertIn('<td data-label="작품">T</td>', html)
+
+
 class WorksAlbumAndLinksTests(unittest.TestCase):
     def _works(self, *rows):
         base = {"year": 2020, "artist": "A", "title": None, "album": None, "role": "믹싱", "church": False}
@@ -166,6 +287,28 @@ class SitemapAndBuildTests(unittest.TestCase):
             t = f.read_text(encoding="utf-8")
             self.assertNotIn("/about.html<", t)
             self.assertEqual(t.count("/about/<"), 1)
+
+    def test_noindex_paths_are_removed_and_never_added(self):
+        with tempfile.TemporaryDirectory() as d:
+            f = pathlib.Path(d) / "sitemap.xml"
+            f.write_text('<urlset>\n<url><loc>https://mlmusicstudio.co.kr/plugins/</loc></url>\n'
+                         '<url><loc>https://mlmusicstudio.co.kr/studio/</loc></url>\n</urlset>\n', encoding="utf-8")
+            for _ in range(2):
+                pages.update_sitemap(d, ["/studio/", "/plugins/", "/en/plugins/"], (), ["/plugins/", "/en/plugins/"])
+            t = f.read_text(encoding="utf-8")
+            self.assertNotIn("plugins", t)
+            self.assertEqual(t.count("/studio/<"), 1)
+
+    def test_build_all_writes_noindex_page_but_keeps_it_out_of_sitemap(self):
+        with tempfile.TemporaryDirectory() as d:
+            (pathlib.Path(d) / "sitemap.xml").write_text("<urlset>\n</urlset>\n", encoding="utf-8")
+            with mock.patch.object(pages, "SIMPLE_PAGES", ("plugins", "studio")):
+                pages.build_all(d)
+            t = (pathlib.Path(d) / "sitemap.xml").read_text(encoding="utf-8")
+            self.assertTrue((pathlib.Path(d) / "plugins" / "index.html").exists())
+            self.assertNotIn("/plugins/", t)
+            self.assertIn("/studio/<", t)
+            self.assertIn("/en/studio/<", t)
 
     def test_build_all_skips_page_without_json(self):
         with tempfile.TemporaryDirectory() as d:

@@ -20,7 +20,11 @@ LINK_TAG = re.compile(r"<link\b[^>]*>")
 CANONICAL = re.compile(r'<link\b[^>]*\brel="canonical"[^>]*>')
 MT8 = re.compile(r"(?:\?|&amp;|&)mt=8(?!\d)")
 # 생성기가 만드는 페이지만 내부 링크를 점검한다(기존 페이지는 건드리지 않음).
-GENERATED_PREFIXES = ("index.html", "en/", "apps/", "tools/", "ja/", "zh-Hans/", "es/", "de/", "fr/", "pt-BR/")
+GENERATED_PREFIXES = ("index.html", "en/", "apps/", "tools/", "plugins/", "studio/", "about/", "contact/", "privacy/",
+                      "ja/", "zh-Hans/", "es/", "de/", "fr/", "pt-BR/")
+# 기존(손으로 쓴) 페이지는 사이트 안 링크·src(루트 기준 주소)가 실제 파일을 가리키는지만 본다. 스토어 링크·canonical 등은 건드리지 않는다.
+PLAIN_LINK_PREFIXES = ("guides/",)
+PLAIN_LINK_FILES = ("policy.html", "nora_legal.html", "patchio_legal.html", "sheetscope_legal.html", "yul_legal.html")
 MAIN = re.compile(r"<main\b[^>]*>(.*?)</main>", re.S)
 NONKR = ("ja", "zh-Hans", "es", "de", "fr", "pt-BR")
 
@@ -63,6 +67,7 @@ def page_file(root, url_path):
     return p / "index.html" if url_path.endswith("/") else p
 
 
+NOINDEX_META = '<meta name="robots" content="noindex'
 LOC = re.compile(r"<loc>\s*([^<]*?)\s*</loc>")
 
 
@@ -74,8 +79,22 @@ def sitemap_errors(root):
     errors = []
     for loc in LOC.findall(f.read_text(encoding="utf-8")):
         path = local_path(loc)
-        if path is not None and not exists(pathlib.Path(root), path):
+        if path is None:
+            continue
+        if not exists(pathlib.Path(root), path):
             errors.append(f"sitemap.xml: 파일 없는 주소 {path}")
+        elif NOINDEX_META in page_file(pathlib.Path(root), path).read_text(encoding="utf-8", errors="ignore"):
+            errors.append(f"sitemap.xml: noindex 페이지가 사이트맵에 있음 {path}")
+    return errors
+
+
+def link_errors(root, rel, text):
+    """루트 기준 내부 링크(href)·src 가 가리키는 파일이 있는지. 쪽지(#)·쿼리는 떼고 파일만 본다."""
+    errors = []
+    for pattern, what in ((HREF, "깨진 내부 링크"), (SRC_ATTR, "깨진 src")):
+        for link in sorted(set(pattern.findall(text))):
+            if not link.startswith("//") and not exists(root, link):
+                errors.append(f"{rel}: {what} {link}")
     return errors
 
 
@@ -88,19 +107,15 @@ def run(root):
             errors.append(f"보존 주소 없음: {path}")
     for f in sorted(root.rglob("*.html")):
         rel = f.relative_to(root).as_posix()
-        if not rel.startswith(GENERATED_PREFIXES) or rel.startswith("_src"):
+        if rel.startswith("_src"):
+            continue
+        if rel.startswith(PLAIN_LINK_PREFIXES) or rel in PLAIN_LINK_FILES:
+            errors += link_errors(root, rel, f.read_text(encoding="utf-8"))
+            continue
+        if not rel.startswith(GENERATED_PREFIXES):
             continue
         text = f.read_text(encoding="utf-8")
-        for link in sorted(set(HREF.findall(text))):
-            if link.startswith("//"):
-                continue
-            if not exists(root, link):
-                errors.append(f"{rel}: 깨진 내부 링크 {link}")
-        for link in sorted(set(SRC_ATTR.findall(text))):
-            if link.startswith("//"):
-                continue
-            if not exists(root, link):
-                errors.append(f"{rel}: 깨진 src {link}")
+        errors += link_errors(root, rel, text)
         for link in STORE.findall(text):
             if f"pt={PT}" not in link or "ct=homepage" not in link or not MT8.search(link):
                 errors.append(f"{rel}: 앱스토어 링크에 pt={PT} / ct=homepage / mt=8 누락 {link[:70]}")

@@ -26,7 +26,7 @@
        "note": "파일 정리 기준 2024년까지 · 일부만 실었습니다"},
       {"type": "contact", "title": "위치",
        "text": "운영 시간은 따로 없고 예약제입니다. 카카오톡으로 먼저 문의해 주세요."},
-      {"type": "prose", "title": "Moon Studio 팀과 함께 합니다",
+      {"type": "prose", "title": "Moon Studio 팀과 함께합니다",
        "paragraphs": ["Moon Studio는 작곡가와 엔지니어로 이루어진 팀으로, 작곡·편곡·녹음·믹싱·마스터링을 합니다. 영화, 연극, 뮤지컬, 음반, 오디오북의 음악을 다룹니다."],
        "links": [{"text": "Moon Studio 사이트", "href": "http://moonstudiorecording.com/"}]}
     ]

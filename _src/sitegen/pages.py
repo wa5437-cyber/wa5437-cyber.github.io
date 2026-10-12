@@ -155,9 +155,24 @@ def fill_facts(secs, career):
     return out
 
 
+def profile_ld(lang, profile):
+    """소개 페이지의 ProfilePage 구조화 데이터. 페이지 JSON 의 최상위 "profile" 값으로 만든다."""
+    person = {"@type": "Person", "name": profile["name"], "alternateName": profile["alternateName"],
+              "jobTitle": profile["jobTitle"][lang], "url": kit.BASE + "/about/", "sameAs": profile["sameAs"]}
+    data = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": person}
+    return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+
+def is_noindex(name):
+    """페이지 JSON 최상위 "noindex": true -> 색인 제외(meta robots)·광고 없음·사이트맵에서 뺀다. 내용이 채워지면 지운다."""
+    d = load_page(name)
+    return bool(d and d.get("noindex"))
+
+
 def simple_page(lang, name):
     """content/pages/<name>.json 의 hero + 구역들로 만든 단순 페이지."""
-    c = load_page(name)[lang]
+    data = load_page(name)
+    c = data[lang]
     career = load("career.json")
     ctx = {"contact": kit.SITE["contact"], "career": career,
            "img_exists": lambda p: (ROOT / p.lstrip("/")).exists()}
@@ -165,7 +180,9 @@ def simple_page(lang, name):
             f'<p class="sub">{esc(c["sub"])}</p></div></section>'
             + sections.render(fill_facts(c["sections"], career), lang, ctx))
     path = url(lang, f"/{name}/")
-    return path, kit.page(lang, path, c["title"], c["description"], body, alts_for(f"/{name}/"))
+    ld = profile_ld(lang, data["profile"]) if data.get("profile") else ""
+    return path, kit.page(lang, path, c["title"], c["description"], body, alts_for(f"/{name}/"),
+                          extra_head=ld, noindex=bool(data.get("noindex")))
 
 
 CAMPAIGN = "?pt=129167489&amp;ct=homepage&amp;mt=8"
@@ -233,13 +250,8 @@ def alts_for_app(slug):
 
 
 BULLET_RE = re.compile(r"([•・]|-\s)\s*")
-HANGUL_RUN = re.compile(r"[가-힣]+(?:[ ·→\-][가-힣]+)*")
-
-
-def esc_mixed(text):
-    """esc() 한 뒤 한글 덩어리마다 <span lang="ko"> 로 감싼다(비ko/en 페이지의 앱 이름·장단 이름 등).
-    한글에는 HTML 특수문자가 없어 이스케이프 후 감싸도 안전하다."""
-    return HANGUL_RUN.sub(lambda m: f'<span lang="ko">{m.group(0)}</span>', esc(text))
+HANGUL_RUN = kit.HANGUL_RUN
+esc_mixed = kit.esc_mixed       # sections.py 도 쓰므로 kit 에 있다
 
 
 def _is_bullet(line):
@@ -363,14 +375,18 @@ def app_page_re(slugs):
 SITEMAP_REPLACES = {"/about/": "/about.html"}   # 새 주소가 만들어졌을 때만 옛 주소 항목을 뺀다
 
 
-def update_sitemap(root, new_paths, known_slugs=()):
-    """new_paths 를 사이트맵에 더하고, known_slugs 앱의 상세 페이지 주소 중 new_paths 에 없는 것은 뺀다. 나머지는 그대로."""
+def update_sitemap(root, new_paths, known_slugs=(), noindex_paths=()):
+    """new_paths 를 사이트맵에 더하고, known_slugs 앱의 상세 페이지 주소 중 new_paths 에 없는 것은 뺀다.
+    noindex_paths(색인 제외 페이지)는 더하지 않고, 이미 있으면 뺀다. 나머지는 그대로."""
     f = pathlib.Path(root) / "sitemap.xml"
     if not f.exists():          # 임시 폴더 테스트 등
         return
     text = orig = f.read_text(encoding="utf-8")
+    skip = set(noindex_paths)
+    new_paths = [p for p in new_paths if p not in skip]
     keep = set(new_paths)
     gone = {kit.BASE + old for new, old in SITEMAP_REPLACES.items() if new in keep}
+    gone |= {kit.BASE + p for p in skip}
     app_re = app_page_re(known_slugs)
 
     def drop(m):
@@ -411,7 +427,7 @@ def prune_stale_app_pages(root, slugs):
 def build_all(root):
     root = pathlib.Path(root)
     d = load("apps.json")
-    made = []
+    made, noindex = [], []
     for lang in ("ko", "en"):
         for fn in (home, tools, apps_index):
             path, html = fn(lang)
@@ -424,6 +440,8 @@ def build_all(root):
             path, html = simple_page(lang, name)
             kit.write(root, path, html)
             made.append(path)
+            if is_noindex(name):
+                noindex.append(path)
     slugs = [a["slug"] for a in d["apps"]]
     for slug in slugs:
         for lang in app_langs(slug):
@@ -431,4 +449,4 @@ def build_all(root):
             kit.write(root, path, html)
             made.append(path)
     prune_stale_app_pages(root, slugs)
-    update_sitemap(root, made, slugs)
+    update_sitemap(root, made, slugs, noindex)

@@ -82,6 +82,42 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn("by appointment", en)
         self.assertIn("map.naver.com", en)
 
+    def test_studio_wording_and_about_has_no_separate_principle_section(self):
+        _, studio = pages.simple_page("ko", "studio")
+        self.assertIn("Moon Studio 팀과 함께합니다", studio)
+        self.assertNotIn("함께 합니다", studio)
+        d = pages.load_page("about")
+        for lang in ("ko", "en"):
+            titles = [x.get("title") for x in d[lang]["sections"]]
+            self.assertNotIn("원칙", titles)
+            self.assertNotIn("Principle", titles)
+        _, ko = pages.simple_page("ko", "about")
+        self.assertIn("현장에서 바로 쓰이는 것을 만듭니다.", ko)
+        _, en = pages.simple_page("en", "about")
+        self.assertIn("I make things that can be used on the spot, at the venue.", en)
+
+    def test_about_facts_lead_line_uses_placeholders(self):
+        career = json.loads((ROOT / "_src" / "content" / "career.json").read_text(encoding="utf-8"))
+        d = pages.load_page("about")
+        self.assertEqual(next(s for s in d["ko"]["sections"] if s["type"] == "facts")["items"][0],
+                         "{since}년부터 기록된 작업 {total}건")
+        _, ko = pages.simple_page("ko", "about")
+        self.assertIn(f'{career["since"]}년부터 기록된 작업 {career["total"]}건', ko)
+        _, en = pages.simple_page("en", "about")
+        self.assertIn(str(career["since"]), en)
+        self.assertIn(f'{career["total"]} credits', en)
+
+
+class LegalPageLinkTests(unittest.TestCase):
+    def test_legal_pages_have_no_old_home_anchors_and_policy_anchors_exist(self):
+        policy = (ROOT / "policy.html").read_text(encoding="utf-8")
+        self.assertIn('id="policy"', policy)
+        for name in ("nora", "patchio", "sheetscope", "yul"):
+            text = (ROOT / f"{name}_legal.html").read_text(encoding="utf-8")
+            self.assertNotIn('href="/#', text, name)
+            self.assertIn('href="/policy.html#policy"', text, name)
+            self.assertIn('href="/apps/"', text, name)
+
 
 class FactsPlaceholderTests(unittest.TestCase):
     def test_fill_facts_uses_career_and_raises_on_unknown_key(self):
@@ -103,6 +139,42 @@ class PrivacyPageTests(unittest.TestCase):
         _, en = pages.simple_page("en", "privacy")
         for needle in ("cookies", "adssettings.google.com", "aboutads.info"):
             self.assertIn(needle, en)
+
+    def test_privacy_adsense_required_statement_and_partner_link(self):
+        _, ko = pages.simple_page("ko", "privacy")
+        self.assertIn("Google을 포함한 제3자 광고 공급업체는 쿠키를 사용해, 이 사이트나 다른 웹사이트에 대한 사용자의 이전 방문 기록을 바탕으로 광고를 게재합니다.", ko)
+        self.assertIn("이 사이트 대부분의 페이지에는", ko)
+        self.assertNotIn("이 사이트의 대부분의 페이지에는", ko)
+        self.assertIn("Google이 파트너 사이트의 데이터를 사용하는 방법", ko)
+        _, en = pages.simple_page("en", "privacy")
+        self.assertIn("Third-party vendors, including Google, use cookies to serve ads based on a user&#x27;s prior visits to this website or other websites.", en)
+        self.assertIn("How Google uses data from partner sites", en)
+        for html in (ko, en):
+            m = re.search(r'<a [^>]*href="https://policies\.google\.com/technologies/partner-sites"[^>]*>', html)
+            self.assertTrue(m)
+            self.assertIn('rel="noopener"', m.group(0))
+
+    def test_privacy_inquiry_hosting_and_localstorage_statements(self):
+        _, ko = pages.simple_page("ko", "privacy")
+        self.assertIn("보내시는 분의 이메일 주소 또는 카카오톡 표시 이름과 메시지 내용을 운영자가 받게 됩니다", ko)
+        self.assertIn("문의에 답하는 목적으로만", ko)
+        self.assertIn("개인정보 관련 책임자: 이효섭, 연락처는 이 페이지 아래의 문의 방법.", ko)
+        self.assertIn("이 사이트는 GitHub Pages에서 제공되며, 호스팅 업체가 접속 기록(IP 주소 등)을 보관할 수 있습니다.", ko)
+        self.assertIn("일부 페이지(웹 도구와 정책 페이지)는", ko)
+        self.assertNotIn("보관 기간", ko)           # 보관 기간은 운영자가 정할 일이라 쓰지 않는다
+        _, en = pages.simple_page("en", "privacy")
+        self.assertIn("the site owner receives your email address or KakaoTalk display name and the content of your message", en)
+        self.assertIn("Person responsible for personal information: Hyoseop Lee, via the contact methods below.", en)
+        self.assertIn("This site is served from GitHub Pages, and the hosting provider may keep access logs (such as IP addresses).", en)
+        self.assertIn("some pages (the web tools and the policy pages)", en)
+        self.assertNotIn("retain", en.lower())
+
+    def test_privacy_updated_date_is_visible_in_both_languages(self):
+        d = pages.load_page("privacy")
+        for lang, label in (("ko", "최종 수정일: 2026-10-12"), ("en", "Last updated: 2026-10-12")):
+            self.assertEqual(d[lang]["updated"], "2026-10-12")
+            _, html = pages.simple_page(lang, "privacy")
+            self.assertIn(label, html)
 
     @staticmethod
     def _site_files(exts):

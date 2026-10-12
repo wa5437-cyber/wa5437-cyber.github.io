@@ -10,13 +10,15 @@
        "paragraphs": [
          "이 사이트는 ML Music Studio의 앱과 웹 도구, 가이드를 소개합니다. 회원가입이 없고 로그인도 없으며, 방문자가 내용을 적어 보내는 입력 양식도 없습니다. 그래서 이 사이트가 입력 양식으로 이름이나 연락처를 직접 받는 일은 없습니다.",
          "방문 통계를 모으는 분석 도구(Google Analytics 등)도 쓰지 않습니다. 다만 아래에서 설명하는 광고 서비스는 자체적으로 정보를 수집할 수 있습니다.",
-         "문의는 카카오톡 오픈채팅이나 이메일로 이루어지며, 그 내용은 해당 서비스가 처리합니다."]},
+         "문의는 카카오톡 오픈채팅이나 이메일로 이루어지며, 그 내용은 해당 서비스가 처리합니다.",
+         "이 사이트는 GitHub Pages에서 제공되며, 호스팅 업체가 접속 기록(IP 주소 등)을 보관할 수 있습니다."]},
       {"type": "prose", "title": "광고와 쿠키",
        "paragraphs": [
-         "이 사이트의 대부분의 페이지에는 Google AdSense 광고 스크립트가 들어 있습니다. Google과 광고 파트너는 쿠키 등을 사용해 광고를 보여 주며, 방문자의 이전 방문 기록을 바탕으로 개인 맞춤 광고를 제공할 수 있습니다.",
+         "이 사이트 대부분의 페이지에는 Google AdSense 광고 스크립트가 들어 있습니다. Google을 포함한 제3자 광고 공급업체는 쿠키를 사용해, 이 사이트나 다른 웹사이트에 대한 사용자의 이전 방문 기록을 바탕으로 광고를 게재합니다.",
          "맞춤 광고는 아래 링크에서 끄거나 선택할 수 있습니다. 쿠키는 사용 중인 브라우저의 설정에서 삭제하거나 차단할 수도 있습니다. 다만 차단하면 일부 기능이 기대와 다르게 동작할 수 있습니다.",
          "또한 페이지의 글꼴을 Google Fonts에서 불러오므로, 페이지를 열 때 브라우저가 Google 서버(fonts.googleapis.com, fonts.gstatic.com)에도 접속합니다."],
        "links": [
+         {"text": "Google이 파트너 사이트의 데이터를 사용하는 방법", "href": "https://policies.google.com/technologies/partner-sites"},
          {"text": "Google 광고 설정에서 맞춤 광고 관리 (adssettings.google.com)", "href": "https://adssettings.google.com"},
          {"text": "광고 선택 사항 안내 (aboutads.info)", "href": "https://www.aboutads.info"}]},
       {"type": "prose", "title": "웹 도구",
@@ -24,12 +26,14 @@
          "RTA, 청음 훈련, 제너레이터, 계산기, 퀴즈 같은 웹 도구는 브라우저 안에서 동작합니다. 이 도구들의 코드에는 소리나 입력값을 서버로 보내는 기능이 들어 있지 않습니다.",
          "RTA는 실시간 측정을 위해 브라우저에 마이크 사용 허락을 요청합니다. 허락 여부는 브라우저에서 정하며 언제든 바꿀 수 있습니다. 소리는 브라우저 안에서 분석에만 쓰이고, 사이트가 녹음해서 저장하거나 전송하지 않습니다.",
          "청음 훈련에서 직접 고른 음악 파일도 브라우저 안에서만 열어 쓰며 사이트로 올리지 않습니다.",
-         "웹 도구 페이지는 편의를 위해 브라우저의 localStorage에 선택한 언어(siteLang)를 저장하고, RTA는 보정값도 저장합니다. 이 값은 사용 중인 기기의 브라우저에만 남으며, 브라우저의 사이트 데이터를 지우면 함께 지워집니다."]},
+         "일부 페이지(웹 도구와 정책 페이지)는 편의를 위해 브라우저의 localStorage에 선택한 언어(siteLang)를 저장하고, RTA는 보정값도 저장합니다. 이 값은 사용 중인 기기의 브라우저에만 남으며, 브라우저의 사이트 데이터를 지우면 함께 지워집니다."]},
       {"type": "list", "title": "문의하실 때",
        "items": [
          "문의는 카카오톡 오픈채팅이나 이메일로 받습니다. 이 사이트 안에는 문의 내용을 따로 저장하는 곳이 없습니다.",
-         "보내 주신 내용은 문의에 답하는 목적으로만 봅니다.",
-         "메시지와 계정 정보는 카카오톡과 이메일 서비스가 각 서비스의 방침에 따라 처리합니다."]},
+         "문의하시면 보내시는 분의 이메일 주소 또는 카카오톡 표시 이름과 메시지 내용을 운영자가 받게 됩니다.",
+         "받은 내용은 문의에 답하는 목적으로만 봅니다.",
+         "메시지와 계정 정보는 카카오톡과 이메일 서비스가 각 서비스의 방침에 따라 처리합니다.",
+         "개인정보 관련 책임자: 이효섭, 연락처는 이 페이지 아래의 문의 방법."]},
       {"type": "prose", "title": "앱의 개인정보 방침",
        "paragraphs": [
          "앱이 다루는 정보는 사이트와 따로 정리되어 있습니다. 전체 개인정보처리방침과, 별도 방침 페이지가 있는 앱의 방침은 아래에서 볼 수 있습니다. 앱의 개인정보 방침(policy.html과 앱별 페이지)은 이 안내와 별도 문서이며 작성일이 따로 있습니다."],
@@ -57,13 +61,15 @@
        "paragraphs": [
          "This site presents the apps, web tools and guides of ML Music Studio. There is no sign-up, no login, and no form for visitors to submit information. So the site does not collect names or contact details through any form of its own.",
          "It also does not use an analytics tool (such as Google Analytics) to gather visit statistics. The advertising service described below, however, may collect information on its own.",
-         "Inquiries are made through the KakaoTalk open chat or by email, and those services handle what you send."]},
+         "Inquiries are made through the KakaoTalk open chat or by email, and those services handle what you send.",
+         "This site is served from GitHub Pages, and the hosting provider may keep access logs (such as IP addresses)."]},
       {"type": "prose", "title": "Advertising and cookies",
        "paragraphs": [
-         "Most pages on this site include the Google AdSense advertising script. Google and its advertising partners use cookies and similar technologies to show ads, and may provide personalized ads based on your earlier visits.",
+         "Most pages on this site include the Google AdSense advertising script. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or other websites.",
          "You can turn off or manage personalized ads with the links below. You can also delete or block cookies in your browser settings, though some features may then behave differently than you expect.",
          "The site also loads its fonts from Google Fonts, so when a page opens your browser also connects to Google servers (fonts.googleapis.com and fonts.gstatic.com)."],
        "links": [
+         {"text": "How Google uses data from partner sites", "href": "https://policies.google.com/technologies/partner-sites"},
          {"text": "Manage personalized ads in Google Ads Settings (adssettings.google.com)", "href": "https://adssettings.google.com"},
          {"text": "Advertising choices (aboutads.info)", "href": "https://www.aboutads.info"}]},
       {"type": "prose", "title": "Web tools",
@@ -71,12 +77,14 @@
          "Web tools such as the RTA, ear trainer, generator, calculators and quiz run inside your browser. Their code has no feature that sends sound or what you enter to a server.",
          "The RTA asks your browser for permission to use the microphone for live measurement. You decide in the browser and can change it at any time. The sound is only analyzed inside the browser; the site does not record, store or transmit it.",
          "Music files you pick yourself in the ear trainer are also opened only inside your browser and are not uploaded to the site.",
-         "For convenience, the web tool pages save your chosen language (siteLang) in the browser's localStorage, and the RTA also saves its calibration value. These values stay in the browser on your device and are removed when you clear the browser's site data."]},
+         "For convenience, some pages (the web tools and the policy pages) save your chosen language (siteLang) in the browser's localStorage, and the RTA also saves its calibration value. These values stay in the browser on your device and are removed when you clear the browser's site data."]},
       {"type": "list", "title": "When you contact us",
        "items": [
          "Inquiries are accepted through the KakaoTalk open chat or by email. Nothing on this site stores your message separately.",
+         "When you write to us, the site owner receives your email address or KakaoTalk display name and the content of your message.",
          "We read what you send only to answer your inquiry.",
-         "Your messages and account details are handled by KakaoTalk and your email service under their own policies."]},
+         "Your messages and account details are handled by KakaoTalk and your email service under their own policies.",
+         "Person responsible for personal information: Hyoseop Lee, via the contact methods below."]},
       {"type": "prose", "title": "Privacy policies for the apps",
        "paragraphs": [
          "What the apps handle is documented separately from the site. The full privacy policy, and the policies of the apps that have their own policy page, are available below. The apps' privacy policy (policy.html and the per-app pages) is a separate document with its own date."],

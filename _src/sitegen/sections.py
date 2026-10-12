@@ -66,8 +66,23 @@ def _photos(sec, lang, ctx):
 
 WORKS_UI = {
     "ko": {"cols": ("연도", "아티스트", "작품", "역할"), "church": "교회·찬양"},
-    "en": {"cols": ("Year", "Artist", "Work", "Role"), "church": "Worship"},
+    "en": {"cols": ("Year", "Artist", "Work", "Role"), "church": "Worship",
+           # 역할: 전체 문구가 여기 있으면 그대로, 아니면 낱말별로 옮겨 ", " 로 잇는다. 모르는 낱말은 한글 그대로(lang="ko").
+           "role_phrases": {"음악믹싱": "Score mixing", "음악 믹싱": "Score mixing", "믹싱 스튜디오": "Mixing (studio)"},
+           "role_words": {"마스터링": "Mastering", "믹싱": "Mixing", "녹음": "Recording", "레코딩": "Recording"},
+           "albums": {"싱글": "Single", "EP 첫 번째": "EP no.1", "EP 두 번째": "EP no.2"}},
 }
+
+
+def _role(ui, role):
+    """역할 칸. ko 는 그대로, en 은 위 표로 옮긴다."""
+    if role is None:
+        return ""
+    if "role_words" not in ui:
+        return esc(role)
+    if role in ui["role_phrases"]:
+        return esc(ui["role_phrases"][role])
+    return ", ".join(esc(ui["role_words"][w]) if w in ui["role_words"] else kit.esc_mixed(w) for w in role.split())
 
 
 def _works(sec, lang, ctx):
@@ -75,18 +90,31 @@ def _works(sec, lang, ctx):
     if not works:
         return ""
     ui = WORKS_UI[kit.chrome(lang)]
+    en = "role_words" in ui                       # 영어 표: 한글 이름·곡명은 lang="ko" 로 표시
+    text = kit.esc_mixed if en else esc
     keys = ("year", "artist", "title", "role")
     head = "".join(f"<th>{esc(c)}</th>" for c in ui["cols"])
     rows = ""
     for w in works:
+        album = w.get("album")
+        album_html = text(ui.get("albums", {}).get(album, album)) if album else ""
         cells = ""
         for key, label in zip(keys, ui["cols"]):
-            val = "" if w.get(key) is None else esc(w[key])
-            if key == "title" and w.get("album"):      # 곡명 다음에 작은 앨범/구분, 곡명이 없으면 앨범이 곧 작품명
-                if val:
-                    val += f' <span class="album">{esc(w["album"])}</span>'
-                else:
-                    val = esc(w["album"])
+            if key == "role":
+                val = _role(ui, w.get(key))
+            else:
+                val = "" if w.get(key) is None else text(w[key])
+            if key == "title":
+                title = w.get("title")
+                if title and title in (w.get("artist") or ""):   # 영화·뮤지컬처럼 작품명이 아티스트 칸에 이미 있으면 되풀이하지 않는다
+                    val = ""
+                    if not album:
+                        val = "—"
+                if album:                                       # 곡명 다음에 작은 앨범/구분, 곡명이 없으면 앨범이 곧 작품명
+                    if val:
+                        val += f' <span class="album">{album_html}</span>'
+                    else:
+                        val = album_html
             if key == "artist" and w.get("church"):
                 val += f' <span class="pill">{esc(ui["church"])}</span>'
             cells += f'<td data-label="{esc(label)}">{val}</td>'

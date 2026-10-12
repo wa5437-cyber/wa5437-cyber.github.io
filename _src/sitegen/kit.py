@@ -1,6 +1,7 @@
 import html
 import json
 import pathlib
+import re
 
 from . import strings
 
@@ -19,6 +20,16 @@ ADS = ('<script async src="https://pagead2.googlesyndication.com/pagead/js/adsby
 
 def esc(s):
     return html.escape(str(s), quote=True)
+
+
+HANGUL_RUN = re.compile(r"[가-힣]+(?:[ ·→\-][가-힣]+)*")
+NOINDEX = '<meta name="robots" content="noindex,follow">'
+
+
+def esc_mixed(text):
+    """esc() 한 뒤 한글 덩어리마다 <span lang="ko"> 로 감싼다(비ko 페이지·영어 표의 앱 이름·곡명 등).
+    한글에는 HTML 특수문자가 없어 이스케이프 후 감싸도 안전하다."""
+    return HANGUL_RUN.sub(lambda m: f'<span lang="ko">{m.group(0)}</span>', esc(text))
 
 
 def url(lang, path):
@@ -100,13 +111,15 @@ def footer(lang):
             f'<p class="copy">© 2026 {esc(SITE["brand"])}</p></div></footer>')
 
 
-def page(lang, path, title, description, body, alts, extra_head=""):
+def page(lang, path, title, description, body, alts, extra_head="", noindex=False):
     if lang not in LANGS:
         raise ValueError(f"unknown language: {lang}")
     alt_tags = "".join(
         f'<link rel="alternate" hreflang="{code}" href="{BASE}{p}">' for code, p in alts.items())
     xdef = f'<link rel="alternate" hreflang="x-default" href="{BASE}{alts.get("ko", path)}">' if alts else ""
     verif = "".join(tag + "\n" for tag in SITE["verification_meta"])
+    robots = NOINDEX + "\n" if noindex else ""
+    ads = "" if noindex else ADS + "\n"      # 내용이 얇은 페이지는 색인에서 빼고 광고도 넣지 않는다
     return (f'<!DOCTYPE html>\n<html lang="{lang}">\n<head>\n<meta charset="UTF-8">\n'
             f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             f'<title>{esc(title)}</title>\n<meta name="description" content="{esc(description)}">\n'
@@ -120,6 +133,6 @@ def page(lang, path, title, description, body, alts, extra_head=""):
             f'<meta name="twitter:description" content="{esc(description)}"><meta name="twitter:image" content="{BASE}/og-image.png">\n'
             f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
             f'<link href="{FONTS}" rel="stylesheet"><link rel="stylesheet" href="/assets/site.css">\n'
-            f'{ADS}\n{extra_head}\n</head>\n<body>\n'
+            f'{robots}{ads}{extra_head}\n</head>\n<body>\n'
             f'<a class="skip" href="#main"{chrome_lang_attr(lang)}>{esc(t("skip", chrome(lang)))}</a>\n'
             f'{header(lang, alts)}\n<main id="main">{body}</main>\n{footer(lang)}\n</body>\n</html>\n')

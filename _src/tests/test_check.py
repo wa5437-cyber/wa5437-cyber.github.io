@@ -185,6 +185,50 @@ class SitemapCheckTests(unittest.TestCase):
             (root / "sitemap.xml").unlink()
             self.assertEqual(check.sitemap_errors(root), [])
 
+    def test_noindex_page_listed_in_sitemap_is_reported(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = self.root(td, [self.B + "/plugins/"])
+            touch(root, "/plugins/index.html", '<meta name="robots" content="noindex,follow">')
+            errs = check.sitemap_errors(root)
+            self.assertEqual(len(errs), 1)
+            self.assertIn("noindex", errs[0])
+            touch(root, "/plugins/index.html", "<p>indexable</p>")
+            self.assertEqual(check.sitemap_errors(root), [])
+
+
+class GeneratedAndPlainLinkTests(unittest.TestCase):
+    def base(self, td):
+        root = pathlib.Path(td)
+        for p in check.PRESERVED:
+            touch(root, p if not p.endswith("/") else p + "index.html")
+        return root
+
+    def test_new_simple_pages_are_checked_for_links_and_canonical(self):
+        for prefix in ("plugins/", "studio/", "about/", "contact/", "privacy/"):
+            self.assertIn(prefix, check.GENERATED_PREFIXES)
+            with tempfile.TemporaryDirectory() as td:
+                root = self.base(td)
+                touch(root, prefix + "index.html", '<a href="/nope/">x</a>')
+                errs = check.run(root)
+                self.assertTrue(any("깨진 내부 링크 /nope/" in e for e in errs), prefix)
+                self.assertTrue(any("canonical 없음" in e for e in errs), prefix)
+
+    def test_guides_and_legal_pages_get_only_the_plain_link_check(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = self.base(td)
+            store = '<link rel="x"><a href="https://apps.apple.com/app/id1">store</a><a href="/policy.html#policy">p</a>'
+            for rel in ("guides/a.html", "nora_legal.html", "policy.html"):
+                touch(root, rel, store)          # canonical·스토어 캠페인 점검은 받지 않는다
+            touch(root, "/policy.html", store)
+            self.assertEqual(check.run(root), [])
+            touch(root, "guides/a.html", '<a href="/gone.html">x</a><img src="/img/gone.png"><a href="/policy.html#nope">ok</a>')
+            touch(root, "yul_legal.html", '<a href="/apps/">x</a>')
+            errs = check.run(root)
+            self.assertTrue(any("guides/a.html: 깨진 내부 링크 /gone.html" in e for e in errs))
+            self.assertTrue(any("guides/a.html: 깨진 src /img/gone.png" in e for e in errs))
+            self.assertTrue(any("yul_legal.html: 깨진 내부 링크 /apps/" in e for e in errs))
+            self.assertFalse(any("#nope" in e for e in errs))   # 쪽지는 보지 않고 파일만 본다
+
 
 if __name__ == "__main__":
     unittest.main()
