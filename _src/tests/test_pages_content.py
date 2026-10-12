@@ -63,3 +63,44 @@ class FactsPlaceholderTests(unittest.TestCase):
         self.assertEqual(out[1], secs[1])           # facts 가 아닌 구역은 손대지 않는다
         with self.assertRaises(KeyError):
             pages.fill_facts([{"type": "facts", "items": ["{nope}"]}], career)
+
+
+class PrivacyPageTests(unittest.TestCase):
+    def test_privacy_page_has_ads_cookie_notice_and_optout_links(self):
+        _, html = pages.simple_page("ko", "privacy")
+        for needle in ("Google", "쿠키", "adssettings.google.com", "aboutads.info", "/policy.html#policy", "2026-10-12"):
+            self.assertIn(needle, html)
+        _, en = pages.simple_page("en", "privacy")
+        for needle in ("cookies", "adssettings.google.com", "aboutads.info"):
+            self.assertIn(needle, en)
+
+    def test_privacy_does_not_claim_tools_the_site_lacks(self):
+        # 사이트가 실제로 분석 도구를 쓰지 않을 때만 "쓰지 않는다"고 말할 수 있다 — 코드로 확인
+        import subprocess
+        hits = subprocess.run(["grep", "-rlE", "googletagmanager|google-analytics|gtag\\(", "--include=*.html", "."],
+                              cwd=ROOT, capture_output=True, text=True).stdout.strip()
+        _, html = pages.simple_page("ko", "privacy")
+        if hits:
+            self.assertNotIn("분석 도구를 쓰지 않", html)
+        else:
+            self.assertIn("분석 도구", html)
+
+    def test_privacy_has_no_collection_form_claim(self):
+        _, html = pages.simple_page("ko", "privacy")
+        self.assertNotIn("회원가입", html.replace("회원가입이 없", ""))
+
+    def test_privacy_never_claims_no_cookies_or_no_third_party_processing(self):
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "privacy")
+            text = re.sub(r"<[^>]+>", " ", html)
+            for bad in ("쿠키를 쓰지 않", "쿠키를 사용하지 않", "쿠키가 없", "no cookies", "does not use cookies", "do not use cookies"):
+                self.assertNotIn(bad, text)
+
+    def test_privacy_external_links_use_noopener_and_updated_field_matches_text(self):
+        d = pages.load_page("privacy")
+        for lang in ("ko", "en"):
+            self.assertEqual(d[lang]["updated"], "2026-10-12")
+            _, html = pages.simple_page(lang, "privacy")
+            self.assertIn(d[lang]["updated"], html)
+            for m in re.finditer(r'<a [^>]*href="https://[^"]*(adssettings|aboutads)[^"]*"[^>]*>', html):
+                self.assertIn('rel="noopener"', m.group(0))
