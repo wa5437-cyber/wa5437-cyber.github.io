@@ -91,6 +91,33 @@ class CollectSafetyTests(unittest.TestCase):
         self.assertEqual(pull_store.collect("1", get=get)["ja"]["description"], "NEW")
 
 
+class PlatformFallbackTests(unittest.TestCase):
+    LIVE = [{"id": "i", "attributes": {"state": "READY_FOR_SALE"}}]
+
+    @staticmethod
+    def ver(vid, platform, state, string):
+        return {"id": vid, "attributes": {"platform": platform, "appStoreState": state, "versionString": string}}
+
+    def test_mac_only_app_uses_mac_version(self):
+        get = FakeAsc([self.ver("m1", "MAC_OS", "READY_FOR_SALE", "1.0")],
+                      {"m1": [vloc("ko", "맥 설명", "맥 프로모")]}, self.LIVE, [iloc("ko", "노라", "부제")])
+        out = pull_store.collect("1", get=get)
+        self.assertEqual(out["ko"], {"name": "노라", "subtitle": "부제", "promo": "맥 프로모", "description": "맥 설명"})
+
+    def test_ios_wins_over_mac_regardless_of_version_number(self):
+        get = FakeAsc([self.ver("m2", "MAC_OS", "READY_FOR_SALE", "2.0"),
+                       self.ver("i1", "IOS", "READY_FOR_SALE", "1.0")],
+                      {"i1": [vloc("ko", "IOS 설명")], "m2": [vloc("ko", "MAC 설명")]},
+                      self.LIVE, [iloc("ko", "이름")])
+        self.assertEqual(pull_store.collect("1", get=get)["ko"]["description"], "IOS 설명")
+
+    def test_no_ready_version_yields_nothing(self):
+        get = FakeAsc([self.ver("m1", "MAC_OS", "WAITING_FOR_REVIEW", "1.0"),
+                       self.ver("i1", "IOS", "PREPARE_FOR_SUBMISSION", "1.0")],
+                      {"m1": [vloc("ko", "x")], "i1": [vloc("ko", "x")]}, self.LIVE, [iloc("ko", "이름")])
+        self.assertEqual(pull_store.collect("1", get=get), {})
+
+
 class RenderTests(unittest.TestCase):
     def test_dash_bullets_need_whitespace_after_marker(self):
         self.assertIn('<ul class="bullets"><li>a</li><li>b</li></ul>', pages.render_store_text("- a\n- b"))

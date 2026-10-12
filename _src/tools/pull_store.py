@@ -20,22 +20,24 @@ def map_locale(asc_locale):
     return LOCALES.get(asc_locale)
 
 
-def _ready_ios_version(get, app_id):
-    vs = get(f"/apps/{app_id}/appStoreVersions", **{"filter[platform]": "IOS", "limit": 20})["data"]
-    ready = [v for v in vs if v["attributes"].get("platform") == "IOS"
-             and v["attributes"].get("appStoreState") == "READY_FOR_SALE"]
-    if not ready:
-        return None
+def _ready_version(get, app_id):
+    """공개 중(READY_FOR_SALE)인 가장 높은 IOS 버전. IOS 가 하나도 없으면(맥 전용 앱) 가장 높은 MAC_OS 버전."""
+    vs = get(f"/apps/{app_id}/appStoreVersions", limit=50)["data"]
 
     def key(v):
         return [int(x) for x in re.findall(r"\d+", v["attributes"].get("versionString", "0"))]
-    return max(ready, key=key)
+    for platform in ("IOS", "MAC_OS"):
+        ready = [v for v in vs if v["attributes"].get("platform") == platform
+                 and v["attributes"].get("appStoreState") == "READY_FOR_SALE"]
+        if ready:
+            return max(ready, key=key)
+    return None
 
 
 def collect(app_id, get=None):
     if get is None:
         get = _asc_get
-    v = _ready_ios_version(get, app_id)
+    v = _ready_version(get, app_id)
     if v is None:
         return {}
     out = {}
