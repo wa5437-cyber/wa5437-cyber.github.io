@@ -7,11 +7,24 @@ class HomeTests(unittest.TestCase):
     def test_home_ko_and_en_paths_and_hash_redirect(self):
         path, html = pages.home("ko")
         self.assertEqual(path, "/")
-        self.assertIn("location.replace('/policy.html'", html)
-        self.assertIn("(policy|privacy)", html)
+        self.assertIn("location.replace(u)", html)
         path_en, html_en = pages.home("en")
         self.assertEqual(path_en, "/en/")
         self.assertIn('<html lang="en">', html_en)
+
+    def test_old_anchor_map_is_in_ko_home_only_and_targets_exist(self):
+        _, ko = pages.home("ko")
+        _, en = pages.home("en")
+        for key, target in pages.HASH_MAP.items():
+            self.assertIn(json.dumps(key) + ":" + json.dumps(target), ko)
+        self.assertEqual(ko.count("location.replace"), 1)
+        self.assertNotIn("location.replace", en)
+        self.assertNotIn("/policy.html#policy", en)
+        for key in ("policy", "privacy", "apps", "download", "tools", "guides"):
+            self.assertIn(key, pages.HASH_MAP)
+        from sitegen import check
+        for target in pages.HASH_MAP.values():
+            self.assertTrue(check.exists(pages.ROOT, target.split("#")[0]), target)
 
     def test_home_has_three_cards_and_contact_links_free_of_made_up_hours(self):
         _, html = pages.home("ko")
@@ -42,6 +55,15 @@ class HomeTests(unittest.TestCase):
             self.assertTrue((root / "en/index.html").exists())
 
 
+class PolicyPageTests(unittest.TestCase):
+    def test_policy_has_charset_first_and_its_own_og_url(self):
+        text = (pathlib.Path(__file__).resolve().parents[2] / "policy.html").read_text(encoding="utf-8")
+        head = text[text.index("<head>"):]
+        self.assertLess(head.index('<meta charset="UTF-8">'), head.index('<meta name="robots"'))
+        self.assertIn('<meta property="og:url" content="https://mlmusicstudio.co.kr/policy.html">', text)
+        self.assertNotIn('<meta property="og:url" content="https://mlmusicstudio.co.kr/">', text)
+
+
 class HomeExtrasTests(unittest.TestCase):
     def jsonld(self, html):
         blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)
@@ -64,7 +86,8 @@ class HomeExtrasTests(unittest.TestCase):
 
     def test_ko_home_keeps_hash_redirect_next_to_json_ld(self):
         _, html = pages.home("ko")
-        self.assertIn("location.replace('/policy.html'", html)
+        self.assertIn('"policy":"/policy.html#policy"', html)
+        self.assertIn("location.replace(u)", html)
         self.assertNotIn("location.replace", pages.home("en")[1])
 
     def test_en_home_marks_guides_as_korean(self):

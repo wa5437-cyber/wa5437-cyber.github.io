@@ -12,6 +12,21 @@ class KitTests(unittest.TestCase):
         self.assertEqual(kit.url("en", "/apps/"), "/en/apps/")
         self.assertEqual(kit.url("en", "/"), "/en/")
 
+    def test_unknown_language_raises(self):
+        with self.assertRaises(ValueError):
+            kit.url("ja", "/apps/")
+        with self.assertRaises(ValueError):
+            kit.t("menu", "ja")
+        with self.assertRaises(ValueError):
+            kit.t("no_such_key", "ko")
+        with self.assertRaises(ValueError):
+            kit.page("ja", "/ja/", "T", "D", "<p>b</p>", {"ja": "/ja/"})
+        self.assertEqual(kit.LANGS, ("ko", "en"))
+
+    def test_lang_menu_unknown_code_raises(self):
+        with self.assertRaises(KeyError):
+            kit.lang_menu("ko", {"ko": "/", "xx": "/xx/"})
+
     def test_write_folder_url_creates_index_html(self):
         with tempfile.TemporaryDirectory() as td:
             root = pathlib.Path(td)
@@ -21,17 +36,17 @@ class KitTests(unittest.TestCase):
             self.assertTrue((root / "policy.html").exists())
 
     def test_header_lists_nav_and_only_existing_language_alternates(self):
-        h = kit.header("ko", "/tools/", {"ko": "/tools/", "en": "/en/tools/"})
+        h = kit.header("ko", {"ko": "/tools/", "en": "/en/tools/"})
         for label in ("앱", "웹 도구", "플러그인", "녹음실", "가이드"):
             self.assertIn(label, h)
         self.assertIn('href="/en/tools/"', h)
 
     def test_header_hides_language_menu_with_zero_or_one_alternate(self):
-        self.assertNotIn('class="lang"', kit.header("ko", "/x/", {"ko": "/x/"}))
-        self.assertNotIn('class="lang"', kit.header("ko", "/x/", {}))
+        self.assertNotIn('class="lang"', kit.header("ko", {"ko": "/x/"}))
+        self.assertNotIn('class="lang"', kit.header("ko", {}))
 
     def test_english_header_uses_en_prefix_and_keeps_guides_korean_only(self):
-        h = kit.header("en", "/en/", {"ko": "/", "en": "/en/"})
+        h = kit.header("en", {"ko": "/", "en": "/en/"})
         self.assertIn('href="/en/apps/"', h)
         self.assertIn('href="/guides/"', h)
         self.assertIn("Apps", h)

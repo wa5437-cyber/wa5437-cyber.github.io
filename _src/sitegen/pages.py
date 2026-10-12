@@ -13,8 +13,18 @@ def load(name):
     return json.loads((SRC / "content" / name).read_text(encoding="utf-8"))
 
 
-HASH_KEEP = ("<script>if(/^#(policy|privacy)$/.test(location.hash))"
-             "location.replace('/policy.html'+location.hash);</script>")
+# 옛 홈(한국어)에 있던 쪽지(#anchor) 주소 -> 새 주소. 한국어 홈에서만 적용한다.
+HASH_MAP = {
+    "policy": "/policy.html#policy",
+    "privacy": "/policy.html#privacy",
+    "apps": "/apps/",
+    "download": "/apps/",
+    "tools": "/tools/",
+    "guides": "/guides/",
+}
+HASH_KEEP = ("<script>var m=" + json.dumps(HASH_MAP, separators=(",", ":")) +
+             ";var u=m[location.hash.slice(1)];"
+             "if(typeof u=='string')location.replace(u);</script>")
 
 
 def guide_title(slug):
