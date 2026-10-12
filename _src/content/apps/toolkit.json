@@ -48,5 +48,140 @@
    "promo": "Da lei de Ohm ao alinhamento de delay, modos da sala, BPM e pitch: calculadoras de áudio que funcionam offline. Fixe suas ferramentas favoritas. Sem login, sem anúncios.",
    "description": "Um conjunto completo de calculadoras offline para engenheiros de áudio — no palco, no estúdio, sem precisar de internet. Sem login, sem anúncios, sem rastreamento.\n\n■ Elétrica\n· Calculadora da lei de Ohm\n· Calculadora de potência\n· Impedância de caixas acústicas (série/paralelo)\n· Conversor dB ↔ razão de potência\n\n■ Delay\n· Distância ↔ tempo ↔ fase\n· Zona do efeito Haas\n· Alinhamento de delay para várias zonas de caixas\n· Pré-delay de reverb baseado no BPM\n\n■ Acústica\n· Frequência ↔ período ↔ comprimento de onda ↔ quarto de onda\n· Calculadora de bandas de oitava\n· Distância ↔ tempo de delay\n· Volume da sala\n· Modos da sala\n· Tempo de reverberação (RT60)\n\n■ Tempo e pitch\n· Descobrir o BPM por tap tempo\n· Duração das notas\n· Velocidade de reprodução ↔ pitch (como no toca-discos)\n· Descobrir o BPM de um loop\n· Duração de compassos\n· Latência por taxa de amostragem e tamanho do buffer\n\nDisponível em coreano, inglês, japonês, espanhol, chinês simplificado, alemão, português do Brasil e francês. Funciona no iPhone, iPad e Mac."
   }
+ },
+ "detail": {
+  "lead": {
+   "ko": "현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.",
+   "en": "A set of offline calculators for audio engineers, ready on stage or in the studio with no internet."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
+  },
+  "bullets": {
+   "ko": [
+    "전기: 옴의 법칙·파워·스피커 임피던스(직렬/병렬)·dB ↔ 전력비",
+    "딜레이: 거리 ↔ 시간 ↔ 위상, 하스 효과 존 판정, 다중 스피커 존 딜레이 정렬",
+    "음향: 주파수·파장, 옥타브 밴드, 룸 볼륨, 룸 모드, RT60 잔향 시간",
+    "템포 & 피치: 탭 템포, 음표 길이, 재생 속도 ↔ 피치, 루프 BPM, 레이턴시 계산",
+    "자주 쓰는 계산기는 즐겨찾기 탭에 모아 한 번에 열기"
+   ],
+   "en": [
+    "Electrical: Ohm's law, power, speaker impedance (series/parallel), dB ↔ power ratio",
+    "Delay: distance ↔ time ↔ phase, Haas effect zone finder, multi-zone speaker delay alignment",
+    "Acoustics: frequency and wavelength, octave bands, room volume, room modes, RT60",
+    "Tempo & Pitch: tap tempo, note length, playback speed ↔ pitch, loop BPM, latency calculator",
+    "Keep your go-to calculators in the Favorites tab and open them in one tap"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac",
+    "인터넷 없이 사용",
+    "로그인·광고·추적 없음",
+    "8개 언어 지원"
+   ],
+   "en": [
+    "iPhone · iPad · Mac",
+    "Works offline",
+    "No login, no ads, no tracking",
+    "8 languages"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_favorites_ko.jpg",
+   "en": "01_favorites_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_electrical_ko.jpg",
+     "en": "02_electrical_en.jpg"
+    },
+    "alt": {
+     "ko": "옴의 법칙 계산기 화면",
+     "en": "Ohm's law calculator screen"
+    },
+    "title": {
+     "ko": "전기 계산기",
+     "en": "Electrical calculators"
+    },
+    "text": {
+     "ko": "옴의 법칙, 파워, 스피커 임피던스, dB와 전력비 변환을 한곳에서 계산합니다.",
+     "en": "Ohm's law, power, speaker impedance and dB-to-power-ratio conversion in one place."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_delay_ko.jpg",
+     "en": "03_delay_en.jpg"
+    },
+    "alt": {
+     "ko": "딜레이 계산기 화면",
+     "en": "Delay calculator screen"
+    },
+    "title": {
+     "ko": "거리·시간·위상 딜레이",
+     "en": "Distance, time and phase delay"
+    },
+    "text": {
+     "ko": "거리와 시간, 위상을 오가며 계산하고 원음과 딜레이 신호의 위상차를 그래프로 볼 수 있습니다.",
+     "en": "Convert between distance, time and phase, and see the phase difference between the direct and delayed signal as a graph."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_tempo_ko.jpg",
+     "en": "04_tempo_en.jpg"
+    },
+    "alt": {
+     "ko": "템포 & 피치 화면",
+     "en": "Tempo & Pitch screen"
+    },
+    "title": {
+     "ko": "탭 템포와 음표 길이",
+     "en": "Tap tempo and note length"
+    },
+    "text": {
+     "ko": "탭으로 BPM을 재고, BPM에 따른 음표 길이를 밀리초로 확인합니다.",
+     "en": "Tap to measure BPM and see note lengths in milliseconds for that tempo."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "분야를 고릅니다",
+     "d": "하단 탭에서 음향, 전기, 딜레이, 템포 & 피치 중 하나를 엽니다."
+    },
+    {
+     "t": "값을 입력합니다",
+     "d": "필요한 값을 입력하면 결과가 바로 계산됩니다."
+    },
+    {
+     "t": "즐겨찾기에 담습니다",
+     "d": "자주 쓰는 계산기는 별표로 즐겨찾기 탭에 모아 둡니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Pick a category",
+     "d": "Open Acoustics, Electrical, Delay or Tempo & Pitch from the bottom tabs."
+    },
+    {
+     "t": "Enter your values",
+     "d": "Type in the numbers you have and the result is calculated right away."
+    },
+    {
+     "t": "Save favorites",
+     "d": "Star the calculators you use most to keep them in the Favorites tab."
+    }
+   ]
+  },
+  "related": [
+   "ohms-law-for-audio",
+   "delay-tower-alignment",
+   "bpm-to-delay-time"
+  ]
  }
 }

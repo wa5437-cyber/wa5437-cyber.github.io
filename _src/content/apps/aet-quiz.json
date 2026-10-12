@@ -48,5 +48,152 @@
    "promo": "Aprimore suas habilidades em engenharia de áudio: perguntas aleatórias da lei de Ohm ao RT60, com a explicação da fórmula logo após cada resposta.",
    "description": "Um app de quiz para praticar cálculos de engenharia de áudio com perguntas geradas aleatoriamente. Sem login, sem anúncios, sem rastreamento — funciona totalmente offline.\n\n■ Elétrica\n· Perguntas sobre a lei de Ohm (corrente/tensão)\n· Perguntas sobre potência (P=V×I)\n· Conversão dB ↔ razão de potência\n· Impedância de caixas acústicas (série/paralelo)\n\n■ Delay\n· Velocidade do som conforme a temperatura\n· Distância ↔ tempo de delay\n· Duração das notas a partir do BPM\n· Zona do efeito Haas (efeito de precedência)\n· Delay para várias zonas de caixas (com offset de precedência)\n\n■ Acústica\n· Comprimento de onda (λ)\n· Período\n· Tempo de reverberação (RT60)\n· Queda do SPL com a distância\n\n■ Tempo e pitch\n· Velocidade de reprodução ↔ pitch (semitons)\n· BPM de loops\n· Latência por tamanho do buffer e taxa de amostragem\n\n■ Misto\n· Perguntas combinadas das quatro categorias acima\n\nEscolha 5, 10, 15 ou 20 perguntas por rodada — um novo conjunto aleatório a cada vez. Cada resposta vem na hora com uma explicação e a fórmula, e você acompanha em tempo real a rodada, os acertos e a taxa de acerto.\n\nDisponível em coreano, inglês, japonês, espanhol, chinês simplificado, alemão, português do Brasil e francês. Funciona no iPhone, iPad e Mac."
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "무료 · 광고·로그인 없음",
+   "en": "Free · no ads, no login"
+  },
+  "lead": {
+   "ko": "옴의 법칙부터 RT60까지, 오디오 엔지니어링 계산을 랜덤 문제로 반복 연습하는 퀴즈 앱입니다.",
+   "en": "A quiz app for practicing audio engineering calculations, from Ohm's Law to RT60, with randomly generated questions."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
+  },
+  "bullets": {
+   "ko": [
+    "전기·딜레이·음향·템포&피치 4개 카테고리와 혼합 문제",
+    "5·10·15·20문제 중 선택, 매번 새 문제를 랜덤 출제",
+    "정답을 고르면 공식과 함께 해설이 바로 표시",
+    "라운드 진행·정답 수·정답률을 실시간으로 확인",
+    "로그인·광고·추적 없이 인터넷 연결 없이도 사용"
+   ],
+   "en": [
+    "Four categories (electrical, delay, acoustics, tempo & pitch) plus mixed questions",
+    "Choose 5, 10, 15 or 20 questions; a fresh random set every time",
+    "Instant explanation with the formula after each answer",
+    "Live round progress, hit count and accuracy",
+    "No login, no ads, no tracking; works offline"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac",
+    "무료",
+    "8개 언어 지원",
+    "오프라인 사용 가능"
+   ],
+   "en": [
+    "iPhone · iPad · Mac",
+    "Free",
+    "8 languages",
+    "Works offline"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_setup_ko.jpg",
+   "en": "01_setup_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_question_ko.jpg",
+     "en": "02_question_en.jpg"
+    },
+    "alt": {
+     "ko": "문제 풀이 화면",
+     "en": "Question screen"
+    },
+    "title": {
+     "ko": "랜덤 계산 문제",
+     "en": "Random calculation questions"
+    },
+    "text": {
+     "ko": "기온에 따른 음속, 주기, 재생 속도와 피치처럼 전기·딜레이·음향·템포 분야의 계산 문제가 매번 새로 출제됩니다.",
+     "en": "Questions on electrical, delay, acoustics and tempo topics, such as speed of sound by temperature, the period of a frequency, and playback speed and pitch, are generated fresh each time."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_answered_ko.jpg",
+     "en": "03_answered_en.jpg"
+    },
+    "alt": {
+     "ko": "정답 해설 화면",
+     "en": "Answer explanation screen"
+    },
+    "title": {
+     "ko": "정답마다 공식 해설",
+     "en": "A formula explanation for every answer"
+    },
+    "text": {
+     "ko": "답을 고르면 정답이 표시되고, 계산에 쓴 공식과 풀이가 바로 나옵니다.",
+     "en": "Pick an answer and the correct choice is highlighted together with the formula and the working."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_result_ko.jpg",
+     "en": "04_result_en.jpg"
+    },
+    "alt": {
+     "ko": "결과 화면",
+     "en": "Result screen"
+    },
+    "title": {
+     "ko": "라운드 결과와 정답률",
+     "en": "Round result and accuracy"
+    },
+    "text": {
+     "ko": "라운드가 끝나면 맞힌 문제 수와 정답률을 보여 주고, 바로 다시 도전할 수 있습니다.",
+     "en": "At the end of a round you see your score and accuracy, and can start another round right away."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "카테고리를 고릅니다",
+     "d": "전기·딜레이·음향·템포&피치 또는 혼합을 선택합니다."
+    },
+    {
+     "t": "문제 수를 정합니다",
+     "d": "5·10·15·20문제 중 하나를 고르고 시작합니다."
+    },
+    {
+     "t": "문제를 풀고 해설을 봅니다",
+     "d": "답을 고를 때마다 공식 해설이 나옵니다."
+    },
+    {
+     "t": "결과를 확인하고 다시 풉니다",
+     "d": "정답률을 확인한 뒤 새 문제로 다시 도전합니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Pick a category",
+     "d": "Choose electrical, delay, acoustics, tempo & pitch, or mixed."
+    },
+    {
+     "t": "Set the number of questions",
+     "d": "Select 5, 10, 15 or 20 and start."
+    },
+    {
+     "t": "Answer and read the explanation",
+     "d": "Each answer comes with the formula and working."
+    },
+    {
+     "t": "Check your result and go again",
+     "d": "See your accuracy, then try a new random set."
+    }
+   ]
+  },
+  "related": [
+   "ohms-law-for-audio",
+   "rt60-reverberation-time",
+   "bpm-to-delay-time"
+  ]
  }
 }

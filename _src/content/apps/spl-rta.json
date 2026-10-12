@@ -48,5 +48,152 @@
    "promo": "Kostenloser SPL-Meter und 31-Band-RTA. Beim Messen nennt die KI auf dem Gerät die Lärmquelle: Schritte, Baustelle, Verkehr (nur zur Orientierung). Pro einmalig, ohne Abo.",
    "description": "SPL Meter & RTA ist ein präzises Messwerkzeug für Tontechniker im Einsatz vor Ort.\n\nKostenlos\n• Echtzeit-SPL-Meter (Schalldruckpegel) — Frequenzbewertung A/C, dB\n• 31-Band-RTA (Echtzeit-Analysator) — Terz-Mittenfrequenzen nach ISO 266\n• Mikrofonkalibrierung\n• Raummoden-Rechner\n• Rückkopplungs-Erkennung — überwacht live und zeigt die Frequenz und das GEQ-Band, das du absenken kannst (nur zur Orientierung). Überwachung und Hinweise sind kostenlos; bei den ersten 3 Erkennungen jeder Sitzung wird auch die Frequenz angezeigt\n• Lärmquellen-Erkennung durch KI auf dem Gerät: Schritte, Baustelle, Verkehr u. a. (nur zur Orientierung)\n• Vergleich mit Lärm-Richtwerten: koreanischer Trittschall-Richtwert und WHO-Richtwert für Nachtlärm (nur zur Orientierung)\n\nPro freischalten (Einmalkauf)\n• LUFS-Lautheitsmesser (BS.1770-4, Integrated/Short-term, LU-Abweichung vom Ziel)\n• RT60-Nachhallzeitanalyse\n• Delay-Finder — Entfernung und Laufzeit für die Lautsprecher-Ausrichtung per ESS-Sweep\n• Polaritätsprüfung — passiver und aktiver Modus, A/B-Lautsprechervergleich\n• THD+N-Analysator\n• Loopback-Test — Bericht im RTA-Stil mit Rosa Rauschen\n• Unterstützung für externe Mikrofone\n• SPL-Schwellenwert-Hinweise und Messverlauf (Sitzungsprotokoll)\n• Dashboard-Ansicht (SPL + RTA auf einen Blick)\n• Soundcheck — Gain langsam anheben, Frequenzen mit Rückkopplung sammeln, nach Ort speichern und teilen (nur zur Orientierung)\n• Rückkopplungsfrequenz ohne Begrenzung der Anzeigen\n• Lärmquellen-Timeline und Lärmexpositionsberichte (PDF/CSV)\n\nEine Universal-App für iPhone, iPad und Mac. Läuft komplett auf dem Gerät, ganz ohne Internetverbindung — ohne Konto, ohne Werbung, ohne Analytics, damit deine Privatsphäre bei dir bleibt."
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "기본 기능 무료 · Pro 한 번 구매(구독 아님)",
+   "en": "Core tools free · Pro one-time purchase (no subscription)"
+  },
+  "lead": {
+   "ko": "현장 사운드 엔지니어를 위한 실시간 SPL 미터와 31밴드 RTA 측정 앱입니다. 하울링 감시와 소음원 AI 분류는 참고용입니다.",
+   "en": "A real-time SPL meter and 31-band RTA for sound engineers on site. Feedback detection and noise-source AI are for reference only."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
+  },
+  "bullets": {
+   "ko": [
+    "실시간 SPL 미터(A/C 가중치, dB)와 31밴드 RTA(ISO 266 표준 센터 주파수)",
+    "하울링 감시(참고용): 라이브 중 울리는 주파수와 깎을 GEQ 밴드를 알려 줍니다",
+    "측정 중 소음원(발걸음·공사·차량 등)을 기기 안 AI가 알려 줍니다(참고용)",
+    "Pro(일회성 구매): LUFS(BS.1770-4)·RT60·딜레이 파인더·극성 체커·THD+N·루프백 테스트",
+    "Pro: SPL 임계값 알림·측정 이력·대시보드 뷰·외장 마이크, 공연 전 하울링 사운드체크(참고용)"
+   ],
+   "en": [
+    "Real-time SPL meter (A/C weighting, dB) and 31-band RTA at ISO 266 center frequencies",
+    "Feedback detector (for reference only): shows the ringing frequency and the GEQ band to cut during a live show",
+    "On-device AI names the noise source (footsteps, construction, traffic) while you measure (for reference)",
+    "Pro (one-time purchase): LUFS (BS.1770-4), RT60, Delay Finder, Polarity Checker, THD+N, Loopback Test",
+    "Pro: SPL threshold alerts, measurement history, Dashboard view, external mic, and a pre-show feedback sound check (for reference only)"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac 유니버설 앱",
+    "기본 기능 무료, Pro는 한 번 구매(구독 아님)",
+    "하울링 감시·소음원 AI 분류는 참고용",
+    "인터넷 연결 없이 기기 안에서 동작, 가입·광고·분석 도구 없음"
+   ],
+   "en": [
+    "Universal app for iPhone, iPad and Mac",
+    "Core tools free; Pro is a one-time purchase (no subscription)",
+    "Feedback detection and AI noise-source labels are for reference only",
+    "Works on-device without internet; no accounts, ads or analytics"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_spl_ko.jpg",
+   "en": "01_spl_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "02_rta_ko.jpg",
+     "en": "02_rta_en.jpg"
+    },
+    "alt": {
+     "ko": "31밴드 RTA 막대 화면",
+     "en": "31-band RTA bar view"
+    },
+    "title": {
+     "ko": "31밴드 RTA로 주파수별 레벨 보기",
+     "en": "See the level in each of 31 bands"
+    },
+    "text": {
+     "ko": "ISO 266 표준 센터 주파수의 31밴드로 소리를 실시간 분석합니다. 막대(RTA)와 선형(FFT) 보기를 전환할 수 있습니다.",
+     "en": "Analyze sound in real time across 31 bands at ISO 266 center frequencies, and switch between bar (RTA) and line (FFT) views."
+    }
+   },
+   {
+    "img": {
+     "ko": "03_timeline_ko.jpg",
+     "en": "03_timeline_en.jpg"
+    },
+    "alt": {
+     "ko": "소음원 타임라인 화면",
+     "en": "Noise-source timeline screen"
+    },
+    "title": {
+     "ko": "소음원 타임라인으로 기록하기",
+     "en": "Log what the noise was"
+    },
+    "text": {
+     "ko": "발걸음·공사 장비·차량 등 소음원을 기기 안 AI가 추정해 시간순으로 보여 줍니다. 추정값이므로 참고용입니다.",
+     "en": "On-device AI estimates sources such as footsteps, construction equipment and vehicles and lays them out over time. Labels are estimates, for reference only."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_generator_ko.jpg",
+     "en": "04_generator_en.jpg"
+    },
+    "alt": {
+     "ko": "신호 발생기 화면",
+     "en": "Signal generator screen"
+    },
+    "title": {
+     "ko": "신호 발생기로 점검 신호 만들기",
+     "en": "Generate test signals"
+    },
+    "text": {
+     "ko": "핑크·화이트 노이즈와 사인·사각·삼각파 등을 주파수와 음량을 정해 재생할 수 있습니다.",
+     "en": "Play pink and white noise or sine, square and triangle waves at a chosen frequency and level."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "마이크 권한을 허용합니다",
+     "d": "마이크 권한을 허용합니다 — 기기 마이크로 소리를 측정합니다."
+    },
+    {
+     "t": "SPL 미터나 RTA를 켭니다",
+     "d": "SPL 미터에서는 dB(A)·dB(C)를, RTA에서는 31밴드 막대를 실시간으로 봅니다."
+    },
+    {
+     "t": "필요하면 마이크를 교정합니다",
+     "d": "마이크 교정으로 기기에 맞게 보정한 뒤 측정합니다."
+    },
+    {
+     "t": "기록하고 내보냅니다",
+     "d": "Pro에서는 측정 이력(세션 로그)을 저장하고 SPL 임계값 알림을 설정할 수 있습니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Allow microphone access",
+     "d": "Allow microphone access — the app measures sound with the device microphone."
+    },
+    {
+     "t": "Open the SPL meter or the RTA",
+     "d": "Watch dB(A) and dB(C) on the SPL meter, or the 31 bands on the RTA, in real time."
+    },
+    {
+     "t": "Calibrate the microphone if needed",
+     "d": "Use microphone calibration to adjust readings for your device."
+    },
+    {
+     "t": "Log and export",
+     "d": "With Pro, keep measurement history (session log) and set SPL threshold alerts."
+    }
+   ]
+  },
+  "related": [
+   "reading-31-band-rta",
+   "spl-inverse-square-law",
+   "31-band-eq-standard-frequencies"
+  ]
  }
 }

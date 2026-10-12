@@ -48,5 +48,152 @@
    "promo": "Trainiere dein Gehör an EQ-Frequenzen, Rauschen und Effekten. Neu: Die Probeprüfung (10 Fragen) bewertet dich von S bis D und zeigt Schwächen. Pro: eigene Musik nutzen.",
    "description": "AudioEngineer Ear Trainer ist eine Gehörtraining-App für Tontechniker, Toningenieure und Musiker. Trainiere dein Gefühl für Frequenzen, dein Gehör für Rauschen und dein Gehör für Effekte – in zwei Modi: Quiz (Antwort raten) und Hören (frei, ohne Wertung). Kein Login, keine Werbung, kein Tracking, und die App funktioniert komplett offline.\n\n■ Frequenz-Gehörtraining\n\nGratis\n· EQ-Training mit 10 Bändern: Anhebung und Absenkung auf Rosa Rauschen\n· Übungsmodi: nur Anhebung, nur Absenkung und gemischt (auch die Richtung erraten)\n· Aufzeichnung der besten Serie\n\nPro freischalten (Einmalkauf)\n· Präzisionstraining mit 31 Bändern im 1/3-Oktav-Raster (ISO 266)\n· Anhebung/Absenkung wahlweise 12dB, 6dB oder 3dB (auch gemischt)\n· Hörmodus mit reinem Sinuston\n· Links/Rechts-Training – in jedem Ohr wird ein anderes Band angehoben oder abgesenkt, und du erkennst beide getrennt\n· Mit deiner eigenen importierten Musik trainieren\n\n■ Rausch-Gehörtraining\n\nGratis\n· Rauscharten erkennen (Zischen, Rumpeln, Knistern und mehr)\n\nPro freischalten (Einmalkauf)\n· Weitere Rauscharten\n· Brummfrequenz erkennen (50Hz oder 60Hz)\n· Grundrauschen erkennen – ist Rauschen vorhanden, und welcher Pegel (-60/-50/-40dB)?\n· Alle diese Übungen funktionieren auch mit deiner eigenen Musik im Hintergrund\n\n■ Effekt-Gehörtraining\n\nGratis\n· 3 Effekte erkennen – Hall, Delay, Chorus\n\nPro freischalten (Einmalkauf)\n· 4 weitere Effekte – Flanger, Phaser, Tremolo, Verzerrung (insgesamt 7)\n· A/B-Vergleich der Effektintensität (welcher ist stärker?)\n· Eigene Musik importieren und hören, wie jeder Effekt auf einem echten Titel klingt\n\n■ Probeprüfung\n· Eine Prüfung mit 10 Fragen, die alles abfragt, was du trainiert hast (Basis gratis / Pro-Version)\n· Bewertung von S bis D und Trefferquote pro Kategorie, damit du deine Schwächen findest – mit Aufzeichnung der besten Ergebnisse\n\nVerfügbar auf Koreanisch, Englisch, Japanisch, Spanisch, vereinfachtem Chinesisch, Deutsch, brasilianischem Portugiesisch und Französisch. Läuft auf iPhone, iPad, Mac und Apple Vision Pro."
   }
+ },
+ "detail": {
+  "price": {
+   "ko": "기본 훈련 무료 · Pro 일회성 구매",
+   "en": "Core drills free · Pro is a one-time purchase"
+  },
+  "lead": {
+   "ko": "EQ 주파수·노이즈·이펙트를 귀로 맞히며 청음 감각을 키우는 오디오 엔지니어·음악가용 귀 훈련 앱입니다.",
+   "en": "An ear-training app for audio engineers and musicians: learn to recognise EQ frequencies, noise and effects by ear."
+  },
+  "platforms": {
+   "ko": "iPhone · iPad · Mac · Apple Vision Pro",
+   "en": "iPhone · iPad · Mac · Apple Vision Pro"
+  },
+  "bullets": {
+   "ko": [
+    "핑크노이즈 위의 10밴드 EQ 부스트·컷을 귀로 맞히는 주파수 훈련",
+    "노이즈 종류 구분 훈련. Pro에서는 험 주파수(50·60Hz)와 노이즈 플로어 구분도 가능",
+    "이펙트 청음: 리버브·딜레이·코러스 맞히기. Pro는 7종 이펙트와 강도 A/B 비교",
+    "10문제 모의고사로 S~D 등급과 카테고리별 정답률 확인",
+    "광고·로그인 없이 인터넷 연결 없이도 사용"
+   ],
+   "en": [
+    "Frequency training: spot 10-band EQ boosts and cuts on pink noise",
+    "Noise training: identify noise types; Pro adds hum frequency (50 or 60 Hz) and noise floor",
+    "Effects training: identify reverb, delay and chorus; Pro adds 4 more effects (7 total) and A/B intensity comparison",
+    "A 10-question mock exam gives an S to D grade and per-category accuracy",
+    "No ads, no login, and it works offline"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iPhone · iPad · Mac · Apple Vision Pro",
+    "8개 언어 지원",
+    "광고·로그인 없음, 오프라인 사용",
+    "Pro: 내 음악으로 훈련, 31밴드 정밀 훈련 (일회성 구매)"
+   ],
+   "en": [
+    "iPhone · iPad · Mac · Apple Vision Pro",
+    "8 languages",
+    "No ads or login, works offline",
+    "Pro: train on your own music, 31-band precision (one-time purchase)"
+   ]
+  },
+  "hero_img": {
+   "ko": "01_home_ko.jpg",
+   "en": "01_home_en.jpg"
+  },
+  "blocks": [
+   {
+    "img": {
+     "ko": "03_eqnoise_ko.jpg",
+     "en": "03_eqnoise_en.jpg"
+    },
+    "alt": {
+     "ko": "EQ 노이즈 훈련 화면",
+     "en": "EQ noise training screen"
+    },
+    "title": {
+     "ko": "핑크노이즈 속 주파수 찾기",
+     "en": "Find the frequency in pink noise"
+    },
+    "text": {
+     "ko": "핑크노이즈에서 바뀐 대역을 퀴즈로 맞히거나, 청음 모드에서 점수 없이 자유롭게 들어 볼 수 있습니다.",
+     "en": "Guess the changed band in pink noise in Quiz mode, or just listen freely in Listen mode with no score."
+    }
+   },
+   {
+    "img": {
+     "ko": "02_lr_ko.jpg",
+     "en": "02_lr_en.jpg"
+    },
+    "alt": {
+     "ko": "양쪽 귀 훈련 화면 (Pro)",
+     "en": "L/R ear training screen (Pro)"
+    },
+    "title": {
+     "ko": "왼쪽·오른쪽 귀를 따로",
+     "en": "Left and right ears, separately"
+    },
+    "text": {
+     "ko": "양쪽 귀에 각각 다른 밴드가 걸리고, 귀별로 따로 맞힙니다. 이어폰을 연결하면 더 분명하게 들립니다. 이 훈련은 Pro 기능입니다.",
+     "en": "A different band is boosted or cut in each ear, and you answer for each one. Headphones make it clearer. This drill is part of Pro."
+    }
+   },
+   {
+    "img": {
+     "ko": "04_effectcompare_ko.jpg",
+     "en": "04_effectcompare_en.jpg"
+    },
+    "alt": {
+     "ko": "이펙트 강도 비교 화면",
+     "en": "Effect intensity comparison screen"
+    },
+    "title": {
+     "ko": "이펙트 강도 A/B 비교",
+     "en": "Compare effect intensity A/B"
+    },
+    "text": {
+     "ko": "같은 이펙트가 걸린 A와 B 중 더 강한 쪽을 고릅니다. 이 훈련은 Pro 기능입니다.",
+     "en": "Pick which of A and B has the stronger effect. This drill is part of Pro."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "훈련 종류를 고릅니다",
+     "d": "주파수, 노이즈, 이펙트 중 연습할 항목을 선택합니다."
+    },
+    {
+     "t": "퀴즈나 청음으로 연습합니다",
+     "d": "퀴즈는 정답을 맞히고, 청음은 점수 없이 자유롭게 듣습니다."
+    },
+    {
+     "t": "모의고사로 확인합니다",
+     "d": "10문제를 풀고 S~D 등급과 카테고리별 정답률을 봅니다."
+    },
+    {
+     "t": "약한 부분을 다시 훈련합니다",
+     "d": "카테고리별 정답률로 약한 부분을 확인하고 그 훈련을 다시 합니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Pick a drill",
+     "d": "Choose frequency, noise or effects."
+    },
+    {
+     "t": "Practise in Quiz or Listen mode",
+     "d": "Quiz mode asks you to guess; Listen mode lets you hear freely with no score."
+    },
+    {
+     "t": "Check with the mock exam",
+     "d": "Answer 10 questions and see your S to D grade and per-category accuracy."
+    },
+    {
+     "t": "Train your weak spots",
+     "d": "Use the per-category accuracy to spot weak areas, then train them again."
+    }
+   ]
+  },
+  "related": [
+   "pink-noise-eq-ear-training",
+   "31-band-eq-standard-frequencies",
+   "reverb-delay-chorus-explained"
+  ]
  }
 }
