@@ -19,12 +19,22 @@ class KoreanWrapTests(unittest.TestCase):
 
     def test_headings_and_components_keep_words_whole(self):
         self.assertNotIn("word-break:break-all", CSS)
-        self.assertNotIn("hyphens", CSS)
+        # 자동 하이픈은 언어별 규칙(de·es·fr·pt-BR)에서만 쓴다. 기본(ko/en) 규칙에는 없어야 한다.
+        self.assertNotIn("hyphens", re.sub(r"html:lang\([^)]*\)[^{]*\{[^}]*\}", "", CSS))
         wanted = ["h1", "h2", "h3", ".card", ".sub", ".pill", ".facts li", ".steps li", ".tool-list"]
         for sel_list, block in re.findall(r"([^{}]+)\{([^}]*)\}", CSS):
             if "word-break:keep-all" in block and all(w in [x.strip() for x in sel_list.split(",")] for w in wanted):
                 return
         self.fail("no rule applies word-break:keep-all to headings, cards, pills, facts, steps and tool list")
+
+    def test_cjk_languages_override_keep_all(self):
+        compact = re.sub(r"\s+", "", CSS)
+        self.assertIn("html:lang(ja)", compact)
+        self.assertIn("html:lang(zh-Hans)", compact)
+        # keep-all 을 되돌리는 규칙이 같은 블록 안에 있어야 한다
+        self.assertRegex(compact, r"html:lang\(ja\)[^}]*word-break:normal")
+        self.assertRegex(compact, r"html:lang\(ja\)[^}]*line-break:strict")
+        self.assertIn("hyphens:auto", compact)
 
     def test_pill_can_wrap_inside_its_container(self):
         pill = rule(".pill")

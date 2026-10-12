@@ -77,3 +77,11 @@ h3{font-size:20px;font-weight:700}
 .foot-links{list-style:none;display:flex;flex-wrap:wrap;gap:6px 18px;padding:0;margin:10px 0}
 .site-footer a{color:var(--ink2)}
 .copy{font-size:13px}
+
+/* 언어별 조판: 한국어는 keep-all, 일본어·중국어는 공백이 없으므로 되돌린다 */
+html:lang(ja) body,html:lang(zh-Hans) body,
+html:lang(ja) h1,html:lang(ja) h2,html:lang(ja) h3,html:lang(ja) .card,html:lang(ja) .sub,html:lang(ja) .pill,html:lang(ja) .facts li,html:lang(ja) .steps li,
+html:lang(zh-Hans) h1,html:lang(zh-Hans) h2,html:lang(zh-Hans) h3,html:lang(zh-Hans) .card,html:lang(zh-Hans) .sub,html:lang(zh-Hans) .pill,html:lang(zh-Hans) .facts li,html:lang(zh-Hans) .steps li{word-break:normal;line-break:strict;overflow-wrap:anywhere}
+html:lang(ja){--sans:"Hiragino Sans","Yu Gothic",Meiryo,"Noto Sans KR",system-ui,sans-serif;--serif:"Hiragino Mincho ProN","Yu Mincho","Noto Serif KR",serif}
+html:lang(zh-Hans){--sans:"PingFang SC","Microsoft YaHei","Noto Sans KR",system-ui,sans-serif;--serif:"Songti SC","Noto Serif KR",serif}
+html:lang(de) body,html:lang(es) body,html:lang(fr) body,html:lang(pt-BR) body{hyphens:auto}

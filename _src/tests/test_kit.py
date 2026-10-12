@@ -1,6 +1,6 @@
 import pathlib, re, sys, tempfile, unittest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
-from sitegen import kit
+from sitegen import kit, strings
 
 
 class KitTests(unittest.TestCase):
@@ -14,14 +14,47 @@ class KitTests(unittest.TestCase):
 
     def test_unknown_language_raises(self):
         with self.assertRaises(ValueError):
-            kit.url("ja", "/apps/")
+            kit.url("xx", "/apps/")
         with self.assertRaises(ValueError):
-            kit.t("menu", "ja")
+            kit.t("menu", "xx")
         with self.assertRaises(ValueError):
             kit.t("no_such_key", "ko")
         with self.assertRaises(ValueError):
-            kit.page("ja", "/ja/", "T", "D", "<p>b</p>", {"ja": "/ja/"})
-        self.assertEqual(kit.LANGS, ("ko", "en"))
+            kit.page("xx", "/xx/", "T", "D", "<p>b</p>", {"xx": "/xx/"})
+        with self.assertRaises(ValueError):
+            kit.chrome("xx")
+
+    def test_eight_languages_registered_with_prefixes(self):
+        self.assertEqual(kit.LANGS, ("ko", "en", "ja", "zh-Hans", "es", "de", "fr", "pt-BR"))
+        self.assertEqual(kit.url("ja", "/apps/x/"), "/ja/apps/x/")
+        self.assertEqual(kit.url("zh-Hans", "/apps/x/"), "/zh-Hans/apps/x/")
+        self.assertEqual(kit.url("pt-BR", "/"), "/pt-BR/")
+        for code in kit.LANGS:
+            self.assertIn(code, kit.OG_LOCALE)
+            self.assertIn(code, strings.LANG_NAMES)
+            self.assertIn(code, strings.LANG_SHORT)
+            for key, per in strings.APP_UI.items():
+                if key in ("related", "details"):
+                    continue
+                self.assertTrue(per.get(code), (key, code))
+
+    def test_chrome_falls_back_to_english_for_other_languages(self):
+        self.assertEqual(kit.chrome("ko"), "ko")
+        self.assertEqual(kit.chrome("en"), "en")
+        self.assertEqual(kit.chrome("ja"), "en")
+        self.assertEqual(kit.chrome("pt-BR"), "en")
+
+    def test_ja_page_has_ja_html_lang_but_english_chrome_and_en_links(self):
+        alts = {"ko": "/apps/x/", "en": "/en/apps/x/", "ja": "/ja/apps/x/"}
+        html = kit.page("ja", "/ja/apps/x/", "T", "D", "<p>b</p>", alts)
+        self.assertIn('<html lang="ja">', html)
+        self.assertIn('property="og:locale" content="ja_JP"', html)
+        self.assertIn('<a class="skip" href="#main">Skip to content</a>', html)
+        self.assertIn('href="/en/apps/"', html)           # 상단 메뉴는 영어 페이지로
+        self.assertIn('href="/en/"', html)                # 브랜드 링크
+        self.assertIn('hreflang="ja" lang="ja" aria-current="true"', html)
+        self.assertIn(">JA ▾<", html)
+        self.assertEqual(html.count('rel="alternate" hreflang="ja"'), 1)
 
     def test_lang_menu_unknown_code_raises(self):
         with self.assertRaises(KeyError):

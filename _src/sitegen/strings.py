@@ -14,4 +14,14 @@ S = {
     "chat": {"ko": "카카오톡으로 문의", "en": "Contact on KakaoTalk"},
     "mail": {"ko": "이메일 보내기", "en": "Send an email"},
 }
-LANG_NAMES = {"ko": "한국어", "en": "English"}
+LANG_NAMES = {"ko": "한국어", "en": "English", "ja": "日本語", "zh-Hans": "简体中文",
+              "es": "Español", "de": "Deutsch", "fr": "Français", "pt-BR": "Português (Brasil)"}
+LANG_SHORT = {"ko": "KO", "en": "EN", "ja": "JA", "zh-Hans": "简体", "es": "ES", "de": "DE",
+              "fr": "FR", "pt-BR": "PT"}
+APP_UI = {
+    "howto":   {"ko": "사용법", "en": "How to use", "ja": "使い方", "zh-Hans": "使用方法", "es": "Cómo usarla", "de": "So funktioniert’s", "fr": "Mode d’emploi", "pt-BR": "Como usar"},
+    "screens": {"ko": "화면", "en": "Screenshots", "ja": "スクリーンショット", "zh-Hans": "截图", "es": "Capturas de pantalla", "de": "Screenshots", "fr": "Captures d’écran", "pt-BR": "Capturas de tela"},
+    "privacy": {"ko": "개인정보처리방침", "en": "Privacy policy (Korean)", "ja": "プライバシーポリシー(韓国語)", "zh-Hans": "隐私政策(韩语)", "es": "Política de privacidad (en coreano)", "de": "Datenschutzerklärung (auf Koreanisch)", "fr": "Politique de confidentialité (en coréen)", "pt-BR": "Política de privacidade (em coreano)"},
+    "related": {"ko": "관련 가이드", "en": "Related guides (Korean)"},
+    "details": {"ko": "자세히 보기", "en": "Details"},
+}
