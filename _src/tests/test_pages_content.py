@@ -115,6 +115,8 @@ class LegalPageLinkTests(unittest.TestCase):
         for name in ("nora", "patchio", "sheetscope", "yul"):
             text = (ROOT / f"{name}_legal.html").read_text(encoding="utf-8")
             self.assertNotIn('href="/#', text, name)
+            # I18N JSON 안의 이스케이프된 형태(\")도 남으면 안 된다
+            self.assertNotIn('href=\\"/#', text, name)
             self.assertIn('href="/policy.html#policy"', text, name)
             self.assertIn('href="/apps/"', text, name)
 
