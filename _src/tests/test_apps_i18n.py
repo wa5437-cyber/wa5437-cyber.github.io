@@ -1,4 +1,4 @@
-import json, pathlib, sys, tempfile, unittest
+import json, pathlib, re, sys, tempfile, unittest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "_src"))
 sys.path.insert(0, str(ROOT / "_src" / "tools"))
@@ -130,14 +130,14 @@ class RenderTests(unittest.TestCase):
 
     def test_render_store_text_paragraphs_lists_and_escape(self):
         html = pages.render_store_text("A & B <script>\n둘째 줄\n\n• one\n• two\n\nlast")
-        self.assertIn("<p>A &amp; B &lt;script&gt;<br>둘째 줄</p>", html)
+        self.assertIn('<p>A &amp; B &lt;script&gt;<br><span lang="ko">둘째 줄</span></p>', html)
         self.assertIn('<ul class="bullets"><li>one</li><li>two</li></ul>', html)
         self.assertIn("<p>last</p>", html)
         self.assertNotIn("<script>", html)
 
     def test_render_store_text_handles_many_blank_lines_and_long_text(self):
         html = pages.render_store_text("\n\n\n" + ("가나다 " * 2000) + "\n\n\n\n끝")
-        self.assertTrue(html.endswith("<p>끝</p>"))
+        self.assertTrue(html.endswith('<p><span lang="ko">끝</span></p>'))
 
 
 class PageLangTests(unittest.TestCase):
@@ -234,6 +234,47 @@ class PricePillTests(unittest.TestCase):
         self.assertNotIn("9,900", row)
         self.det["price"] = {"ko": "", "en": ""}
         self.assertNotIn('class="pill"', self._hero_row("ko"))
+
+
+class KoreanSpanTests(unittest.TestCase):
+    NAME = "율 Yul — 国楽チューナー & 長短"
+    DESC = "リズム 진양조→중모리→… のように\n\n• 자진모리 機能"
+
+    def setUp(self):
+        self._load_app = pages.load_app
+        det = self._load_app("stage-sound")["detail"]
+        store = {"ja": {"name": self.NAME, "subtitle": "부제 サブ", "promo": "", "description": self.DESC}}
+        pages.load_app = lambda slug: {"detail": det, "store": store} if slug == "stage-sound" else self._load_app(slug)
+
+    def tearDown(self):
+        pages.load_app = self._load_app
+
+    def test_hangul_runs_are_wrapped_and_check_passes(self):
+        from sitegen import check
+        _, html = pages.app_page("ja", "stage-sound")
+        self.assertIn('<span lang="ko">율</span> Yul', html)
+        self.assertIn('<span lang="ko">진양조→중모리</span>→…', html)
+        self.assertIn('<li><span lang="ko">자진모리</span> 機能</li>', html)
+        self.assertEqual(check.language_errors("ja/apps/x/index.html", html), [])
+
+    def test_ampersand_in_name_stays_escaped(self):
+        _, html = pages.app_page("ja", "stage-sound")
+        self.assertIn("国楽チューナー &amp; 長短", html)
+        self.assertNotIn("&amp;amp;", html)
+        self.assertNotIn(" & 長短", html.split("<main", 1)[1])
+
+    def test_title_and_alt_stay_plain(self):
+        _, html = pages.app_page("ja", "stage-sound")
+        head = html.split("<main", 1)[0]
+        self.assertIn("<title>" + "율 Yul", head)
+        self.assertNotIn("<span", head.split("</title>", 1)[0])
+        self.assertNotIn("<span", re.search(r'<meta name="description"[^>]*>', head).group(0))
+        self.assertNotIn('alt="<span', html)
+
+    def test_esc_mixed_unit(self):
+        self.assertEqual(pages.esc_mixed("a<b>&가나"), 'a&lt;b&gt;&amp;<span lang="ko">가나</span>')
+        self.assertEqual(pages.esc_mixed("가 나·다-라→마"), '<span lang="ko">가 나·다-라→마</span>')
+        self.assertEqual(pages.esc_mixed("가→x"), '<span lang="ko">가</span>→x')
 
 
 class ImgAndLegalTests(unittest.TestCase):

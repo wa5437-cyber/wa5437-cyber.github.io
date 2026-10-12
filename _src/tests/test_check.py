@@ -120,6 +120,19 @@ class LanguageCheckTests(unittest.TestCase):
         html = html.replace("<main", "<header>한글 메뉴</header><main")
         self.assertEqual(check.language_errors("ja/apps/x/index.html", html), [])
 
+    def test_hangul_inside_lang_ko_span_is_ignored(self):
+        html = self.page("ja", main_extra='<p>名前 <span lang="ko">율</span> Yul</p>')
+        self.assertEqual(check.language_errors("ja/apps/x/index.html", html), [])
+
+    def test_hangul_inside_nested_tag_in_lang_ko_span_is_ignored(self):
+        html = self.page("ja", main_extra='<p><span lang="ko"><b>진양조</b>→<i>중모리</i></span></p>')
+        self.assertEqual(check.language_errors("ja/apps/x/index.html", html), [])
+
+    def test_bare_hangul_next_to_lang_ko_span_is_still_flagged(self):
+        html = self.page("ja", main_extra='<p><span lang="ko">율</span> 한글</p>')
+        errs = check.language_errors("ja/apps/x/index.html", html)
+        self.assertTrue(any("한글 노출" in e for e in errs))
+
     def test_empty_h1_and_lang_mismatch(self):
         errs = check.language_errors("de/apps/x/index.html", self.page("de", h1="", html_lang="fr"))
         self.assertTrue(any("h1 비어" in e for e in errs))

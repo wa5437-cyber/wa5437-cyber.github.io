@@ -197,6 +197,13 @@ def alts_for_app(slug):
 
 
 BULLET_RE = re.compile(r"([•・]|-\s)\s*")
+HANGUL_RUN = re.compile(r"[가-힣]+(?:[ ·→\-][가-힣]+)*")
+
+
+def esc_mixed(text):
+    """esc() 한 뒤 한글 덩어리마다 <span lang="ko"> 로 감싼다(비ko/en 페이지의 앱 이름·장단 이름 등).
+    한글에는 HTML 특수문자가 없어 이스케이프 후 감싸도 안전하다."""
+    return HANGUL_RUN.sub(lambda m: f'<span lang="ko">{m.group(0)}</span>', esc(text))
 
 
 def render_store_text(text):
@@ -208,9 +215,9 @@ def render_store_text(text):
             continue
         if all(BULLET_RE.match(l) and BULLET_RE.sub("", l, count=1).strip() for l in lines):
             out.append('<ul class="bullets">' + "".join(
-                f"<li>{esc(BULLET_RE.sub('', l, count=1).strip())}</li>" for l in lines) + "</ul>")
+                f"<li>{esc_mixed(BULLET_RE.sub('', l, count=1).strip())}</li>" for l in lines) + "</ul>")
         else:
-            out.append("<p>" + "<br>".join(esc(l) for l in lines) + "</p>")
+            out.append("<p>" + "<br>".join(esc_mixed(l) for l in lines) + "</p>")
     return "".join(out)
 
 
@@ -271,8 +278,8 @@ def _app_page_store(lang, app, det, s, slug):
         for b in det["blocks"][:3])
     body = (
         f'<section class="hero"><div class="wrap"><div class="grid"><div>'
-        f'<h1>{esc(name)}</h1><p class="sub">{esc(s.get("subtitle", ""))}</p>'
-        + (f'<p>{esc(s["promo"])}</p>' if s.get("promo") else "")
+        f'<h1>{esc_mixed(name)}</h1><p class="sub">{esc_mixed(s.get("subtitle", ""))}</p>'
+        + (f'<p>{esc_mixed(s["promo"])}</p>' if s.get("promo") else "")
         + f'<div class="row">{store_buttons(app, lang)}</div></div>'
         f'<div><img class="shot" src="{img_dir}{esc(pick_img(det["hero_img"], lang))}" alt="{esc(name)}"></div></div></div></section>'
         f'<section class="band"><div class="wrap"><h2>{esc(strings.APP_UI["screens"][lang])}</h2>'

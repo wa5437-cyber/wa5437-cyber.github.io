@@ -126,6 +126,7 @@ def page_meta_errors(root, rel, text):
 
 def _visible_text(html):
     html = re.sub(r"<script\b.*?</script>|<style\b.*?</style>", "", html, flags=re.S)
+    html = re.sub(r'<(\w+)\b[^>]*\blang="ko"[^>]*>.*?</\1>', "", html, flags=re.S)   # lang="ko" 로 표시한 한글은 정상
     return re.sub(r"<[^>]+>", " ", html)
 
 
