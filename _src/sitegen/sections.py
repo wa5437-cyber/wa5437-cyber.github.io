@@ -58,17 +58,32 @@ def _photos(sec, lang, ctx):
     return _wrap(_h2(sec) + f'<div class="shots">{imgs}</div>')
 
 
+WORKS_UI = {
+    "ko": {"cols": ("연도", "아티스트", "작품", "역할"), "church": "교회·찬양"},
+    "en": {"cols": ("Year", "Artist", "Work", "Role"), "church": "Worship"},
+}
+
+
 def _works(sec, lang, ctx):
-    career = ctx.get("career")
-    works = (career or {}).get("works")
+    works = (ctx.get("career") or {}).get("works")
     if not works:
         return ""
+    ui = WORKS_UI[kit.chrome(lang)]
+    keys = ("year", "artist", "title", "role")
+    head = "".join(f"<th>{esc(c)}</th>" for c in ui["cols"])
     rows = ""
     for w in works:
-        cells = [w] if isinstance(w, str) else [w[k] for k in ("year", "title", "role") if w.get(k)]
-        rows += "<tr>" + "".join(f"<td>{esc(x)}</td>" for x in cells) + "</tr>"
-    note = f'<p class="addr">{esc(sec["note"])}</p>' if sec.get("note") else ""
-    return _wrap(_h2(sec) + f'<table class="works"><tbody>{rows}</tbody></table>{note}')
+        cells = ""
+        for key, label in zip(keys, ui["cols"]):
+            val = "" if w.get(key) is None else esc(w[key])
+            if key == "artist" and w.get("church"):
+                val += f' <span class="pill">{esc(ui["church"])}</span>'
+            cells += f'<td data-label="{esc(label)}">{val}</td>'
+        rows += f"<tr>{cells}</tr>"
+    note = f'<p class="note">{esc(sec["note"])}</p>' if sec.get("note") else ""
+    cap = f'<caption>{esc(sec["title"])}</caption>' if sec.get("title") else ""
+    return _wrap(_h2(sec) + f'<table class="works">{cap}<thead><tr>{head}</tr></thead>'
+                 f'<tbody>{rows}</tbody></table>{note}')
 
 
 def _facts(sec, lang, ctx):

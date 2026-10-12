@@ -345,6 +345,9 @@ def app_page_re(slugs):
     return re.compile(rf"^(?:/(?:{langs}))?/apps/(?:{names})/$")
 
 
+SITEMAP_REPLACES = {"/about/": "/about.html"}   # 새 주소가 만들어졌을 때만 옛 주소 항목을 뺀다
+
+
 def update_sitemap(root, new_paths, known_slugs=()):
     """new_paths 를 사이트맵에 더하고, known_slugs 앱의 상세 페이지 주소 중 new_paths 에 없는 것은 뺀다. 나머지는 그대로."""
     f = pathlib.Path(root) / "sitemap.xml"
@@ -352,10 +355,13 @@ def update_sitemap(root, new_paths, known_slugs=()):
         return
     text = orig = f.read_text(encoding="utf-8")
     keep = set(new_paths)
+    gone = {kit.BASE + old for new, old in SITEMAP_REPLACES.items() if new in keep}
     app_re = app_page_re(known_slugs)
 
     def drop(m):
         loc = m.group(1)
+        if loc in gone:
+            return ""
         path = loc[len(kit.BASE):] if loc.startswith(kit.BASE) else None
         return "" if path and app_re.match(path) and path not in keep else m.group(0)
     text = re.sub(r"[ \t]*<url>\s*<loc>([^<]*)</loc>.*?</url>[ \t]*\n?", drop, text, flags=re.S)
