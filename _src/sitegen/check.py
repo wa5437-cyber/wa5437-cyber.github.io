@@ -20,7 +20,9 @@ LINK_TAG = re.compile(r"<link\b[^>]*>")
 CANONICAL = re.compile(r'<link\b[^>]*\brel="canonical"[^>]*>')
 MT8 = re.compile(r"(?:\?|&amp;|&)mt=8(?!\d)")
 # 생성기가 만드는 페이지만 내부 링크를 점검한다(기존 페이지는 건드리지 않음).
-GENERATED_PREFIXES = ("index.html", "en/", "apps/", "tools/")
+GENERATED_PREFIXES = ("index.html", "en/", "apps/", "tools/", "ja/", "zh-Hans/", "es/", "de/", "fr/", "pt-BR/")
+MAIN = re.compile(r"<main\b[^>]*>(.*?)</main>", re.S)
+NONKR = ("ja", "zh-Hans", "es", "de", "fr", "pt-BR")
 
 
 def exists(root, url_path):
@@ -88,6 +90,7 @@ def run(root):
             if "&" in link.replace("&amp;", ""):
                 errors.append(f"{rel}: 앱스토어 링크의 & 는 &amp; 여야 함 {link[:70]}")
         errors += page_meta_errors(root, rel, text)
+        errors += language_errors(rel, text)
     return errors
 
 
@@ -118,4 +121,27 @@ def page_meta_errors(root, rel, text):
             errors.append(f"hreflang 짝 불일치: {rel} -> {path} (대상이 되돌아오는 링크 없음)")
     if rel.startswith("en/") and not any(code == "ko" for code, _ in alts):
         errors.append(f"{rel}: 짝이 되는 ko 페이지(hreflang=ko)가 선언되지 않음")
+    return errors
+
+
+def _visible_text(html):
+    html = re.sub(r"<script\b.*?</script>|<style\b.*?</style>", "", html, flags=re.S)
+    return re.sub(r"<[^>]+>", " ", html)
+
+
+def language_errors(rel, text):
+    """비(非)ko/en 페이지의 한글 노출, 빈 h1, html lang 불일치 점검."""
+    errors = []
+    lang = rel.split("/", 1)[0] if rel.split("/", 1)[0] in NONKR else None
+    m = MAIN.search(text)
+    main = m.group(1) if m else ""
+    if lang and re.search(r"[가-힣]", _visible_text(main)):
+        errors.append(f"{rel}: {lang} 페이지에 한글 노출")
+    h1 = re.search(r"<h1\b[^>]*>(.*?)</h1>", main, re.S)
+    if not h1 or not _visible_text(h1.group(1)).strip():
+        errors.append(f"{rel}: h1 비어 있음")
+    if lang:
+        hl = re.search(r'<html\b[^>]*\blang="([^"]*)"', text)
+        if not hl or hl.group(1) != lang:
+            errors.append(f"{rel}: html lang 불일치")
     return errors

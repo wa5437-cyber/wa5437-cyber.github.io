@@ -42,10 +42,10 @@ class CheckTests(unittest.TestCase):
 
     @staticmethod
     def html(path, alts=(), body=""):
-        """canonical 과 hreflang 을 가진 최소 페이지."""
+        """canonical 과 hreflang, 비어 있지 않은 h1 을 가진 최소 페이지."""
         b = check.BASE
         tags = "".join(f'<link rel="alternate" hreflang="{c}" href="{b}{p}">' for c, p in alts)
-        return f'<link rel="canonical" href="{b}{path}">{tags}{body}'
+        return f'<link rel="canonical" href="{b}{path}">{tags}<main id="main"><h1>Title</h1>{body}</main>'
 
     def test_store_link_without_mt8_is_reported_and_full_link_passes(self):
         with tempfile.TemporaryDirectory() as td:
@@ -103,6 +103,39 @@ class CheckTests(unittest.TestCase):
             self.assertTrue(any("canonical 없음" in e for e in check.run(root)))
             touch(root, "/index.html", self.html("/other/"))
             self.assertTrue(any("canonical 불일치" in e for e in check.run(root)))
+
+
+class LanguageCheckTests(unittest.TestCase):
+    def page(self, lang, h1="Title", main_extra="", html_lang=None):
+        return (f'<!DOCTYPE html><html lang="{html_lang or lang}"><head><meta charset="UTF-8">'
+                f'<link rel="canonical" href="{check.BASE}/{lang}/apps/x/"></head><body>'
+                f'<main id="main"><h1>{h1}</h1>{main_extra}</main></body></html>')
+
+    def test_hangul_in_ja_main_is_flagged(self):
+        errs = check.language_errors("ja/apps/x/index.html", self.page("ja", main_extra="<p>한글</p>"))
+        self.assertTrue(any("한글 노출" in e for e in errs))
+
+    def test_hangul_outside_main_or_in_jsonld_is_ignored(self):
+        html = self.page("ja", main_extra='<script type="application/ld+json">{"name":"한글"}</script>')
+        html = html.replace("<main", "<header>한글 메뉴</header><main")
+        self.assertEqual(check.language_errors("ja/apps/x/index.html", html), [])
+
+    def test_empty_h1_and_lang_mismatch(self):
+        errs = check.language_errors("de/apps/x/index.html", self.page("de", h1="", html_lang="fr"))
+        self.assertTrue(any("h1 비어" in e for e in errs))
+        self.assertTrue(any("html lang 불일치" in e for e in errs))
+
+    def test_ko_and_en_pages_are_not_checked_for_hangul(self):
+        self.assertEqual(check.language_errors("en/apps/x/index.html", self.page("en", main_extra="<p>한글</p>")), [])
+
+    def test_new_language_dirs_are_scanned_by_run(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = pathlib.Path(d)
+            (root / "ja" / "apps" / "x").mkdir(parents=True)
+            (root / "ja" / "apps" / "x" / "index.html").write_text(
+                self.page("ja", main_extra="<p>한글</p>"), encoding="utf-8")
+            errs = check.run(root)
+            self.assertTrue(any("ja/apps/x/index.html" in e and "한글 노출" in e for e in errs))
 
 
 if __name__ == "__main__":
