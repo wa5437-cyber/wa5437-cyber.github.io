@@ -20,7 +20,7 @@ class CareerTests(unittest.TestCase):
         self.assertTrue(20 <= len(d["works"]) <= 30)
         per = {}
         for w in d["works"]:
-            self.assertEqual(set(w), {"year", "artist", "title", "role", "church"})
+            self.assertEqual(set(w), {"year", "artist", "title", "album", "role", "church"})
             self.assertTrue(w["artist"] and w["role"])
             per[w["artist"]] = per.get(w["artist"], 0) + 1
         self.assertLessEqual(max(per.values()), 2)
@@ -44,6 +44,6 @@ class CareerTests(unittest.TestCase):
         with open(csv_path, encoding="utf-8-sig", newline="") as f:
             rows = list(csv.DictReader(f))
         d = json.loads((ROOT / "_src" / "content" / "career.json").read_text(encoding="utf-8"))
-        have = {(int(r["년도"]), r["가수/작품"].strip(), (r["제목"] or "").strip() or None, r["역할"].strip()) for r in rows}
+        have = {(int(r["년도"]), r["가수/작품"].strip(), (r["제목"] or "").strip() or None, (r["앨범/구분"] or "").strip() or None, r["역할"].strip()) for r in rows}
         for w in d["works"]:
-            self.assertIn((w["year"], w["artist"], w["title"], w["role"]), have, w)
+            self.assertIn((w["year"], w["artist"], w["title"], w["album"], w["role"]), have, w)

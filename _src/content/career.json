@@ -4,6 +4,7 @@
    "year": 2024,
    "artist": "배이성",
    "title": null,
+   "album": "EP 첫 번째",
    "role": "믹싱 마스터링",
    "church": false
   },
@@ -11,6 +12,7 @@
    "year": 2024,
    "artist": "뮤지컬 더쇼 신라하다",
    "title": "더쇼 신라하다",
+   "album": null,
    "role": "믹싱",
    "church": false
   },
@@ -18,6 +20,7 @@
    "year": 2023,
    "artist": "파파더캅",
    "title": "해가 나를 밀어내던 밤",
+   "album": "싱글",
    "role": "믹싱 마스터링",
    "church": false
   },
@@ -25,6 +28,7 @@
    "year": 2023,
    "artist": "뮤지컬 보이A",
    "title": "보이A",
+   "album": null,
    "role": "믹싱",
    "church": false
   },
@@ -32,6 +36,7 @@
    "year": 2022,
    "artist": "빛과소금",
    "title": "오늘까지만/우리모두에게/비오는숲/사랑의묘약/우리모두에게 With Fans",
+   "album": "Here we go",
    "role": "믹싱 스튜디오",
    "church": false
   },
@@ -39,6 +44,7 @@
    "year": 2022,
    "artist": "매튜",
    "title": "잔기침",
+   "album": "싱글",
    "role": "믹싱 마스터링",
    "church": false
   },
@@ -46,6 +52,7 @@
    "year": 2021,
    "artist": "송영주",
    "title": null,
+   "album": "Jazz Meets Hymns3",
    "role": "녹음",
    "church": false
   },
@@ -53,6 +60,7 @@
    "year": 2021,
    "artist": "Monologue",
    "title": null,
+   "album": "Letters for You",
    "role": "녹음 믹싱 마스터링",
    "church": false
   },
@@ -60,6 +68,7 @@
    "year": 2021,
    "artist": "pe.young",
    "title": null,
+   "album": "Walk",
    "role": "마스터링",
    "church": false
   },
@@ -67,6 +76,7 @@
    "year": 2021,
    "artist": "원스톤워십",
    "title": "예수,경이",
+   "album": "싱글",
    "role": "마스터링",
    "church": true
   },
@@ -74,6 +84,7 @@
    "year": 2021,
    "artist": "쉐이커스 워십",
    "title": "주님의 때에",
+   "album": "싱글",
    "role": "마스터링",
    "church": true
   },
@@ -81,6 +92,7 @@
    "year": 2020,
    "artist": "램넌트워십",
    "title": "삶의 모든 순간 (축복송)",
+   "album": "싱글",
    "role": "믹싱 마스터링",
    "church": true
   },
@@ -88,6 +100,7 @@
    "year": 2020,
    "artist": "영화 울지마톤즈2",
    "title": "울지마톤즈2",
+   "album": null,
    "role": "음악믹싱",
    "church": false
   },
@@ -95,6 +108,7 @@
    "year": 2020,
    "artist": "우디",
    "title": "Go with the flow",
+   "album": "싱글",
    "role": "믹싱 마스터링",
    "church": false
   },
@@ -102,6 +116,7 @@
    "year": 2020,
    "artist": "크리스탈 밴드",
    "title": null,
+   "album": "I and my beloved",
    "role": "믹싱 마스터링",
    "church": false
   },
@@ -109,6 +124,7 @@
    "year": 2019,
    "artist": "영화 극한직업",
    "title": "극한직업",
+   "album": null,
    "role": "음악 믹싱",
    "church": false
   },
@@ -116,6 +132,7 @@
    "year": 2019,
    "artist": "Samwil worship",
    "title": null,
+   "album": "내가 여호와를 기다렸더니",
    "role": "믹싱 마스터링",
    "church": true
   },
@@ -123,6 +140,7 @@
    "year": 2019,
    "artist": "정평일",
    "title": null,
+   "album": "101",
    "role": "믹싱 마스터링",
    "church": false
   },
@@ -130,6 +148,7 @@
    "year": 2018,
    "artist": "미노",
    "title": null,
+   "album": "성장통",
    "role": "레코딩 믹싱 마스터링",
    "church": false
   },
@@ -137,6 +156,7 @@
    "year": 2017,
    "artist": "영화 재심",
    "title": "재심",
+   "album": null,
    "role": "음악 믹싱",
    "church": false
   },
@@ -144,6 +164,7 @@
    "year": 2017,
    "artist": "이루마",
    "title": null,
+   "album": "Frame",
    "role": "레코딩",
    "church": false
   },
@@ -151,6 +172,7 @@
    "year": 2016,
    "artist": "신날새,정진희",
    "title": null,
+   "album": "해금 Meets 피아노",
    "role": "레코딩",
    "church": false
   },
@@ -158,13 +180,23 @@
    "year": 2016,
    "artist": "우디",
    "title": null,
+   "album": "Erased",
    "role": "믹싱",
+   "church": false
+  },
+  {
+   "year": 2013,
+   "artist": "노형우",
+   "title": null,
+   "album": "그댈 사랑 하는데",
+   "role": "레코딩",
    "church": false
   },
   {
    "year": 2012,
    "artist": "KiO장기호",
    "title": null,
+   "album": "Chagall Out Of Town2",
    "role": "레코딩",
    "church": false
   },
@@ -172,6 +204,7 @@
    "year": 2012,
    "artist": "김창완밴드",
    "title": null,
+   "album": "분홍굴착기",
    "role": "레코딩",
    "church": false
   },
@@ -179,6 +212,7 @@
    "year": 2011,
    "artist": "Various Artists",
    "title": null,
+   "album": "Korea’s Got Talent",
    "role": "레코딩",
    "church": false
   },
@@ -186,6 +220,7 @@
    "year": 2009,
    "artist": "이루마",
    "title": null,
+   "album": "Movement On A Theme By Yiruma",
    "role": "레코딩",
    "church": false
   }
