@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""기존 가이드(guides/*.html)에 새 메뉴·푸터 링크·글쓴이 박스를 넣는 멱등 변환기.
+"""기존 가이드(guides/*.html)에 새 메뉴·푸터 링크·글쓴이 박스·사이트 글꼴을 넣는 멱등 변환기.
 
 사용: chrome_legacy.py          guides/*.html 을 제자리 변환(바뀐 파일 수 출력)
       chrome_legacy.py --check  쓰지 않고, 변환이 필요한 파일이 있으면 종료코드 1
@@ -17,6 +17,13 @@ MENU = [("/apps/", "Apps"), ("/tools/", "Tools"), ("/plugins/", "Plugins"),
         ("/studio/", "Studio"), ("/guides/", "Guides"), ("/about/", "About")]
 COMPANY = [("/about/", "About"), ("/studio/", "Studio"), ("/privacy/", "Privacy"),
            ("/policy.html#policy", "App privacy policy"), ("/contact/", "Contact")]
+
+# 사이트(_src/sitegen/kit.py 의 FONTS·THEME_COLOR)와 같은 글꼴·브라우저 색. 테스트가 두 값이 같은지 본다.
+FONTS = ("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700"
+         "&family=Noto+Sans+KR:wght@400;500;600;700&display=swap")
+THEME_COLOR = "#f4f5f3"
+FONT_LINK_RE = re.compile(r'<link href="https://fonts\.googleapis\.com/css2\?[^"]*" rel="stylesheet">')
+THEME_RE = re.compile(r'<meta name="theme-color" content="#[0-9a-fA-F]{6}">')
 
 AUTHOR_RE = re.compile(r"\n\n?[ \t]*<!-- author-box -->.*?<!-- /author-box -->(?=\n</article>)", re.S)
 
@@ -58,6 +65,17 @@ def _footer(html):
     links = "".join('\n      <a href="%s">%s</a>' % c for c in COMPANY)
     foot = foot[:col.start(2)] + links + foot[col.end(2):]
     return html[:m.start()] + foot + html[m.end():]
+
+
+def _head(html):
+    """<head> 의 Google Fonts 링크와 theme-color 를 사이트와 같게."""
+    html, n = FONT_LINK_RE.subn('<link href="%s" rel="stylesheet">' % FONTS, html)
+    if n != 1:
+        _fail("Google Fonts <link> 가 정확히 하나여야 함(%d개)" % n)
+    html, n = THEME_RE.subn('<meta name="theme-color" content="%s">' % THEME_COLOR, html)
+    if n != 1:
+        _fail('<meta name="theme-color"> 가 정확히 하나여야 함(%d개)' % n)
+    return html
 
 
 def _body_anchors(html):
@@ -138,6 +156,7 @@ def _author_box(published, modified):
 def transform(html, kind, dates=None):
     if kind not in ("guide", "guides-index"):
         raise ValueError("알 수 없는 kind: %r" % (kind,))
+    html = _head(html)
     html = _menu(html)
     html = _footer(html)
     html = _body_anchors(html)

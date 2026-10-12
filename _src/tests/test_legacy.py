@@ -52,6 +52,10 @@ DATES = json.loads((ROOT / "_src" / "content" / "guide_dates.json").read_text(en
 LD_KEEP = ("headline", "description", "inLanguage", "image", "publisher", "mainEntityOfPage", "@context", "@type")
 
 
+def FONT_LINK_GONE(text):
+    return chrome_legacy.FONT_LINK_RE.sub("", text)
+
+
 def guide_files():
     return sorted(glob.glob(str(ROOT / "guides" / "*.html")))
 
@@ -122,6 +126,21 @@ class TransformSampleTests(unittest.TestCase):
                  self.raw.replace('<script type="application/ld+json">', '<script type="text/plain">'),
                  self.raw.replace('"@type": "Article"', '"@type": "BlogPosting"'))
         for broken in cases:
+            with self.assertRaises(ValueError):
+                chrome_legacy.transform(broken, "guide")
+
+    def test_fonts_and_theme_color_match_site(self):
+        sys.path.insert(0, str(ROOT / "_src"))
+        from sitegen import kit
+        self.assertEqual(chrome_legacy.FONTS, kit.FONTS)
+        self.assertEqual(chrome_legacy.THEME_COLOR, kit.THEME_COLOR)
+        self.assertEqual(self.out.count("fonts.googleapis.com/css2?"), 1)
+        self.assertIn('<link href="%s" rel="stylesheet">' % kit.FONTS, self.out)
+        self.assertNotIn("Space+Grotesk", self.out)
+        self.assertIn('<meta name="theme-color" content="%s">' % kit.THEME_COLOR, self.out)
+
+    def test_missing_font_link_or_theme_color_raises(self):
+        for broken in (FONT_LINK_GONE(self.raw), self.raw.replace('<meta name="theme-color"', '<meta name="x-color"')):
             with self.assertRaises(ValueError):
                 chrome_legacy.transform(broken, "guide")
 
@@ -208,7 +227,9 @@ class AllGuidesTests(unittest.TestCase):
 
 
 def strip_chrome(text):
-    """메뉴 링크·푸터·글쓴이 박스·JSON-LD 를 걷어내고 옛 홈 앵커를 새 주소로 맞춘 본문 비교용 문자열."""
+    """메뉴 링크·푸터·글쓴이 박스·JSON-LD·글꼴 링크·theme-color 를 걷어내고 옛 홈 앵커를 새 주소로 맞춘 본문 비교용 문자열."""
+    text = chrome_legacy.FONT_LINK_RE.sub("<!-- fonts -->", text)
+    text = chrome_legacy.THEME_RE.sub("<!-- theme -->", text)
     text = re.sub(r'<div class="links">.*?</div>', "", text, flags=re.S)
     text = re.sub(r"<footer.*?</footer>", "", text, flags=re.S)
     text = re.sub(r"\n\n?[ \t]*<!-- author-box -->.*?<!-- /author-box -->", "", text, flags=re.S)
