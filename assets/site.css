@@ -88,3 +88,4 @@ html:lang(zh-Hans){--sans:"PingFang SC","Microsoft YaHei","Noto Sans KR",system-
 html:lang(de) body,html:lang(es) body,html:lang(fr) body,html:lang(pt-BR) body{hyphens:auto}
 .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media (max-width:640px){.shots{grid-template-columns:1fr}}
+.addr{margin:.6em 0 0;color:var(--ink2)}

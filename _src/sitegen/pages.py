@@ -2,7 +2,7 @@ import json
 import pathlib
 import re
 
-from . import kit, strings
+from . import kit, sections, strings
 from .kit import esc, url
 
 SRC = pathlib.Path(__file__).resolve().parents[1]
@@ -130,6 +130,27 @@ def tools(lang):
             f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
     path = url(lang, "/tools/")
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/tools/"))
+
+
+SIMPLE_PAGES = ("plugins", "studio", "about", "contact", "privacy")
+
+
+def load_page(name):
+    """content/pages/<name>.json 을 읽는다. 파일이 없으면 None."""
+    f = SRC / "content" / "pages" / f"{name}.json"
+    return json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
+
+
+def simple_page(lang, name):
+    """content/pages/<name>.json 의 hero + 구역들로 만든 단순 페이지."""
+    c = load_page(name)[lang]
+    ctx = {"contact": kit.SITE["contact"], "career": None,
+           "img_exists": lambda p: (ROOT / p.lstrip("/")).exists()}
+    body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
+            f'<p class="sub">{esc(c["sub"])}</p></div></section>'
+            + sections.render(c["sections"], lang, ctx))
+    path = url(lang, f"/{name}/")
+    return path, kit.page(lang, path, c["title"], c["description"], body, alts_for(f"/{name}/"))
 
 
 CAMPAIGN = "?pt=129167489&amp;ct=homepage&amp;mt=8"
@@ -375,6 +396,13 @@ def build_all(root):
             path, html = fn(lang)
             kit.write(root, path, html)
         made += [url(lang, "/"), url(lang, "/tools/"), url(lang, "/apps/")]
+    for name in SIMPLE_PAGES:
+        if load_page(name) is None:
+            continue
+        for lang in ("ko", "en"):
+            path, html = simple_page(lang, name)
+            kit.write(root, path, html)
+            made.append(path)
     slugs = [a["slug"] for a in d["apps"]]
     for slug in slugs:
         for lang in app_langs(slug):

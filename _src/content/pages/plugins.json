@@ -1,0 +1,28 @@
+{
+  "ko": {
+    "title": "플러그인 | ML Music Studio",
+    "description": "데스크톱 DAW용 VST3·AU 플러그인을 준비하고 있습니다. 출시 소식은 카카오톡 오픈채팅이나 이메일로 받을 수 있습니다.",
+    "h1": "플러그인",
+    "sub": "데스크톱용 VST3·AU 플러그인을 준비하고 있습니다.",
+    "sections": [
+      {"type": "prose", "title": "준비 중입니다",
+       "paragraphs": [
+         "지금 출시되어 있는 것은 앱입니다. 데스크톱 DAW에서 쓰는 VST3·AU 플러그인은 개발 중입니다.",
+         "출시 소식은 카카오톡 오픈채팅이나 이메일로 문의해 주세요."]},
+      {"type": "contact", "title": "문의", "text": null}
+    ]
+  },
+  "en": {
+    "title": "Plug-ins | ML Music Studio",
+    "description": "We are preparing VST3 and AU plug-ins for desktop DAWs. News is available through the KakaoTalk open chat or by email.",
+    "h1": "Plug-ins",
+    "sub": "We are preparing VST3 and AU plug-ins for desktop DAWs.",
+    "sections": [
+      {"type": "prose", "title": "Coming soon",
+       "paragraphs": [
+         "What is released today are the apps. The VST3 and AU plug-ins for desktop DAWs are in development.",
+         "For release news, please ask through the KakaoTalk open chat or by email."]},
+      {"type": "contact", "title": "Contact", "text": null}
+    ]
+  }
+}
