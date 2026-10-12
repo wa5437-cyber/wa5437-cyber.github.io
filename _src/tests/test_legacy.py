@@ -39,10 +39,17 @@ def src(name):
 
 
 def protected_lines(text):
-    """JSON-LD 블록, AdSense 줄, apps.apple.com 링크 줄, h1 줄."""
-    ld = re.findall(r'<script type="application/ld\+json">.*?</script>', text, re.S)
-    lines = [l for l in text.split("\n") if "adsbygoogle" in l or "apps.apple.com" in l or "<h1" in l]
-    return ld, lines
+    """AdSense 줄, apps.apple.com 링크 줄, h1 줄(변환 전후 바이트 동일해야 함)."""
+    return [l for l in text.split("\n") if "adsbygoogle" in l or "apps.apple.com" in l or "<h1" in l]
+
+
+def ld_of(text):
+    m = re.search(r'<script type="application/ld\+json">\n(.*?)\n</script>', text, re.S)
+    return json.loads(m.group(1)) if m else None
+
+
+DATES = json.loads((ROOT / "_src" / "content" / "guide_dates.json").read_text(encoding="utf-8"))
+LD_KEEP = ("headline", "description", "inLanguage", "image", "publisher", "mainEntityOfPage", "@context", "@type")
 
 
 def guide_files():
@@ -87,13 +94,32 @@ class TransformSampleTests(unittest.TestCase):
         self.assertLess(self.out.index("<!-- /author-box -->"), self.out.index("</article>"))
         self.assertEqual(self.out.count("</article>"), 1)
 
-    def test_modified_date_only_from_json_ld(self):
-        no_date = chrome_legacy.transform(self.raw, "guide")
-        self.assertNotIn("최종 수정", no_date)
-        with_mod = self.raw.replace('"inLanguage": "ko",', '"inLanguage": "ko",\n  "datePublished": "2026-01-02",\n  "dateModified": "2026-03-04T10:00:00+09:00",')
-        self.assertIn("최종 수정 2026-03-04", chrome_legacy.transform(with_mod, "guide"))
-        only_pub = self.raw.replace('"inLanguage": "ko",', '"inLanguage": "ko",\n  "datePublished": "2026-01-02",')
-        self.assertIn("최종 수정 2026-01-02", chrome_legacy.transform(only_pub, "guide"))
+    def test_dates_in_box_and_json_ld_from_guide_dates(self):
+        d = {"gain-staging-basics": {"published": "2026-01-02", "modified": "2026-03-04"}}
+        out = chrome_legacy.transform(self.raw, "guide", dates=d)
+        self.assertIn("게시 2026-01-02 · 최종 수정 2026-03-04</p>", out)
+        ld = ld_of(out)
+        self.assertEqual((ld["datePublished"], ld["dateModified"]), ("2026-01-02", "2026-03-04"))
+        same = {"gain-staging-basics": {"published": "2026-01-02", "modified": "2026-01-02"}}
+        out2 = chrome_legacy.transform(self.raw, "guide", dates=same)
+        self.assertIn("· 게시 2026-01-02</p>", out2)
+        self.assertNotIn("최종 수정", out2)
+        # 날짜를 바꿔 다시 적용해도 중복 키 없이 교체(멱등)
+        again = chrome_legacy.transform(out, "guide", dates=same)
+        self.assertEqual(again.count('"datePublished"'), 1)
+        self.assertEqual(again, out2)
+
+    def test_json_ld_author_person_and_other_fields_unchanged(self):
+        before, after = ld_of(self.raw), ld_of(self.out)
+        for k in LD_KEEP:
+            self.assertEqual(after[k], before[k], k)
+        self.assertEqual(after["author"], {"@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/"})
+        self.assertEqual(after["@type"], "Article")
+        self.assertEqual(self.out.count('<script type="application/ld+json">'), 1)
+
+    def test_missing_date_entry_raises(self):
+        with self.assertRaises(ValueError):
+            chrome_legacy.transform(self.raw, "guide", dates={})
 
     def test_protected_lines_identical(self):
         self.assertEqual(protected_lines(self.out), protected_lines(self.raw))
@@ -145,6 +171,15 @@ class AllGuidesTests(unittest.TestCase):
             self.assertEqual(balanced_errors(once), [], f)
             self.assertEqual(protected_lines(once), protected_lines(raw), f)
             self.assertNotIn('href="/#', once, f)
+            if self.kind(f) == "guide":
+                slug = pathlib.Path(f).stem
+                ld0, ld1 = ld_of(raw), ld_of(once)
+                self.assertEqual(ld1["@type"], "Article", f)
+                for k in LD_KEEP:
+                    self.assertEqual(ld1[k], ld0[k], f + k)
+                self.assertEqual(ld1["datePublished"], DATES[slug]["published"], f)
+                self.assertEqual(ld1["dateModified"], DATES[slug]["modified"], f)
+                self.assertEqual(ld1["author"]["@type"], "Person", f)
             self.assertEqual(once.count('class="author-box"'), 0 if self.kind(f) == "guides-index" else 1, f)
 
     def test_disk_guides_balanced_like_publish_guide(self):
@@ -157,6 +192,32 @@ class AllGuidesTests(unittest.TestCase):
             out = chrome_legacy.transform(raw, self.kind(f))
             self.assertEqual(set(re.findall(r'href="(/guides/[^"]+)"', raw)) - {"/guides/"},
                              set(re.findall(r'href="(/guides/[^"]+)"', out)) - {"/guides/"}, f)
+
+
+class GuideDatesTests(unittest.TestCase):
+    def test_pick_dates(self):
+        import guide_dates
+        added = [("2026-09-02", "가이드 추가"), ("2026-09-01", "가이드 3편 추가")]
+        touched = [("2026-10-12", "기존 가이드 25개에 새 메뉴·푸터 링크·글쓴이 박스 추가"),
+                   ("2026-10-05", "앱스토어 링크에 캠페인 표시"),
+                   ("2026-10-02", "무대음향 앱 1.2 반영"),
+                   ("2026-09-01", "가이드 3편 추가")]
+        self.assertEqual(guide_dates.pick_dates(added, touched), ("2026-09-01", "2026-10-02"))
+
+    def test_pick_dates_all_mechanical_falls_back_to_published(self):
+        import guide_dates
+        added = [("2026-09-01", "커스텀 도메인 연결")]
+        touched = [("2026-10-05", "앱스토어 링크에 캠페인 표시"), ("2026-09-01", "커스텀 도메인 연결")]
+        self.assertEqual(guide_dates.pick_dates(added, touched), ("2026-09-01", "2026-09-01"))
+
+    def test_json_covers_every_guide_with_valid_dates(self):
+        import datetime
+        slugs = {pathlib.Path(f).stem for f in guide_files() if not f.endswith("/index.html")}
+        self.assertEqual(set(DATES), slugs)
+        for slug, d in DATES.items():
+            pub = datetime.date.fromisoformat(d["published"])
+            mod = datetime.date.fromisoformat(d["modified"])
+            self.assertLessEqual(pub, mod, slug)
 
 
 class CliTests(unittest.TestCase):

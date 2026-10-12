@@ -1,0 +1,98 @@
+{
+ "31-band-eq-standard-frequencies": {
+  "modified": "2026-10-09",
+  "published": "2026-10-09"
+ },
+ "ableton-fl-studio-workflow": {
+  "modified": "2026-09-18",
+  "published": "2026-09-18"
+ },
+ "balanced-vs-unbalanced-cables": {
+  "modified": "2026-10-02",
+  "published": "2026-09-30"
+ },
+ "bpm-to-delay-time": {
+  "modified": "2026-08-30",
+  "published": "2026-08-30"
+ },
+ "compressor-parameters-explained": {
+  "modified": "2026-09-11",
+  "published": "2026-09-11"
+ },
+ "condenser-vs-dynamic-mic": {
+  "modified": "2026-10-02",
+  "published": "2026-09-28"
+ },
+ "daw-shortcuts-concepts": {
+  "modified": "2026-09-01",
+  "published": "2026-09-01"
+ },
+ "delay-tower-alignment": {
+  "modified": "2026-08-29",
+  "published": "2026-08-29"
+ },
+ "eq-types-and-q": {
+  "modified": "2026-10-05",
+  "published": "2026-10-05"
+ },
+ "frequency-and-wavelength": {
+  "modified": "2026-09-01",
+  "published": "2026-09-01"
+ },
+ "gain-staging-basics": {
+  "modified": "2026-09-01",
+  "published": "2026-09-01"
+ },
+ "line-array-basics": {
+  "modified": "2026-10-01",
+  "published": "2026-10-01"
+ },
+ "microphone-polar-patterns": {
+  "modified": "2026-10-02",
+  "published": "2026-09-01"
+ },
+ "ohms-law-for-audio": {
+  "modified": "2026-08-30",
+  "published": "2026-08-30"
+ },
+ "pink-noise-eq-ear-training": {
+  "modified": "2026-09-01",
+  "published": "2026-09-01"
+ },
+ "pro-tools-to-logic-migration": {
+  "modified": "2026-09-01",
+  "published": "2026-09-01"
+ },
+ "reading-31-band-rta": {
+  "modified": "2026-08-29",
+  "published": "2026-08-29"
+ },
+ "reading-lufs-loudness": {
+  "modified": "2026-08-30",
+  "published": "2026-08-30"
+ },
+ "reverb-delay-chorus-explained": {
+  "modified": "2026-09-01",
+  "published": "2026-09-01"
+ },
+ "rt60-reverberation-time": {
+  "modified": "2026-08-30",
+  "published": "2026-08-30"
+ },
+ "speaker-impedance-matching": {
+  "modified": "2026-10-02",
+  "published": "2026-08-29"
+ },
+ "spl-inverse-square-law": {
+  "modified": "2026-09-28",
+  "published": "2026-09-28"
+ },
+ "stage-sound-cert-study-plan": {
+  "modified": "2026-10-02",
+  "published": "2026-08-29"
+ },
+ "stage-sound-exam-scoring": {
+  "modified": "2026-10-02",
+  "published": "2026-10-02"
+ }
+}

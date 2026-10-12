@@ -4,11 +4,14 @@
 사용: chrome_legacy.py          guides/*.html 을 제자리 변환(바뀐 파일 수 출력)
       chrome_legacy.py --check  쓰지 않고, 변환이 필요한 파일이 있으면 종료코드 1
 정규식·문자열 치환만 쓴다. 바꿀 자리가 파일에 없으면 ValueError(템플릿에서 벗어난 가이드를 알아채려고).
+날짜는 content/guide_dates.json(guide_dates.py 가 git 기록에서 만든 것)만 읽고, 이 도구는 git 을 부르지 않는다.
 """
 import json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 CAREER = ROOT / "_src" / "content" / "career.json"
+DATES = ROOT / "_src" / "content" / "guide_dates.json"
+AUTHOR_LD = {"@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/"}
 
 MENU = [("/apps/", "Apps"), ("/tools/", "Tools"), ("/plugins/", "Plugins"),
         ("/studio/", "Studio"), ("/guides/", "Guides"), ("/about/", "About")]
@@ -66,31 +69,73 @@ def _career():
     return json.loads(CAREER.read_text(encoding="utf-8"))
 
 
-def _modified(html):
-    for key in ("dateModified", "datePublished"):
-        m = re.search(r'"%s"\s*:\s*"(\d{4}-\d{2}-\d{2})' % key, html)
-        if m:
-            return m.group(1)
-    return None
+def _slug(html):
+    m = re.search(r'<link rel="canonical" href="https://mlmusicstudio\.co\.kr/guides/([^"/]+)\.html">', html)
+    if not m:
+        _fail("canonical 링크에서 가이드 slug 를 찾지 못함")
+    return m.group(1)
 
 
-def _author_box(html):
+def _dates(html, dates):
+    slug = _slug(html)
+    if dates is None:
+        dates = json.loads(DATES.read_text(encoding="utf-8"))
+    if slug not in dates:
+        _fail("guide_dates.json 에 %s 항목이 없음(guide_dates.py 를 다시 실행)" % slug)
+    return dates[slug]["published"], dates[slug]["modified"]
+
+
+def _inline(v):
+    """원래 파일 모양: 중첩 객체는 한 줄 `{ "k": v, ... }`."""
+    if isinstance(v, dict):
+        return "{ " + ", ".join("%s: %s" % (json.dumps(k, ensure_ascii=False), _inline(x)) for k, x in v.items()) + " }"
+    return json.dumps(v, ensure_ascii=False)
+
+
+def _dump_ld(d):
+    rows = ["  %s: %s" % (json.dumps(k, ensure_ascii=False), _inline(v)) for k, v in d.items()]
+    return "{\n" + ",\n".join(rows) + "\n}"
+
+
+def _json_ld(html, published, modified):
+    m = re.search(r'(<script type="application/ld\+json">\n)(.*?)(\n</script>)', html, re.S)
+    if not m:
+        _fail("JSON-LD 블록이 없음")
+    try:
+        ld = json.loads(m.group(2))
+    except ValueError as e:
+        _fail("JSON-LD 를 읽을 수 없음: %s" % e)
+    if ld.get("@type") != "Article":
+        _fail('JSON-LD @type 이 "Article" 이 아님')
+    if "author" not in ld:
+        _fail("JSON-LD 에 author 가 없음")
+    ordered = {}
+    for k, v in ld.items():  # 날짜는 author 바로 앞에, 나머지 순서는 그대로
+        if k in ("datePublished", "dateModified"):
+            continue
+        if k == "author":
+            ordered["datePublished"], ordered["dateModified"] = published, modified
+            v = dict(AUTHOR_LD)
+        ordered[k] = v
+    return html[:m.start(2)] + _dump_ld(ordered) + html[m.end(2):]
+
+
+def _author_box(published, modified):
     c = _career()
-    mod = _modified(html)
-    tail = " · 최종 수정 %s" % mod if mod else ""
+    when = "게시 %s" % published if modified == published else "게시 %s · 최종 수정 %s" % (published, modified)
     return "\n".join([
         "  <!-- author-box -->",
         '  <aside class="author-box" aria-label="글쓴이">',
         '    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>',
         "    <p>%d년부터 믹싱·마스터링·녹음 작업을 하고 있으며(기록된 작업 %d건), 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>"
         % (c["since"], c["total"]),
-        '    <p class="meta"><a href="/about/">글쓴이 소개</a>%s</p>' % tail,
+        '    <p class="meta"><a href="/about/">글쓴이 소개</a> · %s</p>' % when,
         "  </aside>",
         "  <!-- /author-box -->",
     ])
 
 
-def transform(html, kind):
+def transform(html, kind, dates=None):
     if kind not in ("guide", "guides-index"):
         raise ValueError("알 수 없는 kind: %r" % (kind,))
     html = _menu(html)
@@ -100,8 +145,10 @@ def transform(html, kind):
     if kind == "guide":
         if html.count("\n</article>") != 1:
             _fail("</article> 가 줄 머리에 정확히 한 번 있어야 함")
+        pub, mod = _dates(html, dates)
         # 박스 앞에 빈 줄 하나(관련 글 블록과 구분)
-        html = html.replace("\n</article>", "\n\n" + _author_box(html) + "\n</article>")
+        html = html.replace("\n</article>", "\n\n" + _author_box(pub, mod) + "\n</article>")
+        html = _json_ld(html, pub, mod)
     elif "author-box" in html:
         _fail("guides-index 에 글쓴이 박스가 있음")
     return html
