@@ -163,8 +163,13 @@ class AllGuidesTests(unittest.TestCase):
     def kind(self, path):
         return "guides-index" if path.endswith("/index.html") else "guide"
 
-    def test_25_files(self):
-        self.assertEqual(len(guide_files()), 25)
+    def test_guide_count_matches_index_entries(self):
+        """가이드 수를 하드코딩하지 않는다: guides/*.html(index 제외) = guides/index.html 의 목록 항목 = guide_dates.json."""
+        slugs = {pathlib.Path(f).stem for f in guide_files() if not f.endswith("/index.html")}
+        listed = set(re.findall(r'href="/guides/([^"/]+)\.html"', src("index.html")))
+        self.assertGreaterEqual(len(slugs), 25)
+        self.assertEqual(slugs, listed)
+        self.assertEqual(slugs, set(DATES))
 
     def test_every_guide_is_transformed_on_disk(self):
         """리포지토리에 있는 파일이 이미 변환된 상태(--check 와 같은 뜻)."""
@@ -230,8 +235,14 @@ class BodyAndDatesTests(unittest.TestCase):
             r = subprocess.run(["git", "show", "09605f1~1:guides/" + name], cwd=str(ROOT),
                                capture_output=True, text=True)
             if r.returncode != 0:
-                self.skipTest("git 기록에서 변환 전 파일을 읽을 수 없음")
-            self.assertEqual(strip_chrome(src(name)), strip_chrome(r.stdout), name)
+                continue  # 변환 이후에 추가된 가이드는 비교할 변환 전 파일이 없다
+            now = strip_chrome(src(name))
+            if name == "index.html":  # 변환 뒤에 추가된 가이드의 목록 항목은 비교에서 뺀다
+                for slug in re.findall(r'<a href="/guides/([^"/]+)\.html">', now):
+                    if subprocess.run(["git", "cat-file", "-e", "09605f1~1:guides/%s.html" % slug],
+                                      cwd=str(ROOT), capture_output=True).returncode != 0:
+                        now = re.sub(r'      <a href="/guides/%s\.html">.*?</a>\n' % re.escape(slug), "", now, flags=re.S)
+            self.assertEqual(now, strip_chrome(r.stdout), name)
 
 
 class GuideDatesTests(unittest.TestCase):
