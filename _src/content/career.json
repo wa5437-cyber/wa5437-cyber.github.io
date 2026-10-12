@@ -1,0 +1,200 @@
+{
+ "works": [
+  {
+   "year": 2024,
+   "artist": "배이성",
+   "title": null,
+   "role": "믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2024,
+   "artist": "뮤지컬 더쇼 신라하다",
+   "title": "더쇼 신라하다",
+   "role": "믹싱",
+   "church": false
+  },
+  {
+   "year": 2023,
+   "artist": "파파더캅",
+   "title": "해가 나를 밀어내던 밤",
+   "role": "믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2023,
+   "artist": "뮤지컬 보이A",
+   "title": "보이A",
+   "role": "믹싱",
+   "church": false
+  },
+  {
+   "year": 2022,
+   "artist": "빛과소금",
+   "title": "오늘까지만/우리모두에게/비오는숲/사랑의묘약/우리모두에게 With Fans",
+   "role": "믹싱 스튜디오",
+   "church": false
+  },
+  {
+   "year": 2022,
+   "artist": "매튜",
+   "title": "잔기침",
+   "role": "믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2021,
+   "artist": "송영주",
+   "title": null,
+   "role": "녹음",
+   "church": false
+  },
+  {
+   "year": 2021,
+   "artist": "Monologue",
+   "title": null,
+   "role": "녹음 믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2021,
+   "artist": "pe.young",
+   "title": null,
+   "role": "마스터링",
+   "church": false
+  },
+  {
+   "year": 2021,
+   "artist": "원스톤워십",
+   "title": "예수,경이",
+   "role": "마스터링",
+   "church": true
+  },
+  {
+   "year": 2021,
+   "artist": "쉐이커스 워십",
+   "title": "주님의 때에",
+   "role": "마스터링",
+   "church": true
+  },
+  {
+   "year": 2020,
+   "artist": "램넌트워십",
+   "title": "삶의 모든 순간 (축복송)",
+   "role": "믹싱 마스터링",
+   "church": true
+  },
+  {
+   "year": 2020,
+   "artist": "영화 울지마톤즈2",
+   "title": "울지마톤즈2",
+   "role": "음악믹싱",
+   "church": false
+  },
+  {
+   "year": 2020,
+   "artist": "우디",
+   "title": "Go with the flow",
+   "role": "믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2020,
+   "artist": "크리스탈 밴드",
+   "title": null,
+   "role": "믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2019,
+   "artist": "영화 극한직업",
+   "title": "극한직업",
+   "role": "음악 믹싱",
+   "church": false
+  },
+  {
+   "year": 2019,
+   "artist": "Samwil worship",
+   "title": null,
+   "role": "믹싱 마스터링",
+   "church": true
+  },
+  {
+   "year": 2019,
+   "artist": "정평일",
+   "title": null,
+   "role": "믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2018,
+   "artist": "미노",
+   "title": null,
+   "role": "레코딩 믹싱 마스터링",
+   "church": false
+  },
+  {
+   "year": 2017,
+   "artist": "영화 재심",
+   "title": "재심",
+   "role": "음악 믹싱",
+   "church": false
+  },
+  {
+   "year": 2017,
+   "artist": "이루마",
+   "title": null,
+   "role": "레코딩",
+   "church": false
+  },
+  {
+   "year": 2016,
+   "artist": "신날새,정진희",
+   "title": null,
+   "role": "레코딩",
+   "church": false
+  },
+  {
+   "year": 2016,
+   "artist": "우디",
+   "title": null,
+   "role": "믹싱",
+   "church": false
+  },
+  {
+   "year": 2012,
+   "artist": "KiO장기호",
+   "title": null,
+   "role": "레코딩",
+   "church": false
+  },
+  {
+   "year": 2012,
+   "artist": "김창완밴드",
+   "title": null,
+   "role": "레코딩",
+   "church": false
+  },
+  {
+   "year": 2011,
+   "artist": "Various Artists",
+   "title": null,
+   "role": "레코딩",
+   "church": false
+  },
+  {
+   "year": 2009,
+   "artist": "이루마",
+   "title": null,
+   "role": "레코딩",
+   "church": false
+  }
+ ],
+ "since": 2009,
+ "total": 111,
+ "roles": {
+  "마스터링": 66,
+  "믹싱": 49,
+  "녹음": 30
+ }
+}
