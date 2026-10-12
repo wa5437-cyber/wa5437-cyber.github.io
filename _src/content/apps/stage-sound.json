@@ -1,128 +1,136 @@
 {
-  "detail": {
-    "price": {
-      "ko": "평생 이용권 ₩9,900 · 카테고리별 첫 회차 무료",
-      "en": "Lifetime unlock ₩9,900 · first round of each category free"
+ "detail": {
+  "price": {
+   "ko": "평생 이용권 ₩9,900 · 카테고리별 첫 회차 무료",
+   "en": "Lifetime unlock ₩9,900 · first round of each category free"
+  },
+  "lead": {
+   "ko": "무대예술전문인(음향) 1·2·3급 필기시험을 기출문제로 준비하는 앱입니다.",
+   "en": "An app for preparing for Korea's stage-sound certification written exams (grades 1-3) with past-exam questions."
+  },
+  "platforms": {
+   "ko": "iOS · Android",
+   "en": "iOS · Android"
+  },
+  "bullets": {
+   "ko": [
+    "필기 2,174문항(음향·법규·일반)과 무제한 계산문제",
+    "등급별 모의고사, 100분 타이머",
+    "표준교재 3권 요약노트",
+    "실기 기출문제 2010~2026",
+    "오답노트·북마크와 필기 출제 경향"
+   ],
+   "en": [
+    "2,174 written-exam questions (sound, regulations, general) and unlimited calculation problems",
+    "Mock exams by grade with a 100-minute timer",
+    "Summary notes for the 3 standard textbooks",
+    "Practical-exam past papers 2010–2026",
+    "Wrong-answer notes, bookmarks and exam-trend statistics"
+   ]
+  },
+  "facts": {
+   "ko": [
+    "iOS · Android",
+    "한국어 앱",
+    "필기 2,174문항",
+    "평생 이용권 ₩9,900"
+   ],
+   "en": [
+    "iOS · Android",
+    "Korean-language app",
+    "2,174 written questions",
+    "Lifetime unlock ₩9,900"
+   ]
+  },
+  "blocks": [
+   {
+    "img": "03_exam_grade.jpg",
+    "alt": {
+     "ko": "등급 선택 화면",
+     "en": "Grade selection screen"
     },
-    "lead": {
-      "ko": "무대예술전문인(음향) 1·2·3급 필기시험을 기출문제로 준비하는 앱입니다.",
-      "en": "An app for preparing for Korea's stage-sound certification written exams (grades 1-3) with past-exam questions."
+    "title": {
+     "ko": "등급별 모의고사",
+     "en": "Mock exams by grade"
     },
-    "platforms": {
-      "ko": "iOS · Android",
-      "en": "iOS · Android"
+    "text": {
+     "ko": "1·2·3급을 고르면 실제 시험처럼 100분 타이머가 돌아가는 모의고사를 볼 수 있습니다.",
+     "en": "Pick grade 1, 2 or 3 and take a mock exam with a 100-minute timer, just like the real one."
+    }
+   },
+   {
+    "img": "05_trend.jpg",
+    "alt": {
+     "ko": "필기 출제 경향 화면",
+     "en": "Past-exam topic frequency screen"
     },
-    "bullets": {
-      "ko": [
-        "필기 2,174문항(음향·법규·일반)과 무제한 계산문제",
-        "등급별 모의고사, 100분 타이머",
-        "표준교재 3권 요약노트",
-        "실기 기출문제 2010~2026",
-        "오답노트·북마크와 필기 출제 경향"
-      ],
-      "en": [
-        "2,174 written-exam questions (sound, regulations, general) and unlimited calculation problems",
-        "Mock exams by grade with a 100-minute timer",
-        "Summary notes for the 3 standard textbooks",
-        "Practical-exam past papers 2010–2026",
-        "Wrong-answer notes, bookmarks and exam-trend statistics"
-      ]
+    "title": {
+     "ko": "자주 나오는 주제부터",
+     "en": "Start with the most frequent topics"
     },
-    "facts": {
-      "ko": [
-        "iOS · Android",
-        "한국어 앱",
-        "필기 2,174문항",
-        "평생 이용권 ₩9,900"
-      ],
-      "en": [
-        "iOS · Android",
-        "Korean-language app",
-        "2,174 written questions",
-        "Lifetime unlock ₩9,900"
-      ]
+    "text": {
+     "ko": "역대 필기 기출을 주제별 빈도로 정리한 출제 경향에서 자주 나오는 주제 Top 15를 확인할 수 있습니다.",
+     "en": "The exam-trend screen ranks the most frequent topics from past written exams (Top 15)."
+    }
+   },
+   {
+    "img": "06_wrongnote.jpg",
+    "alt": {
+     "ko": "오답노트 화면",
+     "en": "Wrong-answer notes screen"
     },
-    "blocks": [
-      {
-        "img": "03_exam_grade.jpg",
-        "alt": {
-          "ko": "등급 선택 화면",
-          "en": "Grade selection screen"
-        },
-        "title": {
-          "ko": "등급별 모의고사",
-          "en": "Mock exams by grade"
-        },
-        "text": {
-          "ko": "1·2·3급을 고르면 실제 시험처럼 100분 타이머가 돌아가는 모의고사를 볼 수 있습니다.",
-          "en": "Pick grade 1, 2 or 3 and take a mock exam with a 100-minute timer, just like the real one."
-        }
-      },
-      {
-        "img": "05_trend.jpg",
-        "alt": {
-          "ko": "필기 출제 경향 화면",
-          "en": "Past-exam topic frequency screen"
-        },
-        "title": {
-          "ko": "자주 나오는 주제부터",
-          "en": "Start with the most frequent topics"
-        },
-        "text": {
-          "ko": "역대 필기 기출을 주제별 빈도로 정리한 출제 경향에서 자주 나오는 주제 Top 15를 확인할 수 있습니다.",
-          "en": "The exam-trend screen ranks the most frequent topics from past written exams (Top 15)."
-        }
-      },
-      {
-        "img": "06_wrongnote.jpg",
-        "alt": {
-          "ko": "오답노트 화면",
-          "en": "Wrong-answer notes screen"
-        },
-        "title": {
-          "ko": "오답노트와 북마크",
-          "en": "Wrong-answer notes and bookmarks"
-        },
-        "text": {
-          "ko": "오답은 다시 풀고, 북마크한 문제는 따로 모아 볼 수 있습니다.",
-          "en": "Redo your missed questions, and keep bookmarked ones together in one place."
-        }
-      }
-    ],
-    "steps": {
-      "ko": [
-        {
-          "t": "등급을 고릅니다",
-          "d": "1·2·3급 중 준비하는 등급을 선택합니다."
-        },
-        {
-          "t": "모의고사나 분야별 문제를 풉니다",
-          "d": "100분 모의고사 또는 분야별 문제로 연습합니다."
-        },
-        {
-          "t": "오답노트와 출제 경향을 봅니다",
-          "d": "틀린 문제는 오답노트에서 다시 풀고, 출제 경향에서 자주 나오는 주제를 확인합니다."
-        }
-      ],
-      "en": [
-        {
-          "t": "Pick your grade",
-          "d": "Choose grade 1, 2 or 3."
-        },
-        {
-          "t": "Take a mock exam or practice by topic",
-          "d": "Use the 100-minute mock exam or topic-by-topic practice."
-        },
-        {
-          "t": "Review mistakes and exam trends",
-          "d": "Redo missed questions from the notes and check which topics appear most often."
-        }
-      ]
+    "title": {
+     "ko": "오답노트와 북마크",
+     "en": "Wrong-answer notes and bookmarks"
     },
-    "related": [
-      "stage-sound-cert-study-plan",
-      "stage-sound-exam-scoring"
-    ],
-    "hero_img": "01_home.jpg"
+    "text": {
+     "ko": "오답은 다시 풀고, 북마크한 문제는 따로 모아 볼 수 있습니다.",
+     "en": "Redo your missed questions, and keep bookmarked ones together in one place."
+    }
+   }
+  ],
+  "steps": {
+   "ko": [
+    {
+     "t": "등급을 고릅니다",
+     "d": "1·2·3급 중 준비하는 등급을 선택합니다."
+    },
+    {
+     "t": "모의고사나 분야별 문제를 풉니다",
+     "d": "100분 모의고사 또는 분야별 문제로 연습합니다."
+    },
+    {
+     "t": "오답노트와 출제 경향을 봅니다",
+     "d": "틀린 문제는 오답노트에서 다시 풀고, 출제 경향에서 자주 나오는 주제를 확인합니다."
+    }
+   ],
+   "en": [
+    {
+     "t": "Pick your grade",
+     "d": "Choose grade 1, 2 or 3."
+    },
+    {
+     "t": "Take a mock exam or practice by topic",
+     "d": "Use the 100-minute mock exam or topic-by-topic practice."
+    },
+    {
+     "t": "Review mistakes and exam trends",
+     "d": "Redo missed questions from the notes and check which topics appear most often."
+    }
+   ]
+  },
+  "related": [
+   "stage-sound-cert-study-plan",
+   "stage-sound-exam-scoring"
+  ],
+  "hero_img": "01_home.jpg"
+ },
+ "store": {
+  "ko": {
+   "name": "무대음향 자격증 기출문제",
+   "subtitle": "무대예술전문인 1·2·3급 필기 문제집",
+   "promo": "2,174문항 + 계산문제 무한 생성 · 1·2·3급 등급별 모의고사(100분 타이머·실제 배점·과락 채점) · 2009~2026 필기 51회분 출제 경향 · 교재 3권 요약노트 · 북마크. 구독 없이 ₩9,900 한 번 결제.",
+   "description": "무대예술전문인(음향) 자격검정 필기시험을 준비하는 분들을 위한 문제풀이 앱입니다. 3급은 물론 2급·1급 응시자도 등급별 모의고사로 대비할 수 있습니다.\n\n실제 출제 범위인 [음향]·[무대기술일반]·[공연장안전 및 관련법규] 3개 표준교재를 기준으로, 원문을 그대로 옮기지 않고 개념과 출제 스타일을 참고해 새로 작성한 오리지널 문제 2,174문항을 담았습니다. 응시자가 가장 많은 3급은 물론 1급·2급 문항도 두텁게 보강해 등급별 모의고사를 여러 번 풀어도 잘 겹치지 않습니다.\n\n■ 등급별 모의고사\n- 3급·2급·1급 중 골라 실제 시험 구성(법규 25·일반 25·음향 25, 총 75문항)으로 풉니다\n- 채점도 실제와 같이 등급별 배점(공통 0.8/0.6/0.4점, 전공 2.4/2.8/3.2점)을 적용하고, 합계 60점 이상·과목군별 40% 이상(과락) 기준으로 합격 여부를 판정합니다\n- 매번 새로 무작위 출제\n- 실제 시험처럼 100분 타이머가 흐르고, 시간이 끝나면 자동으로 채점합니다\n\n■ 문제풀이\n- 챕터별 풀이: 과목(음향/법규/일반)을 골라 10문제·25문제 단위(회차)로 반복 학습\n- 기본이론문제: 난이도 '하'의 기초 개념만 모은 입문용 회차\n- 약점 집중 모드: 틀린 문제의 챕터만 다시 풀기, 오답노트 자동 저장\n- 북마크: 헷갈리는 문제를 별표로 표시해 두고 모아 보거나 다시 풀기\n- 빈출 × 약점 추천: 자주 출제되는데 내 정답률이 낮은 주제를 홈에서 바로 추천\n- 모든 문항에 해설 수록, 문제 오류 신고 버튼\n\n■ 계산문제 생성기\n68개 공식(음향 레벨, 전기, 반사/잔향, dB 계산 등)을 기반으로 문제를 무한히 새로 생성합니다. 풀 때마다 숫자가 바뀌어 \"정답만 외우는\" 것이 불가능하고, 매번 개념을 직접 계산해서 익힐 수 있습니다.\n\n■ 필기 출제 경향\n2009~2026년 필기 기출 51회분을 주제별로 집계한 통계입니다. 어떤 주제가 얼마나 자주 나오는지 보고, 주제를 누르면 바로 그 주제의 연습 문제를 풀 수 있습니다. (문항 원문은 포함하지 않습니다.)\n\n■ 챕터별 요약노트\n[무대음향] 18개 장, [무대기술일반] 5개 장, [공연장안전 및 관련법규] 7개 장 전 범위를 표준교재 흐름 그대로 정리했습니다. 핵심정리 1,046개·용어 350개·공식 74개. 섹션을 접고 펼칠 수 있어 목차처럼 훑다가 필요한 부분만 읽을 수 있습니다.\n\n■ 실기 기출문제\n2010년(12회)부터 2026년(28회)까지 전 연도 실기 기출 정리본을 수록했습니다.\n\n■ 무료로 이용 가능한 범위\n- 챕터별 풀이·기본이론문제: 과목별 첫 회차 무료\n- 요약노트: 교재별 첫 장 무료\n- 실기 기출문제: 가장 최근 연도 무료\n- 계산문제 생성기: 완전 무료(무제한)\n\n전체 콘텐츠는 ₩9,900 1회 결제로 평생 이용권을 구매하면 잠금 해제됩니다(구독 아님, 광고 없음).\n\n■ 안내\n이 앱의 모든 문제는 실제 기출문제나 교재 문장을 그대로 옮긴 것이 아니라, 공개된 출제 범위와 개념을 바탕으로 새로 작성한 오리지널 문제입니다. 실제 시험과 문항이 100% 일치하지 않을 수 있습니다. 출제 경향은 과년도 기출을 주제별로 집계한 참고용 통계입니다.\n\n문의: wa547@hanmail.net"
   }
+ }
 }

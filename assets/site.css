@@ -85,3 +85,5 @@ html:lang(zh-Hans) h1,html:lang(zh-Hans) h2,html:lang(zh-Hans) h3,html:lang(zh-H
 html:lang(ja){--sans:"Hiragino Sans","Yu Gothic",Meiryo,"Noto Sans KR",system-ui,sans-serif;--serif:"Hiragino Mincho ProN","Yu Mincho","Noto Serif KR",serif}
 html:lang(zh-Hans){--sans:"PingFang SC","Microsoft YaHei","Noto Sans KR",system-ui,sans-serif;--serif:"Songti SC","Noto Serif KR",serif}
 html:lang(de) body,html:lang(es) body,html:lang(fr) body,html:lang(pt-BR) body{hyphens:auto}
+.shots{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:640px){.shots{grid-template-columns:1fr}}
