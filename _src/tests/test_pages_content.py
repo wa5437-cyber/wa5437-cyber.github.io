@@ -104,27 +104,56 @@ class PrivacyPageTests(unittest.TestCase):
         for needle in ("cookies", "adssettings.google.com", "aboutads.info"):
             self.assertIn(needle, en)
 
-    def test_privacy_does_not_claim_tools_the_site_lacks(self):
-        # 사이트가 실제로 분석 도구를 쓰지 않을 때만 "쓰지 않는다"고 말할 수 있다 — 코드로 확인
-        import subprocess
-        hits = subprocess.run(["grep", "-rlE", "googletagmanager|google-analytics|gtag\\(", "--include=*.html", "."],
-                              cwd=ROOT, capture_output=True, text=True).stdout.strip()
-        _, html = pages.simple_page("ko", "privacy")
-        if hits:
-            self.assertNotIn("분석 도구를 쓰지 않", html)
-        else:
-            self.assertIn("분석 도구", html)
+    @staticmethod
+    def _site_files(exts):
+        """_src/, .superpowers/, .git/ 밖의 사이트 파일들."""
+        skip = {"_src", ".superpowers", ".git", "node_modules"}
+        for f in ROOT.rglob("*"):
+            rel = f.relative_to(ROOT).parts
+            if f.is_file() and f.suffix in exts and not (set(rel[:-1]) & skip):
+                yield f
 
-    def test_privacy_has_no_collection_form_claim(self):
+    def test_privacy_analytics_sentence_matches_code(self):
+        # 페이지는 분석 도구를 쓰지 않는다고 말한다. 분석 스니펫이 하나라도 생기면 이 테스트가 실패하므로 글을 고쳐야 한다.
+        pat = re.compile(r"googletagmanager|google-analytics|gtag\(")
+        hits = [str(f.relative_to(ROOT)) for f in self._site_files({".html", ".js"})
+                if pat.search(f.read_text(encoding="utf-8", errors="ignore"))]
+        self.assertEqual(hits, [], f"분석 스니펫이 생겼다: privacy 페이지의 '분석 도구' 문장을 고쳐야 한다 {hits}")
+        d = pages.load_page("privacy")
+        self.assertIn("방문 통계를 모으는 분석 도구(Google Analytics 등)도 쓰지 않습니다", " ".join(d["ko"]["sections"][0]["paragraphs"]))
+        self.assertIn("광고 서비스는 자체적으로 정보를 수집할 수 있습니다", " ".join(d["ko"]["sections"][0]["paragraphs"]))
         _, html = pages.simple_page("ko", "privacy")
+        self.assertIn("방문 통계를 모으는 분석 도구(Google Analytics 등)도 쓰지 않습니다", html)
+        self.assertIn("광고 서비스는 자체적으로 정보를 수집할 수 있습니다", html)
+        _, en = pages.simple_page("en", "privacy")
+        self.assertIn("does not use an analytics tool (such as Google Analytics)", en)
+        self.assertIn("may collect information on its own", en)
+
+    def test_site_has_no_html_form_so_privacy_page_claim_holds(self):
+        forms = [str(f.relative_to(ROOT)) for f in self._site_files({".html"})
+                 if "<form" in f.read_text(encoding="utf-8", errors="ignore").lower()]
+        self.assertEqual(forms, [], f"<form 이 생겼다: privacy 페이지의 '입력 양식 없음' 문장을 고쳐야 한다 {forms}")
+        _, html = pages.simple_page("ko", "privacy")
+        self.assertIn("회원가입이 없", html)
         self.assertNotIn("회원가입", html.replace("회원가입이 없", ""))
 
     def test_privacy_never_claims_no_cookies_or_no_third_party_processing(self):
-        for lang in ("ko", "en"):
+        bad_ko = ("쿠키를 쓰지 않", "쿠키를 사용하지 않", "쿠키가 없", "제3자가 처리하지 않", "제3자에게 전달되지 않", "외부에서 처리하지 않")
+        bad_en = ("no cookies", "does not use cookies", "do not use cookies", "no third part", "no data is processed", "not processed by third")
+        for lang, bad in (("ko", bad_ko), ("en", bad_en)):
             _, html = pages.simple_page(lang, "privacy")
-            text = re.sub(r"<[^>]+>", " ", html)
-            for bad in ("쿠키를 쓰지 않", "쿠키를 사용하지 않", "쿠키가 없", "no cookies", "does not use cookies", "do not use cookies"):
-                self.assertNotIn(bad, text)
+            text = re.sub(r"<[^>]+>", " ", html).lower()
+            for b in bad:
+                self.assertNotIn(b.lower(), text)
+
+    def test_privacy_is_distinguished_from_policy_html(self):
+        d = pages.load_page("privacy")
+        self.assertEqual(d["ko"]["h1"], "사이트 개인정보·쿠키·광고 안내")
+        self.assertEqual(d["en"]["h1"], "Site privacy, cookie and advertising notice")
+        _, ko = pages.simple_page("ko", "privacy")
+        _, en = pages.simple_page("en", "privacy")
+        self.assertIn("별도 문서이며 작성일이 따로 있습니다", ko)
+        self.assertIn("separate document with its own date", en)
 
     def test_privacy_external_links_use_noopener_and_updated_field_matches_text(self):
         d = pages.load_page("privacy")
