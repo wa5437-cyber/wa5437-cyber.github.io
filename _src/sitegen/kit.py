@@ -67,6 +67,11 @@ def lang_menu(lang, alts):
             f'{esc(strings.LANG_SHORT[lang])} ▾</summary><ul>{items}</ul></details>')
 
 
+def chrome_lang_attr(lang):
+    """영어 chrome 을 다른 언어 페이지에 쓸 때, 그 영역이 영어임을 스크린리더에 알린다."""
+    return ' lang="en"' if chrome(lang) != lang else ""
+
+
 def header(lang, alts):
     c = chrome(lang)
     links = [("nav_apps", "/apps/"), ("nav_tools", "/tools/"), ("nav_plugins", "/plugins/"),
@@ -75,7 +80,7 @@ def header(lang, alts):
     nav = "".join(
         f'<li><a href="{esc(url(c, p) if p != "/guides/" else "/guides/")}">{esc(t(k, c))}</a></li>'
         for k, p in links)
-    return (f'<header class="site-header"><div class="wrap bar">'
+    return (f'<header class="site-header"{chrome_lang_attr(lang)}><div class="wrap bar">'
             f'<a class="brand" href="{esc(url(c, "/"))}">{esc(SITE["brand"])}</a>'
             f'<details class="menu"><summary>{esc(t("menu", c))}</summary><ul class="nav">{nav}</ul></details>'
             f'<ul class="nav nav-wide">{nav}</ul>{lang_menu(lang, alts)}</div></header>')
@@ -84,7 +89,7 @@ def header(lang, alts):
 def footer(lang):
     c = SITE["contact"]
     k = chrome(lang)
-    return (f'<footer class="site-footer"><div class="wrap">'
+    return (f'<footer class="site-footer"{chrome_lang_attr(lang)}><div class="wrap">'
             f'<p class="foot-tag">{esc(t("footer_tag", k))}</p>'
             f'<ul class="foot-links">'
             f'<li><a href="{esc(url(k, "/about/"))}">{esc(t("footer_about", k))}</a></li>'
@@ -116,5 +121,5 @@ def page(lang, path, title, description, body, alts, extra_head=""):
             f'<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
             f'<link href="{FONTS}" rel="stylesheet"><link rel="stylesheet" href="/assets/site.css">\n'
             f'{ADS}\n{extra_head}\n</head>\n<body>\n'
-            f'<a class="skip" href="#main">{esc(t("skip", chrome(lang)))}</a>\n'
+            f'<a class="skip" href="#main"{chrome_lang_attr(lang)}>{esc(t("skip", chrome(lang)))}</a>\n'
             f'{header(lang, alts)}\n<main id="main">{body}</main>\n{footer(lang)}\n</body>\n</html>\n')

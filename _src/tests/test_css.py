@@ -69,6 +69,19 @@ class KoreanWrapTests(unittest.TestCase):
         self.assertIn("max-width:100%", pill)
 
 
+class OverflowTests(unittest.TestCase):
+    def test_grid_children_may_shrink_below_their_content(self):
+        # 자동 격자 칸 안의 쪼갤 수 없는 긴 제목이 칸을 밀어 가로 스크롤이 생기지 않게 한다.
+        for sels, block in rules():
+            if {".hero .grid>*", ".alt>*", ".cards>*"} <= set(sels):
+                self.assertIn("min-width:0", block)
+                return
+        self.fail("no rule gives min-width:0 to .hero .grid>*, .alt>*, .cards>*")
+
+    def test_h1_can_break_as_a_last_resort(self):
+        self.assertIn("overflow-wrap:anywhere", rule("h1"))
+
+
 class HeaderNarrowTests(unittest.TestCase):
     def test_brand_and_buttons_never_wrap_vertically(self):
         self.assertIn("white-space:nowrap", rule(".brand"))

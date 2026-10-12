@@ -59,7 +59,7 @@ class PullStoreTests(unittest.TestCase):
 
 
 class CollectSafetyTests(unittest.TestCase):
-    V = [{"id": "v1", "attributes": {"platform": "IOS", "appStoreState": "READY_FOR_SALE", "versionString": "1.1"}},
+    V = [{"id": "v1", "attributes": {"platform": "IOS", "appStoreState": "READY_FOR_SALE", "versionString": "1.9"}},
          {"id": "v10", "attributes": {"platform": "IOS", "appStoreState": "READY_FOR_SALE", "versionString": "1.10"}}]
 
     def test_two_appinfos_uses_live_one_even_when_draft_is_listed_first(self):
@@ -89,6 +89,57 @@ class CollectSafetyTests(unittest.TestCase):
         get = FakeAsc(self.V, {"v1": [vloc("ja", "OLD")], "v10": [vloc("ja", "NEW")]},
                       [{"id": "i", "attributes": {"state": "READY_FOR_SALE"}}], [iloc("ja", "名前")])
         self.assertEqual(pull_store.collect("1", get=get)["ja"]["description"], "NEW")
+
+
+class StateNameTests(unittest.TestCase):
+    """Apple 이 상태 이름을 옮겨 가는 중이라 어느 키로 와도 공개 중으로 읽어야 한다."""
+    @staticmethod
+    def get(version_attrs, info_attrs):
+        return FakeAsc([{"id": "v1", "attributes": dict(platform="IOS", versionString="1.0", **version_attrs)}],
+                       {"v1": [vloc("ja", "説明")]},
+                       [{"id": "a", "attributes": info_attrs}, {"id": "b", "attributes": {"state": "PREPARE_FOR_SUBMISSION"}}],
+                       [iloc("ja", "名前")])
+
+    def test_appinfo_with_only_app_store_state(self):
+        out = pull_store.collect("1", get=self.get({"appStoreState": "READY_FOR_SALE"}, {"appStoreState": "READY_FOR_SALE"}))
+        self.assertEqual(out["ja"]["name"], "名前")
+
+    def test_appinfo_state_ready_for_distribution_is_live(self):
+        out = pull_store.collect("1", get=self.get({"appStoreState": "READY_FOR_SALE"}, {"state": "READY_FOR_DISTRIBUTION"}))
+        self.assertEqual(out["ja"]["name"], "名前")
+
+    def test_version_with_app_version_state(self):
+        out = pull_store.collect("1", get=self.get({"appVersionState": "READY_FOR_SALE"}, {"state": "READY_FOR_SALE"}))
+        self.assertEqual(out["ja"]["description"], "説明")
+
+    def test_version_with_plain_state_ready_for_distribution(self):
+        out = pull_store.collect("1", get=self.get({"state": "READY_FOR_DISTRIBUTION"}, {"state": "READY_FOR_SALE"}))
+        self.assertEqual(out["ja"]["description"], "説明")
+
+    def test_version_not_live_in_any_key_is_ignored(self):
+        out = pull_store.collect("1", get=self.get({"appVersionState": "WAITING_FOR_REVIEW"}, {"state": "READY_FOR_SALE"}))
+        self.assertEqual(out, {})
+
+
+class MergeStoreTests(unittest.TestCase):
+    OLD = {"ja": {"name": "旧", "subtitle": "", "promo": "", "description": "説明"}}
+    NEW = {"fr": {"name": "N", "subtitle": "", "promo": "", "description": "D"}}
+
+    def test_empty_result_keeps_existing_store_and_warns(self):
+        import contextlib, io
+        err = io.StringIO()
+        with contextlib.redirect_stderr(err):
+            out = pull_store.merge_store(self.OLD, {}, allow_empty=False)
+        self.assertEqual(out, self.OLD)
+        self.assertIn("--allow-empty", err.getvalue())
+
+    def test_allow_empty_replaces_with_empty(self):
+        self.assertEqual(pull_store.merge_store(self.OLD, {}, allow_empty=True), {})
+
+    def test_nonempty_result_replaces_and_empty_over_empty_is_empty(self):
+        self.assertEqual(pull_store.merge_store(self.OLD, self.NEW, allow_empty=False), self.NEW)
+        self.assertEqual(pull_store.merge_store(None, {}, allow_empty=False), {})
+        self.assertEqual(pull_store.merge_store({}, {}, allow_empty=False), {})
 
 
 class PlatformFallbackTests(unittest.TestCase):
@@ -127,6 +178,24 @@ class RenderTests(unittest.TestCase):
         self.assertNotIn("<li>", pages.render_store_text("-"))
         self.assertNotIn("<li></li>", pages.render_store_text("•"))
         self.assertIn("<li>x</li>", pages.render_store_text("・x"))
+
+    def test_bullet_without_space_renders_as_list_item(self):
+        self.assertEqual(pages.render_store_text("•x\n•y"), '<ul class="bullets"><li>x</li><li>y</li></ul>')
+        self.assertEqual(pages.render_store_text("•x"), '<ul class="bullets"><li>x</li></ul>')
+
+    def test_heading_line_followed_only_by_bullets_splits_into_p_and_ul(self):
+        self.assertEqual(pages.render_store_text("免费\n• a\n• b"),
+                         '<p>免费</p><ul class="bullets"><li>a</li><li>b</li></ul>')
+        html = pages.render_store_text("Free\n- a\n- b")
+        self.assertEqual(html, '<p>Free</p><ul class="bullets"><li>a</li><li>b</li></ul>')
+        self.assertEqual(pages.render_store_text("제목\n• 가"),
+                         '<p><span lang="ko">제목</span></p><ul class="bullets"><li><span lang="ko">가</span></li></ul>')
+
+    def test_mixed_blocks_stay_one_paragraph(self):
+        self.assertEqual(pages.render_store_text("head\n• a\ntail"), "<p>head<br>• a<br>tail</p>")
+        self.assertEqual(pages.render_store_text("• a\ntail"), "<p>• a<br>tail</p>")
+        self.assertEqual(pages.render_store_text("head\nmore\n• a"), "<p>head<br>more<br>• a</p>")
+        self.assertEqual(pages.render_store_text("head\n•"), "<p>head<br>•</p>")
 
     def test_render_store_text_paragraphs_lists_and_escape(self):
         html = pages.render_store_text("A & B <script>\n둘째 줄\n\n• one\n• two\n\nlast")
@@ -197,6 +266,114 @@ class PageLangTests(unittest.TestCase):
         self.assertTrue((root / "ja" / "apps" / "stage-sound" / "index.html").exists())
         self.assertFalse((root / "de" / "apps" / "stage-sound" / "index.html").exists())
         self.assertTrue((root / "apps" / "stage-sound" / "index.html").exists())
+
+
+class PromoAndPruneTests(unittest.TestCase):
+    """스토어 구성 페이지는 기간 한정 홍보 문구를 싣지 않고, 빠진 언어의 옛 출력은 지운다."""
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = pathlib.Path(self.tmp.name)
+        self._orig = pages.load_app
+        self.det = self._orig("stage-sound")["detail"]
+        self.store = {"ja": {"name": "ステージ音響", "subtitle": "副題", "promo": "最初の2週間無料", "description": "説明1"}}
+        pages.load_app = lambda slug: ({"detail": self.det, "store": self.store} if slug == "stage-sound"
+                                       else self._orig(slug))
+        (self.root / "sitemap.xml").write_text("<urlset>\n</urlset>\n", encoding="utf-8")
+
+    def tearDown(self):
+        pages.load_app = self._orig
+        self.tmp.cleanup()
+
+    def sitemap(self):
+        return (self.root / "sitemap.xml").read_text(encoding="utf-8")
+
+    def test_store_page_has_no_promo_in_body_or_meta(self):
+        _, html = pages.app_page("ja", "stage-sound")
+        self.assertNotIn("最初の2週間無料", html)
+        self.assertIn('<meta name="description" content="副題 — 説明1">', html)
+        self.assertIn('<meta property="og:description" content="副題 — 説明1">', html)
+
+    def test_description_is_cut_to_150_and_is_subtitle_only_when_description_empty(self):
+        self.store["ja"]["description"] = "word " * 80
+        _, html = pages.app_page("ja", "stage-sound")
+        desc = re.search(r'<meta name="description" content="([^"]*)"', html).group(1)
+        self.assertTrue(desc.startswith("副題 — word word") and desc.endswith("…"))
+        self.assertLessEqual(len(desc), 151)
+        self.store["ja"]["description"] = ""
+        _, html = pages.app_page("ja", "stage-sound")
+        self.assertIn('<meta name="description" content="副題">', html)
+
+    def test_dropped_language_output_and_sitemap_entry_are_removed(self):
+        pages.build_all(self.root)
+        ja = self.root / "ja" / "apps" / "stage-sound"
+        self.assertTrue((ja / "index.html").exists())
+        self.assertIn(kit.BASE + "/ja/apps/stage-sound/", self.sitemap())
+        del self.store["ja"]
+        pages.build_all(self.root)
+        self.assertFalse((ja / "index.html").exists())
+        self.assertFalse(ja.exists())                                   # 빈 폴더도 지운다
+        self.assertNotIn("/ja/apps/stage-sound/", self.sitemap())
+        self.assertIn(kit.BASE + "/apps/stage-sound/", self.sitemap())  # ko 는 그대로
+        self.assertIn(kit.BASE + "/en/apps/stage-sound/", self.sitemap())
+
+    def test_app_losing_its_detail_loses_ko_and_en_pages_too(self):
+        pages.build_all(self.root)
+        self.assertTrue((self.root / "apps" / "stage-sound" / "index.html").exists())
+        self.assertTrue((self.root / "apps" / "index.html").exists())
+        self.det = None
+        pages.load_app = lambda slug: ({"store": self.store} if slug == "stage-sound" else self._orig(slug))
+        pages.build_all(self.root)
+        for rel in ("apps/stage-sound", "en/apps/stage-sound", "ja/apps/stage-sound"):
+            self.assertFalse((self.root / rel / "index.html").exists(), rel)
+            self.assertFalse((self.root / rel).exists(), rel)
+        self.assertTrue((self.root / "apps" / "index.html").exists())     # 목록 페이지는 건드리지 않는다
+        sm = self.sitemap()
+        self.assertNotIn("/apps/stage-sound/", sm)
+        self.assertIn(kit.BASE + "/apps/", sm)
+
+    def test_pruning_leaves_unknown_slugs_other_files_and_other_sitemap_entries(self):
+        keep = ["https://mlmusicstudio.co.kr/guides/", "https://mlmusicstudio.co.kr/ja/apps/other-app/",
+                "https://mlmusicstudio.co.kr/ja/apps/stage-sound/extra.html"]
+        (self.root / "sitemap.xml").write_text(
+            "<urlset>\n" + "".join(f"  <url><loc>{k}</loc><priority>0.5</priority></url>\n" for k in keep)
+            + "  <url><loc>https://mlmusicstudio.co.kr/de/apps/stage-sound/</loc><priority>0.5</priority></url>\n"
+            + "</urlset>\n", encoding="utf-8")
+        other = self.root / "ja" / "apps" / "other-app"
+        other.mkdir(parents=True)
+        (other / "index.html").write_text("keep", encoding="utf-8")
+        stray = self.root / "de" / "apps" / "stage-sound"
+        stray.mkdir(parents=True)
+        (stray / "index.html").write_text("old", encoding="utf-8")
+        (stray / "notes.txt").write_text("mine", encoding="utf-8")
+        pages.build_all(self.root)
+        self.assertEqual((other / "index.html").read_text(encoding="utf-8"), "keep")
+        self.assertFalse((stray / "index.html").exists())
+        self.assertTrue((stray / "notes.txt").exists())                  # 비어 있지 않은 폴더는 남긴다
+        sm = self.sitemap()
+        for k in keep:
+            self.assertIn(k, sm)
+        self.assertIn("<priority>0.5</priority>", sm)
+        self.assertNotIn("/de/apps/stage-sound/<", sm)
+
+
+class DetailLinkTests(unittest.TestCase):
+    """계획 Task 16: 상세 페이지가 있는 앱은 목록에서 링크되고, 그 언어 주소는 모두 사이트맵과 디스크에 있다."""
+    def test_every_detail_app_is_linked_and_its_alternates_are_built_and_in_sitemap(self):
+        slugs = [a["slug"] for a in pages.load("apps.json")["apps"] if pages.has_detail(a["slug"])]
+        self.assertTrue(slugs)
+        _, index = pages.apps_index("ko")
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            (root / "sitemap.xml").write_text("<urlset>\n</urlset>\n", encoding="utf-8")
+            pages.build_all(root)
+            sitemap = (root / "sitemap.xml").read_text(encoding="utf-8")
+            for slug in slugs:
+                self.assertIn(f'href="/apps/{slug}/"', index, slug)
+                alts = pages.alts_for_app(slug)
+                self.assertIn("ko", alts)
+                for lang, path in alts.items():
+                    self.assertIn(f"<loc>{kit.BASE}{path}</loc>", sitemap, (slug, lang))
+                    self.assertTrue((root / path.lstrip("/") / "index.html").exists(), (slug, lang))
 
 
 class PricePillTests(unittest.TestCase):

@@ -49,12 +49,29 @@ class KitTests(unittest.TestCase):
         html = kit.page("ja", "/ja/apps/x/", "T", "D", "<p>b</p>", alts)
         self.assertIn('<html lang="ja">', html)
         self.assertIn('property="og:locale" content="ja_JP"', html)
-        self.assertIn('<a class="skip" href="#main">Skip to content</a>', html)
+        self.assertIn('<a class="skip" href="#main" lang="en">Skip to content</a>', html)
         self.assertIn('href="/en/apps/"', html)           # 상단 메뉴는 영어 페이지로
         self.assertIn('href="/en/"', html)                # 브랜드 링크
         self.assertIn('hreflang="ja" lang="ja" aria-current="true"', html)
         self.assertIn(">JA ▾<", html)
         self.assertEqual(html.count('rel="alternate" hreflang="ja"'), 1)
+
+    def test_english_chrome_on_other_languages_is_marked_lang_en(self):
+        alts = {"ko": "/apps/x/", "ja": "/ja/apps/x/"}
+        for lang in ("ja", "zh-Hans", "es", "de", "fr", "pt-BR"):
+            html = kit.page(lang, f"/{lang}/apps/x/", "T", "D", "<p>b</p>", alts if lang == "ja" else {"ko": "/apps/x/"})
+            self.assertIn('<header class="site-header" lang="en">', html, lang)
+            self.assertIn('<footer class="site-footer" lang="en">', html, lang)
+            self.assertIn('<a class="skip" href="#main" lang="en">', html, lang)
+            self.assertIn(f'<html lang="{lang}">', html)
+            self.assertIn('<main id="main"><p>b</p></main>', html)       # 본문에는 lang 을 덧붙이지 않는다
+
+    def test_ko_and_en_chrome_carry_no_extra_lang(self):
+        for lang in ("ko", "en"):
+            html = kit.page(lang, "/x/", "T", "D", "<p>b</p>", {"ko": "/x/"})
+            self.assertIn('<header class="site-header">', html, lang)
+            self.assertIn('<footer class="site-footer">', html, lang)
+            self.assertIn('<a class="skip" href="#main">', html, lang)
 
     def test_lang_menu_unknown_code_raises(self):
         with self.assertRaises(KeyError):

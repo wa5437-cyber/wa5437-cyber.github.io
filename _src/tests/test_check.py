@@ -151,5 +151,40 @@ class LanguageCheckTests(unittest.TestCase):
             self.assertTrue(any("ja/apps/x/index.html" in e and "한글 노출" in e for e in errs))
 
 
+class SitemapCheckTests(unittest.TestCase):
+    B = check.BASE
+
+    def root(self, td, locs):
+        root = pathlib.Path(td)
+        for p in check.PRESERVED:
+            if p != "/sitemap.xml":
+                touch(root, p if not p.endswith("/") else p + "index.html")
+        body = "".join(f"<url><loc>{l}</loc></url>\n" for l in locs)
+        touch(root, "/sitemap.xml", f"<urlset>\n{body}</urlset>\n")
+        return root
+
+    def test_every_loc_present_on_disk_passes(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = self.root(td, [self.B + "/", self.B + "/ads.txt", self.B + "/guides/"])
+            touch(root, "/index.html", "x")
+            self.assertEqual(check.sitemap_errors(root), [])
+            self.assertEqual([e for e in check.run(root) if "sitemap" in e], [])
+
+    def test_loc_without_file_is_reported(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = self.root(td, [self.B + "/ja/apps/gone/", self.B + "/nope.html"])
+            errs = check.sitemap_errors(root)
+            self.assertEqual(len(errs), 2)
+            self.assertTrue(any("/ja/apps/gone/" in e for e in errs))
+            self.assertTrue(any("sitemap" in e for e in check.run(root)))
+
+    def test_foreign_domain_locs_are_ignored_and_missing_sitemap_is_fine(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = self.root(td, ["https://example.com/nothing/"])
+            self.assertEqual(check.sitemap_errors(root), [])
+            (root / "sitemap.xml").unlink()
+            self.assertEqual(check.sitemap_errors(root), [])
+
+
 if __name__ == "__main__":
     unittest.main()

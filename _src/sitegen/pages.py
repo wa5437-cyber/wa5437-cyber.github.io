@@ -206,16 +206,27 @@ def esc_mixed(text):
     return HANGUL_RUN.sub(lambda m: f'<span lang="ko">{m.group(0)}</span>', esc(text))
 
 
+def _is_bullet(line):
+    return bool(BULLET_RE.match(line) and BULLET_RE.sub("", line, count=1).strip())
+
+
+def _ul(lines):
+    return '<ul class="bullets">' + "".join(
+        f"<li>{esc_mixed(BULLET_RE.sub('', l, count=1).strip())}</li>" for l in lines) + "</ul>"
+
+
 def render_store_text(text):
-    """앱스토어 설명문을 HTML 로. 빈 줄=문단, •/-/・ 로 시작하는 줄만 이어지면 목록, 문단 안 줄바꿈=<br>."""
+    """앱스토어 설명문을 HTML 로. 빈 줄=문단, •/-/・ 로 시작하는 줄만 이어지면 목록, 문단 안 줄바꿈=<br>.
+    첫 줄만 제목(불릿 아님)이고 나머지가 전부 불릿이면 <p>제목</p> 뒤에 목록."""
     out = []
     for block in re.split(r"\n\s*\n", text.strip()):
         lines = [l.strip() for l in block.splitlines() if l.strip()]
         if not lines:
             continue
-        if all(BULLET_RE.match(l) and BULLET_RE.sub("", l, count=1).strip() for l in lines):
-            out.append('<ul class="bullets">' + "".join(
-                f"<li>{esc_mixed(BULLET_RE.sub('', l, count=1).strip())}</li>" for l in lines) + "</ul>")
+        if all(_is_bullet(l) for l in lines):
+            out.append(_ul(lines))
+        elif len(lines) > 1 and not _is_bullet(lines[0]) and all(_is_bullet(l) for l in lines[1:]):
+            out.append(f"<p>{esc_mixed(lines[0])}</p>" + _ul(lines[1:]))
         else:
             out.append("<p>" + "<br>".join(esc_mixed(l) for l in lines) + "</p>")
     return "".join(out)
@@ -279,15 +290,14 @@ def _app_page_store(lang, app, det, s, slug):
     body = (
         f'<section class="hero"><div class="wrap"><div class="grid"><div>'
         f'<h1>{esc_mixed(name)}</h1><p class="sub">{esc_mixed(s.get("subtitle", ""))}</p>'
-        + (f'<p>{esc_mixed(s["promo"])}</p>' if s.get("promo") else "")
-        + f'<div class="row">{store_buttons(app, lang)}</div></div>'
+        f'<div class="row">{store_buttons(app, lang)}</div></div>'
         f'<div><img class="shot" src="{img_dir}{esc(pick_img(det["hero_img"], lang))}" alt="{esc(name)}"></div></div></div></section>'
         f'<section class="band"><div class="wrap"><h2>{esc(strings.APP_UI["screens"][lang])}</h2>'
         f'<div class="shots">{shots}</div></div></section>'
         f'<section class="band"><div class="wrap">{render_store_text(s["description"])}'
         f'<p><a href="{esc(privacy_href(app))}">{esc(strings.APP_UI["privacy"][lang])}</a></p></div></section>')
     title = f'{name} | ML Music Studio'
-    lead = " — ".join(x for x in (s.get("subtitle", ""), s.get("promo") or s["description"]) if x)
+    lead = " — ".join(x for x in (s.get("subtitle", ""), s["description"]) if x)   # 홍보 문구(기간 한정)는 쓰지 않는다
     return title, short(lead, 150), body, app_ld(lang, slug, dict(app, name={lang: name}))
 
 
@@ -307,11 +317,27 @@ def app_page(lang, slug):
     return path, kit.page(lang, path, title, desc, body, alts_for_app(slug), extra_head=ld)
 
 
-def update_sitemap(root, new_paths):
+def app_page_re(slugs):
+    """알려진 앱 slug 의 상세 페이지 주소(언어 접두사 선택)를 알아보는 정규식."""
+    langs = "|".join(re.escape(l) for l in kit.LANGS if l != "ko")
+    names = "|".join(re.escape(x) for x in slugs) or "(?!)"
+    return re.compile(rf"^(?:/(?:{langs}))?/apps/(?:{names})/$")
+
+
+def update_sitemap(root, new_paths, known_slugs=()):
+    """new_paths 를 사이트맵에 더하고, known_slugs 앱의 상세 페이지 주소 중 new_paths 에 없는 것은 뺀다. 나머지는 그대로."""
     f = pathlib.Path(root) / "sitemap.xml"
     if not f.exists():          # 임시 폴더 테스트 등
         return
-    text = f.read_text(encoding="utf-8")
+    text = orig = f.read_text(encoding="utf-8")
+    keep = set(new_paths)
+    app_re = app_page_re(known_slugs)
+
+    def drop(m):
+        loc = m.group(1)
+        path = loc[len(kit.BASE):] if loc.startswith(kit.BASE) else None
+        return "" if path and app_re.match(path) and path not in keep else m.group(0)
+    text = re.sub(r"[ \t]*<url>\s*<loc>([^<]*)</loc>.*?</url>[ \t]*\n?", drop, text, flags=re.S)
     add = ""
     for p in dict.fromkeys(new_paths):
         loc = f"<loc>{kit.BASE}{p}</loc>"
@@ -319,7 +345,25 @@ def update_sitemap(root, new_paths):
             add += f"<url>{loc}</url>\n"
     if add:
         text = text.replace("</urlset>", add + "</urlset>")
+    if text != orig:
         f.write_text(text, encoding="utf-8")
+
+
+def prune_stale_app_pages(root, slugs):
+    """app_langs 에 없는 언어(상세가 없어진 앱은 ko·en 도)의 옛 상세 페이지 index.html 을 지우고, 비면 폴더도 지운다."""
+    root = pathlib.Path(root)
+    for slug in slugs:
+        live = set(app_langs(slug))
+        for lang in kit.LANGS:
+            if lang in live:
+                continue
+            f = root / url(lang, f"/apps/{slug}/").strip("/") / "index.html"
+            if f.exists():
+                f.unlink()
+                try:
+                    f.parent.rmdir()
+                except OSError:      # 다른 파일이 남아 있으면 그대로 둔다
+                    pass
 
 
 def build_all(root):
@@ -331,9 +375,11 @@ def build_all(root):
             path, html = fn(lang)
             kit.write(root, path, html)
         made += [url(lang, "/"), url(lang, "/tools/"), url(lang, "/apps/")]
-    for a in d["apps"]:
-        for lang in app_langs(a["slug"]):
-            path, html = app_page(lang, a["slug"])
+    slugs = [a["slug"] for a in d["apps"]]
+    for slug in slugs:
+        for lang in app_langs(slug):
+            path, html = app_page(lang, slug)
             kit.write(root, path, html)
             made.append(path)
-    update_sitemap(root, made)
+    prune_stale_app_pages(root, slugs)
+    update_sitemap(root, made, slugs)

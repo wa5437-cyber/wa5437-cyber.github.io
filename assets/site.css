@@ -13,7 +13,7 @@ a{color:var(--accent-ink)}
 .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 .skip{position:absolute;left:-999px}.skip:focus{left:12px;top:12px;background:#fff;padding:8px 12px;border-radius:8px;z-index:9}
 h1,h2,h3{font-family:var(--serif);line-height:1.25;margin:0 0 .4em;color:var(--ink)}
-h1{font-size:clamp(30px,5vw,52px);font-weight:700}
+h1{font-size:clamp(30px,5vw,52px);font-weight:700;overflow-wrap:anywhere}
 h2{font-size:clamp(24px,3.4vw,34px);font-weight:700}
 h3{font-size:20px;font-weight:700}
 .sub{color:var(--ink2);font-size:18px;max-width:640px}
@@ -47,6 +47,7 @@ h3{font-size:20px;font-weight:700}
 /* sections */
 .hero{padding:56px 0 32px}
 .hero .grid{display:grid;gap:32px;align-items:center}
+.hero .grid>*,.alt>*,.cards>*{min-width:0}
 @media(min-width:900px){.hero .grid{grid-template-columns:1.1fr .9fr}}
 .band{padding:40px 0}
 .cards{display:grid;gap:16px}

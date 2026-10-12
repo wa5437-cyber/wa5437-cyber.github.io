@@ -63,9 +63,26 @@ def page_file(root, url_path):
     return p / "index.html" if url_path.endswith("/") else p
 
 
+LOC = re.compile(r"<loc>\s*([^<]*?)\s*</loc>")
+
+
+def sitemap_errors(root):
+    """sitemap.xml 의 <loc> 중 우리 주소(BASE)인데 디스크에 없는 것."""
+    f = pathlib.Path(root) / "sitemap.xml"
+    if not f.exists():
+        return []
+    errors = []
+    for loc in LOC.findall(f.read_text(encoding="utf-8")):
+        path = local_path(loc)
+        if path is not None and not exists(pathlib.Path(root), path):
+            errors.append(f"sitemap.xml: 파일 없는 주소 {path}")
+    return errors
+
+
 def run(root):
     root = pathlib.Path(root)
     errors = []
+    errors += sitemap_errors(root)
     for path in PRESERVED:
         if not exists(root, path):
             errors.append(f"보존 주소 없음: {path}")
