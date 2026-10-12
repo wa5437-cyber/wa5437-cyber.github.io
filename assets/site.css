@@ -91,7 +91,6 @@ html:lang(de) body,html:lang(es) body,html:lang(fr) body,html:lang(pt-BR) body{h
 .addr{margin:.6em 0 0;color:var(--ink2)}
 .note{margin:.8em 0 0;color:var(--ink2);font-size:14px}
 .works{width:100%;border-collapse:collapse;font-size:15px}
-.works caption{text-align:left;font-weight:700;padding:0 0 8px;caption-side:top}
 .works th,.works td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;word-break:keep-all;overflow-wrap:break-word}
 .works th{background:var(--soft);color:var(--accent-ink);font-size:14px}
 @media (max-width:640px){

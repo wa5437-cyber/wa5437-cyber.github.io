@@ -1,7 +1,7 @@
 import json, pathlib, re, sys, unittest
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "_src"))
-from sitegen import pages, kit
+from sitegen import pages
 
 
 class StudioAboutContactTests(unittest.TestCase):
@@ -15,7 +15,7 @@ class StudioAboutContactTests(unittest.TestCase):
 
     def test_studio_has_works_table_address_and_contact(self):
         _, html = pages.simple_page("ko", "studio")
-        self.assertIn('<table class="works">', html)
+        self.assertIn('<table class="works" aria-labelledby="works-title">', html)
         self.assertIn("원효로4가 120-3", html)
         self.assertIn("open.kakao.com/o/sQhjCeZb", html)
         self.assertIn("wa547@hanmail.net", html)
@@ -31,26 +31,56 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn(str(career["since"]), html)
         self.assertNotRegex(html, r"\{(since|total|mastering|mixing|recording)\}")   # 자리표시자가 남지 않음
 
-    def test_missing_photos_leave_no_broken_images(self):
-        for name in ("studio", "about"):
-            _, html = pages.simple_page("ko", name)
-            for src in re.findall(r'<img[^>]+src="(/[^"]+)"', html):
-                self.assertTrue((ROOT / src.lstrip("/")).exists(), src)
+    def test_missing_photos_leave_no_broken_images_or_empty_sections(self):
+        for lang in ("ko", "en"):
+            for name in ("studio", "about"):
+                _, html = pages.simple_page(lang, name)
+                for src in re.findall(r'<img[^>]+src="(/[^"]+)"', html):
+                    self.assertTrue((ROOT / src.lstrip("/")).exists(), src)
+        # 사진 파일이 아직 없는 동안에는 구역 전체(제목 포함)가 사라진다
+        missing = [p for p in ("img/studio/room-01.jpg", "img/studio/room-02.jpg", "img/studio/room-03.jpg",
+                               "img/about/profile.jpg") if not (ROOT / p).exists()]
+        if len(missing) == 4:
+            for lang, h2 in (("ko", "<h2>작업실</h2>"), ("en", "<h2>The studio</h2>")):
+                _, html = pages.simple_page(lang, "studio")
+                self.assertNotIn('class="shots"', html)
+                self.assertNotIn(h2, html)
+            for lang in ("ko", "en"):
+                _, html = pages.simple_page(lang, "about")
+                self.assertNotIn('class="shots"', html)
 
     def test_works_church_items_are_marked_and_few(self):
         _, html = pages.simple_page("ko", "studio")
         self.assertLessEqual(html.count("교회·찬양"), 5)
         self.assertGreaterEqual(html.count("교회·찬양"), 1)
 
-    def test_no_invented_claims(self):
-        for name in ("studio", "about", "contact"):
-            _, html = pages.simple_page("ko", name)
-            for bad in ("최고", "No.1", "수상", "영업일", "24시간"):
-                self.assertNotIn(bad, html)
+    def test_no_invented_claims_and_no_leftover_placeholders(self):
+        bad_words = ("최고", "No.1", "수상", "영업일", "24시간",
+                     "best", "award", "business day", "24 hours", "24/7", "within")
+        for lang in ("ko", "en"):
+            for name in ("studio", "about", "contact"):
+                _, html = pages.simple_page(lang, name)
+                text = re.search(r"<main.*?</main>", html, re.S).group(0)
+                for bad in bad_words:
+                    self.assertNotIn(bad, text.lower() if bad.islower() else text, (lang, name, bad))
+                self.assertNotRegex(text, r"\{\w+\}", (lang, name))
 
     def test_moon_studio_links_use_http_not_https(self):
-        _, html = pages.simple_page("ko", "studio")
-        self.assertNotIn("https://moonstudiorecording.com", html)
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "studio")
+            self.assertIn('href="http://moonstudiorecording.com/"', html)
+            self.assertNotIn("https://moonstudiorecording.com", html)
+            _, about = pages.simple_page(lang, "about")
+            self.assertIn('href="http://moonstudiorecording.com/sub/team_HS.html"', about)
+            self.assertNotIn("https://moonstudiorecording.com", about)
+
+    def test_studio_shows_reservation_sentence_and_map_link(self):
+        _, ko = pages.simple_page("ko", "studio")
+        self.assertIn("운영 시간은 따로 없고 예약제입니다. 카카오톡으로 먼저 문의해 주세요.", ko)
+        self.assertIn("map.naver.com", ko)
+        _, en = pages.simple_page("en", "studio")
+        self.assertIn("by appointment", en)
+        self.assertIn("map.naver.com", en)
 
 
 class FactsPlaceholderTests(unittest.TestCase):

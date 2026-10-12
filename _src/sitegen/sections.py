@@ -82,16 +82,19 @@ def _works(sec, lang, ctx):
         cells = ""
         for key, label in zip(keys, ui["cols"]):
             val = "" if w.get(key) is None else esc(w[key])
-            if key == "title" and w.get("album"):      # 곡명 다음에 앨범/구분(없으면 앨범만)
-                album = f'<span class="album">{esc(w["album"])}</span>'
-                val = f"{val} {album}" if val else album
+            if key == "title" and w.get("album"):      # 곡명 다음에 작은 앨범/구분, 곡명이 없으면 앨범이 곧 작품명
+                if val:
+                    val += f' <span class="album">{esc(w["album"])}</span>'
+                else:
+                    val = esc(w["album"])
             if key == "artist" and w.get("church"):
                 val += f' <span class="pill">{esc(ui["church"])}</span>'
             cells += f'<td data-label="{esc(label)}">{val}</td>'
         rows += f"<tr>{cells}</tr>"
     note = f'<p class="note">{esc(sec["note"])}</p>' if sec.get("note") else ""
-    cap = f'<caption>{esc(sec["title"])}</caption>' if sec.get("title") else ""
-    return _wrap(_h2(sec) + f'<table class="works">{cap}<thead><tr>{head}</tr></thead>'
+    labelled = ' aria-labelledby="works-title"' if sec.get("title") else ""
+    h2 = f'<h2 id="works-title">{esc(sec["title"])}</h2>' if sec.get("title") else ""
+    return _wrap(h2 + f'<table class="works"{labelled}><thead><tr>{head}</tr></thead>'
                  f'<tbody>{rows}</tbody></table>{note}')
 
 

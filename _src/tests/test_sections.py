@@ -91,7 +91,9 @@ class MoreSectionTests(unittest.TestCase):
         ctx = dict(CTX, career=CAREER)
         sec = [{"type": "works", "title": "대표작", "note": "n <b>"}]
         ko = sections.render(sec, "ko", ctx)
-        self.assertIn("<caption>대표작</caption>", ko)
+        self.assertIn('<h2 id="works-title">대표작</h2>', ko)
+        self.assertIn('<table class="works" aria-labelledby="works-title">', ko)
+        self.assertNotIn("<caption", ko)
         for label in ("연도", "아티스트", "작품", "역할"):
             self.assertIn(f"<th>{label}</th>", ko)
         for v in ("2020", "2021", "2022", "T1", "믹싱", "녹음", "마스터링"):
@@ -115,13 +117,20 @@ class WorksAlbumAndLinksTests(unittest.TestCase):
         ctx = dict(CTX, career={"works": [dict(base, **r) for r in rows]})
         return sections.render([{"type": "works", "title": "t"}], "ko", ctx)
 
+    def test_works_without_title_has_no_label_link(self):
+        ctx = dict(CTX, career=CAREER)
+        html = sections.render([{"type": "works"}], "ko", ctx)
+        self.assertIn('<table class="works">', html)
+        self.assertNotIn("aria-labelledby", html)
+
     def test_title_and_album_both_shown_with_album_span(self):
         html = self._works({"title": "곡명", "album": "앨범 <i>&"})
         self.assertIn('<td data-label="작품">곡명 <span class="album">앨범 &lt;i&gt;&amp;</span></td>', html)
 
     def test_album_only_row_shows_album_alone(self):
         html = self._works({"title": None, "album": "EP 첫 번째"})
-        self.assertIn('<td data-label="작품"><span class="album">EP 첫 번째</span></td>', html)
+        self.assertIn('<td data-label="작품">EP 첫 번째</td>', html)
+        self.assertNotIn('class="album"', html)      # 작품명 자리의 앨범은 작은 보조 글씨가 아니다
 
     def test_title_only_and_neither(self):
         html = self._works({"title": "T"}, {"title": None, "album": None})
