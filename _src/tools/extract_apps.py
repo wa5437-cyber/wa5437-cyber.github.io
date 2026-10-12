@@ -25,7 +25,7 @@ def main():
     if OUT.exists():
         existing = json.loads(OUT.read_text(encoding="utf-8"))
     if existing.get("apps") and "--force" not in sys.argv[1:]:
-        print("apps.json 에 이미 앱 목록이 있습니다. 덮어쓰려면 --force 를 붙이세요(details 는 보존됩니다).")
+        print("apps.json 에 이미 앱 목록이 있습니다. 덮어쓰려면 --force 를 붙이세요(앱별 파일 content/apps/*.json 은 건드리지 않습니다).")
         sys.exit(1)
     t = (ROOT / "policy.html").read_text(encoding="utf-8")
     m = re.search(r"const I18N\s*=\s*(\{.*?\});\s*\n", t, re.S)
@@ -43,7 +43,7 @@ def main():
         d = i18n.get(key, {})
         return d.get(lang) or d.get("en") or d.get("ko") or ""
 
-    out = {"apps": [], "details": existing.get("details", {})}
+    out = {"apps": []}
     for (slug, key, ko, en, legal), link in zip(APPS, unique):
         out["apps"].append({
             "slug": slug,
@@ -53,7 +53,6 @@ def main():
             "appstore": H.unescape(link).split("?")[0],
             "play": "https://play.google.com/store/apps/details?id=com.mlmusicstudio.stagesoundexam" if slug == "stage-sound" else None,
             "legal": legal,
-            "detail": slug == "stage-sound",
         })
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
     print("앱", len(out["apps"]), "개 기록")

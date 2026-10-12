@@ -176,7 +176,7 @@ class AppsTests(unittest.TestCase):
         for lang in ("ko", "en"):
             _, html = pages.app_page(lang, "stage-sound")
             sub = re.search(r'<p class="sub">(.*?)</p>', html, re.S).group(1)
-            lead = pages.load("apps.json")["details"]["stage-sound"]["lead"][lang]
+            lead = pages.load_app("stage-sound")["detail"]["lead"][lang]
             self.assertEqual(sub, kit.esc(lead), lang)
             self.assertLess(len(sub), 120, lang)
         self.assertIn("무대예술전문인(음향) 1·2·3급 필기시험을 기출문제로 준비하는 앱입니다.",
@@ -208,6 +208,34 @@ class SitemapTests(unittest.TestCase):
             self.assertEqual(text.count("<loc>https://mlmusicstudio.co.kr/apps/</loc>"), 1)
             self.assertEqual(text.count("<loc>https://mlmusicstudio.co.kr/</loc>"), 1)
             self.assertIn("<loc>https://mlmusicstudio.co.kr/guides/</loc>", text)
+
+
+class AppFilesTests(unittest.TestCase):
+    def test_stage_sound_loads_from_its_own_file(self):
+        app = pages.load_app("stage-sound")
+        self.assertIn("detail", app)
+        self.assertTrue(pages.has_detail("stage-sound"))
+        self.assertFalse(pages.has_detail("no-such-app"))
+        self.assertIsNone(pages.load_app("no-such-app"))
+
+    def test_apps_json_no_longer_embeds_details_or_flag(self):
+        d = pages.load("apps.json")
+        self.assertNotIn("details", d)
+        for a in d["apps"]:
+            self.assertNotIn("detail", a)
+
+    def test_pick_img(self):
+        self.assertEqual(pages.pick_img("a.jpg", "ja"), "a.jpg")
+        both = {"ko": "k.jpg", "en": "e.jpg"}
+        self.assertEqual(pages.pick_img(both, "ko"), "k.jpg")
+        self.assertEqual(pages.pick_img(both, "en"), "e.jpg")
+        self.assertEqual(pages.pick_img(both, "ja"), "e.jpg")
+        self.assertEqual(pages.pick_img({"ko": "k.jpg"}, "en"), "k.jpg")
+
+    def test_stage_sound_page_unchanged_in_substance(self):
+        _, html = pages.app_page("ko", "stage-sound")
+        self.assertIn("/img/apps/stage-sound/01_home.jpg", html)
+        self.assertIn("평생 이용권 ₩9,900", html)
 
 
 if __name__ == "__main__":

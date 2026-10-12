@@ -13,6 +13,24 @@ def load(name):
     return json.loads((SRC / "content" / name).read_text(encoding="utf-8"))
 
 
+def load_app(slug):
+    """content/apps/<slug>.json 을 읽는다. 파일이 없으면 None."""
+    f = SRC / "content" / "apps" / f"{slug}.json"
+    return json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
+
+
+def has_detail(slug):
+    app = load_app(slug)
+    return bool(app and "detail" in app)
+
+
+def pick_img(value, lang):
+    """문자열이면 그대로, {"ko":…, "en":…} 이면 언어별 파일(없으면 en, 그다음 ko)."""
+    if isinstance(value, str):
+        return value
+    return value.get(lang) or value.get("en") or value["ko"]
+
+
 # 옛 홈(한국어)에 있던 쪽지(#anchor) 주소 -> 새 주소. 한국어 홈에서만 적용한다.
 HASH_MAP = {
     "policy": "/policy.html#policy",
@@ -45,7 +63,7 @@ def alts_for(path_ko, langs=("ko", "en")):
 
 def app_href(lang, app):
     """상세 페이지가 있으면 그 주소, 없으면 앱 목록(깨진 링크 방지)."""
-    return url(lang, "/apps/" + app["slug"] + "/") if app.get("detail") else url(lang, "/apps/")
+    return url(lang, "/apps/" + app["slug"] + "/") if has_detail(app["slug"]) else url(lang, "/apps/")
 
 
 def json_ld(lang):
@@ -141,7 +159,7 @@ def apps_index(lang):
     cards = ""
     for a in d["apps"]:
         link = ""
-        if a.get("detail"):
+        if has_detail(a["slug"]):
             link = f'<a class="more" href="{esc(url(lang, "/apps/" + a["slug"] + "/"))}">{"자세히 보기" if lang == "ko" else "Details"} →</a>'
         pill = f'<span class="pill">{esc(a["badge"][lang])}</span>' if a["badge"][lang] else ""
         cards += (f'<div class="card">{pill}'
@@ -160,14 +178,14 @@ def apps_index(lang):
 def app_page(lang, slug):
     d = load("apps.json")
     app = next(a for a in d["apps"] if a["slug"] == slug)
-    det = d["details"][slug]
+    det = load_app(slug)["detail"]
     img_dir = f"/img/apps/{slug}/"
     bullets = "".join(f"<li>{esc(b)}</li>" for b in det["bullets"][lang])
     facts = "".join(f"<li>{esc(f)}</li>" for f in det["facts"][lang])
     blocks = ""
     for i, b in enumerate(det["blocks"]):
         blocks += (f'<div class="alt{" rev" if i % 2 else ""}"><div class="alt-img">'
-                   f'<img class="shot" src="{img_dir}{esc(b["img"])}" alt="{esc(b["alt"][lang])}" loading="lazy"></div>'
+                   f'<img class="shot" src="{img_dir}{esc(pick_img(b["img"], lang))}" alt="{esc(b["alt"][lang])}" loading="lazy"></div>'
                    f'<div><h3>{esc(b["title"][lang])}</h3><p>{esc(b["text"][lang])}</p></div></div>')
     steps = "".join(f'<li><strong>{esc(s["t"])}</strong><br>{esc(s["d"])}</li>' for s in det["steps"][lang])
     howto = "사용법" if lang == "ko" else "How to use"
@@ -185,7 +203,7 @@ def app_page(lang, slug):
         f'<h1>{esc(app["name"][lang])}</h1><p class="sub">{esc(det["lead"][lang] if det.get("lead") else short(app["tagline"][lang], 160))}</p>'
         f'<ul class="bullets">{bullets}</ul>'
         f'<div class="row">{store_buttons(app, lang)}<span class="pill" style="align-self:center">{esc(det["price"][lang])}</span></div>'
-        f'</div><div><img class="shot" src="{img_dir}01_home.jpg" alt="{esc(app["name"][lang])}"></div></div></div></section>'
+        f'</div><div><img class="shot" src="{img_dir}{esc(pick_img(det["hero_img"], lang))}" alt="{esc(app["name"][lang])}"></div></div></div></section>'
         f'<section class="band"><div class="wrap">{blocks}</div></section>'
         f'<section class="band"><div class="wrap"><h2>{howto}</h2><ol class="steps">{steps}</ol></div></section>'
         f'<section class="band"><div class="wrap"><ul class="facts">{facts}</ul>{privacy}</div></section>{rel}')
@@ -217,11 +235,11 @@ def build_all(root):
             path, html = fn(lang)
             kit.write(root, path, html)
         for a in d["apps"]:
-            if a.get("detail"):
+            if has_detail(a["slug"]):
                 path, html = app_page(lang, a["slug"])
                 kit.write(root, path, html)
     made = []
     for lang in ("ko", "en"):
         made += [url(lang, "/"), url(lang, "/tools/"), url(lang, "/apps/")]
-        made += [url(lang, "/apps/" + a["slug"] + "/") for a in d["apps"] if a.get("detail")]
+        made += [url(lang, "/apps/" + a["slug"] + "/") for a in d["apps"] if has_detail(a["slug"])]
     update_sitemap(root, made)

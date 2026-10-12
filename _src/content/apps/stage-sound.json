@@ -1,0 +1,128 @@
+{
+  "detail": {
+    "price": {
+      "ko": "평생 이용권 ₩9,900 · 카테고리별 첫 회차 무료",
+      "en": "Lifetime unlock ₩9,900 · first round of each category free"
+    },
+    "lead": {
+      "ko": "무대예술전문인(음향) 1·2·3급 필기시험을 기출문제로 준비하는 앱입니다.",
+      "en": "An app for preparing for Korea's stage-sound certification written exams (grades 1-3) with past-exam questions."
+    },
+    "platforms": {
+      "ko": "iOS · Android",
+      "en": "iOS · Android"
+    },
+    "bullets": {
+      "ko": [
+        "필기 2,174문항(음향·법규·일반)과 무제한 계산문제",
+        "등급별 모의고사, 100분 타이머",
+        "표준교재 3권 요약노트",
+        "실기 기출문제 2010~2026",
+        "오답노트·북마크와 필기 출제 경향"
+      ],
+      "en": [
+        "2,174 written-exam questions (sound, regulations, general) and unlimited calculation problems",
+        "Mock exams by grade with a 100-minute timer",
+        "Summary notes for the 3 standard textbooks",
+        "Practical-exam past papers 2010–2026",
+        "Wrong-answer notes, bookmarks and exam-trend statistics"
+      ]
+    },
+    "facts": {
+      "ko": [
+        "iOS · Android",
+        "한국어 앱",
+        "필기 2,174문항",
+        "평생 이용권 ₩9,900"
+      ],
+      "en": [
+        "iOS · Android",
+        "Korean-language app",
+        "2,174 written questions",
+        "Lifetime unlock ₩9,900"
+      ]
+    },
+    "blocks": [
+      {
+        "img": "03_exam_grade.jpg",
+        "alt": {
+          "ko": "등급 선택 화면",
+          "en": "Grade selection screen"
+        },
+        "title": {
+          "ko": "등급별 모의고사",
+          "en": "Mock exams by grade"
+        },
+        "text": {
+          "ko": "1·2·3급을 고르면 실제 시험처럼 100분 타이머가 돌아가는 모의고사를 볼 수 있습니다.",
+          "en": "Pick grade 1, 2 or 3 and take a mock exam with a 100-minute timer, just like the real one."
+        }
+      },
+      {
+        "img": "05_trend.jpg",
+        "alt": {
+          "ko": "필기 출제 경향 화면",
+          "en": "Past-exam topic frequency screen"
+        },
+        "title": {
+          "ko": "자주 나오는 주제부터",
+          "en": "Start with the most frequent topics"
+        },
+        "text": {
+          "ko": "역대 필기 기출을 주제별 빈도로 정리한 출제 경향에서 자주 나오는 주제 Top 15를 확인할 수 있습니다.",
+          "en": "The exam-trend screen ranks the most frequent topics from past written exams (Top 15)."
+        }
+      },
+      {
+        "img": "06_wrongnote.jpg",
+        "alt": {
+          "ko": "오답노트 화면",
+          "en": "Wrong-answer notes screen"
+        },
+        "title": {
+          "ko": "오답노트와 북마크",
+          "en": "Wrong-answer notes and bookmarks"
+        },
+        "text": {
+          "ko": "오답은 다시 풀고, 북마크한 문제는 따로 모아 볼 수 있습니다.",
+          "en": "Redo your missed questions, and keep bookmarked ones together in one place."
+        }
+      }
+    ],
+    "steps": {
+      "ko": [
+        {
+          "t": "등급을 고릅니다",
+          "d": "1·2·3급 중 준비하는 등급을 선택합니다."
+        },
+        {
+          "t": "모의고사나 분야별 문제를 풉니다",
+          "d": "100분 모의고사 또는 분야별 문제로 연습합니다."
+        },
+        {
+          "t": "오답노트와 출제 경향을 봅니다",
+          "d": "틀린 문제는 오답노트에서 다시 풀고, 출제 경향에서 자주 나오는 주제를 확인합니다."
+        }
+      ],
+      "en": [
+        {
+          "t": "Pick your grade",
+          "d": "Choose grade 1, 2 or 3."
+        },
+        {
+          "t": "Take a mock exam or practice by topic",
+          "d": "Use the 100-minute mock exam or topic-by-topic practice."
+        },
+        {
+          "t": "Review mistakes and exam trends",
+          "d": "Redo missed questions from the notes and check which topics appear most often."
+        }
+      ]
+    },
+    "related": [
+      "stage-sound-cert-study-plan",
+      "stage-sound-exam-scoring"
+    ],
+    "hero_img": "01_home.jpg"
+  }
+}
