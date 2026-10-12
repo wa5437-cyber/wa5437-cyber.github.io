@@ -1,0 +1,22 @@
+{
+ "store": {
+  "en": {
+   "name": "Yul — Gugak Tuner & Jangdan",
+   "subtitle": "Jeongganbo, drone tone, theory",
+   "promo": "All features free for the first two weeks. Tuner, jangdan and theory stay free; recording, sigimsae analysis and practice scores are a one-time purchase, no subscription.",
+   "description": "A tuner and rhythm trainer built for Korean traditional instruments. It reads pitch in yul names (黃, 太, 仲 …), shows jangdan rhythms on a jeongganbo grid, and explains the theory behind them, all in one app.\n\n■ Tuner\nPlay a note and see the nearest yul and the deviation in cents at once. Set hwangjong to the court-music standard (Eb), type any Hz, or take it from your own sound. Choose sambunsonik or equal temperament. The reference tone is a real daegeum or piri recorded by the National Gugak Center. String-by-string tuning for gayageum, geomungo, haegeum and ajaeng; fingering registers for daegeum, sogeum and piri.\n\n■ Jangdan\nDozens of court, folk, pungmul and gut rhythms on a jeongganbo grid, played with janggu, buk, jing and kkwaenggwari samples recorded by the National Gugak Center. The current cell follows along, BPM is adjustable, and you can tap cells to make your own pattern. Chain rhythms together, such as jinyangjo → jungmori → jajinmori.\n\n■ Theory\nIllustrated articles in Korean, English and Japanese on the 12 yul and tuning, jangdan, jo and tori, sigimsae, instruments and their tuning, and how to read jeongganbo, staff notation, gueum and yuljabo. Every jangdan has an explanation card, and there is a guide to the app itself.\n\n■ Recording, sigimsae and practice (one-time purchase)\nRecord yourself and listen back with the pitch curve, measure the rate and width of vibrato-like sigimsae against reference values, and keep long-tone and pitch-drill scores. Buy once, keep forever. No subscription.\n\n■ About accuracy\nTuner and sigimsae readings depend on your microphone and room and are for reference. Try them with your own instrument during the free period before buying.\n\nSamples: National Gugak Center, Digital Sound Sources of Korean Instruments (KOGL Type 1)\nWorks on iPhone, iPad and Mac."
+  },
+  "ko": {
+   "name": "율 — 국악 튜너 & 장단",
+   "subtitle": "정간보 장단 · 대금 기준음 · 이론",
+   "promo": "출시 기념 2주간 모든 기능 무료. 그 뒤에도 튜너·장단·이론은 계속 무료, 녹음·시김새·연습 기록은 평생권 ₩6,600(구독 아님).",
+   "description": "국악기를 위한 튜너와 장단 연습 앱입니다. 율명(黃·太·仲…)으로 읽는 튜너, 정간보 격자로 보고 듣는 장단, 그리고 국악 이론 글을 한 앱에 담았습니다.\n\n■ 튜너\n소리를 들으면 가장 가까운 율명과 센트 편차를 바로 보여 줍니다. 황종 기준은 정악(Eb) 외에 Hz를 직접 넣거나 내 소리로 청을 잡을 수 있고, 삼분손익과 평균율을 고를 수 있습니다. 기준음(드론)은 국립국악원이 녹음한 실제 대금·피리 소리입니다. 가야금·거문고·해금·아쟁은 현별 조율, 대금·소금·피리는 취법별로 봅니다.\n\n■ 장단\n정악·민속악·풍물·굿 장단 수십 종을 정간보 격자로 보여 주고, 국립국악원 녹음 장구·북·징·꽹과리 소리로 들려줍니다. 재생 중 현재 칸이 따라가고, BPM을 바꾸고, 칸을 눌러 나만의 장단으로 고칠 수 있습니다. 진양조→중모리→…처럼 여러 장단을 이어 재생하는 체인도 만듭니다.\n\n■ 이론\n12율과 음률, 장단, 조와 토리, 시김새, 악기와 조율, 정간보·오선보·구음·율자보 읽는 법을 그림과 함께 한국어·영어·일본어로 설명합니다. 장단마다 해설 카드가 있고, 앱 사용법도 들어 있습니다.\n\n■ 녹음·시김새·연습 (평생권)\n연주를 녹음해 피치 곡선과 함께 다시 듣고, 요성·퇴성 같은 시김새의 떨림·폭을 수치로 보며 기준값과 비교하고, 롱톤·음정 연습 점수를 쌓습니다. 한 번 구매로 평생, 구독이 아닙니다.\n\n■ 정확도에 대해\n튜너와 시김새 수치는 마이크 환경에 따라 달라지는 참고용 값입니다. 결제 전에 무료 기간 동안 내 악기로 직접 확인해 보세요.\n\n음원 출처: 국립국악원 「국악기 디지털 음원」(공공누리 제1유형)\niPhone · iPad · Mac에서 쓸 수 있습니다."
+  },
+  "ja": {
+   "name": "율 Yul — 国楽チューナー & 長短",
+   "subtitle": "井間譜の長短 · 大笒の基準音 · 理論",
+   "promo": "リリース記念で2週間すべて無料。その後もチューナー・長短・理論は無料のまま。録音・シギムセ分析・練習記録は買い切り（サブスクではありません）。",
+   "description": "韓国伝統楽器のためのチューナーとリズム練習アプリです。律名（黃・太・仲…）で読むチューナー、井間譜の格子で見て聞く長短、そして理論の記事を一つにまとめました。\n\n■ チューナー\n音を出すと最も近い律名とセントのずれをすぐ表示します。黃鐘の基準は正楽の Eb のほか、Hz を直接入力するか自分の音から取れます。三分損益と平均律を選べます。基準音は国立国楽院が録音した本物の大笒・觱篥です。伽倻琴・玄琴・奚琴・牙箏は弦ごとの調弦、大笒・小笒・觱篥は運指ごとに確認できます。\n\n■ 長短\n正楽・民俗楽・風物・クッの長短数十種を井間譜の格子で表示し、国立国楽院が録音したチャング・プク・チン・ケンガリの音で鳴らします。再生中は現在の枠が進み、BPM を変え、枠を叩いて自分の長短に直せます。진양조→중모리→… のように複数の長短をつなぐチェーンも作れます。\n\n■ 理論\n12律と音律、長短、調とトリ、シギムセ、楽器と調弦、井間譜・五線譜・口音・律字譜の読み方を図とともに韓国語・英語・日本語で解説します。長短ごとに解説カードがあり、アプリの使い方も載っています。\n\n■ 録音・シギムセ・練習（買い切り）\n演奏を録音してピッチ曲線と一緒に聞き直し、揺れ（シギムセ）の速さと幅を数値で基準値と比べ、ロングトーンや音程練習の点数を残します。一度の購入でずっと使えます。サブスクではありません。\n\n■ 精度について\nチューナーとシギムセの数値はマイクや部屋によって変わる参考値です。購入前に無料期間中にご自分の楽器で確かめてください。\n\n音源: 国立国楽院「国楽器デジタル音源」（公共ヌリ第1類型）\niPhone・iPad・Mac で使えます。"
+  }
+ }
+}

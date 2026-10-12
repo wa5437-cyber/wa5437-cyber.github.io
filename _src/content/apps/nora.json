@@ -1,0 +1,52 @@
+{
+ "store": {
+  "ja": {
+   "name": "NORA - 歌ってみた録音・カバー曲",
+   "subtitle": "ボーカル録音・ミックス・マスタリング",
+   "promo": "",
+   "description": "NORAは、オーディオ機材の知識がなくてもカバー曲を完成できるスタジオです。\n\n5ステップで完成します。\n\n1. デバイス確認 — マイクを選んで音量を合わせると、レイテンシーとヘッドホンの接続をNORAが代わりに確認します。\n2. 伴奏アップロード — MP3・WAV・M4Aをアップロードすると、キーとテンポ(BPM)を自動解析します。\n3. 録音 — 伴奏に合わせて歌います。間違えたら波形上でその区間だけドラッグして録り直し(パンチイン)、自然につながります。\n4. ボーカルスタイル — ボタン一つで音色が変わります。キラキラ・力強く・感性的に・爽やかに・自然に、ジャンルごとに調整済み。聴きながらボーカルと伴奏のバランス、空間の広がりも調整できます。\n5. 書き出し — マスタリングでラウドネスを市販音源レベルに合わせ、MP3またはWAVで保存します。\n\n· ボーカルだけを書き出し — 原音/EQ・コンプのみ/エフェクトすべてから選んで、伴奏とタイミングが揃ったWAVで保存。DAWでそのまま続きの作業ができます\n· ヘッドホンでのリアルタイムモニタリング。外すと自動でオフになるハウリング防止\n· モニタリング専用リバーブ — 録音ファイルは常にクリーン\n· すべての処理はあなたのMac上で。アカウント不要、声のアップロードもありません。\n\n初めて歌を録る人のために作りました。"
+  },
+  "ko": {
+   "name": "NORA - 커버곡 노래 녹음",
+   "subtitle": "노래방 녹음·보컬믹싱·마스터링",
+   "promo": "",
+   "description": "NORA는 오디오 장비를 몰라도 커버곡을 완성할 수 있는 스튜디오입니다.\n\n5단계면 끝납니다.\n\n1. 장치 진단 — 마이크를 고르고 음량을 맞추면, 지연 시간과 헤드폰 연결을 NORA가 대신 확인합니다.\n2. MR 업로드 — MP3·WAV·M4A를 올리면 키와 템포(BPM)를 자동 분석합니다.\n3. 녹음 — 반주에 맞춰 부릅니다. 틀렸다면 파형에서 그 구간만 드래그해 다시 녹음(펀치인)하면 자연스럽게 이어붙습니다.\n4. 보컬 스타일 — 버튼 하나로 음색이 바뀝니다. 샤방하게·단단하게·감성적으로·시원하게·자연스럽게, 장르별로 맞춰져 있습니다. 들으면서 보컬/반주 밸런스와 공간감도 조절하세요.\n5. 내보내기 — 마스터링으로 라우드니스를 시중 음원 수준에 맞추고 MP3 또는 WAV로 저장합니다.\n\n· 보컬만 따로 내보내기 — 원음 / EQ·컴프만 / 이펙트 전체 중 골라, MR과 박자가 맞는 WAV로 저장해 DAW에서 이어 작업\n· 헤드폰 실시간 모니터링, 빼면 자동으로 꺼지는 하울링 방지\n· 모니터링 전용 리버브 — 녹음 파일은 항상 깨끗하게\n· 모든 처리는 내 Mac에서. 계정도, 목소리 업로드도 없습니다.\n\n노래를 처음 녹음해보는 사람을 위해 만들었습니다."
+  },
+  "de": {
+   "name": "NORA: Coversong-Studio",
+   "subtitle": "Gesang aufnehmen & abmischen",
+   "promo": "",
+   "description": "NORA ist ein Cover-Studio für alle, die sich mit Audiotechnik nicht auskennen.\n\nFünf einfache Schritte:\n\n1. Geräte prüfen — wähl dein Mikrofon und stell den Pegel ein; NORA behält Latenz und Kopfhörer für dich im Blick.\n2. Track hochladen — MP3, WAV oder M4A. NORA erkennt Tonart und Tempo (BPM) automatisch.\n3. Aufnehmen — sing zum Track. Verhört? Zieh über die Wellenform und nimm nur diese Stelle neu auf (Punch-in); der Übergang ist nahtlos.\n4. Gesangsstil — ein Tippen ändert den Klang: Strahlend, Kraftvoll, Gefühlvoll, Klar oder Natürlich, pro Genre abgestimmt. Ändere Stimme/Track-Balance und Hall beim Hören.\n5. Exportieren — wende Mastering an, um die Lautheit kommerzieller Releases zu erreichen, und speichere als MP3 oder WAV.\n\n· Gesang einzeln exportieren — trocken, nur EQ & Kompression oder mit allen Effekten — als WAV, das in der DAW exakt zum Track passt\n· Live-Monitoring über Kopfhörer, mit automatischem Rückkopplungsschutz beim Abziehen\n· Hall nur fürs Monitoring — deine Aufnahme bleibt sauber\n· Alles läuft auf deinem Mac. Kein Konto, kein Hochladen deiner Stimme.\n\nGemacht für alle, die zum ersten Mal ihre Stimme aufnehmen — nicht für Toningenieure."
+  },
+  "es": {
+   "name": "NORA: Estudio de Covers",
+   "subtitle": "Graba voz, mezcla y masteriza",
+   "promo": "",
+   "description": "NORA es un estudio de covers para quienes no saben de equipos de audio.\n\nCinco pasos sencillos:\n\n1. Comprobar dispositivo — elige tu micrófono y ajusta el nivel; NORA vigila la latencia y los auriculares por ti.\n2. Subir pista — MP3, WAV o M4A. NORA detecta el tono y el tempo (BPM) automáticamente.\n3. Grabar — canta siguiendo la pista. ¿Un fallo? Arrastra sobre la onda y regraba solo ese tramo (punch-in); se une sin cortes.\n4. Estilo vocal — un toque cambia el sonido: Brillante, Contundente, Emotivo, Nítido o Natural, ajustado por género. Cambia el equilibrio voz/pista y la reverb mientras escuchas.\n5. Exportar — aplica masterización para igualar el volumen de los lanzamientos comerciales y guarda en MP3 o WAV.\n\n· Exporta solo tu voz — original, solo EQ y compresión o con todos los efectos — en un WAV alineado con la pista para seguir en tu DAW\n· Monitorización en directo por auriculares, con protección antiacople al desconectarlos\n· Reverb solo para monitorización: tu grabación queda limpia\n· Todo funciona en tu Mac. Sin cuenta y sin subir tu voz.\n\nHecho para quienes graban su voz por primera vez, no para ingenieros de sonido."
+  },
+  "fr": {
+   "name": "NORA : Studio de Reprises",
+   "subtitle": "Chantez, enregistrez, mixez",
+   "promo": "",
+   "description": "NORA est un studio de reprises pour ceux qui ne connaissent rien au matériel audio.\n\nCinq étapes simples :\n\n1. Vérification des appareils — choisissez votre micro et réglez le niveau ; NORA surveille la latence et le casque pour vous.\n2. Importer la piste — MP3, WAV ou M4A. NORA détecte la tonalité et le tempo (BPM) automatiquement.\n3. Enregistrer — chantez sur la piste. Une erreur ? Sélectionnez la zone sur la forme d'onde et réenregistrez seulement ce passage (punch-in) ; le raccord est invisible.\n4. Style vocal — un geste change le son : Éclatant, Puissant, Émouvant, Net ou Naturel, réglé par genre. Ajustez l'équilibre voix/piste et la réverbération en écoutant.\n5. Exporter — appliquez le mastering pour atteindre le niveau des sorties commerciales, puis enregistrez en MP3 ou WAV.\n\n· Exportez votre voix seule — brute, EQ et compression seulement, ou avec tous les effets — en WAV calé sur la piste pour continuer dans votre DAW\n· Monitoring en direct au casque, avec protection anti-larsen au débranchement\n· Réverbération réservée au monitoring : votre enregistrement reste propre\n· Tout fonctionne sur votre Mac. Sans compte, sans envoi de votre voix.\n\nConçu pour ceux qui enregistrent leur voix pour la première fois, pas pour les ingénieurs du son."
+  },
+  "pt-BR": {
+   "name": "NORA: Estúdio de Covers",
+   "subtitle": "Grave voz, mixe e masterize",
+   "promo": "",
+   "description": "O NORA é um estúdio de covers para quem não entende de equipamento de áudio.\n\nCinco passos simples:\n\n1. Verificar dispositivo — escolha o microfone e ajuste o nível; o NORA cuida da latência e dos fones para você.\n2. Enviar faixa — MP3, WAV ou M4A. O NORA detecta o tom e o andamento (BPM) automaticamente.\n3. Gravar — cante acompanhando a faixa. Errou? Arraste sobre a forma de onda e regrave só aquele trecho (punch-in); ele se junta sem emendas.\n4. Estilo vocal — um toque muda o som: Brilhante, Encorpado, Emotivo, Nítido ou Natural, ajustado por gênero. Mude o equilíbrio voz/faixa e o reverb enquanto ouve.\n5. Exportar — aplique masterização para igualar o volume de lançamentos comerciais e salve em MP3 ou WAV.\n\n· Exporte só a sua voz — original, só EQ e compressão ou com todos os efeitos — em um WAV alinhado com a faixa para continuar no seu DAW\n· Monitoramento ao vivo pelos fones, com proteção contra microfonia ao desconectá-los\n· Reverb só no monitoramento: sua gravação continua limpa\n· Tudo roda no seu Mac. Sem conta e sem enviar sua voz.\n\nFeito para quem grava a voz pela primeira vez, não para engenheiros de som."
+  },
+  "en": {
+   "name": "NORA: Cover Song Studio",
+   "subtitle": "Record vocals, mix, master",
+   "promo": "",
+   "description": "NORA is a cover-song studio for people who don't know studio gear.\n\nFive simple steps:\n\n1. Device check — pick your mic and set the level; NORA watches your latency and headphones for you.\n2. Upload a backing track — MP3, WAV or M4A. NORA detects the key and tempo (BPM) automatically.\n3. Record — sing along to the track. Made a mistake? Drag across the waveform and re-record just that part (punch-in); it stitches back together seamlessly.\n4. Vocal style — one tap switches the sound: Sparkly, Solid, Emotional, Crisp or Natural, tuned per genre. Adjust the vocal/track balance and reverb while you listen.\n5. Export — apply mastering to match commercial loudness, then save as MP3 or WAV, ready to upload.\n\n· Export your vocal on its own — dry, EQ & compression only, or with all effects — as a WAV that lines up with the backing track in your DAW\n· Live monitoring through headphones, with automatic feedback protection when you unplug\n· Monitoring-only reverb — your recording stays clean\n· Everything runs on your Mac. No account, no upload of your voice.\n\nMade for first-time singers, not audio engineers."
+  },
+  "zh-Hans": {
+   "name": "NORA - 翻唱录音工作室",
+   "subtitle": "K歌录音、混音、母带处理",
+   "promo": "",
+   "description": "NORA 是一个让你无需懂录音设备也能完成翻唱作品的工作室。\n\n五步即可完成:\n\n1. 设备检测 — 选择麦克风、调好音量,NORA 会替你检查延迟和耳机连接。\n2. 上传伴奏 — 上传 MP3、WAV 或 M4A,自动分析调性(Key)和速度(BPM)。\n3. 录音 — 跟着伴奏演唱。唱错了?在波形上拖选那一段重新录制(打孔录音),会自动无缝衔接。\n4. 人声风格 — 一键切换音色:闪亮、厚实、感性、清爽、自然,按曲风调校。可一边听一边调整人声与伴奏的平衡和空间感。\n5. 导出 — 用母带处理把响度调整到商业发行水准,保存为 MP3 或 WAV。\n\n· 单独导出人声 — 可选原声 / 仅均衡与压缩 / 全部效果,保存为与伴奏对齐的 WAV,直接在 DAW 中继续制作\n· 耳机实时监听,拔掉耳机自动关闭以防啸叫\n· 仅监听用的混响 — 录音文件始终干净\n· 所有处理都在你的 Mac 上完成。无需账号,不上传你的声音。\n\n为第一次录歌的人而做。"
+  }
+ }
+}

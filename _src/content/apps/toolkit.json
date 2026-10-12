@@ -1,0 +1,52 @@
+{
+ "store": {
+  "es": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "Calc: dB, delay, RT60, BPM",
+   "promo": "De la ley de Ohm a la alineación de retardos, modos de sala, BPM y tono: calculadoras de audio sin conexión. Guarda tus favoritas a mano. Sin registro ni anuncios.",
+   "description": "Un conjunto completo de calculadoras offline para ingenieros de audio — en el escenario, en el estudio, sin necesidad de internet. Sin inicio de sesión, sin anuncios, sin rastreo.\n\n■ Eléctrico (Electrical)\n· Calculadora de la Ley de Ohm\n· Calculadora de potencia\n· Impedancia de altavoces (serie/paralelo)\n· Conversión dB ↔ relación de potencia\n\n■ Delay\n· Distancia ↔ Tiempo ↔ Fase\n· Detector de zona del Efecto Haas\n· Alineación de delay para múltiples zonas de altavoces\n· Pre-delay de reverb basado en BPM\n\n■ Acústica (Acoustics)\n· Frecuencia ↔ Período ↔ Longitud de onda ↔ Cuarto de onda\n· Calculadora de bandas de octava\n· Delay por distancia ↔ tiempo\n· Calculadora de volumen de sala\n· Calculadora de modos de sala\n· Tiempo de reverberación RT60\n\n■ Tempo y Pitch (Tempo & Pitch)\n· Detector de BPM por tap tempo\n· Calculadora de duración de notas\n· Conversión velocidad de reproducción ↔ pitch (estilo tocadiscos)\n· Buscador de BPM de loops\n· Calculadora de duración de compás\n· Calculadora de latencia por sample rate/buffer\n\n\nGuarda tus calculadoras habituales en la pestaña Favoritos y ábrelas con un toque.\n\nDisponible en coreano, inglés, japonés, español, chino simplificado, alemán, portugués de Brasil y francés. Funciona en iPhone, iPad y Mac."
+  },
+  "ja": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "dB・ディレイ・残響・BPM 計算機",
+   "promo": "オームの法則からスピーカーのディレイ調整、ルームモード、BPM・ピッチまで — 現場の計算機をオフラインで。よく使う計算機はお気に入りタブに。ログイン・広告・トラッキングなし。",
+   "description": "現場でもスタジオでも、インターネット接続なしですぐに使えるオーディオエンジニア向け計算機セットです。ログイン不要、広告なし、トラッキングなし。\n\n■ 電気 (Electrical)\n・オームの法則計算機\n・パワー(電力)計算機\n・スピーカーインピーダンス計算機(直列/並列)\n・dB ↔ 電力比変換\n\n■ ディレイ (Delay)\n・距離 ↔ 時間 ↔ 位相計算\n・ハース効果(Haas Effect)ゾーン判定\n・マルチゾーンスピーカーディレイ整列\n・BPMベースのリバーブプリディレイ計算\n\n■ 音響 (Acoustics)\n・周波数 ↔ 周期 ↔ 波長 ↔ 1/4波長\n・オクターブバンド計算\n・距離 ↔ 時間ディレイ\n・室容積計算\n・ルームモード計算\n・RT60残響時間計算\n\n■ テンポ&ピッチ (Tempo & Pitch)\n・タップテンポでBPM測定\n・音符長計算\n・再生速度 ↔ ピッチ変換(ターンテーブルピッチ風)\n・ループBPMファインダー\n・小節長計算\n・サンプルレート/バッファサイズのレイテンシ計算\n\n\nよく使う計算機はお気に入りタブにまとめ、ワンタップで開けます。\n\n韓国語・英語・日本語・スペイン語・簡体字中国語・ドイツ語・ポルトガル語(ブラジル)・フランス語に対応し、iPhone・iPad・Macで使用できます。"
+  },
+  "en": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "dB, delay, phase, RT60, BPM",
+   "promo": "From Ohm's law to speaker delay alignment, room modes, BPM and pitch: audio calculators that work offline. Pin your go-to tools to Favorites. No login, no ads.",
+   "description": "A complete set of offline calculators for audio engineers — on stage, in the studio, no internet required. No login, no ads, no tracking.\n\n■ Electrical\n· Ohm's Law calculator\n· Power calculator\n· Speaker impedance (series/parallel)\n· dB ↔ power ratio converter\n\n■ Delay\n· Distance ↔ Time ↔ Phase\n· Haas Effect zone finder\n· Multi-zone speaker delay alignment\n· BPM-based reverb pre-delay\n\n■ Acoustics\n· Frequency ↔ Period ↔ Wavelength ↔ Quarter-wavelength\n· Octave band calculator\n· Distance ↔ time delay\n· Room volume calculator\n· Room mode calculator\n· RT60 reverberation time\n\n■ Tempo & Pitch\n· Tap tempo (BPM) finder\n· Note length calculator\n· Playback speed ↔ pitch converter (turntable-style)\n· Loop BPM finder\n· Bar duration calculator\n· Sample rate / buffer size latency calculator\n\n\nKeep your go-to calculators in the Favorites tab and open them in one tap.\n\nAvailable in Korean, English, Japanese, Spanish, Simplified Chinese, German, Brazilian Portuguese and French. Runs on iPhone, iPad and Mac."
+  },
+  "zh-Hans": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "dB·延时·RT60·BPM 计算器",
+   "promo": "从欧姆定律到音箱延时对齐、房间模态、BPM与音高 — 离线可用的音频计算器。常用的计算器可收进收藏标签。无需登录，无广告，无跟踪。",
+   "description": "面向音频工程师的离线计算器工具集 — 无论在现场还是录音棚，无需联网即可使用。无需登录，无广告，无跟踪。\n\n■ 电气 (Electrical)\n· 欧姆定律计算器\n· 功率计算器\n· 扬声器阻抗计算器(串联/并联)\n· dB ↔ 功率比转换\n\n■ 延时 (Delay)\n· 距离 ↔ 时间 ↔ 相位计算\n· 哈斯效应(Haas Effect)区域判断\n· 多分区扬声器延时对齐\n· 基于BPM的混响预延时计算\n\n■ 声学 (Acoustics)\n· 频率 ↔ 周期 ↔ 波长 ↔ 四分之一波长\n· 倍频程带宽计算\n· 距离 ↔ 时间延时\n· 房间容积计算\n· 房间模式计算\n· RT60混响时间计算\n\n■ 节拍与音高 (Tempo & Pitch)\n· 敲击节拍测BPM\n· 音符时值计算\n· 播放速度 ↔ 音高转换(黑胶转盘式)\n· Loop BPM查找器\n· 小节时长计算\n· 采样率/缓冲区延迟计算\n\n\n把常用计算器放进\"收藏\"标签，一键打开。\n\n支持韩语、英语、日语、西班牙语、简体中文、德语、葡萄牙语(巴西)和法语,可在iPhone、iPad、Mac上使用。"
+  },
+  "ko": {
+   "name": "AudioEngineerToolkit-오디오엔지니어",
+   "subtitle": "dB·딜레이·RT60·임피던스 계산기,오디오엔지니어",
+   "promo": "옴의 법칙부터 스피커 딜레이 정렬, 룸 모드, BPM·피치 계산까지 — 현장 계산기를 인터넷 없이. 자주 쓰는 계산기는 즐겨찾기 탭에 모아 두세요. 로그인·광고·추적 없음.",
+   "description": "현장에서, 스튜디오에서, 인터넷 연결 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다. 로그인도, 광고도, 추적도 없습니다.\n\n■ 전기 (Electrical)\n· 옴의 법칙 계산기\n· 파워(전력) 계산기\n· 스피커 임피던스 계산기 (직렬/병렬)\n· dB ↔ 전력비 변환\n\n■ 딜레이 (Delay)\n· 거리 ↔ 시간 ↔ 위상 계산\n· 하스 효과(Haas Effect) 존 판정\n· 다중 스피커 존 딜레이 정렬\n· BPM 기반 리버브 프리딜레이 계산\n\n■ 음향 (Acoustics)\n· 주파수 ↔ 주기 ↔ 파장 ↔ 1/4파장\n· 옥타브 밴드 계산\n· 거리 ↔ 시간 딜레이\n· 룸 볼륨 계산\n· 룸 모드 계산\n· RT60 잔향 시간 계산\n\n■ 템포 & 피치 (Tempo & Pitch)\n· 탭 템포로 BPM 측정\n· 음표 길이 계산\n· 재생 속도 ↔ 피치 변환 (턴테이블 피치처럼)\n· 루프 BPM 파인더\n· 마디(Bar) 길이 계산\n· 샘플레이트/버퍼 사이즈 레이턴시 계산\n\n\n자주 쓰는 계산기는 즐겨찾기 탭에 모아두고 한 번에 열 수 있습니다.\n\n한국어·영어·일본어·스페인어·중국어(간체)·독일어·포르투갈어(브라질)·프랑스어를 지원하며, iPhone·iPad·Mac에서 사용할 수 있습니다."
+  },
+  "de": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "Tontechnik-Rechner: dB, Delay",
+   "promo": "Vom Ohmschen Gesetz über Lautsprecher-Delay und Raummoden bis zu BPM und Tonhöhe: Audio-Rechner ohne Internet. Lieblingstools als Favoriten. Ohne Login, ohne Werbung.",
+   "description": "Eine komplette Sammlung von Offline-Rechnern für Tontechniker – auf der Bühne, im Studio, ganz ohne Internet. Ohne Login, ohne Werbung, ohne Tracking.\n\n■ Elektrik\n· Rechner für das Ohmsche Gesetz\n· Leistungsrechner\n· Lautsprecher-Impedanz (Reihen-/Parallelschaltung)\n· dB ↔ Leistungsverhältnis\n\n■ Delay\n· Entfernung ↔ Zeit ↔ Phase\n· Haas-Zone bestimmen\n· Delay-Ausrichtung für mehrere Lautsprecherzonen\n· BPM-basierte Reverb-Vorverzögerung (Pre-Delay)\n\n■ Akustik\n· Frequenz ↔ Periodendauer ↔ Wellenlänge ↔ Viertelwellenlänge\n· Oktavband-Rechner\n· Entfernung ↔ Laufzeit\n· Raumvolumen\n· Raummoden\n· Nachhallzeit (RT60)\n\n■ Tempo & Tonhöhe\n· Tap-Tempo (BPM) ermitteln\n· Notenlängen\n· Wiedergabegeschwindigkeit ↔ Tonhöhe (wie beim Plattenspieler)\n· Loop-BPM ermitteln\n· Taktlänge\n· Latenz aus Samplerate und Puffergröße\n\nVerfügbar in Koreanisch, Englisch, Japanisch, Spanisch, Vereinfachtem Chinesisch, Deutsch, brasilianischem Portugiesisch und Französisch. Läuft auf iPhone, iPad und Mac."
+  },
+  "fr": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "Calculateurs audio hors ligne",
+   "promo": "De la loi d’Ohm au délai des enceintes, des modes propres au BPM et au pitch : des calculateurs audio hors ligne. Épinglez vos outils favoris. Sans compte ni publicité.",
+   "description": "Un ensemble complet de calculateurs hors ligne pour les ingénieurs du son — sur scène comme en studio, sans connexion internet. Sans compte, sans publicité, sans traçage.\n\n■ Électricité\n· Loi d’Ohm\n· Calculateur de puissance\n· Impédance des enceintes (série/parallèle)\n· Conversion dB ↔ rapport de puissance\n\n■ Délai\n· Distance ↔ temps ↔ phase\n· Zone de l’effet Haas\n· Alignement des délais pour plusieurs zones d’enceintes\n· Pré-délai de réverbération calé sur le BPM\n\n■ Acoustique\n· Fréquence ↔ période ↔ longueur d’onde ↔ quart d’onde\n· Calculateur de bandes d’octave\n· Distance ↔ délai\n· Volume de la salle\n· Modes propres de la salle\n· Temps de réverbération (RT60)\n\n■ Tempo & pitch\n· Tap tempo (BPM)\n· Durée des notes\n· Vitesse de lecture ↔ pitch (comme sur une platine vinyle)\n· BPM d’une boucle\n· Durée des mesures\n· Latence selon la fréquence d’échantillonnage et la taille du buffer\n\n\nGardez vos calculateurs favoris dans l’onglet Favoris et ouvrez-les d’un seul geste.\n\nDisponible en coréen, anglais, japonais, espagnol, chinois simplifié, allemand, portugais brésilien et français. Fonctionne sur iPhone, iPad et Mac."
+  },
+  "pt-BR": {
+   "name": "AudioEngineerToolkit",
+   "subtitle": "Calculadoras de áudio offline",
+   "promo": "Da lei de Ohm ao alinhamento de delay, modos da sala, BPM e pitch: calculadoras de áudio que funcionam offline. Fixe suas ferramentas favoritas. Sem login, sem anúncios.",
+   "description": "Um conjunto completo de calculadoras offline para engenheiros de áudio — no palco, no estúdio, sem precisar de internet. Sem login, sem anúncios, sem rastreamento.\n\n■ Elétrica\n· Calculadora da lei de Ohm\n· Calculadora de potência\n· Impedância de caixas acústicas (série/paralelo)\n· Conversor dB ↔ razão de potência\n\n■ Delay\n· Distância ↔ tempo ↔ fase\n· Zona do efeito Haas\n· Alinhamento de delay para várias zonas de caixas\n· Pré-delay de reverb baseado no BPM\n\n■ Acústica\n· Frequência ↔ período ↔ comprimento de onda ↔ quarto de onda\n· Calculadora de bandas de oitava\n· Distância ↔ tempo de delay\n· Volume da sala\n· Modos da sala\n· Tempo de reverberação (RT60)\n\n■ Tempo e pitch\n· Descobrir o BPM por tap tempo\n· Duração das notas\n· Velocidade de reprodução ↔ pitch (como no toca-discos)\n· Descobrir o BPM de um loop\n· Duração de compassos\n· Latência por taxa de amostragem e tamanho do buffer\n\nDisponível em coreano, inglês, japonês, espanhol, chinês simplificado, alemão, português do Brasil e francês. Funciona no iPhone, iPad e Mac."
+  }
+ }
+}
