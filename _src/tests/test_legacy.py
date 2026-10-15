@@ -7,8 +7,8 @@ import chrome_legacy  # noqa: E402
 
 SAMPLE = ROOT / "guides" / "gain-staging-basics.html"
 VOID = {"meta", "link", "br", "img", "hr", "input", "source", "wbr", "col", "area", "base", "embed", "track"}
-NEW_MENU = ("/apps/", "/tools/", "/plugins/", "/studio/", "/guides/", "/about/")
-CAREER = json.loads((ROOT / "_src" / "content" / "career.json").read_text(encoding="utf-8"))
+NEW_MENU = ("/work/", "/studio/", "/apps/", "/tools/", "/plugins/", "/guides/")
+CAREER_NUMBERS = re.compile(r"\b111\b|\b66\b|\b49\b|기록한 작업|기록된 작업|2009|\d+건")
 
 
 class Balance(HTMLParser):
@@ -83,16 +83,17 @@ class TransformSampleTests(unittest.TestCase):
 
     def test_footer_links(self):
         footer = re.search(r"<footer.*?</footer>", self.out, re.S).group(0)
-        for href in ("/apps/", "/tools/", "/guides/", "/about/", "/studio/", "/privacy/",
+        for href in ("/work/", "/apps/", "/tools/", "/guides/", "/about/", "/studio/", "/privacy/",
                      "/policy.html#policy", "/contact/"):
             self.assertIn('href="%s"' % href, footer)
 
-    def test_author_box_once_with_career_numbers_before_article_end(self):
+    def test_author_box_once_without_career_numbers_before_article_end(self):
         self.assertEqual(self.out.count('class="author-box"'), 1)
         self.assertEqual(self.out.count("<!-- author-box -->"), 1)
         self.assertEqual(self.out.count("<!-- /author-box -->"), 1)
         box = re.search(r"<!-- author-box -->.*?<!-- /author-box -->", self.out, re.S).group(0)
-        self.assertIn("%d년부터 기록한 작업이 %d건이며, 현장에서 쓰는 앱과 웹 도구를 만듭니다." % (CAREER["since"], CAREER["total"]), box)
+        self.assertIn("<p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>", box)
+        self.assertNotRegex(re.sub(r'<p class="meta">.*?</p>', "", box), CAREER_NUMBERS)   # 날짜 줄은 빼고 본다
         self.assertIn('<a href="/about/">글쓴이 소개</a>', box)
         self.assertLess(self.out.index("<!-- /author-box -->"), self.out.index("</article>"))
         self.assertEqual(self.out.count("</article>"), 1)
@@ -213,6 +214,16 @@ class AllGuidesTests(unittest.TestCase):
                 self.assertEqual(ld1["dateModified"], DATES[slug]["modified"], f)
                 self.assertEqual(ld1["author"]["@type"], "Person", f)
             self.assertEqual(once.count('class="author-box"'), 0 if self.kind(f) == "guides-index" else 1, f)
+
+    def test_no_career_numbers_in_any_author_box_and_menu_matches_site(self):
+        sys.path.insert(0, str(ROOT / "_src"))
+        from sitegen import kit
+        self.assertEqual([h for h, _ in chrome_legacy.MENU], [p for _, p in kit.NAV])
+        for f in guide_files():
+            text = pathlib.Path(f).read_text(encoding="utf-8")
+            for box in re.findall(r"<!-- author-box -->.*?<!-- /author-box -->", text, re.S):
+                self.assertNotRegex(re.sub(r'<p class="meta">.*?</p>', "", box), CAREER_NUMBERS, f)
+            self.assertNotIn("moonstudio", text.lower(), f)
 
     def test_disk_guides_balanced_like_publish_guide(self):
         for f in guide_files():

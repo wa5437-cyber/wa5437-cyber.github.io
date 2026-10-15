@@ -9,13 +9,13 @@
 import json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-CAREER = ROOT / "_src" / "content" / "career.json"
 DATES = ROOT / "_src" / "content" / "guide_dates.json"
 AUTHOR_LD = {"@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/"}
 
-MENU = [("/apps/", "Apps"), ("/tools/", "Tools"), ("/plugins/", "Plugins"),
-        ("/studio/", "Studio"), ("/guides/", "Guides"), ("/about/", "About")]
-COMPANY = [("/about/", "About"), ("/studio/", "Studio"), ("/privacy/", "Privacy"),
+# 사이트 머리 메뉴(kit.NAV)와 같은 순서: 작업·녹음실이 먼저. 소개(About)는 푸터에.
+MENU = [("/work/", "Work"), ("/studio/", "Studio"), ("/apps/", "Apps"), ("/tools/", "Tools"),
+        ("/plugins/", "Plugins"), ("/guides/", "Guides")]
+COMPANY = [("/work/", "Work"), ("/about/", "About"), ("/studio/", "Studio"), ("/privacy/", "Privacy"),
            ("/policy.html#policy", "App privacy policy"), ("/contact/", "Contact")]
 
 # 사이트(_src/sitegen/kit.py 의 FONTS·THEME_COLOR)와 같은 글꼴·브라우저 색. 테스트가 두 값이 같은지 본다.
@@ -83,10 +83,6 @@ def _body_anchors(html):
     return html.replace('href="/#apps"', 'href="/apps/"').replace('href="/#tools"', 'href="/tools/"')
 
 
-def _career():
-    return json.loads(CAREER.read_text(encoding="utf-8"))
-
-
 def _slug(html):
     m = re.search(r'<link rel="canonical" href="https://mlmusicstudio\.co\.kr/guides/([^"/]+)\.html">', html)
     if not m:
@@ -138,15 +134,16 @@ def _json_ld(html, published, modified):
     return html[:m.start(2)] + _dump_ld(ordered) + html[m.end(2):]
 
 
+AUTHOR_LINE = "ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다."   # 경력 건수·기간은 쓰지 않는다(사용자 지시)
+
+
 def _author_box(published, modified):
-    c = _career()
     when = "게시 %s" % published if modified == published else "게시 %s · 최종 수정 %s" % (published, modified)
     return "\n".join([
         "  <!-- author-box -->",
         '  <aside class="author-box" aria-label="글쓴이">',
         '    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>',
-        "    <p>%d년부터 기록한 작업이 %d건이며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>"
-        % (c["since"], c["total"]),
+        "    <p>%s</p>" % AUTHOR_LINE,
         '    <p class="meta"><a href="/about/">글쓴이 소개</a> · %s</p>' % when,
         "  </aside>",
         "  <!-- /author-box -->",
