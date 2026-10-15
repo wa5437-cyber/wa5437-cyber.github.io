@@ -1,8 +1,8 @@
 {
   "hero_img": "/img/studio/control-room.jpg",
   "gear": {
-    "ko": ["Grace Design m201 마이크 프리앰프", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B 컴프레서"],
-    "en": ["Grace Design m201 microphone preamp", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B compressor"]
+    "ko": ["Grace Design m201 마이크 프리앰프", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B 컴프레서", "Focal Solo6 Be 모니터"],
+    "en": ["Grace Design m201 microphone preamp", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B compressor", "Focal Solo6 Be monitors"]
   },
   "ko": {
     "title": "녹음실 | ML Music Studio",

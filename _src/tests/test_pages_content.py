@@ -38,7 +38,7 @@ class StudioAboutContactTests(unittest.TestCase):
         for img in re.findall(r"<img [^>]+>", gallery):
             self.assertIn('loading="lazy"', img)
             self.assertRegex(img, r'width="\d+" height="\d+"')
-        self.assertIn("<li>Grace Design m201 마이크 프리앰프</li><li>Neve 1073DPA</li><li>Lydkraft Tube-Tech CL 1B 컴프레서</li>", html)
+        self.assertIn("<li>Grace Design m201 마이크 프리앰프</li><li>Neve 1073DPA</li><li>Lydkraft Tube-Tech CL 1B 컴프레서</li><li>Focal Solo6 Be 모니터</li>", html)
         chips = re.search(r'<ul class="chips">(.*?)</ul>', html).group(1)
         self.assertEqual(re.findall(r"<li>(.*?)</li>", chips), ["음반", "영화", "연극", "뮤지컬", "방송", "행사", "오디오북"])
         self.assertIn('class="covers strip-4"', html)
