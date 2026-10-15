@@ -7,35 +7,35 @@
 <meta name="description" content="무대예술전문인 자격검정(음향) 3급 대비 객관식 문제풀이. 표준교재 14개 장 + 계산문제.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
-    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.16);
-    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+    --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
+    --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.16);
+    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
   }
   *{ box-sizing:border-box; }
   html{ scroll-behavior:smooth; }
   body{
     margin:0;
-    background: radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
-    color:var(--text-primary); font-family:'Inter', -apple-system, sans-serif;
+    background: radial-gradient(circle at 1px 1px, rgba(32,36,38,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #f4f5f3 70%, #f4f5f3);
+    color:var(--text-primary); font-family:'Inter','Noto Sans KR',-apple-system,sans-serif;
     -webkit-font-smoothing:antialiased; min-height:100vh;
   }
-  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; letter-spacing:-0.01em; }
+  h1,h2,h3{ font-family:'Inter','Noto Sans KR',sans-serif; margin:0; letter-spacing:-0.01em; }
   .mono{ font-family:'IBM Plex Mono', monospace; }
   a{ color:inherit; text-decoration:none; }
   .wrap{ max-width:920px; margin:0 auto; padding:0 24px 80px; }
-  nav{ position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(250,248,243,0.72); border-bottom:1px solid var(--line); }
+  nav{ position:sticky; top:0; z-index:50; backdrop-filter:blur(14px); background:rgba(244,245,243,0.72); border-bottom:1px solid var(--line); }
   nav .inner{ max-width:920px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between; height:60px; }
   .brand{ font-weight:700; font-size:15px; }
   .backlink{ font-size:13px; color:var(--text-secondary); }
   .backlink:hover{ color:var(--text-primary); }
 
   header.hero{ padding:48px 0 28px; }
-  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(47,109,76,0.28); background:rgba(47,109,76,0.06); padding:6px 12px; border-radius:100px; margin-bottom:18px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); border:1px solid rgba(35,105,92,0.28); background:rgba(35,105,92,0.06); padding:6px 12px; border-radius:100px; margin-bottom:18px; }
   header.hero h1{ font-size:clamp(26px,4.5vw,38px); line-height:1.15; }
   header.hero p{ margin-top:14px; color:var(--text-secondary); font-size:15px; line-height:1.6; max-width:640px; }
   .disclaimer{ margin-top:16px; padding:12px 16px; border-radius:10px; background:rgba(156,107,23,0.07); border:1px solid rgba(156,107,23,0.25); color:var(--text-secondary); font-size:12.5px; line-height:1.6; }
@@ -43,7 +43,7 @@
   .chapter-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:10px; margin-top:28px; }
   .chapter-card{ text-align:left; border:1px solid var(--line); background:var(--bg-panel); border-radius:12px; padding:16px 16px; cursor:pointer; transition:.15s; }
   .chapter-card:hover{ border-color:var(--line-strong); background:var(--bg-panel-2); }
-  .chapter-card.active{ border-color:var(--teal); background:rgba(47,109,76,0.06); }
+  .chapter-card.active{ border-color:var(--teal); background:rgba(35,105,92,0.06); }
   .chapter-card .num{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-tertiary); }
   .chapter-card .name{ font-size:14.5px; font-weight:600; margin-top:4px; }
   .chapter-card .count{ font-size:11.5px; color:var(--text-tertiary); margin-top:6px; }
@@ -57,17 +57,17 @@
   .q-progress-bar{ height:100%; background:linear-gradient(90deg,var(--teal),var(--blue)); transition:width .3s; }
   .q-text{ font-size:17px; line-height:1.6; margin-bottom:20px; font-weight:500; }
   .choices{ display:flex; flex-direction:column; gap:10px; }
-  .choice{ text-align:left; padding:14px 16px; border-radius:10px; border:1px solid var(--line); background:rgba(30,26,20,0.02); color:var(--text-primary); font-size:14.5px; cursor:pointer; transition:.12s; }
-  .choice:hover{ background:rgba(30,26,20,0.06); border-color:var(--line-strong); }
-  .choice.correct{ border-color:var(--teal); background:rgba(47,109,76,0.12); }
+  .choice{ text-align:left; padding:14px 16px; border-radius:10px; border:1px solid var(--line); background:rgba(32,36,38,0.02); color:var(--text-primary); font-size:14.5px; cursor:pointer; transition:.12s; }
+  .choice:hover{ background:rgba(32,36,38,0.06); border-color:var(--line-strong); }
+  .choice.correct{ border-color:var(--teal); background:rgba(35,105,92,0.12); }
   .choice.wrong{ border-color:var(--red); background:rgba(178,58,42,0.12); }
   .choice[disabled]{ cursor:default; }
-  .q-explain{ margin-top:16px; padding:14px 16px; border-radius:10px; background:rgba(30,26,20,0.03); font-size:13.5px; color:var(--text-secondary); line-height:1.6; display:none; }
+  .q-explain{ margin-top:16px; padding:14px 16px; border-radius:10px; background:rgba(32,36,38,0.03); font-size:13.5px; color:var(--text-secondary); line-height:1.6; display:none; }
   .q-explain.show{ display:block; }
   .q-nextbtn{ margin-top:18px; display:none; }
   .q-nextbtn.show{ display:inline-flex; }
   .btn-primary{ background:linear-gradient(180deg,#33587a, var(--blue)); color:#fff; font-weight:600; font-size:14px; padding:12px 22px; border-radius:10px; border:none; cursor:pointer; }
-  .btn-ghost{ border:1px solid var(--line-strong); color:var(--text-primary); font-weight:600; font-size:14px; padding:12px 20px; border-radius:10px; background:rgba(30,26,20,0.02); cursor:pointer; }
+  .btn-ghost{ border:1px solid var(--line-strong); color:var(--text-primary); font-weight:600; font-size:14px; padding:12px 20px; border-radius:10px; background:rgba(32,36,38,0.02); cursor:pointer; }
   .result-box{ text-align:center; padding:20px 0; }
   .result-box .score{ font-family:'IBM Plex Mono',monospace; font-size:44px; font-weight:600; color:var(--teal); }
   .result-box p{ color:var(--text-secondary); margin-top:8px; }
@@ -81,8 +81,16 @@
   .prose ol li{ margin-bottom:4px; }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<!-- site-chrome:head -->
+<meta name="theme-color" content="#f4f5f3">
+<link rel="stylesheet" href="/assets/tools.css">
+<!-- /site-chrome:head -->
 </head>
 <body>
+<!-- site-chrome:header -->
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<!-- /site-chrome:header -->
 
 <nav><div class="inner">
   <div class="brand">SOUND ENGINEER TOOLS</div>
@@ -402,5 +410,10 @@ function renderResult(){
   };
 }
 </script>
+<!-- site-chrome:footer -->
+<section class="tool-related chrome-ko" aria-label="관련 앱"><div class="wrap"><p class="tr-kicker">관련 앱</p><a class="tr-card" href="/apps/stage-sound/"><span class="tr-shot"><img src="/img/apps/stage-sound/01_home.jpg" alt="" width="331" height="720" loading="lazy"></span><span class="tr-text"><strong>무대음향 자격증 기출문제</strong><span>무대예술전문인(음향) 1·2·3급 필기시험을 기출문제로 준비하는 앱입니다.</span><span class="tr-more">앱 자세히 보기 →</span></span></a></div></section><section class="tool-related chrome-en" lang="en" aria-label="Related app"><div class="wrap"><p class="tr-kicker">Related app</p><a class="tr-card" href="/en/apps/stage-sound/"><span class="tr-shot"><img src="/img/apps/stage-sound/01_home.jpg" alt="" width="331" height="720" loading="lazy"></span><span class="tr-text"><strong>Stage Sound Exam Prep (Korea)</strong><span>An app for preparing for Korea&#x27;s stage-sound certification written exams (grades 1-3) with past-exam questions.</span><span class="tr-more">App details →</span></span></a></div></section>
+<footer class="site-footer chrome-ko"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<footer class="site-footer chrome-en" lang="en"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/en/">ML Music Studio</a><p class="foot-tag">A recording, mixing and mastering studio in Yongsan, Seoul. We also make apps and web tools for sound work.</p></div><div class="foot-col"><p class="foot-h">Work</p><ul class="foot-links"><li><a href="/en/work/">Work</a></li><li><a href="/en/about/">About</a></li></ul></div><div class="foot-col"><p class="foot-h">Studio</p><ul class="foot-links"><li><a href="/en/studio/">Studio</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">Directions</a></li></ul></div><div class="foot-col"><p class="foot-h">Products</p><ul class="foot-links"><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div><div class="foot-col"><p class="foot-h">Contact</p><ul class="foot-links"><li><a href="/en/contact/">How to reach us</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">Contact on KakaoTalk</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/en/privacy/">Privacy Policy</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<!-- /site-chrome:footer -->
 </body>
 </html>

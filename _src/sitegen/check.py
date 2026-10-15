@@ -24,7 +24,11 @@ GENERATED_PREFIXES = ("index.html", "en/", "apps/", "tools/", "plugins/", "studi
                       "ja/", "zh-Hans/", "es/", "de/", "fr/", "pt-BR/")
 # 기존(손으로 쓴) 페이지는 사이트 안 링크·src(루트 기준 주소)가 실제 파일을 가리키는지만 본다. 스토어 링크·canonical 등은 건드리지 않는다.
 PLAIN_LINK_PREFIXES = ("guides/",)
-PLAIN_LINK_FILES = ("policy.html", "nora_legal.html", "patchio_legal.html", "sheetscope_legal.html", "yul_legal.html")
+PLAIN_LINK_FILES = ("policy.html", "nora_legal.html", "patchio_legal.html", "sheetscope_legal.html", "yul_legal.html",
+                    # 웹 도구 9쪽(_src/tools/chrome_tools.py 가 사이트 머리·푸터를 넣는다)
+                    "rta.html", "trainer.html", "generator.html", "effects-listening.html", "delay-calculator.html",
+                    "acoustics-calculator.html", "electrical-calculator.html", "tempo-pitch-calculator.html",
+                    "stage-sound-quiz.html")
 MAIN = re.compile(r"<main\b[^>]*>(.*?)</main>", re.S)
 NONKR = ("ja", "zh-Hans", "es", "de", "fr", "pt-BR")
 

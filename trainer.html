@@ -6,26 +6,26 @@
 <title>31-Band Ear Trainer — Web</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
-    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
-    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
-    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+    --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
+    --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
+    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
   body{
     margin:0; background:
-      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
-    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+      radial-gradient(circle at 1px 1px, rgba(32,36,38,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #f4f5f3 70%, #f4f5f3);
+    color:var(--text-primary); font-family:'Inter','Noto Sans KR',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
     display:flex; justify-content:center; align-items:flex-start;
   }
   .mono{ font-family:'IBM Plex Mono',monospace; }
-  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  h1,h2,h3{ font-family:'Inter','Noto Sans KR',sans-serif; margin:0; }
   button{ font-family:inherit; cursor:pointer; }
 
   /* ✅ 세로로 길게 늘어나는 대신, 화면 비율(가로 폭)에 맞춰 좌우로 넓게 쓰도록 max-width를 크게 잡는다 */
@@ -39,7 +39,7 @@
     padding:8px 12px; border-radius:100px; border:1px solid var(--line);
     text-decoration:none; flex-shrink:0;
   }
-  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(32,36,38,0.04); }
   .mark{ width:30px; height:30px; border-radius:9px; background:linear-gradient(160deg,#ffffff,#ffffff); border:1px solid var(--line-strong); display:flex; align-items:center; justify-content:center; gap:3px; flex-shrink:0; }
   .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); animation: markbar 2.4s ease-in-out infinite; }
   .mark span:nth-child(1){ height:10px; animation-delay:-0.6s; }
@@ -60,7 +60,7 @@
   .modepicker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
   .modepicker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:15px; font-weight:600; padding:12px 8px; border-radius:9px; transition:background .15s, color .15s; white-space:nowrap; }
   .modepicker button .short{ display:none; }
-  .modepicker button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .modepicker button.active{ background:#dbe3df; color:var(--text-primary); }
   .modepicker button:disabled{ opacity:0.5; cursor:not-allowed; }
 
   /* ---- 음악 업로드 패널 ---- */
@@ -69,10 +69,10 @@
     background:var(--bg-panel); border:1px solid var(--line); border-radius:14px; padding:14px;
   }
   .upload-btn{
-    border:1px dashed var(--line); background:rgba(30,26,20,0.02); color:var(--text-secondary);
+    border:1px dashed var(--line); background:rgba(32,36,38,0.02); color:var(--text-secondary);
     font-size:13px; font-weight:600; padding:10px 18px; border-radius:10px; width:100%;
   }
-  .upload-btn:hover{ background:rgba(30,26,20,0.06); color:var(--text-primary); }
+  .upload-btn:hover{ background:rgba(32,36,38,0.06); color:var(--text-primary); }
   .music-filename{
     font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--teal); text-align:center;
     word-break:break-all;
@@ -94,7 +94,7 @@
     display:inline-flex; align-items:center; gap:5px; margin-top:8px;
     font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600;
     padding:5px 12px; border-radius:100px; letter-spacing:0.02em;
-    background:rgba(47,109,76,0.12); color:var(--teal); border:1px solid rgba(47,109,76,0.3);
+    background:rgba(35,105,92,0.12); color:var(--teal); border:1px solid rgba(35,105,92,0.3);
     transition:background .2s, color .2s, border-color .2s;
   }
   .ab-badge.modified{
@@ -109,7 +109,7 @@
     display:flex; gap:8px; align-items:flex-start; font-size:13px; font-weight:500;
     padding:12px 14px; border-radius:12px; line-height:1.5; animation:popin .25s ease;
   }
-  .feedback .banner.ok{ background:rgba(47,109,76,0.12); color:var(--teal); border:1px solid rgba(47,109,76,0.3); }
+  .feedback .banner.ok{ background:rgba(35,105,92,0.12); color:var(--teal); border:1px solid rgba(35,105,92,0.3); }
   .feedback .banner.no{ background:rgba(156,107,23,0.12); color:var(--amber); border:1px solid rgba(156,107,23,0.3); }
   @keyframes popin{ from{opacity:0; transform:translateY(-4px);} to{opacity:1; transform:translateY(0);} }
 
@@ -141,7 +141,7 @@
   }
   .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
   .track{
-    position:relative; width:100%; flex:1; min-height:60px; background:#ece7db; border-radius:4px; border:1px solid rgba(30,26,20,0.04);
+    position:relative; width:100%; flex:1; min-height:60px; background:#e2e8e5; border-radius:4px; border:1px solid rgba(32,36,38,0.04);
     overflow:hidden; cursor:ns-resize;
     /* ✅ pan-x: 가로 스와이프는 브라우저가 그리드를 가로 스크롤하도록 허용하고,
        세로 방향 움직임은 우리 JS(포인터 이벤트)가 그대로 받아 페이더 드래그로 처리한다.
@@ -149,18 +149,18 @@
     touch-action:pan-x;
   }
   .track.disabled{ cursor:default; }
-  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(30,26,20,0.12); pointer-events:none; }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(32,36,38,0.12); pointer-events:none; }
   /* ✅ cap은 절대 위치(bottom %)로 두고, 평소엔 transition 없이 포인터를 1:1로 즉시 따라간다.
      (transition을 항상 걸어두면 드래그할 때 손가락보다 한 박자 늦게 따라오는 "밀림" 현상이 생긴다) */
   .band button.cap{
-    all:unset; width:100%; height:12px; border-radius:3px; background:#8c8677;
+    all:unset; width:100%; height:12px; border-radius:3px; background:#5f686c;
     position:absolute; left:0; right:0; bottom:50%; pointer-events:none; /* 드래그는 트랙 전체가 받는다 */
   }
   .band button.cap.settle{ transition:bottom .35s cubic-bezier(.22,.85,.32,1); }
   /* ✅ 정답 공개 시 색상만 바뀌고 위치는 그대로 유지한다 (요청에 따라 위치 이동 애니메이션 제거) */
   .band button.cap{ transition:background .15s, box-shadow .15s; }
   .band.dragging button.cap{ background:var(--blue); box-shadow:0 0 10px rgba(51,88,122,0.5); }
-  .band.correct button.cap{ background:var(--teal) !important; box-shadow:0 0 12px rgba(47,109,76,0.6); }
+  .band.correct button.cap{ background:var(--teal) !important; box-shadow:0 0 12px rgba(35,105,92,0.6); }
   .band.wrong button.cap{ background:var(--red) !important; box-shadow:0 0 12px rgba(178,58,42,0.6); }
   /* ✅ 밴드는 맞았지만 부스트/컷 방향이 반대인 "부분 정답" 상태 — 완전 오답(빨강)과 구분되게 주황으로 표시 */
   .band.partial button.cap{ background:var(--amber) !important; box-shadow:0 0 12px rgba(156,107,23,0.6); }
@@ -177,14 +177,14 @@
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
-    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(32,36,38,0.02);
     display:inline-flex; align-items:center; gap:5px;
   }
-  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(32,36,38,0.06); }
 
   /* ---- 도구 설명 ---- */
   .explain{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:22px 22px 20px; margin-top:4px; }
-  .explain h2{ font-family:'Space Grotesk','Inter',sans-serif; font-size:17px; margin:0 0 10px; }
+  .explain h2{ font-family:'Inter','Noto Sans KR',sans-serif; font-size:17px; margin:0 0 10px; }
   .explain p{ font-size:14.5px; line-height:1.75; color:var(--text-secondary); margin:0 0 12px; }
   .explain p:last-child{ margin-bottom:0; }
   .explain a{ color:var(--teal); font-weight:600; }
@@ -252,8 +252,16 @@
   }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<!-- site-chrome:head -->
+<meta name="theme-color" content="#f4f5f3">
+<link rel="stylesheet" href="/assets/tools.css">
+<!-- /site-chrome:head -->
 </head>
 <body>
+<!-- site-chrome:header -->
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<!-- /site-chrome:header -->
 <div class="app">
 
   <div class="topbar">
@@ -1600,5 +1608,10 @@
 </script>
 <script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "chapter_training": {"ko": "훈련", "en": "Training", "ja": "トレーニング", "es": "Entrenamiento", "zh": "训练"}, "chapter_listen": {"ko": "청음", "en": "Listen", "ja": "リスニング", "es": "Escucha", "zh": "聆听"}, "band_count_31_full": {"ko": "31밴드 (실전형)", "en": "31-Band (Pro)", "ja": "31バンド（実戦向け）", "es": "31 bandas (avanzado)", "zh": "31 段（实战型）"}, "band_count_31_short": {"ko": "31밴드", "en": "31-Band", "ja": "31バンド", "es": "31 bandas", "zh": "31 段"}, "band_count_10_full": {"ko": "10밴드 (입문형)", "en": "10-Band (Beginner)", "ja": "10バンド（入門向け）", "es": "10 bandas (principiante)", "zh": "10 段（入门型）"}, "band_count_10_short": {"ko": "10밴드", "en": "10-Band", "ja": "10バンド", "es": "10 bandas", "zh": "10 段"}, "mag_mixed": {"ko": "복합(랜덤)", "en": "Mixed (Random)", "ja": "複合（ランダム）", "es": "Mixto (aleatorio)", "zh": "混合（随机）"}, "source_pink_label": {"ko": "🌫️ 핑크노이즈", "en": "🌫️ Pink Noise", "ja": "🌫️ ピンクノイズ", "es": "🌫️ Ruido rosa", "zh": "🌫️ 粉红噪音"}, "source_music_label": {"ko": "🎵 내 음악", "en": "🎵 My Music", "ja": "🎵 マイミュージック", "es": "🎵 Mi música", "zh": "🎵 我的音乐"}, "upload_music_btn": {"ko": "📂 음악 파일 업로드", "en": "📂 Upload Music File", "ja": "📂 音楽ファイルをアップロード", "es": "📂 Subir archivo de música", "zh": "📂 上传音乐文件"}, "status_default_title": {"ko": "시작 버튼을 눌러 핑크노이즈를 재생하세요", "en": "Tap start to play pink noise", "ja": "スタートボタンを押してピンクノイズを再生しましょう", "es": "Pulsa iniciar para reproducir ruido rosa", "zh": "点击开始按钮播放粉红噪音"}, "ab_badge_normal": {"ko": "● 기본(무변형) 재생 중", "en": "● Playing Normal (Unmodified)", "ja": "● 基本（無変形）再生中", "es": "● Reproduciendo normal (sin modificar)", "zh": "● 正在播放原始（未调整）"}, "ab_badge_modified": {"ko": "● 변형(부스트/컷) 재생 중", "en": "● Playing Modified (Boost/Cut)", "ja": "● 変形（ブースト/カット）再生中", "es": "● Reproduciendo modificado (Boost/Cut)", "zh": "● 正在播放调整后（升/降）"}, "btn_training_start": {"ko": "▸ 훈련 시작", "en": "▸ Start Training", "ja": "▸ トレーニング開始", "es": "▸ Iniciar entrenamiento", "zh": "▸ 开始训练"}, "btn_stop_generic": {"ko": "■ 종료", "en": "■ Stop", "ja": "■ 終了", "es": "■ Detener", "zh": "■ 结束"}, "btn_listen_start": {"ko": "▸ 청음 시작", "en": "▸ Start Listening", "ja": "▸ リスニング開始", "es": "▸ Iniciar escucha", "zh": "▸ 开始聆听"}, "btn_listen_stop": {"ko": "■ 청음 종료", "en": "■ End Listening", "ja": "■ リスニング終了", "es": "■ Finalizar escucha", "zh": "■ 结束聆听"}, "status_listen_prompt": {"ko": "밴드를 탭하면 바로 들려드려요", "en": "Tap a band to hear it instantly", "ja": "バンドをタップするとすぐに聴けます", "es": "Toca una banda para escucharla al instante", "zh": "点击频段即可立即试听"}, "error_title": {"ko": "⚠️ 오류가 발생했습니다", "en": "⚠️ An error occurred", "ja": "⚠️ エラーが発生しました", "es": "⚠️ Se produjo un error", "zh": "⚠️ 发生错误"}, "error_console_hint": {"ko": "콘솔(F12)에서 자세한 내용을 확인해주세요", "en": "Check the console (F12) for details", "ja": "コンソール（F12）で詳細をご確認ください", "es": "Consulta la consola (F12) para más detalles", "zh": "请查看控制台（F12）了解详情"}, "label_boost": {"ko": "부스트", "en": "Boost", "ja": "ブースト", "es": "Boost", "zh": "提升"}, "label_cut": {"ko": "컷", "en": "Cut", "ja": "カット", "es": "Cut", "zh": "衰减"}, "label_sine": {"ko": "사인파", "en": "Sine Wave", "ja": "サイン波", "es": "Onda senoidal", "zh": "正弦波"}, "label_lower": {"ko": "낮은", "en": "lower", "ja": "低い", "es": "más baja", "zh": "更低"}, "label_higher": {"ko": "높은", "en": "higher", "ja": "高い", "es": "más alta", "zh": "更高"}, "listen_playing_generic": {"ko": "{freq}Hz {dir} 재생 중", "en": "Playing {freq}Hz {dir}", "ja": "{freq}Hz {dir} 再生中", "es": "Reproduciendo {freq}Hz {dir}", "zh": "正在播放 {freq}Hz {dir}"}, "viz_upload_hint": {"ko": "🎵 음악을 업로드하면 파형이 여기에 표시돼요", "en": "🎵 Upload music to see the waveform here", "ja": "🎵 音楽をアップロードすると、ここに波形が表示されます", "es": "🎵 Sube música para ver aquí la forma de onda", "zh": "🎵 上传音乐后波形会显示在这里"}, "feedback_correct": {"ko": "✓ 정답! {freq}Hz {dir}였습니다.", "en": "✓ Correct! It was {freq}Hz {dir}.", "ja": "✓ 正解！{freq}Hz {dir}でした。", "es": "✓ ¡Correcto! Era {freq}Hz {dir}.", "zh": "✓ 答对了！是 {freq}Hz {dir}。"}, "feedback_partial": {"ko": "△ 대역은 맞았지만 방향이 반대예요 — {freq}Hz는 {dir}였습니다. (부스트는 위로, 컷은 아래로 끌어야 정답이에요)", "en": "△ You got the band right, but the direction was reversed — {freq}Hz was {dir}. (Drag up for boost, down for cut.)", "ja": "△ 帯域は合っていましたが方向が逆でした — {freq}Hzは{dir}でした。（ブーストは上に、カットは下にドラッグするのが正解です）", "es": "△ Acertaste la banda, pero la dirección estaba invertida — {freq}Hz era {dir}. (Arrastra hacia arriba para boost, hacia abajo para cut).", "zh": "△ 频段猜对了，但方向反了——{freq}Hz 是{dir}。（提升需向上拖动，衰减需向下拖动）"}, "feedback_wrong": {"ko": "✕ 오답 — 정답은 {freq}Hz {dir}였습니다 (선택: {selectedFreq}Hz, 정답이 더 {direction} 대역)", "en": "✕ Wrong — the answer was {freq}Hz {dir} (you picked: {selectedFreq}Hz; the answer is a {direction} band)", "ja": "✕ 不正解 — 正解は{freq}Hz {dir}でした（選択：{selectedFreq}Hz、正解はより{direction}帯域）", "es": "✕ Incorrecto — la respuesta era {freq}Hz {dir} (elegiste: {selectedFreq}Hz; la respuesta está en una banda {direction})", "zh": "✕ 答错了 — 正确答案是 {freq}Hz {dir}（你选择了：{selectedFreq}Hz，正确答案在{direction}的频段）"}, "status_warmup_title": {"ko": "배경음 청취 중… 곧 문제가 출제됩니다", "en": "Listening to the background sound… a question is coming up", "ja": "背景音を聴いています…まもなく問題が出題されます", "es": "Escuchando el sonido de fondo… la pregunta está por llegar", "zh": "正在聆听背景音……题目即将出现"}, "status_warmup_sub": {"ko": "({index}/{total})", "en": "({index}/{total})", "ja": "({index}/{total})", "es": "({index}/{total})", "zh": "({index}/{total})"}, "instruction_eq": {"ko": "부스트라면 위로, 컷이라면 아래로 — 대역을 짚어주세요", "en": "If it's boosted, drag up; if it's cut, drag down — pick the band", "ja": "ブーストなら上へ、カットなら下へ — 帯域を選んでください", "es": "Si está reforzada, arrastra hacia arriba; si está cortada, hacia abajo — elige la banda", "zh": "如果是提升就向上拖，如果是衰减就向下拖——选择频段"}, "instruction_sine": {"ko": "사인파와 같은 음고의 대역을 짚어주세요", "en": "Pick the band that matches the pitch of the sine wave", "ja": "サイン波と同じ音高の帯域を選んでください", "es": "Elige la banda que coincida con el tono de la onda senoidal", "zh": "选择与正弦波音高相同的频段"}, "status_active": {"ko": "{index}/{total} — {instruction}", "en": "{index}/{total} — {instruction}", "ja": "{index}/{total} — {instruction}", "es": "{index}/{total} — {instruction}", "zh": "{index}/{total} — {instruction}"}, "status_correct": {"ko": "정답입니다!", "en": "Correct!", "ja": "正解です！", "es": "¡Correcto!", "zh": "答对了！"}, "status_wrong": {"ko": "오답입니다.", "en": "Wrong.", "ja": "不正解です。", "es": "Incorrecto.", "zh": "答错了。"}, "status_finishing_chapter": {"ko": "챕터를 마무리하는 중…", "en": "Finishing up the chapter…", "ja": "チャプターを終了しています…", "es": "Terminando el capítulo…", "zh": "正在结束本章……"}, "status_next_question": {"ko": "다음 문제로 이동합니다…", "en": "Moving to the next question…", "ja": "次の問題に進みます…", "es": "Pasando a la siguiente pregunta…", "zh": "正在进入下一题……"}, "status_chapter_complete": {"ko": "챕터 완료! {total}문제 중 {correct}개 정답 ({pct}%)", "en": "Chapter complete! {correct} out of {total} correct ({pct}%)", "ja": "チャプター完了！{total}問中{correct}問正解（{pct}%）", "es": "¡Capítulo completado! {correct} de {total} correctas ({pct}%)", "zh": "章节完成！{total} 题中答对 {correct} 题（{pct}%）"}, "music_loading": {"ko": "⏳ \"{name}\" 불러오는 중...", "en": "⏳ Loading \"{name}\"...", "ja": "⏳ \"{name}\" を読み込み中...", "es": "⏳ Cargando \"{name}\"...", "zh": "⏳ 正在加载 \"{name}\"..."}, "music_loaded": {"ko": "✅ \"{name}\" ({duration}초)", "en": "✅ \"{name}\" ({duration}s)", "ja": "✅ \"{name}\" ({duration}秒)", "es": "✅ \"{name}\" ({duration} s)", "zh": "✅ \"{name}\"（{duration}秒）"}, "music_load_failed": {"ko": "⚠️ \"{name}\" 불러오기 실패 — 지원하지 않는 형식일 수 있습니다", "en": "⚠️ Failed to load \"{name}\" — the format may not be supported", "ja": "⚠️ \"{name}\" の読み込みに失敗しました — 対応していない形式の可能性があります", "es": "⚠️ Error al cargar \"{name}\" — puede que el formato no sea compatible", "zh": "⚠️ 加载 \"{name}\" 失败 — 可能是不受支持的格式"}};</script>
 <script src="i18n-core.js"></script>
+<!-- site-chrome:footer -->
+<section class="tool-related chrome-ko" aria-label="관련 앱"><div class="wrap"><p class="tr-kicker">관련 앱</p><a class="tr-card" href="/apps/ear-trainer/"><span class="tr-shot"><img src="/img/apps/ear-trainer/01_home_ko.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>EAR Trainer 귀훈련</strong><span>EQ 주파수·노이즈·이펙트를 귀로 맞히며 청음 감각을 키우는 오디오 엔지니어·음악가용 귀 훈련 앱입니다.</span><span class="tr-more">앱 자세히 보기 →</span></span></a></div></section><section class="tool-related chrome-en" lang="en" aria-label="Related app"><div class="wrap"><p class="tr-kicker">Related app</p><a class="tr-card" href="/en/apps/ear-trainer/"><span class="tr-shot"><img src="/img/apps/ear-trainer/01_home_en.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineer EAR Trainer</strong><span>An ear-training app for audio engineers and musicians: learn to recognise EQ frequencies, noise and effects by ear.</span><span class="tr-more">App details →</span></span></a></div></section>
+<footer class="site-footer chrome-ko"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<footer class="site-footer chrome-en" lang="en"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/en/">ML Music Studio</a><p class="foot-tag">A recording, mixing and mastering studio in Yongsan, Seoul. We also make apps and web tools for sound work.</p></div><div class="foot-col"><p class="foot-h">Work</p><ul class="foot-links"><li><a href="/en/work/">Work</a></li><li><a href="/en/about/">About</a></li></ul></div><div class="foot-col"><p class="foot-h">Studio</p><ul class="foot-links"><li><a href="/en/studio/">Studio</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">Directions</a></li></ul></div><div class="foot-col"><p class="foot-h">Products</p><ul class="foot-links"><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div><div class="foot-col"><p class="foot-h">Contact</p><ul class="foot-links"><li><a href="/en/contact/">How to reach us</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">Contact on KakaoTalk</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/en/privacy/">Privacy Policy</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<!-- /site-chrome:footer -->
 </body>
 </html>

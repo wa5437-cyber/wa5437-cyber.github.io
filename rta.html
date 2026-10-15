@@ -6,26 +6,26 @@
 <title>RTA — Real-Time Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
-    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
-    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
-    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+    --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
+    --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
+    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
   body{
     margin:0; background:
-      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
-    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+      radial-gradient(circle at 1px 1px, rgba(32,36,38,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #f4f5f3 70%, #f4f5f3);
+    color:var(--text-primary); font-family:'Inter','Noto Sans KR',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
     display:flex; justify-content:center; align-items:flex-start;
   }
   .mono{ font-family:'IBM Plex Mono',monospace; }
-  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  h1,h2,h3{ font-family:'Inter','Noto Sans KR',sans-serif; margin:0; }
   button{ font-family:inherit; cursor:pointer; }
 
   .app{ width:100%; max-width:1180px; padding:20px 24px 32px; display:flex; flex-direction:column; gap:16px; }
@@ -43,7 +43,7 @@
     margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
     padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
   }
-  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(32,36,38,0.04); }
 
   .status{ text-align:center; }
   .status h2{ font-size:19px; font-weight:700; }
@@ -62,7 +62,7 @@
     border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
     font-size:16px; font-weight:600; padding:9px 16px; border-radius:10px;
   }
-  .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#e3ddd0; }
+  .toolbar-btn.active{ color:var(--text-primary); border-color:var(--line-strong); background:#dbe3df; }
 
   /* ---- dB 범위(민감도) 조절 패널 ---- */
   .range-panel{
@@ -75,7 +75,7 @@
   }
   .range-input-row{ display:flex; align-items:center; gap:6px; }
   .range-input-row input[type=number]{
-    width:76px; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    width:76px; background:#e8eeeb; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
     font-family:'IBM Plex Mono',monospace; font-size:14px; padding:8px 9px;
   }
   .range-input-row .unit{ font-family:'IBM Plex Mono',monospace; font-size:13.5px; color:var(--text-secondary); }
@@ -88,11 +88,11 @@
   }
   .range-slider::-webkit-slider-thumb{
     -webkit-appearance:none; appearance:none; width:22px; height:22px; border-radius:50%;
-    background:#fff; border:2px solid var(--text-primary); box-shadow:0 2px 6px rgba(30,26,20,0.13); cursor:pointer;
+    background:#fff; border:2px solid var(--text-primary); box-shadow:0 2px 6px rgba(32,36,38,0.13); cursor:pointer;
   }
   .range-slider::-moz-range-thumb{
     width:22px; height:22px; border-radius:50%; background:#fff; border:2px solid var(--text-primary);
-    box-shadow:0 2px 6px rgba(30,26,20,0.13); cursor:pointer;
+    box-shadow:0 2px 6px rgba(32,36,38,0.13); cursor:pointer;
   }
 
   /* ---- 보정(선택사항) 접이식 섹션 ---- */
@@ -118,7 +118,7 @@
     border:1px solid var(--line); background:var(--bg-panel); color:var(--text-secondary);
     font-size:14.5px; font-weight:600; padding:9px 16px; border-radius:10px;
   }
-  .view-toggle button.active{ color:var(--text-primary); border-color:var(--line-strong); background:#e3ddd0; }
+  .view-toggle button.active{ color:var(--text-primary); border-color:var(--line-strong); background:#dbe3df; }
 
   /* ---- 라인(연속 스펙트럼) 뷰 ---- */
   .line-console{ padding:14px; }
@@ -139,12 +139,12 @@
   }
   .spl-fs-row{ font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; color:var(--text-secondary); margin-top:-2px; }
   .vu-bar-wrap{
-    width:100%; max-width:340px; height:24px; background:#ece7db; border-radius:7px;
-    overflow:hidden; border:1px solid rgba(30,26,20,0.04);
+    width:100%; max-width:340px; height:24px; background:#e2e8e5; border-radius:7px;
+    overflow:hidden; border:1px solid rgba(32,36,38,0.04);
   }
   .vu-bar-fill{
     height:100%; width:0%;
-    background:linear-gradient(90deg, #2f6d4c, #2f6d4c 65%, #9c6b17 85%, #b23a2a 96%);
+    background:linear-gradient(90deg, #23695c, #23695c 65%, #9c6b17 85%, #b23a2a 96%);
     transition:width 0.08s linear;
   }
   .spl-big-val{ font-family:'IBM Plex Mono',monospace; font-size:76px; font-weight:700; color:var(--teal); line-height:1; }
@@ -159,13 +159,13 @@
     border:none; background:var(--bg-panel-2); color:var(--text-secondary); font-size:14px; font-weight:600;
     padding:8px 15px;
   }
-  .vu-toggle button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .vu-toggle button.active{ background:#dbe3df; color:var(--text-primary); }
 
   /* ---- 아날로그 VU 니들 게이지 ---- */
   .vu-gauge-wrap{ width:100%; max-width:320px; }
   .vu-gauge-svg{ width:100%; height:auto; display:block; }
   #vuNeedle, #vuMaxNeedle{ transition:transform 0.08s linear; transform-origin:150px 160px; }
-  .vu-gauge-tick{ stroke:rgba(30,26,20,0.25); stroke-width:1.5; }
+  .vu-gauge-tick{ stroke:rgba(32,36,38,0.25); stroke-width:1.5; }
   .vu-gauge-ticklabel{ font-family:'IBM Plex Mono',monospace; font-size:9px; fill:var(--text-tertiary); text-anchor:middle; }
   .spl-stats-row{ display:flex; gap:14px; }
   .spl-stat{
@@ -194,13 +194,13 @@
   .grid{ display:flex; align-items:stretch; gap:2px; flex:1; min-height:0; }
   .band{ display:flex; flex-direction:column; align-items:center; flex:1 1 0; min-width:0; min-height:0; }
   .track{
-    position:relative; width:100%; flex:1; min-height:60px; background:#ece7db; border-radius:4px; border:1px solid rgba(30,26,20,0.04);
+    position:relative; width:100%; flex:1; min-height:60px; background:#e2e8e5; border-radius:4px; border:1px solid rgba(32,36,38,0.04);
     overflow:hidden;
   }
-  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(30,26,20,0.08); pointer-events:none; }
+  .track .zero{ position:absolute; left:0; right:0; top:50%; height:1px; background:rgba(32,36,38,0.08); pointer-events:none; }
   .band .bar{
     position:absolute; left:1px; right:1px; bottom:0; border-radius:2px 2px 0 0;
-    background:linear-gradient(180deg, var(--teal), #1e4a33);
+    background:linear-gradient(180deg, var(--teal), #194e45);
     height:0%;
   }
   .band .peak{
@@ -250,14 +250,14 @@
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
-    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(32,36,38,0.02);
     display:inline-flex; align-items:center; gap:5px;
   }
-  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(32,36,38,0.06); }
 
   /* ---- 도구 설명 ---- */
   .explain{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:22px 22px 20px; margin-top:4px; }
-  .explain h2{ font-family:'Space Grotesk','Inter',sans-serif; font-size:17px; margin:0 0 10px; }
+  .explain h2{ font-family:'Inter','Noto Sans KR',sans-serif; font-size:17px; margin:0 0 10px; }
   .explain p{ font-size:14.5px; line-height:1.75; color:var(--text-secondary); margin:0 0 12px; }
   .explain p:last-child{ margin-bottom:0; }
   .explain a{ color:var(--teal); font-weight:600; }
@@ -267,8 +267,16 @@
   }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<!-- site-chrome:head -->
+<meta name="theme-color" content="#f4f5f3">
+<link rel="stylesheet" href="/assets/tools.css">
+<!-- /site-chrome:head -->
 </head>
 <body>
+<!-- site-chrome:header -->
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<!-- /site-chrome:header -->
 <div class="app">
 
   <div class="topbar">
@@ -1322,5 +1330,10 @@
 </script>
 <script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 首页"}, "status_default_title": {"ko": "시작 버튼을 눌러 마이크로 실시간 스펙트럼을 확인하세요", "en": "Tap start to view the real-time spectrum from your mic", "ja": "スタートボタンを押してマイクのリアルタイムスペクトラムを確認しましょう", "es": "Pulsa iniciar para ver el espectro en tiempo real desde tu micrófono", "zh": "点击开始按钮查看麦克风的实时频谱"}, "status_default_sub": {"ko": "기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다", "en": "Displays sound from your device's mic in real time as a 31-band (ISO 266) spectrum", "ja": "デバイスのマイクに入る音を31バンド（ISO 266）スペクトラムでリアルタイム表示します", "es": "Muestra el sonido captado por el micrófono del dispositivo en tiempo real como un espectro de 31 bandas (ISO 266)", "zh": "将设备麦克风采集的声音实时显示为 31 段（ISO 266）频谱"}, "mic_denied_msg": {"ko": "마이크 접근이 거부되었습니다. 브라우저 주소창 옆 자물쇠(또는 사이트 설정)에서 마이크 권한을 허용한 뒤 다시 시도해주세요.", "en": "Microphone access was denied. Please allow microphone permission from the lock icon (or site settings) next to your browser's address bar, then try again.", "ja": "マイクへのアクセスが拒否されました。ブラウザのアドレスバー横の鍵アイコン（またはサイト設定）でマイクの許可を有効にしてから、もう一度お試しください。", "es": "Se denegó el acceso al micrófono. Permite el acceso al micrófono desde el icono de candado (o la configuración del sitio) junto a la barra de direcciones del navegador y vuelve a intentarlo.", "zh": "麦克风访问被拒绝。请在浏览器地址栏旁的锁形图标（或网站设置）中允许麦克风权限，然后重试。"}, "btn_mic_start": {"ko": "▸ 마이크 시작", "en": "▸ Start Mic", "ja": "▸ マイクを開始", "es": "▸ Iniciar micrófono", "zh": "▸ 开始麦克风"}, "btn_mic_stop": {"ko": "■ 정지", "en": "■ Stop", "ja": "■ 停止", "es": "■ Detener", "zh": "■ 停止"}, "view_bar_label": {"ko": "▤ 막대(Bar)", "en": "▤ Bar", "ja": "▤ バー", "es": "▤ Barras", "zh": "▤ 条形图"}, "view_line_label": {"ko": "∿ 라인(Line)", "en": "∿ Line", "ja": "∿ ライン", "es": "∿ Línea", "zh": "∿ 线形图"}, "view_spl_label": {"ko": "📟 SPL 미터", "en": "📟 SPL Meter", "ja": "📟 SPLメーター", "es": "📟 Medidor SPL", "zh": "📟 SPL 声级计"}, "label_floor": {"ko": "Floor (조용한 소리 기준)", "en": "Floor (Quiet Sound Reference)", "ja": "Floor（静かな音の基準）", "es": "Floor (referencia de sonido silencioso)", "zh": "Floor（安静声音基准）"}, "label_ceiling": {"ko": "Ceiling (큰 소리 기준)", "en": "Ceiling (Loud Sound Reference)", "ja": "Ceiling（大きな音の基準）", "es": "Ceiling (referencia de sonido fuerte)", "zh": "Ceiling（响亮声音基准）"}, "label_range_prefix": {"ko": "Range (Floor 기준 폭) · ", "en": "Range (Width from Floor) · ", "ja": "Range（Floor基準の幅） · ", "es": "Range (ancho desde Floor) · ", "zh": "Range（相对 Floor 的宽度） · "}, "btn_boost_quiet": {"ko": "🔉 작은 소리 더 잘 보이게", "en": "🔉 Boost Quiet Sounds", "ja": "🔉 小さな音をもっと見やすく", "es": "🔉 Resaltar sonidos suaves", "zh": "🔉 放大安静声音的显示"}, "btn_reset_range": {"ko": "↺ 기본값으로 초기화", "en": "↺ Reset to Default", "ja": "↺ 初期値にリセット", "es": "↺ Restablecer valores predeterminados", "zh": "↺ 恢复默认值"}, "calib_summary": {"ko": "🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)", "en": "🎯 Improve Accuracy (Optional — works automatically without it)", "ja": "🎯 精度をさらに高める（任意 — しなくても自動で動作します）", "es": "🎯 Mejorar la precisión (opcional — funciona automáticamente sin esto)", "zh": "🎯 提高精度（可选 — 不设置也能自动工作）"}, "calib_note": {"ko": "기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.", "en": "The default (140dB offset) works right away. Only use the settings below if you want a more precise calibration.", "ja": "デフォルト（オフセット140dB）だけでもすぐに動作します。より正確に合わせたいときだけ、以下を使ってみてください。", "es": "El valor predeterminado (offset de 140dB) funciona de inmediato. Usa lo siguiente solo si quieres una calibración más precisa.", "zh": "默认值（偏移量 140dB）即可直接使用。只有在想要更精确校准时才需要使用下面的设置。"}, "label_calib_offset": {"ko": "보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨", "en": "Calibration Offset (dBFS→SPL approx.) · Auto-saved", "ja": "補正オフセット（dBFS→SPL近似） · 自動保存", "es": "Offset de calibración (aprox. dBFS→SPL) · Guardado automático", "zh": "校准偏移量（dBFS→SPL 近似值） · 自动保存"}, "label_target_spl": {"ko": "기준 SPL (다른 SPL미터 값)", "en": "Reference SPL (value from another SPL meter)", "ja": "基準SPL（他のSPLメーターの値）", "es": "SPL de referencia (valor de otro medidor SPL)", "zh": "基准 SPL（其他声级计的读数）"}, "btn_calibrate_now": {"ko": "🎯 지금 소리로 자동 보정", "en": "🎯 Auto-Calibrate with Current Sound", "ja": "🎯 今の音で自動補正", "es": "🎯 Autocalibrar con el sonido actual", "zh": "🎯 用当前声音自动校准"}, "level_peak_label": {"ko": "PEAK (피크)", "en": "PEAK (Peak)", "ja": "PEAK（ピーク）", "es": "PEAK (Pico)", "zh": "PEAK（峰值）"}, "level_avg_label": {"ko": "BAND AVG (대역 평균)", "en": "BAND AVG (Band Average)", "ja": "BAND AVG（帯域平均）", "es": "BAND AVG (promedio de banda)", "zh": "BAND AVG（频段平均）"}, "hint_text": {"ko": "라이브 사운드 점검, 룸 특성 확인, 하울링 포인트 찾기 등에 사용해보세요. (마이크 입력은 저장되거나 전송되지 않으며, 오직 화면 표시에만 사용됩니다)", "en": "Use this for live sound checks, checking room characteristics, or finding feedback points. (Mic input is never saved or transmitted — it's used only for the on-screen display.)", "ja": "ライブサウンドチェック、ルームの特性確認、ハウリングポイントの発見などに使ってみましょう。（マイク入力は保存・送信されず、画面表示のみに使用されます）", "es": "Úsalo para revisiones de sonido en vivo, comprobar las características de la sala o encontrar puntos de retroalimentación (feedback). (La entrada del micrófono nunca se guarda ni se transmite — solo se usa para la visualización en pantalla).", "zh": "可用于现场声音检查、房间特性确认、寻找啸叫点等。（麦克风输入不会被保存或传输，仅用于屏幕显示）"}, "btn_spl_reset": {"ko": "↺ Min/Max/Avg 초기화", "en": "↺ Reset Min/Max/Avg", "ja": "↺ Min/Max/Avgをリセット", "es": "↺ Restablecer Min/Max/Avg", "zh": "↺ 重置 Min/Max/Avg"}, "calib_need_mic_title": {"ko": "먼저 마이크를 켜고 소리를 들려주세요", "en": "Turn on the mic and make some sound first", "ja": "まずマイクをオンにして音を出してください", "es": "Primero enciende el micrófono y produce algún sonido", "zh": "请先打开麦克风并发出声音"}, "calib_need_mic_sub": {"ko": "보정하려면 실시간으로 소리가 들어오고 있어야 합니다", "en": "Calibration requires live sound input", "ja": "補正するにはリアルタイムで音が入力されている必要があります", "es": "Para calibrar es necesario que haya entrada de sonido en tiempo real", "zh": "校准需要实时输入声音"}, "calib_done_title": {"ko": "보정 완료", "en": "Calibration Complete", "ja": "補正完了", "es": "Calibración completa", "zh": "校准完成"}, "calib_done_sub": {"ko": "기준 SPL {targetSpl}dB(평균 기준)에 맞춰 오프셋을 {offset}dB로 설정했습니다. 이 값은 자동 저장되어 다음에 열 때도 유지됩니다.", "en": "Set the offset to {offset}dB to match a reference SPL of {targetSpl}dB (based on average). This value is saved automatically and will be kept the next time you open the page.", "ja": "基準SPL {targetSpl}dB（平均基準）に合わせてオフセットを{offset}dBに設定しました。この値は自動保存され、次回開いたときも維持されます。", "es": "Se ajustó el offset a {offset}dB para coincidir con un SPL de referencia de {targetSpl}dB (basado en el promedio). Este valor se guarda automáticamente y se mantendrá la próxima vez que abras la página.", "zh": "已根据基准 SPL {targetSpl}dB（按平均值计算）将偏移量设置为 {offset}dB。该数值会自动保存，下次打开时依然生效。"}, "reset_done_title": {"ko": "기본값으로 초기화했습니다", "en": "Reset to defaults", "ja": "初期値にリセットしました", "es": "Se restablecieron los valores predeterminados", "zh": "已恢复默认值"}, "reset_done_sub": {"ko": "Floor 30dB, Ceiling 120dB, 오프셋 140dB로 되돌렸습니다", "en": "Restored to Floor 30dB, Ceiling 120dB, offset 140dB", "ja": "Floor 30dB、Ceiling 120dB、オフセット140dBに戻しました", "es": "Se restauraron Floor 30dB, Ceiling 120dB, offset 140dB", "zh": "已恢复为 Floor 30dB、Ceiling 120dB、偏移量 140dB"}, "mic_permission_needed_title": {"ko": "마이크 접근이 필요합니다", "en": "Microphone access is needed", "ja": "マイクへのアクセスが必要です", "es": "Se necesita acceso al micrófono", "zh": "需要麦克风访问权限"}, "mic_permission_needed_sub": {"ko": "브라우저에서 마이크 권한을 허용해주세요", "en": "Please allow microphone permission in your browser", "ja": "ブラウザでマイクの許可を有効にしてください", "es": "Permite el acceso al micrófono en tu navegador", "zh": "请在浏览器中允许麦克风权限"}, "status_running_title": {"ko": "실시간 분석 중", "en": "Analyzing in Real Time", "ja": "リアルタイム解析中", "es": "Analizando en tiempo real", "zh": "正在实时分析"}, "status_running_sub": {"ko": "마이크에 소리를 들려주면 해당 대역의 막대가 올라갑니다", "en": "Make a sound near the mic and the corresponding band's bar will rise", "ja": "マイクに音を聞かせると、該当する帯域のバーが上がります", "es": "Haz un sonido cerca del micrófono y la barra de la banda correspondiente subirá", "zh": "对着麦克风发出声音，相应频段的柱形就会升高"}, "error_title": {"ko": "오류가 발생했습니다", "en": "An error occurred", "ja": "エラーが発生しました", "es": "Se produjo un error", "zh": "发生错误"}};</script>
 <script src="i18n-core.js"></script>
+<!-- site-chrome:footer -->
+<section class="tool-related chrome-ko" aria-label="관련 앱"><div class="wrap"><p class="tr-kicker">관련 앱</p><a class="tr-card" href="/apps/spl-rta/"><span class="tr-shot"><img src="/img/apps/spl-rta/01_spl_ko.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineerKit: SPL &amp; RTA</strong><span>현장 사운드 엔지니어를 위한 실시간 SPL 미터와 31밴드 RTA 측정 앱입니다.</span><span class="tr-more">앱 자세히 보기 →</span></span></a></div></section><section class="tool-related chrome-en" lang="en" aria-label="Related app"><div class="wrap"><p class="tr-kicker">Related app</p><a class="tr-card" href="/en/apps/spl-rta/"><span class="tr-shot"><img src="/img/apps/spl-rta/01_spl_en.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineerKit: SPL &amp; RTA</strong><span>A real-time SPL meter and 31-band RTA for sound engineers on site.</span><span class="tr-more">App details →</span></span></a></div></section>
+<footer class="site-footer chrome-ko"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<footer class="site-footer chrome-en" lang="en"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/en/">ML Music Studio</a><p class="foot-tag">A recording, mixing and mastering studio in Yongsan, Seoul. We also make apps and web tools for sound work.</p></div><div class="foot-col"><p class="foot-h">Work</p><ul class="foot-links"><li><a href="/en/work/">Work</a></li><li><a href="/en/about/">About</a></li></ul></div><div class="foot-col"><p class="foot-h">Studio</p><ul class="foot-links"><li><a href="/en/studio/">Studio</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">Directions</a></li></ul></div><div class="foot-col"><p class="foot-h">Products</p><ul class="foot-links"><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div><div class="foot-col"><p class="foot-h">Contact</p><ul class="foot-links"><li><a href="/en/contact/">How to reach us</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">Contact on KakaoTalk</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/en/privacy/">Privacy Policy</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<!-- /site-chrome:footer -->
 </body>
 </html>

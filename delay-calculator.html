@@ -6,26 +6,26 @@
 <title>Delay Calculator — Web Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
-    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
-    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
-    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+    --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
+    --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
+    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
   body{
     margin:0; background:
-      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
-    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+      radial-gradient(circle at 1px 1px, rgba(32,36,38,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #f4f5f3 70%, #f4f5f3);
+    color:var(--text-primary); font-family:'Inter','Noto Sans KR',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
     display:flex; justify-content:center; align-items:flex-start;
   }
   .mono{ font-family:'IBM Plex Mono',monospace; }
-  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  h1,h2,h3{ font-family:'Inter','Noto Sans KR',sans-serif; margin:0; }
   button{ font-family:inherit; cursor:pointer; }
 
   .app{ width:100%; max-width:780px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
@@ -43,7 +43,7 @@
     margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
     padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
   }
-  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(32,36,38,0.04); }
 
   /* ✅ 모바일에서 제목/부제 글자가 커서 줄바꿈되며 상단바가 어긋나 보이던 것을 수정 */
   @media (max-width:480px){
@@ -64,13 +64,13 @@
   .field label{ display:block; font-family:'IBM Plex Mono',monospace; font-size:14.5px; color:var(--text-primary); opacity:0.9; font-weight:600; text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
   .field .input-row{ display:flex; align-items:center; gap:6px; }
   .field input[type=number]{
-    width:100%; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    width:100%; background:#e8eeeb; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
     font-family:'IBM Plex Mono',monospace; font-size:18px; padding:9px 10px;
   }
   .field .unit{ font-family:'IBM Plex Mono',monospace; font-size:15.5px; color:var(--text-secondary); flex-shrink:0; }
   .unit-toggle{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
-  .unit-toggle button{ flex:1; border:none; background:#f1ede3; color:var(--text-secondary); font-size:15.5px; font-weight:600; padding:9px 4px; }
-  .unit-toggle button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .unit-toggle button{ flex:1; border:none; background:#e8eeeb; color:var(--text-secondary); font-size:15.5px; font-weight:600; padding:9px 4px; }
+  .unit-toggle button.active{ background:#dbe3df; color:var(--text-primary); }
 
   .speed-readout{ margin-top:12px; font-size:15.5px; color:var(--text-secondary); }
   .speed-readout b{ color:var(--teal); font-family:'IBM Plex Mono',monospace; }
@@ -88,8 +88,8 @@
   .zone:last-of-type{ border-bottom:none; }
   @media (max-width:640px){ .zone{ grid-template-columns:1fr 1fr; row-gap:10px; } .zone .result-cell{ grid-column:1/2; } .zone .remove-cell{ grid-column:2/3; justify-self:end; } }
   .zone input[type=text]{
-    width:100%; background:#f1ede3; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
-    font-size:16.5px; padding:9px 10px; font-family:'Inter',sans-serif;
+    width:100%; background:#e8eeeb; border:1px solid var(--line); border-radius:8px; color:var(--text-primary);
+    font-size:16.5px; padding:9px 10px; font-family:'Inter','Noto Sans KR',sans-serif;
   }
   .result-cell{ text-align:center; }
   .result-cell .val{ font-family:'IBM Plex Mono',monospace; font-size:24.5px; font-weight:700; color:var(--teal); }
@@ -103,7 +103,7 @@
     margin-top:14px; width:100%; border:1px dashed var(--line-strong); background:transparent; color:var(--text-secondary);
     border-radius:10px; padding:12px; font-size:16.5px; font-weight:600;
   }
-  .add-zone-btn:hover{ color:var(--text-primary); background:rgba(30,26,20,0.03); }
+  .add-zone-btn:hover{ color:var(--text-primary); background:rgba(32,36,38,0.03); }
 
   .warn-note{
     margin-top:16px; font-size:14.5px; color:var(--text-secondary); line-height:1.6;
@@ -147,10 +147,10 @@
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
-    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(32,36,38,0.02);
     display:inline-flex; align-items:center; gap:5px;
   }
-  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(32,36,38,0.06); }
 
   /* ---- 0~360도 위상 게이지 ---- */
   .phase-gauge-wrap{ margin-top:18px; }
@@ -162,7 +162,7 @@
   .phase-gauge-marker{
     position:absolute; top:50%; left:0%; width:16px; height:16px; margin-left:-8px; margin-top:-8px;
     border-radius:50%; background:#fff; border:2px solid var(--text-primary);
-    box-shadow:0 0 0 2px rgba(30,26,20,0.4), 0 2px 6px rgba(30,26,20,0.13);
+    box-shadow:0 0 0 2px rgba(32,36,38,0.4), 0 2px 6px rgba(32,36,38,0.13);
     transition:left 0.1s linear;
   }
   .phase-gauge-ticks{
@@ -171,8 +171,16 @@
   }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<!-- site-chrome:head -->
+<meta name="theme-color" content="#f4f5f3">
+<link rel="stylesheet" href="/assets/tools.css">
+<!-- /site-chrome:head -->
 </head>
 <body>
+<!-- site-chrome:header -->
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<!-- /site-chrome:header -->
 <div class="app">
 
   <div class="topbar">
@@ -741,5 +749,10 @@
 </script>
 <script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "panel_tempo_delay": {"ko": "Tempo ↔ Delay (박자 동기화)", "en": "Tempo ↔ Delay (Sync to Tempo)", "ja": "Tempo ↔ Delay (テンポ同期)", "es": "Tempo ↔ Delay (Sincronización de tempo)", "zh": "Tempo ↔ Delay (节拍同步)"}, "panel_reverb_time": {"ko": "Reverb Time (리버브 타임)", "en": "Reverb Time", "ja": "Reverb Time (リバーブタイム)", "es": "Reverb Time (Tiempo de reverberación)", "zh": "Reverb Time (混响时间)"}, "panel_speaker_delay": {"ko": "Speaker Delay (스피커 딜레이 계산)", "en": "Speaker Delay (Calculation)", "ja": "Speaker Delay (スピーカーディレイ計算)", "es": "Speaker Delay (Cálculo)", "zh": "Speaker Delay (扬声器延时计算)"}, "panel_haas": {"ko": "Haas Effect (선행효과) 참고표", "en": "Haas Effect Reference Table", "ja": "Haas Effect (先行効果) 早見表", "es": "Tabla de referencia del Efecto Haas", "zh": "哈斯效应(先行效应)参考表"}, "unit_meters": {"ko": "Meters", "en": "Meters", "ja": "メートル", "es": "Metros", "zh": "米(公制)"}, "unit_feet": {"ko": "Feet", "en": "Feet", "ja": "フィート", "es": "Pies", "zh": "英尺"}, "speed_readout_label": {"ko": "현재 온도 기준 음속:", "en": "Speed of sound at current temperature:", "ja": "現在の気温での音速:", "es": "Velocidad del sonido a la temperatura actual:", "zh": "当前温度下的音速："}, "phase_desc": {"ko": "딜레이 시간(또는 거리)이 특정 주파수에서 얼마나 위상을 틀어지게 만드는지 확인합니다. 마이크 위상 정렬, 콤필터링(comb filtering) 점검에 유용해요. 네 값 중 아무거나 바꾸면 나머지가 자동으로 맞춰집니다.", "en": "See how much a delay time (or distance) shifts the phase at a given frequency. Useful for mic phase alignment and checking for comb filtering. Change any one of the four values and the rest update automatically.", "ja": "ディレイ時間(または距離)が特定の周波数でどれだけ位相をずらすかを確認します。マイクの位相合わせやコムフィルタリングの確認に便利です。4つの値のどれかを変えると、残りが自動的に調整されます。", "es": "Comprueba cuánto desplaza la fase un tiempo de delay (o distancia) a una frecuencia determinada. Útil para alinear la fase de micrófonos y detectar comb filtering. Cambia cualquiera de los cuatro valores y el resto se ajusta automáticamente.", "zh": "查看延时时间(或距离)在特定频率下会造成多大的相位偏移。适用于麦克风相位对齐和梳状滤波检查。四个数值中任意一个改变，其余会自动联动更新。"}, "phase_legend_original": {"ko": "원음", "en": "Original", "ja": "原音", "es": "Original", "zh": "原声"}, "phase_legend_delayed": {"ko": "딜레이 신호", "en": "Delayed signal", "ja": "ディレイ信号", "es": "Señal con delay", "zh": "延时信号"}, "phase_wrap_template": {"ko": "{wrapped}° (총 {cycles}사이클 + {wrapped}°)", "en": "{wrapped}° (total {cycles} cycles + {wrapped}°)", "ja": "{wrapped}° (合計{cycles}サイクル + {wrapped}°)", "es": "{wrapped}° (total {cycles} ciclos + {wrapped}°)", "zh": "{wrapped}° (共{cycles}个周期 + {wrapped}°)"}, "haas_panel_desc": {"ko": "두 소리 사이의 시간차에 따라 사람 귀에 어떻게 들리는지에 대한 일반적인 기준입니다. 위 Time 값에 맞춰 해당 구간이 강조돼요.", "en": "General guidelines for how the human ear perceives two sounds based on the time gap between them. The matching row is highlighted based on the Time value above.", "ja": "2つの音の時間差によって人の耳にどう聴こえるかについての一般的な目安です。上のTime値に応じて該当する区間がハイライトされます。", "es": "Pautas generales sobre cómo percibe el oído humano dos sonidos según la diferencia de tiempo entre ellos. La fila correspondiente se resalta según el valor de Time de arriba.", "zh": "关于两个声音之间的时间差如何被人耳感知的一般性参考标准。会根据上方的Time数值高亮对应的区间。"}, "tempo_panel_desc": {"ko": "곡의 BPM(분당 박자 수)을 입력하면, 딜레이 이펙트를 박자에 딱 맞춰 걸 수 있도록 각 음표 길이에 해당하는 딜레이 타임(ms)을 자동으로 계산합니다.", "en": "Enter the song's BPM (beats per minute) and it automatically calculates the delay time (ms) for each note length, so you can set a delay effect perfectly in time with the beat.", "ja": "曲のBPM(1分あたりの拍数)を入力すると、ディレイエフェクトを拍にぴったり合わせられるよう、各音符の長さに対応するディレイタイム(ms)を自動計算します。", "es": "Introduce el BPM (pulsos por minuto) de la canción y se calculará automáticamente el tiempo de delay (ms) para cada duración de nota, para que puedas ajustar un efecto de delay perfectamente sincronizado con el ritmo.", "zh": "输入歌曲的BPM(每分钟拍数)，即可自动计算各音符时值对应的延时时间(ms)，方便将延时效果精确对齐节拍。"}, "reverb_panel_desc": {"ko": "위의 BPM을 그대로 사용합니다. <b style=\"color:var(--text-secondary)\">프리딜레이 + 디케이 타임의 합이 박자 단위(마디/half/quarter/eighth)로 딱 떨어지게</b> 잡으면, 리버브 꼬리가 다음 박이 오기 직전에 자연스럽게 사라져서 믹스가 지저분해지지 않습니다 (믹싱 엔지니어 Bobby Owsinski가 저서 《The Mixing Engineer's Handbook》에서 소개한 방법입니다).", "en": "Uses the BPM entered above. If you set the <b style=\"color:var(--text-secondary)\">pre-delay + decay time to add up exactly to a beat division (bar/half/quarter/eighth)</b>, the reverb tail naturally fades away right before the next beat, keeping the mix from getting muddy (a technique introduced by mixing engineer Bobby Owsinski in his book The Mixing Engineer's Handbook).", "ja": "上のBPMをそのまま使用します。<b style=\"color:var(--text-secondary)\">プリディレイ＋ディケイタイムの合計を拍単位(小節/2分/4分/8分)にきっちり合わせる</b>と、リバーブの余韻が次の拍が来る直前に自然に消えるため、ミックスが濁りません(ミキシングエンジニアBobby Owsinskiが著書『The Mixing Engineer's Handbook』で紹介した手法です)。", "es": "Usa el BPM introducido arriba. Si ajustas <b style=\"color:var(--text-secondary)\">la suma de pre-delay + decay time para que coincida exactamente con una división del pulso (compás/mitad/negra/corchea)</b>, la cola de la reverb se desvanece de forma natural justo antes del siguiente pulso, evitando que la mezcla se ensucie (una técnica presentada por el ingeniero de mezcla Bobby Owsinski en su libro The Mixing Engineer's Handbook).", "zh": "沿用上方输入的BPM。若将<b style=\"color:var(--text-secondary)\">预延时+衰减时间之和精确对齐到节拍单位(小节/二分/四分/八分)</b>，混响尾音会在下一拍到来前自然消失，避免混音变得浑浊(这是混音工程师Bobby Owsinski在其著作《The Mixing Engineer's Handbook》中介绍的方法)。"}, "warn_reverb_note": {"ko": "<b>참고:</b> 프리딜레이는 짧게(1/64~1/128 음표)만 잡고, 나머지 길이를 디케이 타임으로 채우는 방식입니다. 이건 실전에서 바로 쓸 수 있는 \"시작점\"이고, 곡의 느낌에 따라 취향껏 조절해서 쓰시면 됩니다.", "en": "<b>Note:</b> Pre-delay is kept short (a 1/64–1/128 note), with the remaining length filled by the decay time. This is a practical \"starting point\" — feel free to adjust it to taste depending on the feel of the song.", "ja": "<b>参考:</b> プリディレイは短く(1/64〜1/128音符)に留め、残りの長さをディケイタイムで埋める方式です。これは実践ですぐ使える「出発点」なので、曲の雰囲気に合わせて好みで調整して使ってください。", "es": "<b>Nota:</b> El pre-delay se mantiene corto (una nota de 1/64–1/128), y el resto de la duración se llena con el decay time. Este es un \"punto de partida\" práctico — ajústalo a tu gusto según la sensación de la canción.", "zh": "<b>提示：</b>预延时保持较短(1/64~1/128音符)，其余长度由衰减时间填充。这是一个可直接用于实战的\"起点\"，可根据歌曲的感觉自行调整。"}, "label_main_dist": {"ko": "메인 스피커 → 기준 지점 거리", "en": "Main speaker → reference point distance", "ja": "メインスピーカー→基準地点までの距離", "es": "Distancia de altavoz principal → punto de referencia", "zh": "主扬声器→基准点距离"}, "add_zone_btn": {"ko": "+ 존 추가", "en": "+ Add Zone", "ja": "+ ゾーンを追加", "es": "+ Añadir zona", "zh": "+ 添加分区"}, "warn_calc_method": {"ko": "<b>계산 방식:</b> 딜레이 시간 = (딜레이 스피커 → 기준 지점 거리 − 메인 스피커 → 기준 지점 거리) ÷ 음속 + 프리시던스 오프셋. 값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장). 프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.", "en": "<b>Calculation method:</b> Delay time = (delay speaker → reference point distance − main speaker → reference point distance) ÷ speed of sound + precedence offset. A negative result means the delay speaker is farther from the reference point than the main speaker, so delay may not be needed (we recommend treating it as 0). The precedence offset (typically 10–20ms) makes the delay speaker's sound arrive slightly later than the main, so listeners perceive the sound's location as coming from the stage (main speaker) — this is the Haas Effect correction value.", "ja": "<b>計算方法:</b> ディレイ時間 = (ディレイスピーカー→基準地点までの距離 − メインスピーカー→基準地点までの距離) ÷ 音速 + プリシデンスオフセット。値がマイナスになる場合、ディレイスピーカーの方が基準地点からメインより遠いことを意味し、ディレイが不要な場合があります(0として扱うことを推奨)。プリシデンスオフセット(通常10〜20ms)は、ディレイスピーカーの音がメインよりわずかに遅れて届くようにすることで、聴き手が音の位置をステージ(メインスピーカー)側と知覚するようにするハース効果の補正値です。", "es": "<b>Método de cálculo:</b> Tiempo de delay = (distancia del altavoz de delay al punto de referencia − distancia del altavoz principal al punto de referencia) ÷ velocidad del sonido + offset de precedencia. Un resultado negativo significa que el altavoz de delay está más lejos del punto de referencia que el principal, por lo que puede no necesitarse delay (se recomienda tratarlo como 0). El offset de precedencia (normalmente 10–20ms) hace que el sonido del altavoz de delay llegue un poco más tarde que el principal, para que los oyentes perciban la ubicación del sonido hacia el escenario (altavoz principal) — este es el valor de corrección del Efecto Haas.", "zh": "<b>计算方式：</b>延时时间 = (延时扬声器→基准点距离 − 主扬声器→基准点距离) ÷ 音速 + 优先效应偏移量。若结果为负数，表示延时扬声器离基准点比主扬声器更远，可能不需要延时(建议按0处理)。优先效应偏移量(通常10~20ms)会让延时扬声器的声音比主扬声器稍晚到达，使听众将声音的位置感知为来自舞台(主扬声器)方向 — 这是哈斯效应(Haas Effect)的修正值。"}, "zone_name_label": {"ko": "존 이름", "en": "Zone Name", "ja": "ゾーン名", "es": "Nombre de la zona", "zh": "分区名称"}, "zone_dist_label": {"ko": "딜레이 스피커 → 기준 지점 거리", "en": "Delay speaker → reference point distance", "ja": "ディレイスピーカー→基準地点までの距離", "es": "Altavoz de delay → distancia al punto de referencia", "zh": "延时扬声器→基准点距离"}, "zone_result_default_lbl": {"ko": "권장 딜레이", "en": "Recommended delay", "ja": "推奨ディレイ", "es": "Delay recomendado", "zh": "建议延时"}, "zone_result_none_lbl": {"ko": "딜레이 불필요", "en": "No delay needed", "ja": "ディレイ不要", "es": "No se necesita delay", "zh": "无需延时"}, "zone_remove_title": {"ko": "이 존 삭제", "en": "Delete this zone", "ja": "このゾーンを削除", "es": "Eliminar esta zona", "zh": "删除此分区"}, "haas_col_time": {"ko": "시간차", "en": "Time Diff", "ja": "時間差", "es": "Diferencia de tiempo", "zh": "时间差"}, "haas_col_perception": {"ko": "들리는 방식", "en": "How it's perceived", "ja": "聴こえ方", "es": "Cómo se percibe", "zh": "听感"}, "haas_zone1_desc": {"ko": "거의 하나의 소리로 합쳐져 들려요. 위상 간섭(콤필터링)이 가장 두드러지는 구간이에요.", "en": "The two sounds nearly fuse into one. This is the range where phase interference (comb filtering) is most noticeable.", "ja": "ほぼ一つの音として聴こえます。位相干渉(コムフィルタリング)が最も目立つ区間です。", "es": "Los dos sonidos casi se fusionan en uno. Es el rango donde la interferencia de fase (comb filtering) es más notable.", "zh": "两个声音几乎融合为一体，是相位干扰(梳状滤波)最明显的区间。"}, "haas_zone2_desc": {"ko": "여전히 하나로 들리지만, 음색이 살짝 변하거나(콤필터링) 공간감이 생기기 시작해요.", "en": "Still perceived as one sound, but the tone starts to shift slightly (comb filtering) and a sense of space begins to emerge.", "ja": "依然として一つの音に聴こえますが、音色がわずかに変化したり(コムフィルタリング)、空間感が生まれ始めます。", "es": "Aún se percibe como un solo sonido, pero el timbre empieza a cambiar ligeramente (comb filtering) y comienza a aparecer sensación de espacio.", "zh": "仍会被感知为一个声音，但音色开始略有变化(梳状滤波)，并开始产生空间感。"}, "haas_zone3_desc": {"ko": "\"선행효과(Precedence Effect)\" 구간 — 먼저 도착한 소리 방향으로 위치를 지각해요. 뒤 소리가 더 커도(약 +10dB까지) 에코로 안 들려요.", "en": "The \"Precedence Effect\" range — you perceive the location as coming from the direction of the first-arriving sound. Even if the later sound is louder (up to about +10dB), it isn't heard as a separate echo.", "ja": "「先行効果(Precedence Effect)」区間 — 先に到達した音の方向に位置を知覚します。後の音が大きくても(約+10dBまで)エコーとして聴こえません。", "es": "El rango del \"Efecto de precedencia\" — percibes la ubicación en la dirección del sonido que llega primero. Aunque el sonido posterior sea más fuerte (hasta unos +10dB), no se percibe como un eco aparte.", "zh": "\"优先效应(Precedence Effect)\"区间 — 会将声音方位感知为先到达的那个声音的方向。即使后到的声音更大声(最多约+10dB)，也不会被听成回声。"}, "haas_zone4_desc": {"ko": "별개의 메아리(에코)로 뚜렷하게 들리기 시작해요.", "en": "You start to clearly hear it as a distinct echo.", "ja": "別々のこだま(エコー)としてはっきり聴こえ始めます。", "es": "Empiezas a escucharlo claramente como un eco independiente.", "zh": "会开始清楚地被听成独立的回声(Echo)。"}, "tempo_col_note": {"ko": "음표", "en": "Note", "ja": "音符", "es": "Nota", "zh": "音符"}, "tempo_col_normal": {"ko": "일반", "en": "Normal", "ja": "通常", "es": "Normal", "zh": "普通"}, "tempo_col_dotted": {"ko": "붙임(●)", "en": "Dotted (●)", "ja": "付点(●)", "es": "Con puntillo (●)", "zh": "附点(●)"}, "tempo_col_triplet": {"ko": "셋잇단(3)", "en": "Triplet (3)", "ja": "三連符(3)", "es": "Tresillo (3)", "zh": "三连音(3)"}, "reverb_hall_desc": {"ko": "크고 웅장하게 — 두 마디를 꽉 채움", "en": "Big and grand — fills two full bars", "ja": "大きく壮大に — 2小節をフルに使用", "es": "Grande y majestuoso — llena dos compases completos", "zh": "宏大壮阔 — 填满两个小节"}, "reverb_bigroom_desc": {"ko": "중간 크기 — 한 마디", "en": "Medium size — one bar", "ja": "中くらいのサイズ — 1小節", "es": "Tamaño mediano — un compás", "zh": "中等大小 — 一个小节"}, "reverb_smallroom_desc": {"ko": "작은 방 — 반 마디", "en": "Small room — half a bar", "ja": "小さな部屋 — 半小節", "es": "Sala pequeña — medio compás", "zh": "小房间 — 半个小节"}, "reverb_tight_desc": {"ko": "아주 짧은 잔향 — 4분의 1마디", "en": "Very short tail — a quarter bar", "ja": "非常に短い残響 — 4分の1小節", "es": "Cola muy corta — un cuarto de compás", "zh": "极短尾音 — 四分之一小节"}};</script>
 <script src="i18n-core.js"></script>
+<!-- site-chrome:footer -->
+<section class="tool-related chrome-ko" aria-label="관련 앱"><div class="wrap"><p class="tr-kicker">관련 앱</p><a class="tr-card" href="/apps/toolkit/"><span class="tr-shot"><img src="/img/apps/toolkit/01_favorites_ko.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineerToolkit-오디오엔지니어</strong><span>현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.</span><span class="tr-more">앱 자세히 보기 →</span></span></a></div></section><section class="tool-related chrome-en" lang="en" aria-label="Related app"><div class="wrap"><p class="tr-kicker">Related app</p><a class="tr-card" href="/en/apps/toolkit/"><span class="tr-shot"><img src="/img/apps/toolkit/01_favorites_en.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineerToolkit</strong><span>A set of offline calculators for audio engineers, ready on stage or in the studio with no internet.</span><span class="tr-more">App details →</span></span></a></div></section>
+<footer class="site-footer chrome-ko"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<footer class="site-footer chrome-en" lang="en"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/en/">ML Music Studio</a><p class="foot-tag">A recording, mixing and mastering studio in Yongsan, Seoul. We also make apps and web tools for sound work.</p></div><div class="foot-col"><p class="foot-h">Work</p><ul class="foot-links"><li><a href="/en/work/">Work</a></li><li><a href="/en/about/">About</a></li></ul></div><div class="foot-col"><p class="foot-h">Studio</p><ul class="foot-links"><li><a href="/en/studio/">Studio</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">Directions</a></li></ul></div><div class="foot-col"><p class="foot-h">Products</p><ul class="foot-links"><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div><div class="foot-col"><p class="foot-h">Contact</p><ul class="foot-links"><li><a href="/en/contact/">How to reach us</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">Contact on KakaoTalk</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/en/privacy/">Privacy Policy</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<!-- /site-chrome:footer -->
 </body>
 </html>

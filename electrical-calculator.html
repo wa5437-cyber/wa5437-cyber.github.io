@@ -6,26 +6,26 @@
 <title>Electrical Calculator — Web Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="i18n-core.css">
 <style>
   :root{
-    --bg-deep:#faf8f3; --bg-panel:#ffffff; --bg-panel-2:#f1ede3;
-    --line: rgba(30,26,20,0.08); --line-strong: rgba(30,26,20,0.18);
-    --teal:#2f6d4c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#221f1a; --text-secondary:#5c574c; --text-tertiary:#8c8677;
+    --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
+    --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
+    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
   body{
     margin:0; background:
-      radial-gradient(circle at 1px 1px, rgba(30,26,20,0.035) 1px, transparent 0) 0 0/22px 22px,
-      linear-gradient(180deg, var(--bg-deep), #faf8f3 70%, #faf8f3);
-    color:var(--text-primary); font-family:'Inter',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
+      radial-gradient(circle at 1px 1px, rgba(32,36,38,0.035) 1px, transparent 0) 0 0/22px 22px,
+      linear-gradient(180deg, var(--bg-deep), #f4f5f3 70%, #f4f5f3);
+    color:var(--text-primary); font-family:'Inter','Noto Sans KR',-apple-system,sans-serif; -webkit-font-smoothing:antialiased;
     display:flex; justify-content:center; align-items:flex-start;
   }
   .mono{ font-family:'IBM Plex Mono',monospace; }
-  h1,h2,h3{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; }
+  h1,h2,h3{ font-family:'Inter','Noto Sans KR',sans-serif; margin:0; }
   button{ font-family:inherit; cursor:pointer; }
 
   .app{ width:100%; max-width:700px; padding:20px 24px 40px; display:flex; flex-direction:column; gap:16px; }
@@ -43,7 +43,7 @@
     margin-left:auto; display:flex; align-items:center; gap:5px; font-size:15.5px; font-weight:600; color:var(--text-secondary);
     padding:8px 12px; border-radius:100px; border:1px solid var(--line); text-decoration:none; flex-shrink:0;
   }
-  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(30,26,20,0.04); }
+  .topbar .home-link:hover{ color:var(--text-primary); background:rgba(32,36,38,0.04); }
 
   @media (max-width:480px){
     .app{ padding:14px 14px 26px; gap:12px; }
@@ -56,7 +56,7 @@
   /* ---- 챕터 피커(자유 계산 / 계산 문제) ---- */
   .chapter-picker{ display:flex; background:var(--bg-panel); border:1px solid var(--line); border-radius:12px; padding:3px; }
   .chapter-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:15px; font-weight:600; padding:12px 8px; border-radius:9px; }
-  .chapter-picker button.active{ background:#e3ddd0; color:var(--text-primary); }
+  .chapter-picker button.active{ background:#dbe3df; color:var(--text-primary); }
   .chapter-picker button:disabled{ opacity:0.5; cursor:not-allowed; }
 
   /* ---- 탭 피커(4가지 계산 종류) ---- */
@@ -68,7 +68,7 @@
     border:none; background:transparent; color:var(--text-secondary); font-size:13px; font-weight:700;
     padding:12px 4px; border-radius:9px; min-width:0; white-space:normal; word-break:keep-all;
   }
-  .tab-picker button.active{ background:#e3ddd0; color:var(--teal); }
+  .tab-picker button.active{ background:#dbe3df; color:var(--teal); }
   .tab-picker button:disabled{ opacity:0.35; cursor:default; }
 
   /* ---- 스코어보드 ---- */
@@ -85,7 +85,7 @@
   /* ---- 값 선택(Solve for) 피커 ---- */
   .solve-picker{ display:flex; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:12px; padding:3px; margin-bottom:16px; }
   .solve-picker button{ flex:1; border:none; background:transparent; color:var(--text-secondary); font-size:14px; font-weight:700; padding:11px 6px; border-radius:9px; }
-  .solve-picker button.active{ background:#e3ddd0; color:var(--amber); }
+  .solve-picker button.active{ background:#dbe3df; color:var(--amber); }
 
   .field{ margin-top:14px; }
   .field:first-child{ margin-top:0; }
@@ -95,7 +95,7 @@
   }
   .input-row{ display:flex; align-items:center; gap:8px; }
   .input-row input[type=number], .input-row input[type=text]{
-    flex:1; background:#f1ede3; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    flex:1; background:#e8eeeb; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
     font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:600; padding:12px 14px; width:100%; min-width:0;
   }
   .input-row input:disabled{ opacity:0.55; }
@@ -111,7 +111,7 @@
   /* ---- 스피커 임피던스: 배선 방식 + 존 리스트 ---- */
   .zone-row{ display:flex; align-items:center; gap:8px; margin-top:10px; }
   .zone-row input[type=number]{
-    flex:1; background:#f1ede3; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
+    flex:1; background:#e8eeeb; border:1px solid var(--line); border-radius:10px; color:var(--text-primary);
     font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:600; padding:10px 12px; min-width:0;
   }
   .zone-row .zone-label{ font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text-secondary); width:60px; flex-shrink:0; }
@@ -120,10 +120,10 @@
     border-radius:8px; padding:9px 12px; flex-shrink:0;
   }
   .add-zone-btn{
-    border:1px dashed var(--line); background:rgba(30,26,20,0.02); color:var(--text-secondary);
+    border:1px dashed var(--line); background:rgba(32,36,38,0.02); color:var(--text-secondary);
     font-size:13.5px; font-weight:600; padding:10px 16px; border-radius:10px; width:100%; margin-top:12px;
   }
-  .add-zone-btn:hover{ background:rgba(30,26,20,0.06); color:var(--text-primary); }
+  .add-zone-btn:hover{ background:rgba(32,36,38,0.06); color:var(--text-primary); }
 
   /* ---- 계산 문제(퀴즈) ---- */
   .quiz-problem{
@@ -137,7 +137,7 @@
     min-width:0; transition:background .15s, border-color .15s, color .15s;
   }
   .quiz-option-btn:disabled{ cursor:default; }
-  .quiz-option-btn.correct-option{ background:rgba(47,109,76,0.16); border-color:var(--teal); color:var(--teal); }
+  .quiz-option-btn.correct-option{ background:rgba(35,105,92,0.16); border-color:var(--teal); color:var(--teal); }
   .quiz-option-btn.wrong-option{ background:rgba(178,58,42,0.16); border-color:var(--red); color:var(--red); }
   .feedback{ min-height:22px; text-align:center; font-weight:700; font-size:15px; margin-top:12px; }
   .feedback.correct{ color:var(--teal); }
@@ -145,21 +145,29 @@
 
   .startbtn{
     width:100%; padding:16px; border-radius:14px; border:none; font-size:16px; font-weight:700;
-    color:#e8f2ec; background:linear-gradient(160deg, var(--teal), #3a8c5e);
+    color:#e8eeeb; background:linear-gradient(160deg, var(--teal), #2c8070);
   }
   .startbtn.stop{ color:#fff; background:linear-gradient(160deg, var(--red), #8f2c22); }
 
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
-    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(30,26,20,0.02);
+    padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:rgba(32,36,38,0.02);
     display:inline-flex; align-items:center; gap:5px;
   }
-  .tool-links a:hover{ color:var(--text-primary); background:rgba(30,26,20,0.06); }
+  .tool-links a:hover{ color:var(--text-primary); background:rgba(32,36,38,0.06); }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<!-- site-chrome:head -->
+<meta name="theme-color" content="#f4f5f3">
+<link rel="stylesheet" href="/assets/tools.css">
+<!-- /site-chrome:head -->
 </head>
 <body>
+<!-- site-chrome:header -->
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<!-- /site-chrome:header -->
 <div class="app">
 
   <div class="topbar">
@@ -1046,5 +1054,10 @@
 </script>
 <script>window.I18N_DATA = {"nav_home": {"ko": "← 홈으로", "en": "← Home", "ja": "← ホームへ", "es": "← Inicio", "zh": "← 返回首页"}, "chapter_free": {"ko": "자유 계산", "en": "Free Calculation", "ja": "自由計算", "es": "Cálculo libre", "zh": "自由计算"}, "chapter_quiz": {"ko": "계산 문제", "en": "Practice Quiz", "ja": "計算問題", "es": "Preguntas de cálculo", "zh": "计算题"}, "solve_v": {"ko": "V 구하기", "en": "Solve V", "ja": "Vを求める", "es": "Calcular V", "zh": "求V"}, "solve_i": {"ko": "I 구하기", "en": "Solve I", "ja": "Iを求める", "es": "Calcular I", "zh": "求I"}, "solve_r": {"ko": "R 구하기", "en": "Solve R", "ja": "Rを求める", "es": "Calcular R", "zh": "求R"}, "ohm_desc": {"ko": "V = I × R. 무엇을 구할지 고르면, 나머지 두 값을 입력받아 계산합니다.", "en": "V = I × R. Choose what you want to solve for, then enter the other two values.", "ja": "V = I × R。何を求めるか選ぶと、残り2つの値を入力して計算します。", "es": "V = I × R. Elige qué quieres calcular y luego introduce los otros dos valores.", "zh": "V = I × R。选择要求解的量，然后输入其余两个数值即可计算。"}, "result_label": {"ko": "결과", "en": "Result", "ja": "結果", "es": "Resultado", "zh": "结果"}, "power_desc": {"ko": "필요한 공식을 고르세요 — P=V×I, P=I²×R, P=V²/R.", "en": "Choose the formula you need — P=V×I, P=I²×R, P=V²/R.", "ja": "必要な公式を選んでください — P=V×I、P=I²×R、P=V²/R。", "es": "Elige la fórmula que necesitas — P=V×I, P=I²×R, P=V²/R.", "zh": "选择所需公式 — P=V×I、P=I²×R、P=V²/R。"}, "wiring_series": {"ko": "직렬 (Series)", "en": "Series", "ja": "直列 (Series)", "es": "Serie (Series)", "zh": "串联 (Series)"}, "wiring_parallel": {"ko": "병렬 (Parallel)", "en": "Parallel", "ja": "並列 (Parallel)", "es": "Paralelo (Parallel)", "zh": "并联 (Parallel)"}, "impedance_desc": {"ko": "스피커를 직렬 또는 병렬로 연결했을 때의 합성 임피던스를 계산합니다.", "en": "Calculates the total impedance when speakers are wired in series or parallel.", "ja": "スピーカーを直列または並列に接続したときの合成インピーダンスを計算します。", "es": "Calcula la impedancia total al conectar altavoces en serie o en paralelo.", "zh": "计算扬声器以串联或并联方式连接时的合成阻抗。"}, "add_speaker_btn": {"ko": "+ 스피커 추가", "en": "+ Add Speaker", "ja": "+ スピーカーを追加", "es": "+ Añadir altavoz", "zh": "+ 添加扬声器"}, "total_impedance_label": {"ko": "합성 임피던스", "en": "Total Impedance", "ja": "合成インピーダンス", "es": "Impedancia total", "zh": "总阻抗"}, "db_power_desc": {"ko": "dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.", "en": "dB = 10 × log10(P2/P1). Enter either value and the other is calculated automatically.", "ja": "dB = 10 × log10(P2/P1)。どちらかを入力すると、もう一方が自動的に計算されます。", "es": "dB = 10 × log10(P2/P1). Introduce cualquiera de los dos valores y el otro se calcula automáticamente.", "zh": "dB = 10 × log10(P2/P1)。输入其中任意一个数值，另一个会自动计算。"}, "db_level_diff_label": {"ko": "dB (레벨 차이)", "en": "dB (Level Difference)", "ja": "dB (レベル差)", "es": "dB (Diferencia de nivel)", "zh": "dB(电平差)"}, "db_volt_desc": {"ko": "dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.", "en": "dB = 20 × log10(V2/V1). The coefficient for voltage (or current)-based dB differs from power-based dB — the same ratio gives a different dB value.", "ja": "dB = 20 × log10(V2/V1)。電圧(または電流)基準のdBは電力基準と係数が異なります — 同じ倍率でもdB値が変わります。", "es": "dB = 20 × log10(V2/V1). El coeficiente para dB basado en voltaje (o corriente) es distinto al basado en potencia — la misma proporción da un valor de dB diferente.", "zh": "dB = 20 × log10(V2/V1)。以电压(或电流)为基准的dB系数与以功率为基准不同 — 相同倍数下dB值也不同。"}, "db_volt_note": {"ko": "참고: 같은 숫자의 \"배수\"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 \"2배\"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 \"2배\"를 넣어 비교해보세요.)", "en": "Note: the same numeric \"ratio\" gives a different dB value depending on whether it's a power ratio or a voltage ratio. For example, a \"2×\" power ratio is 10×log10(2)≈3dB, while a \"2×\" voltage ratio is 20×log10(2)≈6dB. (Since doubling voltage quadruples power, physically the same change always gives the same dB when calculated using its own reference — try entering \"2\" in both panels above to compare.)", "ja": "参考: 同じ数字の「倍率」でも、電力比か電圧比かによってdB値が変わります。例えば「2倍」が電力比なら10×log10(2)≈3dB、電圧比なら20×log10(2)≈6dBです。(電圧が2倍になると電力は4倍になるため、物理的に同じ変化をそれぞれの基準で計算すると常に同じdBになります — 上の2つのパネルに実際に「2」を入れて比べてみてください。)", "es": "Nota: la misma \"proporción\" numérica da un valor de dB distinto según sea una relación de potencia o de voltaje. Por ejemplo, un \"2×\" en relación de potencia es 10×log10(2)≈3dB, mientras que un \"2×\" en relación de voltaje es 20×log10(2)≈6dB. (Como duplicar el voltaje cuadruplica la potencia, el mismo cambio físico siempre da el mismo dB al calcularlo con su propia referencia — prueba a introducir \"2\" en los dos paneles de arriba para comparar.)", "zh": "提示：同样数字的\"倍数\"，按功率比还是电压比计算，dB值是不同的。例如\"2倍\"若是功率比，为10×log10(2)≈3dB；若是电压比，则为20×log10(2)≈6dB。(因为电压变为2倍时功率会变为4倍，所以物理上相同的变化用各自基准计算时dB值始终一致 — 可以在上面两个面板中都输入\"2\"来对比看看。)"}, "dbu_dbv_desc": {"ko": "dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.", "en": "dBV is referenced to 1V, and dBu to 0.775V (the voltage that produces 1mW into 600Ω). Enter any one of the three and the rest are calculated automatically.", "ja": "dBVは1V基準、dBuは0.775V(=600Ωで1mWを出す電圧)基準です。3つのうちどれかを入力すると、残りが自動的に計算されます。", "es": "dBV toma como referencia 1V, y dBu 0.775V (el voltaje que produce 1mW en 600Ω). Introduce cualquiera de los tres y el resto se calcula automáticamente.", "zh": "dBV以1V为基准，dBu以0.775V(在600Ω上产生1mW的电压)为基准。三者中输入任意一个，其余会自动计算。"}, "dbv_label": {"ko": "dBV (0dBV = 1V 기준)", "en": "dBV (0dBV = 1V reference)", "ja": "dBV (0dBV = 1V基準)", "es": "dBV (0dBV = referencia 1V)", "zh": "dBV(0dBV = 1V基准)"}, "dbu_label": {"ko": "dBu (0dBu = 0.775V 기준)", "en": "dBu (0dBu = 0.775V reference)", "ja": "dBu (0dBu = 0.775V基準)", "es": "dBu (0dBu = referencia 0.775V)", "zh": "dBu(0dBu = 0.775V基准)"}, "dbm_dbw_desc": {"ko": "dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.", "en": "dBW is referenced to 1W, and dBm to 1mW (dBW = dBm − 30). Enter any one of the three and the rest are calculated automatically.", "ja": "dBWは1W基準、dBmは1mW基準です(dBW = dBm − 30)。3つのうちどれかを入力すると、残りが自動的に計算されます。", "es": "dBW toma como referencia 1W, y dBm 1mW (dBW = dBm − 30). Introduce cualquiera de los tres y el resto se calcula automáticamente.", "zh": "dBW以1W为基准，dBm以1mW为基准(dBW = dBm − 30)。三者中输入任意一个，其余会自动计算。"}, "dbw_label": {"ko": "dBW (0dBW = 1W 기준)", "en": "dBW (0dBW = 1W reference)", "ja": "dBW (0dBW = 1W基準)", "es": "dBW (0dBW = referencia 1W)", "zh": "dBW(0dBW = 1W基准)"}, "dbm_label": {"ko": "dBm (0dBm = 1mW 기준)", "en": "dBm (0dBm = 1mW reference)", "ja": "dBm (0dBm = 1mW基準)", "es": "dBm (0dBm = referencia 1mW)", "zh": "dBm(0dBm = 1mW基准)"}, "dbu_dbm_note": {"ko": "참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.", "en": "Note: at a 600Ω reference, dBu and dBm are exactly equal (since 0.775V produces exactly 1mW into 600Ω) — this is why this reference became standard in old telephone/broadcast systems.", "ja": "参考: 600Ω基準ではdBuとdBmは正確に同じ値になります(0.775Vが600Ωでちょうど1mWを出すため) — これが昔の電話・放送システムでこの基準が定着した理由です。", "es": "Nota: con una referencia de 600Ω, dBu y dBm son exactamente iguales (ya que 0.775V produce exactamente 1mW en 600Ω) — por eso esta referencia se estableció en los antiguos sistemas telefónicos y de radiodifusión.", "zh": "提示：在600Ω基准下，dBu与dBm数值完全相等(因为0.775V在600Ω上恰好产生1mW) — 这也是早期电话/广播系统采用该基准的原因。"}, "acwave_desc": {"ko": "정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)", "en": "Based on a sine wave. Enter any one of the three and the rest are calculated automatically. (Peak = RMS × √2, P-P = 2 × Peak)", "ja": "正弦波基準です。3つのうちどれかを入力すると、残りが自動的に計算されます。(Peak = RMS × √2、P-P = 2 × Peak)", "es": "Basado en una onda seno. Introduce cualquiera de los tres y el resto se calcula automáticamente. (Peak = RMS × √2, P-P = 2 × Peak)", "zh": "以正弦波为基准。三者中输入任意一个，其余会自动计算。(Peak = RMS × √2，P-P = 2 × Peak)"}, "cable_desc": {"ko": "스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.", "en": "Enter the speaker cable gauge (AWG), length, and current to calculate the voltage drop and power loss caused by cable resistance.", "ja": "スピーカーケーブルの太さ(AWG)・長さ・電流を入力すると、ケーブル抵抗による電圧降下と電力損失を計算します。", "es": "Introduce el calibre del cable (AWG), la longitud y la corriente para calcular la caída de tensión y la pérdida de potencia causadas por la resistencia del cable.", "zh": "输入扬声器线缆的线规(AWG)、长度和电流，即可计算因线缆电阻造成的电压降与功率损耗。"}, "cable_length_label": {"ko": "Cable Length (편도, 한쪽 길이)", "en": "Cable Length (one-way)", "ja": "ケーブル長(片道)", "es": "Longitud del cable (un sentido)", "zh": "线缆长度(单程)"}, "cable_resistance_label": {"ko": "케이블 저항 (왕복)", "en": "Cable Resistance (round-trip)", "ja": "ケーブル抵抗(往復)", "es": "Resistencia del cable (ida y vuelta)", "zh": "线缆电阻(往返)"}, "voltage_drop_label": {"ko": "전압 강하", "en": "Voltage Drop", "ja": "電圧降下", "es": "Caída de tensión", "zh": "电压降"}, "power_loss_label": {"ko": "손실 전력", "en": "Power Loss", "ja": "損失電力", "es": "Pérdida de potencia", "zh": "损耗功率"}, "cable_warning_template": {"ko": "⚠️ 전압 강하가 {v}V예요 — 케이블이 얇거나 너무 길면 저역이 물러지고(damping factor 저하) 전력 손실도 커질 수 있어요. 더 굵은 케이블을 고려해보세요.", "en": "⚠️ The voltage drop is {v}V — if the cable is too thin or too long, the low end can get loose (reduced damping factor) and power loss can increase. Consider a thicker cable.", "ja": "⚠️ 電圧降下が{v}Vです — ケーブルが細すぎたり長すぎたりすると、低域が緩くなり(ダンピングファクター低下)、電力損失も大きくなることがあります。より太いケーブルの使用を検討してください。", "es": "⚠️ La caída de tensión es de {v}V — si el cable es demasiado fino o largo, los graves pueden aflojarse (menor damping factor) y la pérdida de potencia puede aumentar. Considera usar un cable más grueso.", "zh": "⚠️ 电压降为{v}V — 若线缆过细或过长，低频会变得松散(阻尼系数下降)，功率损耗也可能增大。建议考虑使用更粗的线缆。"}, "quiz_problem_title": {"ko": "문제", "en": "Question", "ja": "問題", "es": "Pregunta", "zh": "题目"}, "quiz_start_prompt": {"ko": "시작 버튼을 눌러주세요", "en": "Press Start to begin", "ja": "スタートボタンを押してください", "es": "Pulsa Iniciar para comenzar", "zh": "请点击开始按钮"}, "btn_quiz_start": {"ko": "▸ 계산 문제 시작", "en": "▸ Start Quiz", "ja": "▸ 計算問題スタート", "es": "▸ Iniciar cuestionario", "zh": "▸ 开始计算题"}, "btn_quiz_stop": {"ko": "■ 계산 문제 중단", "en": "■ Stop Quiz", "ja": "■ 計算問題を中断", "es": "■ Detener cuestionario", "zh": "■ 中止计算题"}, "speaker_n_template": {"ko": "스피커 {n}", "en": "Speaker {n}", "ja": "スピーカー{n}", "es": "Altavoz {n}", "zh": "扬声器{n}"}, "feedback_correct": {"ko": "✅ 정답이에요!", "en": "✅ Correct!", "ja": "✅ 正解です！", "es": "✅ ¡Correcto!", "zh": "✅ 答对了！"}, "feedback_wrong_template": {"ko": "❌ 오답이에요 — 정답은 {answer}이었어요", "en": "❌ Wrong — the answer was {answer}", "ja": "❌ 不正解 — 正解は{answer}でした", "es": "❌ Incorrecto — la respuesta era {answer}", "zh": "❌ 答错了 — 正确答案是{answer}"}, "quiz_finish_template": {"ko": "퀴즈 종료! {hit}/{total} 정답", "en": "Quiz complete! {hit}/{total} correct", "ja": "クイズ終了！{hit}/{total}問正解", "es": "¡Cuestionario terminado! {hit}/{total} correctas", "zh": "测验结束！答对{hit}/{total}题"}, "ohm_q_v": {"ko": "I = {I}A, R = {R}Ω 일 때, V(전압)은 몇 V인가요?", "en": "If I = {I}A and R = {R}Ω, what is V (voltage) in volts?", "ja": "I = {I}A、R = {R}Ωのとき、V(電圧)は何Vですか？", "es": "Si I = {I}A y R = {R}Ω, ¿cuál es V (voltaje) en voltios?", "zh": "当I = {I}A，R = {R}Ω时，V(电压)是多少V？"}, "ohm_q_i": {"ko": "V = {V}V, R = {R}Ω 일 때, I(전류)는 몇 A인가요?", "en": "If V = {V}V and R = {R}Ω, what is I (current) in amps?", "ja": "V = {V}V、R = {R}Ωのとき、I(電流)は何Aですか？", "es": "Si V = {V}V y R = {R}Ω, ¿cuál es I (corriente) en amperios?", "zh": "当V = {V}V，R = {R}Ω时，I(电流)是多少A？"}, "ohm_q_r": {"ko": "V = {V}V, I = {I}A 일 때, R(저항)은 몇 Ω인가요?", "en": "If V = {V}V and I = {I}A, what is R (resistance) in ohms?", "ja": "V = {V}V、I = {I}Aのとき、R(抵抗)は何Ωですか？", "es": "Si V = {V}V e I = {I}A, ¿cuál es R (resistencia) en ohmios?", "zh": "当V = {V}V，I = {I}A时，R(电阻)是多少Ω？"}, "power_q_vi": {"ko": "V = {V}V, I = {I}A 일 때, P(전력)는 몇 W인가요? (P = V×I)", "en": "If V = {V}V and I = {I}A, what is P (power) in watts? (P = V×I)", "ja": "V = {V}V、I = {I}Aのとき、P(電力)は何Wですか？(P = V×I)", "es": "Si V = {V}V e I = {I}A, ¿cuál es P (potencia) en vatios? (P = V×I)", "zh": "当V = {V}V，I = {I}A时，P(功率)是多少W？(P = V×I)"}, "power_q_i2r": {"ko": "I = {I}A, R = {R}Ω 일 때, P(전력)는 몇 W인가요? (P = I²×R)", "en": "If I = {I}A and R = {R}Ω, what is P (power) in watts? (P = I²×R)", "ja": "I = {I}A、R = {R}Ωのとき、P(電力)は何Wですか？(P = I²×R)", "es": "Si I = {I}A y R = {R}Ω, ¿cuál es P (potencia) en vatios? (P = I²×R)", "zh": "当I = {I}A，R = {R}Ω时，P(功率)是多少W？(P = I²×R)"}, "power_q_v2r": {"ko": "V = {V}V, R = {R}Ω 일 때, P(전력)는 몇 W인가요? (P = V²/R)", "en": "If V = {V}V and R = {R}Ω, what is P (power) in watts? (P = V²/R)", "ja": "V = {V}V、R = {R}Ωのとき、P(電力)は何Wですか？(P = V²/R)", "es": "Si V = {V}V y R = {R}Ω, ¿cuál es P (potencia) en vatios? (P = V²/R)", "zh": "当V = {V}V，R = {R}Ω时，P(功率)是多少W？(P = V²/R)"}, "impedance_q_template": {"ko": "{list} 스피커 {count}개를 {wiring}로 연결하면, 합성 임피던스는 몇 Ω인가요?", "en": "If you connect {count} speakers ({list}) in {wiring}, what is the total impedance in Ω?", "ja": "{list}のスピーカー{count}台を{wiring}で接続すると、合成インピーダンスは何Ωですか？", "es": "Si conectas {count} altavoces ({list}) en {wiring}, ¿cuál es la impedancia total en Ω?", "zh": "将{list}共{count}个扬声器以{wiring}方式连接，合成阻抗是多少Ω？"}, "imp_wiring_series": {"ko": "직렬(Series)", "en": "series", "ja": "直列(Series)", "es": "serie", "zh": "串联(Series)"}, "imp_wiring_parallel": {"ko": "병렬(Parallel)", "en": "parallel", "ja": "並列(Parallel)", "es": "paralelo", "zh": "并联(Parallel)"}, "db_q_from_db": {"ko": "{db}dB는 전력비(P2/P1)로 몇 배인가요?", "en": "What power ratio (P2/P1) does {db}dB correspond to?", "ja": "{db}dBは電力比(P2/P1)で何倍ですか？", "es": "¿A qué relación de potencia (P2/P1) corresponde {db}dB?", "zh": "{db}dB对应的功率比(P2/P1)是多少倍？"}, "db_q_from_ratio": {"ko": "전력비(P2/P1)가 {ratio}배이면, 몇 dB인가요?", "en": "If the power ratio (P2/P1) is {ratio}×, how many dB is that?", "ja": "電力比(P2/P1)が{ratio}倍のとき、何dBですか？", "es": "Si la relación de potencia (P2/P1) es {ratio}×, ¿cuántos dB son?", "zh": "当功率比(P2/P1)为{ratio}倍时，是多少dB？"}, "dbvolt_q_from_db": {"ko": "{db}dB는 전압비(V2/V1)로 몇 배인가요?", "en": "What voltage ratio (V2/V1) does {db}dB correspond to?", "ja": "{db}dBは電圧比(V2/V1)で何倍ですか？", "es": "¿A qué relación de voltaje (V2/V1) corresponde {db}dB?", "zh": "{db}dB对应的电压比(V2/V1)是多少倍？"}, "dbvolt_q_from_ratio": {"ko": "전압비(V2/V1)가 {ratio}배이면, 몇 dB인가요?", "en": "If the voltage ratio (V2/V1) is {ratio}×, how many dB is that?", "ja": "電圧比(V2/V1)が{ratio}倍のとき、何dBですか？", "es": "Si la relación de voltaje (V2/V1) es {ratio}×, ¿cuántos dB son?", "zh": "当电压比(V2/V1)为{ratio}倍时，是多少dB？"}, "dbudbv_q_v2dbv": {"ko": "전압이 {v}V일 때, dBV는 얼마인가요? (0dBV = 1V 기준)", "en": "If the voltage is {v}V, what is dBV? (0dBV = 1V reference)", "ja": "電圧が{v}Vのとき、dBVはいくつですか？(0dBV = 1V基準)", "es": "Si el voltaje es {v}V, ¿cuál es dBV? (0dBV = referencia 1V)", "zh": "当电压为{v}V时，dBV是多少？(0dBV = 1V基准)"}, "dbudbv_q_v2dbu": {"ko": "전압이 {v}V일 때, dBu는 얼마인가요? (0dBu = 0.775V 기준)", "en": "If the voltage is {v}V, what is dBu? (0dBu = 0.775V reference)", "ja": "電圧が{v}Vのとき、dBuはいくつですか？(0dBu = 0.775V基準)", "es": "Si el voltaje es {v}V, ¿cuál es dBu? (0dBu = referencia 0.775V)", "zh": "当电压为{v}V时，dBu是多少？(0dBu = 0.775V基准)"}, "dbudbv_q_dbm2dbw": {"ko": "{dbm}dBm은 몇 dBW인가요? (dBW = dBm − 30)", "en": "How many dBW is {dbm}dBm? (dBW = dBm − 30)", "ja": "{dbm}dBmは何dBWですか？(dBW = dBm − 30)", "es": "¿Cuántos dBW son {dbm}dBm? (dBW = dBm − 30)", "zh": "{dbm}dBm等于多少dBW？(dBW = dBm − 30)"}, "acwave_q_rms2peak": {"ko": "RMS 전압이 {rms}V일 때, Peak 전압은 몇 V인가요? (Peak = RMS × √2)", "en": "If the RMS voltage is {rms}V, what is the Peak voltage in V? (Peak = RMS × √2)", "ja": "RMS電圧が{rms}Vのとき、Peak電圧は何Vですか？(Peak = RMS × √2)", "es": "Si el voltaje RMS es {rms}V, ¿cuál es el voltaje Peak en V? (Peak = RMS × √2)", "zh": "当RMS电压为{rms}V时，Peak电压是多少V？(Peak = RMS × √2)"}, "acwave_q_peak2rms": {"ko": "Peak 전압이 {peak}V일 때, RMS 전압은 몇 V인가요? (RMS = Peak / √2)", "en": "If the Peak voltage is {peak}V, what is the RMS voltage in V? (RMS = Peak / √2)", "ja": "Peak電圧が{peak}Vのとき、RMS電圧は何Vですか？(RMS = Peak / √2)", "es": "Si el voltaje Peak es {peak}V, ¿cuál es el voltaje RMS en V? (RMS = Peak / √2)", "zh": "当Peak电压为{peak}V时，RMS电压是多少V？(RMS = Peak / √2)"}, "acwave_q_rms2pp": {"ko": "RMS 전압이 {rms}V일 때, Peak-to-Peak 전압은 몇 V인가요? (P-P = 2 × RMS × √2)", "en": "If the RMS voltage is {rms}V, what is the Peak-to-Peak voltage in V? (P-P = 2 × RMS × √2)", "ja": "RMS電圧が{rms}Vのとき、Peak-to-Peak電圧は何Vですか？(P-P = 2 × RMS × √2)", "es": "Si el voltaje RMS es {rms}V, ¿cuál es el voltaje Peak-to-Peak en V? (P-P = 2 × RMS × √2)", "zh": "当RMS电压为{rms}V时，Peak-to-Peak电压是多少V？(P-P = 2 × RMS × √2)"}, "cable_q_drop": {"ko": "{awg}AWG 케이블을 편도 {length}m 사용해서 {current}A가 흐르면, 전압 강하는 몇 V인가요? (왕복 저항 고려)", "en": "With a {awg}AWG cable, {length}m one-way, carrying {current}A, what is the voltage drop in V? (accounting for round-trip resistance)", "ja": "{awg}AWGケーブルを片道{length}m使用して{current}Aが流れる場合、電圧降下は何Vですか？(往復抵抗を考慮)", "es": "Con un cable de {awg}AWG, {length}m en un sentido, y una corriente de {current}A, ¿cuál es la caída de tensión en V? (considerando la resistencia de ida y vuelta)", "zh": "使用{awg}AWG线缆，单程{length}m，通过{current}A电流时，电压降是多少V？(考虑往返电阻)"}, "cable_q_loss": {"ko": "{awg}AWG 케이블을 편도 {length}m 사용해서 {current}A가 흐르면, 케이블에서 손실되는 전력은 몇 W인가요?", "en": "With a {awg}AWG cable, {length}m one-way, carrying {current}A, how much power in W is lost in the cable?", "ja": "{awg}AWGケーブルを片道{length}m使用して{current}Aが流れる場合、ケーブルで損失する電力は何Wですか？", "es": "Con un cable de {awg}AWG, {length}m en un sentido, y una corriente de {current}A, ¿cuánta potencia en W se pierde en el cable?", "zh": "使用{awg}AWG线缆，单程{length}m，通过{current}A电流时，线缆上损耗的功率是多少W？"}};</script>
 <script src="i18n-core.js"></script>
+<!-- site-chrome:footer -->
+<section class="tool-related chrome-ko" aria-label="관련 앱"><div class="wrap"><p class="tr-kicker">관련 앱</p><a class="tr-card" href="/apps/toolkit/"><span class="tr-shot"><img src="/img/apps/toolkit/01_favorites_ko.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineerToolkit-오디오엔지니어</strong><span>현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.</span><span class="tr-more">앱 자세히 보기 →</span></span></a></div></section><section class="tool-related chrome-en" lang="en" aria-label="Related app"><div class="wrap"><p class="tr-kicker">Related app</p><a class="tr-card" href="/en/apps/toolkit/"><span class="tr-shot"><img src="/img/apps/toolkit/01_favorites_en.jpg" alt="" width="736" height="1600" loading="lazy"></span><span class="tr-text"><strong>AudioEngineerToolkit</strong><span>A set of offline calculators for audio engineers, ready on stage or in the studio with no internet.</span><span class="tr-more">App details →</span></span></a></div></section>
+<footer class="site-footer chrome-ko"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<footer class="site-footer chrome-en" lang="en"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/en/">ML Music Studio</a><p class="foot-tag">A recording, mixing and mastering studio in Yongsan, Seoul. We also make apps and web tools for sound work.</p></div><div class="foot-col"><p class="foot-h">Work</p><ul class="foot-links"><li><a href="/en/work/">Work</a></li><li><a href="/en/about/">About</a></li></ul></div><div class="foot-col"><p class="foot-h">Studio</p><ul class="foot-links"><li><a href="/en/studio/">Studio</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">Directions</a></li></ul></div><div class="foot-col"><p class="foot-h">Products</p><ul class="foot-links"><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div><div class="foot-col"><p class="foot-h">Contact</p><ul class="foot-links"><li><a href="/en/contact/">How to reach us</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">Contact on KakaoTalk</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="/en/privacy/">Privacy Policy</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+<!-- /site-chrome:footer -->
 </body>
 </html>

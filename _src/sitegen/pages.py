@@ -274,7 +274,7 @@ def tools(lang):
             cards += (f'<div class="tool-card">{pic}<div class="tc-body"><h3><a href="{esc(it["href"])}">{name}</a></h3>'
                       f'<p>{esc(it["text"])}</p>{link}</div></div>')
         groups += (f'<section class="band"><div class="wrap"><h2>{esc(g["title"])}</h2>'
-                   f'<div class="tool-cards">{cards}</div></div></section>')
+                   f'<div class="tool-cards{" tc-4" if len(g["items"]) == 4 else ""}">{cards}</div></div></section>')   # 4개는 2×2 / 한 줄 4칸
     body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
             f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
     path = url(lang, "/tools/")
