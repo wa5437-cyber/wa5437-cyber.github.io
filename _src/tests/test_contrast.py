@@ -77,6 +77,24 @@ class ContrastTests(unittest.TestCase):
         for bg in ("bg", "panel", "dark"):
             self.assertGreaterEqual(ratio(t["control"], t[bg]), 3.0, f"--control on --{bg}")
 
+    def test_photo_hero_scrim_keeps_text_aa_even_over_white(self):
+        # 사진 위 글: --scrim 이 사진의 가장 밝은 점(흰색)을 덮어도 제목·부제(--dark-ink)와 보조글(--dark-muted)이 4.5:1 이상
+        css = CSS.read_text(encoding="utf-8")
+        m = re.search(r"--scrim:rgba\((\d+),(\d+),(\d+),([.\d]+)\)", css)
+        self.assertTrue(m)
+        r, g, b, a = int(m.group(1)), int(m.group(2)), int(m.group(3)), float(m.group(4))
+        worst = "#%02x%02x%02x" % tuple(round(a * c + (1 - a) * 255) for c in (r, g, b))
+        t = tokens()
+        self.assertEqual("#%02x%02x%02x" % (r, g, b), t["dark"])
+        for fg in ("dark-ink", "dark-muted"):
+            self.assertGreaterEqual(ratio(t[fg], worst), 4.5, f"--{fg} on scrim over white ({worst})")
+        # 글이 놓이는 왼쪽 640px 까지는 scrim 이 그대로(그 뒤에서만 옅어진다)
+        self.assertIn("var(--scrim) max(640px,calc(100% - 360px))", css)
+        self.assertIn(".ph-copy>*{max-width:560px}", css)
+
+    def test_dark_hero_pill_contrast(self):
+        self.assertGreaterEqual(ratio(tokens()["dark-link"], "#24302f"), 4.5)
+
     def test_theme_color_matches_background(self):
         import sys
         sys.path.insert(0, str(CSS.parents[1] / "_src"))

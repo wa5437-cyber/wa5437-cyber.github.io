@@ -5,7 +5,7 @@
     "h1": "문의",
     "sub": "카카오톡 오픈채팅이나 이메일로 연락해 주세요.",
     "sections": [
-      {"type": "contact", "title": "연락처",
+      {"type": "contact", "tone": "dark", "title": "연락처",
        "text": "녹음·믹싱·마스터링 의뢰, 앱 문의, 광고·협업 문의 모두 오픈카톡이나 이메일로 받습니다."},
       {"type": "list", "title": "문의할 때 알려 주시면 좋은 것",
        "items": [
@@ -19,7 +19,7 @@
     "h1": "Contact",
     "sub": "Please reach us through the KakaoTalk open chat or by email.",
     "sections": [
-      {"type": "contact", "title": "How to reach us",
+      {"type": "contact", "tone": "dark", "title": "How to reach us",
        "text": "We accept recording, mixing and mastering requests, app questions, and advertising or collaboration inquiries through the KakaoTalk open chat or by email."},
       {"type": "list", "title": "Helpful to include in your message",
        "items": [

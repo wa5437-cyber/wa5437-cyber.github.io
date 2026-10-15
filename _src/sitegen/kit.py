@@ -84,8 +84,9 @@ def chrome_lang_attr(lang):
     return ' lang="en"' if chrome(lang) != lang else ""
 
 
-NAV = (("nav_apps", "/apps/"), ("nav_tools", "/tools/"), ("nav_plugins", "/plugins/"),
-       ("nav_studio", "/studio/"), ("nav_guides", "/guides/"))
+# 녹음실·엔지니어가 먼저, 앱·도구는 그다음(2차 개편, 사용자 지시)
+NAV = (("nav_work", "/work/"), ("nav_studio", "/studio/"), ("nav_apps", "/apps/"), ("nav_tools", "/tools/"),
+       ("nav_plugins", "/plugins/"), ("nav_guides", "/guides/"))
 
 
 def _nav_href(c, p):
@@ -95,7 +96,6 @@ def _nav_href(c, p):
 def header(lang, alts, current=None):
     """current: 지금 페이지 주소. 그 주소가 속한 메뉴 항목에 aria-current="page" 를 단다."""
     c = chrome(lang)
-    # 아직 만들어지지 않은 단계의 메뉴(플러그인·녹음실)도 자리는 잡아 둔다. 링크 점검은 build 단계에서 한다.
     def item(k, p):
         href = _nav_href(c, p)
         here = current is not None and current.startswith(url(lang, p) if p != "/guides/" else p)
@@ -109,15 +109,16 @@ def header(lang, alts, current=None):
 
 
 def footer(lang):
-    """푸터: 제품 / 녹음실 / 지원 세 묶음."""
+    """푸터: 작업 / 스튜디오 / 제품 / 문의 네 묶음."""
     c = SITE["contact"]
     k = chrome(lang)
     def links(items):
         return "".join(f'<li><a href="{esc(h)}"{extra}>{esc(label)}</a></li>' for h, label, extra in items)
     groups = (
+        ("footer_work", [(url(k, "/work/"), t("nav_work", k), ""), (url(k, "/about/"), t("footer_about", k), "")]),
+        ("footer_studio", [(url(k, "/studio/"), t("nav_studio", k), ""), (c["map"], t("footer_map", k), ' rel="noopener"')]),
         ("footer_products", [(url(k, "/apps/"), t("nav_apps", k), ""), (url(k, "/tools/"), t("nav_tools", k), ""),
                              (url(k, "/plugins/"), t("nav_plugins", k), ""), ("/guides/", t("nav_guides", k), "")]),
-        ("footer_studio", [(url(k, "/studio/"), t("nav_studio", k), ""), (url(k, "/about/"), t("footer_about", k), "")]),
         ("footer_support", [(url(k, "/contact/"), t("footer_contact", k), ""),
                             (c["kakao"], t("chat", k), ' rel="noopener"'),
                             (f'mailto:{c["email"]}', c["email"], ""),

@@ -104,57 +104,131 @@ class HomeExtrasTests(unittest.TestCase):
         self.assertTrue(any(p.endswith("…") for _, _, p in items))
 
 
+# 화면에 보이면 안 되는 경력 숫자·기간(사용자 지시: 포트폴리오에서 건수·기간 강조를 뺀다)
+CAREER_NUMBERS = re.compile(r"\b111\b|\b66\b|\b49\b|\b30건|기록된 작업|기록한 작업|2009|recorded credits|credits on record|\{(since|total|mastering|mixing|recording)\}")
+
+
+def visible(html):
+    """<head>·스크립트를 빼고, 태그를 걷어낸 본문 글 + alt·title 속성."""
+    body = html[html.index("<body>"):]
+    body = re.sub(r"<script\b.*?</script>", "", body, flags=re.S)
+    attrs = " ".join(re.findall(r'\s(?:alt|title|aria-label)="([^"]*)"', body))
+    return re.sub(r"<[^>]+>", " ", body) + " " + attrs
+
+
+def section_of(html, cls):
+    m = re.search(r'<section class="%s">(.*?)</section>' % re.escape(cls), html, re.S)
+    return m.group(1) if m else None
+
+
 class HomeLayoutTests(unittest.TestCase):
-    """홈: 실제 앱 화면 히어로 → 대표 앱 3(화면 무대) → 녹음실 어두운 띠 → 플러그인 띠 → 웹 도구·가이드 목록."""
-    def test_hero_shows_two_real_screenshots_first_eager_with_size(self):
+    """홈(2차): 사진 히어로 → 참여한 작업 띠 → 엔지니어 → 녹음실(어두운 띠) → 앱(보조) → 플러그인 띠 → 웹 도구·가이드 → 문의(어두운 띠)."""
+    def test_sections_in_studio_first_order(self):
         for lang in ("ko", "en"):
             _, html = pages.home(lang)
-            stage = re.search(r'<div class="hero-stage">(.*?)</div></div></div></section>', html, re.S).group(1)
-            imgs = re.findall(r"<img [^>]+>", stage)
-            self.assertEqual(len(imgs), 2, lang)
-            self.assertIn("/img/apps/spl-rta/", imgs[0])
-            self.assertIn("fetchpriority=\"high\"", imgs[0])
-            self.assertNotIn('loading="lazy"', imgs[0])
-            self.assertIn('loading="lazy"', imgs[1])
-            for img in imgs:
-                self.assertRegex(img, r'width="\d+" height="\d+"')
-                src = re.search(r'src="([^"]+)"', img).group(1)
-                self.assertTrue((pages.ROOT / src.lstrip("/")).exists(), src)
+            main = re.search(r"<main.*?</main>", html, re.S).group(0)
+            marks = ['class="photo-hero"', 'class="covers strip-5"', 'class="wrap engineer"', '<section class="band dark">',
+                     'class="band apps-band"', '<section class="strip">', 'class="wrap split"', '<h2>%s</h2>' % pages.load("home.json")[lang]["contact_title"]]
+            pos = [main.index(m) for m in marks]
+            self.assertEqual(pos, sorted(pos), lang)
 
-    def test_headline_and_ctas(self):
+    def test_hero_photo_is_eager_sized_and_text_is_short(self):
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            hero = section_of(html, "photo-hero")
+            img = re.search(r"<img [^>]+>", hero).group(0)
+            self.assertIn('src="/img/studio/control-room.jpg"', img)
+            self.assertIn('fetchpriority="high"', img)
+            self.assertNotIn('loading="lazy"', img)
+            self.assertRegex(img, r'width="768" height="450"')
+            self.assertRegex(img, r'alt="[^"]+"')
         _, ko = pages.home("ko")
-        self.assertIn('<h1><span class="line">소리를 다루는 도구,</span> <span class="line">직접 만드는 엔지니어.</span></h1>', ko)
-        self.assertIn('<a class="btn primary" href="/apps/">앱 둘러보기</a>', ko)
-        self.assertIn('<a class="btn" href="/studio/">녹음실 보기</a>', ko)
-        _, en = pages.home("en")
-        self.assertIn("Tools for sound,</span>", en)
-        self.assertIn('<a class="btn primary" href="/en/apps/">', en)
+        self.assertIn("<h1>ML Music Studio 녹음실</h1>", ko)
+        self.assertIn('<p class="sub">서울 용산 · 녹음 · 믹싱 · 마스터링</p>', ko)
 
-    def test_featured_apps_are_product_cards_with_image_stage(self):
-        h = pages.load("home.json")
-        _, html = pages.home("ko")
-        cards = re.findall(r'<a class="card product" href="([^"]+)"><div class="stage"><img [^>]+></div>', html)
-        self.assertEqual(len(cards), 3)
-        self.assertEqual(cards, [f"/apps/{s}/" for s in h["featured_apps"]])
+    def test_hero_ctas_contact_on_kakao_then_work(self):
+        _, ko = pages.home("ko")
+        hero = section_of(ko, "photo-hero")
+        btns = re.findall(r'<a class="(btn[^"]*)" href="([^"]+)"[^>]*>([^<]+)</a>', hero)
+        self.assertEqual(btns[0], ("btn primary", "https://open.kakao.com/o/sQhjCeZb", "문의하기"))
+        self.assertEqual(btns[1], ("btn", "/work/", "작업 보기"))
+        _, en = pages.home("en")
+        self.assertIn('href="/en/work/"', section_of(en, "photo-hero"))
+
+    def test_credits_strip_has_ten_lazy_sized_posters_mixing_categories(self):
+        posters = {p["img"]: p for p in pages.load("work_posters.json")}
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            strip = re.search(r'<div class="covers strip-5">(.*?)</div></div></section>', html, re.S).group(1)
+            imgs = re.findall(r"<img [^>]+>", strip)
+            self.assertEqual(len(imgs), 10, lang)
+            cats = set()
+            for img in imgs:
+                self.assertIn('loading="lazy"', img)
+                self.assertRegex(img, r'width="324" height="324"')
+                src = re.search(r'src="([^"]+)"', img).group(1)
+                p = posters[src]
+                cats.add(p["category"])
+                alt = re.search(r'alt="([^"]*)"', img).group(1)
+                if p["artist"] and p["title"]:
+                    self.assertEqual(alt, kit.esc(f'{p["artist"]} — {p["title"]}'))
+                self.assertTrue(alt)
+            self.assertGreaterEqual(len(cats), 4, lang)
+            self.assertIn(f'href="{kit.url(lang, "/work/")}"', html)
+
+    def test_engineer_block_has_portrait_and_about_link_but_no_numbers(self):
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            eng = re.search(r'<div class="wrap engineer">(.*?)</div></div></section>', html, re.S).group(1)
+            self.assertIn('src="/img/about/profile.png"', eng)
+            self.assertIn(f'href="{kit.url(lang, "/about/")}"', eng)
+            self.assertNotIn("stat", eng)
+            self.assertNotRegex(re.sub(r"<[^>]+>", " ", eng), r"\d")
+
+    def test_dark_studio_band_has_three_photos_captions_and_gear(self):
+        gear = pages.load_page("studio")["gear"]
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            band = section_of(html, "band dark")
+            self.assertEqual(len(re.findall(r'<figure class="pic"><img [^>]*loading="lazy"', band)), 3, lang)
+            self.assertEqual(len(re.findall(r"<figcaption>[^<]+</figcaption>", band)), 3, lang)
+            for g in gear[lang]:
+                self.assertIn(kit.esc(g), band)
+            self.assertIn(f'href="{kit.url(lang, "/studio/")}"', band)
+            self.assertNotIn('class="stats"', html)
+
+    def test_apps_are_a_secondary_band_of_four_small_screens(self):
         n = len(pages.load("apps.json")["apps"])
-        self.assertIn(f"전체 앱 보기 ({n}) →", html)
+        _, html = pages.home("ko")
+        band = section_of(html, "band apps-band")
+        shots = re.findall(r'<img class="mini [^"]*"[^>]+>', band)
+        self.assertEqual(len(shots), 4)
+        for img in shots:
+            self.assertIn('loading="lazy"', img)
+        self.assertIn(f"앱 {n}개 보기 →", band)
+        self.assertNotIn('class="card product"', html)
+        self.assertGreater(html.index("band apps-band"), html.index('<section class="band dark">'))
+
+    def test_contact_band_is_dark_with_kakao_mail_and_address(self):
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            last = html[html.rindex('<section class="band dark">'):html.index("</main>")]
+            self.assertIn("open.kakao.com/o/sQhjCeZb", last)
+            self.assertIn("mailto:wa547@hanmail.net", last)
+            self.assertIn("map.naver.com", last)
+
+    def test_no_career_counts_or_ranges_on_home(self):
+        for lang in ("ko", "en"):
+            _, html = pages.home(lang)
+            self.assertNotRegex(visible(html), CAREER_NUMBERS, lang)
+            head = html[:html.index("<body>")]
+            self.assertNotRegex(head, CAREER_NUMBERS, lang)
 
     def test_old_three_cards_and_empty_tools_band_are_gone(self):
         _, html = pages.home("ko")
         self.assertNotIn("곧 선보일 오디오 플러그인", html)
         self.assertNotIn('style="text-decoration:none', html)
         self.assertNotIn("브라우저에서 바로 쓰세요", html)
-
-    def test_dark_studio_band_has_facts_from_career_and_trust_line(self):
-        career = pages.load("career.json")
-        for lang in ("ko", "en"):
-            _, html = pages.home(lang)
-            band = re.search(r'<section class="band dark">(.*?)</section>', html, re.S).group(1)
-            self.assertIn(pages.load("home.json")[lang]["trust"], band)
-            self.assertIn(f'<dd>{career["total"]}</dd>', band)
-            self.assertIn(f'<dd>{career["roles"]["마스터링"]}</dd>', band)
-            self.assertIn(f'href="{kit.url(lang, "/studio/")}"', band)
-        self.assertIn("서울 용산", pages.home("ko")[1])
 
     def test_plugin_strip_and_compact_tool_links(self):
         _, html = pages.home("ko")
@@ -197,7 +271,7 @@ class ToolsTests(unittest.TestCase):
         for f in ("/rta.html", "/generator.html", "/trainer.html", "/effects-listening.html",
                   "/delay-calculator.html", "/acoustics-calculator.html",
                   "/electrical-calculator.html", "/tempo-pitch-calculator.html", "/stage-sound-quiz.html"):
-            self.assertEqual(html.count(f'href="{f}"'), 1, f)
+            self.assertEqual(html.count(f'<h3><a href="{f}">'), 1, f)
 
     def test_prototype_page_is_not_listed(self):
         _, html = pages.tools("en")

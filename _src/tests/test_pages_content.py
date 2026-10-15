@@ -4,6 +4,20 @@ sys.path.insert(0, str(ROOT / "_src"))
 from sitegen import pages
 
 
+# 화면·메타에 나오면 안 되는 경력 건수·기간(사용자 지시). 작업 페이지의 접힌 역할 표(연도별 줄)는 따로 뺀다.
+CAREER_NUMBERS = re.compile(r"\b111\b|\b66\b|\b49\b|기록된 작업|기록한 작업|2009|2024년까지|through 2024|"
+                            r"recorded credits|credits on record|\{(since|total|mastering|mixing|recording)\}")
+
+
+def page_text(html):
+    """사람이 보는 글: <title>·메타 content 값·본문 글·alt. 스크립트(JSON-LD 포함)는 따로 본다."""
+    head = html[:html.index("<body>")]
+    head_text = " ".join(re.findall(r"<title>(.*?)</title>", head) + re.findall(r'content="([^"]*)"', head))
+    body = re.sub(r"<script\b.*?</script>", "", html[html.index("<body>"):], flags=re.S)
+    alts = " ".join(re.findall(r'\salt="([^"]*)"', body))
+    return head_text + " " + re.sub(r"<[^>]+>", " ", body) + " " + alts
+
+
 class StudioAboutContactTests(unittest.TestCase):
     def test_pages_exist_in_both_languages_with_hreflang_pairs(self):
         for name in ("studio", "about", "contact"):
@@ -13,79 +27,95 @@ class StudioAboutContactTests(unittest.TestCase):
                 self.assertIn('hreflang="ko"', html)
                 self.assertIn('hreflang="en"', html)
 
-    def test_studio_has_works_table_address_and_contact(self):
+    def test_studio_has_photo_hero_gallery_gear_fields_posters_and_dark_contact(self):
         _, html = pages.simple_page("ko", "studio")
-        self.assertIn('<table class="works" aria-labelledby="works-title">', html)
-        self.assertIn("원효로4가 120-3", html)
-        self.assertIn("open.kakao.com/o/sQhjCeZb", html)
-        self.assertIn("wa547@hanmail.net", html)
+        hero = re.search(r'<section class="photo-hero">.*?</section>', html, re.S).group(0)
+        self.assertIn('src="/img/studio/control-room.jpg"', hero)
+        self.assertIn('fetchpriority="high"', hero)
+        gallery = re.search(r'<div class="gallery">(.*?)</div></div></section>', html, re.S).group(1)
+        self.assertEqual(re.findall(r"<figcaption>(.*?)</figcaption>", gallery),
+                         ["컨트롤룸", "복도", "아웃보드", "모니터와 인터페이스", "라운지"])
+        for img in re.findall(r"<img [^>]+>", gallery):
+            self.assertIn('loading="lazy"', img)
+            self.assertRegex(img, r'width="\d+" height="\d+"')
+        self.assertIn("<li>Grace Design m201 마이크 프리앰프</li><li>Neve 1073DPA</li><li>Lydkraft Tube-Tech CL 1B 컴프레서</li>", html)
+        chips = re.search(r'<ul class="chips">(.*?)</ul>', html).group(1)
+        self.assertEqual(re.findall(r"<li>(.*?)</li>", chips), ["음반", "영화", "연극", "뮤지컬", "방송", "행사", "오디오북"])
+        self.assertIn('class="covers strip-4"', html)
+        self.assertIn('href="/work/"', html)
+        dark = html[html.index('<section class="band dark">'):]
+        self.assertIn("<h2>위치·문의</h2>", dark)
+        self.assertIn("원효로4가 120-3", dark)
+        self.assertIn("open.kakao.com/o/sQhjCeZb", dark)
+        self.assertIn("wa547@hanmail.net", dark)
+        self.assertIn("map.naver.com", dark)
         self.assertNotIn("10:00", html)             # 운영시간 지어내지 않음
         _, en = pages.simple_page("en", "studio")
         self.assertIn("Wonhyo-ro", en)
+        self.assertIn("<li>Grace Design m201 microphone preamp</li>", en)
 
-    def test_about_numbers_come_from_career_json(self):
-        career = json.loads((ROOT / "_src" / "content" / "career.json").read_text(encoding="utf-8"))
-        _, html = pages.simple_page("ko", "about")
-        self.assertIn(str(career["total"]), html)
-        self.assertIn(str(career["roles"]["마스터링"]), html)
-        self.assertIn(str(career["since"]), html)
-        self.assertNotRegex(html, r"\{(since|total|mastering|mixing|recording)\}")   # 자리표시자가 남지 않음
-
-    def test_missing_photos_leave_no_broken_images_or_empty_sections(self):
+    def test_studio_generic_copy_is_gone(self):
+        # 녹음실이 하는 일 4칸·4단계 진행 방법 같은 누구나 아는 글은 지웠다(사용자 지시)
         for lang in ("ko", "en"):
-            for name in ("studio", "about"):
-                _, html = pages.simple_page(lang, name)
-                for src in re.findall(r'<img[^>]+src="(/[^"]+)"', html):
-                    self.assertTrue((ROOT / src.lstrip("/")).exists(), src)
-        # 사진 파일이 아직 없는 동안에는 구역 전체(제목 포함)가 사라진다
-        missing = [p for p in ("img/studio/room-01.jpg", "img/studio/room-02.jpg", "img/studio/room-03.jpg",
-                               "img/about/profile.jpg") if not (ROOT / p).exists()]
-        if len(missing) == 4:
-            for lang, h2 in (("ko", "<h2>작업실</h2>"), ("en", "<h2>The studio</h2>")):
-                _, html = pages.simple_page(lang, "studio")
-                self.assertNotIn('class="shots"', html)
-                self.assertNotIn(h2, html)
-            for lang in ("ko", "en"):
-                _, html = pages.simple_page(lang, "about")
-                self.assertNotIn('class="shots"', html)
+            _, html = pages.simple_page(lang, "studio")
+            self.assertNotIn('class="steps"', html)
+            self.assertNotIn('class="cards', html)
+            for gone in ("하는 일", "진행 방법", "악기와 보컬을 녹음합니다", "What we do", "How it works"):
+                self.assertNotIn(gone, html)
 
-    def test_works_church_items_are_marked_and_few(self):
-        _, html = pages.simple_page("ko", "studio")
-        self.assertLessEqual(html.count("교회·찬양"), 5)
-        self.assertGreaterEqual(html.count("교회·찬양"), 1)
+    def test_studio_reservation_sentence(self):
+        _, ko = pages.simple_page("ko", "studio")
+        self.assertIn("예약제 — 카카오톡으로 먼저 문의해 주세요.", ko)
+        _, en = pages.simple_page("en", "studio")
+        self.assertIn("By appointment", en)
+
+    def test_no_moon_studio_anywhere_on_generated_site(self):
+        bad = re.compile(r"moonstudio|moon studio", re.I)
+        for name in pages.SIMPLE_PAGES:
+            for lang in ("ko", "en"):
+                self.assertNotRegex(pages.simple_page(lang, name)[1], bad, (name, lang))
+        for fn in (pages.home, pages.work, pages.tools, pages.apps_index):
+            for lang in ("ko", "en"):
+                self.assertNotRegex(fn(lang)[1], bad, (fn.__name__, lang))
+        for name in ("about", "studio"):
+            self.assertNotRegex(json.dumps(pages.load_page(name), ensure_ascii=False), bad, name)
+
+    def test_no_career_counts_or_ranges_on_pages(self):
+        for name in pages.SIMPLE_PAGES:
+            for lang in ("ko", "en"):
+                html = pages.simple_page(lang, name)[1]
+                self.assertNotRegex(page_text(html), CAREER_NUMBERS, (name, lang))
+                for ld in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S):
+                    self.assertNotRegex(ld, CAREER_NUMBERS, (name, lang))
+        for lang in ("ko", "en"):
+            html = pages.work(lang)[1]
+            without_table = re.sub(r'<details class="roles">.*?</details>', "", html, flags=re.S)
+            self.assertNotRegex(page_text(without_table), CAREER_NUMBERS, lang)
+            self.assertNotIn('class="facts"', pages.simple_page(lang, "about")[1])
+
+    def test_about_has_portrait_links_and_no_works_table(self):
+        for lang, pre in (("ko", ""), ("en", "/en")):
+            _, html = pages.simple_page(lang, "about")
+            hero = re.search(r'<section class="hero portrait-hero">.*?</section>', html, re.S).group(0)
+            self.assertIn('src="/img/about/profile.png"', hero)
+            self.assertIn(f'href="{pre}/work/"', hero)
+            self.assertIn(f'href="{pre}/studio/"', hero)
+            self.assertNotIn('<table class="works"', html)
+            for src in re.findall(r'<img[^>]+src="(/[^"]+)"', html):
+                self.assertTrue((ROOT / src.lstrip("/")).exists(), src)
 
     def test_no_invented_claims_and_no_leftover_placeholders(self):
         bad_words = ("최고", "No.1", "수상", "영업일", "24시간",
                      "best", "award", "business day", "24 hours", "24/7", "within")
         for lang in ("ko", "en"):
-            for name in ("studio", "about", "contact"):
+            for name in ("studio", "about", "contact", "plugins"):
                 _, html = pages.simple_page(lang, name)
                 text = re.search(r"<main.*?</main>", html, re.S).group(0)
                 for bad in bad_words:
                     self.assertNotIn(bad, text.lower() if bad.islower() else text, (lang, name, bad))
                 self.assertNotRegex(text, r"\{\w+\}", (lang, name))
 
-    def test_moon_studio_links_use_http_not_https(self):
-        for lang in ("ko", "en"):
-            _, html = pages.simple_page(lang, "studio")
-            self.assertIn('href="http://moonstudiorecording.com/"', html)
-            self.assertNotIn("https://moonstudiorecording.com", html)
-            _, about = pages.simple_page(lang, "about")
-            self.assertIn('href="http://moonstudiorecording.com/sub/team_HS.html"', about)
-            self.assertNotIn("https://moonstudiorecording.com", about)
-
-    def test_studio_shows_reservation_sentence_and_map_link(self):
-        _, ko = pages.simple_page("ko", "studio")
-        self.assertIn("운영 시간은 따로 없고 예약제입니다. 카카오톡으로 먼저 문의해 주세요.", ko)
-        self.assertIn("map.naver.com", ko)
-        _, en = pages.simple_page("en", "studio")
-        self.assertIn("by appointment", en)
-        self.assertIn("map.naver.com", en)
-
-    def test_studio_wording_and_about_has_no_separate_principle_section(self):
-        _, studio = pages.simple_page("ko", "studio")
-        self.assertIn("Moon Studio 팀과 함께합니다", studio)
-        self.assertNotIn("함께 합니다", studio)
+    def test_about_wording_and_no_separate_principle_section(self):
         d = pages.load_page("about")
         for lang in ("ko", "en"):
             titles = [x.get("title") for x in d[lang]["sections"]]
@@ -96,16 +126,84 @@ class StudioAboutContactTests(unittest.TestCase):
         _, en = pages.simple_page("en", "about")
         self.assertIn("I make things that can be used on the spot, at the venue.", en)
 
-    def test_about_facts_lead_line_uses_placeholders(self):
-        career = json.loads((ROOT / "_src" / "content" / "career.json").read_text(encoding="utf-8"))
-        d = pages.load_page("about")
-        self.assertEqual(next(s for s in d["ko"]["sections"] if s["type"] == "facts")["items"][0],
-                         "{since}년부터 기록된 작업 {total}건")
-        _, ko = pages.simple_page("ko", "about")
-        self.assertIn(f'{career["since"]}년부터 기록된 작업 {career["total"]}건', ko)
-        _, en = pages.simple_page("en", "about")
-        self.assertIn(str(career["since"]), en)
-        self.assertIn(f'{career["total"]} credits', en)
+    def test_contact_and_privacy_reuse_the_dark_contact_band(self):
+        for name in ("contact", "privacy", "about", "studio"):
+            for lang in ("ko", "en"):
+                html = pages.simple_page(lang, name)[1]
+                dark = re.search(r'<section class="band dark">(.*?)</section>', html, re.S)
+                self.assertTrue(dark, (name, lang))
+                self.assertIn("open.kakao.com", dark.group(1))
+
+    def test_plugins_is_a_dark_hero_page_without_invented_features(self):
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "plugins")
+            hero = re.search(r'<section class="hero dark-hero">(.*?)</section>', html, re.S).group(1)
+            self.assertIn("VST3 · AU", hero)
+            self.assertIn("open.kakao.com", hero)
+            self.assertIn("mailto:wa547@hanmail.net", hero)
+        self.assertIn("개발 중", pages.simple_page("ko", "plugins")[1])
+
+
+class WorkPageTests(unittest.TestCase):
+    def test_paths_hreflang_and_h1(self):
+        for lang, path, h1 in (("ko", "/work/", "작업"), ("en", "/en/work/", "Work")):
+            p, html = pages.work(lang)
+            self.assertEqual(p, path)
+            self.assertIn(f"<h1>{h1}</h1>", html)
+            self.assertIn('hreflang="ko" href="https://mlmusicstudio.co.kr/work/"', html)
+            self.assertIn('hreflang="en" href="https://mlmusicstudio.co.kr/en/work/"', html)
+
+    def test_every_poster_once_with_alt_size_and_lazy(self):
+        posters = pages.load("work_posters.json")
+        for lang in ("ko", "en"):
+            _, html = pages.work(lang)
+            imgs = re.findall(r'<figure class="cover"[^>]*><img [^>]+>', html)
+            self.assertEqual(len(imgs), len(posters), lang)
+            for p in posters:
+                self.assertEqual(html.count(f'src="{p["img"]}"'), 1, p["img"])
+            for img in imgs:
+                self.assertIn('loading="lazy"', img)
+                self.assertRegex(img, r'width="324" height="324"')
+                self.assertRegex(img, r'alt="[^"]+"')
+
+    def test_category_chips_jump_to_existing_anchors_without_js(self):
+        w = pages.load("work.json")
+        have = {p["category"] for p in pages.load("work_posters.json")}
+        for lang in ("ko", "en"):
+            _, html = pages.work(lang)
+            nav = re.search(r'<nav class="work-nav"[^>]*>(.*?)</nav>', html, re.S).group(1)
+            targets = re.findall(r'href="#([^"]+)"', nav)
+            self.assertEqual(targets, ["c-" + c["id"] for c in w["categories"] if c["key"] in have])
+            for t in targets:
+                self.assertEqual(html.count(f'id="{t}"'), 1, t)
+            main = re.search(r"<main.*?</main>", html, re.S).group(0)
+            self.assertNotIn("<script", main)
+        _, en = pages.work("en")
+        for label in ("Albums", "Film", "Theatre", "Musical", "Broadcast", "Events", "Audiobook"):
+            self.assertIn(f">{label}</a>", en)
+
+    def test_roles_table_is_collapsed_details_without_totals_note(self):
+        for lang in ("ko", "en"):
+            _, html = pages.work(lang)
+            det = re.search(r'<details class="roles"><summary>(.*?)</summary>(.*?)</details>', html, re.S)
+            self.assertTrue(det)
+            self.assertIn('<table class="works">', det.group(2))
+            self.assertNotIn('class="note"', html)
+            self.assertNotIn("<details open", html)
+        self.assertIn("<summary>역할이 기록된 작업</summary>", pages.work("ko")[1])
+        self.assertLessEqual(pages.work("ko")[1].count("교회·찬양"), 5)
+        self.assertGreaterEqual(pages.work("ko")[1].count("교회·찬양"), 1)
+
+    def test_en_work_page_marks_korean_names(self):
+        _, en = pages.work("en")
+        main = re.search(r"<main.*?</main>", en, re.S).group(0)
+        main = re.sub(r'\salt="[^"]*"', "", main)               # 대체 글의 고유명사는 그대로 둔다
+        self.assertNotRegex(re.sub(r'<span lang="ko">.*?</span>', "", main), r"[가-힣]")
+
+    def test_header_and_footer_link_to_work(self):
+        _, html = pages.home("ko")
+        self.assertIn('<li><a href="/work/">작업</a></li>', html)
+        self.assertIn('href="/about/"', html)
 
 
 class LegalPageLinkTests(unittest.TestCase):
@@ -119,18 +217,6 @@ class LegalPageLinkTests(unittest.TestCase):
             self.assertNotIn('href=\\"/#', text, name)
             self.assertIn('href="/policy.html#policy"', text, name)
             self.assertIn('href="/apps/"', text, name)
-
-
-class FactsPlaceholderTests(unittest.TestCase):
-    def test_fill_facts_uses_career_and_raises_on_unknown_key(self):
-        career = {"since": 2009, "total": 111, "roles": {"마스터링": 66, "믹싱": 49, "녹음": 30}}
-        secs = [{"type": "facts", "items": ["{since}년 {total}건 {mastering}/{mixing}/{recording}"]},
-                {"type": "prose", "title": "{since}", "paragraphs": ["{x}"]}]
-        out = pages.fill_facts(secs, career)
-        self.assertEqual(out[0]["items"], ["2009년 111건 66/49/30"])
-        self.assertEqual(out[1], secs[1])           # facts 가 아닌 구역은 손대지 않는다
-        with self.assertRaises(KeyError):
-            pages.fill_facts([{"type": "facts", "items": ["{nope}"]}], career)
 
 
 class PrivacyPageTests(unittest.TestCase):

@@ -87,7 +87,7 @@ class KitTests(unittest.TestCase):
 
     def test_header_lists_nav_and_only_existing_language_alternates(self):
         h = kit.header("ko", {"ko": "/tools/", "en": "/en/tools/"})
-        for label in ("앱", "웹 도구", "플러그인", "녹음실", "가이드"):
+        for label in ("작업", "앱", "웹 도구", "플러그인", "녹음실", "가이드"):
             self.assertIn(label, h)
         self.assertIn('href="/en/tools/"', h)
 
@@ -143,16 +143,25 @@ class KitTests(unittest.TestCase):
 
 
 class FooterAndHeaderTests(unittest.TestCase):
-    def test_footer_has_three_groups_products_studio_support(self):
+    def test_footer_has_four_groups_work_studio_products_contact(self):
         f = kit.footer("ko")
-        self.assertEqual(re.findall(r'<p class="foot-h">(.*?)</p>', f), ["제품", "녹음실", "지원"])
-        for href in ('href="/apps/"', 'href="/tools/"', 'href="/plugins/"', 'href="/guides/"', 'href="/studio/"',
-                     'href="/about/"', 'href="/contact/"', 'href="/privacy/"'):
+        self.assertEqual(re.findall(r'<p class="foot-h">(.*?)</p>', f), ["작업", "스튜디오", "제품", "문의"])
+        for href in ('href="/work/"', 'href="/apps/"', 'href="/tools/"', 'href="/plugins/"', 'href="/guides/"', 'href="/studio/"',
+                     'href="/about/"', 'href="/contact/"', 'href="/privacy/"', "map.naver.com"):
             self.assertIn(href, f)
         en = kit.footer("en")
-        self.assertEqual(re.findall(r'<p class="foot-h">(.*?)</p>', en), ["Products", "Studio", "Support"])
+        self.assertEqual(re.findall(r'<p class="foot-h">(.*?)</p>', en), ["Work", "Studio", "Products", "Contact"])
         self.assertIn('href="/en/studio/"', en)
+        self.assertIn('href="/en/work/"', en)
         self.assertNotIn("/policy.html", en)
+
+    def test_header_menu_order_is_studio_first(self):
+        h = kit.header("ko", {})
+        wide = re.search(r'<ul class="nav nav-wide">(.*?)</ul>', h).group(1)
+        self.assertEqual(re.findall(r">([^<]+)</a>", wide), ["작업", "녹음실", "앱", "웹 도구", "플러그인", "가이드"])
+        en = re.search(r'<ul class="nav nav-wide">(.*?)</ul>', kit.header("en", {})).group(1)
+        self.assertEqual(re.findall(r">([^<]+)</a>", en), ["Work", "Studio", "Apps", "Web Tools", "Plugins", "Guides"])
+        self.assertIn('href="/en/work/"', en)
 
     def test_header_marks_current_section(self):
         h = kit.header("ko", {}, "/apps/keymap/")

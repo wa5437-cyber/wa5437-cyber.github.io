@@ -112,51 +112,91 @@ def app_card(app, lang, line, more):
             f'<span class="platforms">{esc(plat)}</span><span class="more">{esc(more)} →</span></div></a>')
 
 
+def posters():
+    return load("work_posters.json")
+
+
+def section_ctx():
+    """구역 렌더러에 넘기는 공용 자료(연락처·작업 목록·포스터·장비)."""
+    studio = load_page("studio") or {}
+    return {"contact": kit.SITE["contact"], "career": load("career.json"), "posters": posters(),
+            "work": load("work.json"), "gear": studio.get("gear", {"ko": [], "en": []}),
+            "img_exists": lambda p: (ROOT / p.lstrip("/")).exists()}
+
+
+def cta_href(href, lang):
+    """페이지 JSON 의 버튼 주소: "kakao"·"mail" 은 연락처로, 나머지는 그대로."""
+    c = kit.SITE["contact"]
+    if href == "kakao":
+        return c["kakao"], ' rel="noopener"'
+    if href == "mail":
+        return f'mailto:{c["email"]}', ""
+    return href, ""
+
+
+def cta_row(ctas, lang):
+    out = ""
+    for i, b in enumerate(ctas):
+        href, extra = cta_href(b["href"], lang)
+        out += f'<a class="btn{" primary" if i == 0 else ""}" href="{esc(href)}"{extra}>{esc(b["text"])}</a>'
+    return f'<div class="row">{out}</div>' if out else ""
+
+
+def photo_hero(src, alt, h1, sub, ctas, lang):
+    """사진을 깐 어두운 히어로. 넓은 화면은 사진 위 왼쪽에 글(어두운 그라데이션), 좁은 화면은 사진 아래 글."""
+    return (f'<section class="photo-hero"><div class="ph-media"><img src="{esc(src)}" alt="{esc(alt)}"'
+            f'{kit.img_attrs(src)} fetchpriority="high"></div>'
+            f'<div class="wrap ph-copy"><h1>{esc(h1)}</h1><p class="sub">{esc(sub)}</p>{cta_row(ctas, lang)}</div></section>')
+
+
 def home(lang):
     h = load("home.json")
     c = h[lang]
+    ctx = section_ctx()
     all_apps = load("apps.json")["apps"]
     apps = {a["slug"]: a for a in all_apps}
-    career = load("career.json")
-    # 히어로: 실제 앱 화면 두 장(첫 장만 바로 읽는다)
-    shots = ""
-    for i, s in enumerate(h["hero_shots"]):
-        app = apps[s["app"]]
-        src = app_shot(app, lang, s.get("img"))
-        alt = c["shot_alt"].format(name=app["name"][lang])
-        shots += (f'<div class="device{" lead" if i == 0 else " back"}">'
-                  f'{shot_img(src, alt, eager=(i == 0))}</div>')
-    lines = c["h1"].split(", ", 1)
-    h1 = (f'<span class="line">{esc(lines[0])},</span> <span class="line">{esc(lines[1])}</span>'
-          if len(lines) == 2 else esc(c["h1"]))
-    hero = (f'<section class="hero home-hero"><div class="wrap"><div class="grid">'
-            f'<div class="hero-copy"><h1>{h1}</h1><p class="sub">{esc(c["sub"])}</p>'
-            f'<div class="row"><a class="btn primary" href="{esc(url(lang, "/apps/"))}">{esc(c["cta_apps"])}</a>'
-            f'<a class="btn" href="{esc(url(lang, "/studio/"))}">{esc(c["cta_studio"])}</a></div></div>'
-            f'<div class="hero-stage">{shots}</div></div></div></section>')
-    # 대표 앱 3
-    def line(a):
-        det = (load_app(a["slug"]) or {}).get("detail") or {}
-        lead = (det.get("lead") or {}).get(lang)
-        return first_sentence(lead) if lead else short(a["tagline"][lang], 80)
-    feat = "".join(app_card(apps[s], lang, line(apps[s]), c["details"]) for s in h["featured_apps"] if s in apps)
-    featured = (f'<section class="band"><div class="wrap"><div class="band-head"><h2>{esc(c["featured_title"])}</h2>'
-                f'<a class="more" href="{esc(url(lang, "/apps/"))}">{esc(c["all_apps"])} ({len(all_apps)}) →</a></div>'
-                f'<div class="cards c3">{feat}</div></div></section>')
-    # 녹음실(어두운 띠)
-    st = c["stats"]
-    stats = "".join(f'<div class="stat"><dt>{esc(label)}</dt><dd>{esc(value)}</dd></div>' for value, label in (
-        (career["total"], st["total"]), (career["roles"]["마스터링"], st["mastering"]),
-        (career["roles"]["믹싱"], st["mixing"]), (career["roles"]["녹음"], st["recording"])))
-    studio = (f'<section class="band dark"><div class="wrap split studio-band"><div>'
-              f'<p class="kicker">{esc(c["studio_kicker"])}</p><h2>{esc(c["studio_title"])}</h2>'
-              f'<p class="sub">{esc(c["studio_text"])}</p><p class="trust">{esc(c["trust"])}</p>'
-              f'<div class="row"><a class="btn primary" href="{esc(url(lang, "/studio/"))}">{esc(c["cta_studio"])}</a></div></div>'
-              f'<dl class="stats">{stats}</dl></div></section>')
-    # 플러그인(얇은 띠)
+    by_img = {p["img"]: p for p in ctx["posters"]}
+    # 1) 사진 히어로: 녹음실 이름 + 한 줄, 문의(카카오톡)·작업 보기
+    hero = photo_hero(h["hero_img"], c["hero_alt"], c["h1"], c["sub"],
+                      [{"text": c["cta_contact"], "href": "kakao"}, {"text": c["cta_work"], "href": url(lang, "/work/")}], lang)
+    # 2) 참여한 작업 띠
+    credits = (f'<section class="band"><div class="wrap"><div class="band-head"><h2>{esc(c["credits_title"])}</h2>'
+               f'<a class="more" href="{esc(url(lang, "/work/"))}">{esc(c["credits_more"])} →</a></div>'
+               f'{sections.cover_strip([by_img[i] for i in h["credits"]], lang, ctx)}</div></section>')
+    # 3) 엔지니어(숫자 없이: 사진·이름·두 줄)
+    portrait = "/img/about/profile.png"
+    lines = "".join(f"<p>{esc(x)}</p>" for x in c["engineer_lines"])
+    engineer = (f'<section class="band"><div class="wrap engineer"><span class="portrait"><img src="{portrait}" alt="{esc(c["engineer_name"])}"'
+                f'{kit.img_attrs(portrait)} loading="lazy"></span><div><p class="kicker">{esc(c["engineer_kicker"])}</p>'
+                f'<h2>{esc(c["engineer_name"])}</h2>{lines}'
+                f'<a class="more" href="{esc(url(lang, "/about/"))}">{esc(c["engineer_more"])} →</a></div></div></section>')
+    # 4) 녹음실(어두운 띠): 사진 3장 + 한 줄 설명 + 장비
+    pics = "".join(f'<figure class="pic"><img src="{esc(x["src"])}" alt="{esc(x[lang])}"{kit.img_attrs(x["src"])} loading="lazy">'
+                   f'<figcaption>{esc(x[lang])}</figcaption></figure>' for x in h["studio_photos"])
+    gear = "".join(f"<li>{esc(g)}</li>" for g in ctx["gear"][lang])
+    studio = (f'<section class="band dark"><div class="wrap"><div class="band-head"><div><p class="kicker">{esc(c["studio_kicker"])}</p>'
+              f'<h2>{esc(c["studio_title"])}</h2></div>'
+              f'<a class="more" href="{esc(url(lang, "/studio/"))}">{esc(c["studio_more"])} →</a></div>'
+              f'<div class="pics">{pics}</div>'
+              f'<div class="gear-row"><h3>{esc(c["gear_title"])}</h3><ul class="gear">{gear}</ul></div></div></section>')
+    # 5) 앱(보조 띠): 작은 휴대폰 화면 4장
+    row = ""
+    for slug in h["featured_apps"]:
+        app = apps.get(slug)
+        src = app and app_shot(app, lang)
+        if not src:
+            continue
+        row += (f'<li><a href="{esc(app_href(lang, app))}"><span class="mini-stage">'
+                f'{shot_img(src, c["shot_alt"].format(name=app["name"][lang]), "mini")}</span>'
+                f'<span class="mini-name">{esc(app["name"][lang])}</span></a></li>')
+    apps_band = (f'<section class="band apps-band"><div class="wrap"><div class="band-head"><div><h2>{esc(c["apps_title"])}</h2>'
+                 f'<p class="sub">{esc(c["apps_text"])}</p></div>'
+                 f'<a class="more" href="{esc(url(lang, "/apps/"))}">{esc(c["apps_more"].format(n=len(all_apps)))} →</a></div>'
+                 f'<ul class="app-row">{row}</ul></div></section>')
+    # 6) 플러그인(얇은 띠)
     plugins = (f'<section class="strip"><div class="wrap strip-row"><span class="kicker">{esc(c["plugins_label"])}</span>'
                f'<a href="{esc(url(lang, "/plugins/"))}">{esc(c["plugins_text"])} →</a></div></section>')
-    # 웹 도구(이름만) + 최신 가이드(제목 + 한 줄)
+    # 7) 웹 도구(이름만) + 최신 가이드(제목 + 한 줄)
     names = {it["href"]: it["name"] for g in load("tools.json")[lang]["groups"] for it in g["items"]}
     tools = "".join(f'<li><a href="{esc(href)}">{esc(names[href])}</a></li>' for href in h["featured_tools"] if href in names)
     guides = ""
@@ -170,10 +210,51 @@ def home(lang):
     guides_col = (f'<div><h2>{esc(c["guides_title"])}</h2><ul class="link-list guide-links">{guides}</ul>'
                   f'<a class="more" href="/guides/">{esc(c["guides_more"])} →</a></div>') if guides else ""
     more = f'<section class="band"><div class="wrap split">{tools_col}{guides_col}</div></section>'
-    body = hero + featured + studio + plugins + more
+    # 8) 문의(어두운 띠)
+    contact = sections.render([{"type": "contact", "tone": "dark", "title": c["contact_title"], "text": c["contact_text"]}],
+                              lang, ctx)
+    body = hero + credits + engineer + studio + apps_band + plugins + more + contact
     path = url(lang, "/")
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/"),
                           extra_head=(HASH_KEEP if lang == "ko" else "") + json_ld(lang))
+
+
+def work(lang):
+    """작업(크레딧 벽): 분야 칩(앵커) → 분야 묶음별 정사각 커버 격자 → 접힌 역할 표 → 문의."""
+    w = load("work.json")
+    c = w[lang]
+    ctx = section_ctx()
+    cats = {x["key"]: x for x in w["categories"]}
+    present = sections.present_categories(ctx)
+    chips = "".join(f'<li><a href="#c-{esc(x["id"])}">{esc(x[lang])}</a></li>' for x in present)
+    nav = (f'<nav class="work-nav" aria-label="{esc(c["nav_label"])}"><ul class="chips links">{chips}</ul></nav>')
+    seen, groups = set(), ""
+    for keys in w["groups"]:
+        items = [p for k in keys for p in ctx["posters"] if p["category"] == k]
+        if not items:
+            continue
+        mixed = len({p["category"] for p in items}) > 1
+        figs = ""
+        for p in items:
+            anchor = None
+            if p["category"] not in seen:
+                seen.add(p["category"])
+                anchor = "c-" + cats[p["category"]]["id"]
+            figs += sections.poster_figure(p, lang, ctx, show_cat=mixed, anchor=anchor)
+        title = " · ".join(cats[k][lang] for k in keys if any(p["category"] == k for p in items))
+        groups += (f'<section class="band work-group"><div class="wrap"><h2>{esc(title)}</h2>'
+                   f'<div class="work-grid">{figs}</div></div></section>')
+    missing = [x["key"] for x in present if x["key"] not in seen]
+    if missing:
+        raise ValueError(f"work.json groups 에 없는 분야: {missing}")
+    roles = (f'<section class="band"><div class="wrap"><details class="roles"><summary>{esc(c["roles_summary"])}</summary>'
+             f'{sections.works_table(ctx["career"]["works"], lang)}</details></div></section>')
+    contact = sections.render([{"type": "contact", "tone": "dark", "title": c["contact_title"], "text": c["contact_text"]}],
+                              lang, ctx)
+    body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1><p class="sub">{esc(c["sub"])}</p>{nav}</div></section>'
+            + groups + roles + contact)
+    path = url(lang, "/work/")
+    return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/work/"))
 
 
 def tools(lang):
@@ -181,18 +262,29 @@ def tools(lang):
     apps = {a["slug"]: a for a in load("apps.json")["apps"]}
     groups = ""
     for g in c["groups"]:
-        items = ""
+        cards = ""
         for it in g["items"]:
             app = apps.get(it["app"])
-            link = (f' <a class="more" href="{esc(app_href(lang, app))}">'
+            name = esc(it["name"])
+            img = tool_img(it["href"])
+            pic = (f'<a class="tc-img" href="{esc(it["href"])}" tabindex="-1" aria-hidden="true">'
+                   f'<img src="{esc(img)}" alt=""{kit.img_attrs(img)} loading="lazy"></a>') if img else ""
+            link = (f'<a class="tc-app" href="{esc(app_href(lang, app))}">'
                     f'{esc(c["app_label"])}: {esc(app["name"][lang])} →</a>') if app else ""
-            items += (f'<li><a href="{esc(it["href"])}">{esc(it["name"])}</a>'
-                      f'<p>{esc(it["text"])}{link}</p></li>')
-        groups += f'<section class="band"><div class="wrap"><h2>{esc(g["title"])}</h2><ul class="tool-list">{items}</ul></div></section>'
+            cards += (f'<div class="tool-card">{pic}<div class="tc-body"><h3><a href="{esc(it["href"])}">{name}</a></h3>'
+                      f'<p>{esc(it["text"])}</p>{link}</div></div>')
+        groups += (f'<section class="band"><div class="wrap"><h2>{esc(g["title"])}</h2>'
+                   f'<div class="tool-cards">{cards}</div></div></section>')
     body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
             f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
     path = url(lang, "/tools/")
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for("/tools/"))
+
+
+def tool_img(href):
+    """웹 도구 미리보기 이미지(img/tools/<이름>.jpg). 파일이 없으면 None."""
+    rel = "/img/tools/" + href.strip("/").replace(".html", "") + ".jpg"
+    return rel if (ROOT / rel.lstrip("/")).exists() else None
 
 
 SIMPLE_PAGES = ("plugins", "studio", "about", "contact", "privacy")
@@ -204,24 +296,12 @@ def load_page(name):
     return json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
 
 
-def fill_facts(secs, career):
-    """facts 구역의 항목 문자열 자리표시자({since} {total} {mastering} {mixing} {recording})를 career.json 으로 채운다.
-    모르는 자리표시자는 KeyError 로 빌드를 멈춘다. 다른 구역은 그대로 둔다."""
-    values = {"since": career["since"], "total": career["total"],
-              "mastering": career["roles"]["마스터링"], "mixing": career["roles"]["믹싱"],
-              "recording": career["roles"]["녹음"]}
-    out = []
-    for sec in secs:
-        if sec.get("type") == "facts":
-            sec = dict(sec, items=[i.format_map(values) for i in sec["items"]])
-        out.append(sec)
-    return out
-
-
 def profile_ld(lang, profile):
-    """소개 페이지의 ProfilePage 구조화 데이터. 페이지 JSON 의 최상위 "profile" 값으로 만든다."""
+    """소개 페이지의 ProfilePage 구조화 데이터. 페이지 JSON 의 최상위 "profile" 값으로 만든다(sameAs 없음)."""
     person = {"@type": "Person", "name": profile["name"], "alternateName": profile["alternateName"],
-              "jobTitle": profile["jobTitle"][lang], "url": kit.BASE + "/about/", "sameAs": profile["sameAs"]}
+              "jobTitle": profile["jobTitle"][lang], "url": kit.BASE + "/about/"}
+    if profile.get("image"):
+        person["image"] = kit.BASE + profile["image"]
     data = {"@context": "https://schema.org", "@type": "ProfilePage", "mainEntity": person}
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
@@ -232,16 +312,30 @@ def is_noindex(name):
     return bool(d and d.get("noindex"))
 
 
+def page_hero(data, c, lang):
+    """페이지 머리: 사진(hero_img) / 인물(portrait) / 어두운(hero_tone=dark) / 기본."""
+    ctas = cta_row(c.get("cta", []), lang)
+    if data.get("hero_img"):
+        return photo_hero(data["hero_img"], c.get("hero_alt", c["h1"]), c["h1"], c["sub"], c.get("cta", []), lang)
+    if data.get("portrait"):
+        src = data["portrait"]
+        return (f'<section class="hero portrait-hero"><div class="wrap"><div class="pt-grid">'
+                f'<span class="portrait"><img src="{esc(src)}" alt="{esc(c.get("portrait_alt", c["h1"]))}"{kit.img_attrs(src)} fetchpriority="high"></span>'
+                f'<div><h1>{esc(c["h1"])}</h1><p class="sub">{esc(c["sub"])}</p>{ctas}</div></div></div></section>')
+    if data.get("hero_tone") == "dark":
+        kicker = f'<p class="kicker">{esc(c["kicker"])}</p>' if c.get("kicker") else ""
+        pill = f'<span class="pill">{esc(c["pill"])}</span>' if c.get("pill") else ""
+        return (f'<section class="hero dark-hero"><div class="wrap">{kicker}<h1>{esc(c["h1"])}</h1>{pill}'
+                f'<p class="sub">{esc(c["sub"])}</p>{ctas}</div></section>')
+    return (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
+            f'<p class="sub">{esc(c["sub"])}</p>{ctas}</div></section>')
+
+
 def simple_page(lang, name):
-    """content/pages/<name>.json 의 hero + 구역들로 만든 단순 페이지."""
+    """content/pages/<name>.json 의 머리 + 구역들로 만든 단순 페이지."""
     data = load_page(name)
     c = data[lang]
-    career = load("career.json")
-    ctx = {"contact": kit.SITE["contact"], "career": career,
-           "img_exists": lambda p: (ROOT / p.lstrip("/")).exists()}
-    body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
-            f'<p class="sub">{esc(c["sub"])}</p></div></section>'
-            + sections.render(fill_facts(c["sections"], career), lang, ctx))
+    body = page_hero(data, c, lang) + sections.render(c["sections"], lang, section_ctx())
     path = url(lang, f"/{name}/")
     ld = profile_ld(lang, data["profile"]) if data.get("profile") else ""
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for(f"/{name}/"),
@@ -497,10 +591,10 @@ def build_all(root):
     d = load("apps.json")
     made, noindex = [], []
     for lang in ("ko", "en"):
-        for fn in (home, tools, apps_index):
+        for fn in (home, work, tools, apps_index):
             path, html = fn(lang)
             kit.write(root, path, html)
-        made += [url(lang, "/"), url(lang, "/tools/"), url(lang, "/apps/")]
+            made.append(path)
     for name in SIMPLE_PAGES:
         if load_page(name) is None:
             continue

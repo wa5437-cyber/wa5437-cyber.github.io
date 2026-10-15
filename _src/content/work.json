@@ -1,0 +1,36 @@
+{
+  "categories": [
+    {"key": "음반", "id": "album", "ko": "음반", "en": "Albums"},
+    {"key": "영화", "id": "film", "ko": "영화", "en": "Film"},
+    {"key": "연극", "id": "theatre", "ko": "연극", "en": "Theatre"},
+    {"key": "뮤지컬", "id": "musical", "ko": "뮤지컬", "en": "Musical"},
+    {"key": "방송", "id": "broadcast", "ko": "방송", "en": "Broadcast"},
+    {"key": "행사", "id": "event", "ko": "행사", "en": "Events"},
+    {"key": "오디오북", "id": "audiobook", "ko": "오디오북", "en": "Audiobook"}
+  ],
+  "groups": [
+    ["음반"],
+    ["뮤지컬", "연극"],
+    ["영화", "방송", "행사", "오디오북"]
+  ],
+  "ko": {
+    "title": "작업 | ML Music Studio",
+    "description": "ML Music Studio가 녹음·믹싱·마스터링으로 참여한 음반, 영화, 뮤지컬, 연극, 방송, 행사, 오디오북 작업을 모았습니다.",
+    "h1": "작업",
+    "sub": "음반·영화·공연 등 참여한 작업의 일부입니다.",
+    "nav_label": "분야",
+    "roles_summary": "역할이 기록된 작업",
+    "contact_title": "작업 문의",
+    "contact_text": "예약제입니다. 카카오톡으로 먼저 문의해 주세요."
+  },
+  "en": {
+    "title": "Work | ML Music Studio",
+    "description": "Albums, films, musicals, plays, broadcasts, events and an audiobook that ML Music Studio worked on — recording, mixing and mastering.",
+    "h1": "Work",
+    "sub": "A selection of albums, films, stage shows and other productions we have worked on.",
+    "nav_label": "Categories",
+    "roles_summary": "Works with recorded roles",
+    "contact_title": "Work with us",
+    "contact_text": "The studio works by appointment. Please message us on KakaoTalk first."
+  }
+}

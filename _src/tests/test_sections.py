@@ -28,6 +28,35 @@ class SectionTests(unittest.TestCase):
             {"src": "/img/missing.jpg", "alt": "b"}]}], "ko", CTX)
         self.assertEqual(none.strip(), "")
 
+    def test_new_sections_gallery_gear_chips_posters(self):
+        ctx = dict(CTX, img_exists=lambda p: p != "/img/missing.jpg", gear={"ko": ["A <b>"], "en": ["B"]},
+                   work={"categories": [{"key": "음반", "id": "album", "ko": "음반", "en": "Albums"},
+                                        {"key": "영화", "id": "film", "ko": "영화", "en": "Film"}]},
+                   posters=[{"img": "/img/work/01_00.jpg", "artist": "가수", "title": None, "category": "음반"},
+                            {"img": "/img/work/02_08.jpg", "artist": None, "title": "작품 & <x>", "category": "영화"}])
+        html = sections.render([
+            {"type": "gallery", "title": "G", "items": [{"src": "/img/a.jpg", "caption": "C1", "wide": True},
+                                                       {"src": "/img/missing.jpg", "caption": "C2"}]},
+            {"type": "gear", "title": "장비"}, {"type": "chips", "title": "분야"},
+            {"type": "posters", "title": "P", "items": ["/img/work/02_08.jpg", "/img/work/01_00.jpg"],
+             "more": {"text": "더", "href": "/work/"}}], "ko", ctx)
+        self.assertIn('<figure class="pic wide">', html)
+        self.assertNotIn("missing.jpg", html)
+        self.assertIn("<li>A &lt;b&gt;</li>", html)
+        self.assertIn("<li>음반</li><li>영화</li>", html)
+        self.assertIn('alt="작품 &amp; &lt;x&gt;"', html)
+        self.assertIn('alt="가수 — 음반"', html)                 # 제목이 없으면 "아티스트 — 분야"
+        self.assertIn('class="covers strip-', html)
+        self.assertIn('<a class="more" href="/work/">더 →</a>', html)
+        en = sections.render([{"type": "chips", "title": "F"}], "en", ctx)
+        self.assertIn("<li>Albums</li><li>Film</li>", en)
+
+    def test_cover_cols_avoid_lonely_last_row(self):
+        self.assertEqual(sections.cover_cols(10), 5)
+        self.assertEqual(sections.cover_cols(8), 4)
+        self.assertEqual(sections.cover_cols(6), 6)
+        self.assertEqual(sections.cover_cols(7), 4)
+
     def test_works_without_career_is_hidden(self):
         self.assertEqual(sections.render([{"type": "works", "title": "대표작"}], "ko", CTX).strip(), "")
 
@@ -95,13 +124,14 @@ class PluginsPageTests(unittest.TestCase):
             self.assertEqual(person["alternateName"], "Hyoseop Lee")
             self.assertEqual(person["jobTitle"], job)
             self.assertEqual(person["url"], "https://mlmusicstudio.co.kr/about/")
-            self.assertEqual(person["sameAs"], ["http://moonstudiorecording.com/sub/team_HS.html"])
+            self.assertNotIn("sameAs", person)                  # 외부 팀 페이지로 잇지 않는다(사용자 지시)
+            self.assertEqual(person["image"], "https://mlmusicstudio.co.kr/img/about/profile.png")
         for name in ("studio", "contact", "privacy", "plugins"):
             _, html = pages.simple_page("ko", name)
             self.assertNotIn("ProfilePage", html, name)
 
     def test_profile_ld_escapes_script_end(self):
-        out = pages.profile_ld("ko", {"name": "a</script>", "alternateName": "b", "jobTitle": {"ko": "c"}, "sameAs": []})
+        out = pages.profile_ld("ko", {"name": "a</script>", "alternateName": "b", "jobTitle": {"ko": "c"}})
         self.assertEqual(out.count("</script>"), 1)
 
 
@@ -211,6 +241,7 @@ class EnglishWorksTableTests(unittest.TestCase):
             for name in ("studio", "about"):
                 _, page = pages.simple_page(lang, name)
                 main = re.search(r"<main.*?</main>", page, re.S).group(0)
+                main = re.sub(r'\salt="[^"]*"', "", main)       # 포스터 대체 글의 한글 고유명사는 그대로 둔다
                 self.assertNotRegex(_strip_ko_spans(main), r"[가-힣]", name)
 
     def test_ko_table_is_unchanged(self):

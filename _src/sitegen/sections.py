@@ -88,10 +88,8 @@ def _role(ui, role):
     return ", ".join(esc(ui["role_words"][w]) if w in ui["role_words"] else kit.esc_mixed(w) for w in role.split())
 
 
-def _works(sec, lang, ctx):
-    works = (ctx.get("career") or {}).get("works")
-    if not works:
-        return ""
+def works_table(works, lang, labelledby=None):
+    """career.json 의 works 목록을 표로. 영어 표는 한글 이름·곡명을 lang="ko" 로 표시한다."""
     ui = WORKS_UI[kit.chrome(lang)]
     en = "role_words" in ui                       # 영어 표: 한글 이름·곡명은 lang="ko" 로 표시
     text = kit.esc_mixed if en else esc
@@ -122,11 +120,106 @@ def _works(sec, lang, ctx):
                 val += f' <span class="pill">{esc(ui["church"])}</span>'
             cells += f'<td data-label="{esc(label)}">{val}</td>'
         rows += f"<tr>{cells}</tr>"
+    labelled = f' aria-labelledby="{labelledby}"' if labelledby else ""
+    return f'<table class="works"{labelled}><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table>'
+
+
+def _works(sec, lang, ctx):
+    works = (ctx.get("career") or {}).get("works")
+    if not works:
+        return ""
     note = f'<p class="note">{esc(sec["note"])}</p>' if sec.get("note") else ""
-    labelled = ' aria-labelledby="works-title"' if sec.get("title") else ""
     h2 = f'<h2 id="works-title">{esc(sec["title"])}</h2>' if sec.get("title") else ""
-    return _wrap(h2 + f'<table class="works"{labelled}><thead><tr>{head}</tr></thead>'
-                 f'<tbody>{rows}</tbody></table>{note}')
+    return _wrap(h2 + works_table(works, lang, "works-title" if sec.get("title") else None) + note)
+
+
+# --- 작업(포스터·커버) ---
+
+def category_label(key, lang, ctx):
+    """포스터 분야(음반·영화…)의 그 언어 이름. 모르는 분야는 그대로."""
+    for c in (ctx.get("work") or {}).get("categories", []):
+        if c["key"] == key:
+            return c.get(kit.chrome(lang)) or key
+    return key
+
+
+def poster_alt(p, lang, ctx):
+    """대체 글: "아티스트 — 제목". 아티스트가 없으면 제목만, 제목이 없으면 "아티스트 — 분야"."""
+    a, t = p.get("artist"), p.get("title")
+    if a and t:
+        return f"{a} — {t}"
+    if t:
+        return t
+    return f"{a} — {category_label(p['category'], lang, ctx)}"
+
+
+def poster_figure(p, lang, ctx, show_cat=False, anchor=None):
+    """정사각 커버 하나 + 아래 이름. 이미지는 늦게 읽고 width·height 를 붙인다."""
+    text = kit.esc_mixed if kit.chrome(lang) != "ko" else esc
+    a, t = p.get("artist"), p.get("title")
+    lines = ""
+    if a:
+        lines += f"<strong>{text(a)}</strong>"
+    if t:
+        lines += f"<strong>{text(t)}</strong>" if not a else f"<span>{text(t)}</span>"
+    if show_cat or not t:
+        lines += f'<span class="cat">{esc(category_label(p["category"], lang, ctx))}</span>'
+    ident = f' id="{esc(anchor)}"' if anchor else ""
+    return (f'<figure class="cover"{ident}><img src="{esc(p["img"])}" alt="{esc(poster_alt(p, lang, ctx))}"'
+            f'{kit.img_attrs(p["img"])} loading="lazy"><figcaption>{lines}</figcaption></figure>')
+
+
+def cover_cols(n):
+    """띠로 보여 줄 커버 수에 맞는 넓은 화면 칸 수(마지막 줄이 비지 않게)."""
+    for cols in (5, 4, 6, 3):
+        if n % cols == 0:
+            return cols
+    return 4
+
+
+def cover_strip(items, lang, ctx):
+    figs = "".join(poster_figure(p, lang, ctx) for p in items)
+    return f'<div class="covers strip-{cover_cols(len(items))}">{figs}</div>'
+
+
+def _posters(sec, lang, ctx):
+    by_img = {p["img"]: p for p in ctx["posters"]}
+    items = [by_img[src] for src in sec["items"]]
+    more = sec.get("more")
+    link = f'<a class="more" href="{esc(more["href"])}">{esc(more["text"])} →</a>' if more else ""
+    head = f'<div class="band-head"><h2>{esc(sec["title"])}</h2>{link}</div>'
+    return _wrap(head + cover_strip(items, lang, ctx), sec)
+
+
+def _gallery(sec, lang, ctx):
+    figs = ""
+    for i in sec["items"]:
+        if not ctx["img_exists"](i["src"]):
+            continue
+        cls = "pic wide" if i.get("wide") else "pic"
+        figs += (f'<figure class="{cls}"><img src="{esc(i["src"])}" alt="{esc(i["caption"])}"'
+                 f'{kit.img_attrs(i["src"])} loading="lazy"><figcaption>{esc(i["caption"])}</figcaption></figure>')
+    if not figs:
+        return ""
+    return _wrap(_h2(sec) + f'<div class="gallery">{figs}</div>', sec)
+
+
+def _gear(sec, lang, ctx):
+    items = "".join(f"<li>{esc(i)}</li>" for i in ctx["gear"][kit.chrome(lang)])
+    note = f'<p class="note">{esc(sec["note"])}</p>' if sec.get("note") else ""
+    return _wrap(_h2(sec) + f'<ul class="gear">{items}</ul>{note}', sec)
+
+
+def present_categories(ctx):
+    """포스터에 실제로 있는 분야만, work.json 의 순서대로."""
+    have = {p["category"] for p in ctx["posters"]}
+    return [c for c in ctx["work"]["categories"] if c["key"] in have]
+
+
+def _chips(sec, lang, ctx):
+    k = kit.chrome(lang)
+    items = "".join(f"<li>{esc(c[k])}</li>" for c in present_categories(ctx))
+    return _wrap(_h2(sec) + f'<ul class="chips">{items}</ul>', sec)
 
 
 def _facts(sec, lang, ctx):
@@ -135,7 +228,8 @@ def _facts(sec, lang, ctx):
 
 
 RENDERERS = {"prose": _prose, "list": _list, "cards": _cards, "steps": _steps,
-             "contact": _contact, "photos": _photos, "works": _works, "facts": _facts}
+             "contact": _contact, "photos": _photos, "works": _works, "facts": _facts,
+             "posters": _posters, "gallery": _gallery, "gear": _gear, "chips": _chips}
 
 
 def render(sections, lang, ctx):

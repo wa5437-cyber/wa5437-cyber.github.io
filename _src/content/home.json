@@ -1,73 +1,87 @@
 {
   "ko": {
-    "title": "ML Music Studio — 앱, 웹 도구, 녹음실",
-    "description": "사운드 엔지니어를 위한 앱과 무료 웹 도구, 그리고 용산의 녹음·믹싱·마스터링 스튜디오.",
-    "h1": "소리를 다루는 도구, 직접 만드는 엔지니어.",
-    "sub": "사운드 엔지니어가 직접 만든 앱과 웹 도구, 그리고 녹음·믹싱·마스터링을 하는 작은 스튜디오입니다.",
-    "cta_apps": "앱 둘러보기",
-    "cta_studio": "녹음실 보기",
-    "shot_alt": "{name} 앱 화면",
-    "featured_title": "대표 앱",
-    "all_apps": "전체 앱 보기",
-    "details": "자세히 보기",
+    "title": "ML Music Studio — 서울 용산 녹음·믹싱·마스터링 스튜디오",
+    "description": "서울 용산의 녹음·믹싱·마스터링 스튜디오. 참여한 음반·영화·공연 작업, 작업실과 장비, 엔지니어가 만든 앱과 웹 도구를 소개합니다.",
+    "h1": "ML Music Studio 녹음실",
+    "hero_alt": "ML Music Studio 컨트롤룸",
+    "sub": "서울 용산 · 녹음 · 믹싱 · 마스터링",
+    "cta_contact": "문의하기",
+    "cta_work": "작업 보기",
+    "credits_title": "참여한 작업",
+    "credits_more": "전체 작업 보기",
+    "engineer_kicker": "엔지니어",
+    "engineer_name": "이효섭",
+    "engineer_lines": [
+      "믹싱·마스터링·녹음을 하는 사운드 엔지니어입니다. 서울 용산의 작업실에서 ML Music Studio를 운영합니다.",
+      "음반부터 영화·뮤지컬·연극까지, 위에 있는 작업들에 엔지니어로 참여했습니다."
+    ],
+    "engineer_more": "소개 보기",
     "studio_kicker": "녹음실",
-    "studio_title": "ML Music Studio 녹음실",
-    "studio_text": "서울 용산의 작업실에서 녹음·믹싱·마스터링·무대음향 작업을 엔지니어가 직접 합니다.",
-    "stats": {
-      "total": "기록된 작업",
-      "mastering": "마스터링",
-      "mixing": "믹싱",
-      "recording": "녹음"
-    },
-    "trust": "2009년부터 2024년까지 기록된 앨범·영화·공연 작업 111건에 레코딩·믹싱·마스터링·무대음향으로 참여했습니다.",
+    "studio_title": "작업실과 장비",
+    "gear_title": "장비",
+    "studio_more": "녹음실 보기",
+    "apps_title": "엔지니어가 만든 앱",
+    "apps_text": "현장에서 쓰려고 직접 만든 측정·학습 앱입니다.",
+    "apps_more": "앱 {n}개 보기",
+    "shot_alt": "{name} 앱 화면",
     "plugins_label": "플러그인",
     "plugins_text": "VST3 · AU 개발 중",
     "tools_title": "무료 웹 도구",
     "tools_more": "모두 보기",
     "guides_title": "최신 가이드",
-    "guides_more": "모두 보기"
+    "guides_more": "모두 보기",
+    "contact_title": "문의",
+    "contact_text": "예약제입니다. 카카오톡으로 먼저 문의해 주세요."
   },
   "en": {
-    "title": "ML Music Studio — Apps, Web Tools and a Recording Studio",
-    "description": "Apps and free web tools for sound engineers, plus a recording, mixing and mastering studio in Yongsan, Seoul.",
-    "h1": "Tools for sound, built by an engineer.",
-    "sub": "Apps and web tools made by a working sound engineer, and a small studio for recording, mixing and mastering.",
-    "cta_apps": "Explore the apps",
-    "cta_studio": "Visit the studio",
-    "shot_alt": "{name} app screen",
-    "featured_title": "Featured apps",
-    "all_apps": "See all apps",
-    "details": "Details",
+    "title": "ML Music Studio — Recording, Mixing and Mastering in Yongsan, Seoul",
+    "description": "A recording, mixing and mastering studio in Yongsan, Seoul: selected albums, films and stage work, the room and its gear, plus apps and web tools made by the engineer.",
+    "h1": "ML Music Studio Recording",
+    "hero_alt": "The ML Music Studio control room",
+    "sub": "Yongsan, Seoul · Recording · Mixing · Mastering",
+    "cta_contact": "Contact us",
+    "cta_work": "See the work",
+    "credits_title": "Selected work",
+    "credits_more": "See all work",
+    "engineer_kicker": "The engineer",
+    "engineer_name": "Hyoseop Lee",
+    "engineer_lines": [
+      "A sound engineer who does mixing, mastering and recording, and runs ML Music Studio from a studio in Yongsan, Seoul.",
+      "From albums to films, musicals and plays, he worked as an engineer on the projects above."
+    ],
+    "engineer_more": "About Hyoseop",
     "studio_kicker": "Studio",
-    "studio_title": "ML Music Studio Recording",
-    "studio_text": "Recording, mixing, mastering and stage sound, done by an engineer in a studio in Yongsan, Seoul.",
-    "stats": {
-      "total": "recorded credits",
-      "mastering": "Mastering",
-      "mixing": "Mixing",
-      "recording": "Recording"
-    },
-    "trust": "From 2009 to 2024: 111 recorded credits on albums, films and stage productions — recording, mixing, mastering and stage sound.",
+    "studio_title": "The room and the gear",
+    "gear_title": "Gear",
+    "studio_more": "Visit the studio",
+    "apps_title": "Apps made by the engineer",
+    "apps_text": "Measurement and training apps, built for use on the job.",
+    "apps_more": "See all {n} apps",
+    "shot_alt": "{name} app screen",
     "plugins_label": "Plugins",
     "plugins_text": "VST3 · AU in development",
     "tools_title": "Free web tools",
     "tools_more": "See all",
     "guides_title": "Latest guides (in Korean)",
-    "guides_more": "See all"
+    "guides_more": "See all",
+    "contact_title": "Contact",
+    "contact_text": "The studio works by appointment. Please message us on KakaoTalk first."
   },
-  "hero_shots": [
-    {
-      "app": "spl-rta"
-    },
-    {
-      "app": "keymap",
-      "img": "02_search.jpg"
-    }
+  "hero_img": "/img/studio/control-room.jpg",
+  "credits": [
+    "/img/work/02_08.jpg", "/img/work/01_05.jpg", "/img/work/jh_01.jpg", "/img/work/01_10.jpg", "/img/work/04_05.jpg",
+    "/img/work/01_00.jpg", "/img/work/01_09.jpg", "/img/work/01_12.jpg", "/img/work/01_14.jpg", "/img/work/05_02.jpg"
+  ],
+  "studio_photos": [
+    {"src": "/img/studio/outboard.jpg", "ko": "아웃보드", "en": "Outboard"},
+    {"src": "/img/studio/monitors.jpg", "ko": "모니터와 인터페이스", "en": "Monitors and interface"},
+    {"src": "/img/studio/lounge.jpg", "ko": "라운지", "en": "Lounge"}
   ],
   "featured_apps": [
     "stage-sound",
     "spl-rta",
-    "ear-trainer"
+    "ear-trainer",
+    "temposcope"
   ],
   "featured_tools": [
     "/rta.html",

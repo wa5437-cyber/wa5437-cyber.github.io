@@ -47,7 +47,7 @@
        "paragraphs": [
          "이 안내가 바뀌면 이 페이지에 반영합니다.",
          "최종 수정일: 2026-10-12"]},
-      {"type": "contact", "title": "문의", "text": "개인정보와 관련해 궁금한 점은 오픈카톡이나 이메일로 문의해 주세요."}
+      {"type": "contact", "tone": "dark", "title": "문의", "text": "개인정보와 관련해 궁금한 점은 오픈카톡이나 이메일로 문의해 주세요."}
     ]
   },
   "en": {
@@ -98,7 +98,7 @@
        "paragraphs": [
          "If this notice changes, we will update this page.",
          "Last updated: 2026-10-12"]},
-      {"type": "contact", "title": "Contact", "text": "For questions about privacy, please reach us through the KakaoTalk open chat or by email."}
+      {"type": "contact", "tone": "dark", "title": "Contact", "text": "For questions about privacy, please reach us through the KakaoTalk open chat or by email."}
     ]
   }
 }
