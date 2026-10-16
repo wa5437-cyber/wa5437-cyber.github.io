@@ -166,7 +166,7 @@ def home(lang):
     # 3) 엔지니어(숫자 없이: 사진·이름·두 줄)
     portrait = "/img/about/profile.png"
     lines = "".join(f"<p>{esc(x)}</p>" for x in c["engineer_lines"])
-    engineer = (f'<section class="band"><div class="wrap engineer"><span class="portrait"><img src="{portrait}" alt="{esc(c["engineer_name"])}"'
+    engineer = (f'<section class="band band-engineer"><div class="wrap engineer"><span class="portrait"><img src="{portrait}" alt="{esc(c["engineer_name"])}"'
                 f'{kit.img_attrs(portrait)} loading="lazy"></span><div><p class="kicker">{esc(c["engineer_kicker"])}</p>'
                 f'<h2>{esc(c["engineer_name"])}</h2>{lines}'
                 f'<a class="more" href="{esc(url(lang, "/about/"))}">{esc(c["engineer_more"])} →</a></div></div></section>')
@@ -269,9 +269,9 @@ def tools(lang):
             img = tool_img(it["href"])
             pic = (f'<a class="tc-img" href="{esc(it["href"])}" tabindex="-1" aria-hidden="true">'
                    f'<img src="{esc(img)}" alt=""{kit.img_attrs(img)} loading="lazy"></a>') if img else ""
-            label = "앱에서도" if lang == "ko" else "Also in the app"
+            label = "앱 보기" if lang == "ko" else "See the app"
             link = (f'<a class="tc-app" href="{esc(app_href(lang, app))}" '
-                    f'aria-label="{esc(label + ": " + app["name"][lang])}">{label} ↗</a>') if app else ""
+                    f'aria-label="{esc(label + ": " + app["name"][lang])}">{label} →</a>') if app else ""
             cards += (f'<div class="tool-card">{pic}<div class="tc-body"><h3><a href="{esc(it["href"])}">{name}</a></h3>'
                       f'<p>{esc(it["text"])}</p>{link}</div></div>')
         slugs = list(dict.fromkeys(it.get("app") for it in g["items"] if it.get("app")))
@@ -393,12 +393,16 @@ def web_counterparts(slug, lang):
              "zh-Hans": "先试用免费网页工具", "es": "Prueba las herramientas web gratis",
              "de": "Kostenlose Webtools ausprobieren", "fr": "Essayez les outils web gratuits",
              "pt-BR": "Experimente as ferramentas web grátis"}[lang]
+    kind = {"ko": "무료 웹 도구", "en": "Free web tool", "ja": "無料のウェブツール", "zh-Hans": "免费网页工具",
+            "es": "Herramienta web gratuita", "de": "Kostenloses Webtool", "fr": "Outil web gratuit",
+            "pt-BR": "Ferramenta web grátis"}[lang]
     links = ""
     for it in items:
         src = tool_img(it["href"])
         img = f'<img src="{esc(src)}" alt=""{kit.img_attrs(src)} loading="lazy">' if src else ""
         extra = ' lang="en"' if lang not in ("ko", "en") else ""
-        links += f'<li><a href="{esc(it["href"])}"{extra}>{img}<span>{esc(it["name"])} <span aria-hidden="true">↗</span></span></a></li>'
+        links += (f'<li><a href="{esc(it["href"])}">{img}<span class="wp-copy"><strong{extra}>{esc(it["name"])}</strong>'
+                  f'<small>{esc(kind)}</small></span></a></li>')
     return (f'<section class="web-counterparts"><div class="wrap"><h2>{title}</h2>'
             f'<ul class="web-previews">{links}</ul></div></section>')
 
