@@ -61,3 +61,9 @@
   .site-header .menu summary{padding:8px 10px}
   .site-header .lang summary{padding:8px}
 }
+
+/* Touch targets follow the same rhythm across generated, guide and tool pages. */
+.site-header .menu summary,.site-header .lang summary{display:flex;align-items:center;min-height:44px}
+.site-header .nav a,.site-header .lang a{min-height:44px;display:flex;align-items:center}
+.site-footer .foot-links{gap:0}
+.site-footer .foot-links a{display:flex;align-items:center;min-height:44px;padding-block:8px}

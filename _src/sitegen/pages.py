@@ -269,12 +269,16 @@ def tools(lang):
             img = tool_img(it["href"])
             pic = (f'<a class="tc-img" href="{esc(it["href"])}" tabindex="-1" aria-hidden="true">'
                    f'<img src="{esc(img)}" alt=""{kit.img_attrs(img)} loading="lazy"></a>') if img else ""
-            link = (f'<a class="tc-app" href="{esc(app_href(lang, app))}">'
-                    f'<span class="tc-label">{esc(c["app_label"])}:</span>{esc(app["name"][lang])} →</a>') if app else ""
+            label = "앱에서도" if lang == "ko" else "Also in the app"
+            link = (f'<a class="tc-app" href="{esc(app_href(lang, app))}" '
+                    f'aria-label="{esc(label + ": " + app["name"][lang])}">{label} ↗</a>') if app else ""
             cards += (f'<div class="tool-card">{pic}<div class="tc-body"><h3><a href="{esc(it["href"])}">{name}</a></h3>'
                       f'<p>{esc(it["text"])}</p>{link}</div></div>')
-        groups += (f'<section class="band"><div class="wrap"><h2>{esc(g["title"])}</h2>'
-                   f'<div class="tool-cards tc-{len(g["items"])}">{cards}</div></div></section>')
+        slugs = list(dict.fromkeys(it.get("app") for it in g["items"] if it.get("app")))
+        panels = "".join(app_pair(apps[s], lang) for s in slugs if s in apps and has_detail(s))
+        groups += (f'<section class="band tool-group"><div class="wrap"><h2>{esc(g["title"])}</h2>'
+                   f'<div class="tool-group-grid"><div class="group-apps">{panels}</div>'
+                   f'<div class="tool-cards tc-{len(g["items"])}">{cards}</div></div></div></section>')
     body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
             f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
     path = url(lang, "/tools/")
@@ -362,6 +366,41 @@ def store_buttons(app, lang):
     if app.get("play"):
         out.append(f'<a class="btn" href="{esc(app["play"])}" target="_blank" rel="noopener">Google Play</a>')
     return "".join(out)
+
+
+def app_pair(app, lang, compact=False):
+    """Tools index and legacy tools share this app-version panel and store links."""
+    det = load_app(app["slug"])["detail"]
+    src = app_shot(app, lang)
+    line = first_sentence((det.get("lead") or {}).get(lang) or app["tagline"][lang])
+    platforms = (det.get("platforms") or {}).get(lang) or app["badge"][lang]
+    label, more = ("앱 버전", "앱 자세히 보기") if lang == "ko" else ("App version", "App details")
+    href = app_href(lang, app)
+    return (f'<aside class="app-pair{" app-pair--compact" if compact else ""}" aria-label="{label}: {esc(app["name"][lang])}">'
+            f'<a class="ap-shot" href="{esc(href)}" tabindex="-1" aria-hidden="true">{shot_img(src, "")}</a>'
+            f'<div class="ap-copy"><p class="ap-kicker">{label}</p><h3><a href="{esc(href)}">{esc(app["name"][lang])}</a></h3>'
+            f'<p class="ap-line">{esc(line)}</p><p class="ap-platforms">{esc(platforms)}</p></div>'
+            f'<div class="ap-actions">{store_buttons(app, lang)}<a class="ap-more" href="{esc(href)}">{more} →</a></div></aside>')
+
+
+def web_counterparts(slug, lang):
+    """Reverse tools.json's mapping; do not invent counterparts for other apps."""
+    content_lang = kit.chrome(lang)
+    items = [it for g in load("tools.json")[content_lang]["groups"] for it in g["items"] if it.get("app") == slug]
+    if not items:
+        return ""
+    title = {"ko": "웹에서 먼저 써 보기", "en": "Try the free web tools", "ja": "まずは無料のウェブツールで",
+             "zh-Hans": "先试用免费网页工具", "es": "Prueba las herramientas web gratis",
+             "de": "Kostenlose Webtools ausprobieren", "fr": "Essayez les outils web gratuits",
+             "pt-BR": "Experimente as ferramentas web grátis"}[lang]
+    links = ""
+    for it in items:
+        src = tool_img(it["href"])
+        img = f'<img src="{esc(src)}" alt=""{kit.img_attrs(src)} loading="lazy">' if src else ""
+        extra = ' lang="en"' if lang not in ("ko", "en") else ""
+        links += f'<li><a href="{esc(it["href"])}"{extra}>{img}<span>{esc(it["name"])} <span aria-hidden="true">↗</span></span></a></li>'
+    return (f'<section class="web-counterparts"><div class="wrap"><h2>{title}</h2>'
+            f'<ul class="web-previews">{links}</ul></div></section>')
 
 
 def apps_index(lang):
@@ -485,6 +524,7 @@ def _app_page_full(lang, app, det, slug):
         f'<ul class="bullets">{bullets}</ul>'
         f'<div class="row">{store_buttons(app, lang)}{price_pill}</div>'
         f'</div><div class="hero-shot">{shot_img(img_dir + pick_img(det["hero_img"], lang), app["name"][lang], "shot", eager=True)}</div></div></div></section>'
+        f'{web_counterparts(slug, lang)}'
         f'<section class="band"><div class="wrap">{blocks}</div></section>'
         f'<section class="band"><div class="wrap"><h2>{esc(ui["howto"][lang])}</h2><ol class="steps">{steps}</ol></div></section>'
         f'<section class="band"><div class="wrap"><ul class="facts">{facts}</ul>{privacy}</div></section>{rel}')
@@ -502,9 +542,10 @@ def _app_page_store(lang, app, det, s, slug):
         f'<h1>{esc_mixed(name)}</h1><p class="sub">{esc_mixed(s.get("subtitle", ""))}</p>'
         f'<div class="row">{store_buttons(app, lang)}</div></div>'
         f'<div class="hero-shot">{shot_img(img_dir + pick_img(det["hero_img"], lang), name, "shot", eager=True)}</div></div></div></section>'
+        f'{web_counterparts(slug, lang)}'
         f'<section class="band"><div class="wrap"><h2>{esc(strings.APP_UI["screens"][lang])}</h2>'
         f'<div class="shots">{shots}</div></div></section>'
-        f'<section class="band"><div class="wrap">{render_store_text(s["description"])}'
+        f'<section class="band"><div class="wrap store-copy">{render_store_text(s["description"])}'
         f'<p><a href="{esc(privacy_href(app))}">{esc(strings.APP_UI["privacy"][lang])}</a></p></div></section>')
     title = f'{name} | ML Music Studio'
     lead = " — ".join(x for x in (s.get("subtitle", ""), s["description"]) if x)   # 홍보 문구(기간 한정)는 쓰지 않는다

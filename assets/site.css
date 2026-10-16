@@ -1,4 +1,5 @@
 @import url("./chrome.css");
+@import url("./pairing.css");
 
 :root{
   --bg:#f4f5f3; --panel:#ffffff; --ink:#202426; --ink2:#5b6468; --line:#d5dadb; --control:#7a858a;
@@ -188,22 +189,44 @@ a.card .more{color:var(--accent-ink)}
 .dark-hero :where(a,summary,button):focus-visible{outline-color:var(--dark-link)}
 .dark-hero+.band:not(.dark){padding-top:clamp(48px,7vw,96px)}
 
-/* Web tools: two readable columns, including calculators with long app names. */
-.tool-cards{display:grid;gap:24px}
-@media(min-width:700px){.tool-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-cards.tc-1{grid-template-columns:minmax(0,1fr);max-width:calc((100% - 24px)/2)}}
+/* Web tools and their matching app live together in each group. */
+.tool-group h2{margin-bottom:24px}
+.tool-group-grid{display:grid;gap:20px;align-items:start}
+.group-apps{display:grid;gap:16px;min-width:0}
+.tool-cards{display:grid;gap:20px;min-width:0}
+@media(min-width:700px){.tool-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1000px){
+  .tool-group-grid{grid-template-columns:minmax(0,1fr) 320px;gap:24px}
+  .group-apps{grid-column:2;grid-row:1}
+  .tool-cards{grid-column:1;grid-row:1}
+}
 .tool-card{min-width:0;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .tool-card:focus-within{border-color:var(--accent)}
 .tc-img{display:block;background:var(--stage);border-bottom:1px solid var(--line);overflow:hidden}
 .tc-img img{width:100%;height:auto;aspect-ratio:16/10;object-fit:contain}
-.tc-body{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:24px;flex:1}
+.tc-body{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:20px;flex:1;min-width:0}
 .tc-body h3{margin:0;font-size:clamp(1.125rem,1.05rem + .3vw,1.3rem)}
 .tc-body h3 a{color:var(--ink);text-decoration:none}
 .tc-body h3 a:hover{color:var(--accent-ink);text-decoration:underline}
-.tc-body p{margin:0;color:var(--ink2);font-size:16px;line-height:1.7;max-width:32em}
-.tc-app{display:block;width:100%;margin-top:auto;padding-top:16px;border-top:1px solid var(--line);font-weight:600;font-size:14px;line-height:1.7;text-decoration:none}
-.tc-label{display:block;font-weight:400;color:var(--ink2);margin-bottom:2px}
+.tc-body p{margin:0;color:var(--ink2);font-size:15px;line-height:1.7;max-width:32em}
+.tc-app{display:inline-flex;align-items:center;min-height:44px;margin-top:auto;padding:6px 10px;border-radius:6px;background:var(--soft);font-weight:600;font-size:13px;line-height:1.5;text-decoration:none}
 .tc-app:hover{text-decoration:underline}
-@media(max-width:480px){.tc-body{padding:20px}}
+@media(max-width:699px){
+  .tool-card{display:grid;grid-template-columns:104px minmax(0,1fr);align-items:start}
+  .tc-img{border:0;border-radius:6px;margin:16px 0 16px 12px}
+  .tc-body{padding:16px 14px;gap:6px}
+  .tc-body h3{font-size:17px;line-height:1.45}
+  .tc-body p{font-size:14px}
+}
+
+/* Reverse links on app detail pages: small, recognizable tool previews. */
+.web-counterparts{padding:16px 0 32px}
+.web-counterparts h2{font-size:18px;margin:0 0 14px}
+.web-previews{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:0;padding:0}
+.web-previews li{min-width:0}
+.web-previews a{height:100%;display:flex;gap:12px;align-items:center;padding:10px 14px 10px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font-size:14px;font-weight:600;line-height:1.5;text-decoration:none}
+.web-previews a:hover{border-color:var(--control);color:var(--accent)}
+.web-previews img{flex:none;width:72px;height:45px;object-fit:contain;border:1px solid var(--line);border-radius:4px}
 
 /* plugin strip */
 .strip{border-bottom:1px solid var(--line);background:var(--panel)}
@@ -274,3 +297,36 @@ html:lang(de) body,html:lang(es) body,html:lang(fr) body,html:lang(pt-BR) body{h
 .prose-copy{max-width:42em}
 .prose-copy p:last-child{margin-bottom:0}
 html [lang="ko"]{word-break:keep-all;line-break:auto;overflow-wrap:normal;hyphens:none}
+
+/* Screens stay legible without turning each feature into a full phone-height page. */
+.app-hero .shot.phone{max-height:540px;width:auto;max-width:100%}
+.alt .shot.phone{max-height:460px;width:auto;max-width:100%}
+.store-copy{max-width:800px;font-size:16px;line-height:1.8}
+@media(max-width:799px){
+  .app-hero .shot.phone{max-height:400px}
+  .alt .shot.phone{max-height:360px}
+  .alt{gap:20px;padding-block:28px}
+  .alt-img{display:flex;justify-content:center}
+}
+@media(max-width:640px){
+  .shots{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
+  .shots .shot{max-height:360px;width:auto;max-width:100%;scroll-snap-align:start}
+}
+.chips.links a{min-height:44px}
+.more{display:inline-flex;align-items:center;min-height:44px}
+.link-list a{display:inline-flex;align-items:center;min-height:44px}
+.link-list li{padding-block:8px}
+
+@media(min-width:700px){
+  .tool-cards.tc-1{grid-template-columns:minmax(0,1fr)}
+  .tc-1 .tool-card{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
+  .tc-1 .tc-img{border-bottom:0;align-self:center}
+}
+/* Keep the studio overview compact while preserving the original photo crops. */
+@media(max-width:639px){
+  .gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
+  .gallery figcaption{font-size:14px}
+  .pics{grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
+  .pics .pic{scroll-snap-align:start}
+  .cards.c3 .stage{height:200px;padding:16px}
+}

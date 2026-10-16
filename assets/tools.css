@@ -1,4 +1,5 @@
 @import url("./chrome.css");
+@import url("./pairing.css");
 
 /* 웹 도구(옛 화면) 9쪽 공통: 사이트 머리·푸터·관련 앱 띠 + 바탕 정리.
    _src/tools/chrome_tools.py 가 각 도구의 <style> 뒤에 이 파일을 넣는다. 도구 자체의 변수(--line 등)를
@@ -13,27 +14,9 @@ body>nav{display:none}                      /* 문제풀이의 옛 상단 막대
 html:not(:lang(ko)) .chrome-en{display:block}
 html:not(:lang(ko)) .chrome-ko{display:none}
 
-.tool-related{
-  --bg:#f4f5f3; --panel:#ffffff; --ink:#202426; --ink2:#5b6468; --line:#d5dadb; --control:#7a858a;
-  --accent:#23695c; --accent-hover:#194e45; --accent-ink:#23695c; --soft:#e8eeeb; --stage:#e9ecea; --r:12px;
-  --sans:"Inter","Noto Sans KR","Apple SD Gothic Neo",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-family:var(--sans);color:var(--ink);word-break:keep-all;overflow-wrap:break-word;line-height:1.6;-webkit-font-smoothing:antialiased}
-.tool-related .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
-.tool-related a{color:var(--accent-ink)}
-.tool-related a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
-
-/* 관련 앱 띠 */
-.tool-related{background:var(--bg);padding:8px 0 40px}
-.tool-related .tr-kicker{margin:0 0 12px;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-ink);font-weight:600}
-.tool-related .tr-card{display:flex;align-items:center;gap:20px;max-width:640px;padding:16px 20px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:var(--ink)}
-.tool-related .tr-card:hover{border-color:var(--control)}
-.tool-related .tr-shot{flex:none;display:flex;justify-content:center;align-items:center;width:96px;height:132px;padding:8px;background:var(--stage);border-radius:10px}
-.tool-related .tr-shot img{height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:8px;border:1px solid var(--line);background:#fff;display:block}
-.tool-related .tr-text{display:flex;flex-direction:column;gap:4px;min-width:0}
-.tool-related .tr-text strong{font-size:18px;font-weight:600}
-.tool-related .tr-text span{color:var(--ink2);font-size:15px}
-.tool-related .tr-text .tr-more{color:var(--accent-ink);font-weight:600}
-.tool-related .tr-card:hover strong{color:var(--accent-ink)}
+/* The app panel shares its component with /tools/. Tokens stay scoped. */
+.tool-related{margin:0;padding:0}
+.app-promo{display:none!important}
 
 
 html:lang(ko) body{word-break:keep-all;overflow-wrap:break-word}
@@ -45,10 +28,27 @@ body :where(a,button,input,select,textarea,summary):focus-visible{outline:3px so
 .app .music-filename{word-break:keep-all;overflow-wrap:anywhere}
 .app button.active{border-color:#5b6468}
 @media(max-width:480px){
-  .tool-related .tr-card{align-items:flex-start;gap:14px;padding:16px}
-  .tool-related .tr-shot{width:64px;height:104px}
-  .tool-related .tr-text strong{font-size:16px}
   .app .modepicker{flex-wrap:wrap}
   .app .modepicker button{white-space:normal}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+
+/* Keep the analyzer usable in tall embeds as well as real phone viewports. */
+@media(max-width:700px){
+  .app .console:not(.spl-console),body.line-view .app .console:not(.spl-console){height:clamp(240px,44svh,360px);min-height:240px;max-height:360px;aspect-ratio:auto}
+  .app .range-panel{gap:12px;justify-content:flex-start}
+  .app .range-field{flex:1 1 120px;min-width:0}
+  .app .range-panel>.range-field:nth-child(3){flex-basis:100%}
+  .app .range-panel>.toolbar-btn{flex:1 1 130px;font-size:14px;padding:9px 10px}
+  .app :where(button,select,input:not([type=range]),summary){min-height:44px}
+  .app input:not([type=range]),.app select{font-size:16px}
+  .lang-switch-btn{min-height:44px}
+}
+
+@media(max-width:700px){
+  .app .topbar .title{font-size:16px}
+  .app .topbar .title small{font-size:12px;line-height:1.5}
+  .chapter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .chapter-card{min-width:0;padding:14px 12px;min-height:96px}
+  .disclaimer{font-size:14px}
+}

@@ -1,0 +1,35 @@
+/* App version panel, shared by the tools directory and the live web tools.
+   All tokens are scoped so legacy tool controls retain their own variables. */
+.app-pair{
+  --ap-ink:#202426;--ap-muted:#5b6468;--ap-line:#d5dadb;--ap-accent:#23695c;--ap-hover:#194e45;
+  box-sizing:border-box;display:grid;grid-template-columns:80px minmax(0,1fr);gap:16px;
+  padding:20px;border:1px solid var(--ap-line);border-radius:12px;background:#fff;color:var(--ap-ink);
+  font:400 15px/1.6 "Inter","Noto Sans KR",system-ui,sans-serif;word-break:keep-all;overflow-wrap:break-word;
+}
+.app-pair *{box-sizing:border-box}
+.app-pair .ap-shot{display:flex;justify-content:center;align-items:center;align-self:start;height:148px;padding:8px;background:#e9ecea;border-radius:8px}
+.app-pair .ap-shot img{display:block;max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain;border-radius:5px}
+.app-pair .ap-copy{min-width:0}
+.app-pair .ap-kicker{margin:0 0 4px;color:var(--ap-accent);font-size:12px;font-weight:600;letter-spacing:.04em}
+.app-pair h3{margin:0 0 6px;font:600 17px/1.4 "Inter","Noto Sans KR",system-ui,sans-serif;letter-spacing:-.01em;color:var(--ap-ink)}
+.app-pair h3 a{color:inherit;text-decoration:none}
+.app-pair .ap-line{margin:0 0 8px;font-size:14px;line-height:1.6;color:var(--ap-muted)}
+.app-pair .ap-platforms{margin:0;color:var(--ap-muted);font-size:12px;line-height:1.6}
+.app-pair .ap-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.app-pair .btn{display:inline-flex;justify-content:center;align-items:center;min-height:44px;padding:9px 14px;border:1px solid #7a858a;border-radius:8px;background:#fff;color:var(--ap-ink);font:600 14px/1.4 "Inter","Noto Sans KR",system-ui,sans-serif;text-decoration:none}
+.app-pair .btn.primary{background:var(--ap-accent);border-color:var(--ap-accent);color:#fff}
+.app-pair .btn.primary:hover{background:var(--ap-hover);border-color:var(--ap-hover);color:#fff}
+.app-pair .ap-more{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600;color:var(--ap-accent);text-decoration:none}
+.app-pair h3 a:hover,.app-pair .ap-more:hover{text-decoration:underline}
+.app-pair a:focus-visible{outline:3px solid var(--ap-accent);outline-offset:3px}
+.app-pair--compact{grid-template-columns:64px minmax(0,1fr) auto;padding:14px 18px;gap:12px 18px;align-items:center}
+.app-pair--compact .ap-shot{height:100px;align-self:center}
+.app-pair--compact .ap-actions{grid-column:auto;max-width:240px}
+.app-pair--compact .ap-line{margin-bottom:4px}
+@media(max-width:760px){
+  .app-pair--compact{grid-template-columns:56px minmax(0,1fr);padding:14px;gap:10px 14px}
+  .app-pair--compact .ap-shot{height:90px}
+  .app-pair--compact .ap-actions{grid-column:1/-1;max-width:none}
+  .app-pair--compact .ap-line{display:none}
+  .app-pair h3{font-size:16px}
+}

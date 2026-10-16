@@ -8,7 +8,7 @@
 - <style> 안의 옛 크림색·글꼴 이름만 새 값으로 바꾼다. 바꾼 값은 원래 값 목록에 없으므로 다시 적용해도 그대로다.
 - <head>: Google Fonts 링크를 새 글꼴로 바꾸고, </head> 앞에 표시(<!-- site-chrome:head -->) 사이로 tools.css 를 넣는다.
 - <body>: 바로 뒤에 사이트 머리(ko·en 두 벌, 도구의 언어 선택에 따라 CSS 로 하나만 보임),
-          </body> 바로 앞에 관련 앱 띠 + 사이트 푸터. 모두 표시 주석 사이에 있어 다시 적용하면 갈아 끼운다.
+          상단 도구 제목 바로 아래에 앱 버전 패널, </body> 앞에 사이트 푸터. 표시 주석 사이를 다시 갈아 끼운다.
 - i18n 쌍(<script>window.I18N_DATA = …</script> + <script src="i18n-core.js"></script>)은 본문 맨 끝에서 꺼내
   첫 번째 인라인 본 <script> 바로 앞으로 옮긴다. 본 스크립트가 시작할 때 window.i18n.t() 를 부르는 쪽(지연·전기·템포 계산기)이
   "Cannot read properties of undefined" 로 죽던 버그를 고친다. 스크립트 내용은 그대로, 순서만 바뀐다.
@@ -60,16 +60,14 @@ STYLE_BLOCK_RE = re.compile(r"(<style>)(.*?)(</style>)", re.S)
 HEAD_RE = re.compile(r"\n?<!-- site-chrome:head -->.*?<!-- /site-chrome:head -->", re.S)
 TOP_RE = re.compile(r"\n?<!-- site-chrome:header -->.*?<!-- /site-chrome:header -->", re.S)
 BOTTOM_RE = re.compile(r"\n?<!-- site-chrome:footer -->.*?<!-- /site-chrome:footer -->", re.S)
+PAIR_RE = re.compile(r"\n?<!-- site-chrome:app -->.*?<!-- /site-chrome:app -->", re.S)
+TOOL_TOP_RE = re.compile(r'(<div class="topbar">.*?<a class="home-link"[^>]*>.*?</a>\s*</div>)', re.S)
 
 # 언어 선택이 없는 파일(문제풀이)에는 i18n 쌍이 없다. 나머지 8쪽에는 반드시 있어야 한다.
 NO_I18N = ("stage-sound-quiz.html",)
 I18N_PAIR_RE = re.compile(r'^<script>window\.I18N_DATA = [^\n]*</script>\n<script src="i18n-core\.js"></script>\n', re.M)
 ADSENSE_RE = re.compile(r'<script async src="https://pagead2\.googlesyndication\.com/[^"]*"[^>]*></script>')
 INLINE_SCRIPT_RE = re.compile(r"<script(?![^>]*\bsrc=)[^>]*>")
-
-UI = {"ko": {"kicker": "관련 앱", "more": "앱 자세히 보기"},
-      "en": {"kicker": "Related app", "more": "App details"}}
-
 
 def _fail(msg):
     raise ValueError(msg)
@@ -114,37 +112,37 @@ def _tool_items():
 
 
 def related(lang, href):
-    """도구에 맞는 앱(tools.json 의 app) 띠. 앱 상세 페이지가 있을 때만."""
+    """도구에 맞는 앱(tools.json 의 app). 목록과 같은 패널을 사용한다."""
     it = _tool_items()[lang].get(href)
     if not it or not it.get("app") or not pages.has_detail(it["app"]):
         return ""
     app = next(a for a in pages.load("apps.json")["apps"] if a["slug"] == it["app"])
-    det = pages.load_app(app["slug"])["detail"]
-    page = kit.url(lang, "/apps/%s/" % app["slug"]) if lang in pages.app_langs(app["slug"]) else kit.url(lang, "/apps/")
-    lead = (det.get("lead") or {}).get(lang)
-    line = pages.first_sentence(lead) if lead else pages.short(app["tagline"][lang], 90)
-    src = pages.app_shot(app, lang)
-    shot = ('<span class="tr-shot"><img src="%s" alt=""%s loading="lazy"></span>'
-            % (kit.esc(src), kit.img_attrs(src))) if src else ""
-    ui = UI[lang]
     extra = ' lang="en"' if lang == "en" else ""
-    return ('<section class="tool-related chrome-%s"%s aria-label="%s"><div class="wrap">'
-            '<p class="tr-kicker">%s</p><a class="tr-card" href="%s">%s<span class="tr-text">'
-            '<strong>%s</strong><span>%s</span><span class="tr-more">%s →</span></span></a></div></section>'
-            % (lang, extra, kit.esc(ui["kicker"]), kit.esc(ui["kicker"]), kit.esc(page), shot,
-               kit.esc(app["name"][lang]), kit.esc(line), kit.esc(ui["more"])))
+    return ('<section class="tool-related chrome-%s"%s>%s</section>'
+            % (lang, extra, pages.app_pair(app, lang, compact=True)))
 
 
 def _body(html, href):
     html = TOP_RE.sub("", html)
     html = BOTTOM_RE.sub("", html)
+    html = PAIR_RE.sub("", html)
     if html.count("<body>\n") != 1 or html.count("</body>") != 1:
         _fail("<body> / </body> 가 정확히 하나여야 함")
     top = ("<!-- site-chrome:header -->\n" + _tag(kit.header("ko", {}, "/tools/"), "header", "ko") + "\n"
            + _tag(kit.header("en", {}, "/en/tools/"), "header", "en") + "\n<!-- /site-chrome:header -->")
-    bottom = ("<!-- site-chrome:footer -->\n" + related("ko", href) + related("en", href) + "\n"
-              + _tag(kit.footer("ko"), "footer", "ko") + "\n" + _tag(kit.footer("en"), "footer", "en")
+    bottom = ("<!-- site-chrome:footer -->\n" + _tag(kit.footer("ko"), "footer", "ko") + "\n" + _tag(kit.footer("en"), "footer", "en")
               + "\n<!-- /site-chrome:footer -->")
+    pair = ("\n<!-- site-chrome:app -->\n" + related("ko", href) + related("en", href)
+            + "\n<!-- /site-chrome:app -->")
+    if href == "/stage-sound-quiz.html":
+        anchor = '\n    <div class="prose">'
+        if html.count(anchor) != 1:
+            _fail("문제풀이 소개 문단 위치가 정확히 하나여야 함")
+        html = html.replace(anchor, pair + anchor, 1)
+    else:
+        html, n = TOOL_TOP_RE.subn(lambda m: m.group(1) + pair, html, count=1)
+        if n != 1:
+            _fail("상단 도구 제목 위치를 찾지 못함")
     html = html.replace("<body>\n", "<body>\n" + top + "\n", 1)
     return html.replace("</body>", bottom + "\n</body>", 1)
 

@@ -10,7 +10,7 @@ from test_contrast import ratio  # noqa: E402
 
 BEFORE = "947d6fe"     # 변환기를 처음 적용하기 직전 커밋(도구 9쪽 원본)
 SCRIPT = re.compile(r"<script\b[^>]*>.*?</script>", re.S)
-BLOCKS = (chrome_tools.HEAD_RE, chrome_tools.TOP_RE, chrome_tools.BOTTOM_RE)
+BLOCKS = (chrome_tools.HEAD_RE, chrome_tools.TOP_RE, chrome_tools.BOTTOM_RE, chrome_tools.PAIR_RE)
 
 
 def original(name):
@@ -115,6 +115,24 @@ class ToolsChromeTests(unittest.TestCase):
                 else:
                     self.assertFalse(strip, (name, lang))
 
+    def test_app_panel_is_near_the_top_and_not_repeated_in_footer(self):
+        for name in chrome_tools.FILES:
+            text = disk(name)
+            panel = chrome_tools.PAIR_RE.search(text)
+            self.assertTrue(panel, name)
+            self.assertEqual(len(chrome_tools.PAIR_RE.findall(text)), 1, name)
+            self.assertLess(panel.end(), text.index('<div class="prose">') if name == 'stage-sound-quiz.html'
+                            else chrome_tools.INLINE_SCRIPT_RE.search(text, text.index('<body>')).start(), name)
+            self.assertNotIn('app-pair', chrome_tools.BOTTOM_RE.search(text).group(0), name)
+            for lang in ('ko', 'en'):
+                slug = chrome_tools._tool_items()[lang]['/' + name]['app']
+                app = next(a for a in pages.load('apps.json')['apps'] if a['slug'] == slug)
+                self.assertIn(pages.app_pair(app, lang, compact=True), panel.group(0), (name, lang))
+                self.assertIn(pages.store_buttons(app, lang), panel.group(0), (name, lang))
+            if name != 'stage-sound-quiz.html':
+                top = chrome_tools.TOOL_TOP_RE.search(text)
+                self.assertTrue(text[top.end():panel.end()].startswith('\n<!-- site-chrome:app -->'), name)
+
     def test_new_fonts_and_palette_in_style(self):
         for name in chrome_tools.FILES:
             text = disk(name)
@@ -188,6 +206,41 @@ class ToolsIndexTests(unittest.TestCase):
                 self.assertIn('class="tc-app"', card)
             for g in data[lang]["groups"]:
                 self.assertIn("<h2>%s</h2>" % kit.esc(g["title"]), html)
+
+    def test_group_panels_match_mapping_and_have_store_campaigns(self):
+        for lang in ('ko', 'en'):
+            _, html = pages.tools(lang)
+            groups = re.findall(r'<section class="band tool-group">(.*?)</section>', html, re.S)
+            for group, data in zip(groups, pages.load('tools.json')[lang]['groups']):
+                slugs = set(it['app'] for it in data['items'])
+                self.assertEqual(group.count('<aside class="app-pair"'), len(slugs))
+                self.assertNotIn('class="tc-label"', group)
+                for slug in slugs:
+                    app = next(a for a in pages.load('apps.json')['apps'] if a['slug'] == slug)
+                    self.assertIn(pages.app_pair(app, lang), group)
+                    self.assertIn(pages.store_buttons(app, lang), group)
+                    self.assertIn(pages.app_shot(app, lang), group)
+
+
+class WebCounterpartTests(unittest.TestCase):
+    def test_reverse_mapping_only_lists_real_counterparts_in_every_app_language(self):
+        data = pages.load('tools.json')
+        for app in pages.load('apps.json')['apps']:
+            slug = app['slug']
+            for lang in pages.app_langs(slug):
+                strip = pages.web_counterparts(slug, lang)
+                expected = [it['href'] for g in data[kit.chrome(lang)]['groups'] for it in g['items'] if it['app'] == slug]
+                if not expected:
+                    self.assertEqual(strip, '', (slug, lang))
+                    continue
+                self.assertEqual(re.findall(r'<a href="([^"]+)"', strip), expected, (slug, lang))
+                for href in expected:
+                    self.assertIn(pages.tool_img(href), strip)
+                html = pages.app_page(lang, slug)[1]
+                self.assertEqual(html.count(strip), 1, (slug, lang))
+                self.assertLess(html.index(strip), html.index('class="alt') if lang in ('ko', 'en')
+                                else html.index('class="shots"'), (slug, lang))
+                self.assertEqual(check.link_errors(ROOT, kit.url(lang, '/apps/%s/' % slug), strip), [], (slug, lang))
 
 
 if __name__ == "__main__":

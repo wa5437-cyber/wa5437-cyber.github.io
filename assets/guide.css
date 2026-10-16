@@ -96,7 +96,7 @@ table.data th{ background:var(--soft); font-size:14px; font-weight:600; }
 .guide-group{ margin-top:48px; }
 .guide-group > h2{ font-size:clamp(1.25rem,1.15rem + .5vw,1.5rem); font-weight:700; letter-spacing:-.02em; color:var(--text-primary); margin-bottom:16px; }
 .guide-list{ display:grid; grid-template-columns:minmax(0,1fr); gap:12px; }
-.guide-list a{ overflow-wrap:anywhere; }
+.guide-list a{ overflow-wrap:break-word; }
 .guide-list a{ display:block; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px 22px; transition:border-color 180ms var(--ease-out); }
 @media (hover:hover) and (pointer:fine){ .guide-list a:hover{ border-color:var(--control); } .guide-list a:hover h3{ color:var(--teal); } }
 .guide-list a h3{ font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem); font-weight:600; margin-bottom:6px; }
@@ -107,3 +107,12 @@ kbd{ font-family:var(--mono); font-size:13px; font-weight:500; color:var(--text-
 
 
 .site-footer{margin-top:64px}
+
+/* The directory can use the site width; articles retain their reading measure. */
+.hub-hero .wrap,.hub-hero+main.wrap{max-width:1200px;padding-inline:clamp(16px,4vw,40px)}
+@media(min-width:900px){.guide-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.article .crumb a,.callout .body a{display:inline-flex;align-items:center;min-height:44px}
+@media(max-width:700px){
+  .article table.data th,.article table.data td{min-width:120px}
+  .article table.data th:last-child,.article table.data td:last-child{min-width:200px}
+}
