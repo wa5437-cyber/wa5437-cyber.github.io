@@ -12,7 +12,7 @@
   "published": "2026-09-30"
  },
  "bpm-to-delay-time": {
-  "modified": "2026-08-30",
+  "modified": "2026-10-17",
   "published": "2026-08-30"
  },
  "compressor-parameters-explained": {
@@ -40,11 +40,11 @@
   "published": "2026-10-05"
  },
  "frequency-and-wavelength": {
-  "modified": "2026-09-01",
+  "modified": "2026-10-17",
   "published": "2026-09-01"
  },
  "gain-staging-basics": {
-  "modified": "2026-09-01",
+  "modified": "2026-10-17",
   "published": "2026-09-01"
  },
  "grade3-exam-scope-by-topic": {
@@ -56,7 +56,7 @@
   "published": "2026-10-01"
  },
  "microphone-polar-patterns": {
-  "modified": "2026-09-01",
+  "modified": "2026-10-17",
   "published": "2026-09-01"
  },
  "ohms-law-for-audio": {
@@ -64,7 +64,7 @@
   "published": "2026-08-30"
  },
  "pink-noise-eq-ear-training": {
-  "modified": "2026-09-01",
+  "modified": "2026-10-17",
   "published": "2026-09-01"
  },
  "pro-tools-to-logic-migration": {
