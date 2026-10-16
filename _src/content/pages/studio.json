@@ -25,7 +25,7 @@
       {"type": "gallery", "title": "작업실", "layout": "bento",
        "items": [
          {"src": "/img/studio/vocal-booth.jpg", "caption": "녹음 부스", "alt": "붐 스탠드와 팝 필터, 보면대가 놓인 녹음 부스"},
-         {"src": "/img/studio/preamp-closeup.jpg", "caption": "마이크 프리앰프 클로즈업", "alt": "Neve 1073DPA 마이크 프리앰프 1채널의 게인 노브와 +48V·위상 버튼"},
+         {"src": "/img/studio/preamp-closeup.jpg", "caption": "마이크 프리앰프 클로즈업", "alt": "Neve 1073DPA 마이크 프리앰프 1채널의 빨간 게인 노브, +48V·위상 버튼, 트림 노브와 클립 LED"},
          {"src": "/img/studio/mic-cabinet.jpg", "caption": "마이크 보관함", "alt": "습도 조절 보관함 선반에 놓인 콘덴서·다이내믹·핸드헬드 마이크"},
          {"src": "/img/studio/preamp-compressor.jpg", "caption": "프리앰프와 컴프레서", "alt": "Neve 1073DPA 마이크 프리앰프와 Tube-Tech CL 1B 컴프레서의 노브"},
          {"src": "/img/studio/monitor-controller.jpg", "caption": "모니터 컨트롤러", "alt": "Grace Design m905 모니터 컨트롤러의 볼륨 노브와 버튼"},
@@ -51,7 +51,7 @@
       {"type": "gallery", "title": "The studio", "layout": "bento",
        "items": [
          {"src": "/img/studio/vocal-booth.jpg", "caption": "Recording booth", "alt": "The recording booth with a boom stand, a pop filter and a music stand"},
-         {"src": "/img/studio/preamp-closeup.jpg", "caption": "Microphone preamp close-up", "alt": "The channel 1 gain knob and the +48V and phase buttons of a Neve 1073DPA microphone preamp"},
+         {"src": "/img/studio/preamp-closeup.jpg", "caption": "Microphone preamp close-up", "alt": "Channel 1 of a Neve 1073DPA microphone preamp: the red gain knob, the +48V and phase buttons, the trim knobs and the clip LEDs"},
          {"src": "/img/studio/mic-cabinet.jpg", "caption": "Microphone dry cabinet", "alt": "Condenser, dynamic and handheld microphones on the shelves of a humidity-controlled cabinet"},
          {"src": "/img/studio/preamp-compressor.jpg", "caption": "Preamp and compressor", "alt": "The controls of a Neve 1073DPA microphone preamp and a Tube-Tech CL 1B compressor"},
          {"src": "/img/studio/monitor-controller.jpg", "caption": "Monitor controller", "alt": "The volume knob and buttons of a Grace Design m905 monitor controller"},
