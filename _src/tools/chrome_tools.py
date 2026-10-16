@@ -9,6 +9,9 @@
 - <head>: Google Fonts 링크를 새 글꼴로 바꾸고, </head> 앞에 표시(<!-- site-chrome:head -->) 사이로 tools.css 를 넣는다.
 - <body>: 바로 뒤에 사이트 머리(ko·en 두 벌, 도구의 언어 선택에 따라 CSS 로 하나만 보임),
           </body> 바로 앞에 관련 앱 띠 + 사이트 푸터. 모두 표시 주석 사이에 있어 다시 적용하면 갈아 끼운다.
+- i18n 쌍(<script>window.I18N_DATA = …</script> + <script src="i18n-core.js"></script>)은 본문 맨 끝에서 꺼내
+  첫 번째 인라인 본 <script> 바로 앞으로 옮긴다. 본 스크립트가 시작할 때 window.i18n.t() 를 부르는 쪽(지연·전기·템포 계산기)이
+  "Cannot read properties of undefined" 로 죽던 버그를 고친다. 스크립트 내용은 그대로, 순서만 바뀐다.
 - 도구 자체의 언어 선택(i18n-core.js)은 그대로 두고, 사이트 머리에는 언어 메뉴를 넣지 않는다.
 - 옛 "← 홈으로" 단추와 문제풀이의 옛 상단 막대는 tools.css 에서 숨긴다(마크업·스크립트는 그대로).
 바꿀 자리가 없으면 ValueError(템플릿에서 벗어난 파일을 알아채려고).
@@ -57,6 +60,12 @@ STYLE_BLOCK_RE = re.compile(r"(<style>)(.*?)(</style>)", re.S)
 HEAD_RE = re.compile(r"\n?<!-- site-chrome:head -->.*?<!-- /site-chrome:head -->", re.S)
 TOP_RE = re.compile(r"\n?<!-- site-chrome:header -->.*?<!-- /site-chrome:header -->", re.S)
 BOTTOM_RE = re.compile(r"\n?<!-- site-chrome:footer -->.*?<!-- /site-chrome:footer -->", re.S)
+
+# 언어 선택이 없는 파일(문제풀이)에는 i18n 쌍이 없다. 나머지 8쪽에는 반드시 있어야 한다.
+NO_I18N = ("stage-sound-quiz.html",)
+I18N_PAIR_RE = re.compile(r'^<script>window\.I18N_DATA = [^\n]*</script>\n<script src="i18n-core\.js"></script>\n', re.M)
+ADSENSE_RE = re.compile(r'<script async src="https://pagead2\.googlesyndication\.com/[^"]*"[^>]*></script>')
+INLINE_SCRIPT_RE = re.compile(r"<script(?![^>]*\bsrc=)[^>]*>")
 
 UI = {"ko": {"kicker": "관련 앱", "more": "앱 자세히 보기"},
       "en": {"kicker": "Related app", "more": "App details"}}
@@ -140,11 +149,30 @@ def _body(html, href):
     return html.replace("</body>", bottom + "\n</body>", 1)
 
 
+def _i18n_first(html):
+    """I18N_DATA + i18n-core.js 쌍을 첫 인라인 본 <script> 바로 앞으로(이미 거기면 그대로)."""
+    pairs = I18N_PAIR_RE.findall(html)
+    if len(pairs) != 1:
+        _fail("I18N_DATA + i18n-core.js 쌍(줄 맨 앞, 연속 두 줄)이 정확히 하나여야 함(%d개)" % len(pairs))
+    html = I18N_PAIR_RE.sub("", html, count=1)
+    ad = ADSENSE_RE.search(html)
+    if not ad:
+        _fail("AdSense async <script> 를 찾지 못함")
+    main = INLINE_SCRIPT_RE.search(html, ad.end())
+    if not main:
+        _fail("AdSense 뒤에 인라인 본 <script> 가 없음")
+    if html[main.start() - 1] != "\n":
+        _fail("본 <script> 가 줄 맨 앞이 아님")
+    return html[:main.start()] + pairs[0] + html[main.start():]
+
+
 def transform(html, name):
     if name not in FILES:
         raise ValueError("알 수 없는 도구 파일: %r" % (name,))
     html = _retheme_style(html)
     html = _head(html)
+    if name not in NO_I18N:
+        html = _i18n_first(html)
     return _body(html, "/" + name)
 
 

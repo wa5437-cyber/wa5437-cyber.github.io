@@ -25,9 +25,10 @@ def disk(name):
 
 
 def unchrome(text):
-    """표시 사이 블록을 걷어내고 <style>·글꼴 링크를 빼서, 변환 전 본문과 비교할 수 있게."""
+    """표시 사이 블록·i18n 쌍을 걷어내고 <style>·글꼴 링크를 빼서, 변환 전 본문과 비교할 수 있게."""
     for rx in BLOCKS:
         text = rx.sub("", text)
+    text = chrome_tools.I18N_PAIR_RE.sub("", text)             # i18n 쌍은 위치만 바뀌므로 양쪽에서 뺀다
     text = chrome_tools.STYLE_BLOCK_RE.sub("<style></style>", text)
     return chrome_tools.FONT_LINK_RE.sub("<!-- fonts -->", text)
 
@@ -43,11 +44,30 @@ class ToolsChromeTests(unittest.TestCase):
             self.assertEqual(chrome_tools.transform(once, name), once, name)
 
     def test_scripts_are_byte_identical(self):
+        # 순서는 i18n 쌍을 본 스크립트 앞으로 옮기느라 바뀐다. 내용 묶음(다중집합)은 한 글자도 같아야 한다.
         for name in chrome_tools.FILES:
             before, after = SCRIPT.findall(original(name)), SCRIPT.findall(disk(name))
-            self.assertEqual(after, before, name)
-            if name != "stage-sound-quiz.html":                    # 문제풀이는 언어 전환이 없다
+            self.assertEqual(sorted(after), sorted(before), name)
+            if name not in chrome_tools.NO_I18N:                   # 문제풀이는 언어 전환이 없다
                 self.assertIn('<script src="i18n-core.js"></script>', disk(name))
+
+    def test_i18n_scripts_come_before_the_main_inline_script(self):
+        # 본 스크립트가 시작하자마자 window.i18n.t() 를 부르는 쪽이 있어서, 번역 스크립트가 먼저 와야 한다.
+        for name in chrome_tools.FILES:
+            if name in chrome_tools.NO_I18N:
+                continue
+            text = disk(name)
+            data = text.index("<script>window.I18N_DATA = ")
+            core = text.index('<script src="i18n-core.js"></script>')
+            ad = chrome_tools.ADSENSE_RE.search(text)
+            main = chrome_tools.INLINE_SCRIPT_RE.search(text, text.index("\n", core))   # 쌍 다음 첫 인라인 스크립트
+            self.assertTrue(ad and main, name)
+            self.assertLess(ad.end(), data, name)
+            self.assertLess(data, core, name)
+            self.assertLess(core, main.start(), name)
+            self.assertGreater(len(SCRIPT.match(text, main.start()).group(0)), 5000, name)   # 진짜 본 스크립트
+            self.assertEqual(text.count("window.I18N_DATA = "), 1, name)
+            self.assertEqual(len(chrome_tools.I18N_PAIR_RE.findall(text)), 1, name)
 
     def test_only_head_style_and_marked_blocks_change(self):
         for name in chrome_tools.FILES:
@@ -142,6 +162,13 @@ class ToolsChromeTests(unittest.TestCase):
                 chrome_tools.transform(broken, "rta.html")
         with self.assertRaises(ValueError):
             chrome_tools.transform(raw, "other.html")
+
+    def test_missing_i18n_pair_raises(self):
+        raw = original("rta.html")
+        for broken in (raw.replace('<script src="i18n-core.js"></script>\n', ""),
+                       chrome_tools.I18N_PAIR_RE.sub("", raw)):
+            with self.assertRaises(ValueError):
+                chrome_tools.transform(broken, "rta.html")
 
 
 class ToolsIndexTests(unittest.TestCase):
