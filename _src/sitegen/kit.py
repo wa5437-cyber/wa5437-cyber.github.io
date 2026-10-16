@@ -24,6 +24,7 @@ def esc(s):
 
 
 HANGUL_RUN = re.compile(r"[가-힣]+(?:[ ·→\-][가-힣]+)*")
+ADSENSE_ACCOUNT = '<meta name="google-adsense-account" content="ca-pub-2274337627237362">'
 NOINDEX = '<meta name="robots" content="noindex,follow">'
 
 
@@ -181,15 +182,16 @@ def img_attrs(rel_path):
     return f' width="{size[0]}" height="{size[1]}"' if size else ""
 
 
-def page(lang, path, title, description, body, alts, extra_head="", noindex=False):
+def page(lang, path, title, description, body, alts, extra_head="", noindex=False, ads=False):
     if lang not in LANGS:
         raise ValueError(f"unknown language: {lang}")
     alt_tags = "".join(
         f'<link rel="alternate" hreflang="{code}" href="{BASE}{p}">' for code, p in alts.items())
     xdef = f'<link rel="alternate" hreflang="x-default" href="{BASE}{alts.get("ko", path)}">' if alts else ""
-    verif = "".join(tag + "\n" for tag in SITE["verification_meta"])
+    verif = "".join(tag + "\n" for tag in SITE["verification_meta"]) + ADSENSE_ACCOUNT + "\n"
     robots = NOINDEX + "\n" if noindex else ""
-    ads = "" if noindex else ADS + "\n"      # 내용이 얇은 페이지는 색인에서 빼고 광고도 넣지 않는다
+    # 광고 스크립트는 읽을거리(가이드·웹 도구, 직접 만든 옛 페이지)에만 둔다. 여기서 만드는 페이지에는 넣지 않고 소유권 메타만 둔다.
+    ads = (ADS + "\n") if (ads and not noindex) else ""
     return (f'<!DOCTYPE html>\n<html lang="{lang}">\n<head>\n<meta charset="UTF-8">\n'
             f'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
             f'<title>{esc(title)}</title>\n<meta name="description" content="{esc(description)}">\n'

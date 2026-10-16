@@ -285,7 +285,10 @@ class BodyAndDatesTests(unittest.TestCase):
                     if subprocess.run(["git", "cat-file", "-e", "09605f1~1:guides/%s.html" % slug],
                                       cwd=str(ROOT), capture_output=True).returncode != 0:
                         now = re.sub(r'      <a href="/guides/%s\.html">.*?</a>\n' % re.escape(slug), "", now, flags=re.S)
-            self.assertEqual(now, strip_chrome(r.stdout), name)
+            before = strip_chrome(r.stdout)
+            if name == "index.html":  # 목록 페이지는 광고를 뺐다(읽을거리 페이지에만 광고)
+                before = re.sub(r'<script async src="https://pagead2\.googlesyndication\.com/[^"]*"[^>]*></script>\n?', "", before)
+            self.assertEqual(now, before, name)
 
 
 class GuideDatesTests(unittest.TestCase):

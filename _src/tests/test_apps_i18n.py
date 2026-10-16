@@ -308,7 +308,9 @@ class PromoAndPruneTests(unittest.TestCase):
         pages.build_all(self.root)
         ja = self.root / "ja" / "apps" / "stage-sound"
         self.assertTrue((ja / "index.html").exists())
-        self.assertIn(kit.BASE + "/ja/apps/stage-sound/", self.sitemap())
+        self.assertNotIn(kit.BASE + "/ja/apps/stage-sound/", self.sitemap())   # 스토어 문구 페이지는 색인 제외라 사이트맵에 없다
+        self.assertIn('content="noindex', (ja / "index.html").read_text(encoding="utf-8"))
+        self.assertNotIn("adsbygoogle", (ja / "index.html").read_text(encoding="utf-8"))
         del self.store["ja"]
         pages.build_all(self.root)
         self.assertFalse((ja / "index.html").exists())
@@ -373,7 +375,10 @@ class DetailLinkTests(unittest.TestCase):
                 alts = pages.alts_for_app(slug)
                 self.assertIn("ko", alts)
                 for lang, path in alts.items():
-                    self.assertIn(f"<loc>{kit.BASE}{path}</loc>", sitemap, (slug, lang))
+                    if pages.is_store_layout_app(lang, slug):       # 색인 제외: 파일은 만들지만 사이트맵에는 없다
+                        self.assertNotIn(f"<loc>{kit.BASE}{path}</loc>", sitemap, (slug, lang))
+                    else:
+                        self.assertIn(f"<loc>{kit.BASE}{path}</loc>", sitemap, (slug, lang))
                     self.assertTrue((root / path.lstrip("/") / "index.html").exists(), (slug, lang))
 
 

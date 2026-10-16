@@ -96,13 +96,14 @@ class PluginsPageTests(unittest.TestCase):
         self.assertNotIn("/plugins/<", sm)
         self.assertNotIn("/en/plugins/<", sm)
 
-    def test_other_pages_stay_indexable_with_ads(self):
+    def test_other_pages_stay_indexable_without_ads(self):
         for name in ("studio", "about", "contact", "privacy"):
             self.assertFalse(pages.is_noindex(name), name)
             for lang in ("ko", "en"):
                 _, html = pages.simple_page(lang, name)
                 self.assertNotIn('name="robots"', html, (lang, name))
-                self.assertIn("adsbygoogle", html, (lang, name))
+                self.assertNotIn("adsbygoogle", html, (lang, name))     # 광고는 가이드·웹 도구에만
+                self.assertIn('name="google-adsense-account"', html, (lang, name))
 
     def test_noindex_flag_is_top_level_and_shared_by_both_languages(self):
         d = pages.load_page("plugins")

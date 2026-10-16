@@ -565,6 +565,12 @@ def _app_page_store(lang, app, det, s, slug):
     return title, short(lead, 150), body, app_ld(lang, slug, dict(app, name={lang: name}))
 
 
+def is_store_layout_app(lang, slug):
+    if lang in ("ko", "en"):
+        return False
+    return lang not in load_app(slug)["detail"].get("bullets", {})
+
+
 def app_page(lang, slug):
     d = load("apps.json")
     app = next(a for a in d["apps"] if a["slug"] == slug)
@@ -578,7 +584,9 @@ def app_page(lang, slug):
             raise ValueError(f"no content for {slug} [{lang}]")
         title, desc, body, ld = _app_page_store(lang, app, det, s, slug)
     path = url(lang, f"/apps/{slug}/")
-    return path, kit.page(lang, path, title, desc, body, alts_for_app(slug), extra_head=ld)
+    # 앱스토어 문구를 옮겨 놓은 다른 언어 페이지는 검색에서 뺀다(중복 콘텐츠). 사용자는 언어 메뉴로 그대로 볼 수 있다.
+    return path, kit.page(lang, path, title, desc, body, alts_for_app(slug), extra_head=ld,
+                          noindex=is_store_layout_app(lang, slug))
 
 
 def app_page_re(slugs):
@@ -664,5 +672,7 @@ def build_all(root):
             path, html = app_page(lang, slug)
             kit.write(root, path, html)
             made.append(path)
+            if is_store_layout_app(lang, slug):
+                noindex.append(path)
     prune_stale_app_pages(root, slugs)
     update_sitemap(root, made, slugs, noindex)
