@@ -79,6 +79,13 @@
   .prose p{ color:var(--text-secondary); font-size:14px; line-height:1.7; margin:0 0 10px; }
   .prose ol{ color:var(--text-secondary); font-size:14px; line-height:1.75; margin:0 0 10px; padding-left:20px; }
   .prose ol li{ margin-bottom:4px; }
+  .prose ul{ color:var(--text-secondary); font-size:14px; line-height:1.75; margin:0 0 10px; padding-left:20px; }
+  .prose ul li{ margin-bottom:4px; }
+  .prose h2:not(:first-child){ margin-top:30px; }
+  .prose a{ color:var(--teal); font-weight:600; text-decoration:underline; }
+  .prose table{ width:100%; border-collapse:collapse; font-size:13.5px; line-height:1.6; color:var(--text-secondary); margin:4px 0 12px; }
+  .prose th,.prose td{ text-align:left; vertical-align:top; padding:7px 8px; border-bottom:1px solid var(--line); }
+  .prose th{ color:var(--text-tertiary); font-family:'IBM Plex Mono',monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:.04em; }
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
 <!-- site-chrome:head -->
@@ -151,6 +158,84 @@
     <div id="quizBody">
       <div class="placeholder">위에서 장(챕터)을 선택하면 문제가 시작됩니다.</div>
     </div>
+  </div>
+
+  <div class="prose">
+    <h2>문제풀이는 이렇게 구성되어 있습니다</h2>
+    <p>이 페이지의 문제는 표준교재 14개 장에 맞춘 객관식 76문항과, 값이 매번 새로 만들어지는 계산문제로 이루어져 있습니다. 장마다 3~7문항이라 한 장을 끝내는 데 몇 분이면 충분하고, 시험 직전에 약한 장만 골라 복습하기에 적합합니다. 아래 표는 각 장이 다루는 주제입니다.</p>
+    <table>
+      <tr><th>장</th><th>문항</th><th>다루는 주제</th></tr>
+      <tr><td>1 기초 음향</td><td>7</td><td>가청주파수, 음속, 등청감곡선, 파장, 옴의 법칙, 데시벨, 마스킹 효과</td></tr>
+      <tr><td>2 디지털 음향</td><td>6</td><td>샘플링 레이트, 나이퀴스트 이론, 비트 뎁스, 양자화 잡음, 디더링, 지터</td></tr>
+      <tr><td>3 마이크로폰</td><td>6</td><td>다이나믹·콘덴서 마이크의 원리, 지향성, 근접효과, 팬텀파워, 샷건 마이크</td></tr>
+      <tr><td>4 오디오 믹싱 콘솔</td><td>6</td><td>게인, 페이더, AUX 센드, 팬, PFL/솔로, 디지털 콘솔의 씬 저장</td></tr>
+      <tr><td>5 케이블과 커넥터</td><td>6</td><td>XLR, TRS, 스피콘, 밸런스와 언밸런스, 케이블 길이에 따른 손실</td></tr>
+      <tr><td>6 파워 앰프와 스피커</td><td>6</td><td>파워앰프의 역할, 임피던스, 스피커 유닛, 크로스오버, 직렬·병렬 연결</td></tr>
+      <tr><td>7 멀티미디어 기기</td><td>5</td><td>MIDI, 오디오 인터페이스, 타임코드, 이중화, 영상과 음향의 동기</td></tr>
+      <tr><td>8 음향효과기</td><td>6</td><td>리버브, 컴프레서, 게이트, 리미터, 딜레이, 하이패스 필터</td></tr>
+      <tr><td>9 전원 및 기타 무대음향기기</td><td>4</td><td>접지, UPS, 인터컴, SPL 미터</td></tr>
+      <tr><td>10 음향 기기의 레벨 운영</td><td>6</td><td>라인레벨, 헤드룸, 0dBFS, 게인 스테이징, dBu와 dBV, 피크와 RMS</td></tr>
+      <tr><td>11 공연장 실내음향</td><td>6</td><td>잔향시간, 세이빈 공식, 흡음재, 룸모드, 임계거리, 하울링</td></tr>
+      <tr><td>12 디지털 오디오 전송</td><td>4</td><td>AES/EBU, 워드클럭, 무손실 포맷, 네트워크 오디오 프로토콜</td></tr>
+      <tr><td>13 실감 음향</td><td>3</td><td>실감음향의 특징, 오브젝트 기반 오디오, 5.1채널</td></tr>
+      <tr><td>14 무선마이크 시스템</td><td>5</td><td>시스템 구성, 다이버시티, 주파수 간섭, 사용 전 확인 사항, 인터모듈레이션</td></tr>
+    </table>
+    <p>이 페이지는 음향 과목에 해당하는 장만 다룹니다. 법규와 일반 과목 문제는 들어 있지 않습니다.</p>
+
+    <h2>풀이 방식과 화면 읽는 법</h2>
+    <ol>
+      <li>장 카드를 누르면 그 장의 문제가 바로 시작됩니다. 한 장의 모든 문항이 한 판이며, 문제 순서는 풀 때마다 섞입니다.</li>
+      <li>4개의 선택지 중 하나를 누르면 즉시 정답과 오답이 표시되고, 맞았든 틀렸든 해설이 함께 나옵니다. 그다음 다음 문제 버튼으로 넘어갑니다.</li>
+      <li>위쪽의 CH는 현재 장, ROUND는 푼 문제 수, HIT는 맞힌 수, ACC는 지금까지의 정답률입니다.</li>
+      <li>마지막 문제까지 풀면 점수와 정답률이 나오고, 다시 풀기나 다른 장 선택으로 이어갈 수 있습니다.</li>
+    </ol>
+    <p>문제마다 선택지 순서는 항상 같습니다. 정답이 몇 번째에 있는지 외우지 말고, 왜 그 선택지가 맞는지를 해설로 확인하는 데 쓰세요. 점수와 푼 기록은 저장되지 않으며 페이지를 새로 고치면 사라집니다.</p>
+
+    <h2>계산문제 8가지 유형</h2>
+    <p>계산문제 카드를 누르면 10문제가 새로 만들어지고, 아래 8가지 유형 중 하나가 문제마다 무작위로 나옵니다. 값이 매번 달라서 공식을 외우는 대신 계산 흐름을 연습하기 좋습니다. 선택지에는 단위가 붙어 있고, 풀고 나면 계산 과정이 해설로 나옵니다.</p>
+    <ul>
+      <li>주파수에서 파장 구하기: 음속을 343m/s로 놓고 λ = v/f로 계산합니다. 예를 들어 1000Hz는 약 0.34m입니다.</li>
+      <li>기온에 따른 음속: v = 331.4 + 0.6 × T로 계산합니다. 20°C면 약 343.4m/s입니다.</li>
+      <li>전력비의 dB: 10 × log10(전력비)로 계산합니다. 2배는 약 3dB, 10배는 10dB, 100배는 20dB입니다.</li>
+      <li>전압비의 dB: 20 × log10(전압비)로 계산합니다. 2배는 약 6dB, 10배는 20dB입니다.</li>
+      <li>옴의 법칙: 전압과 저항(4, 8, 16Ω)이 주어지면 I = V/R로 전류를 구합니다.</li>
+      <li>직렬 임피던스: 스피커 두 대를 직렬로 연결하면 임피던스를 더합니다. 8Ω과 8Ω이면 16Ω입니다.</li>
+      <li>병렬 임피던스: 같은 임피던스의 스피커 두 대를 병렬로 연결하면 절반이 됩니다. 8Ω 두 대면 4Ω입니다.</li>
+      <li>RT60 세이빈 공식: RT60 = 0.161 × V/A로 계산합니다. 부피 1000m³, 흡음력 100sabins면 1.61초입니다.</li>
+    </ul>
+    <p>공식의 의미와 유도는 <a href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위</a>, <a href="/guides/frequency-and-wavelength.html">주파수와 파장</a>, <a href="/guides/ohms-law-for-audio.html">오디오를 위한 옴의 법칙</a>, <a href="/guides/speaker-impedance-matching.html">스피커 임피던스</a>, <a href="/guides/rt60-reverberation-time.html">RT60 잔향시간</a> 가이드에서 자세히 볼 수 있습니다.</p>
+
+    <h2>틀린 장을 이어서 공부하기</h2>
+    <p>문제를 풀고 나서 약한 장이 보이면 그 장의 개념을 가이드로 보충하세요.</p>
+    <ul>
+      <li>3장 마이크로폰: <a href="/guides/condenser-vs-dynamic-mic.html">콘덴서 vs 다이나믹 마이크</a>, <a href="/guides/microphone-polar-patterns.html">마이크 지향성 패턴</a></li>
+      <li>5장 케이블과 커넥터: <a href="/guides/balanced-vs-unbalanced-cables.html">XLR·TRS·TS 커넥터와 밸런스드 신호</a></li>
+      <li>6장 파워 앰프와 스피커: <a href="/guides/speaker-impedance-matching.html">스피커 임피던스</a>, <a href="/guides/ohms-law-for-audio.html">옴의 법칙</a></li>
+      <li>8장 음향효과기: <a href="/guides/compressor-parameters-explained.html">컴프레서 파라미터</a>, <a href="/guides/reverb-delay-chorus-explained.html">시간 기반 이펙트 구분</a>, <a href="/guides/eq-types-and-q.html">EQ 종류와 Q값</a></li>
+      <li>10장 레벨 운영: <a href="/guides/gain-staging-basics.html">게인 스테이징 기본</a>, <a href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위</a></li>
+      <li>11장 공연장 실내음향: <a href="/guides/rt60-reverberation-time.html">RT60 잔향시간</a>, <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법</a></li>
+    </ul>
+    <p>시험 준비 전반은 <a href="/guides/stage-sound-cert-study-plan.html">3급 필기 과목별 순서와 3주 플랜</a>, <a href="/guides/stage-sound-exam-scoring.html">배점·과락 계산</a>, <a href="/guides/grade3-exam-scope-by-topic.html">주제별 출제 비중</a> 가이드에 정리해 두었습니다.</p>
+
+    <h2>이 문제풀이의 한계</h2>
+    <ul>
+      <li>자체 제작한 학습용 문제이며 실제 기출문제나 공식 문제가 아닙니다. 76문항으로는 시험 범위를 모두 다루지 못하므로 같은 장을 반복하면 문제가 눈에 익어 정답을 기억으로 맞히게 될 수 있습니다.</li>
+      <li>정답률은 지금 내가 이 문제들을 얼마나 이해했는지 확인하는 지표일 뿐이며, 시험 결과를 예측하거나 합격을 보장하지 않습니다.</li>
+      <li>법규와 일반 과목은 이 페이지에 없고, 표준교재와 규정은 개정될 수 있습니다. 최신 내용은 무대예술전문인 자격검정위원회의 공식 자료로 확인하세요.</li>
+      <li>해설은 핵심 개념을 짧게 설명하는 수준입니다. 이해가 안 되는 부분은 교재와 가이드로 보충해야 합니다.</li>
+    </ul>
+
+    <h2>자주 묻는 질문</h2>
+    <h3>실제 기출문제인가요?</h3>
+    <p>아닙니다. 표준교재 목차와 일반적인 음향학 지식을 바탕으로 직접 만든 학습용 문제입니다.</p>
+    <h3>같은 장을 다시 풀면 똑같은 문제가 나오나요?</h3>
+    <p>장별 문제는 같은 문항이고 순서만 섞입니다. 계산문제는 값이 새로 만들어지므로 매번 다릅니다.</p>
+    <h3>계산문제의 선택지는 어떻게 만들어지나요?</h3>
+    <p>정답 근처에서 무작위로 만든 값이 오답으로 섞이고, 정답이 몇 번째에 놓일지도 문제마다 달라집니다. 파장 문제는 음속을 343m/s로 놓고 계산하므로 다른 음속 값으로 계산하면 약간 차이가 날 수 있습니다.</p>
+    <h3>시험에 계산문제가 이런 형태로 나오나요?</h3>
+    <p>시험의 출제 형태를 이 페이지에서 알려 드릴 수는 없습니다. 이 계산문제는 공식을 익히는 연습용이며, 실제 출제 범위와 형식은 공식 자료로 확인하세요.</p>
+    <h3>휴대폰에서도 풀 수 있나요?</h3>
+    <p>됩니다. 별도 설치나 로그인 없이 브라우저에서 바로 풀 수 있습니다.</p>
   </div>
 </div>
 
