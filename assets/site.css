@@ -90,7 +90,7 @@ a.card .more{color:var(--accent-ink)}
 .split{display:grid;gap:48px}
 @media(min-width:860px){.split{grid-template-columns:1fr 1fr;gap:64px}}
 
-/* Photo and copy stay separate: the trimmed source is never enlarged. */
+/* Photo and copy stay separate; the photo is capped at 767px wide when stacked. */
 .photo-hero{display:grid;gap:32px;align-items:center;background:var(--dark);color:var(--dark-ink);padding:clamp(32px,4.5vw,64px) max(clamp(16px,4vw,40px),calc((100% - 1120px)/2))}
 .ph-media{min-width:0;width:100%;max-width:767px;margin-inline:auto}
 .ph-media img{width:100%;height:auto;border-radius:8px}
@@ -166,25 +166,37 @@ a.card .more{color:var(--accent-ink)}
   .portrait-hero .cta-row,.portrait-hero .row{grid-column:1/-1;margin-top:20px}
 }
 
-/* 녹음실 사진 */
+/* 녹음실 사진: 파일 비율 그대로(세로 3:4 port, 가로 4:3 land) */
 .pic{margin:0;min-width:0}
-.pic img{width:100%;height:auto;object-fit:cover;border-radius:10px;aspect-ratio:510/475}
-.pic.wide img{aspect-ratio:768/450}
+.pic img{display:block;width:100%;height:auto;object-fit:cover;border-radius:10px;background:var(--stage)}
+.pic.port img{aspect-ratio:3/4}
+.pic.land img{aspect-ratio:4/3}
 .pic figcaption{margin-top:10px;font-size:15px;color:var(--ink2)}
 .band.dark .pic figcaption{color:var(--dark-muted)}
-.pics{display:grid;gap:16px}
-@media(min-width:640px){.pics{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}}
-.gallery{display:grid;gap:20px}
+/* 홈 띠: 한 줄, 사진 폭을 비율만큼 나눠 높이를 맞춘다 */
+.pics{display:flex;gap:20px}
+.pics .pic.port{flex:3 1 0}
+.pics .pic.land{flex:5.333 1 0}
+/* 녹음실 페이지: 6칸 격자 — 세로 사진 3장 한 줄, 가로 사진 2장 한 줄 */
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
+.gallery .feature{grid-column:span 2}
+.gallery .feature img{aspect-ratio:4/3;object-position:50% 62%}
 @media(min-width:640px){
-  .gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 24px}
-  .gallery .pic img{aspect-ratio:4/3}
+  .gallery{grid-template-columns:repeat(6,minmax(0,1fr));gap:32px 24px}
+  .gallery .port,.gallery .feature{grid-column:span 2}
+  .gallery .land{grid-column:span 3}
+  .gallery .feature img{aspect-ratio:3/4;object-position:50% 50%}
 }
 .gear{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-.gear li{padding:12px 0;border-bottom:1px solid var(--line);font-weight:500}
+.gear li{padding:10px 0;border-bottom:1px solid var(--line);font-weight:500}
 .band.dark .gear,.band.dark .gear li{border-color:var(--dark-line)}
-.gear-row{display:grid;gap:8px 32px;margin-top:40px}
-.gear-row h3{margin:0}
-@media(min-width:860px){.gear-row{grid-template-columns:200px minmax(0,1fr)}.gear-row h3{padding-top:12px}}
+.gear-groups{display:grid;gap:28px 40px}
+@media(min-width:760px){.gear-groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gear-group :is(h3,h4){margin:0 0 8px;font-size:14px;font-weight:600;letter-spacing:.02em;color:var(--ink2)}
+.band.dark .gear-group :is(h3,h4){color:var(--dark-muted)}
+.gear-row{display:grid;gap:12px 32px;margin-top:48px}
+.gear-row>h3{margin:0}
+@media(min-width:860px){.gear-row{grid-template-columns:200px minmax(0,1fr)}.gear-row>h3{padding-top:2px}}
 
 /* 홈 앱(보조) 띠: 작은 휴대폰 화면 */
 .apps-band .band-head .sub{margin:6px 0 0;font-size:16px}
@@ -355,10 +367,10 @@ html [lang="ko"]{word-break:keep-all;line-break:auto;overflow-wrap:normal;hyphen
 }
 /* Keep the studio overview compact while preserving the original photo crops. */
 @media(max-width:639px){
-  .gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
   .gallery figcaption{font-size:14px}
-  .gallery .pic img,.gallery .pic.wide img{aspect-ratio:4/3}
-  .pics{grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
-  .pics .pic{scroll-snap-align:start}
+  .pics{gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
+  .pics .pic.port,.pics .pic.land{flex:none;scroll-snap-align:start}
+  .pics .pic img{height:240px;width:auto;max-width:none}
+  .pics .pic figcaption{width:0;min-width:100%}
   .cards.c3 .stage{height:200px;padding:16px}
 }

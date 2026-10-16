@@ -191,23 +191,38 @@ def _posters(sec, lang, ctx):
     return _wrap(head + cover_strip(items, lang, ctx), sec)
 
 
+def photo_figure(src, caption, alt=None, extra="", lazy=True):
+    """작업실 사진 한 장. 파일 모양(가로 land / 세로 port)을 class 로 달아 격자가 사진 비율을 지키게 한다."""
+    size = kit.img_size(src)
+    orient = "land" if not size or size[0] >= size[1] else "port"
+    load = ' loading="lazy"' if lazy else ""
+    return (f'<figure class="pic {orient}{extra}"><img src="{esc(src)}" alt="{esc(alt or caption)}"'
+            f'{kit.img_attrs(src)}{load}><figcaption>{esc(caption)}</figcaption></figure>')
+
+
 def _gallery(sec, lang, ctx):
-    figs = ""
-    for i in sec["items"]:
-        if not ctx["img_exists"](i["src"]):
-            continue
-        cls = "pic wide" if i.get("wide") else "pic"
-        figs += (f'<figure class="{cls}"><img src="{esc(i["src"])}" alt="{esc(i["caption"])}"'
-                 f'{kit.img_attrs(i["src"])} loading="lazy"><figcaption>{esc(i["caption"])}</figcaption></figure>')
+    figs = "".join(photo_figure(i["src"], i["caption"], i.get("alt"), " feature" if i.get("feature") else "")
+                   for i in sec["items"] if ctx["img_exists"](i["src"]))
     if not figs:
         return ""
     return _wrap(_h2(sec) + f'<div class="gallery">{figs}</div>', sec)
 
 
+def gear_groups(groups, level=3):
+    """장비 목록을 분류(마이크·프리앰프…)별 작은 제목 + 목록으로. 분류 없는 단순 목록도 받는다."""
+    if groups and isinstance(groups[0], str):
+        groups = [{"group": "", "items": groups}]
+    out = ""
+    for g in groups:
+        head = f'<h{level}>{esc(g["group"])}</h{level}>' if g.get("group") else ""
+        items = "".join(f"<li>{esc(i)}</li>" for i in g["items"])
+        out += f'<div class="gear-group">{head}<ul class="gear">{items}</ul></div>'
+    return f'<div class="gear-groups">{out}</div>'
+
+
 def _gear(sec, lang, ctx):
-    items = "".join(f"<li>{esc(i)}</li>" for i in ctx["gear"][kit.chrome(lang)])
     note = f'<p class="note">{esc(sec["note"])}</p>' if sec.get("note") else ""
-    return _wrap(_h2(sec) + f'<ul class="gear">{items}</ul>{note}', sec)
+    return _wrap(_h2(sec) + gear_groups(ctx["gear"][kit.chrome(lang)]) + note, sec)
 
 
 def present_categories(ctx):

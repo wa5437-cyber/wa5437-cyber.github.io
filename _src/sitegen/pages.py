@@ -142,9 +142,19 @@ def cta_row(ctas, lang):
     return f'<div class="row">{out}</div>' if out else ""
 
 
+def hero_srcset(src):
+    """히어로 사진에 작은 판(<이름>-1200.jpg)이 있으면 srcset·sizes 를 붙인다(휴대폰·데스크톱 2배 화면은 1200 으로 충분)."""
+    small = src[:-4] + "-1200.jpg" if src.endswith(".jpg") else None
+    if not small or not (ROOT / small.lstrip("/")).exists():
+        return ""
+    big_w, small_w = kit.img_size(src)[0], kit.img_size(small)[0]
+    return (f' srcset="{esc(small)} {small_w}w, {esc(src)} {big_w}w"'
+            f' sizes="(min-width:900px) min(590px, 50vw), min(767px, calc(100vw - 32px))"')
+
+
 def photo_hero(src, alt, h1, sub, ctas, lang):
-    """어두운 바탕의 제목과 원본 크기 이내의 사진을 나란히 배치한다."""
-    return (f'<section class="photo-hero"><div class="ph-media"><img src="{esc(src)}" alt="{esc(alt)}"'
+    """어두운 바탕의 제목과 사진을 나란히 배치한다(좁은 화면은 제목 아래 사진)."""
+    return (f'<section class="photo-hero"><div class="ph-media"><img src="{esc(src)}"{hero_srcset(src)} alt="{esc(alt)}"'
             f'{kit.img_attrs(src)} fetchpriority="high"></div>'
             f'<div class="wrap ph-copy"><h1>{esc(h1)}</h1><p class="sub">{esc(sub)}</p>{cta_row(ctas, lang)}</div></section>')
 
@@ -171,14 +181,12 @@ def home(lang):
                 f'<h2>{esc(c["engineer_name"])}</h2>{lines}'
                 f'<a class="more" href="{esc(url(lang, "/about/"))}">{esc(c["engineer_more"])} →</a></div></div></section>')
     # 4) 녹음실(어두운 띠): 사진 3장 + 한 줄 설명 + 장비
-    pics = "".join(f'<figure class="pic"><img src="{esc(x["src"])}" alt="{esc(x[lang])}"{kit.img_attrs(x["src"])} loading="lazy">'
-                   f'<figcaption>{esc(x[lang])}</figcaption></figure>' for x in h["studio_photos"])
-    gear = "".join(f"<li>{esc(g)}</li>" for g in ctx["gear"][lang])
+    pics = "".join(sections.photo_figure(x["src"], x[lang]) for x in h["studio_photos"])
     studio = (f'<section class="band dark"><div class="wrap"><div class="band-head"><div><p class="kicker">{esc(c["studio_kicker"])}</p>'
               f'<h2>{esc(c["studio_title"])}</h2></div>'
               f'<a class="more" href="{esc(url(lang, "/studio/"))}">{esc(c["studio_more"])} →</a></div>'
               f'<div class="pics">{pics}</div>'
-              f'<div class="gear-row"><h3>{esc(c["gear_title"])}</h3><ul class="gear">{gear}</ul></div></div></section>')
+              f'<div class="gear-row"><h3>{esc(c["gear_title"])}</h3>{sections.gear_groups(ctx["gear"][lang], 4)}</div></div></section>')
     # 5) 앱(보조 띠): 작은 휴대폰 화면 4장
     row = ""
     for slug in h["featured_apps"]:

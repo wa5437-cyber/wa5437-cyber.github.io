@@ -35,14 +35,15 @@ class SectionTests(unittest.TestCase):
                    posters=[{"img": "/img/work/01_00.jpg", "artist": "가수", "title": None, "category": "음반"},
                             {"img": "/img/work/02_08.jpg", "artist": None, "title": "작품 & <x>", "category": "영화"}])
         html = sections.render([
-            {"type": "gallery", "title": "G", "items": [{"src": "/img/a.jpg", "caption": "C1", "wide": True},
+            {"type": "gallery", "title": "G", "items": [{"src": "/img/a.jpg", "caption": "C1", "feature": True, "alt": "A1"},
                                                        {"src": "/img/missing.jpg", "caption": "C2"}]},
             {"type": "gear", "title": "장비"}, {"type": "chips", "title": "분야"},
             {"type": "posters", "title": "P", "items": ["/img/work/02_08.jpg", "/img/work/01_00.jpg"],
              "more": {"text": "더", "href": "/work/"}}], "ko", ctx)
-        self.assertIn('<figure class="pic wide">', html)
+        self.assertIn('<figure class="pic land feature"><img src="/img/a.jpg" alt="A1"', html)   # 크기 모름 → land
+        self.assertIn("<figcaption>C1</figcaption>", html)
         self.assertNotIn("missing.jpg", html)
-        self.assertIn("<li>A &lt;b&gt;</li>", html)
+        self.assertIn('<div class="gear-groups"><div class="gear-group"><ul class="gear"><li>A &lt;b&gt;</li></ul></div></div>', html)
         self.assertIn("<li>음반</li><li>영화</li>", html)
         self.assertIn('alt="작품 &amp; &lt;x&gt;"', html)
         self.assertIn('alt="가수 — 음반"', html)                 # 제목이 없으면 "아티스트 — 분야"

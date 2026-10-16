@@ -1,22 +1,36 @@
 {
   "hero_img": "/img/studio/control-room.jpg",
   "gear": {
-    "ko": ["Grace Design m201 마이크 프리앰프", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B 컴프레서", "Focal Solo6 Be 모니터"],
-    "en": ["Grace Design m201 microphone preamp", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B compressor", "Focal Solo6 Be monitors"]
+    "ko": [
+      {"group": "마이크", "items": ["Neumann U87 빈티지 마이크", "Telefunken 마이크"]},
+      {"group": "프리앰프·컴프레서", "items": ["Grace Design m201 마이크 프리앰프", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B 컴프레서"]},
+      {"group": "인터페이스·컨트롤러", "items": ["Avid HD I/O", "Grace Design m905 모니터 컨트롤러"]},
+      {"group": "모니터", "items": ["Focal Solo6 Be 모니터", "Dynaudio 모니터"]}
+    ],
+    "en": [
+      {"group": "Microphones", "items": ["Neumann U87 (vintage) microphone", "Telefunken microphone"]},
+      {"group": "Preamps & compressor", "items": ["Grace Design m201 microphone preamp", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B compressor"]},
+      {"group": "Interface & controller", "items": ["Avid HD I/O", "Grace Design m905 monitor controller"]},
+      {"group": "Monitors", "items": ["Focal Solo6 Be monitors", "Dynaudio monitors"]}
+    ]
   },
   "ko": {
     "title": "녹음실 | ML Music Studio",
     "description": "서울 용산의 녹음·믹싱·마스터링 스튜디오. 작업실 사진과 장비, 참여한 작업, 위치와 문의 방법을 안내합니다.",
     "h1": "ML Music Studio 녹음실",
+    "hero_alt": "ML Music Studio 컨트롤룸: 모니터 스피커 네 대와 화면, 책상",
     "sub": "서울 용산 · 녹음 · 믹싱 · 마스터링",
     "cta": [{"text": "문의하기", "href": "kakao"}, {"text": "작업 보기", "href": "/work/"}],
     "sections": [
       {"type": "gallery", "title": "작업실",
        "items": [
-         {"src": "/img/studio/corridor.jpg", "caption": "복도", "wide": true},
-         {"src": "/img/studio/monitors.jpg", "caption": "모니터와 인터페이스"},
-         {"src": "/img/studio/outboard.jpg", "caption": "아웃보드"},
-         {"src": "/img/studio/lounge.jpg", "caption": "라운지"}]},
+         {"src": "/img/studio/vocal-booth.jpg", "caption": "녹음 부스", "alt": "붐 스탠드에 마이크와 보면대가 놓인 녹음 부스", "feature": true},
+         {"src": "/img/studio/booth-mic.jpg", "caption": "부스의 마이크", "alt": "쇼크 마운트와 팝 필터를 단 대형 진동판 마이크, 뒤로 의자와 헤드폰"},
+         {"src": "/img/studio/microphones.jpg", "caption": "마이크: Neumann U87(빈티지), Telefunken", "alt": "나란히 놓인 Telefunken 마이크와 Neumann U87 빈티지 마이크"},
+         {"src": "/img/studio/mic-cabinet.jpg", "caption": "마이크 보관함", "alt": "습도 조절 보관함 선반에 놓인 콘덴서·다이내믹·핸드헬드 마이크"},
+         {"src": "/img/studio/preamp-compressor.jpg", "caption": "마이크 프리앰프와 컴프레서", "alt": "랙에 장착된 Grace Design m201, Neve 1073DPA, Tube-Tech CL 1B"},
+         {"src": "/img/studio/rack.jpg", "caption": "랙", "alt": "패치베이, Avid HD I/O, Grace Design m905 등이 장착된 랙"},
+         {"src": "/img/studio/monitor-controller.jpg", "caption": "모니터 컨트롤러", "alt": "책상 위 Grace Design m905 모니터 컨트롤러"}]},
       {"type": "gear", "title": "장비", "note": "작업실 사진에 보이는 장비입니다."},
       {"type": "chips", "title": "작업 분야"},
       {"type": "posters", "title": "참여한 작업",
@@ -31,15 +45,19 @@
     "title": "Recording Studio | ML Music Studio",
     "description": "A recording, mixing and mastering studio in Yongsan, Seoul: photos of the room, the gear, selected work, the location and how to get in touch.",
     "h1": "ML Music Studio Recording",
+    "hero_alt": "The ML Music Studio control room: four monitor speakers, screens and the desk",
     "sub": "Yongsan, Seoul · Recording · Mixing · Mastering",
     "cta": [{"text": "Contact us", "href": "kakao"}, {"text": "See the work", "href": "/en/work/"}],
     "sections": [
       {"type": "gallery", "title": "The studio",
        "items": [
-         {"src": "/img/studio/corridor.jpg", "caption": "Hallway", "wide": true},
-         {"src": "/img/studio/monitors.jpg", "caption": "Monitors and interface"},
-         {"src": "/img/studio/outboard.jpg", "caption": "Outboard"},
-         {"src": "/img/studio/lounge.jpg", "caption": "Lounge"}]},
+         {"src": "/img/studio/vocal-booth.jpg", "caption": "Vocal booth", "alt": "The vocal booth with a microphone on a boom stand and a music stand", "feature": true},
+         {"src": "/img/studio/booth-mic.jpg", "caption": "Microphone in the booth", "alt": "A large-diaphragm microphone in a shock mount with a pop filter, a chair and headphones behind it"},
+         {"src": "/img/studio/microphones.jpg", "caption": "Microphones: Neumann U87 (vintage), Telefunken", "alt": "A Telefunken microphone next to a vintage Neumann U87"},
+         {"src": "/img/studio/mic-cabinet.jpg", "caption": "Microphone dry cabinet", "alt": "Condenser, dynamic and handheld microphones on the shelves of a humidity-controlled cabinet"},
+         {"src": "/img/studio/preamp-compressor.jpg", "caption": "Microphone preamps and compressor", "alt": "A Grace Design m201, a Neve 1073DPA and a Tube-Tech CL 1B in a rack"},
+         {"src": "/img/studio/rack.jpg", "caption": "Rack", "alt": "A rack with patchbays, an Avid HD I/O and a Grace Design m905"},
+         {"src": "/img/studio/monitor-controller.jpg", "caption": "Monitor controller", "alt": "The Grace Design m905 monitor controller on the desk"}]},
       {"type": "gear", "title": "Gear", "note": "The equipment visible in the studio photos."},
       {"type": "chips", "title": "Fields of work"},
       {"type": "posters", "title": "Selected work",

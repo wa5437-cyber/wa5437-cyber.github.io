@@ -34,12 +34,21 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn('fetchpriority="high"', hero)
         gallery = re.search(r'<div class="gallery">(.*?)</div></div></section>', html, re.S).group(1)
         self.assertEqual(re.findall(r"<figcaption>(.*?)</figcaption>", gallery),
-                         ["복도", "모니터와 인터페이스", "아웃보드", "라운지"])
+                         ["녹음 부스", "부스의 마이크", "마이크: Neumann U87(빈티지), Telefunken", "마이크 보관함",
+                          "마이크 프리앰프와 컴프레서", "랙", "모니터 컨트롤러"])
+        # 세로 사진 3장(한 줄) 다음 가로 사진 4장(두 줄): 6칸 격자에 빈칸이 생기지 않는다
+        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port"] * 3 + ["land"] * 4)
         for img in re.findall(r"<img [^>]+>", gallery):
             self.assertIn('loading="lazy"', img)
             self.assertRegex(img, r'width="\d+" height="\d+"')
+            self.assertNotRegex(img, r'alt=""')
         self.assertIn("작업실 사진에 보이는 장비입니다.", html)
-        self.assertIn("<li>Grace Design m201 마이크 프리앰프</li><li>Neve 1073DPA</li><li>Lydkraft Tube-Tech CL 1B 컴프레서</li><li>Focal Solo6 Be 모니터</li>", html)
+        gear = re.search(r'<div class="gear-groups">(.*?)</div></div>(?:<p|</div>)', html, re.S).group(0)
+        self.assertEqual(re.findall(r"<h3>(.*?)</h3>", gear), ["마이크", "프리앰프·컴프레서", "인터페이스·컨트롤러", "모니터"])
+        self.assertEqual(re.findall(r"<li>(.*?)</li>", gear),
+                         ["Neumann U87 빈티지 마이크", "Telefunken 마이크", "Grace Design m201 마이크 프리앰프", "Neve 1073DPA",
+                          "Lydkraft Tube-Tech CL 1B 컴프레서", "Avid HD I/O", "Grace Design m905 모니터 컨트롤러",
+                          "Focal Solo6 Be 모니터", "Dynaudio 모니터"])
         chips = re.search(r'<ul class="chips">(.*?)</ul>', html).group(1)
         self.assertEqual(re.findall(r"<li>(.*?)</li>", chips), ["음반", "영화", "연극", "뮤지컬", "방송", "행사", "오디오북"])
         self.assertIn('class="covers strip-4"', html)
@@ -55,12 +64,15 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn("The equipment visible in the studio photos.", en)
         self.assertIn("Wonhyo-ro", en)
         self.assertIn("<li>Grace Design m201 microphone preamp</li>", en)
+        self.assertIn("<li>Neumann U87 (vintage) microphone</li>", en)
+        self.assertIn("<h3>Preamps &amp; compressor</h3>", en)
+        self.assertIn("<figcaption>Microphones: Neumann U87 (vintage), Telefunken</figcaption>", en)
 
     def test_studio_photos_are_unique_in_both_languages(self):
         for lang in ("ko", "en"):
             _, html = pages.simple_page(lang, "studio")
             photos = re.findall(r'<img[^>]+src="(/img/studio/[^"]+)"', html)
-            self.assertEqual(len(photos), 5, lang)
+            self.assertEqual(len(photos), 8, lang)       # 히어로 1 + 갤러리 7
             self.assertEqual(len(set(photos)), len(photos), lang)
             self.assertEqual(photos.count("/img/studio/control-room.jpg"), 1, lang)
 

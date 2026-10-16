@@ -140,6 +140,9 @@ class HomeLayoutTests(unittest.TestCase):
             self.assertIn('src="/img/studio/control-room.jpg"', img)
             self.assertIn('fetchpriority="high"', img)
             self.assertNotIn('loading="lazy"', img)
+            # 휴대폰·데스크톱은 1200 판, 넓은 태블릿 2배 화면만 큰 판
+            self.assertIn('srcset="/img/studio/control-room-1200.jpg 1200w, /img/studio/control-room.jpg ', img)
+            self.assertIn('sizes="', img)
             width, height = kit.img_size("/img/studio/control-room.jpg")
             self.assertIn(f'width="{width}" height="{height}"', img)
             self.assertRegex(img, r'alt="[^"]+"')
@@ -191,10 +194,16 @@ class HomeLayoutTests(unittest.TestCase):
         for lang in ("ko", "en"):
             _, html = pages.home(lang)
             band = section_of(html, "band dark")
-            self.assertEqual(len(re.findall(r'<figure class="pic"><img [^>]*loading="lazy"', band)), 3, lang)
+            figs = re.findall(r'<figure class="pic (port|land)"><img src="(/img/studio/[^"]+)"[^>]*width="\d+" height="\d+" loading="lazy"', band)
+            self.assertEqual([f[1] for f in figs], ["/img/studio/vocal-booth.jpg", "/img/studio/microphones.jpg",
+                                                   "/img/studio/preamp-compressor.jpg"], lang)
+            self.assertEqual([f[0] for f in figs], ["port", "port", "land"], lang)   # 높이 맞춤용 비율 class
             self.assertEqual(len(re.findall(r"<figcaption>[^<]+</figcaption>", band)), 3, lang)
+            # 장비: 분류 제목(h4, 띠 안의 h3 "장비" 아래) + 항목
+            self.assertEqual(re.findall(r"<h4>([^<]+)</h4>", band), [kit.esc(g["group"]) for g in gear[lang]], lang)
             for g in gear[lang]:
-                self.assertIn(kit.esc(g), band)
+                for item in g["items"]:
+                    self.assertIn(f"<li>{kit.esc(item)}</li>", band)
             self.assertIn(f'href="{kit.url(lang, "/studio/")}"', band)
             self.assertNotIn('class="stats"', html)
 
