@@ -34,11 +34,11 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn('fetchpriority="high"', hero)
         gallery = re.search(r'<div class="gallery bento">(.*?)</div></div></section>', html, re.S).group(1)
         self.assertEqual(re.findall(r"<figcaption>(.*?)</figcaption>", gallery),
-                         ["녹음 부스", "마이크 프리앰프 클로즈업", "마이크 보관함", "프리앰프와 컴프레서", "모니터 컨트롤러", "녹음 부스 안쪽"])
-        # bento: 세로·가로·세로·가로·가로·가로 — 2번(프리앰프 클로즈업)은 옆으로 돌린 가로 사진(사용자 지시 10/16).
+                         ["녹음 부스", "마이크 보관함", "프리앰프와 컴프레서", "모니터 컨트롤러", "녹음 부스 안쪽"])
+        # bento: 세로·세로·가로·가로·가로 — 프리앰프만 찍은 클로즈업은 뺐다(사용자 지시 10/16).
         # site.css 의 nth-child 자리와 짝이 맞아야 3칸·2칸 격자 모두 빈칸이 없다
-        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port", "land", "port", "land", "land", "land"])
-        self.assertIn('src="/img/studio/preamp-closeup.jpg" alt="Neve 1073DPA 마이크 프리앰프 1채널의 빨간 게인 노브, +48V·위상 버튼, 트림 노브와 클립 LED" width="840" height="560"', gallery)
+        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port", "port", "land", "land", "land"])
+        self.assertNotIn("preamp-closeup", html)
         # 부스 쇼크 마운트는 비어 있다 — 마이크가 꽂힌 것처럼 쓰지 않는다. 마이크만 찍은 사진은 뺐다(사용자 지시)
         self.assertNotIn("부스의 마이크", html)
         self.assertNotIn("microphones.jpg", html)
@@ -81,19 +81,19 @@ class StudioAboutContactTests(unittest.TestCase):
         for lang in ("ko", "en"):
             _, html = pages.simple_page(lang, "studio")
             photos = re.findall(r'<img[^>]+src="(/img/studio/[^"]+)"', html)
-            self.assertEqual(len(photos), 7, lang)       # 히어로 1 + 갤러리 6
+            self.assertEqual(len(photos), 6, lang)       # 히어로 1 + 갤러리 5
             self.assertEqual(len(set(photos)), len(photos), lang)
             self.assertEqual(photos.count("/img/studio/control-room.jpg"), 1, lang)
 
-    def test_studio_gallery_is_bento_of_six_without_head_on_rack_shots(self):
-        # 정면으로 찍은 랙 사진(rack·랙 전체)은 빼고, 비스듬한 부스·클로즈업 위주 6장(사용자 지시 10/16)
+    def test_studio_gallery_is_bento_of_five_without_head_on_rack_shots(self):
+        # 정면으로 찍은 랙 사진(rack·랙 전체)은 빼고, 비스듬한 부스·클로즈업 위주 5장(프리앰프만 찍은 사진도 뺌)(사용자 지시 10/16)
         for lang in ("ko", "en"):
             _, html = pages.simple_page(lang, "studio")
             self.assertIn('<div class="gallery bento">', html)
             gal = html[html.index('<div class="gallery bento">'):]
             gal = gal[:gal.index("</section>")]
             self.assertEqual(re.findall(r'<img src="/img/studio/([^"]+)"', gal),
-                             ["vocal-booth.jpg", "preamp-closeup.jpg", "mic-cabinet.jpg",
+                             ["vocal-booth.jpg", "mic-cabinet.jpg",
                               "preamp-compressor.jpg", "monitor-controller.jpg", "booth-corner.jpg"], lang)
             self.assertNotIn("rack.jpg", html)
             for alt in re.findall(r'<img src="/img/studio/[^"]+" alt="([^"]+)"', gal):
@@ -114,8 +114,7 @@ class StudioAboutContactTests(unittest.TestCase):
         for name in files:
             cap = 300_000 if name.startswith("control-room") else 280_000
             self.assertLessEqual((root / name).stat().st_size, cap, name)
-        # 프리앰프 클로즈업은 원본(768x1024)을 옆으로 돌린 가로 3:2 — 원본보다 키우지 않는다
-        self.assertEqual(pages.kit.img_size("/img/studio/preamp-closeup.jpg"), (840, 560))
+        self.assertFalse((root / "preamp-closeup.jpg").exists())
 
     def test_studio_generic_copy_is_gone(self):
         # 녹음실이 하는 일 4칸·4단계 진행 방법 같은 누구나 아는 글은 지웠다(사용자 지시)
