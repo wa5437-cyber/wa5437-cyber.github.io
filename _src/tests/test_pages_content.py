@@ -32,11 +32,11 @@ class StudioAboutContactTests(unittest.TestCase):
         hero = re.search(r'<section class="photo-hero">.*?</section>', html, re.S).group(0)
         self.assertIn('src="/img/studio/control-room.jpg"', hero)
         self.assertIn('fetchpriority="high"', hero)
-        gallery = re.search(r'<div class="gallery">(.*?)</div></div></section>', html, re.S).group(1)
+        gallery = re.search(r'<div class="gallery bento">(.*?)</div></div></section>', html, re.S).group(1)
         self.assertEqual(re.findall(r"<figcaption>(.*?)</figcaption>", gallery),
-                         ["녹음 부스", "보면대와 의자", "마이크 보관함", "마이크 프리앰프와 컴프레서", "장비 랙", "모니터 컨트롤러"])
-        # 세로 4:5 사진 4장(넓은 화면 한 줄, 휴대폰 두 줄) 다음 가로 3:2 사진 2장: 12칸·2칸 격자 모두 빈칸이 없다
-        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port"] * 4 + ["land"] * 2)
+                         ["녹음 부스", "마이크 프리앰프 클로즈업", "마이크 보관함", "프리앰프와 컴프레서", "모니터 컨트롤러", "녹음 부스 안쪽"])
+        # bento: 큰 세로 1 + 작은 세로 2 / 작은 가로 2 + 큰 가로 1 — 3칸·2칸 격자 모두 빈칸이 없다
+        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port"] * 3 + ["land"] * 3)
         # 부스 쇼크 마운트는 비어 있다 — 마이크가 꽂힌 것처럼 쓰지 않는다. 마이크만 찍은 사진은 뺐다(사용자 지시)
         self.assertNotIn("부스의 마이크", html)
         self.assertNotIn("microphones.jpg", html)
@@ -46,7 +46,7 @@ class StudioAboutContactTests(unittest.TestCase):
             self.assertIn('loading="lazy"', img)
             self.assertRegex(img, r'width="\d+" height="\d+"')
             self.assertNotRegex(img, r'alt=""')
-        self.assertIn("작업실 사진에 보이는 장비입니다.", html)
+        self.assertIn("작업실에서 쓰는 장비입니다.", html)
         gear = re.search(r'<div class="gear-groups">(.*?)</div></div>(?:<p|</div>)', html, re.S).group(0)
         self.assertEqual(re.findall(r"<h3>(.*?)</h3>", gear), ["마이크", "프리앰프·컴프레서", "인터페이스·컨트롤러", "모니터"])
         self.assertEqual(re.findall(r"<li>(.*?)</li>", gear),
@@ -65,7 +65,8 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn("map.naver.com", dark)
         self.assertNotIn("10:00", html)             # 운영시간 지어내지 않음
         _, en = pages.simple_page("en", "studio")
-        self.assertIn("The equipment visible in the studio photos.", en)
+        self.assertIn("The equipment used in the studio.", en)   # 사진에 안 보이는 장비(m201·HD I/O)도 있어 "사진에 보이는" 이라 하지 않는다
+        self.assertNotIn("visible in the studio photos", en)
         self.assertIn("Wonhyo-ro", en)
         self.assertIn("<li>Grace Design m201 microphone preamp</li>", en)
         self.assertIn("<li>Neumann U87 (vintage) microphone</li>", en)
@@ -81,6 +82,23 @@ class StudioAboutContactTests(unittest.TestCase):
             self.assertEqual(len(photos), 7, lang)       # 히어로 1 + 갤러리 6
             self.assertEqual(len(set(photos)), len(photos), lang)
             self.assertEqual(photos.count("/img/studio/control-room.jpg"), 1, lang)
+
+    def test_studio_gallery_is_bento_of_six_without_head_on_rack_shots(self):
+        # 정면으로 찍은 랙 사진(rack·랙 전체)은 빼고, 비스듬한 부스·클로즈업 위주 6장(사용자 지시 10/16)
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "studio")
+            self.assertIn('<div class="gallery bento">', html)
+            gal = html[html.index('<div class="gallery bento">'):]
+            gal = gal[:gal.index("</section>")]
+            self.assertEqual(re.findall(r'<img src="/img/studio/([^"]+)"', gal),
+                             ["vocal-booth.jpg", "preamp-closeup.jpg", "mic-cabinet.jpg",
+                              "preamp-compressor.jpg", "monitor-controller.jpg", "booth-corner.jpg"], lang)
+            self.assertNotIn("rack.jpg", html)
+            for alt in re.findall(r'<img src="/img/studio/[^"]+" alt="([^"]+)"', gal):
+                self.assertTrue(alt.strip(), lang)
+        _, ko = pages.simple_page("ko", "studio")
+        self.assertIn("작업실에서 쓰는 장비입니다.", ko)
+        self.assertNotIn("사진에 보이는 장비", ko)
 
     def test_studio_photo_files_are_web_sized_and_no_stale_files_remain(self):
         root = pages.ROOT / "img" / "studio"

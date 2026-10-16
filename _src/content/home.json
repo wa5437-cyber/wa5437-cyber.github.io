@@ -75,7 +75,7 @@
   "studio_photos": [
     {"src": "/img/studio/vocal-booth.jpg", "ko": "녹음 부스", "en": "Recording booth"},
     {"src": "/img/studio/mic-cabinet.jpg", "ko": "마이크 보관함", "en": "Microphone dry cabinet"},
-    {"src": "/img/studio/preamp-compressor.jpg", "ko": "마이크 프리앰프와 컴프레서", "en": "Microphone preamps and compressor"}
+    {"src": "/img/studio/preamp-compressor.jpg", "ko": "프리앰프와 컴프레서", "en": "Preamp and compressor"}
   ],
   "featured_apps": [
     "stage-sound",

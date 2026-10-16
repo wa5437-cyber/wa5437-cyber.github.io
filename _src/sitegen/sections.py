@@ -205,7 +205,8 @@ def _gallery(sec, lang, ctx):
                    for i in sec["items"] if ctx["img_exists"](i["src"]))
     if not figs:
         return ""
-    return _wrap(_h2(sec) + f'<div class="gallery">{figs}</div>', sec)
+    layout = f' {sec["layout"]}' if sec.get("layout") else ""   # "bento": 큰 칸 + 작은 칸(site.css)
+    return _wrap(_h2(sec) + f'<div class="gallery{esc(layout)}">{figs}</div>', sec)
 
 
 def gear_groups(groups, level=3):
