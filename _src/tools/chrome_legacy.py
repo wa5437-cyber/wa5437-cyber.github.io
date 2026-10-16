@@ -63,6 +63,14 @@ def _body_anchors(html):
     return html.replace('href="/#apps"', 'href="/apps/"').replace('href="/#tools"', 'href="/tools/"')
 
 
+def _semantics(html):
+    if '<a class="skip"' not in html:
+        html = html.replace('<body>', '<body>\n<a class="skip" href="#main">본문으로 건너뛰기</a>', 1)
+    html = html.replace('<main class="wrap">', '<main class="wrap" id="main" tabindex="-1">', 1)
+    html = re.sub(r'(<div class="related">\s*)<h4>(.*?)</h4>', r'\1<h2>\2</h2>', html, flags=re.S)
+    return html.replace('<h4>', '<h3>').replace('</h4>', '</h3>')
+
+
 def _slug(html):
     m = re.search(r'<link rel="canonical" href="https://mlmusicstudio\.co\.kr/guides/([^"/]+)\.html">', html)
     if not m:
@@ -137,6 +145,7 @@ def transform(html, kind, dates=None):
     html = _menu(html)
     html = _footer(html)
     html = _body_anchors(html)
+    html = _semantics(html)
     html = AUTHOR_RE.sub("", html) if kind == "guide" else html
     if kind == "guide":
         if html.count("\n</article>") != 1:

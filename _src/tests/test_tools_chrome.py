@@ -30,6 +30,17 @@ def unchrome(text):
         text = rx.sub("", text)
     text = chrome_tools.I18N_PAIR_RE.sub("", text)             # i18n 쌍은 위치만 바뀌므로 양쪽에서 뺀다
     text = chrome_tools.STYLE_BLOCK_RE.sub("<style></style>", text)
+    # Ignore only the reviewed accessibility attributes/tag changes; preserve
+    # all original content, control values/IDs and every script byte.
+    text = text.replace(', maximum-scale=1.0', '')
+    text = text.replace(' id="main" role="main" tabindex="-1"', '')
+    text = re.sub(r'<h1 class="title">(.*?)</h1>', r'<div class="title">\1</div>', text, flags=re.S)
+    text = re.sub(r'<label for="[^"]+"', '<label', text)
+    text = re.sub(r'<span id="label-[^"]+" class="control-label"([^>]*)>(.*?)</span>',
+                  r'<label\1>\2</label>', text, flags=re.S)
+    text = re.sub(r' role="group" aria-labelledby="label-[^"]+"', '', text)
+    text = text.replace(' id="frequency-label"', '')
+    text = re.sub(r' aria-labelledby="(?:frequency-label|label-absorptionPresetPicker)"', '', text)
     return chrome_tools.FONT_LINK_RE.sub("<!-- fonts -->", text)
 
 
@@ -69,7 +80,7 @@ class ToolsChromeTests(unittest.TestCase):
             self.assertEqual(text.count("window.I18N_DATA = "), 1, name)
             self.assertEqual(len(chrome_tools.I18N_PAIR_RE.findall(text)), 1, name)
 
-    def test_only_head_style_and_marked_blocks_change(self):
+    def test_only_head_style_marked_blocks_and_accessibility_markup_change(self):
         for name in chrome_tools.FILES:
             self.assertEqual(unchrome(disk(name)), unchrome(original(name)), name)
 
@@ -154,6 +165,17 @@ class ToolsChromeTests(unittest.TestCase):
             for bg in ("#ffffff", m["#faf8f3"], m["#f1ede3"]):
                 self.assertGreaterEqual(ratio(fg, bg), 4.5, (fg, bg))
 
+    def test_tool_secondary_and_amber_text_also_pass_on_selected_backgrounds(self):
+        for name in chrome_tools.FILES:
+            style = chrome_tools.STYLE_BLOCK_RE.search(disk(name))[2]
+            for token in ('amber', 'text-tertiary'):
+                color = re.search(r'--%s:(#[0-9a-fA-F]{6})' % token, style)[1]
+                for bg in ('#ffffff', '#f4f5f3', '#e8eeeb', '#dbe3df', '#e2e8e5'):
+                    self.assertGreaterEqual(ratio(color, bg), 4.5, (name, token, bg))
+        # Start buttons use white over both ends of their gradient.
+        for bg in ('#23695c', '#2c8070'):
+            self.assertGreaterEqual(ratio('#ffffff', bg), 4.5)
+
     def test_tools_css_hides_old_home_button_and_scopes_site_tokens(self):
         css = (ROOT / "assets" / "tools.css").read_text(encoding="utf-8")
         self.assertIn(".topbar .home-link{display:none}", css)
@@ -190,7 +212,7 @@ class ToolsChromeTests(unittest.TestCase):
 
 
 class ToolsIndexTests(unittest.TestCase):
-    def test_cards_have_preview_image_name_text_and_app_link(self):
+    def test_cards_have_preview_image_and_open_the_tool_before_app_promotions(self):
         data = pages.load("tools.json")
         for lang in ("ko", "en"):
             _, html = pages.tools(lang)
@@ -206,6 +228,11 @@ class ToolsIndexTests(unittest.TestCase):
                 self.assertIn('class="tc-app"', card)
             for g in data[lang]["groups"]:
                 self.assertIn("<h2>%s</h2>" % kit.esc(g["title"]), html)
+            for card, item in zip(cards, [it for g in data[lang]["groups"] for it in g["items"]]):
+                action = re.search(r'<a class="tc-app" href="([^"]+)"', card)
+                self.assertEqual(action[1], item['href'])
+            for group in re.findall(r'<section class="band tool-group">(.*?)</section>', html, re.S):
+                self.assertLess(group.index('class="tool-cards'), group.index('class="group-apps'))
 
     def test_group_panels_match_mapping_and_have_store_campaigns(self):
         for lang in ('ko', 'en'):

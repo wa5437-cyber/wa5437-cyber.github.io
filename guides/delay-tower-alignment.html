@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
   <h1>딜레이 타워, 거리로 딜레이 타임 계산하는 법</h1>
@@ -55,7 +56,7 @@
   <div class="formula">음속(m/s) ≈ 331.3 + 0.606 × 기온(°C)</div>
 
   <div class="example">
-    <h4>계산 예시</h4>
+    <h3>계산 예시</h3>
     <p>메인 스피커에서 딜레이 타워까지 34 m, 기온 25°C인 경우:</p>
     <p>음속 = 331.3 + 0.606 × 25 = <strong>346.5 m/s</strong><br>
     지연 = 34 ÷ 346.5 × 1000 ≈ <strong>98.1 ms</strong></p>
@@ -107,7 +108,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/speaker-impedance-matching.html">스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭 <span>· 도구 가이드</span></a>
     <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
   <h1>LUFS·라우드니스 미터 읽는 법</h1>
@@ -77,7 +78,7 @@
 <tr><td>방송 (미국 ATSC A/85)</td><td>−24 LKFS</td><td>LKFS = LUFS와 동일</td></tr>
 </table>
   <div class="example">
-    <h4>정규화가 실제로 하는 일</h4>
+    <h3>정규화가 실제로 하는 일</h3>
     <p>내 마스터가 <strong>−8 LUFS</strong>(요즘 흔한 "라우드"한 팝)라고 하면, Spotify는 재생 시 <strong>−6 dB</strong>를 그냥 깎아 −14로 맞춥니다. 옆 곡이 −14로 만든 마스터라면 <strong>둘의 재생 음량이 같아집니다.</strong> 결국 −8까지 밀어 넣느라 희생한 다이내믹·트랜지언트만 손해입니다.</p>
     <p>반대로 −18 LUFS로 얌전하게 만들면 Spotify·YouTube는 안 올려주므로 옆 곡보다 4 dB 작게 들립니다. 목표(−14) 부근에 두는 게 안전합니다.</p>
   </div>
@@ -118,7 +119,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
     <a href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기 <span>· 믹싱·측정</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Electrical Calculator — Web Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,8 +12,8 @@
   :root{
     --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
     --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
-    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
+    --teal:#23695c; --blue:#33587a; --amber:#805710; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5b6468;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
@@ -159,25 +159,29 @@
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
 <!-- site-chrome:head -->
+<meta name="description" content="옴의 법칙, 전력, 임피던스, dB와 전력 환산, 케이블 전압 강하를 계산합니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/electrical-calculator.html">
 <meta name="theme-color" content="#f4f5f3">
 <link rel="stylesheet" href="/assets/tools.css">
 <!-- /site-chrome:head -->
 </head>
 <body>
 <!-- site-chrome:header -->
-<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
-<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<a class="skip chrome-ko" href="#main">본문으로 건너뛰기</a>
+<a class="skip chrome-en" href="#main" lang="en">Skip to content</a>
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></nav></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><nav class="site-nav" aria-label="Main navigation"><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></nav></div></header>
 <!-- /site-chrome:header -->
-<div class="app">
+<div class="app" id="main" role="main" tabindex="-1">
 
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
-    <div class="title">ELECTRICAL CALCULATOR<small>Ohm's Law · Power · Impedance · dB</small></div>
+    <h1 class="title">ELECTRICAL CALCULATOR<small>Ohm's Law · Power · Impedance · dB</small></h1>
     <div id="langSwitchMount"></div>
     <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 <!-- site-chrome:app -->
-<section class="tool-related chrome-ko"><aside class="app-pair app-pair--compact" aria-label="앱 버전: AudioEngineerToolkit-오디오엔지니어"><a class="ap-shot" href="/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_ko.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">앱 버전</p><h3><a href="/apps/toolkit/">AudioEngineerToolkit-오디오엔지니어</a></h3><p class="ap-line">현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/apps/toolkit/">앱 자세히 보기 →</a></div></aside></section><section class="tool-related chrome-en" lang="en"><aside class="app-pair app-pair--compact" aria-label="App version: AudioEngineerToolkit"><a class="ap-shot" href="/en/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_en.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">App version</p><h3><a href="/en/apps/toolkit/">AudioEngineerToolkit</a></h3><p class="ap-line">A set of offline calculators for audio engineers, ready on stage or in the studio with no internet.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/en/apps/toolkit/">App details →</a></div></aside></section>
+<section class="tool-related chrome-ko"><aside class="app-pair app-pair--compact" aria-label="앱 버전: AudioEngineerToolkit-오디오엔지니어"><a class="ap-shot" href="/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_ko.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">앱 버전</p><h2><a href="/apps/toolkit/">AudioEngineerToolkit-오디오엔지니어</a></h2><p class="ap-line">현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/apps/toolkit/">앱 자세히 보기 →</a></div></aside></section><section class="tool-related chrome-en" lang="en"><aside class="app-pair app-pair--compact" aria-label="App version: AudioEngineerToolkit"><a class="ap-shot" href="/en/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_en.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">App version</p><h2><a href="/en/apps/toolkit/">AudioEngineerToolkit</a></h2><p class="ap-line">A set of offline calculators for audio engineers, ready on stage or in the studio with no internet.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/en/apps/toolkit/">App details →</a></div></aside></section>
 <!-- /site-chrome:app -->
 
   <div class="chapter-picker" id="chapterPicker">
@@ -211,15 +215,15 @@
         <button data-solve="r" data-i18n="solve_r">R 구하기</button>
       </div>
       <div class="field">
-        <label>Voltage (V)</label>
+        <label for="ohmV">Voltage (V)</label>
         <div class="input-row"><input type="number" id="ohmV" value="12" step="0.1"><span class="unit">V</span></div>
       </div>
       <div class="field">
-        <label>Current (I)</label>
+        <label for="ohmI">Current (I)</label>
         <div class="input-row"><input type="number" id="ohmI" value="2" step="0.01"><span class="unit">A</span></div>
       </div>
       <div class="field">
-        <label>Resistance (R)</label>
+        <label for="ohmR">Resistance (R)</label>
         <div class="input-row"><input type="number" id="ohmR" value="6" step="0.1"><span class="unit">Ω</span></div>
       </div>
       <div class="result-list">
@@ -277,11 +281,11 @@
       <div class="panel-title">dB ↔ Power Ratio</div>
       <p class="phase-desc" data-i18n="db_power_desc">dB = 10 × log10(P2/P1). 둘 중 아무거나 입력하면 나머지가 자동으로 계산됩니다.</p>
       <div class="field">
-        <label data-i18n="db_level_diff_label">dB (레벨 차이)</label>
+        <label for="dbInput" data-i18n="db_level_diff_label">dB (레벨 차이)</label>
         <div class="input-row"><input type="number" id="dbInput" value="3" step="0.1"><span class="unit">dB</span></div>
       </div>
       <div class="field">
-        <label>Power Ratio (P2 / P1)</label>
+        <label for="dbRatioInput">Power Ratio (P2 / P1)</label>
         <div class="input-row"><input type="number" id="dbRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
       </div>
     </div>
@@ -290,11 +294,11 @@
       <div class="panel-title">dB ↔ Voltage Ratio</div>
       <p class="phase-desc" data-i18n="db_volt_desc">dB = 20 × log10(V2/V1). 전압(또는 전류) 기준 dB는 전력 기준과 계수가 다릅니다 — 같은 배수라도 dB 값이 달라요.</p>
       <div class="field">
-        <label data-i18n="db_level_diff_label">dB (레벨 차이)</label>
+        <label for="dbVoltInput" data-i18n="db_level_diff_label">dB (레벨 차이)</label>
         <div class="input-row"><input type="number" id="dbVoltInput" value="6" step="0.1"><span class="unit">dB</span></div>
       </div>
       <div class="field">
-        <label>Voltage Ratio (V2 / V1)</label>
+        <label for="dbVoltRatioInput">Voltage Ratio (V2 / V1)</label>
         <div class="input-row"><input type="number" id="dbVoltRatioInput" value="2" step="0.001"><span class="unit">×</span></div>
       </div>
       <p class="phase-desc" style="margin-top:14px; font-size:13px;" data-i18n="db_volt_note">참고: 같은 숫자의 "배수"라도 전력비냐 전압비냐에 따라 dB 값이 달라요. 예를 들어 "2배"가 전력비면 10×log10(2)≈3dB, 전압비면 20×log10(2)≈6dB예요. (전압이 2배가 되면 전력은 4배가 되므로, 물리적으로 같은 변화를 각각의 기준으로 계산하면 항상 같은 dB가 나와요 — 위 두 패널에 실제로 "2배"를 넣어 비교해보세요.)</p>
@@ -304,15 +308,15 @@
       <div class="panel-title">dBu / dBV (전압 기준 절대 레벨)</div>
       <p class="phase-desc" data-i18n="dbu_dbv_desc">dBV는 1V 기준, dBu는 0.775V(=600Ω에서 1mW를 내는 전압) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
       <div class="field">
-        <label>Voltage</label>
+        <label for="voltAbsInput">Voltage</label>
         <div class="input-row"><input type="number" id="voltAbsInput" value="1" step="0.001"><span class="unit">V</span></div>
       </div>
       <div class="field">
-        <label data-i18n="dbv_label">dBV (0dBV = 1V 기준)</label>
+        <label for="dbVInput" data-i18n="dbv_label">dBV (0dBV = 1V 기준)</label>
         <div class="input-row"><input type="number" id="dbVInput" value="0" step="0.01"><span class="unit">dBV</span></div>
       </div>
       <div class="field">
-        <label data-i18n="dbu_label">dBu (0dBu = 0.775V 기준)</label>
+        <label for="dbuInput" data-i18n="dbu_label">dBu (0dBu = 0.775V 기준)</label>
         <div class="input-row"><input type="number" id="dbuInput" value="2.22" step="0.01"><span class="unit">dBu</span></div>
       </div>
     </div>
@@ -321,15 +325,15 @@
       <div class="panel-title">dBm / dBW (전력 기준 절대 레벨)</div>
       <p class="phase-desc" data-i18n="dbm_dbw_desc">dBW는 1W 기준, dBm은 1mW 기준입니다 (dBW = dBm − 30). 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요.</p>
       <div class="field">
-        <label>Power</label>
+        <label for="powerAbsInput">Power</label>
         <div class="input-row"><input type="number" id="powerAbsInput" value="1" step="0.001"><span class="unit">W</span></div>
       </div>
       <div class="field">
-        <label data-i18n="dbw_label">dBW (0dBW = 1W 기준)</label>
+        <label for="dbWInput" data-i18n="dbw_label">dBW (0dBW = 1W 기준)</label>
         <div class="input-row"><input type="number" id="dbWInput" value="0" step="0.01"><span class="unit">dBW</span></div>
       </div>
       <div class="field">
-        <label data-i18n="dbm_label">dBm (0dBm = 1mW 기준)</label>
+        <label for="dbmInput" data-i18n="dbm_label">dBm (0dBm = 1mW 기준)</label>
         <div class="input-row"><input type="number" id="dbmInput" value="30" step="0.01"><span class="unit">dBm</span></div>
       </div>
       <p class="phase-desc" style="margin-top:14px; font-size:13px;" data-i18n="dbu_dbm_note">참고: 600Ω 기준에서는 dBu와 dBm이 정확히 같은 값이에요 (0.775V가 600Ω에서 딱 1mW를 내거든요) — 옛날 전화/방송 시스템에서 이 기준이 정착된 이유예요.</p>
@@ -342,15 +346,15 @@
       <div class="panel-title">AC Waveform (RMS ↔ Peak ↔ Peak-to-Peak)</div>
       <p class="phase-desc" data-i18n="acwave_desc">정현파(사인파) 기준입니다. 셋 중 아무거나 입력하면 나머지가 자동으로 계산돼요. (Peak = RMS × √2, P-P = 2 × Peak)</p>
       <div class="field">
-        <label>RMS Voltage</label>
+        <label for="acRmsInput">RMS Voltage</label>
         <div class="input-row"><input type="number" id="acRmsInput" value="1" step="0.001"><span class="unit">V RMS</span></div>
       </div>
       <div class="field">
-        <label>Peak Voltage</label>
+        <label for="acPeakInput">Peak Voltage</label>
         <div class="input-row"><input type="number" id="acPeakInput" value="1.414" step="0.001"><span class="unit">V pk</span></div>
       </div>
       <div class="field">
-        <label>Peak-to-Peak Voltage</label>
+        <label for="acPpInput">Peak-to-Peak Voltage</label>
         <div class="input-row"><input type="number" id="acPpInput" value="2.828" step="0.001"><span class="unit">V p-p</span></div>
       </div>
     </div>
@@ -362,8 +366,8 @@
       <div class="panel-title">Speaker Cable Voltage Drop</div>
       <p class="phase-desc" data-i18n="cable_desc">스피커 케이블 굵기(AWG)·길이·전류를 넣으면, 케이블 저항 때문에 생기는 전압 강하와 전력 손실을 계산합니다.</p>
       <div class="field">
-        <label>Cable Gauge (AWG)</label>
-        <div class="solve-picker" id="awgPicker">
+        <span id="label-awgPicker" class="control-label">Cable Gauge (AWG)</span>
+        <div class="solve-picker" id="awgPicker" role="group" aria-labelledby="label-awgPicker">
           <button data-awg="18">18 AWG</button>
           <button data-awg="16">16 AWG</button>
           <button data-awg="14" class="active">14 AWG</button>
@@ -372,11 +376,11 @@
         </div>
       </div>
       <div class="field">
-        <label data-i18n="cable_length_label">Cable Length (편도, 한쪽 길이)</label>
+        <label for="cableLengthInput" data-i18n="cable_length_label">Cable Length (편도, 한쪽 길이)</label>
         <div class="input-row"><input type="number" id="cableLengthInput" value="15" step="0.1" min="0"><span class="unit">m</span></div>
       </div>
       <div class="field">
-        <label>Load Current</label>
+        <label for="cableCurrentInput">Load Current</label>
         <div class="input-row"><input type="number" id="cableCurrentInput" value="2" step="0.1" min="0"><span class="unit">A</span></div>
       </div>
       <div class="result-list">

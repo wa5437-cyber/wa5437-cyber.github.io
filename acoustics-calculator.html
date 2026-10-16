@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Acoustics Calculator — Web Edition</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,8 +12,8 @@
   :root{
     --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
     --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
-    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
+    --teal:#23695c; --blue:#33587a; --amber:#805710; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5b6468;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
@@ -135,25 +135,29 @@
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
 <!-- site-chrome:head -->
+<meta name="description" content="주파수·파장·주기와 음정, 룸 모드, 잔향(RT60)을 계산합니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/acoustics-calculator.html">
 <meta name="theme-color" content="#f4f5f3">
 <link rel="stylesheet" href="/assets/tools.css">
 <!-- /site-chrome:head -->
 </head>
 <body>
 <!-- site-chrome:header -->
-<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
-<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<a class="skip chrome-ko" href="#main">본문으로 건너뛰기</a>
+<a class="skip chrome-en" href="#main" lang="en">Skip to content</a>
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></nav></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><nav class="site-nav" aria-label="Main navigation"><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></nav></div></header>
 <!-- /site-chrome:header -->
-<div class="app">
+<div class="app" id="main" role="main" tabindex="-1">
 
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
-    <div class="title">ACOUSTICS CALCULATOR<small>Frequency · Wavelength · Period</small></div>
+    <h1 class="title">ACOUSTICS CALCULATOR<small>Frequency · Wavelength · Period</small></h1>
     <div id="langSwitchMount"></div>
     <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 <!-- site-chrome:app -->
-<section class="tool-related chrome-ko"><aside class="app-pair app-pair--compact" aria-label="앱 버전: AudioEngineerToolkit-오디오엔지니어"><a class="ap-shot" href="/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_ko.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">앱 버전</p><h3><a href="/apps/toolkit/">AudioEngineerToolkit-오디오엔지니어</a></h3><p class="ap-line">현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/apps/toolkit/">앱 자세히 보기 →</a></div></aside></section><section class="tool-related chrome-en" lang="en"><aside class="app-pair app-pair--compact" aria-label="App version: AudioEngineerToolkit"><a class="ap-shot" href="/en/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_en.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">App version</p><h3><a href="/en/apps/toolkit/">AudioEngineerToolkit</a></h3><p class="ap-line">A set of offline calculators for audio engineers, ready on stage or in the studio with no internet.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/en/apps/toolkit/">App details →</a></div></aside></section>
+<section class="tool-related chrome-ko"><aside class="app-pair app-pair--compact" aria-label="앱 버전: AudioEngineerToolkit-오디오엔지니어"><a class="ap-shot" href="/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_ko.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">앱 버전</p><h2><a href="/apps/toolkit/">AudioEngineerToolkit-오디오엔지니어</a></h2><p class="ap-line">현장과 스튜디오에서 인터넷 없이 바로 쓰는 오디오 엔지니어용 계산기 모음입니다.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/apps/toolkit/">앱 자세히 보기 →</a></div></aside></section><section class="tool-related chrome-en" lang="en"><aside class="app-pair app-pair--compact" aria-label="App version: AudioEngineerToolkit"><a class="ap-shot" href="/en/apps/toolkit/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/toolkit/01_favorites_en.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">App version</p><h2><a href="/en/apps/toolkit/">AudioEngineerToolkit</a></h2><p class="ap-line">A set of offline calculators for audio engineers, ready on stage or in the studio with no internet.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineertoolkit/id6794612792?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/en/apps/toolkit/">App details →</a></div></aside></section>
 <!-- /site-chrome:app -->
 
   <div class="tab-picker" id="tabPicker">
@@ -169,7 +173,7 @@
     <div class="panel">
       <div class="panel-title">Frequency</div>
       <div class="field">
-        <label data-i18n="label_temperature">Temperature (음속 계산용)</label>
+        <label for="tempInput" data-i18n="label_temperature">Temperature (음속 계산용)</label>
         <div class="input-row">
           <input type="number" id="tempInput" value="15" step="1">
           <span class="unit">°C</span>
@@ -177,7 +181,7 @@
         <p class="speed-readout"><span data-i18n="label_current_speed_prefix">현재 음속: </span><span id="speedReadout">343.0</span> m/s</p>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Frequency</label>
+        <label for="freqInput">Frequency</label>
         <div class="input-row">
           <input type="number" id="freqInput" value="1000" step="1" min="1">
           <span class="unit">Hz</span>
@@ -208,7 +212,7 @@
       <div class="panel-title">Note ↔ Frequency</div>
       <p class="phase-desc" data-i18n="note_freq_desc">평균율(12음계, A4 = 440Hz 기준)입니다. 음정을 입력하면(예: A4, C#3, Bb2) 위 Frequency가 그 음정으로 바뀝니다.</p>
       <div class="field" style="margin-top:14px;">
-        <label>Note Name</label>
+        <label for="noteInput">Note Name</label>
         <div class="input-row">
           <input type="text" id="noteInput" value="C5" placeholder="예: A4, C#3, Bb2" data-i18n-placeholder="placeholder_note_example" style="text-transform:none;">
           <button class="upload-btn" id="noteApplyBtn" data-i18n="btn_apply" style="width:auto; flex-shrink:0; padding:12px 22px; font-size:16px; font-weight:700;">적용</button>
@@ -229,7 +233,7 @@
     <div class="panel">
       <div class="panel-title">Band</div>
       <div class="field">
-        <label>Center Frequency (F0)</label>
+        <label for="bandFreqInput">Center Frequency (F0)</label>
         <div class="input-row">
           <input type="number" id="bandFreqInput" value="1000" step="1" min="1">
           <span class="unit">Hz</span>
@@ -237,8 +241,8 @@
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label>Bandwidth</label>
-        <div class="tab-picker" id="bandwidthPicker" style="grid-template-columns:repeat(4,1fr); margin-top:6px;">
+        <span id="label-bandwidthPicker" class="control-label">Bandwidth</span>
+        <div class="tab-picker" id="bandwidthPicker" role="group" aria-labelledby="label-bandwidthPicker" style="grid-template-columns:repeat(4,1fr); margin-top:6px;">
           <button data-oct="1">1/1 Oct</button>
           <button data-oct="3" class="active">1/3 Oct</button>
           <button data-oct="6">1/6 Oct</button>
@@ -248,7 +252,7 @@
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label data-i18n="label_q_factor">Q factor (직접 입력 가능)</label>
+        <label for="qFactorInput" data-i18n="label_q_factor">Q factor (직접 입력 가능)</label>
         <div class="input-row">
           <input type="number" id="qFactorInput" value="4.32" step="0.01" min="0.01">
         </div>
@@ -290,7 +294,7 @@
       <p class="phase-desc" data-i18n="delay_desc">거리 또는 시간 중 아무거나 입력하면 나머지가 자동으로 계산돼요. 온도는 Frequency 탭과 서로 연동됩니다.</p>
 
       <div class="field" style="margin-top:14px;">
-        <label>Temperature</label>
+        <label for="delayTempInput">Temperature</label>
         <div class="input-row">
           <input type="number" id="delayTempInput" value="15" step="1">
           <span class="unit">°C</span>
@@ -298,7 +302,7 @@
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label>Distance</label>
+        <label for="delayDistInput">Distance</label>
         <div class="input-row">
           <input type="number" id="delayDistInput" value="10" step="0.1" min="0">
           <span class="unit">m</span>
@@ -306,7 +310,7 @@
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label>Delay Time</label>
+        <label for="delayTimeInput">Delay Time</label>
         <div class="input-row">
           <input type="number" id="delayTimeInput" value="29.15" step="0.01" min="0">
           <span class="unit">ms</span>
@@ -329,8 +333,8 @@
       <div class="panel-title" data-i18n="panel_volume_title">Volume (거리에 따른 SPL 감쇠)</div>
 
       <div class="field">
-        <label data-i18n="label_source_type">Source Type (음원 종류)</label>
-        <div class="tab-picker" id="sourceTypePicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
+        <span id="label-sourceTypePicker" class="control-label" data-i18n="label_source_type">Source Type (음원 종류)</span>
+        <div class="tab-picker" id="sourceTypePicker" role="group" aria-labelledby="label-sourceTypePicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
           <button data-src="point" class="active" data-i18n="src_point">점음원</button>
           <button data-src="line" data-i18n="src_line">선음원</button>
           <button data-src="plane" data-i18n="src_plane">면음원</button>
@@ -339,21 +343,21 @@
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label>Reference SPL</label>
+        <label for="volRefSplInput">Reference SPL</label>
         <div class="input-row">
           <input type="number" id="volRefSplInput" value="100" step="0.1">
           <span class="unit">dB SPL</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Reference Distance</label>
+        <label for="volRefDistInput">Reference Distance</label>
         <div class="input-row">
           <input type="number" id="volRefDistInput" value="1" step="0.1" min="0.01">
           <span class="unit">m</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Target Distance</label>
+        <label for="volTargetDistInput">Target Distance</label>
         <div class="input-row">
           <input type="number" id="volTargetDistInput" value="10" step="0.1" min="0.01">
           <span class="unit">m</span>
@@ -384,21 +388,21 @@
       <p class="phase-desc" data-i18n="required_power_desc">스피커 센시티비티(보통 "1W/1m 기준 dB"로 표기)와 거리·목표 SPL을 넣으면, 그 SPL을 내는 데 필요한 앰프 출력(W)을 계산합니다.</p>
 
       <div class="field" style="margin-top:14px;">
-        <label>Speaker Sensitivity (@ 1W/1m)</label>
+        <label for="volSensitivityInput">Speaker Sensitivity (@ 1W/1m)</label>
         <div class="input-row">
           <input type="number" id="volSensitivityInput" value="98" step="0.1">
           <span class="unit">dB SPL</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Distance</label>
+        <label for="volPowerDistInput">Distance</label>
         <div class="input-row">
           <input type="number" id="volPowerDistInput" value="10" step="0.1" min="0.01">
           <span class="unit">m</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label>Desired SPL at that Distance</label>
+        <label for="volDesiredSplInput">Desired SPL at that Distance</label>
         <div class="input-row">
           <input type="number" id="volDesiredSplInput" value="100" step="0.1">
           <span class="unit">dB SPL</span>
@@ -420,21 +424,21 @@
       <p class="phase-desc" data-i18n="room_modes_desc">가로·세로·높이 세 방향으로 생기는 정재파 공진 주파수(축모드)입니다. Frequency 탭의 온도(음속)를 그대로 씁니다. 100Hz 이하 저역에 여러 모드가 몰려있으면, 그 방에서 저음이 유독 뭉치거나(붐) 특정 위치에서 안 들리는 문제가 생기기 쉬워요.</p>
 
       <div class="field" style="margin-top:14px;">
-        <label data-i18n="label_length">Length (L, 가로)</label>
+        <label for="roomLengthInput" data-i18n="label_length">Length (L, 가로)</label>
         <div class="input-row">
           <input type="number" id="roomLengthInput" value="6" step="0.1" min="0.1">
           <span class="unit">m</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label data-i18n="label_width">Width (W, 세로)</label>
+        <label for="roomWidthInput" data-i18n="label_width">Width (W, 세로)</label>
         <div class="input-row">
           <input type="number" id="roomWidthInput" value="4" step="0.1" min="0.1">
           <span class="unit">m</span>
         </div>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label data-i18n="label_height">Height (H, 높이)</label>
+        <label for="roomHeightInput" data-i18n="label_height">Height (H, 높이)</label>
         <div class="input-row">
           <input type="number" id="roomHeightInput" value="2.7" step="0.1" min="0.1">
           <span class="unit">m</span>
@@ -481,27 +485,27 @@
       <p class="phase-desc" data-i18n="rt60_desc">RT60 = 0.161 × V / A — 방이 얼마나 오래 울리는지(잔향시간)를 계산합니다. V는 방 부피, A는 총 흡음력(sabins)이에요.</p>
 
       <div class="field">
-        <label>Length (L)</label>
+        <label for="rt60LengthInput">Length (L)</label>
         <div class="input-row"><input type="number" id="rt60LengthInput" value="6" step="0.1" min="0.1"><span class="unit">m</span></div>
       </div>
       <div class="field">
-        <label>Width (W)</label>
+        <label for="rt60WidthInput">Width (W)</label>
         <div class="input-row"><input type="number" id="rt60WidthInput" value="4" step="0.1" min="0.1"><span class="unit">m</span></div>
       </div>
       <div class="field">
-        <label>Height (H)</label>
+        <label for="rt60HeightInput">Height (H)</label>
         <div class="input-row"><input type="number" id="rt60HeightInput" value="2.7" step="0.1" min="0.1"><span class="unit">m</span></div>
       </div>
 
       <div class="field" style="margin-top:14px;">
-        <label data-i18n="label_surface_treatment">표면 처리 (평균 흡음계수 α)</label>
-        <div class="tab-picker" id="absorptionPresetPicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
+        <span id="label-absorptionPresetPicker" class="control-label" data-i18n="label_surface_treatment">표면 처리 (평균 흡음계수 α)</span>
+        <div class="tab-picker" id="absorptionPresetPicker" role="group" aria-labelledby="label-absorptionPresetPicker" style="grid-template-columns:repeat(3,1fr); margin-top:6px;">
           <button data-alpha="0.05" data-i18n="absorption_hard" data-i18n-html="true">매우 단단함<br><span style="font-weight:400;font-size:10.5px;">(콘크리트·유리)</span></button>
           <button data-alpha="0.15" class="active" data-i18n="absorption_medium" data-i18n-html="true">보통<br><span style="font-weight:400;font-size:10.5px;">(벽지·바닥재)</span></button>
           <button data-alpha="0.35" data-i18n="absorption_soft" data-i18n-html="true">흡음 처리<br><span style="font-weight:400;font-size:10.5px;">(카펫·커튼)</span></button>
         </div>
         <div class="input-row" style="margin-top:10px;">
-          <input type="number" id="absorptionAlphaInput" value="0.15" step="0.01" min="0.01" max="1">
+          <input type="number" id="absorptionAlphaInput" aria-labelledby="label-absorptionPresetPicker" value="0.15" step="0.01" min="0.01" max="1">
           <span class="unit">α (0~1)</span>
         </div>
       </div>
@@ -531,7 +535,7 @@
       <div class="panel-title" data-i18n="panel_critical_distance_title">Critical Distance (임계거리)</div>
       <p class="phase-desc" data-i18n="critical_distance_desc">직접음과 반사음(잔향음)의 세기가 같아지는 거리입니다. 이보다 가까우면 직접음이, 멀면 잔향음이 우세해져요.</p>
       <div class="field">
-        <label data-i18n="label_directivity_q">스피커 지향성 계수 (Q)</label>
+        <label for="directivityQInput" data-i18n="label_directivity_q">스피커 지향성 계수 (Q)</label>
         <div class="input-row"><input type="number" id="directivityQInput" value="2" step="0.1" min="0.1"><span class="unit">Q</span></div>
         <p class="phase-desc" style="margin-top:8px; font-size:12.5px;" data-i18n="directivity_note">참고: 무지향성 스피커는 Q≈1, 일반적인 지향성 스피커는 Q≈2~6 정도예요.</p>
       </div>

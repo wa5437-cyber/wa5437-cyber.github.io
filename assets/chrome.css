@@ -9,6 +9,11 @@
 .site-header :where(a,summary):focus-visible,.site-footer a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
 
 /* Header */
+.skip{position:absolute;left:-999px}
+.skip:focus{left:12px;top:12px;background:#fff;color:#202426;padding:8px 12px;border-radius:8px;z-index:200}
+.site-header .site-nav{display:flex;min-width:0;position:static;border:0;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;z-index:auto}
+/* Anchor targets stay below the sticky header, including keyboard skip links. */
+html{scroll-padding-top:80px}
 .site-header{position:sticky;top:0;background:rgba(244,245,243,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:150}
 .site-header .bar{display:flex;align-items:center;gap:20px;min-height:64px;position:relative}
 .site-header .brand{font-family:var(--sans);font-weight:700;font-size:19px;letter-spacing:-.015em;color:var(--ink);text-decoration:none;margin-right:auto;white-space:nowrap}

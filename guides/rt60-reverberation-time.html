@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
   <h1>RT60·잔향시간 이해와 계산</h1>
@@ -75,7 +76,7 @@
 </table>
 
   <div class="example">
-    <h4>계산 예시 — 소규모 다목적실</h4>
+    <h3>계산 예시 — 소규모 다목적실</h3>
     <p>10 m × 8 m × 3.2 m 방. 부피 V = 256 ㎥.</p>
     <p>표면적: 바닥 80 + 천장 80 + 벽 (10+8)×2×3.2 = 115.2 → 합계 S ≈ 275 ㎡.</p>
     <p>마감이 전부 콘크리트·석고(평균 α ≈ 0.05)라면<br>
@@ -139,7 +140,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
     <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

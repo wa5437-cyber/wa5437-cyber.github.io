@@ -252,6 +252,11 @@ def strip_chrome(text):
     text = re.sub(r"<footer.*?</footer>", "", text, flags=re.S)
     text = re.sub(r"\n\n?[ \t]*<!-- author-box -->.*?<!-- /author-box -->", "", text, flags=re.S)
     text = re.sub(r'<script type="application/ld\+json">.*?</script>', "", text, flags=re.S)
+    # Accessibility changes preserve the article's original words/links.
+    text = text.replace('\n<a class="skip" href="#main">본문으로 건너뛰기</a>', '')
+    text = text.replace(' id="main" tabindex="-1"', '')
+    text = re.sub(r'(<div class="(?:example|related)">\s*)<h[234]>(.*?)</h[234]>',
+                  r'\1<h4>\2</h4>', text, flags=re.S)
     return text.replace('href="/#apps"', 'href="/apps/"').replace('href="/#tools"', 'href="/tools/"')
 
 

@@ -104,8 +104,9 @@ def header(lang, alts, current=None):
     nav = "".join(item(k, p) for k, p in NAV)
     return (f'<header class="site-header"{chrome_lang_attr(lang)}><div class="wrap bar">'
             f'<a class="brand" href="{esc(url(c, "/"))}">{esc(SITE["brand"])}</a>'
+            f'<nav class="site-nav" aria-label="{"주 메뉴" if c == "ko" else "Main navigation"}">'
             f'<details class="menu"><summary>{esc(t("menu", c))}</summary><ul class="nav">{nav}</ul></details>'
-            f'<ul class="nav nav-wide">{nav}</ul>{lang_menu(lang, alts)}</div></header>')
+            f'<ul class="nav nav-wide">{nav}</ul></nav>{lang_menu(lang, alts)}</div></header>')
 
 
 def footer(lang):

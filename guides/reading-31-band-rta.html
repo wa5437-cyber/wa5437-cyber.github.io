@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
   <h1>31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트</h1>
@@ -69,7 +70,7 @@
     <li>측정 마이크를 1~2m만 옮겨도 저역 그래프가 확 바뀝니다. 여러 위치를 재고 평균을 봐야 룸 모드인지 한 지점의 특이점인지 구분됩니다.</li>
   </ul>
   <div class="example">
-    <h4>대략의 감</h4>
+    <h3>대략의 감</h3>
     <p>방의 한 축 길이가 L(m)이면, 그 축의 첫 번째 룸 모드는 약 <strong>172 ÷ L (Hz)</strong> 근처입니다. 길이 5m 방이면 약 34Hz, 그 배수인 69Hz·103Hz…에서도 모드가 생깁니다. RTA에서 이 근처 밴드가 유독 튀면 룸 모드일 가능성이 큽니다.</p>
   </div>
 
@@ -117,7 +118,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
     <a href="/guides/speaker-impedance-matching.html">스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

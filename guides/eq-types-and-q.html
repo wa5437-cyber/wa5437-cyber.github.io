@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
   <h1>EQ 종류와 Q값</h1>
@@ -61,7 +62,7 @@
   <div class="formula">Q = 중심 주파수 ÷ 대역폭</div>
   <p>Q가 클수록 좁고 뾰족하게, 작을수록 넓고 완만하게 걸립니다. 정의 방식(대역폭을 재는 기준)은 제품마다 조금씩 다를 수 있습니다.</p>
   <div class="example">
-    <h4>숫자로 보기 (중심 1 kHz)</h4>
+    <h3>숫자로 보기 (중심 1 kHz)</h3>
     <p>Q = 1이면 대역폭 약 <strong>1,000 Hz</strong>, Q = 4이면 약 <strong>250 Hz</strong>, Q = 10이면 약 <strong>100 Hz</strong>입니다. 1옥타브 폭은 Q ≈ 1.41, 1/3옥타브 폭은 Q ≈ 4.3이므로, 31밴드 그래픽 EQ 슬라이더 하나는 대략 Q 4 정도의 폭입니다.</p>
   </div>
 
@@ -91,7 +92,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/pink-noise-eq-ear-training.html">핑크 노이즈로 EQ 귀 훈련하기 <span>· 가이드</span></a>
     <a href="/guides/frequency-and-wavelength.html">주파수와 파장 계산 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
   <h1>주파수와 파장 계산</h1>
@@ -54,7 +55,7 @@
   <div class="formula">주파수(Hz) = 음속(m/s) ÷ 파장(m)</div>
 
   <div class="example">
-    <h4>계산 예시</h4>
+    <h3>계산 예시</h3>
     <p>100 Hz의 파장: 343 ÷ 100 = <strong>3.43 m</strong></p>
     <p>1 kHz의 파장: 343 ÷ 1000 = <strong>0.343 m</strong> (34.3 cm)</p>
     <p>50 Hz(서브베이스 근처)의 파장: 343 ÷ 50 = <strong>6.86 m</strong> — 웬만한 방의 대각선 길이만 하다.</p>
@@ -101,7 +102,7 @@
   </ul>
 
   <div class="example">
-    <h4>계산 예시 — 3:1 룰</h4>
+    <h3>계산 예시 — 3:1 룰</h3>
     <p>마이크 A와 소스 거리 30 cm, 마이크 B는 90 cm(3배 이상 — 룰 충족)라면, 두 마이크가 잡는 소리의 도달 시간차는 (90−30)/100 ÷ 343 ≈ 1.75 ms. 이 시간차가 반파장과 맞는 주파수 = 1 ÷ (2 × 0.00175) ≈ <strong>286 Hz</strong>에서 상쇄가 가장 심하지만, 레벨차(3배 거리 = 약 9.5 dB 감쇠)가 충분히 커서 상쇄가 들릴 만큼 크지 않다. 거리비가 3:1보다 좁으면 상쇄가 뚜렷해진다.</p>
   </div>
 
@@ -122,7 +123,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/rt60-reverberation-time.html">RT60·잔향시간 이해와 계산 <span>· 도구 가이드</span></a>
     <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

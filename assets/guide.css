@@ -50,7 +50,7 @@ a:focus-visible{ outline:3px solid var(--teal); outline-offset:3px; border-radiu
 .article code{ font-family:var(--mono); font-size:0.9em; background:var(--bg-alt); border:1px solid var(--line); border-radius:5px; padding:1px 5px; }
 .formula{ font-family:var(--mono); font-size:14.5px; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:0 0 18px; overflow-x:auto; line-height:1.7; }
 .example{ background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--teal); border-radius:12px; padding:18px 20px; margin:0 0 20px; }
-.example h4{ font-size:13px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--teal); margin-bottom:10px; }
+.article .example :is(h3,h4){ font-size:13px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--teal); margin:0 0 10px; }
 .example > :last-child,.note > :last-child,.callout .body > :last-child{ margin-bottom:0; }
 .note{ background:var(--bg-alt); border:1px solid var(--line); border-radius:12px; padding:15px 18px; margin:0 0 20px; font-size:15px; color:var(--text-secondary); line-height:1.7; }
 table.data{ width:100%; border-collapse:collapse; margin:0 0 20px; font-size:15px; background:var(--panel); }
@@ -74,7 +74,7 @@ table.data th{ background:var(--soft); font-size:14px; font-weight:600; }
 
 /* related */
 .related{ border-top:1px solid var(--line); margin-top:48px; padding-top:28px; }
-.related h4{ font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:10px; }
+.article .related :is(h2,h4){ font-size:14px; font-weight:600; color:var(--text-primary); margin:0 0 10px; }
 .related a{ display:block; padding:12px 0; border-bottom:1px solid var(--line); font-size:16px; font-weight:500; color:var(--text-primary); }
 .related a:last-child{ border-bottom:0; }
 .related a:hover{ color:var(--teal); }

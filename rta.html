@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RTA — Real-Time Analyzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,8 +12,8 @@
   :root{
     --bg-deep:#f4f5f3; --bg-panel:#ffffff; --bg-panel-2:#e8eeeb;
     --line: rgba(32,36,38,0.08); --line-strong: rgba(32,36,38,0.18);
-    --teal:#23695c; --blue:#33587a; --amber:#9c6b17; --red:#b23a2a;
-    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5f686c;
+    --teal:#23695c; --blue:#33587a; --amber:#805710; --red:#b23a2a;
+    --text-primary:#202426; --text-secondary:#5b6468; --text-tertiary:#5b6468;
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ min-height:100%; }
@@ -144,7 +144,7 @@
   }
   .vu-bar-fill{
     height:100%; width:0%;
-    background:linear-gradient(90deg, #23695c, #23695c 65%, #9c6b17 85%, #b23a2a 96%);
+    background:linear-gradient(90deg, #23695c, #23695c 65%, #805710 85%, #b23a2a 96%);
     transition:width 0.08s linear;
   }
   .spl-big-val{ font-family:'IBM Plex Mono',monospace; font-size:76px; font-weight:700; color:var(--teal); line-height:1; }
@@ -268,25 +268,29 @@
 </style>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
 <!-- site-chrome:head -->
+<meta name="description" content="기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/rta.html">
 <meta name="theme-color" content="#f4f5f3">
 <link rel="stylesheet" href="/assets/tools.css">
 <!-- /site-chrome:head -->
 </head>
 <body>
 <!-- site-chrome:header -->
-<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div></header>
-<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></div></header>
+<a class="skip chrome-ko" href="#main">본문으로 건너뛰기</a>
+<a class="skip chrome-en" href="#main" lang="en">Skip to content</a>
+<header class="site-header chrome-ko"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/" aria-current="page">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></nav></div></header>
+<header class="site-header chrome-en" lang="en"><div class="wrap bar"><a class="brand" href="/en/">ML Music Studio</a><nav class="site-nav" aria-label="Main navigation"><details class="menu"><summary>Menu</summary><ul class="nav"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></details><ul class="nav nav-wide"><li><a href="/en/work/">Work</a></li><li><a href="/en/studio/">Studio</a></li><li><a href="/en/apps/">Apps</a></li><li><a href="/en/tools/" aria-current="page">Web Tools</a></li><li><a href="/en/plugins/">Plugins</a></li><li><a href="/guides/">Guides</a></li></ul></nav></div></header>
 <!-- /site-chrome:header -->
-<div class="app">
+<div class="app" id="main" role="main" tabindex="-1">
 
   <div class="topbar">
     <div class="mark"><span></span><span></span><span></span></div>
-    <div class="title">RTA<small>Real-Time Analyzer · Mic Input</small></div>
+    <h1 class="title">RTA<small>Real-Time Analyzer · Mic Input</small></h1>
     <div id="langSwitchMount"></div>
     <a class="home-link" href="index.html" data-i18n="nav_home">← 홈으로</a>
   </div>
 <!-- site-chrome:app -->
-<section class="tool-related chrome-ko"><aside class="app-pair app-pair--compact" aria-label="앱 버전: AudioEngineerKit: SPL &amp; RTA"><a class="ap-shot" href="/apps/spl-rta/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/spl-rta/01_spl_ko.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">앱 버전</p><h3><a href="/apps/spl-rta/">AudioEngineerKit: SPL &amp; RTA</a></h3><p class="ap-line">현장 사운드 엔지니어를 위한 실시간 SPL 미터와 31밴드 RTA 측정 앱입니다.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/apps/spl-rta/">앱 자세히 보기 →</a></div></aside></section><section class="tool-related chrome-en" lang="en"><aside class="app-pair app-pair--compact" aria-label="App version: AudioEngineerKit: SPL &amp; RTA"><a class="ap-shot" href="/en/apps/spl-rta/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/spl-rta/01_spl_en.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">App version</p><h3><a href="/en/apps/spl-rta/">AudioEngineerKit: SPL &amp; RTA</a></h3><p class="ap-line">A real-time SPL meter and 31-band RTA for sound engineers on site.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/en/apps/spl-rta/">App details →</a></div></aside></section>
+<section class="tool-related chrome-ko"><aside class="app-pair app-pair--compact" aria-label="앱 버전: AudioEngineerKit: SPL &amp; RTA"><a class="ap-shot" href="/apps/spl-rta/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/spl-rta/01_spl_ko.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">앱 버전</p><h2><a href="/apps/spl-rta/">AudioEngineerKit: SPL &amp; RTA</a></h2><p class="ap-line">현장 사운드 엔지니어를 위한 실시간 SPL 미터와 31밴드 RTA 측정 앱입니다.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/apps/spl-rta/">앱 자세히 보기 →</a></div></aside></section><section class="tool-related chrome-en" lang="en"><aside class="app-pair app-pair--compact" aria-label="App version: AudioEngineerKit: SPL &amp; RTA"><a class="ap-shot" href="/en/apps/spl-rta/" tabindex="-1" aria-hidden="true"><img class="phone" src="/img/apps/spl-rta/01_spl_en.jpg" alt="" width="736" height="1600" loading="lazy"></a><div class="ap-copy"><p class="ap-kicker">App version</p><h2><a href="/en/apps/spl-rta/">AudioEngineerKit: SPL &amp; RTA</a></h2><p class="ap-line">A real-time SPL meter and 31-band RTA for sound engineers on site.</p><p class="ap-platforms">iPhone · iPad · Mac</p></div><div class="ap-actions"><a class="btn primary" href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a><a class="ap-more" href="/en/apps/spl-rta/">App details →</a></div></aside></section>
 <!-- /site-chrome:app -->
 
   <div class="status">
@@ -311,21 +315,21 @@
 
   <div class="range-panel">
     <div class="range-field">
-      <label data-i18n="label_floor">Floor (조용한 소리 기준)</label>
+      <label for="floorInput" data-i18n="label_floor">Floor (조용한 소리 기준)</label>
       <div class="range-input-row">
         <input type="number" id="floorInput" value="30" step="1">
         <span class="unit">dB</span>
       </div>
     </div>
     <div class="range-field">
-      <label data-i18n="label_ceiling">Ceiling (큰 소리 기준)</label>
+      <label for="ceilingInput" data-i18n="label_ceiling">Ceiling (큰 소리 기준)</label>
       <div class="range-input-row">
         <input type="number" id="ceilingInput" value="120" step="1">
         <span class="unit">dB</span>
       </div>
     </div>
     <div class="range-field">
-      <label><span data-i18n="label_range_prefix">Range (Floor 기준 폭) · </span><span id="rangeValueLabel">90</span>dB</label>
+      <label for="rangeInput"><span data-i18n="label_range_prefix">Range (Floor 기준 폭) · </span><span id="rangeValueLabel">90</span>dB</label>
       <input type="range" id="rangeInput" min="20" max="140" step="1" value="90" class="range-slider">
     </div>
     <button class="toolbar-btn" id="boostQuietBtn" data-i18n="btn_boost_quiet">🔉 작은 소리 더 잘 보이게</button>
@@ -335,14 +339,14 @@
       <summary data-i18n="calib_summary">🎯 정확도 더 높이기 (선택사항 — 안 해도 자동으로 작동해요)</summary>
       <p class="calib-note" data-i18n="calib_note">기본값(오프셋 140dB)만으로도 바로 작동합니다. 더 정확하게 맞추고 싶을 때만 아래를 써보세요.</p>
       <div class="range-field">
-        <label data-i18n="label_calib_offset">보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨</label>
+        <label for="calibInput" data-i18n="label_calib_offset">보정 오프셋 (dBFS→SPL 근사) · 자동 저장됨</label>
         <div class="range-input-row">
           <input type="number" id="calibInput" value="140" step="1">
           <span class="unit">dB</span>
         </div>
       </div>
       <div class="range-field">
-        <label data-i18n="label_target_spl">기준 SPL (다른 SPL미터 값)</label>
+        <label for="targetSplInput" data-i18n="label_target_spl">기준 SPL (다른 SPL미터 값)</label>
         <div class="range-input-row">
           <input type="number" id="targetSplInput" value="0" step="1">
           <span class="unit">dB SPL</span>

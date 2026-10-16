@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
   <h1>BPM으로 딜레이·리버브 타임 계산하기</h1>
@@ -60,7 +61,7 @@
   </div>
 
   <div class="example">
-    <h4>계산 예시 — 120 BPM</h4>
+    <h3>계산 예시 — 120 BPM</h3>
     <p>4분음표 = 60,000 ÷ 120 = <strong>500 ms</strong></p>
     <p>8분 = 250 ms · 16분 = 125 ms · 점8분 = 375 ms · 8분 셋잇단 ≈ 167 ms · 부점4분(점4분) = 750 ms</p>
     <p>보컬 슬랩백은 보통 80~140 ms이므로 120 BPM에서는 <strong>32분음표(≈63 ms)나 16분음표(125 ms)</strong> 근처를 고릅니다.</p>
@@ -126,7 +127,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
     <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 믹싱·측정</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

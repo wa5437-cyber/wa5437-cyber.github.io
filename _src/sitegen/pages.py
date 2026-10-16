@@ -207,7 +207,7 @@ def home(lang):
                        f'<p>{esc(short(g[1], 70))}</p></li>')
     tools_col = (f'<div><h2>{esc(c["tools_title"])}</h2><ul class="link-list">{tools}</ul>'
                  f'<a class="more" href="{esc(url(lang, "/tools/"))}">{esc(c["tools_more"])} →</a></div>')
-    guides_col = (f'<div><h2>{esc(c["guides_title"])}</h2><ul class="link-list guide-links">{guides}</ul>'
+    guides_col = (f'<div><h2>{esc(c["guides_title"])}</h2><ul class="link-list guide-links" lang="ko">{guides}</ul>'
                   f'<a class="more" href="/guides/">{esc(c["guides_more"])} →</a></div>') if guides else ""
     more = f'<section class="band"><div class="wrap split">{tools_col}{guides_col}</div></section>'
     # 8) 문의(어두운 띠)
@@ -269,16 +269,16 @@ def tools(lang):
             img = tool_img(it["href"])
             pic = (f'<a class="tc-img" href="{esc(it["href"])}" tabindex="-1" aria-hidden="true">'
                    f'<img src="{esc(img)}" alt=""{kit.img_attrs(img)} loading="lazy"></a>') if img else ""
-            label = "앱 보기" if lang == "ko" else "See the app"
-            link = (f'<a class="tc-app" href="{esc(app_href(lang, app))}" '
-                    f'aria-label="{esc(label + ": " + app["name"][lang])}">{label} →</a>') if app else ""
+            label = "도구 열기" if lang == "ko" else "Open tool"
+            link = (f'<a class="tc-app" href="{esc(it["href"])}" '
+                    f'aria-label="{esc(label + ": " + it["name"])}">{label} →</a>')
             cards += (f'<div class="tool-card">{pic}<div class="tc-body"><h3><a href="{esc(it["href"])}">{name}</a></h3>'
                       f'<p>{esc(it["text"])}</p>{link}</div></div>')
         slugs = list(dict.fromkeys(it.get("app") for it in g["items"] if it.get("app")))
         panels = "".join(app_pair(apps[s], lang) for s in slugs if s in apps and has_detail(s))
         groups += (f'<section class="band tool-group"><div class="wrap"><h2>{esc(g["title"])}</h2>'
-                   f'<div class="tool-group-grid"><div class="group-apps">{panels}</div>'
-                   f'<div class="tool-cards tc-{len(g["items"])}">{cards}</div></div></div></section>')
+                   f'<div class="tool-group-grid"><div class="tool-cards tc-{len(g["items"])}">{cards}</div>'
+                   f'<div class="group-apps">{panels}</div></div></div></section>')
     body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
             f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
     path = url(lang, "/tools/")
@@ -376,9 +376,10 @@ def app_pair(app, lang, compact=False):
     platforms = (det.get("platforms") or {}).get(lang) or app["badge"][lang]
     label, more = ("앱 버전", "앱 자세히 보기") if lang == "ko" else ("App version", "App details")
     href = app_href(lang, app)
+    heading = "h2" if compact else "h3"
     return (f'<aside class="app-pair{" app-pair--compact" if compact else ""}" aria-label="{label}: {esc(app["name"][lang])}">'
             f'<a class="ap-shot" href="{esc(href)}" tabindex="-1" aria-hidden="true">{shot_img(src, "")}</a>'
-            f'<div class="ap-copy"><p class="ap-kicker">{label}</p><h3><a href="{esc(href)}">{esc(app["name"][lang])}</a></h3>'
+            f'<div class="ap-copy"><p class="ap-kicker">{label}</p><{heading}><a href="{esc(href)}">{esc(app["name"][lang])}</a></{heading}>'
             f'<p class="ap-line">{esc(line)}</p><p class="ap-platforms">{esc(platforms)}</p></div>'
             f'<div class="ap-actions">{store_buttons(app, lang)}<a class="ap-more" href="{esc(href)}">{more} →</a></div></aside>')
 
@@ -417,10 +418,10 @@ def apps_index(lang):
         if has_detail(a["slug"]):
             href = esc(url(lang, "/apps/" + a["slug"] + "/"))
             stage = f'<a class="stage-link" href="{href}" tabindex="-1" aria-hidden="true">{stage}</a>' if stage else ""
-            title = f'<h3><a href="{href}">{name}</a></h3>'
+            title = f'<h2><a href="{href}">{name}</a></h2>'
             link = f'<a class="more" href="{href}">{esc(strings.APP_UI["details"][lang])} →</a>'
         else:
-            title, link = f"<h3>{name}</h3>", ""
+            title, link = f"<h2>{name}</h2>", ""
         pill = f'<span class="pill">{esc(a["badge"][lang])}</span>' if a["badge"][lang] else ""
         cards += (f'<div class="card product">{stage}<div class="product-body">{pill}'
                   f'{title}<p>{esc(short(a["tagline"][lang]))}</p>'
@@ -509,13 +510,13 @@ def _app_page_full(lang, app, det, slug):
     for i, b in enumerate(det["blocks"]):
         blocks += (f'<div class="alt{" rev" if i % 2 else ""}"><div class="alt-img">'
                    f'{shot_img(img_dir + pick_img(b["img"], lang), b["alt"][lang], "shot")}</div>'
-                   f'<div class="alt-text"><h3>{esc(b["title"][lang])}</h3><p>{esc(b["text"][lang])}</p></div></div>')
+                   f'<div class="alt-text"><h2>{esc(b["title"][lang])}</h2><p>{esc(b["text"][lang])}</p></div></div>')
     steps = "".join(f'<li><strong>{esc(s["t"])}</strong><br>{esc(s["d"])}</li>' for s in det["steps"][lang])
     guides = ""
     for g in det.get("related", []):
         info = guide_title(g)
         if info:
-            guides += f'<li><a href="/guides/{esc(g)}.html">{esc(info[0])}</a></li>'
+            guides += f'<li><a href="/guides/{esc(g)}.html" lang="ko">{esc(info[0])}</a></li>'
     rel = (f'<section class="band"><div class="wrap"><h2>{esc(ui["related"][lang])}</h2>'
            f'<ul class="bullets">{guides}</ul></div></section>') if guides else ""
     privacy = f'<p><a href="{esc(privacy_href(app))}">{esc(ui["privacy"][lang])}</a></p>'

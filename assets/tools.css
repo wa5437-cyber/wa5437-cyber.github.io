@@ -22,9 +22,17 @@ html:not(:lang(ko)) .chrome-ko{display:none}
 html:lang(ko) body{word-break:keep-all;overflow-wrap:break-word}
 html:lang(ja) body,html:lang(zh-Hans) body{word-break:normal;line-break:strict}
 body :where(a,button,input,select,textarea,summary):focus-visible{outline:3px solid #23695c;outline-offset:3px}
+/* Override the more specific legacy range rule that removes its outline. */
+.app input[type=range]:focus-visible{outline:3px solid #23695c;outline-offset:3px}
+.app .startbtn{color:#fff}
 .app :where(button,input:not([type=range]),select,textarea){border-color:#7a858a}
 .app .topbar{flex-wrap:wrap}
 .app .topbar .title{min-width:0}
+.app .topbar h1.title{line-height:inherit}
+.app .control-label{display:block;font-family:'IBM Plex Mono',monospace;font-size:14.5px;color:var(--text-primary);opacity:.9;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px}
+/* Numeric fields must shrink inside two-column grids at 320px. */
+.app .field,.app .input-row{min-width:0}
+.app input:not([type=range]){min-width:0}
 .app .music-filename{word-break:keep-all;overflow-wrap:anywhere}
 .app button.active{border-color:#5b6468}
 @media(max-width:480px){

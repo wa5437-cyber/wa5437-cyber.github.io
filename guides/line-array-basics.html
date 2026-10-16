@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
   <h1>라인 어레이 기초</h1>
@@ -68,7 +69,7 @@
   <p>점음원은 거리 2배마다 −6 dB입니다. 라인 어레이는 가까운 구간에서 원통형으로 퍼져 <strong>거리 2배에 약 −3 dB</strong>만 줄어듭니다. 다만 충분히 멀어지면 다시 −6 dB로 돌아옵니다. 그 경계 거리는 근사적으로 다음과 같이 봅니다.</p>
   <div class="formula">경계 거리 ≈ L² ÷ (2 × λ)</div>
   <div class="example">
-    <h4>숫자로 보기</h4>
+    <h3>숫자로 보기</h3>
     <p>어레이 길이 L = 3 m, 주파수 1 kHz(파장 λ ≈ 0.34 m)라면 3² ÷ (2 × 0.34) ≈ <strong>13 m</strong>입니다. 주파수가 높을수록 경계가 멀어져, 고음은 더 먼 거리까지 덜 줄어듭니다.</p>
   </div>
 
@@ -90,7 +91,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/spl-inverse-square-law.html">SPL과 역제곱 법칙 — 거리별 음압 감쇠 계산 <span>· 도구 가이드</span></a>
     <a href="/guides/delay-tower-alignment.html">딜레이 타워 정렬 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

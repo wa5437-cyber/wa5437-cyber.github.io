@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 기초 가이드</div>
   <h1>데시벨 공식과 단위 총정리</h1>
@@ -74,7 +75,7 @@
 </table>
 
   <div class="example">
-    <h4>+4 dBu와 −10 dBV 비교</h4>
+    <h3>+4 dBu와 −10 dBV 비교</h3>
     <p>+4 dBu = 0.7746 × 10^(4/20) ≈ <strong>1.228 V</strong>, −10 dBV = 10^(−10/20) ≈ <strong>0.316 V</strong>입니다. 비율은 20 × log(0.316 / 1.228) ≈ <strong>−11.8 dB</strong>. 서로 기준이 다른 단위는 전압으로 바꾼 뒤 비교해야 합니다. 참고로 0 dBV는 약 +2.2 dBu입니다.</p>
   </div>
 
@@ -98,7 +99,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/spl-inverse-square-law.html">SPL과 역제곱 법칙 <span>· 도구 가이드</span></a>
     <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 <span>· 가이드</span></a>
     <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 도구 가이드</span></a>

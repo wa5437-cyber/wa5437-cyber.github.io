@@ -5,7 +5,7 @@
       chrome_tools.py --check  쓰지 않고, 변환이 필요한 파일이 있으면 종료코드 1
 
 - <script> 의 내용은 한 글자도 건드리지 않는다(테스트가 변환 전후를 바이트 비교한다).
-- <style> 안의 옛 크림색·글꼴 이름만 새 값으로 바꾼다. 바꾼 값은 원래 값 목록에 없으므로 다시 적용해도 그대로다.
+- <style> 안의 옛 크림색·글꼴 이름·대비가 부족한 강조색을 바꾼다. 새 값은 치환 대상이 아니므로 멱등이다.
 - <head>: Google Fonts 링크를 새 글꼴로 바꾸고, </head> 앞에 표시(<!-- site-chrome:head -->) 사이로 tools.css 를 넣는다.
 - <body>: 바로 뒤에 사이트 머리(ko·en 두 벌, 도구의 언어 선택에 따라 CSS 로 하나만 보임),
           상단 도구 제목 바로 아래에 앱 버전 패널, </body> 앞에 사이트 푸터. 표시 주석 사이를 다시 갈아 끼운다.
@@ -14,6 +14,7 @@
   "Cannot read properties of undefined" 로 죽던 버그를 고친다. 스크립트 내용은 그대로, 순서만 바뀐다.
 - 도구 자체의 언어 선택(i18n-core.js)은 그대로 두고, 사이트 머리에는 언어 메뉴를 넣지 않는다.
 - 옛 "← 홈으로" 단추와 문제풀이의 옛 상단 막대는 tools.css 에서 숨긴다(마크업·스크립트는 그대로).
+- 확대 제한을 없애고 본문 랜드마크·제목·정적 입력 라벨을 보완한다. 스크립트로 만드는 입력은 건드리지 않는다.
 바꿀 자리가 없으면 ValueError(템플릿에서 벗어난 파일을 알아채려고).
 """
 import pathlib
@@ -42,7 +43,9 @@ STYLE_MAP = {
     "#e8f2ec": "#e8eeeb",
     "#221f1a": "#202426",            # 글
     "#5c574c": "#5b6468",            # 보조 글
-    "#8c8677": "#5f686c",            # 흐린 글(대비 4.5:1 이상으로)
+    "#8c8677": "#5b6468",            # 선택된 회색 바탕에서도 대비 4.5:1 이상
+    "#5f686c": "#5b6468",
+    "#9c6b17": "#805710",            # amber: 선택된 버튼 바탕에서 3.55:1 -> 4.89:1
     "#2f6d4c": "#23695c",            # 강조
     "#1e4a33": "#194e45",
     "#3a8c5e": "#2c8070",
@@ -82,14 +85,19 @@ def _retheme_style(html):
     return out
 
 
-def _head(html):
+def _head(html, name):
     html, n = FONT_LINK_RE.subn('<link href="%s" rel="stylesheet">' % FONTS, html)
     if n != 1:
         _fail("Google Fonts <link> 가 정확히 하나여야 함(%d개)" % n)
     html = HEAD_RE.sub("", html)
     if html.count("</head>") != 1:
         _fail("</head> 가 정확히 하나여야 함")
-    block = ("<!-- site-chrome:head -->\n"
+    item = _tool_items()["ko"]["/" + name]
+    description = (f'<meta name="description" content="{kit.esc(item["text"])}">\n'
+                   if not re.search(r'<meta\b[^>]*name="description"', html) else "")
+    canonical = (f'<link rel="canonical" href="{kit.BASE}/{name}">\n'
+                 if not re.search(r'<link\b[^>]*rel="canonical"', html) else "")
+    block = ("<!-- site-chrome:head -->\n" + description + canonical +
              '<meta name="theme-color" content="%s">\n'
              '<link rel="stylesheet" href="/assets/tools.css">\n'
              "<!-- /site-chrome:head -->\n" % kit.THEME_COLOR)
@@ -128,7 +136,9 @@ def _body(html, href):
     html = PAIR_RE.sub("", html)
     if html.count("<body>\n") != 1 or html.count("</body>") != 1:
         _fail("<body> / </body> 가 정확히 하나여야 함")
-    top = ("<!-- site-chrome:header -->\n" + _tag(kit.header("ko", {}, "/tools/"), "header", "ko") + "\n"
+    top = ('<!-- site-chrome:header -->\n<a class="skip chrome-ko" href="#main">본문으로 건너뛰기</a>\n'
+           '<a class="skip chrome-en" href="#main" lang="en">Skip to content</a>\n'
+           + _tag(kit.header("ko", {}, "/tools/"), "header", "ko") + "\n"
            + _tag(kit.header("en", {}, "/en/tools/"), "header", "en") + "\n<!-- /site-chrome:header -->")
     bottom = ("<!-- site-chrome:footer -->\n" + _tag(kit.footer("ko"), "footer", "ko") + "\n" + _tag(kit.footer("en"), "footer", "en")
               + "\n<!-- /site-chrome:footer -->")
@@ -145,6 +155,49 @@ def _body(html, href):
             _fail("상단 도구 제목 위치를 찾지 못함")
     html = html.replace("<body>\n", "<body>\n" + top + "\n", 1)
     return html.replace("</body>", bottom + "\n</body>", 1)
+
+
+def _semantics(html, name):
+    """Add document structure and label associations outside scripts only.
+
+    Keep existing container tags/IDs and every script byte intact: tool code uses
+    those nodes. Native labels also follow the tool's existing text translations.
+    """
+    html = html.replace(', maximum-scale=1.0', '')
+    parts = re.split(r'(<script\b[^>]*>.*?</script>)', html, flags=re.S)
+    has_main = 'id="main"' in html
+    for i in range(0, len(parts), 2):
+        part = parts[i]
+        container = 'wrap' if name == 'stage-sound-quiz.html' else 'app'
+        if not has_main and f'<div class="{container}">' in part:
+            part = part.replace(f'<div class="{container}">',
+                                f'<div class="{container}" id="main" role="main" tabindex="-1">', 1)
+            has_main = True
+        part = re.sub(r'<div class="title">(.*?)</div>', r'<h1 class="title">\1</h1>', part, count=1, flags=re.S)
+        # A label followed immediately by its input, optionally in a row or
+        # after the slider's current-value span. Never cross another control.
+        label_text = r'((?:(?!</?label\b).)*?)'
+        label_input = (r'<label(?![^>]*\bfor=)([^>]*)>' + label_text + r'</label>'
+                       r'(\s*(?:<div class="(?:range-input-row|input-row)">\s*|'
+                       r'<span class="slider-val"[^>]*>.*?</span></div>\s*)?)'
+                       r'(<(?:input|select)\b[^>]*\bid="([^"]+)"[^>]*>)')
+        part = re.sub(label_input, lambda m: f'<label for="{m[5]}"{m[1]}>{m[2]}</label>{m[3]}{m[4]}',
+                      part, flags=re.S)
+        # Button pickers are named groups rather than unassociated <label>s.
+        group = (r'<label(?![^>]*\bid=)([^>]*)>' + label_text + r'</label>(\s*)'
+                 r'<div class="(unit-toggle|tab-picker|solve-picker)" id="([^"]+)"')
+        part = re.sub(group, lambda m: f'<span id="label-{m[5]}" class="control-label"{m[1]}>{m[2]}</span>{m[3]}'
+                      f'<div class="{m[4]}" id="{m[5]}" role="group" aria-labelledby="label-{m[5]}"',
+                      part, flags=re.S)
+        if name == 'generator.html':
+            part = part.replace('<div class="knob-label">Frequency</div>',
+                                '<div class="knob-label" id="frequency-label">Frequency</div>')
+            part = part.replace('id="freqInput" class=', 'id="freqInput" aria-labelledby="frequency-label" class=')
+        if name == 'acoustics-calculator.html':
+            part = part.replace('id="absorptionAlphaInput" value=',
+                                'id="absorptionAlphaInput" aria-labelledby="label-absorptionPresetPicker" value=')
+        parts[i] = part
+    return ''.join(parts)
 
 
 def _i18n_first(html):
@@ -168,10 +221,10 @@ def transform(html, name):
     if name not in FILES:
         raise ValueError("알 수 없는 도구 파일: %r" % (name,))
     html = _retheme_style(html)
-    html = _head(html)
+    html = _head(html, name)
     if name not in NO_I18N:
         html = _i18n_first(html)
-    return _body(html, "/" + name)
+    return _semantics(_body(html, "/" + name), name)
 
 
 def run(check=False, root=ROOT):

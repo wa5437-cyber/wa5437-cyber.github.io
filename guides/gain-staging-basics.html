@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
   <h1>게인 스테이징 기본</h1>
@@ -69,7 +70,7 @@
   <h2>dBFS와 dBu — 디지털과 아날로그를 잇는 값</h2>
   <p>아날로그 장비는 dBu(기준 0.775 V) 스케일을, 디지털은 dBFS(0 dBFS = 클리핑 지점) 스케일을 씁니다. 인터페이스·컨버터는 이 둘을 어딘가에서 맞춥니다 — 흔한 기준은 <strong>+4 dBu = −18 dBFS</strong>(EBU 관례) 또는 <strong>+4 dBu = −20 dBFS</strong>(SMPTE 관례)입니다.</p>
   <div class="example">
-    <h4>실전 적용</h4>
+    <h3>실전 적용</h3>
     <p>인터페이스 스펙에 "0 dBFS = +24 dBu"라고 적혀 있으면, 그 인터페이스에서 −18 dBFS는 아날로그로 +6 dBu에 해당합니다. 이 기준을 알아두면 하드웨어 프리앰프의 아날로그 미터(VU)와 DAW의 디지털 미터(피크) 사이에서 얼마나 여유가 있는지 계산할 수 있습니다.</p>
   </div>
 
@@ -107,7 +108,7 @@
   </div>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 믹싱·측정</span></a>
     <a href="/guides/ohms-law-for-audio.html">오디오를 위한 옴의 법칙 <span>· 도구 가이드</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>

@@ -37,10 +37,11 @@
 </script>
 </head>
 <body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></div></header>
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
 
-<main class="wrap">
+<main class="wrap" id="main" tabindex="-1">
 <article class="article">
   <div class="crumb"><a href="/guides/">가이드</a> / DAW·워크플로우</div>
   <h1>Ableton Live·FL Studio — 루프 기반 워크플로우 이해하기</h1>
@@ -63,7 +64,7 @@
   <p>샘플 팩이나 어쿠스틱 루프를 가져오면 원곡 BPM과 프로젝트 BPM이 다른 경우가 대부분입니다. Ableton의 Warp, FL Studio의 타임스트레치는 피치를 유지한 채 재생 속도만 바꿔 이 차이를 메웁니다.</p>
   <div class="formula">재생 속도 배율 = 목표 BPM ÷ 원곡 BPM</div>
   <div class="example">
-    <h4>계산 예시</h4>
+    <h3>계산 예시</h3>
     <p>92 BPM으로 녹음된 브레이크비트 루프를 128 BPM 하우스 트랙에 쓴다면 배율은 128 ÷ 92 ≈ <strong>1.39배</strong>입니다. Ableton은 루프 길이(마디 수)를 알려주면 이 배율을 자동으로 계산해 Warp Marker를 맞추지만, 원곡 BPM 태그가 틀렸거나 루바토 연주라면 마디 경계에 마커를 직접 찍어 보정해야 합니다.</p>
   </div>
   <p>Warp 모드는 소스 종류에 맞춰 골라야 합니다. 드럼 루프는 <strong>Beats</strong>(트랜지언트 단위 슬라이스), 멜로디·보컬은 <strong>Complex/Complex Pro</strong>(멀티밴드 분석, 무겁지만 자연스러움), 패드처럼 음정 변화가 적은 텍스처는 <strong>Texture</strong>가 적합합니다. 잘못 고르면 배율이 클수록 로봇 음이나 흐려짐 같은 아티팩트가 두드러집니다.</p>
@@ -103,7 +104,7 @@
   </ul>
 
   <div class="related">
-    <h4>이어서 읽기</h4>
+    <h2>이어서 읽기</h2>
     <a href="/guides/daw-shortcuts-concepts.html">DAW 단축키, 왜 다 다르고 어떻게 외워야 할까 <span>· DAW·워크플로우</span></a>
     <a href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기 <span>· 믹싱·측정</span></a>
     <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
