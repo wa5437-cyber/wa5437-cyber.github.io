@@ -195,9 +195,11 @@ class HomeLayoutTests(unittest.TestCase):
             _, html = pages.home(lang)
             band = section_of(html, "band dark")
             figs = re.findall(r'<figure class="pic (port|land)"><img src="(/img/studio/[^"]+)"[^>]*width="\d+" height="\d+" loading="lazy"', band)
-            self.assertEqual([f[1] for f in figs], ["/img/studio/vocal-booth.jpg", "/img/studio/microphones.jpg",
+            # 부스 → 마이크 보관함 → 프리앰프·컴프레서(신호 흐름 순). 마이크만 따로 찍은 사진은 뺐다(사용자 지시)
+            self.assertEqual([f[1] for f in figs], ["/img/studio/vocal-booth.jpg", "/img/studio/mic-cabinet.jpg",
                                                    "/img/studio/preamp-compressor.jpg"], lang)
-            self.assertEqual([f[0] for f in figs], ["port", "port", "land"], lang)   # 높이 맞춤용 비율 class
+            self.assertEqual([f[0] for f in figs], ["port", "port", "port"], lang)   # 높이 맞춤용 비율 class
+            self.assertNotIn("microphones.jpg", html)
             self.assertEqual(len(re.findall(r"<figcaption>[^<]+</figcaption>", band)), 3, lang)
             # 장비: 분류 제목(h4, 띠 안의 h3 "장비" 아래) + 항목
             self.assertEqual(re.findall(r"<h4>([^<]+)</h4>", band), [kit.esc(g["group"]) for g in gear[lang]], lang)

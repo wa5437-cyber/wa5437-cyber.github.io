@@ -24,12 +24,11 @@
     "sections": [
       {"type": "gallery", "title": "작업실",
        "items": [
-         {"src": "/img/studio/vocal-booth.jpg", "caption": "녹음 부스", "alt": "붐 스탠드에 마이크와 보면대가 놓인 녹음 부스", "feature": true},
-         {"src": "/img/studio/booth-mic.jpg", "caption": "부스의 마이크", "alt": "쇼크 마운트와 팝 필터를 단 대형 진동판 마이크, 뒤로 의자와 헤드폰"},
-         {"src": "/img/studio/microphones.jpg", "caption": "마이크: Neumann U87(빈티지), Telefunken", "alt": "나란히 놓인 Telefunken 마이크와 Neumann U87 빈티지 마이크"},
+         {"src": "/img/studio/vocal-booth.jpg", "caption": "녹음 부스", "alt": "붐 스탠드와 팝 필터, 보면대가 놓인 녹음 부스"},
+         {"src": "/img/studio/booth-corner.jpg", "caption": "보면대와 의자", "alt": "보면대와 의자가 있는 녹음 부스"},
          {"src": "/img/studio/mic-cabinet.jpg", "caption": "마이크 보관함", "alt": "습도 조절 보관함 선반에 놓인 콘덴서·다이내믹·핸드헬드 마이크"},
          {"src": "/img/studio/preamp-compressor.jpg", "caption": "마이크 프리앰프와 컴프레서", "alt": "랙에 장착된 Grace Design m201, Neve 1073DPA, Tube-Tech CL 1B"},
-         {"src": "/img/studio/rack.jpg", "caption": "랙", "alt": "패치베이, Avid HD I/O, Grace Design m905 등이 장착된 랙"},
+         {"src": "/img/studio/rack.jpg", "caption": "장비 랙", "alt": "패치베이, Avid HD I/O, Grace Design m905 등이 장착된 랙"},
          {"src": "/img/studio/monitor-controller.jpg", "caption": "모니터 컨트롤러", "alt": "책상 위 Grace Design m905 모니터 컨트롤러"}]},
       {"type": "gear", "title": "장비", "note": "작업실 사진에 보이는 장비입니다."},
       {"type": "chips", "title": "작업 분야"},
@@ -51,12 +50,11 @@
     "sections": [
       {"type": "gallery", "title": "The studio",
        "items": [
-         {"src": "/img/studio/vocal-booth.jpg", "caption": "Vocal booth", "alt": "The vocal booth with a microphone on a boom stand and a music stand", "feature": true},
-         {"src": "/img/studio/booth-mic.jpg", "caption": "Microphone in the booth", "alt": "A large-diaphragm microphone in a shock mount with a pop filter, a chair and headphones behind it"},
-         {"src": "/img/studio/microphones.jpg", "caption": "Microphones: Neumann U87 (vintage), Telefunken", "alt": "A Telefunken microphone next to a vintage Neumann U87"},
+         {"src": "/img/studio/vocal-booth.jpg", "caption": "Recording booth", "alt": "The recording booth with a boom stand, a pop filter and a music stand"},
+         {"src": "/img/studio/booth-corner.jpg", "caption": "Music stand and chair", "alt": "The recording booth with a music stand and a chair"},
          {"src": "/img/studio/mic-cabinet.jpg", "caption": "Microphone dry cabinet", "alt": "Condenser, dynamic and handheld microphones on the shelves of a humidity-controlled cabinet"},
          {"src": "/img/studio/preamp-compressor.jpg", "caption": "Microphone preamps and compressor", "alt": "A Grace Design m201, a Neve 1073DPA and a Tube-Tech CL 1B in a rack"},
-         {"src": "/img/studio/rack.jpg", "caption": "Rack", "alt": "A rack with patchbays, an Avid HD I/O and a Grace Design m905"},
+         {"src": "/img/studio/rack.jpg", "caption": "Equipment rack", "alt": "A rack with patchbays, an Avid HD I/O and a Grace Design m905"},
          {"src": "/img/studio/monitor-controller.jpg", "caption": "Monitor controller", "alt": "The Grace Design m905 monitor controller on the desk"}]},
       {"type": "gear", "title": "Gear", "note": "The equipment visible in the studio photos."},
       {"type": "chips", "title": "Fields of work"},

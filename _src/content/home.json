@@ -73,8 +73,8 @@
     "/img/work/01_00.jpg", "/img/work/01_09.jpg", "/img/work/01_12.jpg", "/img/work/01_14.jpg", "/img/work/05_02.jpg"
   ],
   "studio_photos": [
-    {"src": "/img/studio/vocal-booth.jpg", "ko": "녹음 부스", "en": "Vocal booth"},
-    {"src": "/img/studio/microphones.jpg", "ko": "마이크: Neumann U87(빈티지), Telefunken", "en": "Microphones: Neumann U87 (vintage), Telefunken"},
+    {"src": "/img/studio/vocal-booth.jpg", "ko": "녹음 부스", "en": "Recording booth"},
+    {"src": "/img/studio/mic-cabinet.jpg", "ko": "마이크 보관함", "en": "Microphone dry cabinet"},
     {"src": "/img/studio/preamp-compressor.jpg", "ko": "마이크 프리앰프와 컴프레서", "en": "Microphone preamps and compressor"}
   ],
   "featured_apps": [

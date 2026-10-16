@@ -166,26 +166,23 @@ a.card .more{color:var(--accent-ink)}
   .portrait-hero .cta-row,.portrait-hero .row{grid-column:1/-1;margin-top:20px}
 }
 
-/* 녹음실 사진: 파일 비율 그대로(세로 3:4 port, 가로 4:3 land) */
+/* 녹음실 사진: 파일 비율 그대로(세로 4:5 port, 가로 3:2 land) */
 .pic{margin:0;min-width:0}
 .pic img{display:block;width:100%;height:auto;object-fit:cover;border-radius:10px;background:var(--stage)}
-.pic.port img{aspect-ratio:3/4}
-.pic.land img{aspect-ratio:4/3}
+.pic.port img{aspect-ratio:4/5}
+.pic.land img{aspect-ratio:3/2}
 .pic figcaption{margin-top:10px;font-size:15px;color:var(--ink2)}
 .band.dark .pic figcaption{color:var(--dark-muted)}
-/* 홈 띠: 한 줄, 사진 폭을 비율만큼 나눠 높이를 맞춘다 */
+/* 홈 띠: 한 줄, 사진 폭을 비율(0.8 : 1.5)만큼 나눠 높이를 맞춘다 */
 .pics{display:flex;gap:20px}
-.pics .pic.port{flex:3 1 0}
-.pics .pic.land{flex:5.333 1 0}
-/* 녹음실 페이지: 6칸 격자 — 세로 사진 3장 한 줄, 가로 사진 2장 한 줄 */
+.pics .pic.port{flex:4 1 0}
+.pics .pic.land{flex:7.5 1 0}
+/* 녹음실 페이지: 휴대폰 2칸(세로 2장·세로 2장·가로 2장), 넓은 화면 12칸 — 세로 4장 한 줄, 가로 2장 한 줄 */
 .gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
-.gallery .feature{grid-column:span 2}
-.gallery .feature img{aspect-ratio:4/3;object-position:50% 62%}
 @media(min-width:640px){
-  .gallery{grid-template-columns:repeat(6,minmax(0,1fr));gap:32px 24px}
-  .gallery .port,.gallery .feature{grid-column:span 2}
-  .gallery .land{grid-column:span 3}
-  .gallery .feature img{aspect-ratio:3/4;object-position:50% 50%}
+  .gallery{grid-template-columns:repeat(12,minmax(0,1fr));gap:32px 24px}
+  .gallery .port{grid-column:span 3}
+  .gallery .land{grid-column:span 6}
 }
 .gear{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .gear li{padding:10px 0;border-bottom:1px solid var(--line);font-weight:500}

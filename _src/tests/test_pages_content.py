@@ -34,10 +34,14 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn('fetchpriority="high"', hero)
         gallery = re.search(r'<div class="gallery">(.*?)</div></div></section>', html, re.S).group(1)
         self.assertEqual(re.findall(r"<figcaption>(.*?)</figcaption>", gallery),
-                         ["녹음 부스", "부스의 마이크", "마이크: Neumann U87(빈티지), Telefunken", "마이크 보관함",
-                          "마이크 프리앰프와 컴프레서", "랙", "모니터 컨트롤러"])
-        # 세로 사진 3장(한 줄) 다음 가로 사진 4장(두 줄): 6칸 격자에 빈칸이 생기지 않는다
-        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port"] * 3 + ["land"] * 4)
+                         ["녹음 부스", "보면대와 의자", "마이크 보관함", "마이크 프리앰프와 컴프레서", "장비 랙", "모니터 컨트롤러"])
+        # 세로 4:5 사진 4장(넓은 화면 한 줄, 휴대폰 두 줄) 다음 가로 3:2 사진 2장: 12칸·2칸 격자 모두 빈칸이 없다
+        self.assertEqual(re.findall(r'<figure class="pic (\w+)', gallery), ["port"] * 4 + ["land"] * 2)
+        # 부스 쇼크 마운트는 비어 있다 — 마이크가 꽂힌 것처럼 쓰지 않는다. 마이크만 찍은 사진은 뺐다(사용자 지시)
+        self.assertNotIn("부스의 마이크", html)
+        self.assertNotIn("microphones.jpg", html)
+        for img in re.findall(r"<img [^>]+>", gallery):
+            self.assertNotRegex(re.search(r'alt="([^"]*)"', img).group(1), r"마이크와|마이크를 단")
         for img in re.findall(r"<img [^>]+>", gallery):
             self.assertIn('loading="lazy"', img)
             self.assertRegex(img, r'width="\d+" height="\d+"')
@@ -66,15 +70,30 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn("<li>Grace Design m201 microphone preamp</li>", en)
         self.assertIn("<li>Neumann U87 (vintage) microphone</li>", en)
         self.assertIn("<h3>Preamps &amp; compressor</h3>", en)
-        self.assertIn("<figcaption>Microphones: Neumann U87 (vintage), Telefunken</figcaption>", en)
+        self.assertIn("<figcaption>Recording booth</figcaption>", en)
+        self.assertNotIn("Microphone in the booth", en)
+        self.assertNotIn("microphones.jpg", en)
 
     def test_studio_photos_are_unique_in_both_languages(self):
         for lang in ("ko", "en"):
             _, html = pages.simple_page(lang, "studio")
             photos = re.findall(r'<img[^>]+src="(/img/studio/[^"]+)"', html)
-            self.assertEqual(len(photos), 8, lang)       # 히어로 1 + 갤러리 7
+            self.assertEqual(len(photos), 7, lang)       # 히어로 1 + 갤러리 6
             self.assertEqual(len(set(photos)), len(photos), lang)
             self.assertEqual(photos.count("/img/studio/control-room.jpg"), 1, lang)
+
+    def test_studio_photo_files_are_web_sized_and_no_stale_files_remain(self):
+        root = pages.ROOT / "img" / "studio"
+        used = set()
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "studio")
+            used |= set(re.findall(r'(?:src|srcset)="(/img/studio/[^" ]+)', html))
+            used |= set(re.findall(r'(/img/studio/[^" ]+) \d+w', html))
+        files = {p.name for p in root.glob("*.jpg")}
+        self.assertEqual(files, {u.rsplit("/", 1)[1] for u in used})   # 쓰지 않는 사진 파일이 남지 않는다
+        for name in files:
+            cap = 300_000 if name.startswith("control-room") else 280_000
+            self.assertLessEqual((root / name).stat().st_size, cap, name)
 
     def test_studio_generic_copy_is_gone(self):
         # 녹음실이 하는 일 4칸·4단계 진행 방법 같은 누구나 아는 글은 지웠다(사용자 지시)
