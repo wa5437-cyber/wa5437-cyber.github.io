@@ -9,14 +9,18 @@ from test_legacy import balanced_errors  # noqa: E402
 from test_contrast import ratio  # noqa: E402
 
 BEFORE = "947d6fe"     # 변환기를 처음 적용하기 직전 커밋(도구 9쪽 원본)
+# 10/17 설명 글을 보강한 5쪽은 본문이 일부러 달라졌으므로, 보강 커밋을 기준으로 삼아 이후의 공통 블록 변환만 검증한다.
+BEFORE_BY_FILE = {n: "3d00f09" for n in ("generator.html", "trainer.html", "rta.html",
+                                         "effects-listening.html", "stage-sound-quiz.html")}
 SCRIPT = re.compile(r"<script\b[^>]*>.*?</script>", re.S)
 BLOCKS = (chrome_tools.HEAD_RE, chrome_tools.TOP_RE, chrome_tools.BOTTOM_RE, chrome_tools.PAIR_RE)
 
 
 def original(name):
-    r = subprocess.run(["git", "show", f"{BEFORE}:{name}"], cwd=str(ROOT), capture_output=True, text=True)
+    ref = BEFORE_BY_FILE.get(name, BEFORE)
+    r = subprocess.run(["git", "show", f"{ref}:{name}"], cwd=str(ROOT), capture_output=True, text=True)
     if r.returncode != 0:
-        raise unittest.SkipTest(f"git show {BEFORE}:{name} 실패")
+        raise unittest.SkipTest(f"git show {ref}:{name} 실패")
     return r.stdout
 
 
