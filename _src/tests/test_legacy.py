@@ -262,7 +262,9 @@ def strip_chrome(text):
 
 EXPANDED_GUIDES = {"eq-types-and-q.html", "line-array-basics.html", "speaker-impedance-matching.html",
                    "decibel-formulas-and-units.html", "spl-inverse-square-law.html",
-                   "31-band-eq-standard-frequencies.html", "delay-tower-alignment.html"}
+                   "31-band-eq-standard-frequencies.html", "delay-tower-alignment.html",
+                   "pink-noise-eq-ear-training.html", "bpm-to-delay-time.html", "frequency-and-wavelength.html",
+                   "microphone-polar-patterns.html", "gain-staging-basics.html"}
 
 
 class BodyAndDatesTests(unittest.TestCase):
