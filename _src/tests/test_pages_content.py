@@ -34,10 +34,11 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn('fetchpriority="high"', hero)
         gallery = re.search(r'<div class="gallery">(.*?)</div></div></section>', html, re.S).group(1)
         self.assertEqual(re.findall(r"<figcaption>(.*?)</figcaption>", gallery),
-                         ["컨트롤룸", "복도", "아웃보드", "모니터와 인터페이스", "라운지"])
+                         ["복도", "모니터와 인터페이스", "아웃보드", "라운지"])
         for img in re.findall(r"<img [^>]+>", gallery):
             self.assertIn('loading="lazy"', img)
             self.assertRegex(img, r'width="\d+" height="\d+"')
+        self.assertIn("작업실 사진에 보이는 장비입니다.", html)
         self.assertIn("<li>Grace Design m201 마이크 프리앰프</li><li>Neve 1073DPA</li><li>Lydkraft Tube-Tech CL 1B 컴프레서</li><li>Focal Solo6 Be 모니터</li>", html)
         chips = re.search(r'<ul class="chips">(.*?)</ul>', html).group(1)
         self.assertEqual(re.findall(r"<li>(.*?)</li>", chips), ["음반", "영화", "연극", "뮤지컬", "방송", "행사", "오디오북"])
@@ -51,8 +52,17 @@ class StudioAboutContactTests(unittest.TestCase):
         self.assertIn("map.naver.com", dark)
         self.assertNotIn("10:00", html)             # 운영시간 지어내지 않음
         _, en = pages.simple_page("en", "studio")
+        self.assertIn("The equipment visible in the studio photos.", en)
         self.assertIn("Wonhyo-ro", en)
         self.assertIn("<li>Grace Design m201 microphone preamp</li>", en)
+
+    def test_studio_photos_are_unique_in_both_languages(self):
+        for lang in ("ko", "en"):
+            _, html = pages.simple_page(lang, "studio")
+            photos = re.findall(r'<img[^>]+src="(/img/studio/[^"]+)"', html)
+            self.assertEqual(len(photos), 5, lang)
+            self.assertEqual(len(set(photos)), len(photos), lang)
+            self.assertEqual(photos.count("/img/studio/control-room.jpg"), 1, lang)
 
     def test_studio_generic_copy_is_gone(self):
         # 녹음실이 하는 일 4칸·4단계 진행 방법 같은 누구나 아는 글은 지웠다(사용자 지시)

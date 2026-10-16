@@ -9,14 +9,13 @@
 import json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "_src"))
+from sitegen import kit  # noqa: E402
 DATES = ROOT / "_src" / "content" / "guide_dates.json"
 AUTHOR_LD = {"@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/"}
 
-# 사이트 머리 메뉴(kit.NAV)와 같은 순서: 작업·녹음실이 먼저. 소개(About)는 푸터에.
-MENU = [("/work/", "Work"), ("/studio/", "Studio"), ("/apps/", "Apps"), ("/tools/", "Tools"),
-        ("/plugins/", "Plugins"), ("/guides/", "Guides")]
-COMPANY = [("/work/", "Work"), ("/about/", "About"), ("/studio/", "Studio"), ("/privacy/", "Privacy"),
-           ("/policy.html#policy", "App privacy policy"), ("/contact/", "Contact")]
+# 공통 kit 렌더러를 써서 가이드도 본 사이트와 같은 탐색·연락처를 쓴다.
+MENU = [(p, kit.t(k, "ko")) for k, p in kit.NAV]
 
 # 사이트(_src/sitegen/kit.py 의 FONTS·THEME_COLOR)와 같은 글꼴·브라우저 색. 테스트가 두 값이 같은지 본다.
 FONTS = ("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700"
@@ -33,38 +32,19 @@ def _fail(msg):
 
 
 def _menu(html):
-    m = re.search(r'(<nav>.*?)(<div class="links">)(.*?)(</div>)', html, re.S)
-    if not m:
-        _fail('<nav> 안에 <div class="links"> 가 없음')
-    current = 'aria-current="page"' in m.group(3)
-    lines = []
-    for href, label in MENU:
-        cur = ' aria-current="page"' if current and href == "/guides/" else ""
-        lines.append('      <a href="%s"%s>%s</a>' % (href, cur, label))
-    new = m.group(2) + "\n" + "\n".join(lines) + "\n    " + m.group(4)
-    html = html[:m.start(2)] + new + html[m.end(4):]
-    cta, n = re.subn(r'(class="navcta" href=")/(?:#apps|apps/)(")', r"\1/apps/\2", html)
+    # 첫 변환은 옛 nav, 다음 변환은 공통 header를 교체한다.
+    pattern = r'<header class="site-header"[^>]*>.*?</header>|<nav>.*?</nav>'
+    html, n = re.subn(pattern, lambda _: kit.header("ko", {}, "/guides/"), html, count=1, flags=re.S)
     if n != 1:
-        _fail('navcta(href="/#apps") 링크를 찾지 못함')
-    return cta
+        _fail("사이트 머리 또는 옛 <nav> 가 없음")
+    return html
 
 
 def _footer(html):
-    m = re.search(r"<footer.*?</footer>", html, re.S)
-    if not m:
+    html, n = re.subn(r"<footer[^>]*>.*?</footer>", lambda _: kit.footer("ko"), html, count=1, flags=re.S)
+    if n != 1:
         _fail("<footer> 가 없음")
-    foot = m.group(0)
-    if "<h4>Product</h4>" not in foot:
-        _fail("푸터에 Product 열이 없음")
-    foot = foot.replace('href="/#apps"', 'href="/apps/"').replace('href="/#tools"', 'href="/tools/"')
-    if 'href="/apps/"' not in foot or 'href="/tools/"' not in foot:
-        _fail("푸터 Product 열에 Apps/Tools 링크가 없음")
-    col = re.search(r'(<h4>Company</h4>)(.*?)(\n    </div>)', foot, re.S)
-    if not col:
-        _fail("푸터에 Company 열이 없음")
-    links = "".join('\n      <a href="%s">%s</a>' % c for c in COMPANY)
-    foot = foot[:col.start(2)] + links + foot[col.end(2):]
-    return html[:m.start()] + foot + html[m.end():]
+    return html
 
 
 def _head(html):

@@ -70,21 +70,28 @@ class TransformSampleTests(unittest.TestCase):
         self.assertEqual(chrome_legacy.transform(self.raw, "guide"), self.out)
 
     def test_new_menu_has_six_links_and_guides_stays_current(self):
-        links = re.search(r'<div class="links">(.*?)</div>', self.out, re.S).group(1)
-        self.assertEqual(re.findall(r'href="([^"]+)"', links), list(NEW_MENU))
-        self.assertIn('<a href="/guides/" aria-current="page">Guides</a>', links)
-        self.assertEqual(links.count("aria-current"), 1)
-        self.assertIn('<a class="navcta" href="/apps/">', self.out)
+        header = re.search(r'<header class="site-header">(.*?)</header>', self.out, re.S).group(1)
+        navs = re.findall(r'<ul class="nav(?: nav-wide)?">(.*?)</ul>', header, re.S)
+        self.assertEqual(len(navs), 2)
+        for nav in navs:
+            self.assertEqual(re.findall(r'href="([^"]+)"', nav), list(NEW_MENU))
+            self.assertIn('<a href="/guides/" aria-current="page">가이드</a>', nav)
+            self.assertEqual(nav.count("aria-current"), 1)
+        self.assertNotIn('class="navcta"', header)
+
+    def test_old_navigation_and_footer_migrate_to_shared_chrome(self):
+        old = re.sub(r'<header class="site-header">.*?</header>', '<nav><div class="links"></div></nav>', self.raw, flags=re.S)
+        old = re.sub(r'<footer.*?</footer>', '<footer><h4>Company</h4></footer>', old, flags=re.S)
+        self.assertEqual(chrome_legacy.transform(old, "guide"), self.out)
 
     def test_old_anchors_gone(self):
         self.assertNotIn('href="/#', self.out)
         self.assertNotIn("/about.html", self.out)
-        self.assertNotIn("mailto:", self.out)
 
     def test_footer_links(self):
         footer = re.search(r"<footer.*?</footer>", self.out, re.S).group(0)
         for href in ("/work/", "/apps/", "/tools/", "/guides/", "/about/", "/studio/", "/privacy/",
-                     "/policy.html#policy", "/contact/"):
+                     "/contact/", "mailto:wa547@hanmail.net"):
             self.assertIn('href="%s"' % href, footer)
 
     def test_author_box_once_without_career_numbers_before_article_end(self):
@@ -121,9 +128,9 @@ class TransformSampleTests(unittest.TestCase):
         self.assertEqual(after["@type"], "Article")
         self.assertEqual(self.out.count('<script type="application/ld+json">'), 1)
 
-    def test_missing_navcta_product_column_and_json_ld_raise(self):
-        cases = (self.raw.replace('class="navcta"', 'class="cta"'),
-                 self.raw.replace("<h4>Product</h4>", "<h4>Products</h4>"),
+    def test_missing_chrome_and_json_ld_raise(self):
+        cases = (self.raw.replace('<header class="site-header">', '<header class="other">'),
+                 self.raw.replace("<footer", "<other-footer"),
                  self.raw.replace('<script type="application/ld+json">', '<script type="text/plain">'),
                  self.raw.replace('"@type": "Article"', '"@type": "BlogPosting"'))
         for broken in cases:
@@ -158,8 +165,8 @@ class TransformSampleTests(unittest.TestCase):
             self.assertEqual(len(re.findall(r"<%s[\s>]" % tag, self.out)), self.out.count("</%s>" % tag), tag)
 
     def test_missing_pattern_raises_value_error(self):
-        for broken in (self.raw.replace('<div class="links">', '<div class="menu">'),
-                       self.raw.replace("<h4>Company</h4>", "<h4>Firm</h4>"),
+        for broken in (self.raw.replace("</header>", ""),
+                       self.raw.replace("</footer>", ""),
                        self.raw.replace("</article>", "")):
             with self.assertRaises(ValueError):
                 chrome_legacy.transform(broken, "guide")
@@ -241,7 +248,7 @@ def strip_chrome(text):
     """메뉴 링크·푸터·글쓴이 박스·JSON-LD·글꼴 링크·theme-color 를 걷어내고 옛 홈 앵커를 새 주소로 맞춘 본문 비교용 문자열."""
     text = chrome_legacy.FONT_LINK_RE.sub("<!-- fonts -->", text)
     text = chrome_legacy.THEME_RE.sub("<!-- theme -->", text)
-    text = re.sub(r'<div class="links">.*?</div>', "", text, flags=re.S)
+    text = re.sub(r'<header class="site-header"[^>]*>.*?</header>|<nav>.*?</nav>', "", text, flags=re.S)
     text = re.sub(r"<footer.*?</footer>", "", text, flags=re.S)
     text = re.sub(r"\n\n?[ \t]*<!-- author-box -->.*?<!-- /author-box -->", "", text, flags=re.S)
     text = re.sub(r'<script type="application/ld\+json">.*?</script>', "", text, flags=re.S)

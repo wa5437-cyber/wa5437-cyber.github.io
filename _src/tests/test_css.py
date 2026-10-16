@@ -2,12 +2,14 @@ import pathlib
 import re
 import unittest
 
-CSS = (pathlib.Path(__file__).resolve().parents[2] / "assets" / "site.css").read_text(encoding="utf-8")
+ASSETS = pathlib.Path(__file__).resolve().parents[2] / "assets"
+CSS = (ASSETS / "site.css").read_text(encoding="utf-8")
+CHROME = (ASSETS / "chrome.css").read_text(encoding="utf-8")
 
 
-def rule(selector_start):
+def rule(selector_start, css=CSS):
     """선택자가 정확히 selector_start 인 첫 규칙의 본문."""
-    m = re.search(r"(?:^|\})\s*" + re.escape(selector_start) + r"\s*\{([^}]*)\}", CSS)
+    m = re.search(r"(?:^|\})\s*" + re.escape(selector_start) + r"\s*\{([^}]*)\}", css)
     return m.group(1) if m else ""
 
 
@@ -55,7 +57,7 @@ class KoreanWrapTests(unittest.TestCase):
     def test_hyphens_only_in_de_es_fr_ptbr_rules(self):
         seen = set()
         for sels, block in rules():
-            if "hyphens" not in block:
+            if "hyphens:auto" not in block:
                 continue
             for sel in sels:
                 m = re.match(r"html:lang\((de|es|fr|pt-BR)\)(?:\s|$)", sel)
@@ -84,13 +86,13 @@ class OverflowTests(unittest.TestCase):
 
 class HeaderNarrowTests(unittest.TestCase):
     def test_brand_and_buttons_never_wrap_vertically(self):
-        self.assertIn("white-space:nowrap", rule(".brand"))
-        self.assertRegex(CSS, r"\.menu summary,\.lang summary\{[^}]*white-space:nowrap")
+        self.assertIn("white-space:nowrap", rule(".site-header .brand", CHROME))
+        self.assertRegex(CHROME, r"\.site-header \.menu summary,\.site-header \.lang summary\{[^}]*white-space:nowrap")
 
     def test_bar_is_positioned_and_mobile_menu_is_full_width_panel(self):
-        self.assertIn("position:relative", rule(".bar"))
-        self.assertRegex(CSS, r"\.menu\{[^}]*position:static")
-        self.assertRegex(CSS, r"\.menu \.nav\{[^}]*left:20px;right:20px;top:100%")
+        self.assertIn("position:relative", rule(".site-header .bar", CHROME))
+        self.assertRegex(CHROME, r"\.site-header \.menu\{[^}]*position:static")
+        self.assertRegex(CHROME, r"\.site-header \.menu \.nav\{[^}]*left:20px;right:20px;top:100%")
 
 
 if __name__ == "__main__":

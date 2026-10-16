@@ -13,12 +13,11 @@
     "sections": [
       {"type": "gallery", "title": "작업실",
        "items": [
-         {"src": "/img/studio/control-room.jpg", "caption": "컨트롤룸", "wide": true},
          {"src": "/img/studio/corridor.jpg", "caption": "복도", "wide": true},
-         {"src": "/img/studio/outboard.jpg", "caption": "아웃보드"},
          {"src": "/img/studio/monitors.jpg", "caption": "모니터와 인터페이스"},
+         {"src": "/img/studio/outboard.jpg", "caption": "아웃보드"},
          {"src": "/img/studio/lounge.jpg", "caption": "라운지"}]},
-      {"type": "gear", "title": "장비", "note": "아웃보드 사진에 보이는 장비입니다."},
+      {"type": "gear", "title": "장비", "note": "작업실 사진에 보이는 장비입니다."},
       {"type": "chips", "title": "작업 분야"},
       {"type": "posters", "title": "참여한 작업",
        "items": ["/img/work/01_17.jpg", "/img/work/hs_11.jpg", "/img/work/hs_09.jpg", "/img/work/hs_12.jpg",
@@ -37,12 +36,11 @@
     "sections": [
       {"type": "gallery", "title": "The studio",
        "items": [
-         {"src": "/img/studio/control-room.jpg", "caption": "Control room", "wide": true},
          {"src": "/img/studio/corridor.jpg", "caption": "Hallway", "wide": true},
-         {"src": "/img/studio/outboard.jpg", "caption": "Outboard"},
          {"src": "/img/studio/monitors.jpg", "caption": "Monitors and interface"},
+         {"src": "/img/studio/outboard.jpg", "caption": "Outboard"},
          {"src": "/img/studio/lounge.jpg", "caption": "Lounge"}]},
-      {"type": "gear", "title": "Gear", "note": "The units visible in the outboard photo."},
+      {"type": "gear", "title": "Gear", "note": "The equipment visible in the studio photos."},
       {"type": "chips", "title": "Fields of work"},
       {"type": "posters", "title": "Selected work",
        "items": ["/img/work/01_17.jpg", "/img/work/hs_11.jpg", "/img/work/hs_09.jpg", "/img/work/hs_12.jpg",

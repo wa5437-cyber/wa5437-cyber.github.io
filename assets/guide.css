@@ -1,5 +1,7 @@
+@import url("./chrome.css");
+
 /* ML Music Studio — Guides. Shared stylesheet for /guides/.
-   색·글꼴·머리 막대는 assets/site.css(사이트 본체)와 같은 토큰을 쓴다. 가이드 HTML 은 고치지 않는다. */
+   색·글꼴은 사이트 본체와 같은 토큰, 머리·푸터는 chrome.css 를 쓴다. 본문은 보존한다. */
 
 :root{
   --bg:#f4f5f3; --bg-alt:#eceeec; --panel:#ffffff;
@@ -29,38 +31,6 @@ a:focus-visible{ outline:3px solid var(--teal); outline-offset:3px; border-radiu
 .wrap{ max-width:760px; margin:0 auto; padding:0 clamp(16px,4vw,24px); }
 .wrap-wide{ max-width:1200px; margin:0 auto; padding:0 clamp(16px,4vw,40px); }
 
-/* nav — 사이트 머리 막대와 같은 높이·색 */
-nav{ position:sticky; top:0; z-index:50; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); background:rgba(244,245,243,0.94); border-bottom:1px solid var(--line); }
-nav .wrap-wide{ display:flex; align-items:center; justify-content:space-between; gap:20px; height:64px; }
-.brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:16px; letter-spacing:.02em; color:var(--text-primary); white-space:nowrap; }
-.brand .mark{ display:none; width:28px; height:28px; border-radius:8px; background:var(--panel); border:1px solid var(--line-strong); align-items:center; justify-content:center; gap:2.5px; }
-.brand .mark span{ width:3px; border-radius:2px; background:var(--teal); }
-.brand .mark span:nth-child(1){ height:9px; } .brand .mark span:nth-child(2){ height:15px; } .brand .mark span:nth-child(3){ height:6px; }
-nav .links{ display:flex; gap:4px; font-size:15px; font-weight:500; color:var(--text-secondary); margin-left:auto; }
-nav .links a{ padding:8px 12px; border-radius:8px; }
-nav .links a:hover{ color:var(--text-primary); background:var(--soft); }
-nav .links a[aria-current="page"]{ color:var(--text-primary); font-weight:600; border-radius:0; box-shadow:inset 0 -2px 0 var(--teal); }
-.navcta{ display:inline-flex; align-items:center; min-height:40px; padding:0 16px; border-radius:8px; font-size:14px; font-weight:600; background:var(--teal); color:#fff!important; white-space:nowrap; }
-.navcta:hover{ background:var(--teal-hover); }
-/* 좁은 화면: 메뉴를 가로 스크롤 행으로(오른쪽 끝은 흐리게 — 더 있다는 표시) */
-@media (max-width:600px){
-  nav .wrap-wide{ flex-wrap:wrap; height:auto; min-height:56px; padding-top:8px; padding-bottom:0; gap:0 20px; }
-  nav .links{ order:3; flex:0 0 100%; gap:16px; overflow-x:auto; white-space:nowrap; scrollbar-width:none; margin-left:0;
-    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent); }
-  nav .links::-webkit-scrollbar{ display:none; }
-  nav .links a{ flex:none; padding:10px 0; border-radius:0; }
-  nav .links a:hover{ background:none; }
-}
-/* 아주 좁은 화면: 한 줄(로고 마크 + 메뉴)로 줄여 고정 막대가 64px 를 넘지 않게 */
-@media (max-width:480px){
-  nav .wrap-wide{ flex-wrap:nowrap; height:64px; min-height:0; padding-top:0; gap:14px; }
-  .brand{ font-size:0; flex:none; }
-  .brand .mark{ display:flex; }
-  nav .links{ order:0; flex:1 1 auto; min-width:0; }
-  nav .links a{ padding:13px 0; }
-  .navcta{ display:none; }
-}
-
 /* article */
 .article{ padding:clamp(32px,5vw,56px) 0 8px; }
 .crumb{ font-size:14px; color:var(--text-tertiary); margin-bottom:16px; }
@@ -74,7 +44,7 @@ nav .links a[aria-current="page"]{ color:var(--text-primary); font-weight:600; b
 .article p{ font-size:clamp(1rem,.97rem + .15vw,1.0625rem); line-height:1.8; color:var(--text-primary); margin:0 0 16px; }
 .article ul,.article ol{ font-size:clamp(1rem,.97rem + .15vw,1.0625rem); line-height:1.8; color:var(--text-primary); padding-left:22px; margin:0 0 16px; }
 .article li{ margin-bottom:7px; }
-.article strong{ font-weight:650; }
+.article strong{ font-weight:600; }
 .article a.inline{ color:var(--teal); border-bottom:1px solid rgba(35,105,92,0.35); }
 .article a.inline:hover{ border-bottom-color:var(--teal); }
 .article code{ font-family:var(--mono); font-size:0.9em; background:var(--bg-alt); border:1px solid var(--line); border-radius:5px; padding:1px 5px; }
@@ -97,7 +67,7 @@ table.data th{ background:var(--soft); font-size:14px; font-weight:600; }
 .callout .body a:hover{ text-decoration:underline; }
 
 /* 좁은 화면 넘침 방지 */
-.article h1,.article h2{ overflow-wrap:anywhere; }
+.article h1,.article h2{ overflow-wrap:break-word; text-wrap:balance; }
 @media (max-width:700px){
   .article table.data{ display:block; overflow-x:auto; max-width:100%; -webkit-overflow-scrolling:touch; }
 }
@@ -132,21 +102,8 @@ table.data th{ background:var(--soft); font-size:14px; font-weight:600; }
 .guide-list a h3{ font-size:clamp(1.0625rem,1rem + .3vw,1.1875rem); font-weight:600; margin-bottom:6px; }
 .guide-list a p{ font-size:15px; color:var(--text-secondary); line-height:1.6; margin:0; }
 
-/* footer */
-footer{ border-top:1px solid var(--line); background:var(--panel); padding:48px 0 24px; margin-top:64px; }
-footer .wrap-wide{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:32px; }
-footer .col h4{ font-size:14px; font-weight:600; color:var(--text-primary); margin-bottom:12px; }
-footer .col a{ display:block; font-size:15px; color:var(--text-secondary)!important; margin-bottom:8px; }
-footer .col a:hover{ color:var(--text-primary)!important; text-decoration:underline; }
-footer .bottom{ margin-top:32px; padding-top:20px; border-top:1px solid var(--line); font-size:14px; color:var(--text-tertiary); }
-
 /* keycap — inline shortcut key, e.g. <kbd>Cmd+Z</kbd> */
 kbd{ font-family:var(--mono); font-size:13px; font-weight:500; color:var(--text-primary); background:var(--panel); border:1px solid var(--line-strong); border-bottom-width:2px; border-radius:6px; padding:2px 7px; }
 
-/* footer — 열이 5개 링크로 늘어도 좁은 화면에서 줄바꿈 */
-footer .col{ min-width:0; }
-footer .col a{ overflow-wrap:anywhere; }
-@media (max-width:480px){
-  footer .wrap-wide{ flex-direction:column; gap:20px; }
-  footer .col{ max-width:none!important; }
-}
+
+.site-footer{margin-top:64px}

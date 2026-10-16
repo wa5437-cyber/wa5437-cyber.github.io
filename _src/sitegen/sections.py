@@ -17,7 +17,7 @@ def _prose(sec, lang, ctx):
     paras = "".join(f"<p>{esc(p)}</p>" for p in sec.get("paragraphs", []))
     links = "".join(f'<p><a href="{esc(l["href"])}" rel="noopener">{esc(l["text"])}</a></p>'
                     for l in sec.get("links", []))
-    return _wrap(_h2(sec) + paras + links, sec)
+    return _wrap(f'<div class="prose-copy">{_h2(sec)}{paras}{links}</div>', sec)
 
 
 def _list(sec, lang, ctx):

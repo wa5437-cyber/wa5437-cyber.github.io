@@ -1,8 +1,10 @@
+@import url("./chrome.css");
+
 /* 웹 도구(옛 화면) 9쪽 공통: 사이트 머리·푸터·관련 앱 띠 + 바탕 정리.
    _src/tools/chrome_tools.py 가 각 도구의 <style> 뒤에 이 파일을 넣는다. 도구 자체의 변수(--line 등)를
    덮지 않도록 사이트 값은 머리·푸터·관련 앱 띠 안에서만 정의한다. 값은 assets/site.css 와 같다. */
 body{display:block;background:#f4f5f3}
-.app{margin-left:auto;margin-right:auto}
+.app{margin-left:auto;margin-right:auto;line-height:1.6}
 .topbar .home-link{display:none}            /* 옛 "← 홈으로": 사이트 머리가 대신한다 */
 body>nav{display:none}                      /* 문제풀이의 옛 상단 막대 */
 
@@ -11,31 +13,14 @@ body>nav{display:none}                      /* 문제풀이의 옛 상단 막대
 html:not(:lang(ko)) .chrome-en{display:block}
 html:not(:lang(ko)) .chrome-ko{display:none}
 
-.site-header,.site-footer,.tool-related{
+.tool-related{
   --bg:#f4f5f3; --panel:#ffffff; --ink:#202426; --ink2:#5b6468; --line:#d5dadb; --control:#7a858a;
   --accent:#23695c; --accent-hover:#194e45; --accent-ink:#23695c; --soft:#e8eeeb; --stage:#e9ecea; --r:12px;
   --sans:"Inter","Noto Sans KR","Apple SD Gothic Neo",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-family:var(--sans);color:var(--ink);word-break:keep-all;overflow-wrap:break-word;line-height:1.6;-webkit-font-smoothing:antialiased}
-.site-header .wrap,.site-footer .wrap,.tool-related .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
-.site-header a,.site-footer a,.tool-related a{color:var(--accent-ink)}
-.site-header :where(a,summary):focus-visible,.site-footer a:focus-visible,.tool-related a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
-
-/* 머리(assets/site.css 와 같은 모양) */
-.site-header{position:sticky;top:0;background:rgba(244,245,243,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:150}
-.site-header .bar{display:flex;align-items:center;gap:20px;min-height:64px;position:relative}
-.site-header .brand{font-family:var(--sans);font-weight:700;font-size:19px;letter-spacing:-.015em;color:var(--ink);text-decoration:none;margin-right:auto;white-space:nowrap}
-.site-header .nav{list-style:none;margin:0;padding:0;display:flex;gap:4px}
-.site-header .nav a{display:block;padding:8px 12px;border-radius:8px;color:var(--ink2);text-decoration:none;font-weight:500;font-size:15px;line-height:1.6}
-.site-header .nav a:hover{background:var(--soft);color:var(--ink)}
-.site-header .nav a[aria-current="page"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--accent);border-radius:0}
-.site-header .nav-wide{display:none}
-.site-header .menu{position:static}
-.site-header .menu summary{list-style:none;cursor:pointer;padding:8px 14px;border:1px solid var(--control);border-radius:8px;font-size:15px;font-weight:500;white-space:nowrap}
-.site-header .menu summary::-webkit-details-marker{display:none}
-.site-header .menu .nav{position:absolute;left:20px;right:20px;top:100%;margin-top:4px;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:8px;min-width:0}
-.site-header .menu .nav a[aria-current="page"]{box-shadow:inset 3px 0 0 var(--accent)}
-@media(min-width:860px){.site-header .menu{display:none}.site-header .nav-wide{display:flex}}
-@media(max-width:480px){.site-header .bar{gap:10px}.site-header .brand{font-size:17px}}
+.tool-related .wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+.tool-related a{color:var(--accent-ink)}
+.tool-related a:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
 
 /* 관련 앱 띠 */
 .tool-related{background:var(--bg);padding:8px 0 40px}
@@ -50,18 +35,20 @@ html:not(:lang(ko)) .chrome-ko{display:none}
 .tool-related .tr-text .tr-more{color:var(--accent-ink);font-weight:600}
 .tool-related .tr-card:hover strong{color:var(--accent-ink)}
 
-/* 푸터(assets/site.css 와 같은 모양) */
-.site-footer{border-top:1px solid var(--line);background:var(--panel);padding:48px 0 24px;color:var(--ink2);font-size:15px}
-.site-footer .foot-grid{display:grid;gap:32px;grid-template-columns:repeat(2,minmax(0,1fr))}
-.site-footer .foot-brand{grid-column:1/-1}
-@media(min-width:760px){.site-footer .foot-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(min-width:1040px){.site-footer .foot-grid{grid-template-columns:1.5fr repeat(4,minmax(0,1fr))}.site-footer .foot-brand{grid-column:auto}}
-.site-footer .foot-grid>*{min-width:0}
-.site-footer .brand{font-weight:700;font-size:17px;color:var(--ink);text-decoration:none}
-.site-footer .foot-tag{margin:8px 0 0;max-width:22em}
-.site-footer .foot-h{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--ink)}
-.site-footer .foot-links{list-style:none;padding:0;margin:0;display:grid;gap:6px}
-.site-footer a{color:var(--ink2);text-decoration:none;overflow-wrap:anywhere}
-.site-footer a:hover{color:var(--ink);text-decoration:underline}
-.site-footer .brand:hover{color:var(--ink)}
-.site-footer .copy{margin:32px 0 0;padding-top:20px;border-top:1px solid var(--line);font-size:15px}
+
+html:lang(ko) body{word-break:keep-all;overflow-wrap:break-word}
+html:lang(ja) body,html:lang(zh-Hans) body{word-break:normal;line-break:strict}
+body :where(a,button,input,select,textarea,summary):focus-visible{outline:3px solid #23695c;outline-offset:3px}
+.app :where(button,input:not([type=range]),select,textarea){border-color:#7a858a}
+.app .topbar{flex-wrap:wrap}
+.app .topbar .title{min-width:0}
+.app .music-filename{word-break:keep-all;overflow-wrap:anywhere}
+.app button.active{border-color:#5b6468}
+@media(max-width:480px){
+  .tool-related .tr-card{align-items:flex-start;gap:14px;padding:16px}
+  .tool-related .tr-shot{width:64px;height:104px}
+  .tool-related .tr-text strong{font-size:16px}
+  .app .modepicker{flex-wrap:wrap}
+  .app .modepicker button{white-space:normal}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}

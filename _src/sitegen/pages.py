@@ -143,7 +143,7 @@ def cta_row(ctas, lang):
 
 
 def photo_hero(src, alt, h1, sub, ctas, lang):
-    """사진을 깐 어두운 히어로. 넓은 화면은 사진 위 왼쪽에 글(어두운 그라데이션), 좁은 화면은 사진 아래 글."""
+    """어두운 바탕의 제목과 원본 크기 이내의 사진을 나란히 배치한다."""
     return (f'<section class="photo-hero"><div class="ph-media"><img src="{esc(src)}" alt="{esc(alt)}"'
             f'{kit.img_attrs(src)} fetchpriority="high"></div>'
             f'<div class="wrap ph-copy"><h1>{esc(h1)}</h1><p class="sub">{esc(sub)}</p>{cta_row(ctas, lang)}</div></section>')
@@ -270,11 +270,11 @@ def tools(lang):
             pic = (f'<a class="tc-img" href="{esc(it["href"])}" tabindex="-1" aria-hidden="true">'
                    f'<img src="{esc(img)}" alt=""{kit.img_attrs(img)} loading="lazy"></a>') if img else ""
             link = (f'<a class="tc-app" href="{esc(app_href(lang, app))}">'
-                    f'{esc(c["app_label"])}: {esc(app["name"][lang])} →</a>') if app else ""
+                    f'<span class="tc-label">{esc(c["app_label"])}:</span>{esc(app["name"][lang])} →</a>') if app else ""
             cards += (f'<div class="tool-card">{pic}<div class="tc-body"><h3><a href="{esc(it["href"])}">{name}</a></h3>'
                       f'<p>{esc(it["text"])}</p>{link}</div></div>')
         groups += (f'<section class="band"><div class="wrap"><h2>{esc(g["title"])}</h2>'
-                   f'<div class="tool-cards{" tc-4" if len(g["items"]) == 4 else ""}">{cards}</div></div></section>')   # 4개는 2×2 / 한 줄 4칸
+                   f'<div class="tool-cards tc-{len(g["items"])}">{cards}</div></div></section>')
     body = (f'<section class="hero"><div class="wrap"><h1>{esc(c["h1"])}</h1>'
             f'<p class="sub">{esc(c["sub"])}</p></div></section>{groups}')
     path = url(lang, "/tools/")
