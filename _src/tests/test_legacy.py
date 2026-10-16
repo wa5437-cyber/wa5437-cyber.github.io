@@ -260,6 +260,11 @@ def strip_chrome(text):
     return text.replace('href="/#apps"', 'href="/apps/"').replace('href="/#tools"', 'href="/tools/"')
 
 
+EXPANDED_GUIDES = {"eq-types-and-q.html", "line-array-basics.html", "speaker-impedance-matching.html",
+                   "decibel-formulas-and-units.html", "spl-inverse-square-law.html",
+                   "31-band-eq-standard-frequencies.html", "delay-tower-alignment.html"}
+
+
 class BodyAndDatesTests(unittest.TestCase):
     def test_meta_line_and_json_ld_match_guide_dates_for_all_guides(self):
         for slug, d in DATES.items():
@@ -279,6 +284,8 @@ class BodyAndDatesTests(unittest.TestCase):
                                capture_output=True, text=True)
             if r.returncode != 0:
                 continue  # 변환 이후에 추가된 가이드는 비교할 변환 전 파일이 없다
+            if name in EXPANDED_GUIDES:
+                continue  # 10/17 본문을 일부러 보강한 글은 변환 전 본문과 달라진다
             now = strip_chrome(src(name))
             if name == "index.html":  # 변환 뒤에 추가된 가이드의 목록 항목은 비교에서 뺀다
                 for slug in re.findall(r'<a href="/guides/([^"/]+)\.html">', now):

@@ -1,6 +1,6 @@
 {
  "31-band-eq-standard-frequencies": {
-  "modified": "2026-10-09",
+  "modified": "2026-10-17",
   "published": "2026-10-09"
  },
  "ableton-fl-studio-workflow": {
@@ -28,15 +28,15 @@
   "published": "2026-09-01"
  },
  "decibel-formulas-and-units": {
-  "modified": "2026-10-12",
+  "modified": "2026-10-17",
   "published": "2026-10-12"
  },
  "delay-tower-alignment": {
-  "modified": "2026-08-29",
+  "modified": "2026-10-17",
   "published": "2026-08-29"
  },
  "eq-types-and-q": {
-  "modified": "2026-10-05",
+  "modified": "2026-10-17",
   "published": "2026-10-05"
  },
  "frequency-and-wavelength": {
@@ -52,7 +52,7 @@
   "published": "2026-10-02"
  },
  "line-array-basics": {
-  "modified": "2026-10-01",
+  "modified": "2026-10-17",
   "published": "2026-10-01"
  },
  "microphone-polar-patterns": {
@@ -88,11 +88,11 @@
   "published": "2026-08-30"
  },
  "speaker-impedance-matching": {
-  "modified": "2026-08-29",
+  "modified": "2026-10-17",
   "published": "2026-08-29"
  },
  "spl-inverse-square-law": {
-  "modified": "2026-09-28",
+  "modified": "2026-10-17",
   "published": "2026-09-28"
  },
  "stage-sound-cert-study-plan": {
