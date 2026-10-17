@@ -284,7 +284,7 @@ class LegalPageLinkTests(unittest.TestCase):
 class PrivacyPageTests(unittest.TestCase):
     def test_privacy_page_has_ads_cookie_notice_and_optout_links(self):
         _, html = pages.simple_page("ko", "privacy")
-        for needle in ("Google", "쿠키", "adssettings.google.com", "aboutads.info", "/policy.html#policy", "2026-10-12"):
+        for needle in ("Google", "쿠키", "adssettings.google.com", "aboutads.info", "/policy.html#policy", "2026-10-17"):
             self.assertIn(needle, html)
         _, en = pages.simple_page("en", "privacy")
         for needle in ("cookies", "adssettings.google.com", "aboutads.info"):
@@ -321,8 +321,8 @@ class PrivacyPageTests(unittest.TestCase):
 
     def test_privacy_updated_date_is_visible_in_both_languages(self):
         d = pages.load_page("privacy")
-        for lang, label in (("ko", "최종 수정일: 2026-10-12"), ("en", "Last updated: 2026-10-12")):
-            self.assertEqual(d[lang]["updated"], "2026-10-12")
+        for lang, label in (("ko", "최종 수정일: 2026-10-17"), ("en", "Last updated: 2026-10-17")):
+            self.assertEqual(d[lang]["updated"], "2026-10-17")
             _, html = pages.simple_page(lang, "privacy")
             self.assertIn(label, html)
 
@@ -380,7 +380,7 @@ class PrivacyPageTests(unittest.TestCase):
     def test_privacy_external_links_use_noopener_and_updated_field_matches_text(self):
         d = pages.load_page("privacy")
         for lang in ("ko", "en"):
-            self.assertEqual(d[lang]["updated"], "2026-10-12")
+            self.assertEqual(d[lang]["updated"], "2026-10-17")
             _, html = pages.simple_page(lang, "privacy")
             self.assertIn(d[lang]["updated"], html)
             for m in re.finditer(r'<a [^>]*href="https://[^"]*(adssettings|aboutads)[^"]*"[^>]*>', html):

@@ -19,6 +19,10 @@
         {"href": "/electrical-calculator.html", "name": "전기 계산기", "text": "옴의 법칙, 전력, 임피던스, dB와 전력 환산, 케이블 전압 강하를 계산합니다.", "app": "toolkit"},
         {"href": "/tempo-pitch-calculator.html", "name": "템포·피치 계산기", "text": "탭 템포, BPM별 음표 길이, 속도와 피치, 루프 BPM을 계산합니다.", "app": "toolkit"}
       ]},
+      {"title": "시간·연습", "items": [
+        {"href": "/timer/", "name": "온라인 타이머", "text": "카운트다운, 스톱워치, 시작·종료 시각, 믹싱 45분+귀 휴식 5분 같은 작업/휴식 반복과 합주실·녹음실 대관 시간 알림을 한 화면에서 씁니다."},
+        {"href": "/metronome/", "name": "온라인 메트로놈", "text": "BPM 20~300, 탭 템포, 박자·분할, 가속 연습과 연습 타이머를 지원하는 정확한 메트로놈입니다.", "app": "temposcope"}
+      ]},
       {"title": "시험", "items": [
         {"href": "/stage-sound-quiz.html", "name": "무대예술전문인(음향) 3급 문제풀이", "text": "표준교재 14개 장 객관식 문제와 계산문제를 웹에서 풀어 봅니다.", "app": "stage-sound"}
       ]}
@@ -44,6 +48,10 @@
         {"href": "/acoustics-calculator.html", "name": "Acoustics calculator", "text": "Frequency, wavelength and period, notes, room modes and reverb time (RT60).", "app": "toolkit"},
         {"href": "/electrical-calculator.html", "name": "Electrical calculator", "text": "Ohm's law, power, impedance, dB-to-power conversion and cable voltage drop.", "app": "toolkit"},
         {"href": "/tempo-pitch-calculator.html", "name": "Tempo & pitch calculator", "text": "Tap tempo, note lengths per BPM, speed and pitch, and loop BPM.", "app": "toolkit"}
+      ]},
+      {"title": "Time & practice", "items": [
+        {"href": "/en/timer/", "name": "Online timer", "text": "Countdown, stopwatch, start/end times, work/rest cycles such as 45 min mixing plus a 5 min ear break, and rehearsal-room booking alerts in one place."},
+        {"href": "/en/metronome/", "name": "Online metronome", "text": "A steady metronome with 20–300 BPM, tap tempo, time signatures and subdivisions, a speed trainer and a practice timer.", "app": "temposcope"}
       ]},
       {"title": "Exam", "items": [
         {"href": "/stage-sound-quiz.html", "name": "Stage-sound certification quiz (Korean, level 3)", "text": "Multiple-choice questions from 14 chapters of the standard textbook, plus calculation problems. (Korean only.)", "app": "stage-sound"}

@@ -2,7 +2,7 @@ import json
 import pathlib
 import re
 
-from . import kit, sections, strings
+from . import clock, kit, sections, strings
 from .kit import esc, url
 
 SRC = pathlib.Path(__file__).resolve().parents[1]
@@ -272,7 +272,7 @@ def tools(lang):
     for g in c["groups"]:
         cards = ""
         for it in g["items"]:
-            app = apps.get(it["app"])
+            app = apps.get(it.get("app"))     # app 필드는 짝이 되는 앱이 있을 때만
             name = esc(it["name"])
             img = tool_img(it["href"])
             pic = (f'<a class="tc-img" href="{esc(it["href"])}" tabindex="-1" aria-hidden="true">'
@@ -295,7 +295,10 @@ def tools(lang):
 
 def tool_img(href):
     """웹 도구 미리보기 이미지(img/tools/<이름>.jpg). 파일이 없으면 None."""
-    rel = "/img/tools/" + href.strip("/").replace(".html", "") + ".jpg"
+    name = href.strip("/").replace(".html", "")
+    if name.startswith("en/"):          # /en/timer/ 도 /timer/ 와 같은 미리보기를 쓴다
+        name = name[3:]
+    rel = "/img/tools/" + name + ".jpg"
     return rel if (ROOT / rel.lstrip("/")).exists() else None
 
 
@@ -410,7 +413,10 @@ def web_counterparts(slug, lang):
         src = tool_img(it["href"])
         img = f'<img src="{esc(src)}" alt=""{kit.img_attrs(src)} loading="lazy">' if src else ""
         extra = ' lang="en"' if lang not in ("ko", "en") else ""
-        links += (f'<li><a href="{esc(it["href"])}">{img}<span class="wp-copy"><strong{extra}>{esc(it["name"])}</strong>'
+        href = it["href"]
+        if href.startswith("/en/") and lang != "en" and href[3:] in clock.tool_paths_ko():
+            href = url(lang, href[3:])          # 타이머·메트로놈은 8개 언어 쪽이 있으므로 그 언어 주소로
+        links += (f'<li><a href="{esc(href)}">{img}<span class="wp-copy"><strong{extra}>{esc(it["name"])}</strong>'
                   f'<small>{esc(kind)}</small></span></a></li>')
     return (f'<section class="web-counterparts"><div class="wrap"><h2>{title}</h2>'
             f'<ul class="web-previews">{links}</ul></div></section>')
@@ -674,5 +680,6 @@ def build_all(root):
             made.append(path)
             if is_store_layout_app(lang, slug):
                 noindex.append(path)
+    made += clock.build(root)          # 온라인 타이머·메트로놈 8개 언어 × 2
     prune_stale_app_pages(root, slugs)
     update_sitemap(root, made, slugs, noindex)

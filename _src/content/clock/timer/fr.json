@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "Minuteur en ligne : compte à rebours, cycles | ML Music Studio",
+    "description": "Minuteur en ligne gratuit : compte à rebours, chronomètre, heures de début et de fin, cycles travail/pause (mixage 45 min + 5 min) et alertes de réservation.",
+    "h1": "Minuteur en ligne",
+    "sub": "Compte à rebours, chronomètre, heures de début et de fin et cycles de travail et de pause sur une seule page, avec des préréglages pour le mixage, l'enregistrement et la réservation de salle de répétition."
+  },
+  "ui": {
+    "tool_name": "Minuteur en ligne",
+    "noscript": "Ce minuteur nécessite que JavaScript soit activé.",
+    "tabs_label": "Modes du minuteur",
+    "tab_countdown": "Compte à rebours",
+    "tab_stopwatch": "Chronomètre",
+    "tab_range": "Heure de début et de fin",
+    "tab_interval": "Cycles (travail/pause)",
+    "tab_booking": "Réservation de salle",
+    "lbl_hours": "Heures",
+    "lbl_minutes": "Minutes",
+    "lbl_seconds": "Secondes",
+    "quick_group": "Durées rapides",
+    "quick_label": "{n} min",
+    "quick_aria": "Régler sur {n} minutes",
+    "btn_start": "Démarrer",
+    "btn_pause": "Pause",
+    "btn_resume": "Reprendre",
+    "btn_stop": "Arrêter",
+    "btn_reset": "Réinitialiser",
+    "btn_lap": "Tour",
+    "btn_full": "Plein écran",
+    "btn_full_exit": "Quitter le plein écran",
+    "btn_goto": "Afficher",
+    "st_ready": "Prêt",
+    "st_running": "En cours",
+    "st_paused": "En pause",
+    "st_done": "Terminé",
+    "st_ended": "C'est fini",
+    "sw_hint": "Appuyez sur Démarrer pour lancer le temps. Chaque appui sur Tour ajoute un temps intermédiaire à la liste.",
+    "lap_title": "Tours",
+    "lap_n": "Tour {n}",
+    "lap_split": "Intermédiaire",
+    "lap_total": "Total",
+    "lbl_range_start": "Heure de début",
+    "lbl_range_end": "Heure de fin",
+    "btn_now": "Maintenant",
+    "btn_now_aria": "Remplir l'heure de début avec l'heure actuelle",
+    "btn_apply": "Appliquer",
+    "range_hint": "Si l'heure de fin est antérieure à l'heure de début, elle compte pour le lendemain (après minuit). Avant le début, vous voyez le temps restant avant le départ.",
+    "range_err_invalid": "Saisissez à la fois une heure de début et une heure de fin.",
+    "range_err_same": "Les heures de début et de fin sont identiques. Saisissez des heures différentes.",
+    "range_until": "Avant le début",
+    "range_window": "Plage",
+    "range_total": "Durée totale",
+    "range_elapsed": "Écoulé",
+    "range_left": "Temps restant",
+    "range_next_day": "(se termine le lendemain)",
+    "lbl_preset": "Préréglage",
+    "preset_mix": "Mixage 45 min + 5 min de repos des oreilles",
+    "preset_pomodoro": "Pomodoro 25 min + 5 min",
+    "preset_practice": "Pratique 20 min + 5 min",
+    "preset_custom": "Personnalisé",
+    "lbl_work_min": "Travail (min)",
+    "lbl_rest_min": "Pause (min)",
+    "lbl_cycles": "Cycles (0 = sans fin)",
+    "iv_hint": "Après le dernier bloc de travail, le minuteur s'arrête sans pause. Avec 0 cycle, il se répète jusqu'à ce que vous appuyiez sur Réinitialiser.",
+    "phase_work": "Travail",
+    "phase_rest": "Pause",
+    "cycle_n": "{n} sur {total}",
+    "cycle_n_inf": "Cycle {n}",
+    "book_intro": "Lancez la réservation d'une salle de répétition ou d'un studio d'un seul appui. Vous recevez une alerte quelques minutes avant la fin, et l'alarme retentit quand le temps est écoulé.",
+    "book_group": "Durée de la réservation",
+    "book_aria": "Lancer un minuteur de réservation de {n} heures",
+    "lbl_book_pre": "Alerte préalable (min)",
+    "opts_title": "Alertes et écran",
+    "opt_pre": "Prévenir avant la fin",
+    "lbl_pre_aria": "Minutes avant la fin pour l'alerte",
+    "lbl_pre_min": "min avant",
+    "lbl_sound": "Son de l'alarme",
+    "sound_bell": "Cloche",
+    "sound_beep": "Bip",
+    "sound_chime": "Carillon",
+    "btn_test": "Tester le son",
+    "lbl_volume": "Volume",
+    "lbl_repeat": "Répétitions de l'alarme",
+    "opt_notify": "Notifications de bureau",
+    "notify_denied": "Les notifications sont bloquées dans votre navigateur et ne peuvent donc pas être activées. Autorisez-les dans les réglages du site, à côté de la barre d'adresse.",
+    "opt_wake": "Garder l'écran allumé",
+    "opt_note": "Les réglages et la progression sont enregistrés uniquement dans ce navigateur (localStorage) sur cet appareil. Rien n'est envoyé à un serveur.",
+    "dur_h": "{n} h",
+    "dur_m": "{n} min",
+    "dur_s": "{n} s",
+    "dur_sep": " ",
+    "sr_remaining": "Il reste {t}",
+    "sr_pre": "Il reste {n} minutes avant la fin.",
+    "sr_done": "Le minuteur est terminé.",
+    "sr_all_done": "Tous les cycles sont terminés.",
+    "sr_phase_work": "La phase de travail commence.",
+    "sr_phase_rest": "La pause commence.",
+    "sr_range_start": "L'heure de début est arrivée.",
+    "other_running": "Le mode « {mode} » est en cours.",
+    "restored": "Votre minuteur précédent a été restauré.",
+    "tap_for_sound": "Touchez la page une fois pour que l'alarme puisse sonner."
+  },
+  "article": [
+    {
+      "h2": "Comment utiliser le minuteur",
+      "blocks": [
+        {
+          "p": "Choisissez un mode dans les onglets, réglez la durée, puis appuyez sur **Démarrer**. Voici le déroulement habituel, étape par étape."
+        },
+        {
+          "ol": [
+            "**Choisissez un mode.** Compte à rebours, chronomètre, heure de début et de fin, cycles travail/pause ou réservation de salle.",
+            "**Réglez la durée.** Pour un compte à rebours, saisissez les heures, minutes et secondes, ou utilisez les raccourcis de 5, 10 ou 30 minutes. Pour le mode cycles, choisissez un préréglage.",
+            "**Réglez les alertes.** Dans la section des alertes, décidez si vous voulez être prévenu quelques minutes avant la fin, quel son utiliser, à quel volume et combien de fois il se répète. Le bouton Tester le son permet de l'écouter d'abord.",
+            "**Appuyez sur Démarrer par un clic ou un toucher.** Les navigateurs n'autorisent le son qu'après une action directe de l'utilisateur, et c'est ce clic qui active l'alarme.",
+            "**Continuez à travailler.** Le temps restant s'affiche dans le titre de l'onglet, visible depuis n'importe quel autre onglet. Si vous rechargez la page, le minuteur reprend là où il en était.",
+            "**Réinitialisez à la fin.** Le bouton Réinitialiser efface le minuteur terminé pour que vous puissiez régler le suivant."
+          ]
+        },
+        {
+          "p": "Un mot sur la précision : ce minuteur ne retire pas une seconde à la fois. Au démarrage, il fixe un horodatage de fin et calcule à chaque affichage l'écart avec l'horloge actuelle. C'est pourquoi le temps reste juste même si le navigateur ralentit un onglet en arrière-plan ou si l'ordinateur se fige un instant."
+        }
+      ]
+    },
+    {
+      "h2": "Ce que fait chaque mode",
+      "blocks": [
+        {
+          "h3": "Compte à rebours"
+        },
+        {
+          "p": "Le minuteur classique qui descend jusqu'à zéro. Saisissez les heures, minutes et secondes, ou utilisez les boutons de raccourci. Vous pouvez mettre en pause et reprendre, et l'alarme retentit à zéro. La valeur maximale est de 99 heures, 59 minutes et 59 secondes."
+        },
+        {
+          "h3": "Chronomètre"
+        },
+        {
+          "p": "Il compte vers le haut à partir de zéro, au centième de seconde près. Chaque appui sur Tour enregistre le total cumulé et le temps intermédiaire depuis le tour précédent. Pratique pour chronométrer séparément les sections d'un morceau ou noter la durée de chaque prise."
+        },
+        {
+          "h3": "Heure de début et de fin"
+        },
+        {
+          "p": "Au lieu d'une durée, vous indiquez des heures d'horloge. Saisissez un début et une fin, appuyez sur Appliquer, et vous voyez la durée totale, le temps écoulé, le temps restant et une barre de progression. Avant le début, il affiche le temps qui reste avant le départ, et un signal retentit à l'heure de début. Si la fin est antérieure au début, la séance est considérée comme passant minuit : une séance de nuit de 23 h 00 à 01 h 00 peut donc être saisie telle quelle."
+        },
+        {
+          "h3": "Cycles (travail/pause)"
+        },
+        {
+          "p": "Alterne un bloc de travail et un bloc de pause. Il y a trois préréglages : mixage de 45 minutes avec 5 minutes de repos des oreilles, Pomodoro 25 plus 5, et pratique 20 plus 5. Si vous modifiez un chiffre, cela devient un plan personnalisé, et vous pouvez aussi choisir le nombre de cycles. Avec 0 cycle, tout se répète jusqu'à ce que vous appuyiez sur Réinitialiser. Le son au début du travail est plus aigu que celui du début de la pause : vous savez dans quel sens vous avez basculé sans regarder, et le cycle en cours est toujours affiché."
+        },
+        {
+          "h3": "Réservation de salle"
+        },
+        {
+          "p": "Un préréglage en un appui pour les lieux loués à l'heure, comme les salles de répétition et les studios. Appuyez sur 1, 2 ou 3 heures et le compte à rebours démarre aussitôt, avec une alerte préalable 10 minutes avant la fin (ce nombre est modifiable). L'idée est de préserver le temps dont vous avez besoin pour ranger."
+        }
+      ]
+    },
+    {
+      "h2": "Alertes, son et options d'écran",
+      "blocks": [
+        {
+          "p": "L'**alerte préalable** joue un son doux et affiche un message quelques minutes avant la fin. Activez-la si vous voulez être au courant de la dernière ligne droite, par exemple pour terminer un mixage ou commencer à ranger la salle."
+        },
+        {
+          "p": "Le **son de l'alarme** peut être une cloche, un bip ou un carillon, avec son propre volume et son nombre de répétitions. Les sons sont synthétisés sur place par le navigateur plutôt que chargés depuis des fichiers. Si vous n'entendez rien, vérifiez le volume de l'appareil, le commutateur de sourdine et la sourdine de l'onglet."
+        },
+        {
+          "p": "Les **notifications de bureau** ne demandent l'autorisation qu'au moment où vous cochez la case. Une fois autorisées, un message apparaît à la fin du temps même si une autre fenêtre est au premier plan."
+        },
+        {
+          "p": "**Garder l'écran allumé** empêche l'écran de s'éteindre pendant qu'un minuteur tourne. L'option n'apparaît que dans les navigateurs qui la prennent en charge et reste discrètement masquée ailleurs. Elle consomme de la batterie : n'activez-la que si nécessaire."
+        },
+        {
+          "p": "Le **titre de l'onglet** affiche le temps restant, et le bouton **plein écran** transforme l'horloge en grand affichage, pratique sur une tablette posée sur le bureau. Tout est enregistré uniquement dans ce navigateur sur cet appareil, et rien n'est envoyé à un serveur. Si la page est restaurée alors que le navigateur bloque l'audio, touchez la page une fois pour que l'alarme puisse sonner."
+        }
+      ]
+    },
+    {
+      "h2": "Pour le mixage, l'enregistrement et les répétitions",
+      "blocks": [
+        {
+          "h3": "Prévoir les pauses d'oreilles pendant le mixage"
+        },
+        {
+          "p": "Chez les ingénieurs du son, on dit souvent qu'une écoute prolongée émousse autant les oreilles que le jugement. Il n'existe pas de réponse unique sur la durée de travail et de repos, mais des pauses courtes et régulières tendent à aider à réduire la fatigue auditive et la fatigue décisionnelle. Les 45 minutes de travail et 5 minutes de pause par défaut ne sont qu'un point de départ : adaptez les chiffres à votre façon de travailler et à l'état du morceau."
+        },
+        {
+          "p": "Pendant la pause, baissez ou coupez les moniteurs et, si possible, levez-vous, buvez de l'eau et regardez au loin. Au retour, écoutez d'abord le morceau entier depuis le début à faible volume avant de toucher à la piste sur laquelle vous étiez ; des oreilles fraîches jugent bien l'équilibre général. Sauvegarder la session dès que l'alarme de pause sonne est aussi une bonne habitude."
+        },
+        {
+          "h3": "Découper un mixage en cycles"
+        },
+        {
+          "p": "Pour un mixage avec une échéance, répartissez le travail selon le nombre de cycles. Avec trois cycles, le premier peut porter sur l'équilibre et les mouvements de faders, le deuxième sur les effets et l'espace, et le troisième sur la comparaison avec des morceaux de référence. S'attarder trop longtemps sur un même morceau pousse facilement à le traiter à l'excès ; une règle comme « terminer ce que l'on fait quand l'alarme sonne » aide à avancer."
+        },
+        {
+          "h3": "Pendant une séance d'enregistrement"
+        },
+        {
+          "p": "La concentration de l'interprète est la ressource la plus précieuse d'une séance d'enregistrement. Chronométrer chaque prise aide à retrouver les passages plus tard, et noter le temps qu'ont pris l'installation et le test de son aide à planifier la séance suivante. Pour la voix et les instruments à vent, utilisez le bloc de pause pour boire de l'eau et respirer."
+        },
+        {
+          "h3": "Gérer le temps de la salle de répétition ou du studio"
+        },
+        {
+          "p": "Une réservation comprend le temps d'installation et le temps de rangement, et on oublie facilement le second. Saisissez la réservation dans le mode heure de début et de fin, ou appuyez sur un bouton de réservation avec l'alerte de 10 minutes activée, et il vous restera le temps de décider si vous rejouez le morceau une fois de plus ou si vous commencez à ranger. Pour une réservation d'une heure, vous pouvez prévoir 10 minutes d'installation, 40 de musique et 10 de rangement. Si vous préférez vous fier au son seul, montez le volume de l'alarme assez haut pour qu'on l'entende par-dessus la batterie."
+        }
+      ]
+    },
+    {
+      "h2": "Questions fréquentes",
+      "blocks": [
+        {
+          "faq": [
+            {
+              "q": "L'alarme sonnera-t-elle si je change d'onglet ou si l'ordinateur se met en veille ?",
+              "a": "Tant que l'onglet reste ouvert, oui, même si vous regardez un autre onglet. Si vous fermez l'onglet, il n'y aura pas d'alarme. Quand l'ordinateur se met en veille, le navigateur s'arrête aussi, mais au réveil il recalcule le temps restant à partir de l'heure de fin enregistrée."
+            },
+            {
+              "q": "Je n'entends pas l'alarme.",
+              "a": "Appuyez d'abord sur Tester le son. S'il ne se passe rien, vérifiez le volume de l'appareil, le mode silencieux, la connexion Bluetooth du casque et la sourdine de l'onglet. Un minuteur restauré après un rechargement demande un toucher sur la page avant que le navigateur n'autorise le son."
+            },
+            {
+              "q": "Mes données sont-elles stockées sur un serveur ?",
+              "a": "Non. Les réglages et la progression sont conservés uniquement dans le localStorage de ce navigateur, sur cet appareil, et disparaissent si vous effacez les données du site."
+            },
+            {
+              "q": "Puis-je utiliser un chronomètre et un compte à rebours en même temps ?",
+              "a": "Un seul minuteur fonctionne à la fois ; démarrer un autre mode arrête celui en cours. Si vous en avez besoin de plusieurs, ouvrez plusieurs onglets, mais n'oubliez pas que les onglets d'un même appareil partagent le stockage et peuvent écraser mutuellement la progression enregistrée."
+            },
+            {
+              "q": "Combien de temps doit durer une pause ?",
+              "a": "Il n'y a pas de réponse fixe. Beaucoup de gens prennent 5 à 10 minutes après 45 à 60 minutes de travail, et lors de longues séances d'écoute, des pauses courtes et fréquentes semblent plus utiles. Trouvez ce qui vous convient et enregistrez-le comme plan personnalisé."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "related": {
+    "heading": "Outils et articles associés",
+    "guide_tag": "(guide en coréen)",
+    "items": {
+      "metronome": "Métronome en ligne : travail du tempo et accélération progressive",
+      "trainer": "Entraîneur d'oreille à 31 bandes : outil d'entraînement auditif",
+      "gain": "Les bases du gain staging",
+      "pink": "Entraîner son oreille à l'égalisation avec du bruit rose"
+    }
+  }
+}

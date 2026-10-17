@@ -21,7 +21,7 @@ CANONICAL = re.compile(r'<link\b[^>]*\brel="canonical"[^>]*>')
 MT8 = re.compile(r"(?:\?|&amp;|&)mt=8(?!\d)")
 # 생성기가 만드는 페이지만 내부 링크를 점검한다(기존 페이지는 건드리지 않음).
 GENERATED_PREFIXES = ("index.html", "en/", "apps/", "tools/", "plugins/", "studio/", "about/", "contact/", "privacy/", "work/",
-                      "ja/", "zh-Hans/", "es/", "de/", "fr/", "pt-BR/")
+                      "ja/", "zh-Hans/", "es/", "de/", "fr/", "pt-BR/", "timer/", "metronome/")
 # 기존(손으로 쓴) 페이지는 사이트 안 링크·src(루트 기준 주소)가 실제 파일을 가리키는지만 본다. 스토어 링크·canonical 등은 건드리지 않는다.
 PLAIN_LINK_PREFIXES = ("guides/",)
 PLAIN_LINK_FILES = ("policy.html", "nora_legal.html", "patchio_legal.html", "sheetscope_legal.html", "yul_legal.html",

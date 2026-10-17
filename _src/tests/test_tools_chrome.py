@@ -243,7 +243,7 @@ class ToolsIndexTests(unittest.TestCase):
             _, html = pages.tools(lang)
             groups = re.findall(r'<section class="band tool-group">(.*?)</section>', html, re.S)
             for group, data in zip(groups, pages.load('tools.json')[lang]['groups']):
-                slugs = set(it['app'] for it in data['items'])
+                slugs = set(it['app'] for it in data['items'] if it.get('app'))
                 self.assertEqual(group.count('<aside class="app-pair"'), len(slugs))
                 self.assertNotIn('class="tc-label"', group)
                 for slug in slugs:
@@ -260,11 +260,13 @@ class WebCounterpartTests(unittest.TestCase):
             slug = app['slug']
             for lang in pages.app_langs(slug):
                 strip = pages.web_counterparts(slug, lang)
-                expected = [it['href'] for g in data[kit.chrome(lang)]['groups'] for it in g['items'] if it['app'] == slug]
+                expected = [it['href'] for g in data[kit.chrome(lang)]['groups'] for it in g['items'] if it.get('app') == slug]
                 if not expected:
                     self.assertEqual(strip, '', (slug, lang))
                     continue
-                self.assertEqual(re.findall(r'<a href="([^"]+)"', strip), expected, (slug, lang))
+                # 타이머·메트로놈은 8개 언어 쪽이 있어, en 목록의 /en/… 주소를 해당 언어 주소로 바꿔 건다
+                shown = [kit.url(lang, h[3:]) if h.startswith('/en/') and lang != 'en' else h for h in expected]
+                self.assertEqual(re.findall(r'<a href="([^"]+)"', strip), shown, (slug, lang))
                 for href in expected:
                     self.assertIn(pages.tool_img(href), strip)
                 html = pages.app_page(lang, slug)[1]

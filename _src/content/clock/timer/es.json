@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "Temporizador online: cuenta atrás e intervalos | ML Music Studio",
+    "description": "Temporizador online gratis: cuenta atrás, cronómetro, hora de inicio y fin, ciclos de trabajo y descanso (mezcla 45 min + 5 min) y avisos de reserva de sala.",
+    "h1": "Temporizador online",
+    "sub": "Cuenta atrás, cronómetro, hora de inicio y fin y ciclos de trabajo y descanso en una sola pantalla, con ajustes pensados para mezclar, grabar y reservar la sala de ensayo."
+  },
+  "ui": {
+    "tool_name": "Temporizador online",
+    "noscript": "Este temporizador necesita que JavaScript esté activado.",
+    "tabs_label": "Modos del temporizador",
+    "tab_countdown": "Cuenta atrás",
+    "tab_stopwatch": "Cronómetro",
+    "tab_range": "Hora de inicio y fin",
+    "tab_interval": "Ciclos (trabajo/descanso)",
+    "tab_booking": "Reserva de sala",
+    "lbl_hours": "Horas",
+    "lbl_minutes": "Minutos",
+    "lbl_seconds": "Segundos",
+    "quick_group": "Tiempos rápidos",
+    "quick_label": "{n} min",
+    "quick_aria": "Fijar {n} minutos",
+    "btn_start": "Iniciar",
+    "btn_pause": "Pausar",
+    "btn_resume": "Continuar",
+    "btn_stop": "Detener",
+    "btn_reset": "Reiniciar",
+    "btn_lap": "Vuelta",
+    "btn_full": "Pantalla completa",
+    "btn_full_exit": "Salir de pantalla completa",
+    "btn_goto": "Ver",
+    "st_ready": "Listo",
+    "st_running": "En marcha",
+    "st_paused": "En pausa",
+    "st_done": "Terminado",
+    "st_ended": "Ha terminado",
+    "sw_hint": "Pulsa Iniciar para que corra el tiempo. Cada vez que pulses Vuelta se añadirá un parcial a la lista.",
+    "lap_title": "Vueltas",
+    "lap_n": "Vuelta {n}",
+    "lap_split": "Parcial",
+    "lap_total": "Total",
+    "lbl_range_start": "Hora de inicio",
+    "lbl_range_end": "Hora de fin",
+    "btn_now": "Ahora",
+    "btn_now_aria": "Rellenar la hora de inicio con la hora actual",
+    "btn_apply": "Aplicar",
+    "range_hint": "Si la hora de fin es anterior a la de inicio, se cuenta como el día siguiente (pasada la medianoche). Antes del inicio verás el tiempo que falta para empezar.",
+    "range_err_invalid": "Introduce tanto la hora de inicio como la de fin.",
+    "range_err_same": "La hora de inicio y la de fin son iguales. Introduce horas distintas.",
+    "range_until": "Hasta el inicio",
+    "range_window": "Franja",
+    "range_total": "Duración total",
+    "range_elapsed": "Transcurrido",
+    "range_left": "Tiempo restante",
+    "range_next_day": "(termina al día siguiente)",
+    "lbl_preset": "Ajuste predefinido",
+    "preset_mix": "Mezcla 45 min + 5 min de descanso de oídos",
+    "preset_pomodoro": "Pomodoro 25 min + 5 min",
+    "preset_practice": "Práctica 20 min + 5 min",
+    "preset_custom": "Personalizado",
+    "lbl_work_min": "Trabajo (min)",
+    "lbl_rest_min": "Descanso (min)",
+    "lbl_cycles": "Ciclos (0 = sin fin)",
+    "iv_hint": "Al terminar el último bloque de trabajo, el temporizador acaba sin descanso. Con 0 ciclos se repite hasta que pulses Reiniciar.",
+    "phase_work": "Trabajo",
+    "phase_rest": "Descanso",
+    "cycle_n": "{n} de {total}",
+    "cycle_n_inf": "Ronda {n}",
+    "book_intro": "Inicia la reserva de una sala de ensayo o de un estudio con una sola pulsación. Recibirás un aviso unos minutos antes del final y sonará una alarma al acabar el tiempo.",
+    "book_group": "Duración de la reserva",
+    "book_aria": "Iniciar un temporizador de reserva de {n} horas",
+    "lbl_book_pre": "Aviso previo (min)",
+    "opts_title": "Avisos y pantalla",
+    "opt_pre": "Avisar antes del final",
+    "lbl_pre_aria": "Minutos de antelación del aviso",
+    "lbl_pre_min": "min antes",
+    "lbl_sound": "Sonido de alarma",
+    "sound_bell": "Campana",
+    "sound_beep": "Pitido",
+    "sound_chime": "Carillón",
+    "btn_test": "Probar sonido",
+    "lbl_volume": "Volumen",
+    "lbl_repeat": "Repeticiones de la alarma",
+    "opt_notify": "Notificaciones de escritorio",
+    "notify_denied": "Las notificaciones están bloqueadas en tu navegador, así que no se pueden activar. Permítelas en la configuración del sitio, junto a la barra de direcciones.",
+    "opt_wake": "Mantener la pantalla encendida",
+    "opt_note": "Los ajustes y el progreso se guardan solo en este navegador (localStorage) de este dispositivo. No se envía nada a ningún servidor.",
+    "dur_h": "{n} h",
+    "dur_m": "{n} min",
+    "dur_s": "{n} s",
+    "dur_sep": " ",
+    "sr_remaining": "Quedan {t}",
+    "sr_pre": "Faltan {n} minutos para el final.",
+    "sr_done": "El temporizador ha terminado.",
+    "sr_all_done": "Todos los ciclos han terminado.",
+    "sr_phase_work": "Empieza el trabajo.",
+    "sr_phase_rest": "Empieza el descanso.",
+    "sr_range_start": "Ha llegado la hora de inicio.",
+    "other_running": "El modo «{mode}» está en marcha.",
+    "restored": "Se ha restaurado el temporizador anterior.",
+    "tap_for_sound": "Toca la página una vez para que pueda sonar la alarma."
+  },
+  "article": [
+    {
+      "h2": "Cómo usar el temporizador",
+      "blocks": [
+        {
+          "p": "Elige un modo en las pestañas, fija el tiempo y pulsa **Iniciar**. Este es el recorrido habitual, paso a paso."
+        },
+        {
+          "ol": [
+            "**Elige un modo.** Cuenta atrás, cronómetro, hora de inicio y fin, ciclos de trabajo y descanso o reserva de sala.",
+            "**Fija el tiempo.** En la cuenta atrás escribe horas, minutos y segundos, o pulsa uno de los accesos rápidos de 5, 10 o 30 minutos. En el modo de ciclos, elige un ajuste predefinido.",
+            "**Configura los avisos.** En la sección de avisos decide si quieres un aviso unos minutos antes del final, qué sonido usar, con qué volumen y cuántas veces se repite. El botón Probar sonido te deja oírlo antes.",
+            "**Pulsa Iniciar con un clic o un toque.** Los navegadores solo permiten reproducir sonido tras una acción directa del usuario, así que ese clic es el que activa la alarma.",
+            "**Sigue con tu trabajo.** El tiempo restante aparece en el título de la pestaña, de modo que puedes verlo desde cualquier otra. Si recargas la página, el temporizador continúa donde estaba.",
+            "**Reinicia al terminar.** Con Reiniciar se borra el temporizador acabado y puedes preparar el siguiente."
+          ]
+        },
+        {
+          "p": "Un detalle sobre la precisión: este temporizador no resta un segundo cada vez. Al empezar fija una marca de tiempo de finalización y calcula siempre la diferencia con el reloj actual. Por eso el tiempo sigue siendo correcto aunque el navegador ralentice una pestaña en segundo plano o el ordenador se detenga un momento."
+        }
+      ]
+    },
+    {
+      "h2": "Qué hace cada modo",
+      "blocks": [
+        {
+          "h3": "Cuenta atrás"
+        },
+        {
+          "p": "El temporizador clásico que baja hasta cero. Escribe horas, minutos y segundos, o usa los botones de acceso rápido. Puedes pausar y continuar, y al llegar a cero suena la alarma. El máximo es de 99 horas, 59 minutos y 59 segundos."
+        },
+        {
+          "h3": "Cronómetro"
+        },
+        {
+          "p": "Cuenta hacia arriba desde cero con precisión de centésimas de segundo. Cada vez que pulsas Vuelta se guarda el total acumulado y el parcial desde la vuelta anterior. Sirve para cronometrar por separado las secciones de una canción o para anotar cuánto dura cada toma."
+        },
+        {
+          "h3": "Hora de inicio y fin"
+        },
+        {
+          "p": "En lugar de una duración, indicas horas del reloj. Escribe un inicio y un fin, pulsa Aplicar y verás la duración total, el tiempo transcurrido, el tiempo restante y una barra de progreso. Antes del inicio muestra cuánto falta para empezar y suena un aviso cuando llega la hora de inicio. Si el fin es anterior al inicio, la sesión se considera que pasa de la medianoche, así que una sesión nocturna de 23:00 a 01:00 se puede escribir tal cual."
+        },
+        {
+          "h3": "Ciclos (trabajo/descanso)"
+        },
+        {
+          "p": "Alterna un bloque de trabajo y uno de descanso. Hay tres ajustes predefinidos: mezcla de 45 minutos con 5 minutos de descanso de oídos, Pomodoro de 25 más 5, y práctica de 20 más 5. Si cambias cualquier número pasa a ser un plan personalizado, y también puedes decidir cuántas rondas se repiten. Con 0 ciclos se repite hasta que pulses Reiniciar. El sonido al empezar el trabajo es más agudo que al empezar el descanso, así sabes hacia dónde has cambiado sin mirar la pantalla, y la ronda actual siempre está a la vista."
+        },
+        {
+          "h3": "Reserva de sala"
+        },
+        {
+          "p": "Un ajuste de una sola pulsación para espacios que se alquilan por horas, como salas de ensayo y estudios. Pulsa 1, 2 o 3 horas y la cuenta atrás empieza de inmediato, con un aviso previo 10 minutos antes del final (puedes cambiar ese número). La idea es proteger el tiempo que necesitas para recoger."
+        }
+      ]
+    },
+    {
+      "h2": "Avisos, sonido y opciones de pantalla",
+      "blocks": [
+        {
+          "p": "El **aviso previo** reproduce un sonido suave y muestra un mensaje unos minutos antes del final. Actívalo cuando quieras enterarte del último tramo, por ejemplo para terminar una mezcla o empezar a recoger la sala."
+        },
+        {
+          "p": "El **sonido de alarma** puede ser una campana, un pitido o un carillón, con su propio volumen y número de repeticiones. Los sonidos los sintetiza el navegador al momento en lugar de cargarlos desde archivos. Si no oyes nada, revisa el volumen del dispositivo, el interruptor de silencio y el silencio de la pestaña."
+        },
+        {
+          "p": "Las **notificaciones de escritorio** solo piden permiso en el momento en que marcas la casilla. Una vez permitidas, aparece un aviso al acabar el tiempo aunque haya otra ventana delante."
+        },
+        {
+          "p": "**Mantener la pantalla encendida** evita que se apague mientras corre un temporizador. La opción solo aparece en los navegadores que la admiten y se oculta sin avisar en los demás. Gasta más batería, así que actívala solo cuando la necesites."
+        },
+        {
+          "p": "El **título de la pestaña** muestra el tiempo restante, y el botón de **pantalla completa** convierte el reloj en una pantalla grande, muy útil en una tableta apoyada sobre la mesa. Todo se guarda únicamente en este navegador de este dispositivo y no se envía nada a ningún servidor. Si la página se restaura mientras el navegador bloquea el audio, toca la página una vez para que pueda sonar la alarma."
+        }
+      ]
+    },
+    {
+      "h2": "Para mezclar, grabar y ensayar",
+      "blocks": [
+        {
+          "h3": "Planificar los descansos de oídos al mezclar"
+        },
+        {
+          "p": "Entre ingenieros de sonido se dice a menudo que escuchar durante mucho tiempo embota tanto los oídos como el criterio. No existe una respuesta única sobre cuánto trabajar y cuánto descansar, pero los descansos cortos y regulares suelen ayudar a reducir la fatiga auditiva y de decisión. Los 45 minutos de trabajo y 5 de descanso que vienen por defecto son solo un punto de partida: cambia los números según tu forma de trabajar y el estado de la canción."
+        },
+        {
+          "p": "Durante el descanso, baja o apaga los monitores y, si puedes, levántate, bebe agua y mira algo lejano. Al volver, prueba a escuchar la canción entera desde el principio a bajo volumen antes de tocar la pista en la que estabas; unos oídos frescos juzgan bien el equilibrio general. Guardar la sesión cuando suena la alarma del descanso también es un buen hábito."
+        },
+        {
+          "h3": "Dividir una mezcla en rondas"
+        },
+        {
+          "p": "Si la mezcla tiene fecha de entrega, reparte el trabajo según el número de rondas. Con tres rondas, la primera puede ser el equilibrio y los movimientos de fader, la segunda los efectos y el espacio, y la tercera la comparación con temas de referencia. Quedarse demasiado tiempo en una misma canción lleva fácilmente a procesarla en exceso, así que una regla como terminar lo que estás haciendo cuando suena la alarma ayuda a avanzar."
+        },
+        {
+          "h3": "En una sesión de grabación"
+        },
+        {
+          "p": "La concentración del intérprete es el recurso más valioso de una sesión de grabación. Cronometrar cada toma ayuda a encontrar secciones después, y anotar cuánto duraron el montaje y la prueba de sonido sirve para planificar la siguiente sesión. En voces e instrumentos de viento, usa el bloque de descanso para beber agua y respirar."
+        },
+        {
+          "h3": "Gestionar el tiempo de la sala de ensayo o del estudio"
+        },
+        {
+          "p": "Una reserva incluye el tiempo de montaje y el de recogida, y es fácil olvidar el segundo. Introduce la reserva en el modo de hora de inicio y fin, o pulsa un botón de reserva con el aviso de 10 minutos activado, y te quedará tiempo para decidir si tocáis la canción una vez más o empezáis a recoger. En una reserva de una hora puedes planificar 10 minutos de montaje, 40 de música y 10 de recogida. Si prefieres fiarte solo del oído, sube el volumen de la alarma lo suficiente para que se oiga por encima de la batería."
+        }
+      ]
+    },
+    {
+      "h2": "Preguntas frecuentes",
+      "blocks": [
+        {
+          "faq": [
+            {
+              "q": "¿Sonará la alarma si cambio de pestaña o el ordenador se suspende?",
+              "a": "Si la pestaña sigue abierta, sí, incluso mientras miras otra pestaña. Si cierras la pestaña, no habrá alarma. Cuando el ordenador se suspende, el navegador también se detiene, pero al despertar vuelve a calcular el tiempo restante a partir de la hora de fin guardada."
+            },
+            {
+              "q": "No oigo la alarma.",
+              "a": "Pulsa primero Probar sonido. Si no suena nada, revisa el volumen del dispositivo, el modo silencio, la conexión de los auriculares Bluetooth y el silencio de la pestaña. Un temporizador restaurado tras recargar necesita un toque en la página antes de que el navegador permita el sonido."
+            },
+            {
+              "q": "¿Mis datos se guardan en un servidor?",
+              "a": "No. Los ajustes y el progreso solo se guardan en el localStorage de este navegador, en este dispositivo, y desaparecen si borras los datos del sitio."
+            },
+            {
+              "q": "¿Puedo usar un cronómetro y una cuenta atrás a la vez?",
+              "a": "Solo funciona un temporizador cada vez; al iniciar otro modo se detiene el actual. Si necesitas varios, abre varias pestañas, pero recuerda que las pestañas del mismo dispositivo comparten el almacenamiento y pueden sobrescribirse el progreso guardado."
+            },
+            {
+              "q": "¿Cuánto debería durar un descanso?",
+              "a": "No hay una respuesta fija. Mucha gente usa de 5 a 10 minutos tras 45 a 60 de trabajo, y en las sesiones largas de escucha parece que ayudan más los descansos cortos y frecuentes. Busca lo que mejor te vaya y guárdalo como plan personalizado."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "related": {
+    "heading": "Herramientas y artículos relacionados",
+    "guide_tag": "(guía en coreano)",
+    "items": {
+      "metronome": "Metrónomo online: práctica de tempo y aceleración progresiva",
+      "trainer": "Entrenador de oído de 31 bandas: herramienta de entrenamiento auditivo",
+      "gain": "Fundamentos de la estructura de ganancia",
+      "pink": "Entrenar el oído para el EQ con ruido rosa"
+    }
+  }
+}

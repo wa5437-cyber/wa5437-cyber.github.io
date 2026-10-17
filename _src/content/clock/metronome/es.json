@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "title": "Metrónomo online: tap tempo y compases | ML Music Studio",
+    "description": "Metrónomo online gratis: 20–300 BPM, tap tempo, compases de 2/4 a 7/8, subdivisiones, entrenador de velocidad y temporizador de práctica. Sin enviar datos.",
+    "h1": "Metrónomo online",
+    "sub": "20–300 BPM, tap tempo, compases y subdivisiones, entrenador de velocidad y temporizador de práctica en una sola pantalla. Los pulsos se programan por adelantado con el reloj de audio del navegador, así el intervalo se mantiene estable."
+  },
+  "ui": {
+    "tool_name": "Metrónomo online",
+    "noscript": "Este metrónomo necesita que JavaScript esté activado.",
+    "bpm_down_aria": "Bajar 1 BPM",
+    "bpm_up_aria": "Subir 1 BPM",
+    "bpm_input_aria": "BPM (de 20 a 300)",
+    "bpm_slider_aria": "Control deslizante de BPM",
+    "beats_aria": "Indicador de pulsos",
+    "btn_start": "Iniciar",
+    "btn_stop": "Detener",
+    "btn_tap": "Tap tempo",
+    "tap_count": "{n} toques — sigue tocando antes de 2 segundos",
+    "bar_n": "Compás {n}",
+    "grp_rhythm": "Compás y subdivisión",
+    "lbl_sig": "Compás",
+    "sig_custom": "Personalizado",
+    "lbl_beats": "Pulsos por compás",
+    "lbl_sub": "Subdivisión",
+    "sub_quarter": "Negras (sin subdivisión)",
+    "sub_eighth": "Corcheas",
+    "sub_triplet": "Tresillos",
+    "sub_sixteenth": "Semicorcheas",
+    "sig_note": "En los compases con un 8 abajo, como 6/8 y 7/8, una corchea cuenta como un pulso. La subdivisión divide ese pulso.",
+    "grp_sound": "Sonido",
+    "lbl_sound": "Tipo de sonido",
+    "sound_click": "Click",
+    "sound_wood": "Madera",
+    "sound_beep": "Pitido",
+    "lbl_volume": "Volumen",
+    "opt_accent": "Acento en el pulso 1 (más agudo y fuerte)",
+    "opt_wake": "Mantener la pantalla encendida",
+    "trainer_title": "Entrenador de velocidad",
+    "opt_trainer": "Usar el entrenador de velocidad",
+    "lbl_tr_start": "BPM inicial",
+    "lbl_tr_target": "BPM objetivo",
+    "lbl_tr_every": "Cada N compases",
+    "lbl_tr_step": "Subir (BPM)",
+    "trainer_note": "Cada {every} compases el tempo cambia {step} BPM, de {start} a {target}. Al llegar al objetivo se mantiene. Los controles de BPM quedan bloqueados mientras suena.",
+    "practice_title": "Temporizador de práctica",
+    "lbl_practice_min": "Tiempo de práctica (min, 0 = desactivado)",
+    "practice_note": "Cuando se acaba el tiempo, el metrónomo se detiene solo y suena un aviso.",
+    "practice_left": "Quedan {t} de práctica",
+    "practice_done": "Se ha acabado el tiempo de práctica.",
+    "kb_title": "Atajos de teclado",
+    "kb_space": "Espacio: iniciar/detener",
+    "kb_arrows": "Arriba/Abajo: BPM ±1 (con Mayús ±5)",
+    "kb_tap": "T: tap tempo",
+    "opt_note": "Los ajustes se guardan solo en este navegador (localStorage) de este dispositivo. No se envía nada a ningún servidor.",
+    "no_audio": "Este navegador no puede reproducir sonido.",
+    "sr_started": "Metrónomo iniciado.",
+    "sr_stopped": "Metrónomo detenido.",
+    "term_largo": "muy lento",
+    "term_larghetto": "lento y amplio",
+    "term_adagio": "lento",
+    "term_andante": "a paso tranquilo",
+    "term_moderato": "moderado",
+    "term_allegro": "rápido",
+    "term_vivace": "vivaz y rápido",
+    "term_presto": "muy rápido"
+  },
+  "article": [
+    {
+      "h2": "Cómo usar el metrónomo",
+      "blocks": [
+        {
+          "p": "Fija unos BPM y pulsa **Iniciar** para que empiecen los pulsos. Estos son los pasos, en orden."
+        },
+        {
+          "ol": [
+            "**Fija los BPM.** Escribe un número, usa el control deslizante y los botones − y +, o las teclas de flecha y la rueda del ratón. El intervalo va de 20 a 300.",
+            "**Si no conoces el tempo, usa el tap tempo.** Toca el botón Tap tempo (o la tecla T) al ritmo del pulso que oyes y los BPM se rellenan solos.",
+            "**Elige un compás y una subdivisión.** Escoge 4/4, 3/4, 6/8 u otro compás, y activa la subdivisión en corcheas, tresillos o semicorcheas si la necesitas.",
+            "**Elige un sonido y un volumen.** Click, madera o pitido, el que resulte más cómodo a tus oídos. Activa el acento en el pulso 1 para notar el comienzo de cada compás.",
+            "**Pulsa Iniciar.** Los navegadores solo permiten el sonido tras una acción directa del usuario, así que el clic en Iniciar es lo que despierta el audio. Para detenerlo, pulsa Detener o la tecla Espacio.",
+            "**Añade el entrenador de velocidad o el temporizador de práctica si los quieres.** Se describen más abajo."
+          ]
+        },
+        {
+          "p": "Puedes cambiar los BPM, el compás, la subdivisión y el sonido mientras suena (durante el entrenador de velocidad solo quedan bloqueados los BPM). Los nuevos valores se aplican desde el siguiente pulso que va a sonar, de modo que no hay cortes."
+        }
+      ]
+    },
+    {
+      "h2": "BPM y términos de tempo",
+      "blocks": [
+        {
+          "p": "Los BPM, o pulsos por minuto, indican cuántos pulsos suenan en un minuto. A 60 BPM oyes un pulso por segundo, y a 120 BPM, dos. Junto al número verás el término de tempo tradicional para esa velocidad: Largo (muy lento), Larghetto, Adagio (lento), Andante (a paso tranquilo), Moderato (moderado), Allegro (rápido), Vivace y Presto (muy rápido). Aproximadamente, por debajo de 60 BPM es Largo, de 76 a 107 es Andante, de 120 a 155 es Allegro y de 168 en adelante es Presto. Los límites varían un poco según los libros y las épocas, así que tómalos como una guía aproximada."
+        },
+        {
+          "h3": "Tap tempo"
+        },
+        {
+          "p": "Si estás escuchando una pieza y no conoces sus BPM, toca el botón al ritmo del pulso. Los BPM se calculan con la media de tus últimos toques, de modo que un par de pulsaciones irregulares se corrigen tras unas cuantas más. Si pasan dos segundos desde tu último toque, la cuenta vuelve a empezar. Hacen falta al menos dos toques para obtener un valor, y el tempo más lento que se puede medir así es de unos 30 BPM. En el teclado, la tecla T hace lo mismo, lo cual es cómodo cuando tienes las manos cerca de las teclas o del ratón."
+        }
+      ]
+    },
+    {
+      "h2": "Compases y subdivisiones",
+      "blocks": [
+        {
+          "p": "El compás decide cuántos pulsos forman un compás y dónde cae el peso. Este metrónomo ofrece 2/4, 3/4, 4/4, 5/4, 6/8 y 7/8, y un ajuste personalizado de 1 a 16 pulsos. Los círculos de la pantalla coinciden con el número de pulsos del compás, y el que está sonando se ilumina. El primer pulso del compás es más agudo y fuerte. En 5/4 (agrupado en 3+2) y en 6/8 el cuarto pulso recibe un acento medio, y en 7/8 (agrupado en 2+2+3) lo reciben el primer pulso del segundo y del tercer grupo."
+        },
+        {
+          "p": "En los compases con un 8 abajo, como 6/8 y 7/8, una corchea cuenta como un pulso. Por eso 120 BPM ahí puede sentirse mucho más rápido que 120 BPM en 4/4. Si sientes el 6/8 como dos grupos de tres, prueba con unos BPM cercanos a la mitad de esa cifra."
+        },
+        {
+          "h3": "Subdivisión"
+        },
+        {
+          "p": "Una subdivisión parte cada pulso en partes más pequeñas y hace sonar los toques adicionales. Negras significa sin subdivisión, corcheas da dos toques por pulso, tresillos tres y semicorcheas cuatro. Los toques adicionales son más suaves y graves que el pulso principal para que puedas distinguirlos. Activar una subdivisión mientras practicas un pasaje rápido ayuda a sentir el espacio entre los pulsos, y la opción de tresillos es una buena forma de aprender el shuffle y el balanceo del 6/8."
+        }
+      ]
+    },
+    {
+      "h2": "Sonido, entrenador de velocidad y temporizador de práctica",
+      "blocks": [
+        {
+          "p": "Hay tres **sonidos**: click, madera y pitido, todos generados al momento por el navegador como señal de audio (no se descarga ningún archivo de sonido). El click es corto y nítido y se oye bien en una sala de ensayo con mucho ruido, la madera es más suave, como un bloque de madera, y el pitido tiene una altura clara que facilita distinguir el pulso. Con el acento del pulso 1 desactivado, todos los pulsos suenan con la misma fuerza."
+        },
+        {
+          "h3": "Entrenador de velocidad"
+        },
+        {
+          "p": "Automatiza el hábito de empezar despacio un pasaje difícil y subir la velocidad. Elige un BPM inicial, un BPM objetivo, cuántos compases esperar y cuántos BPM sumar cada vez. Con inicio 80, objetivo 120 y +5 cada 4 compases, el tempo sube 5 cada cuatro compases, llega a 120 en el octavo paso y se queda en 120. Si el objetivo es menor que el inicio, funciona como ejercicio para ir bajando la velocidad. El tempo solo cambia en el primer pulso de un compás, así que el pulso nunca se estira de forma incómoda a mitad de una frase."
+        },
+        {
+          "h3": "Temporizador de práctica"
+        },
+        {
+          "p": "Fija un tiempo de práctica en minutos y, cuando termine, el metrónomo se detiene solo y suena un aviso. El tiempo restante aparece en pantalla. Úsalo para limitar las tandas de práctica a 20 minutos o para mantener una rutina diaria estable. El temporizador de práctica también se calcula a partir de una hora de fin, así que sigue siendo exacto aunque cambies de pestaña."
+        },
+        {
+          "p": "**Mantener la pantalla encendida** evita que se apague mientras el metrónomo está sonando, lo cual es útil con una tableta en el atril. La opción queda oculta en los navegadores que no la admiten. Los ajustes se guardan solo en este navegador y no se envía nada a ningún servidor."
+        }
+      ]
+    },
+    {
+      "h2": "Consejos de práctica",
+      "blocks": [
+        {
+          "h3": "Empieza despacio y sube el tempo"
+        },
+        {
+          "p": "La base de la práctica con metrónomo es empezar a una velocidad a la que puedas tocar sin errores. Comienza hacia la mitad del tempo objetivo y, cada vez que toques el pasaje limpio varias veces seguidas, sube los BPM cuatro o cinco. Practica los puntos difíciles en trozos cortos y, si aparecen errores al acelerar, retrocede un paso y afianza. El entrenador de velocidad lo hace por ti."
+        },
+        {
+          "h3": "Siente el espacio entre pulsos"
+        },
+        {
+          "p": "No te limites a escuchar el click; cuenta dentro de los huecos. Con una subdivisión activada puedes oír la distancia entre pulsos y, cuando te sientas cómodo, prueba a apoyarte solo en el acento de la cabeza de un compás largo personalizado mientras cuentas tú los pulsos intermedios."
+        },
+        {
+          "h3": "Para mezcla y trabajo de sonido"
+        },
+        {
+          "p": "Si conoces el tempo de una canción, puedes ajustar los tiempos de delay y reverb al pulso. Comprueba el tempo aquí y calcula después la duración de las notas con una calculadora. Cuando uses el tap tempo para hallar un tempo de oído, recuerda que promedia varios toques, así que toca unas diez veces y mira si el valor se estabiliza."
+        }
+      ]
+    },
+    {
+      "h2": "Precisión y límites",
+      "blocks": [
+        {
+          "p": "Un metrónomo web que se siente inestable suele sufrir un mal uso de los temporizadores. Los setInterval y setTimeout de JavaScript pueden retrasarse decenas de milisegundos si hay otro trabajo en medio, y eso hace que el espaciado de los pulsos sea irregular. Este metrónomo no hace sonar los pulsos directamente. Se despierta cada 25 milisegundos, usa el reloj del propio dispositivo de audio para programar los pulsos de los próximos 0,1 segundos, y el reloj de audio los reproduce en el instante exacto. Aunque la página se atasque un momento, el espaciado de los pulsos no se ve afectado."
+        },
+        {
+          "p": "Aun así, hay límites. El tiempo que tarda el sonido en salir del altavoz (latencia de salida) varía según el navegador y el dispositivo. Esa latencia no altera el espaciado entre pulsos, solo retrasa todos los pulsos la misma cantidad, así que no importa cuando tocas solo con el metrónomo. Sí importa cuando hay que coincidir con vídeo u otros sonidos, y sobre todo con auriculares o altavoces Bluetooth, donde el retraso puede crecer hasta decenas o cientos de milisegundos. En esos casos es mejor usar auriculares con cable o el altavoz del dispositivo. Las luces de la pantalla se ajustan al sonido lo más posible, pero pueden desfasarse un poco según el dispositivo."
+        },
+        {
+          "p": "Los navegadores pueden ralentizar los temporizadores en las pestañas en segundo plano. Cuando la pestaña está oculta, este metrónomo programa con más antelación (unos 1,5 segundos) para que el sonido no se entrecorte. Aun así, el bloqueo de pantalla con algunos ajustes de ahorro de energía puede detener el sonido, así que activa mantener la pantalla encendida en las sesiones largas."
+        }
+      ]
+    },
+    {
+      "h2": "Preguntas frecuentes",
+      "blocks": [
+        {
+          "faq": [
+            {
+              "q": "No oigo nada.",
+              "a": "El audio solo se inicia después de pulsar Iniciar. Si sigues sin oír nada, revisa el volumen del dispositivo, el modo silencio, la conexión Bluetooth y si la pestaña del navegador está silenciada."
+            },
+            {
+              "q": "El pulso suena un poco tarde.",
+              "a": "Es la latencia de salida. Añade el mismo retraso a todos los pulsos, así que el espaciado entre ellos sigue siendo exacto. Los auriculares Bluetooth añaden mucho retraso; los de cable o el altavoz del dispositivo lo reducen."
+            },
+            {
+              "q": "¿Puedo usar BPM con decimales?",
+              "a": "Los BPM se mueven solo en números enteros. Un valor obtenido con el tap tempo se redondea al entero más cercano."
+            },
+            {
+              "q": "No puedo cambiar los BPM durante el entrenador de velocidad.",
+              "a": "Mientras el entrenador está sonando, el tempo se cambia automáticamente, por lo que los controles de BPM quedan bloqueados. Deténlo y podrás volver a fijar los BPM a mano."
+            },
+            {
+              "q": "¿Mis ajustes se guardan en un servidor?",
+              "a": "No. Los ajustes como los BPM, el compás y el sonido se guardan solo en el localStorage de este navegador, en este dispositivo, y nunca se envían a un servidor."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "related": {
+    "heading": "Herramientas y artículos relacionados",
+    "guide_tag": "(guía en coreano)",
+    "items": {
+      "timer": "Temporizador online: ciclos de trabajo y descanso y reserva de sala",
+      "bpm_delay": "Calcular tiempos de delay y reverb a partir de los BPM",
+      "tempo_calc": "Calculadora de tempo y tono",
+      "temposcope": "App TempoScope: encuentra automáticamente el tempo y la tonalidad de una canción"
+    }
+  }
+}

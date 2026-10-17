@@ -1,0 +1,252 @@
+{
+  "meta": {
+    "title": "Online-Timer: Countdown, Stoppuhr, Intervalle | ML Music Studio",
+    "description": "Kostenloser Online-Timer: Countdown, Stoppuhr, Start- und Endzeit, Arbeits-/Pausenzyklen (45 Min. Mixen + 5 Min. Ohrenpause) und Buchungshinweise.",
+    "h1": "Online-Timer",
+    "sub": "Countdown, Stoppuhr, Start- und Endzeit sowie Arbeits- und Pausenzyklen auf einer Seite, mit Voreinstellungen für Mixing, Aufnahme und Proberaum-Buchungen."
+  },
+  "ui": {
+    "tool_name": "Online-Timer",
+    "noscript": "Dieser Timer funktioniert nur mit aktiviertem JavaScript.",
+    "tabs_label": "Timer-Modi",
+    "tab_countdown": "Countdown",
+    "tab_stopwatch": "Stoppuhr",
+    "tab_range": "Start-/Endzeit",
+    "tab_interval": "Wiederholung (Arbeit/Pause)",
+    "tab_booking": "Raumbuchung",
+    "lbl_hours": "Stunden",
+    "lbl_minutes": "Minuten",
+    "lbl_seconds": "Sekunden",
+    "quick_group": "Schnelle Zeiteinstellung",
+    "quick_label": "{n} Min.",
+    "quick_aria": "Auf {n} Minuten stellen",
+    "btn_start": "Start",
+    "btn_pause": "Pause",
+    "btn_resume": "Fortsetzen",
+    "btn_stop": "Stopp",
+    "btn_reset": "Zurücksetzen",
+    "btn_lap": "Runde",
+    "btn_full": "Vollbild",
+    "btn_full_exit": "Vollbild beenden",
+    "btn_goto": "Anzeigen",
+    "st_ready": "Bereit",
+    "st_running": "Läuft",
+    "st_paused": "Pausiert",
+    "st_done": "Beendet",
+    "st_ended": "Vorbei",
+    "sw_hint": "Mit Start läuft die Zeit. Jeder Druck auf Runde fügt der Liste eine Zwischenzeit hinzu.",
+    "lap_title": "Rundenzeiten",
+    "lap_n": "Runde {n}",
+    "lap_split": "Zwischenzeit",
+    "lap_total": "Gesamt",
+    "lbl_range_start": "Startzeit",
+    "lbl_range_end": "Endzeit",
+    "btn_now": "Jetzt",
+    "btn_now_aria": "Startzeit mit der aktuellen Uhrzeit füllen",
+    "btn_apply": "Übernehmen",
+    "range_hint": "Liegt die Endzeit vor der Startzeit, gilt sie als Ende am nächsten Tag (über Mitternacht). Vor dem Start siehst du die Zeit bis zum Beginn.",
+    "range_err_invalid": "Bitte Start- und Endzeit eingeben.",
+    "range_err_same": "Start- und Endzeit sind gleich. Bitte unterschiedliche Zeiten eingeben.",
+    "range_until": "Bis zum Start",
+    "range_window": "Zeitfenster",
+    "range_total": "Gesamtdauer",
+    "range_elapsed": "Vergangen",
+    "range_left": "Verbleibend",
+    "range_next_day": "(Ende am Folgetag)",
+    "lbl_preset": "Voreinstellung",
+    "preset_mix": "Mixen 45 Min. + 5 Min. Ohrenpause",
+    "preset_pomodoro": "Pomodoro 25 Min. + 5 Min.",
+    "preset_practice": "Üben 20 Min. + 5 Min.",
+    "preset_custom": "Eigene Werte",
+    "lbl_work_min": "Arbeit (Min.)",
+    "lbl_rest_min": "Pause (Min.)",
+    "lbl_cycles": "Runden (0 = endlos)",
+    "iv_hint": "Nach dem letzten Arbeitsblock endet der Timer ohne Pause. Bei 0 Runden wiederholt er sich, bis du auf Zurücksetzen drückst.",
+    "phase_work": "Arbeit",
+    "phase_rest": "Pause",
+    "cycle_n": "{n} von {total}",
+    "cycle_n_inf": "Runde {n}",
+    "book_intro": "Starte die Buchung eines Proberaums oder Studios mit einem Klick. Du bekommst einige Minuten vor dem Ende einen Hinweis, und am Ende ertönt der Alarm.",
+    "book_group": "Buchungsdauer",
+    "book_aria": "Buchungs-Timer für {n} Stunden starten",
+    "lbl_book_pre": "Vorwarnung (Min.)",
+    "opts_title": "Hinweise und Bildschirm",
+    "opt_pre": "Vor dem Ende vorwarnen",
+    "lbl_pre_aria": "Minuten vor dem Ende für die Vorwarnung",
+    "lbl_pre_min": "Min. vorher",
+    "lbl_sound": "Alarmton",
+    "sound_bell": "Glocke",
+    "sound_beep": "Piepton",
+    "sound_chime": "Glockenspiel",
+    "btn_test": "Ton testen",
+    "lbl_volume": "Lautstärke",
+    "lbl_repeat": "Wiederholungen des Alarms",
+    "opt_notify": "Desktop-Benachrichtigungen",
+    "notify_denied": "Benachrichtigungen sind in deinem Browser blockiert und lassen sich deshalb nicht aktivieren. Erlaube sie in den Website-Einstellungen neben der Adressleiste.",
+    "opt_wake": "Bildschirm eingeschaltet lassen",
+    "opt_note": "Einstellungen und Fortschritt werden nur in diesem Browser (localStorage) auf diesem Gerät gespeichert. Es wird nichts an einen Server gesendet.",
+    "dur_h": "{n} Std.",
+    "dur_m": "{n} Min.",
+    "dur_s": "{n} Sek.",
+    "dur_sep": " ",
+    "sr_remaining": "Noch {t}",
+    "sr_pre": "Noch {n} Minuten bis zum Ende.",
+    "sr_done": "Der Timer ist abgelaufen.",
+    "sr_all_done": "Alle Runden sind beendet.",
+    "sr_phase_work": "Die Arbeitsphase beginnt.",
+    "sr_phase_rest": "Die Pause beginnt.",
+    "sr_range_start": "Die Startzeit ist erreicht.",
+    "other_running": "Der Modus „{mode}“ läuft gerade.",
+    "restored": "Dein vorheriger Timer wurde wiederhergestellt.",
+    "tap_for_sound": "Tippe einmal auf die Seite, damit der Alarm ertönen kann."
+  },
+  "article": [
+    {
+      "h2": "So benutzt du den Timer",
+      "blocks": [
+        {
+          "p": "Wähle oben einen Modus, stelle die Zeit ein und drücke **Start**. Hier der übliche Ablauf Schritt für Schritt."
+        },
+        {
+          "ol": [
+            "**Modus wählen.** Countdown, Stoppuhr, Start-/Endzeit, Wiederholung (Arbeit/Pause) oder Raumbuchung.",
+            "**Zeit einstellen.** Beim Countdown gibst du Stunden, Minuten und Sekunden ein oder nutzt die Schnellwahl für 5, 10 oder 30 Minuten. Im Wiederholungsmodus wählst du eine Voreinstellung.",
+            "**Hinweise festlegen.** Im Bereich für Hinweise bestimmst du, ob du einige Minuten vor dem Ende gewarnt wirst, welcher Alarmton gespielt wird, wie laut er ist und wie oft er sich wiederholt. Mit „Ton testen“ hörst du ihn vorab.",
+            "**Mit Klick oder Tippen starten.** Browser erlauben Ton erst nach einer direkten Handlung des Nutzers. Der Klick auf Start schaltet daher auch den Alarm frei.",
+            "**Einfach weiterarbeiten.** Die Restzeit steht im Titel des Browser-Tabs und ist von jedem anderen Tab aus sichtbar. Nach einem Neuladen läuft der Timer an der richtigen Stelle weiter.",
+            "**Am Ende zurücksetzen.** Mit „Zurücksetzen“ löschst du den abgelaufenen Timer und kannst den nächsten einstellen."
+          ]
+        },
+        {
+          "p": "Ein Wort zur Genauigkeit: Der Timer zählt nicht jede Sekunde eins herunter. Beim Start legt er einen Ende-Zeitstempel fest und berechnet bei jeder Anzeige die Differenz zur aktuellen Uhrzeit. Deshalb stimmt die Zeit auch dann, wenn der Browser einen Hintergrund-Tab drosselt oder der Rechner kurz stehen bleibt."
+        }
+      ]
+    },
+    {
+      "h2": "Die einzelnen Modi",
+      "blocks": [
+        {
+          "h3": "Countdown"
+        },
+        {
+          "p": "Der klassische Timer, der bis null herunterzählt. Gib Stunden, Minuten und Sekunden ein oder nutze die Schnellwahl-Tasten. Du kannst pausieren und fortsetzen, und bei null ertönt der Alarm. Der größte einstellbare Wert beträgt 99 Stunden, 59 Minuten und 59 Sekunden."
+        },
+        {
+          "h3": "Stoppuhr"
+        },
+        {
+          "p": "Zählt ab null aufwärts, auf die Hundertstelsekunde genau. Jeder Druck auf Runde speichert die bisherige Gesamtzeit und die Zwischenzeit seit der letzten Runde. Praktisch, um einzelne Abschnitte eines Songs zu messen oder die Länge jedes Takes zu notieren."
+        },
+        {
+          "h3": "Start- und Endzeit"
+        },
+        {
+          "p": "Statt einer Dauer gibst du Uhrzeiten an. Trage Start und Ende ein, drücke Übernehmen, und du siehst Gesamtdauer, vergangene Zeit, Restzeit und einen Fortschrittsbalken. Vor dem Beginn wird angezeigt, wie lange es noch dauert, und zur Startzeit ertönt ein Signal. Liegt das Ende vor dem Start, wird die Sitzung als über Mitternacht reichend behandelt. Eine Nachtsitzung von 23:00 bis 01:00 kannst du also genau so eingeben."
+        },
+        {
+          "h3": "Wiederholung (Arbeit/Pause)"
+        },
+        {
+          "p": "Wechselt zwischen einem Arbeitsblock und einem Pausenblock. Es gibt drei Voreinstellungen: Mixen 45 Minuten mit 5 Minuten Ohrenpause, Pomodoro 25 plus 5 und Üben 20 plus 5. Änderst du eine Zahl, entsteht ein eigener Plan, und auch die Zahl der Runden lässt sich festlegen. Bei 0 Runden wiederholt sich alles, bis du auf Zurücksetzen drückst. Der Ton zu Beginn der Arbeit ist höher als zu Beginn der Pause, du hörst also, in welche Richtung gewechselt wurde, ohne hinzusehen, und die aktuelle Runde steht immer auf dem Bildschirm."
+        },
+        {
+          "h3": "Raumbuchung"
+        },
+        {
+          "p": "Eine Voreinstellung für Räume, die stundenweise gemietet werden, etwa Proberäume und Studios. Ein Druck auf 1, 2 oder 3 Stunden startet sofort den Countdown, mit einer Vorwarnung 10 Minuten vor dem Ende (die Zahl lässt sich ändern). Gedacht ist das, um die Zeit zum Aufräumen und Abbauen zu schützen."
+        }
+      ]
+    },
+    {
+      "h2": "Hinweise, Ton und Bildschirmoptionen",
+      "blocks": [
+        {
+          "p": "Die **Vorwarnung** spielt einige Minuten vor dem Ende einen sanften Ton ab und zeigt eine Meldung. Schalte sie ein, wenn du den letzten Abschnitt im Blick haben willst, etwa um einen Mix abzuschließen oder mit dem Aufräumen zu beginnen."
+        },
+        {
+          "p": "Der **Alarmton** kann eine Glocke, ein Piepton oder ein Glockenspiel sein, mit eigener Lautstärke und Wiederholungszahl. Die Töne erzeugt der Browser direkt, sie werden nicht aus Dateien geladen. Hörst du nichts, prüfe die Gerätelautstärke, den Stummschalter und die Stummschaltung des Tabs."
+        },
+        {
+          "p": "**Desktop-Benachrichtigungen** fragen nur in dem Moment nach der Erlaubnis, in dem du das Kontrollkästchen anklickst. Nach der Freigabe erscheint beim Ablauf eine Meldung, auch wenn ein anderes Fenster im Vordergrund ist."
+        },
+        {
+          "p": "**Bildschirm eingeschaltet lassen** verhindert, dass sich das Display während eines laufenden Timers ausschaltet. Die Option erscheint nur in Browsern, die sie unterstützen, und wird sonst stillschweigend ausgeblendet. Sie kostet Akku, schalte sie also nur bei Bedarf ein."
+        },
+        {
+          "p": "Der **Tab-Titel** zeigt die Restzeit, und die **Vollbild**-Taste macht die Uhr zu einer großen Anzeige, praktisch auf einem Tablet, das auf dem Schreibtisch steht. Alles wird nur in diesem Browser auf diesem Gerät gespeichert, und es wird nichts an einen Server gesendet. Wird die Seite wiederhergestellt, während der Browser Audio blockiert, tippe einmal auf die Seite, damit der Alarm ertönen kann."
+        }
+      ]
+    },
+    {
+      "h2": "Einsatz beim Mixen, Aufnehmen und Proben",
+      "blocks": [
+        {
+          "h3": "Ohrenpausen beim Mixen planen"
+        },
+        {
+          "p": "Unter Tontechnikern heißt es oft, langes Hören stumpfe nicht nur die Ohren, sondern auch das Urteilsvermögen ab. Eine feste Regel dafür, wie lange man arbeiten und wie lange man pausieren sollte, gibt es nicht. Kurze, regelmäßige Pausen helfen aber tendenziell, Ohren- und Entscheidungsmüdigkeit zu verringern. Die Voreinstellung von 45 Minuten Arbeit und 5 Minuten Pause ist nur ein Ausgangspunkt. Passe die Zahlen an deine Arbeitsweise und den Zustand des Songs an."
+        },
+        {
+          "p": "Schalte in der Pause die Monitore leiser oder aus, steh wenn möglich auf, trink etwas Wasser und schau in die Ferne. Spiel danach zuerst den ganzen Song von vorn leise ab, bevor du die Spur anfasst, an der du zuletzt gearbeitet hast. Frische Ohren beurteilen die Gesamtbalance gut. Auch das Speichern der Session, sobald der Pausenalarm ertönt, ist eine nützliche Gewohnheit."
+        },
+        {
+          "h3": "Einen Mix in Runden aufteilen"
+        },
+        {
+          "p": "Hat ein Mix eine Deadline, teile die Arbeit nach der Anzahl der Runden auf. Bei drei Runden kann die erste der Balance und den Fader-Fahrten gehören, die zweite den Effekten und dem Raum, die dritte dem Vergleich mit Referenztiteln. Wer zu lange an einem Song hängt, bearbeitet ihn leicht zu stark. Eine Regel wie „beende, was du gerade tust, sobald der Alarm ertönt“ hält den Fluss in Gang."
+        },
+        {
+          "h3": "In einer Aufnahmesession"
+        },
+        {
+          "p": "Die Konzentration der Musikerinnen und Musiker ist in einer Aufnahmesession die wertvollste Ressource. Wer jeden Take mit der Stoppuhr misst, findet Abschnitte später leichter, und die Notiz, wie lange Aufbau und Soundcheck gedauert haben, hilft bei der Planung der nächsten Session. Bei Gesang und Blasinstrumenten kannst du den Pausenblock für Wasser und Atemübungen nutzen."
+        },
+        {
+          "h3": "Proberaum- und Studiozeit im Griff"
+        },
+        {
+          "p": "Eine Buchung enthält die Zeit für den Aufbau und die für den Abbau, und der zweite Teil gerät schnell in Vergessenheit. Trage die Buchung im Modus Start-/Endzeit ein oder drücke eine Buchungstaste mit eingeschalteter 10-Minuten-Vorwarnung, dann bleibt dir Zeit zu entscheiden, ob ihr den Song noch einmal spielt oder mit dem Aufräumen beginnt. Bei einer Stunde Buchung könntest du 10 Minuten Aufbau, 40 Minuten Musik und 10 Minuten Abbau einplanen. Wenn du dich allein auf das Gehör verlassen willst, stelle die Alarmlautstärke so hoch, dass sie das Schlagzeug übertönt."
+        }
+      ]
+    },
+    {
+      "h2": "Häufige Fragen",
+      "blocks": [
+        {
+          "faq": [
+            {
+              "q": "Ertönt der Alarm auch, wenn ich den Tab wechsle oder der Rechner in den Ruhezustand geht?",
+              "a": "Solange der Tab geöffnet ist, ja, auch wenn du gerade einen anderen Tab ansiehst. Schließt du den Tab, gibt es keinen Alarm. Im Ruhezustand pausiert auch der Browser, berechnet aber nach dem Aufwachen die Restzeit aus der gespeicherten Endzeit neu."
+            },
+            {
+              "q": "Ich höre den Alarm nicht.",
+              "a": "Drücke zuerst „Ton testen“. Bleibt es still, prüfe Gerätelautstärke, Stummmodus, Bluetooth-Verbindung und die Stummschaltung des Tabs. Ein nach dem Neuladen wiederhergestellter Timer braucht einmal ein Tippen auf die Seite, bevor der Browser Ton zulässt."
+            },
+            {
+              "q": "Werden meine Daten auf einem Server gespeichert?",
+              "a": "Nein. Einstellungen und Fortschritt liegen nur im localStorage dieses Browsers auf diesem Gerät und verschwinden, wenn du die Websitedaten löschst."
+            },
+            {
+              "q": "Kann ich Stoppuhr und Countdown gleichzeitig laufen lassen?",
+              "a": "Es läuft immer nur ein Timer. Startest du einen anderen Modus, wird der laufende gestoppt. Brauchst du mehrere, kannst du mehrere Tabs öffnen. Beachte aber, dass Tabs auf demselben Gerät sich den Speicher teilen und den gespeicherten Fortschritt gegenseitig überschreiben können."
+            },
+            {
+              "q": "Wie lang sollte eine Pause sein?",
+              "a": "Eine feste Antwort gibt es nicht. Viele nehmen 5 bis 10 Minuten nach 45 bis 60 Minuten Arbeit, und bei langen Hörphasen scheinen kurze, häufige Pausen eher zu helfen. Finde heraus, was zu dir passt, und speichere es als eigenen Plan."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "related": {
+    "heading": "Passende Werkzeuge und Artikel",
+    "guide_tag": "(Anleitung auf Koreanisch)",
+    "items": {
+      "metronome": "Online-Metronom: Tempo üben und schrittweise beschleunigen",
+      "trainer": "31-Band-Gehörtrainer: Werkzeug zum Ohrentraining",
+      "gain": "Grundlagen des Gain-Stagings",
+      "pink": "EQ-Gehörtraining mit rosa Rauschen"
+    }
+  }
+}

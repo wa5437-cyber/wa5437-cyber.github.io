@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "title": "Online-Metronom: Tap-Tempo und Tempotrainer | ML Music Studio",
+    "description": "Kostenloses Online-Metronom: 20–300 BPM, Tap-Tempo, Taktarten von 2/4 bis 7/8, Unterteilungen, Tempotrainer und Übungstimer. Kein Datenversand.",
+    "h1": "Online-Metronom",
+    "sub": "20–300 BPM, Tap-Tempo, Taktarten und Unterteilungen, Tempotrainer und Übungstimer auf einer Seite. Die Schläge werden mit der Audio-Uhr des Browsers vorausgeplant, damit die Abstände stabil bleiben."
+  },
+  "ui": {
+    "tool_name": "Online-Metronom",
+    "noscript": "Dieses Metronom funktioniert nur mit aktiviertem JavaScript.",
+    "bpm_down_aria": "BPM um 1 senken",
+    "bpm_up_aria": "BPM um 1 erhöhen",
+    "bpm_input_aria": "BPM (20 bis 300)",
+    "bpm_slider_aria": "BPM-Regler",
+    "beats_aria": "Schlaganzeige",
+    "btn_start": "Start",
+    "btn_stop": "Stopp",
+    "btn_tap": "Tap-Tempo",
+    "tap_count": "{n} Taps — innerhalb von 2 Sekunden weitertippen",
+    "bar_n": "Takt {n}",
+    "grp_rhythm": "Taktart und Unterteilung",
+    "lbl_sig": "Taktart",
+    "sig_custom": "Eigene",
+    "lbl_beats": "Schläge pro Takt",
+    "lbl_sub": "Unterteilung",
+    "sub_quarter": "Viertel (keine)",
+    "sub_eighth": "Achtel",
+    "sub_triplet": "Triolen",
+    "sub_sixteenth": "Sechzehntel",
+    "sig_note": "Bei Taktarten mit einer 8 unten, etwa 6/8 und 7/8, zählt ein Achtel als ein Schlag. Die Unterteilung teilt diesen Schlag.",
+    "grp_sound": "Klang",
+    "lbl_sound": "Klangart",
+    "sound_click": "Klick",
+    "sound_wood": "Holz",
+    "sound_beep": "Piepton",
+    "lbl_volume": "Lautstärke",
+    "opt_accent": "Betonung auf Schlag 1 (höher und lauter)",
+    "opt_wake": "Bildschirm eingeschaltet lassen",
+    "trainer_title": "Tempotrainer",
+    "opt_trainer": "Tempotrainer verwenden",
+    "lbl_tr_start": "Start-BPM",
+    "lbl_tr_target": "Ziel-BPM",
+    "lbl_tr_every": "Alle N Takte",
+    "lbl_tr_step": "Erhöhen um (BPM)",
+    "trainer_note": "Alle {every} Takte ändert sich das Tempo um {step} BPM, von {start} bis {target}. Das Ziel wird danach gehalten. Während des Spielens sind die BPM-Regler gesperrt.",
+    "practice_title": "Übungstimer",
+    "lbl_practice_min": "Übungszeit (Min., 0 = aus)",
+    "practice_note": "Ist die Zeit um, stoppt das Metronom von selbst und ein Signalton erklingt.",
+    "practice_left": "Übungszeit: noch {t}",
+    "practice_done": "Die Übungszeit ist vorbei.",
+    "kb_title": "Tastenkürzel",
+    "kb_space": "Leertaste: Start/Stopp",
+    "kb_arrows": "Hoch/Runter: BPM ±1 (mit Umschalt ±5)",
+    "kb_tap": "T: Tap-Tempo",
+    "opt_note": "Einstellungen werden nur in diesem Browser (localStorage) auf diesem Gerät gespeichert. Es wird nichts an einen Server gesendet.",
+    "no_audio": "Dieser Browser kann keinen Ton wiedergeben.",
+    "sr_started": "Metronom gestartet.",
+    "sr_stopped": "Metronom gestoppt.",
+    "term_largo": "sehr langsam",
+    "term_larghetto": "langsam und breit",
+    "term_adagio": "langsam",
+    "term_andante": "gehend",
+    "term_moderato": "mäßig bewegt",
+    "term_allegro": "schnell",
+    "term_vivace": "lebhaft und schnell",
+    "term_presto": "sehr schnell"
+  },
+  "article": [
+    {
+      "h2": "So benutzt du das Metronom",
+      "blocks": [
+        {
+          "p": "Stelle ein Tempo in BPM ein und drücke **Start**, dann beginnen die Schläge. Hier die Schritte der Reihe nach."
+        },
+        {
+          "ol": [
+            "**BPM einstellen.** Tippe eine Zahl ein, nutze den Regler und die Tasten − und +, oder die Pfeiltasten und das Mausrad. Der Bereich reicht von 20 bis 300.",
+            "**Tempo unbekannt? Nimm Tap-Tempo.** Tippe im Takt des gehörten Schlags auf die Taste Tap-Tempo (oder die Taste T), und die BPM füllen sich von selbst.",
+            "**Taktart und Unterteilung wählen.** Wähle 4/4, 3/4, 6/8 oder eine andere Taktart und schalte bei Bedarf die Unterteilung in Achtel, Triolen oder Sechzehntel ein.",
+            "**Klang und Lautstärke wählen.** Klick, Holz oder Piepton, was für deine Ohren am angenehmsten ist. Mit der Betonung auf Schlag 1 spürst du den Beginn jedes Takts.",
+            "**Start drücken.** Browser erlauben Ton erst nach einer direkten Handlung des Nutzers, deshalb weckt der Klick auf Start das Audio auf. Zum Beenden drückst du Stopp oder die Leertaste.",
+            "**Bei Bedarf Tempotrainer oder Übungstimer zuschalten.** Beide werden weiter unten beschrieben."
+          ]
+        },
+        {
+          "p": "BPM, Taktart, Unterteilung und Klang lassen sich auch während des Spielens ändern (beim Tempotrainer sind nur die BPM gesperrt). Neue Werte gelten ab dem nächsten Schlag, der gleich erklingt, es gibt also keine Aussetzer."
+        }
+      ]
+    },
+    {
+      "h2": "BPM und Tempobezeichnungen",
+      "blocks": [
+        {
+          "p": "BPM, also Beats per Minute oder Schläge pro Minute, sagt, wie viele Schläge in einer Minute erklingen. Bei 60 BPM hörst du einen Schlag pro Sekunde, bei 120 BPM zwei. Neben der Zahl siehst du die traditionelle Tempobezeichnung für diese Geschwindigkeit: Largo (sehr langsam), Larghetto, Adagio (langsam), Andante (gehend), Moderato (mäßig bewegt), Allegro (schnell), Vivace und Presto (sehr schnell). Grob gesagt ist alles unter 60 BPM Largo, 76 bis 107 ist Andante, 120 bis 155 ist Allegro und ab 168 ist es Presto. Die Grenzen unterscheiden sich je nach Buch und Epoche ein wenig, sieh sie also als grobe Richtwerte."
+        },
+        {
+          "h3": "Tap-Tempo"
+        },
+        {
+          "p": "Hörst du ein Stück und kennst seine BPM nicht, tippe im Takt auf die Taste. Die BPM werden aus dem Mittelwert deiner letzten Taps berechnet, ein paar ungleichmäßige Taps pendeln sich also nach einigen weiteren ein. Vergehen nach dem letzten Tap zwei Sekunden, beginnt die Zählung von vorn. Für einen Wert brauchst du mindestens zwei Taps, und das langsamste messbare Tempo liegt bei etwa 30 BPM. Auf der Tastatur erledigt die Taste T dasselbe, praktisch, wenn die Hände ohnehin bei den Tasten oder der Maus sind."
+        }
+      ]
+    },
+    {
+      "h2": "Taktarten und Unterteilungen",
+      "blocks": [
+        {
+          "p": "Die Taktart bestimmt, wie viele Schläge einen Takt bilden und wo das Gewicht liegt. Dieses Metronom bietet 2/4, 3/4, 4/4, 5/4, 6/8 und 7/8 sowie eine eigene Einstellung von 1 bis 16 Schlägen. Die Kreise auf dem Bildschirm entsprechen der Zahl der Schläge im Takt, und der gerade erklingende leuchtet auf. Der erste Schlag des Takts ist höher und lauter. In 5/4 (gruppiert 3+2) und in 6/8 bekommt der vierte Schlag eine mittlere Betonung, in 7/8 (gruppiert 2+2+3) jeweils der erste Schlag der zweiten und dritten Gruppe."
+        },
+        {
+          "p": "Bei Taktarten mit einer 8 unten, etwa 6/8 und 7/8, zählt ein Achtel als ein Schlag. Deshalb können 120 BPM dort deutlich schneller wirken als 120 BPM im 4/4-Takt. Empfindest du 6/8 als zwei Dreiergruppen, stelle ein Tempo ein, das etwa der Hälfte dieses Werts entspricht."
+        },
+        {
+          "h3": "Unterteilung"
+        },
+        {
+          "p": "Eine Unterteilung zerlegt jeden Schlag in kleinere Teile und lässt die zusätzlichen Ticks erklingen. Viertel bedeutet keine Unterteilung, Achtel ergibt zwei Ticks pro Schlag, Triolen drei und Sechzehntel vier. Die zusätzlichen Ticks sind leiser und tiefer als der Hauptschlag, damit man sie unterscheiden kann. Wer eine schnelle Passage übt, kann mit eingeschalteter Unterteilung den Abstand zwischen den Schlägen besser spüren, und die Triolen-Einstellung eignet sich gut, um Shuffle und das Gefühl von 6/8 zu lernen."
+        }
+      ]
+    },
+    {
+      "h2": "Klang, Tempotrainer und Übungstimer",
+      "blocks": [
+        {
+          "p": "Es gibt drei **Klänge**: Klick, Holz und Piepton. Alle erzeugt der Browser auf der Stelle als Audiosignal, es werden keine Klangdateien heruntergeladen. Der Klick ist kurz und klar und setzt sich in einem lauten Übungsraum durch, Holz klingt weicher wie ein Holzblock, und der Piepton hat eine klare Tonhöhe, mit der sich der Schlag leicht heraushören lässt. Ist die Betonung auf Schlag 1 ausgeschaltet, erklingen alle Schläge gleich stark."
+        },
+        {
+          "h3": "Tempotrainer"
+        },
+        {
+          "p": "Er automatisiert die Gewohnheit, eine schwierige Passage langsam zu beginnen und das Tempo zu steigern. Wähle ein Start-BPM, ein Ziel-BPM, nach wie vielen Takten es weitergeht und um wie viele BPM es jeweils steigt. Mit Start 80, Ziel 120 und +5 alle 4 Takte erhöht sich das Tempo alle vier Takte um 5, erreicht im achten Schritt 120 und bleibt dann bei 120. Liegt das Ziel unter dem Start, dient er als Übung für langsamer werdendes Tempo. Das Tempo ändert sich nur auf dem ersten Schlag eines Takts, der Schlag wird also nie unangenehm mitten in einer Phrase gedehnt."
+        },
+        {
+          "h3": "Übungstimer"
+        },
+        {
+          "p": "Lege eine Übungszeit in Minuten fest. Ist sie abgelaufen, stoppt das Metronom von selbst und ein Signalton erklingt. Die verbleibende Zeit steht auf dem Bildschirm. Nutze das, um Übungsblöcke auf 20 Minuten zu begrenzen oder eine feste tägliche Routine einzuhalten. Auch der Übungstimer wird aus einer Endzeit berechnet und bleibt deshalb beim Tabwechsel genau."
+        },
+        {
+          "p": "**Bildschirm eingeschaltet lassen** verhindert, dass sich das Display ausschaltet, solange das Metronom läuft. Das ist nützlich bei einem Tablet auf dem Notenständer. In Browsern ohne Unterstützung bleibt die Option ausgeblendet. Einstellungen werden nur in diesem Browser gespeichert, und es wird nichts an einen Server gesendet."
+        }
+      ]
+    },
+    {
+      "h2": "Tipps zum Üben",
+      "blocks": [
+        {
+          "h3": "Langsam anfangen, dann steigern"
+        },
+        {
+          "p": "Die Grundlage des Übens mit dem Metronom ist, mit einem Tempo zu beginnen, in dem du fehlerfrei spielen kannst. Starte bei etwa der Hälfte des Zieltempos, und jedes Mal, wenn du die Passage mehrmals hintereinander sauber spielst, erhöhst du die BPM um vier oder fünf. Übe schwierige Stellen in kurzen Stücken, und treten beim Beschleunigen Fehler auf, geh einen Schritt zurück und festige. Der Tempotrainer nimmt dir das ab."
+        },
+        {
+          "h3": "Den Raum zwischen den Schlägen spüren"
+        },
+        {
+          "p": "Höre nicht nur auf den Klick, sondern zähle in den Lücken mit. Mit eingeschalteter Unterteilung hörst du die Länge zwischen den Schlägen, und wenn du dich sicher fühlst, versuche, dich bei einem langen eigenen Takt nur auf die Betonung am Taktanfang zu stützen und die Schläge dazwischen selbst zu zählen."
+        },
+        {
+          "h3": "Beim Mixen und für Soundarbeit"
+        },
+        {
+          "p": "Kennst du das Tempo eines Songs, kannst du Delay- und Hallzeiten auf den Schlag einstellen. Prüfe das Tempo hier und berechne die Notenlängen danach mit einem Rechner. Nutzt du Tap-Tempo, um ein Tempo nach Gehör zu finden, denk daran, dass mehrere Taps gemittelt werden. Tippe also etwa zehnmal und sieh nach, ob sich der Wert einpendelt."
+        }
+      ]
+    },
+    {
+      "h2": "Genauigkeit und Grenzen",
+      "blocks": [
+        {
+          "p": "Wirkt ein Web-Metronom unruhig, liegt es meist an einer falschen Verwendung von Timern. JavaScripts setInterval und setTimeout können sich um Dutzende Millisekunden verspäten, wenn andere Arbeit dazwischenkommt, und das macht die Schlagabstände ungleichmäßig. Dieses Metronom lässt die Schläge nicht direkt erklingen. Es wacht alle 25 Millisekunden auf, plant anhand der Uhr des Audiogeräts die Schläge der nächsten 0,1 Sekunden voraus, und die Audio-Uhr spielt sie dann im exakten Moment ab. Selbst wenn die Seite kurz ruckelt, bleiben die Abstände der Schläge davon unberührt."
+        },
+        {
+          "p": "Es gibt aber Grenzen. Die Zeit, bis der Ton den Lautsprecher verlässt (Ausgabelatenz), ist je nach Browser und Gerät verschieden. Diese Latenz bringt die Abstände zwischen den Schlägen nicht ins Wanken, sie verschiebt nur alle Schläge um denselben Betrag nach hinten, sodass sie beim Alleinspielen zum Metronom keine Rolle spielt. Sie spielt eine Rolle, wenn du mit Video oder anderen Klängen zusammenpassen musst, und besonders bei Bluetooth-Kopfhörern oder -Lautsprechern, wo die Verzögerung auf Dutzende oder Hunderte Millisekunden anwachsen kann. Dann sind kabelgebundene Kopfhörer oder der Lautsprecher des Geräts besser. Die Leuchten auf dem Bildschirm sind so gut wie möglich auf den Ton abgestimmt, können je nach Gerät aber etwas abweichen."
+        },
+        {
+          "p": "Browser können Timer in Hintergrund-Tabs drosseln. Ist der Tab verdeckt, plant dieses Metronom weiter voraus (etwa 1,5 Sekunden), damit der Ton nicht abreißt. Dennoch kann eine Bildschirmsperre bei manchen Energiespar-Einstellungen den Ton stoppen. Schalte bei langen Sitzungen daher „Bildschirm eingeschaltet lassen“ ein."
+        }
+      ]
+    },
+    {
+      "h2": "Häufige Fragen",
+      "blocks": [
+        {
+          "faq": [
+            {
+              "q": "Ich höre nichts.",
+              "a": "Das Audio startet erst, nachdem du Start gedrückt hast. Hörst du dann noch immer nichts, prüfe Gerätelautstärke, Stummmodus, die Bluetooth-Verbindung und ob der Browser-Tab stummgeschaltet ist."
+            },
+            {
+              "q": "Der Schlag klingt etwas verspätet.",
+              "a": "Das ist die Ausgabelatenz. Sie addiert dieselbe Verzögerung zu jedem Schlag, die Abstände zwischen den Schlägen bleiben also exakt. Bluetooth-Kopfhörer verursachen viel Verzögerung, kabelgebundene Kopfhörer oder der Gerätelautsprecher verringern sie."
+            },
+            {
+              "q": "Kann ich BPM mit Nachkommastellen verwenden?",
+              "a": "BPM lassen sich nur in ganzen Zahlen einstellen. Ein per Tap-Tempo ermittelter Wert wird auf die nächste ganze Zahl gerundet."
+            },
+            {
+              "q": "Ich kann die BPM während des Tempotrainers nicht ändern.",
+              "a": "Solange der Trainer spielt, wird das Tempo automatisch geändert, deshalb sind die BPM-Regler gesperrt. Halte ihn an, dann kannst du die BPM wieder von Hand setzen."
+            },
+            {
+              "q": "Werden meine Einstellungen auf einem Server gespeichert?",
+              "a": "Nein. Einstellungen wie BPM, Taktart und Klang liegen nur im localStorage dieses Browsers auf diesem Gerät und werden nie an einen Server gesendet."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "related": {
+    "heading": "Passende Werkzeuge und Artikel",
+    "guide_tag": "(Anleitung auf Koreanisch)",
+    "items": {
+      "timer": "Online-Timer: Arbeits-/Pausenzyklen und Raumbuchung",
+      "bpm_delay": "Delay- und Hallzeiten aus den BPM berechnen",
+      "tempo_calc": "Tempo- und Tonhöhenrechner",
+      "temposcope": "TempoScope-App: Tempo und Tonart eines Songs automatisch finden"
+    }
+  }
+}

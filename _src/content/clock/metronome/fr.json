@@ -1,0 +1,221 @@
+{
+  "meta": {
+    "title": "Métronome en ligne : tap tempo et mesures | ML Music Studio",
+    "description": "Métronome en ligne gratuit : 20–300 BPM, tap tempo, mesures de 2/4 à 7/8, subdivisions, entraîneur de vitesse et minuteur d'exercice. Aucune donnée envoyée.",
+    "h1": "Métronome en ligne",
+    "sub": "20–300 BPM, tap tempo, mesures et subdivisions, entraîneur de vitesse et minuteur d'exercice sur une seule page. Les temps sont planifiés à l'avance sur l'horloge audio du navigateur, ce qui garde des intervalles réguliers."
+  },
+  "ui": {
+    "tool_name": "Métronome en ligne",
+    "noscript": "Ce métronome nécessite que JavaScript soit activé.",
+    "bpm_down_aria": "Baisser de 1 BPM",
+    "bpm_up_aria": "Augmenter de 1 BPM",
+    "bpm_input_aria": "BPM (de 20 à 300)",
+    "bpm_slider_aria": "Curseur de BPM",
+    "beats_aria": "Indicateur de temps",
+    "btn_start": "Démarrer",
+    "btn_stop": "Arrêter",
+    "btn_tap": "Tap tempo",
+    "tap_count": "{n} appuis — continuez dans les 2 secondes",
+    "bar_n": "Mesure {n}",
+    "grp_rhythm": "Mesure et subdivision",
+    "lbl_sig": "Mesure",
+    "sig_custom": "Personnalisée",
+    "lbl_beats": "Temps par mesure",
+    "lbl_sub": "Subdivision",
+    "sub_quarter": "Noires (aucune)",
+    "sub_eighth": "Croches",
+    "sub_triplet": "Triolets",
+    "sub_sixteenth": "Doubles croches",
+    "sig_note": "Dans les mesures dont le chiffre du bas est un 8, comme 6/8 et 7/8, une croche compte pour un temps. La subdivision partage ce temps.",
+    "grp_sound": "Son",
+    "lbl_sound": "Type de son",
+    "sound_click": "Clic",
+    "sound_wood": "Bois",
+    "sound_beep": "Bip",
+    "lbl_volume": "Volume",
+    "opt_accent": "Accent sur le temps 1 (plus aigu et plus fort)",
+    "opt_wake": "Garder l'écran allumé",
+    "trainer_title": "Entraîneur de vitesse",
+    "opt_trainer": "Utiliser l'entraîneur de vitesse",
+    "lbl_tr_start": "BPM de départ",
+    "lbl_tr_target": "BPM cible",
+    "lbl_tr_every": "Toutes les N mesures",
+    "lbl_tr_step": "Augmenter de (BPM)",
+    "trainer_note": "Toutes les {every} mesures, le tempo change de {step} BPM, de {start} à {target}. Une fois la cible atteinte, il s'y maintient. Les réglages de BPM sont verrouillés pendant la lecture.",
+    "practice_title": "Minuteur d'exercice",
+    "lbl_practice_min": "Durée d'exercice (min, 0 = désactivé)",
+    "practice_note": "Quand le temps est écoulé, le métronome s'arrête de lui-même et un signal retentit.",
+    "practice_left": "Temps d'exercice restant : {t}",
+    "practice_done": "Le temps d'exercice est terminé.",
+    "kb_title": "Raccourcis clavier",
+    "kb_space": "Espace : démarrer/arrêter",
+    "kb_arrows": "Haut/Bas : BPM ±1 (avec Maj ±5)",
+    "kb_tap": "T : tap tempo",
+    "opt_note": "Les réglages sont enregistrés uniquement dans ce navigateur (localStorage) sur cet appareil. Rien n'est envoyé à un serveur.",
+    "no_audio": "Ce navigateur ne peut pas jouer de son.",
+    "sr_started": "Métronome démarré.",
+    "sr_stopped": "Métronome arrêté.",
+    "term_largo": "très lent",
+    "term_larghetto": "lent et large",
+    "term_adagio": "lent",
+    "term_andante": "allant, à pas tranquille",
+    "term_moderato": "modéré",
+    "term_allegro": "rapide",
+    "term_vivace": "vif et rapide",
+    "term_presto": "très rapide"
+  },
+  "article": [
+    {
+      "h2": "Comment utiliser le métronome",
+      "blocks": [
+        {
+          "p": "Réglez un tempo en BPM et appuyez sur **Démarrer** : les temps commencent. Voici les étapes dans l'ordre."
+        },
+        {
+          "ol": [
+            "**Réglez les BPM.** Saisissez un nombre, utilisez le curseur et les boutons − et +, ou les flèches du clavier et la molette de la souris. La plage va de 20 à 300.",
+            "**Si vous ne connaissez pas le tempo, utilisez le tap tempo.** Tapez sur le bouton Tap tempo (ou sur la touche T) en rythme avec le temps que vous entendez, et les BPM se remplissent tout seuls.",
+            "**Choisissez une mesure et une subdivision.** Prenez 4/4, 3/4, 6/8 ou une autre mesure, et activez au besoin la subdivision en croches, en triolets ou en doubles croches.",
+            "**Choisissez un son et un volume.** Clic, bois ou bip, selon ce qui est le plus agréable pour vos oreilles. Activez l'accent sur le temps 1 pour sentir le début de chaque mesure.",
+            "**Appuyez sur Démarrer.** Les navigateurs n'autorisent le son qu'après une action directe de l'utilisateur : c'est donc le clic sur Démarrer qui réveille l'audio. Pour arrêter, appuyez sur Arrêter ou sur la barre d'espace.",
+            "**Ajoutez au besoin l'entraîneur de vitesse ou le minuteur d'exercice.** Tous deux sont décrits plus bas."
+          ]
+        },
+        {
+          "p": "Vous pouvez modifier les BPM, la mesure, la subdivision et le son pendant la lecture (seuls les BPM sont verrouillés pendant l'entraîneur de vitesse). Les nouvelles valeurs s'appliquent à partir du prochain temps sur le point de sonner, sans aucune coupure."
+        }
+      ]
+    },
+    {
+      "h2": "BPM et termes de tempo",
+      "blocks": [
+        {
+          "p": "Les BPM, ou battements par minute, indiquent combien de temps sonnent en une minute. À 60 BPM, vous entendez un temps par seconde, à 120 BPM, deux. À côté du nombre s'affiche le terme de tempo traditionnel correspondant à cette vitesse : Largo (très lent), Larghetto, Adagio (lent), Andante (allant), Moderato (modéré), Allegro (rapide), Vivace et Presto (très rapide). Grosso modo, en dessous de 60 BPM, c'est du Largo, de 76 à 107, de l'Andante, de 120 à 155, de l'Allegro, et à partir de 168, du Presto. Les limites varient un peu selon les ouvrages et les époques ; prenez-les comme des repères approximatifs."
+        },
+        {
+          "h3": "Tap tempo"
+        },
+        {
+          "p": "Si vous écoutez un morceau dont vous ignorez les BPM, tapez sur le bouton en rythme avec la pulsation. Les BPM sont calculés à partir de la moyenne de vos derniers appuis : quelques appuis irréguliers se corrigent après quelques autres. Si deux secondes s'écoulent après votre dernier appui, le décompte repart de zéro. Il faut au moins deux appuis pour obtenir une valeur, et le tempo le plus lent mesurable ainsi est d'environ 30 BPM. Au clavier, la touche T fait la même chose, ce qui est pratique quand vos mains sont près des touches ou de la souris."
+        }
+      ]
+    },
+    {
+      "h2": "Mesures et subdivisions",
+      "blocks": [
+        {
+          "p": "La mesure décide du nombre de temps d'une mesure et de l'endroit où tombe le poids. Ce métronome propose 2/4, 3/4, 4/4, 5/4, 6/8 et 7/8, ainsi qu'un réglage personnalisé de 1 à 16 temps. Les cercles à l'écran correspondent au nombre de temps de la mesure, et celui qui sonne s'allume. Le premier temps de la mesure est plus aigu et plus fort. En 5/4 (groupé en 3+2) et en 6/8, le quatrième temps reçoit un accent moyen, et en 7/8 (groupé en 2+2+3), c'est le premier temps du deuxième et du troisième groupe."
+        },
+        {
+          "p": "Dans les mesures dont le chiffre du bas est un 8, comme 6/8 et 7/8, une croche compte pour un temps. C'est pourquoi 120 BPM peuvent y sembler bien plus rapides que 120 BPM en 4/4. Si vous ressentez le 6/8 comme deux groupes de trois, essayez un tempo proche de la moitié de ce chiffre."
+        },
+        {
+          "h3": "Subdivision"
+        },
+        {
+          "p": "Une subdivision découpe chaque temps en parties plus petites et fait sonner les tics supplémentaires. Noires signifie aucune subdivision, croches donne deux tics par temps, triolets trois, et doubles croches quatre. Les tics supplémentaires sont plus doux et plus graves que le temps principal, de façon à les distinguer. Activer une subdivision en travaillant un passage rapide aide à sentir l'espace entre les temps, et le réglage en triolets est une bonne façon d'apprendre le shuffle et le balancement du 6/8."
+        }
+      ]
+    },
+    {
+      "h2": "Son, entraîneur de vitesse et minuteur d'exercice",
+      "blocks": [
+        {
+          "p": "Il y a trois **sons** : clic, bois et bip, tous générés sur place par le navigateur sous forme de signal audio (aucun fichier son n'est téléchargé). Le clic est court et net, et passe bien dans une salle de répétition bruyante ; le bois est plus doux, comme un wood-block ; le bip a une hauteur claire qui facilite la reconnaissance du temps. Si l'accent du temps 1 est désactivé, tous les temps sonnent avec la même force."
+        },
+        {
+          "h3": "Entraîneur de vitesse"
+        },
+        {
+          "p": "Il automatise l'habitude de commencer lentement un passage difficile puis d'augmenter la vitesse. Choisissez un BPM de départ, un BPM cible, le nombre de mesures à attendre et le nombre de BPM à ajouter à chaque fois. Avec un départ à 80, une cible à 120 et +5 toutes les 4 mesures, le tempo monte de 5 toutes les quatre mesures, atteint 120 à la huitième étape, puis reste à 120. Si la cible est inférieure au départ, il sert d'exercice de ralentissement. Le tempo ne change que sur le premier temps d'une mesure : le temps ne s'étire donc jamais de façon gênante au milieu d'une phrase."
+        },
+        {
+          "h3": "Minuteur d'exercice"
+        },
+        {
+          "p": "Fixez une durée d'exercice en minutes : quand elle est écoulée, le métronome s'arrête de lui-même et un signal retentit. Le temps restant s'affiche à l'écran. Utilisez-le pour limiter les séances de travail à 20 minutes ou pour tenir une routine quotidienne régulière. Le minuteur d'exercice est lui aussi calculé à partir d'une heure de fin, il reste donc exact quand vous changez d'onglet."
+        },
+        {
+          "p": "**Garder l'écran allumé** empêche l'écran de s'éteindre pendant que le métronome tourne, ce qui est utile avec une tablette sur un pupitre. L'option reste masquée dans les navigateurs qui ne la prennent pas en charge. Les réglages sont enregistrés uniquement dans ce navigateur et rien n'est envoyé à un serveur."
+        }
+      ]
+    },
+    {
+      "h2": "Conseils pour s'exercer",
+      "blocks": [
+        {
+          "h3": "Commencer lentement, puis accélérer"
+        },
+        {
+          "p": "La base du travail au métronome est de commencer à une vitesse où vous pouvez jouer sans erreur. Partez d'environ la moitié du tempo visé et, chaque fois que vous jouez proprement le passage plusieurs fois de suite, augmentez les BPM de quatre ou cinq. Travaillez les endroits difficiles en courts morceaux et, si des erreurs apparaissent en accélérant, revenez d'un cran pour consolider. L'entraîneur de vitesse le fait à votre place."
+        },
+        {
+          "h3": "Sentir l'espace entre les temps"
+        },
+        {
+          "p": "Ne vous contentez pas d'écouter le clic : comptez dans les intervalles. Avec une subdivision activée, vous entendez la durée entre les temps, et quand vous êtes à l'aise, essayez de vous appuyer uniquement sur l'accent en tête d'une longue mesure personnalisée tout en comptant vous-même les temps intermédiaires."
+        },
+        {
+          "h3": "Pour le mixage et le travail du son"
+        },
+        {
+          "p": "Si vous connaissez le tempo d'un morceau, vous pouvez régler les temps de delay et de réverbération sur la pulsation. Vérifiez le tempo ici, puis calculez la durée des notes avec une calculatrice. Quand vous utilisez le tap tempo pour trouver un tempo à l'oreille, rappelez-vous qu'il fait la moyenne de plusieurs appuis : tapez une dizaine de fois et regardez si la valeur se stabilise."
+        }
+      ]
+    },
+    {
+      "h2": "Précision et limites",
+      "blocks": [
+        {
+          "p": "Un métronome web qui paraît instable souffre généralement d'une mauvaise utilisation des minuteurs. Les setInterval et setTimeout de JavaScript peuvent prendre des dizaines de millisecondes de retard quand un autre travail s'intercale, ce qui rend l'espacement des temps irrégulier. Ce métronome ne fait pas sonner les temps directement. Il se réveille toutes les 25 millisecondes, utilise l'horloge propre du périphérique audio pour planifier les temps des 0,1 prochaines secondes, et l'horloge audio les joue à l'instant exact. Même si la page saccade un court instant, l'espacement des temps n'en est pas affecté."
+        },
+        {
+          "p": "Il y a toutefois des limites. Le temps que met le son à sortir de l'enceinte (latence de sortie) varie selon le navigateur et l'appareil. Cette latence ne fait pas trembler l'espacement entre les temps : elle décale tous les temps du même montant, ce qui ne gêne pas quand on joue seul avec le métronome. Elle compte quand il faut se caler sur une vidéo ou d'autres sons, et surtout avec un casque ou une enceinte Bluetooth, où le retard peut atteindre des dizaines, voire des centaines de millisecondes. Un casque filaire ou le haut-parleur de l'appareil conviennent alors mieux. Les voyants à l'écran sont calés au plus près du son, mais peuvent être légèrement décalés selon l'appareil."
+        },
+        {
+          "p": "Les navigateurs peuvent ralentir les minuteurs des onglets en arrière-plan. Quand l'onglet est masqué, ce métronome planifie plus loin à l'avance (environ 1,5 seconde) pour que le son ne se coupe pas. Malgré cela, le verrouillage de l'écran avec certains réglages d'économie d'énergie peut arrêter le son : activez donc « Garder l'écran allumé » pour les longues séances."
+        }
+      ]
+    },
+    {
+      "h2": "Questions fréquentes",
+      "blocks": [
+        {
+          "faq": [
+            {
+              "q": "Je n'entends rien.",
+              "a": "L'audio ne démarre qu'après un appui sur Démarrer. Si vous n'entendez toujours rien, vérifiez le volume de l'appareil, le mode silencieux, la connexion Bluetooth et si l'onglet du navigateur est en sourdine."
+            },
+            {
+              "q": "Le temps sonne un peu en retard.",
+              "a": "C'est la latence de sortie. Elle ajoute le même retard à chaque temps, l'espacement entre les temps reste donc exact. Les casques Bluetooth ajoutent beaucoup de retard ; un casque filaire ou le haut-parleur de l'appareil le réduit."
+            },
+            {
+              "q": "Puis-je utiliser des BPM décimaux ?",
+              "a": "Les BPM ne se règlent que par nombres entiers. Une valeur trouvée avec le tap tempo est arrondie à l'entier le plus proche."
+            },
+            {
+              "q": "Je ne peux pas changer les BPM pendant l'entraîneur de vitesse.",
+              "a": "Pendant la lecture de l'entraîneur, le tempo est modifié automatiquement, et les réglages de BPM sont donc verrouillés. Arrêtez-le et vous pourrez de nouveau régler les BPM à la main."
+            },
+            {
+              "q": "Mes réglages sont-ils enregistrés sur un serveur ?",
+              "a": "Non. Les réglages comme les BPM, la mesure et le son sont conservés uniquement dans le localStorage de ce navigateur, sur cet appareil, et ne sont jamais envoyés à un serveur."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "related": {
+    "heading": "Outils et articles associés",
+    "guide_tag": "(guide en coréen)",
+    "items": {
+      "timer": "Minuteur en ligne : cycles travail/pause et réservation de salle",
+      "bpm_delay": "Calculer les temps de delay et de réverbération à partir des BPM",
+      "tempo_calc": "Calculateur de tempo et de hauteur",
+      "temposcope": "Application TempoScope : trouver automatiquement le tempo et la tonalité d'un morceau"
+    }
+  }
+}

@@ -4,7 +4,7 @@
     "description": "ML Music Studio 웹사이트(앱 제외)의 개인정보, 쿠키, Google 광고, 웹 도구가 다루는 정보와 맞춤 광고를 끄는 방법을 안내합니다.",
     "h1": "사이트 개인정보·쿠키·광고 안내",
     "sub": "이 사이트의 개인정보, 쿠키, 광고, 웹 도구가 다루는 정보를 안내합니다.",
-    "updated": "2026-10-12",
+    "updated": "2026-10-17",
     "sections": [
       {"type": "prose", "title": "이 사이트가 하는 일",
        "paragraphs": [
@@ -26,7 +26,8 @@
          "RTA, 청음 훈련, 제너레이터, 계산기, 퀴즈 같은 웹 도구는 브라우저 안에서 동작합니다. 이 도구들의 코드에는 소리나 입력값을 서버로 보내는 기능이 들어 있지 않습니다.",
          "RTA는 실시간 측정을 위해 브라우저에 마이크 사용 허락을 요청합니다. 허락 여부는 브라우저에서 정하며 언제든 바꿀 수 있습니다. 소리는 브라우저 안에서 분석에만 쓰이고, 사이트가 녹음해서 저장하거나 전송하지 않습니다.",
          "청음 훈련에서 직접 고른 음악 파일도 브라우저 안에서만 열어 쓰며 사이트로 올리지 않습니다.",
-         "일부 페이지(웹 도구와 정책 페이지)는 편의를 위해 브라우저의 localStorage에 선택한 언어(siteLang)를 저장하고, RTA는 보정값도 저장합니다. 이 값은 사용 중인 기기의 브라우저에만 남으며, 브라우저의 사이트 데이터를 지우면 함께 지워집니다."]},
+         "일부 페이지(웹 도구와 정책 페이지)는 편의를 위해 브라우저의 localStorage에 선택한 언어(siteLang)를 저장하고, RTA는 보정값도 저장합니다. 이 값은 사용 중인 기기의 브라우저에만 남으며, 브라우저의 사이트 데이터를 지우면 함께 지워집니다.",
+         "온라인 타이머와 메트로놈도 같은 방식으로 설정과 진행 상태(알림음·음량, BPM과 박자, 진행 중인 타이머의 종료 시각 등)를 이 기기 브라우저의 localStorage에만 저장합니다. 이 값은 서버로 보내지 않으며, 브라우저의 사이트 데이터를 지우면 함께 지워집니다."]},
       {"type": "list", "title": "문의하실 때",
        "items": [
          "문의는 카카오톡 오픈채팅이나 이메일로 받습니다. 이 사이트 안에는 문의 내용을 따로 저장하는 곳이 없습니다.",
@@ -46,7 +47,7 @@
       {"type": "prose", "title": "바뀔 때",
        "paragraphs": [
          "이 안내가 바뀌면 이 페이지에 반영합니다.",
-         "최종 수정일: 2026-10-12"]},
+         "최종 수정일: 2026-10-17"]},
       {"type": "contact", "tone": "dark", "title": "문의", "text": "개인정보와 관련해 궁금한 점은 오픈카톡이나 이메일로 문의해 주세요."}
     ]
   },
@@ -55,7 +56,7 @@
     "description": "How the ML Music Studio website (not the apps) handles privacy, cookies, Google advertising and web tool data, and how to turn off personalized ads.",
     "h1": "Site privacy, cookie and advertising notice",
     "sub": "What this site does with information: privacy, cookies, advertising and the web tools.",
-    "updated": "2026-10-12",
+    "updated": "2026-10-17",
     "sections": [
       {"type": "prose", "title": "What this site does",
        "paragraphs": [
@@ -77,7 +78,8 @@
          "Web tools such as the RTA, ear trainer, generator, calculators and quiz run inside your browser. Their code has no feature that sends sound or what you enter to a server.",
          "The RTA asks your browser for permission to use the microphone for live measurement. You decide in the browser and can change it at any time. The sound is only analyzed inside the browser; the site does not record, store or transmit it.",
          "Music files you pick yourself in the ear trainer are also opened only inside your browser and are not uploaded to the site.",
-         "For convenience, some pages (the web tools and the policy pages) save your chosen language (siteLang) in the browser's localStorage, and the RTA also saves its calibration value. These values stay in the browser on your device and are removed when you clear the browser's site data."]},
+         "For convenience, some pages (the web tools and the policy pages) save your chosen language (siteLang) in the browser's localStorage, and the RTA also saves its calibration value. These values stay in the browser on your device and are removed when you clear the browser's site data.",
+         "The online timer and metronome work the same way: they keep their settings and progress (alarm sound and volume, BPM and time signature, the end time of a running timer and similar) only in the localStorage of the browser on this device. These values are never sent to a server and are removed when you clear the browser's site data."]},
       {"type": "list", "title": "When you contact us",
        "items": [
          "Inquiries are accepted through the KakaoTalk open chat or by email. Nothing on this site stores your message separately.",
@@ -97,7 +99,7 @@
       {"type": "prose", "title": "When this changes",
        "paragraphs": [
          "If this notice changes, we will update this page.",
-         "Last updated: 2026-10-12"]},
+         "Last updated: 2026-10-17"]},
       {"type": "contact", "tone": "dark", "title": "Contact", "text": "For questions about privacy, please reach us through the KakaoTalk open chat or by email."}
     ]
   }
