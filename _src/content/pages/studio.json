@@ -2,16 +2,66 @@
   "hero_img": "/img/studio/control-room.jpg",
   "gear": {
     "ko": [
-      {"group": "마이크", "items": ["Neumann U87 빈티지 마이크", "Telefunken 마이크"]},
-      {"group": "프리앰프·컴프레서", "items": ["Grace Design m201 마이크 프리앰프", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B 컴프레서"]},
-      {"group": "인터페이스·컨트롤러", "items": ["Avid HD I/O", "Grace Design m905 모니터 컨트롤러"]},
-      {"group": "모니터", "items": ["Focal Solo6 Be 모니터", "Dynaudio 모니터"]}
+      {
+        "group": "마이크",
+        "items": [
+          "Neumann U87 빈티지 마이크",
+          "Telefunken 마이크"
+        ]
+      },
+      {
+        "group": "프리앰프·컴프레서",
+        "items": [
+          "Grace Design m201 마이크 프리앰프",
+          "Neve 1073DPA",
+          "Lydkraft Tube-Tech CL 1B 컴프레서"
+        ]
+      },
+      {
+        "group": "인터페이스·컨트롤러",
+        "items": [
+          "Avid HD I/O",
+          "Grace Design m905 모니터 컨트롤러"
+        ]
+      },
+      {
+        "group": "모니터",
+        "items": [
+          "Focal Solo6 Be 모니터",
+          "Dynaudio 모니터"
+        ]
+      }
     ],
     "en": [
-      {"group": "Microphones", "items": ["Neumann U87 (vintage) microphone", "Telefunken microphone"]},
-      {"group": "Preamps & compressor", "items": ["Grace Design m201 microphone preamp", "Neve 1073DPA", "Lydkraft Tube-Tech CL 1B compressor"]},
-      {"group": "Interface & controller", "items": ["Avid HD I/O", "Grace Design m905 monitor controller"]},
-      {"group": "Monitors", "items": ["Focal Solo6 Be monitors", "Dynaudio monitors"]}
+      {
+        "group": "Microphones",
+        "items": [
+          "Neumann U87 (vintage) microphone",
+          "Telefunken microphone"
+        ]
+      },
+      {
+        "group": "Preamps & compressor",
+        "items": [
+          "Grace Design m201 microphone preamp",
+          "Neve 1073DPA",
+          "Lydkraft Tube-Tech CL 1B compressor"
+        ]
+      },
+      {
+        "group": "Interface & controller",
+        "items": [
+          "Avid HD I/O",
+          "Grace Design m905 monitor controller"
+        ]
+      },
+      {
+        "group": "Monitors",
+        "items": [
+          "Focal Solo6 Be monitors",
+          "Dynaudio monitors"
+        ]
+      }
     ]
   },
   "ko": {
@@ -20,23 +70,90 @@
     "h1": "ML Music Studio 녹음실",
     "hero_alt": "ML Music Studio 컨트롤룸: 모니터 스피커 네 대와 화면, 책상",
     "sub": "서울 용산 · 녹음 · 믹싱 · 마스터링",
-    "cta": [{"text": "문의하기", "href": "kakao"}, {"text": "작업 보기", "href": "/work/"}],
+    "cta": [
+      {
+        "text": "문의하기",
+        "href": "kakao"
+      },
+      {
+        "text": "작업 보기",
+        "href": "/work/"
+      }
+    ],
     "sections": [
-      {"type": "gallery", "title": "작업실", "layout": "bento",
-       "items": [
-         {"src": "/img/studio/vocal-booth.jpg", "caption": "녹음 부스", "alt": "붐 스탠드와 팝 필터, 보면대가 놓인 녹음 부스"},
-         {"src": "/img/studio/mic-cabinet.jpg", "caption": "마이크 보관함", "alt": "습도 조절 보관함 선반에 놓인 콘덴서·다이내믹·핸드헬드 마이크"},
-         {"src": "/img/studio/preamp-compressor.jpg", "caption": "프리앰프와 컴프레서", "alt": "Neve 1073DPA 마이크 프리앰프와 Tube-Tech CL 1B 컴프레서의 노브"},
-         {"src": "/img/studio/monitor-controller.jpg", "caption": "모니터 컨트롤러", "alt": "Grace Design m905 모니터 컨트롤러 전체와 디스플레이, 볼륨 노브"},
-         {"src": "/img/studio/booth-corner.jpg", "caption": "녹음 부스 안쪽", "alt": "팝 필터와 빈 쇼크 마운트가 달린 붐 스탠드, 의자와 헤드폰이 놓인 녹음 부스 안쪽"}]},
-      {"type": "gear", "title": "장비", "note": "작업실에서 쓰는 장비입니다."},
-      {"type": "chips", "title": "작업 분야"},
-      {"type": "posters", "title": "참여한 작업",
-       "items": ["/img/work/01_17.jpg", "/img/work/hs_11.jpg", "/img/work/hs_09.jpg", "/img/work/hs_12.jpg",
-                 "/img/work/01_11.jpg", "/img/work/hs_01.jpg", "/img/work/01_03.jpg", "/img/work/05_01.jpg"],
-       "more": {"text": "전체 작업 보기", "href": "/work/"}},
-      {"type": "contact", "tone": "dark", "title": "위치·문의",
-       "text": "예약제 — 카카오톡으로 먼저 문의해 주세요."}
+      {
+        "type": "gallery",
+        "title": "작업실",
+        "layout": "bento",
+        "items": [
+          {
+            "src": "/img/studio/vocal-booth.jpg",
+            "caption": "녹음 부스",
+            "alt": "붐 스탠드와 팝 필터, 보면대가 놓인 녹음 부스"
+          },
+          {
+            "src": "/img/studio/mic-cabinet.jpg",
+            "caption": "마이크 보관함",
+            "alt": "습도 조절 보관함 선반에 놓인 콘덴서·다이내믹·핸드헬드 마이크"
+          },
+          {
+            "src": "/img/studio/preamp-compressor.jpg",
+            "caption": "프리앰프와 컴프레서",
+            "alt": "Neve 1073DPA 마이크 프리앰프와 Tube-Tech CL 1B 컴프레서의 노브"
+          },
+          {
+            "src": "/img/studio/monitor-controller.jpg",
+            "caption": "모니터 컨트롤러",
+            "alt": "Grace Design m905 모니터 컨트롤러 전체와 디스플레이, 볼륨 노브"
+          },
+          {
+            "src": "/img/studio/booth-corner.jpg",
+            "caption": "녹음 부스 안쪽",
+            "alt": "팝 필터와 빈 쇼크 마운트가 달린 붐 스탠드, 의자와 헤드폰이 놓인 녹음 부스 안쪽"
+          }
+        ]
+      },
+      {
+        "type": "gear",
+        "title": "장비",
+        "note": "작업실에서 쓰는 장비입니다."
+      },
+      {
+        "type": "chips",
+        "title": "작업 분야"
+      },
+      {
+        "type": "posters",
+        "title": "참여한 작업",
+        "items": [
+          "/img/work/01_17.jpg",
+          "/img/work/hs_11.jpg",
+          "/img/work/hs_09.jpg",
+          "/img/work/hs_12.jpg",
+          "/img/work/01_11.jpg",
+          "/img/work/hs_01.jpg",
+          "/img/work/01_03.jpg",
+          "/img/work/05_01.jpg"
+        ],
+        "more": {
+          "text": "전체 작업 보기",
+          "href": "/work/"
+        }
+      },
+      {
+        "type": "prose",
+        "title": "서비스와 금액",
+        "paragraphs": [
+          "녹음은 1프로(3시간 30분) 기준 150,000원부터 시작합니다.",
+          "작업량과 조건에 따라 달라질 수 있으니 카카오톡으로 먼저 문의해 주세요."
+        ]
+      },
+      {
+        "type": "contact",
+        "tone": "dark",
+        "title": "위치·문의",
+        "text": "예약제 — 카카오톡으로 먼저 문의해 주세요."
+      }
     ]
   },
   "en": {
@@ -45,23 +162,90 @@
     "h1": "ML Music Studio Recording",
     "hero_alt": "The ML Music Studio control room: four monitor speakers, screens and the desk",
     "sub": "Yongsan, Seoul · Recording · Mixing · Mastering",
-    "cta": [{"text": "Contact us", "href": "kakao"}, {"text": "See the work", "href": "/en/work/"}],
+    "cta": [
+      {
+        "text": "Contact us",
+        "href": "kakao"
+      },
+      {
+        "text": "See the work",
+        "href": "/en/work/"
+      }
+    ],
     "sections": [
-      {"type": "gallery", "title": "The studio", "layout": "bento",
-       "items": [
-         {"src": "/img/studio/vocal-booth.jpg", "caption": "Recording booth", "alt": "The recording booth with a boom stand, a pop filter and a music stand"},
-         {"src": "/img/studio/mic-cabinet.jpg", "caption": "Microphone dry cabinet", "alt": "Condenser, dynamic and handheld microphones on the shelves of a humidity-controlled cabinet"},
-         {"src": "/img/studio/preamp-compressor.jpg", "caption": "Preamp and compressor", "alt": "The controls of a Neve 1073DPA microphone preamp and a Tube-Tech CL 1B compressor"},
-         {"src": "/img/studio/monitor-controller.jpg", "caption": "Monitor controller", "alt": "A Grace Design m905 monitor controller, showing the whole unit with its display and volume knob"},
-         {"src": "/img/studio/booth-corner.jpg", "caption": "Inside the booth", "alt": "Inside the recording booth: a boom stand with a pop filter and an empty shock mount, a chair and headphones"}]},
-      {"type": "gear", "title": "Gear", "note": "The equipment used in the studio."},
-      {"type": "chips", "title": "Fields of work"},
-      {"type": "posters", "title": "Selected work",
-       "items": ["/img/work/01_17.jpg", "/img/work/hs_11.jpg", "/img/work/hs_09.jpg", "/img/work/hs_12.jpg",
-                 "/img/work/01_11.jpg", "/img/work/hs_01.jpg", "/img/work/01_03.jpg", "/img/work/05_01.jpg"],
-       "more": {"text": "See all work", "href": "/en/work/"}},
-      {"type": "contact", "tone": "dark", "title": "Location and contact",
-       "text": "By appointment — please message us on KakaoTalk first."}
+      {
+        "type": "gallery",
+        "title": "The studio",
+        "layout": "bento",
+        "items": [
+          {
+            "src": "/img/studio/vocal-booth.jpg",
+            "caption": "Recording booth",
+            "alt": "The recording booth with a boom stand, a pop filter and a music stand"
+          },
+          {
+            "src": "/img/studio/mic-cabinet.jpg",
+            "caption": "Microphone dry cabinet",
+            "alt": "Condenser, dynamic and handheld microphones on the shelves of a humidity-controlled cabinet"
+          },
+          {
+            "src": "/img/studio/preamp-compressor.jpg",
+            "caption": "Preamp and compressor",
+            "alt": "The controls of a Neve 1073DPA microphone preamp and a Tube-Tech CL 1B compressor"
+          },
+          {
+            "src": "/img/studio/monitor-controller.jpg",
+            "caption": "Monitor controller",
+            "alt": "A Grace Design m905 monitor controller, showing the whole unit with its display and volume knob"
+          },
+          {
+            "src": "/img/studio/booth-corner.jpg",
+            "caption": "Inside the booth",
+            "alt": "Inside the recording booth: a boom stand with a pop filter and an empty shock mount, a chair and headphones"
+          }
+        ]
+      },
+      {
+        "type": "gear",
+        "title": "Gear",
+        "note": "The equipment used in the studio."
+      },
+      {
+        "type": "chips",
+        "title": "Fields of work"
+      },
+      {
+        "type": "posters",
+        "title": "Selected work",
+        "items": [
+          "/img/work/01_17.jpg",
+          "/img/work/hs_11.jpg",
+          "/img/work/hs_09.jpg",
+          "/img/work/hs_12.jpg",
+          "/img/work/01_11.jpg",
+          "/img/work/hs_01.jpg",
+          "/img/work/01_03.jpg",
+          "/img/work/05_01.jpg"
+        ],
+        "more": {
+          "text": "See all work",
+          "href": "/en/work/"
+        }
+      },
+      {
+        "type": "prose",
+        "title": "Services and rates",
+        "paragraphs": [
+          "Recording starts at 150,000 KRW per session (one session = 3 hours 30 minutes).",
+          "The final price depends on the scope of work, so please message us on KakaoTalk first."
+        ]
+      },
+      {
+        "type": "contact",
+        "tone": "dark",
+        "title": "Location and contact",
+        "text": "By appointment — please message us on KakaoTalk first."
+      }
     ]
   }
 }
