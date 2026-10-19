@@ -1,8 +1,8 @@
 {
   "ko": {
-    "title": "ML Music Studio — 서울 용산 녹음·믹싱·마스터링 스튜디오",
-    "description": "서울 용산의 녹음·믹싱·마스터링 스튜디오. 참여한 음반·영화·공연 작업, 작업실과 장비, 엔지니어가 만든 앱과 웹 도구를 소개합니다.",
-    "h1": "ML Music Studio 녹음실",
+    "title": "ML Music Studio(엠엘뮤직스튜디오) — 서울 용산 녹음·믹싱·마스터링 스튜디오",
+    "description": "엠엘뮤직스튜디오(ML Music Studio)는 서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 참여한 음반·영화·공연 작업, 작업실과 장비, 엔지니어가 만든 앱과 웹 도구를 소개합니다.",
+    "h1": "엠엘뮤직스튜디오 ML Music Studio",
     "hero_alt": "ML Music Studio 컨트롤룸: 모니터 스피커 네 대와 화면, 책상",
     "sub": "서울 용산 · 녹음 · 믹싱 · 마스터링",
     "cta_contact": "문의하기",
@@ -69,13 +69,33 @@
   },
   "hero_img": "/img/studio/control-room.jpg",
   "credits": [
-    "/img/work/02_08.jpg", "/img/work/01_05.jpg", "/img/work/jh_01.jpg", "/img/work/01_10.jpg", "/img/work/04_05.jpg",
-    "/img/work/01_00.jpg", "/img/work/01_09.jpg", "/img/work/01_12.jpg", "/img/work/01_14.jpg", "/img/work/05_02.jpg"
+    "/img/work/02_08.jpg",
+    "/img/work/01_05.jpg",
+    "/img/work/jh_01.jpg",
+    "/img/work/01_10.jpg",
+    "/img/work/04_05.jpg",
+    "/img/work/01_00.jpg",
+    "/img/work/01_09.jpg",
+    "/img/work/01_12.jpg",
+    "/img/work/01_14.jpg",
+    "/img/work/05_02.jpg"
   ],
   "studio_photos": [
-    {"src": "/img/studio/vocal-booth.jpg", "ko": "녹음 부스", "en": "Recording booth"},
-    {"src": "/img/studio/mic-cabinet.jpg", "ko": "마이크 보관함", "en": "Microphone dry cabinet"},
-    {"src": "/img/studio/preamp-compressor.jpg", "ko": "프리앰프와 컴프레서", "en": "Preamp and compressor"}
+    {
+      "src": "/img/studio/vocal-booth.jpg",
+      "ko": "녹음 부스",
+      "en": "Recording booth"
+    },
+    {
+      "src": "/img/studio/mic-cabinet.jpg",
+      "ko": "마이크 보관함",
+      "en": "Microphone dry cabinet"
+    },
+    {
+      "src": "/img/studio/preamp-compressor.jpg",
+      "ko": "프리앰프와 컴프레서",
+      "en": "Preamp and compressor"
+    }
   ],
   "featured_apps": [
     "stage-sound",

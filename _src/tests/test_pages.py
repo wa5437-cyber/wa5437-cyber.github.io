@@ -147,7 +147,7 @@ class HomeLayoutTests(unittest.TestCase):
             self.assertIn(f'width="{width}" height="{height}"', img)
             self.assertRegex(img, r'alt="[^"]+"')
         _, ko = pages.home("ko")
-        self.assertIn("<h1>ML Music Studio 녹음실</h1>", ko)
+        self.assertIn("<h1>엠엘뮤직스튜디오 ML Music Studio</h1>", ko)
         self.assertIn('<p class="sub">서울 용산 · 녹음 · 믹싱 · 마스터링</p>', ko)
 
     def test_hero_ctas_contact_on_kakao_then_work(self):

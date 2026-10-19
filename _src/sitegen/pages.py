@@ -66,13 +66,20 @@ def app_href(lang, app):
     return url(lang, "/apps/" + app["slug"] + "/") if has_detail(app["slug"]) else url(lang, "/apps/")
 
 
+ORG_DESC = {"ko": "서울 용산의 녹음·믹싱·마스터링 스튜디오이자, 사운드 엔지니어가 만든 앱과 웹 도구를 운영하는 엠엘뮤직스튜디오입니다.",
+            "en": "ML Music Studio (엠엘뮤직스튜디오) is a recording, mixing and mastering studio in Yongsan, Seoul, and the maker of apps and web tools for sound engineers."}
+
+
 def json_ld(lang):
     """홈의 구조화 데이터(Organization + WebSite). 값은 json.dumps 로만 만든다."""
     data = [
         {"@context": "https://schema.org", "@type": "Organization", "name": kit.SITE["brand"],
-         "url": kit.BASE + "/", "logo": kit.BASE + "/og-image.png"},
+         "alternateName": ["엠엘뮤직스튜디오", "MLMusicStudio"], "url": kit.BASE + "/", "logo": kit.BASE + "/og-image.png",
+         "description": ORG_DESC[lang],
+         "address": {"@type": "PostalAddress", "streetAddress": kit.SITE["contact"]["address"][lang],
+                     "addressLocality": "Yongsan-gu, Seoul", "addressCountry": "KR"}},
         {"@context": "https://schema.org", "@type": "WebSite", "name": kit.SITE["brand"],
-         "url": kit.BASE + "/", "inLanguage": lang},
+         "alternateName": ["엠엘뮤직스튜디오", "MLMusicStudio"], "url": kit.BASE + "/", "inLanguage": lang},
     ]
     text = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     return '<script type="application/ld+json">' + text + "</script>"
