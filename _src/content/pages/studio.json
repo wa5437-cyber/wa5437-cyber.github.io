@@ -277,7 +277,7 @@
         "title": "취소·변경",
         "columns": [
           "예약일 기준",
-          "위약금"
+          "위약금(선입금 기준)"
         ],
         "rows": [
           [
@@ -286,19 +286,19 @@
           ],
           [
             "3일 전",
-            "30%"
+            "선입금의 30%"
           ],
           [
             "2일 전",
-            "50%"
+            "선입금의 50%"
           ],
           [
             "1일 전과 당일",
-            "100%"
+            "선입금의 100%"
           ]
         ],
         "paragraphs": [
-          "선입금 없이 진행하는 경우에도 취소 규정은 동일하게 적용됩니다."
+          "위약금은 선입금에서 공제합니다. 선입금 없이 진행하는 경우의 취소 조건은 예약할 때 따로 안내해 드립니다."
         ]
       },
       {
@@ -555,7 +555,7 @@
         "title": "Cancellations and changes",
         "columns": [
           "Before the session",
-          "Cancellation fee"
+          "Cancellation fee (based on the deposit)"
         ],
         "rows": [
           [
@@ -564,19 +564,19 @@
           ],
           [
             "3 days before",
-            "30%"
+            "30% of the deposit"
           ],
           [
             "2 days before",
-            "50%"
+            "50% of the deposit"
           ],
           [
             "1 day before or on the day",
-            "100%"
+            "100% of the deposit"
           ]
         ],
         "paragraphs": [
-          "The cancellation terms apply in the same way when we proceed without a deposit."
+          "The fee is deducted from the deposit. When we proceed without a deposit, the cancellation terms are explained separately when you book."
         ]
       },
       {
