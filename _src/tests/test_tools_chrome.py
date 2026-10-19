@@ -12,6 +12,7 @@ BEFORE = "947d6fe"     # 변환기를 처음 적용하기 직전 커밋(도구 9
 # 10/17 설명 글을 보강한 5쪽은 본문이 일부러 달라졌으므로, 보강 커밋을 기준으로 삼아 이후의 공통 블록 변환만 검증한다.
 BEFORE_BY_FILE = {n: "3d00f09" for n in ("generator.html", "trainer.html", "rta.html",
                                          "effects-listening.html", "stage-sound-quiz.html")}
+NAVER_META = '<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">'
 SCRIPT = re.compile(r"<script\b[^>]*>.*?</script>", re.S)
 BLOCKS = (chrome_tools.HEAD_RE, chrome_tools.TOP_RE, chrome_tools.BOTTOM_RE, chrome_tools.PAIR_RE)
 
@@ -21,6 +22,9 @@ def original(name):
     r = subprocess.run(["git", "show", f"{ref}:{name}"], cwd=str(ROOT), capture_output=True, text=True)
     if r.returncode != 0:
         raise unittest.SkipTest(f"git show {ref}:{name} 실패")
+    # 10/19 네이버 소유 확인 메타를 모든 쪽에 넣었으므로, 그 이전 커밋 원본에도 같은 줄을 넣어 비교한다.
+    if "naver-site-verification" not in r.stdout:
+        return r.stdout.replace('<meta charset="UTF-8">', '<meta charset="UTF-8">\n' + NAVER_META, 1)
     return r.stdout
 
 
@@ -191,7 +195,7 @@ class ToolsChromeTests(unittest.TestCase):
     def test_untouched_pages(self):
         proto = disk("eartrainer_prototype.html")
         self.assertNotIn("site-chrome", proto)
-        self.assertEqual(proto, original("eartrainer_prototype.html"))
+        self.assertEqual(proto, original("eartrainer_prototype.html").replace("\n" + NAVER_META, ""))   # 프로토타입(검색 제외)에는 소유 확인 메타를 넣지 않았다
 
     def test_cli_check_exits_zero(self):
         r = subprocess.run([sys.executable, str(ROOT / "_src" / "tools" / "chrome_tools.py"), "--check"],

@@ -1,0 +1,74 @@
+# ML Music Studio (엠엘뮤직스튜디오)
+
+> ML Music Studio is a recording, mixing and mastering studio in Yongsan, Seoul, run by sound engineer Hyoseop Lee (이효섭). It also makes iOS/Mac apps and free browser tools for sound engineers and musicians. Site languages: Korean and English; app pages also in Japanese, Simplified Chinese, Spanish, German, French and Brazilian Portuguese; guides are in Korean.
+
+서울 용산의 녹음·믹싱·마스터링 스튜디오이며, 사운드 엔지니어 이효섭이 만든 앱과 무료 웹 도구, 음향 가이드를 제공합니다.
+
+## Studio
+- [Home](https://mlmusicstudio.co.kr/): overview
+- [Work](https://mlmusicstudio.co.kr/work/): selected albums, films and stage work
+- [Studio](https://mlmusicstudio.co.kr/studio/): the room and gear
+- [About](https://mlmusicstudio.co.kr/about/): the engineer
+- [Contact](https://mlmusicstudio.co.kr/contact/): by appointment via KakaoTalk
+
+## Apps
+- [Stage Sound Exam Prep (Korea) / 무대음향 자격증 기출문제](https://mlmusicstudio.co.kr/en/apps/stage-sound/): 2,174 multiple-choice questions across sound, regulations, and general topics, plus unlimited randomly generated calculation problems, graded mock exams with a 100-minute timer, summary notes from 3 official textbooks, and practical exam questions (2010–2026)
+- [AudioEngineer EAR Trainer / EAR Trainer 귀훈련](https://mlmusicstudio.co.kr/en/apps/ear-trainer/): Ear training for audio engineers: EQ frequencies (31 bands on pink noise or a sine), noise (type, hum, noise floor) and effects (Reverb, Delay, Chorus and more)
+- [AudioEngineerKit: SPL & RTA / AudioEngineerKit: SPL & RTA](https://mlmusicstudio.co.kr/en/apps/spl-rta/): A professional SPL meter and real-time spectrum analyzer (RTA) in one app
+- [AudioEngineerToolkit / AudioEngineerToolkit-오디오엔지니어](https://mlmusicstudio.co.kr/en/apps/toolkit/): Delay, acoustics, electrical (Ohm's Law/Power/Impedance/dB), and tempo/pitch calculators — fast, and fully offline
+- [AET Quiz / AET Quiz](https://mlmusicstudio.co.kr/en/apps/aet-quiz/): Practice electrical, delay, acoustics, and tempo/pitch calculations with random questions
+- [DAW Shortcuts — KeyMap / DAW 단축키 — 키맵](https://mlmusicstudio.co.kr/en/apps/keymap/): Every keyboard shortcut for six DAWs — Pro Tools, Logic, Ableton, FL Studio, Studio One, Cubase — searchable in one place
+- [Patch & I/O — Stage I/O List / Patch & I/O — 인아웃 리스트](https://mlmusicstudio.co.kr/en/apps/patchio/): Input lists, patchbays, signal flow diagrams and stage plots in one app
+- [NORA: Cover Song Studio / NORA - 커버곡 노래 녹음](https://mlmusicstudio.co.kr/en/apps/nora/): Sing over a backing track, then add a vocal style (EQ, compression, reverb) and master it with one tap
+- [Yul — Gugak Tuner & Jangdan / 율 — 국악 튜너 & 장단](https://mlmusicstudio.co.kr/en/apps/yul/): A tuner and rhythm trainer for Korean traditional instruments
+- [SheetScope / SheetScope](https://mlmusicstudio.co.kr/en/apps/sheetscope/): Turn a sheet-music PDF, photo or scan into an editable score (MusicXML), MIDI or PDF — and a MIDI file into sheet music (accurate up to two-voice piano)
+- [TempoScope / TempoScope](https://mlmusicstudio.co.kr/en/apps/temposcope/): Detects tempo and key live from the microphone, and tempo, key, and chord progressions from audio files
+
+## Free web tools (no install)
+- [RTA real-time analyzer](https://mlmusicstudio.co.kr/rta.html): Shows the sound coming into your device microphone as a 31-band (ISO 266) spectrum in real time.
+- [Signal generator](https://mlmusicstudio.co.kr/generator.html): Pink and white noise, sine, square and triangle waves, hum, buzz and hiss for checking speakers and signal chains.
+- [31-band ear trainer](https://mlmusicstudio.co.kr/trainer.html): Train your ear to hear which frequency band was boosted or cut in pink noise — with your own music too.
+- [Effects listening](https://mlmusicstudio.co.kr/effects-listening.html): Compare reverb, delay, chorus and more, plus compressor, gate and ducking, with the effect on and off.
+- [Delay calculator](https://mlmusicstudio.co.kr/delay-calculator.html): Convert delay time, distance, frequency and phase, and check speaker alignment.
+- [Acoustics calculator](https://mlmusicstudio.co.kr/acoustics-calculator.html): Frequency, wavelength and period, notes, room modes and reverb time (RT60).
+- [Electrical calculator](https://mlmusicstudio.co.kr/electrical-calculator.html): Ohm's law, power, impedance, dB-to-power conversion and cable voltage drop.
+- [Tempo & pitch calculator](https://mlmusicstudio.co.kr/tempo-pitch-calculator.html): Tap tempo, note lengths per BPM, speed and pitch, and loop BPM.
+- [Online timer](https://mlmusicstudio.co.kr/en/timer/): Countdown, stopwatch, start/end times, work/rest cycles such as 45 min mixing plus a 5 min ear break, and rehearsal-room booking alerts in one place.
+- [Online metronome](https://mlmusicstudio.co.kr/en/metronome/): A steady metronome with 20–300 BPM, tap tempo, time signatures and subdivisions, a speed trainer and a practice timer.
+- [Stage-sound certification quiz (Korean, level 3)](https://mlmusicstudio.co.kr/stage-sound-quiz.html): Multiple-choice questions from 14 chapters of the standard textbook, plus calculation problems. (Korean only.)
+
+## Guides (Korean)
+- [31밴드 그래픽 EQ 표준 주파수](https://mlmusicstudio.co.kr/guides/31-band-eq-standard-frequencies.html): 31밴드 그래픽 EQ·RTA의 표준 중심주파수 31개(ISO 266·IEC 61260) 표, 1/3옥타브 계산식(×1.26), 공칭값과 정확값의 차이, 슬라이더 하나의 대역폭, 10밴드·15밴드와의 관계를 정리했습니다.
+- [Ableton Live·FL Studio — 루프 기반 워크플로우 이해하기](https://mlmusicstudio.co.kr/guides/ableton-fl-studio-workflow.html): Pro Tools·Logic의 선형 편집과 다른 Ableton Live 세션 뷰, FL Studio 패턴·채널랙 워크플로우의 개념을 정리했습니다. 클립·패턴·플레이리스트 대응표, Warp로 루프를 프로젝트 템포에 맞추는 계산법, 흔한 실수까지.
+- [XLR·TRS·TS와 밸런스드 신호](https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html): XLR·TRS·TS 커넥터의 구조 차이, 밸런스드 신호가 공통 모드 노이즈를 상쇄하는 원리, 핫·콜드 극성, 케이블 길이별 선택 기준과 흔한 연결 실수를 정리했습니다.
+- [BPM으로 딜레이·리버브 타임 계산하기](https://mlmusicstudio.co.kr/guides/bpm-to-delay-time.html): BPM에서 1박의 밀리초를 구하는 공식과, 8분·16분·점음표·셋잇단 등 음표별 딜레이 타임 계산법. 리버브 프리딜레이·디케이, 트레몰로·게이트 속도까지 곡 템포에 맞추는 법을 표와 예시로 정리했습니다.
+- [컴프레서 파라미터 제대로 이해하기](https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html): 컴프레서의 Threshold·Ratio·Knee·Attack·Release·Makeup Gain이 소리에 실제로 어떤 변화를 주는지 수치 예시로 설명합니다. 게이트·더킹과의 차이, 자주 하는 실수, 악기별 시작값까지 정리했습니다.
+- [콘덴서 vs 다이나믹 마이크 — 원리 차이와 용도별 선택](https://mlmusicstudio.co.kr/guides/condenser-vs-dynamic-mic.html): 콘덴서 마이크와 다이나믹 마이크의 발전 원리 차이, 팬텀파워가 필요한 이유, 감도·주파수 응답·최대 음압레벨(SPL) 차이, 보컬 부스·라이브 무대·드럼·기타앰프 등 상황별로 어떤 마이크를 골라야 하는지 정리했습니다.
+- [DAW 단축키, 왜 다 다르고 어떻게 외워야 할까](https://mlmusicstudio.co.kr/guides/daw-shortcuts-concepts.html): Pro Tools·Logic·Ableton·Cubase·FL Studio·Studio One의 단축키 철학이 왜 다른지, 거의 공통인 단축키와 DAW마다 다른 단축키를 구분하는 법, 키가 아니라 동작 단위로 외워야 다른 DAW로 옮겨도 빠른 이유를 정리했습니다.
+- [데시벨 공식과 단위 총정리](https://mlmusicstudio.co.kr/guides/decibel-formulas-and-units.html): 파워 비교의 10log와 진폭 비교의 20log가 갈리는 이유, +3·+6·+10dB 환산표, dBu·dBV·dBFS·dB SPL·dBm의 기준값, dB 레벨을 합산하는 법을 계산 예시와 함께 정리했습니다.
+- [딜레이 타워, 거리로 딜레이 타임 계산하는 법](https://mlmusicstudio.co.kr/guides/delay-tower-alignment.html): 음속과 온도 보정 공식으로 딜레이 스피커의 지연 시간을 계산하는 법. 하스 효과를 고려한 추가 지연, 여러 존을 정렬하는 실전 순서, 흔한 실수까지 계산 예시와 함께 정리했습니다.
+- [EQ 종류와 Q값](https://mlmusicstudio.co.kr/guides/eq-types-and-q.html): 그래픽·파라메트릭·세미 파라메트릭·셸빙/필터의 차이, Q값과 대역폭의 관계(Q=중심 주파수÷대역폭), 하울링·음색·저음 정리에서의 Q 선택 기준을 정리했습니다.
+- [주파수와 파장 계산](https://mlmusicstudio.co.kr/guides/frequency-and-wavelength.html): 주파수와 파장을 서로 계산하는 공식, 옥타브와 주파수의 관계, 흔한 주파수의 파장 표, 베이스 트랩 두께와 룸 모드가 파장과 왜 연결되는지, 마이크 위치와 콤필터링을 파장으로 이해하는 법을 정리했습니다.
+- [게인 스테이징 기본](https://mlmusicstudio.co.kr/guides/gain-staging-basics.html): 게인 스테이징이 왜 중요한지, 노이즈 플로어와 헤드룸 사이에서 레벨을 잡는 이유, 아날로그·디지털 단계별(마이크 프리·컨버터·트랙·마스터 버스) 적정 레벨, dBFS·dBu 관계와 현장·믹싱 체크리스트를 정리했습니다.
+- [3급 시험범위 — 주제별 출제 비중](https://mlmusicstudio.co.kr/guides/grade3-exam-scope-by-topic.html): 3급 필기 17회분 기출 992문항을 주제별로 집계해 음향·법규·일반 과목의 출제 비중과 상위 주제, 공부 우선순위를 정리했습니다.
+- [라인 어레이 기초](https://mlmusicstudio.co.kr/guides/line-array-basics.html): 라인 어레이가 스피커를 세로로 잇는 이유, 박스 사이 각도(splay)로 커버리지를 나누는 방법, 근거리 −3dB 감쇠와 점음원 전환 거리 계산을 정리했습니다.
+- [메트로놈 연습 가이드](https://mlmusicstudio.co.kr/guides/metronome-practice-guide.html): BPM과 한 박의 길이 계산, 템포 용어, 목표 템포의 60~70%에서 시작하는 단계별 연습, 박자표·분할 활용, 가속 연습 설계와 온라인 메트로놈의 정확도까지 정리했습니다.
+- [마이크 지향성 패턴 이해](https://mlmusicstudio.co.kr/guides/microphone-polar-patterns.html): 무지향·카디오이드·슈퍼카디오이드·하이퍼카디오이드·양지향성(피그오브에이트) 패턴의 차이와 극좌표 그래프 읽는 법, 근접효과, 각 패턴이 실전(보컬·앙상블·라이브 PA)에서 어디에 쓰이는지, 무대음향 자격검정 기출에도 자주 나오는 핵심 개념을 정리했습니다.
+- [믹싱 작업 시간과 휴식, 타이머로 리듬 만들기](https://mlmusicstudio.co.kr/guides/mixing-session-break-timer.html): 믹싱·녹음·연습에서 작업과 휴식의 리듬을 정하는 방법. 45+5, 뽀모도로 같은 출발점 리듬, 쉬고 돌아와서 듣는 순서, 세 시간 세션 예시, 합주실·녹음실 대관 시간 관리와 온라인 타이머 사용법.
+- [오디오를 위한 옴의 법칙](https://mlmusicstudio.co.kr/guides/ohms-law-for-audio.html): V=IR과 전력 공식(P=VI=I²R=V²/R)을 스피커·앰프에 적용하는 법. 임피던스가 낮아질 때 앰프 전류가 어떻게 늘어나는지, 70V/100V 정전압 라인, 케이블 손실과 댐핑 팩터, 안전한 앰프 부하 계산을 예시와 함께 정리했습니다.
+- [위상 간섭과 콤필터 — 시간차가 만드는 빗살 모양 주파수 특성](https://mlmusicstudio.co.kr/guides/phase-interference-comb-filter.html): 같은 소리가 시간차를 두고 겹칠 때 생기는 보강·상쇄 간섭과 콤필터의 골 위치 공식, 마이크 3:1 법칙, 스피커 겹침 구역, 극성 반전과 위상 차이, 정상파 주파수 계산을 예시와 함께 정리했습니다.
+- [핑크노이즈로 EQ 귀 훈련하는 법](https://mlmusicstudio.co.kr/guides/pink-noise-eq-ear-training.html): 핑크노이즈가 화이트노이즈 대신 EQ 훈련에 쓰이는 이유, 옥타브·1/3옥타브 밴드 부스트를 귀로 구분하는 훈련 방법, 대역별로 헷갈리기 쉬운 주파수 쌍, 훈련을 실전 믹싱 감각으로 옮기는 순서를 정리했습니다.
+- [Pro Tools에서 Logic으로 — 용어·워크플로우 대응표](https://mlmusicstudio.co.kr/guides/pro-tools-to-logic-migration.html): Pro Tools 사용자가 Logic Pro로 넘어갈 때 헷갈리는 용어 대응(세션↔프로젝트, 클립게인↔게인 오토메이션, 엘라스틱 오디오↔플렉스 타임), 편집 모드·플레이리스트·버스 구조 차이, 단축키 대응표를 정리했습니다.
+- [31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트](https://mlmusicstudio.co.kr/guides/reading-31-band-rta.html): 1/3 옥타브 31밴드 RTA의 기준선, 핑크노이즈로 룸 특성 읽기, 저역 피크·딥으로 룸 모드 파악, 피드백 직전 밴드를 잡아내는 법을 실전 관점에서 정리했습니다.
+- [LUFS·라우드니스 미터 읽는 법](https://mlmusicstudio.co.kr/guides/reading-lufs-loudness.html): Integrated·Short-term·Momentary LUFS의 차이, True Peak와 LRA의 의미, 스트리밍 플랫폼별 목표 라우드니스와 정규화 동작, 목표값에 맞춰 게인을 잡는 순서를 예시와 함께 정리했습니다.
+- [Reverb·Delay·Chorus·Flanger·Phaser 차이](https://mlmusicstudio.co.kr/guides/reverb-delay-chorus-explained.html): 딜레이·리버브·코러스·플랜저·페이저가 전부 '지연' 기반인데 왜 이렇게 다르게 들리는지, 지연 시간·피드백·모듈레이션 유무로 구분하는 법, 각 이펙트를 실전에서 언제 쓰는지 표와 함께 정리했습니다.
+- [RT60·잔향시간 이해와 계산](https://mlmusicstudio.co.kr/guides/rt60-reverberation-time.html): RT60의 정의(−60 dB 감쇠 시간), 사빈 공식으로 잔향시간을 계산하는 법, 재료별 흡음 계수, 측정 방법(단절 소음·임펄스), 공간 용도별 목표 잔향시간과 명료도(STI)의 관계를 예시와 함께 정리했습니다.
+- [스피커 임피던스 — 직렬·병렬 연결과 앰프 매칭](https://mlmusicstudio.co.kr/guides/speaker-impedance-matching.html): 공칭 임피던스의 의미, 스피커를 직렬·병렬로 연결했을 때의 합성 임피던스 계산, 앰프가 견디는 최소 부하와 2Ω 연결의 위험을 계산 예시와 함께 정리했습니다.
+- [SPL과 역제곱 법칙](https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html): 거리가 2배 멀어지면 음압이 왜 6dB 떨어지는지, 역제곱 법칙 공식과 계산 예시. 자유음장과 실제 현장의 차이, 라인 어레이가 역제곱 법칙을 벗어나는 이유, 딜레이 스피커 SPL 맞추기까지 정리했습니다.
+- [무대예술전문인(음향) 3급 필기 — 과목별 순서와 3주 플랜](https://mlmusicstudio.co.kr/guides/stage-sound-cert-study-plan.html): 무대예술전문인(음향) 3급 자격검정 필기시험의 과목 구성과 난이도, 과락을 피하는 공부 순서, 계산문제 대비법, 주차별 3주 학습 계획을 정리했습니다.
+- [3급 필기 배점·과락 계산](https://mlmusicstudio.co.kr/guides/stage-sound-exam-scoring.html): 3급 필기 75문항의 배점표, 합격 조건(합계 60점 + 과락), 과락선을 문항 수로 환산한 값과 사례 계산, 배점에 맞춘 공부 우선순위를 정리했습니다.
+
+## Notes
+- Measurement features (RTA/SPL) use the device microphone and are for reference, not calibrated measurement.
+- Timer and metronome settings are stored only in the visitor's browser (localStorage).
+- Sitemap: https://mlmusicstudio.co.kr/sitemap.xml

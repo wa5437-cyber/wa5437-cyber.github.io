@@ -246,6 +246,7 @@ class AllGuidesTests(unittest.TestCase):
 
 def strip_chrome(text):
     """메뉴 링크·푸터·글쓴이 박스·JSON-LD·글꼴 링크·theme-color 를 걷어내고 옛 홈 앵커를 새 주소로 맞춘 본문 비교용 문자열."""
+    text = re.sub(r'\n?<meta name="naver-site-verification"[^>]*>', "", text)    # 소유 확인 메타는 본문이 아니다
     text = chrome_legacy.FONT_LINK_RE.sub("<!-- fonts -->", text)
     text = chrome_legacy.THEME_RE.sub("<!-- theme -->", text)
     text = re.sub(r'<header class="site-header"[^>]*>.*?</header>|<nav>.*?</nav>', "", text, flags=re.S)
