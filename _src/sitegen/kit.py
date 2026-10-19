@@ -124,6 +124,7 @@ def footer(lang):
         ("footer_support", [(url(k, "/contact/"), t("footer_contact", k), ""),
                             (c["kakao"], t("chat", k), ' rel="noopener"'),
                             (f'mailto:{c["email"]}', c["email"], ""),
+                            (c["instagram"], "Instagram", ' rel="noopener"'),
                             (url(k, "/privacy/"), t("footer_privacy", k), "")]),
     )
     cols = "".join(f'<div class="foot-col"><p class="foot-h">{esc(t(g, k))}</p><ul class="foot-links">{links(items)}</ul></div>'
