@@ -120,8 +120,7 @@ class StudioAboutContactTests(unittest.TestCase):
         # 녹음실이 하는 일 4칸·4단계 진행 방법 같은 누구나 아는 글은 지웠다(사용자 지시)
         for lang in ("ko", "en"):
             _, html = pages.simple_page(lang, "studio")
-            self.assertNotIn('class="steps"', html)
-            self.assertNotIn('class="cards', html)
+            # 10/19 사용자가 실제 진행 방식·예약 규정·자주 묻는 질문을 알려 줘서 단계·질문 카드는 허용한다(누구나 아는 일반 문구만 금지).
             for gone in ("하는 일", "진행 방법", "악기와 보컬을 녹음합니다", "What we do", "How it works"):
                 self.assertNotIn(gone, html)
 
