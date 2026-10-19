@@ -19,6 +19,34 @@ class SectionTests(unittest.TestCase):
         self.assertIn('href="https://open.kakao.com/o/x"', html)
         self.assertIn('href="mailto:a@b.kr"', html)
 
+    def test_table_escapes_text_and_keeps_headers_and_mobile_labels(self):
+        html = sections.render([{
+            "type": "table", "title": "Rates <x>", "caption": 'Caption "&"',
+            "columns": ['Service "&"', "Price <x>"],
+            "rows": [["Recording <script>", "150,000 & up"], ["Mixing", "800,000"]],
+            "paragraphs": ["VAT <extra>"], "tone": "dark",
+        }], "en", CTX)
+        self.assertIn('<section class="band dark">', html)
+        self.assertIn('<h2>Rates &lt;x&gt;</h2>', html)
+        self.assertIn('<caption>Caption &quot;&amp;&quot;</caption>', html)
+        self.assertIn('<th scope="col" role="columnheader">Service &quot;&amp;&quot;</th>', html)
+        self.assertIn('<span class="table-label" aria-hidden="true">Price &lt;x&gt;</span>150,000 &amp; up</td>', html)
+        self.assertIn('role="rowheader"', html)
+        self.assertEqual(html.count('<tr role="row">'), 3)
+        self.assertIn('<p class="note">VAT &lt;extra&gt;</p>', html)
+        self.assertLess(html.index('</table>'), html.index('<p class="note">'))
+        self.assertNotIn('<script>', html)
+
+    def test_table_caption_is_optional_and_rows_must_match_columns(self):
+        sec = {"type": "table", "title": '안내 "&"', "columns": ["항목", "안내"],
+               "rows": [["녹음", "보컬·솔로 악기"]]}
+        html = sections.render([sec], "ko", CTX)
+        self.assertNotIn('<caption>', html)
+        self.assertIn('aria-label="안내 &quot;&amp;&quot;"', html)
+        self.assertIn('aria-hidden="true">항목</span>녹음</th>', html)
+        with self.assertRaisesRegex(ValueError, "one cell per column"):
+            sections.render([dict(sec, rows=[["녹음"]])], "ko", CTX)
+
     def test_photos_skip_missing_files_and_hide_empty_section(self):
         one = sections.render([{"type": "photos", "title": "사진", "items": [
             {"src": "/img/ok.jpg", "alt": "a"}, {"src": "/img/missing.jpg", "alt": "b"}]}], "ko", CTX)

@@ -20,6 +20,30 @@ def _prose(sec, lang, ctx):
     return _wrap(f'<div class="prose-copy">{_h2(sec)}{paras}{links}</div>', sec)
 
 
+def _table(sec, lang, ctx):
+    """Text-only columns and rows, with an optional caption and notes below."""
+    columns = sec["columns"]
+    caption = f'<caption>{esc(sec["caption"])}</caption>' if sec.get("caption") else ""
+    table_label = f' aria-label="{esc(sec["title"])}"' if sec.get("title") and not caption else ""
+    head = "".join(f'<th scope="col" role="columnheader">{esc(c)}</th>' for c in columns)
+    rows = []
+    for row in sec["rows"]:
+        if len(row) != len(columns):
+            raise ValueError("table row must have one cell per column")
+        cells = []
+        for index, (label, value) in enumerate(zip(columns, row)):
+            tag = "th" if index == 0 else "td"
+            attrs = ' scope="row" role="rowheader"' if index == 0 else ' role="cell"'
+            cells.append(f'<{tag}{attrs}><span class="table-label" aria-hidden="true">'
+                         f'{esc(label)}</span>{esc(value)}</{tag}>')
+        rows.append('<tr role="row">' + "".join(cells) + '</tr>')
+    table = (f'<table class="section-table" role="table"{table_label}>{caption}'
+             f'<thead role="rowgroup"><tr role="row">{head}</tr></thead>'
+             f'<tbody role="rowgroup">{"".join(rows)}</tbody></table>')
+    notes = "".join(f'<p class="note">{esc(p)}</p>' for p in sec.get("paragraphs", []))
+    return _wrap(_h2(sec) + table + notes, sec)
+
+
 def _list(sec, lang, ctx):
     items = "".join(f"<li>{esc(i)}</li>" for i in sec["items"])
     return _wrap(_h2(sec) + f'<ul class="bullets">{items}</ul>')
@@ -32,7 +56,7 @@ def _cards(sec, lang, ctx):
             return f'<a class="card" href="{esc(i["href"])}">{inner}</a>'
         return f'<div class="card">{inner}</div>'
     cards = "".join(card(i) for i in sec["items"])
-    cols = "c4" if len(sec["items"]) == 4 else "c3"          # 4개는 2×2 / 한 줄 4칸(마지막 칸만 외톨이가 되지 않게)
+    cols = {2: "c2", 4: "c4"}.get(len(sec["items"]), "c3")  # 2개는 두 칸, 4개는 2×2 / 한 줄 4칸
     return _wrap(_h2(sec) + f'<div class="cards {cols}">{cards}</div>', sec)
 
 
@@ -243,7 +267,7 @@ def _facts(sec, lang, ctx):
     return _wrap(f'<ul class="facts">{items}</ul>')
 
 
-RENDERERS = {"prose": _prose, "list": _list, "cards": _cards, "steps": _steps,
+RENDERERS = {"prose": _prose, "table": _table, "list": _list, "cards": _cards, "steps": _steps,
              "contact": _contact, "photos": _photos, "works": _works, "facts": _facts,
              "posters": _posters, "gallery": _gallery, "gear": _gear, "chips": _chips}
 

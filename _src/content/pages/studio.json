@@ -141,13 +141,41 @@
         }
       },
       {
-        "type": "prose",
+        "type": "table",
         "title": "서비스와 금액",
+        "columns": [
+          "서비스",
+          "금액",
+          "포함·조건"
+        ],
+        "rows": [
+          [
+            "녹음",
+            "150,000원부터",
+            "1프로(3시간 30분) 기준"
+          ],
+          [
+            "마스터링",
+            "곡당 100,000원부터",
+            "인스트루멘탈 버전을 포함하면 150,000원입니다."
+          ],
+          [
+            "믹싱(개인 작업)",
+            "곡당 800,000원부터",
+            "수정은 2~3회까지 포함합니다."
+          ],
+          [
+            "녹음과 함께 진행하는 믹싱",
+            "곡당 700,000원부터",
+            "녹음과 함께 진행하면"
+          ],
+          [
+            "회사·상업 작업",
+            "견적",
+            "용도와 작업량에 따라 견적을 안내합니다."
+          ]
+        ],
         "paragraphs": [
-          "녹음은 1프로(3시간 30분) 기준 150,000원부터 시작합니다.",
-          "마스터링은 곡당 100,000원부터 시작하며, 인스트루멘탈 버전을 포함하면 150,000원입니다.",
-          "믹싱(개인 작업)은 곡당 800,000원부터 시작하며, 수정은 2~3회까지 포함합니다. 녹음과 함께 진행하면 믹싱은 곡당 700,000원부터입니다.",
-          "회사·상업 작업은 용도와 작업량에 따라 견적을 안내합니다.",
           "모든 금액은 부가세(VAT) 별도입니다.",
           "작업량과 조건에 따라 달라질 수 있으니 카카오톡으로 먼저 문의해 주세요."
         ]
@@ -179,44 +207,112 @@
         ]
       },
       {
-        "type": "prose",
+        "type": "table",
         "title": "녹음 안내",
-        "paragraphs": [
-          "보컬뿐 아니라 솔로 악기 녹음도 가능합니다.",
-          "동시 녹음은 보컬 4~5명까지 가능합니다.",
-          "가이드 음원, MR, 가사 등을 준비해 오시면 작업이 빨라집니다."
-        ]
-      },
-      {
-        "type": "prose",
-        "title": "믹싱·마스터링 파일 전달",
-        "paragraphs": [
-          "믹싱 파일은 WAV로 보내 주세요. 트랙 수에는 제한이 없습니다.",
-          "보내 주실 때 샘플레이트, 비트 뎁스, 템포, 박자를 함께 알려 주시면 작업이 정확해집니다.",
-          "MR도 함께 마스터링하는 경우에는 마스터링 금액이 150,000원입니다."
-        ]
-      },
-      {
-        "type": "prose",
-        "title": "예약과 결제",
-        "paragraphs": [
-          "예약은 카카오톡으로 날짜를 확인한 뒤 선입금으로 확정됩니다. 선입금은 녹음 50,000원, 믹싱·마스터링은 금액의 30%이며, 협의에 따라 선입금 없이 진행하는 경우도 있습니다.",
-          "예약일 4일 전까지는 위약금 없이 취소·변경할 수 있습니다. 3일 전은 위약금 30%, 2일 전은 50%, 1일 전과 당일은 100%입니다.",
-          "선입금 없이 진행하는 경우에도 취소 규정은 동일하게 적용됩니다.",
-          "결제는 계좌이체로 받고, 세금계산서도 발행해 드립니다."
-        ]
-      },
-      {
-        "type": "prose",
-        "title": "오시는 길",
-        "paragraphs": [
-          "오시는 길은 네이버 지도를 참고해 주세요.",
-          "주차는 건물 앞 카페에 한 대 정도 가능하고, 저녁 시간에는 주차에 제약이 없습니다."
+        "columns": [
+          "항목",
+          "안내"
         ],
-        "links": [
+        "rows": [
+          [
+            "보컬·솔로 악기",
+            "보컬뿐 아니라 솔로 악기 녹음도 가능합니다."
+          ],
+          [
+            "동시 녹음",
+            "동시 녹음은 보컬 4~5명까지 가능합니다."
+          ],
+          [
+            "준비",
+            "가이드 음원, MR, 가사 등을 준비해 오시면 작업이 빨라집니다."
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "title": "믹싱·마스터링 파일 전달",
+        "columns": [
+          "항목",
+          "안내"
+        ],
+        "rows": [
+          [
+            "믹싱 파일",
+            "믹싱 파일은 WAV로 보내 주세요. 트랙 수에는 제한이 없습니다."
+          ],
+          [
+            "샘플레이트·비트 뎁스·템포·박자",
+            "보내 주실 때 샘플레이트, 비트 뎁스, 템포, 박자를 함께 알려 주시면 작업이 정확해집니다."
+          ],
+          [
+            "MR 마스터링",
+            "MR도 함께 마스터링하는 경우에는 마스터링 금액이 150,000원입니다."
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "title": "예약과 결제",
+        "columns": [
+          "항목",
+          "안내"
+        ],
+        "rows": [
+          [
+            "예약 확정",
+            "예약은 카카오톡으로 날짜를 확인한 뒤 선입금으로 확정됩니다."
+          ],
+          [
+            "선입금",
+            "선입금은 녹음 50,000원, 믹싱·마스터링은 금액의 30%이며, 협의에 따라 선입금 없이 진행하는 경우도 있습니다."
+          ],
+          [
+            "결제",
+            "결제는 계좌이체로 받고, 세금계산서도 발행해 드립니다."
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "title": "취소·변경",
+        "columns": [
+          "예약일 기준",
+          "위약금"
+        ],
+        "rows": [
+          [
+            "4일 전까지",
+            "위약금 없이 취소·변경할 수 있습니다."
+          ],
+          [
+            "3일 전",
+            "30%"
+          ],
+          [
+            "2일 전",
+            "50%"
+          ],
+          [
+            "1일 전과 당일",
+            "100%"
+          ]
+        ],
+        "paragraphs": [
+          "선입금 없이 진행하는 경우에도 취소 규정은 동일하게 적용됩니다."
+        ]
+      },
+      {
+        "type": "cards",
+        "title": "오시는 길",
+        "items": [
           {
-            "href": "https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3",
-            "text": "네이버 지도에서 보기"
+            "title": "네이버 지도에서 보기",
+            "text": "오시는 길은 네이버 지도를 참고해 주세요.",
+            "href": "https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3"
+          },
+          {
+            "title": "주차",
+            "text": "주차는 건물 앞 카페에 한 대 정도 가능하고, 저녁 시간에는 주차에 제약이 없습니다."
           }
         ]
       },
@@ -323,13 +419,41 @@
         }
       },
       {
-        "type": "prose",
+        "type": "table",
         "title": "Services and rates",
+        "columns": [
+          "Service",
+          "Price",
+          "Included / conditions"
+        ],
+        "rows": [
+          [
+            "Recording",
+            "Starts at 150,000 KRW",
+            "Per session (one session = 3 hours 30 minutes)."
+          ],
+          [
+            "Mastering",
+            "Starts at 100,000 KRW per song",
+            "150,000 KRW when an instrumental version is included."
+          ],
+          [
+            "Mixing for individual projects",
+            "Starts at 800,000 KRW per song",
+            "Including 2–3 rounds of revisions."
+          ],
+          [
+            "Mixing together with recording",
+            "Starts at 700,000 KRW per song",
+            "When mixing is booked together with recording."
+          ],
+          [
+            "Company and commercial projects",
+            "Quote",
+            "We provide a quote based on the purpose and scope of work."
+          ]
+        ],
         "paragraphs": [
-          "Recording starts at 150,000 KRW per session (one session = 3 hours 30 minutes).",
-          "Mastering starts at 100,000 KRW per song, or 150,000 KRW when an instrumental version is included.",
-          "Mixing for individual projects starts at 800,000 KRW per song, including 2–3 rounds of revisions. When mixing is booked together with recording, it starts at 700,000 KRW per song.",
-          "For company and commercial projects, we provide a quote based on the purpose and scope of work.",
           "All prices exclude VAT.",
           "The final price depends on the scope of work, so please message us on KakaoTalk first."
         ]
@@ -361,44 +485,112 @@
         ]
       },
       {
-        "type": "prose",
+        "type": "table",
         "title": "Recording",
-        "paragraphs": [
-          "Besides vocals, we can record solo instruments.",
-          "Simultaneous recording is possible for up to 4–5 vocalists.",
-          "Bringing a guide track, the instrumental (MR) and the lyrics helps the session go faster."
-        ]
-      },
-      {
-        "type": "prose",
-        "title": "Sending files for mixing and mastering",
-        "paragraphs": [
-          "Please send mixing files as WAV. There is no limit on the number of tracks.",
-          "Please also tell us the sample rate, bit depth, tempo and time signature.",
-          "When the instrumental (MR) is mastered as well, mastering is 150,000 KRW."
-        ]
-      },
-      {
-        "type": "prose",
-        "title": "Booking and payment",
-        "paragraphs": [
-          "Bookings are confirmed on KakaoTalk after we agree on a date and receive the deposit: 50,000 KRW for recording, and 30% of the price for mixing and mastering. In some cases, by arrangement, we proceed without a deposit.",
-          "Bookings can be cancelled or changed free of charge up to 4 days before the session. The cancellation fee is 30% at 3 days before, 50% at 2 days before, and 100% at 1 day before or on the day.",
-          "The cancellation terms apply in the same way when we proceed without a deposit.",
-          "Payment is by bank transfer, and we can issue a tax invoice."
-        ]
-      },
-      {
-        "type": "prose",
-        "title": "Getting here",
-        "paragraphs": [
-          "Please see Naver Map for directions.",
-          "There is room for about one car at the café in front of the building, and parking is not an issue in the evening."
+        "columns": [
+          "Item",
+          "Detail"
         ],
-        "links": [
+        "rows": [
+          [
+            "Vocals and solo instruments",
+            "Besides vocals, we can record solo instruments."
+          ],
+          [
+            "Simultaneous recording",
+            "Simultaneous recording is possible for up to 4–5 vocalists."
+          ],
+          [
+            "Preparation",
+            "Bringing a guide track, the instrumental (MR) and the lyrics helps the session go faster."
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "title": "Sending files for mixing and mastering",
+        "columns": [
+          "Item",
+          "Detail"
+        ],
+        "rows": [
+          [
+            "Mixing files",
+            "Please send mixing files as WAV. There is no limit on the number of tracks."
+          ],
+          [
+            "Sample rate, bit depth, tempo and time signature",
+            "Please also tell us the sample rate, bit depth, tempo and time signature."
+          ],
+          [
+            "Instrumental (MR) mastering",
+            "When the instrumental (MR) is mastered as well, mastering is 150,000 KRW."
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "title": "Booking and payment",
+        "columns": [
+          "Item",
+          "Detail"
+        ],
+        "rows": [
+          [
+            "Booking confirmation",
+            "Bookings are confirmed on KakaoTalk after we agree on a date and receive the deposit."
+          ],
+          [
+            "Deposit",
+            "50,000 KRW for recording, and 30% of the price for mixing and mastering. In some cases, by arrangement, we proceed without a deposit."
+          ],
+          [
+            "Payment",
+            "Payment is by bank transfer, and we can issue a tax invoice."
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "title": "Cancellations and changes",
+        "columns": [
+          "Before the session",
+          "Cancellation fee"
+        ],
+        "rows": [
+          [
+            "Up to 4 days before",
+            "Cancelled or changed free of charge."
+          ],
+          [
+            "3 days before",
+            "30%"
+          ],
+          [
+            "2 days before",
+            "50%"
+          ],
+          [
+            "1 day before or on the day",
+            "100%"
+          ]
+        ],
+        "paragraphs": [
+          "The cancellation terms apply in the same way when we proceed without a deposit."
+        ]
+      },
+      {
+        "type": "cards",
+        "title": "Getting here",
+        "items": [
           {
-            "href": "https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3",
-            "text": "View on Naver Map"
+            "title": "View on Naver Map",
+            "text": "Please see Naver Map for directions.",
+            "href": "https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3"
+          },
+          {
+            "title": "Parking",
+            "text": "There is room for about one car at the café in front of the building, and parking is not an issue in the evening."
           }
         ]
       },
