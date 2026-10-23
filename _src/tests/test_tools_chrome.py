@@ -12,6 +12,7 @@ BEFORE = "947d6fe"     # 변환기를 처음 적용하기 직전 커밋(도구 9
 # 10/17 설명 글을 보강한 5쪽은 본문이 일부러 달라졌으므로, 보강 커밋을 기준으로 삼아 이후의 공통 블록 변환만 검증한다.
 BEFORE_BY_FILE = {n: "3d00f09" for n in ("generator.html", "trainer.html", "rta.html",
                                          "effects-listening.html", "stage-sound-quiz.html")}
+BEFORE_BY_FILE.update({n: "bfa7f35" for n in ("delay-calculator.html", "electrical-calculator.html", "acoustics-calculator.html")})
 NAVER_META = '<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">'
 SCRIPT = re.compile(r"<script\b[^>]*>.*?</script>", re.S)
 BLOCKS = (chrome_tools.HEAD_RE, chrome_tools.TOP_RE, chrome_tools.BOTTOM_RE, chrome_tools.PAIR_RE)
