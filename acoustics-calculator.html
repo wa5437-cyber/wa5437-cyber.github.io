@@ -126,6 +126,11 @@
     .tempo-row:not(.tempo-header) .tempo-cell:not(:first-child){ font-size:12.5px; }
   }
 
+  .explain{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:22px 22px 20px; }
+  .explain h2{ font-size:17px; margin:0 0 10px; } .explain h2:not(:first-child){ margin-top:26px; } .explain h3{ font-size:15px; margin:18px 0 6px; }
+  .explain p,.explain ul,.explain ol{ font-size:14.5px; line-height:1.75; color:var(--text-secondary); margin:0 0 12px; } .explain ul,.explain ol{ padding-left:22px; } .explain li{ margin-bottom:5px; }
+  .explain table{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4px; } .explain th,.explain td{ text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); }
+  .explain th{ color:var(--text-tertiary); font-size:12px; } .explain a{ color:var(--teal); font-weight:600; }
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
@@ -554,6 +559,83 @@
       <b data-i18n="coming_soon_title">🎉 모든 탭이 준비됐어요</b>
       <span data-i18n="coming_soon_text">Frequency · Band · Delay · Volume · Room Modes · Reverb(RT60) — 전부 사용할 수 있습니다.</span>
     </div>
+  </div>
+
+  <div class="explain">
+    <h2>화면 구성과 사용 순서</h2>
+    <p>맨 위의 탭 6개(Frequency, Band, Delay, Volume, Room Modes, Reverb (RT60))에서 필요한 계산을 고르면 해당 입력칸과 결과, 그래프가 나타납니다. 온도(음속)는 Frequency 탭과 Delay 탭의 입력칸이 서로 연동되고, Room Modes 탭도 같은 음속을 씁니다. 모든 계산은 브라우저 안에서만 이루어집니다.</p>
+    <ol>
+      <li>먼저 Frequency 탭의 Temperature에 현장 기온을 넣습니다. 기본값은 15 °C입니다.</li>
+      <li>알고 싶은 항목의 탭으로 이동해 값을 넣습니다. 입력을 바꾸면 곧바로 결과와 그래프가 다시 계산됩니다.</li>
+      <li>결과는 화면에 표시된 자릿수까지만 보여 주므로, 더 정밀한 값이 필요한 경우에는 식을 보고 직접 계산합니다.</li>
+    </ol>
+
+    <h2>탭별 입력 항목과 계산 방식</h2>
+    <table>
+      <tr><th>탭</th><th>입력</th><th>표시되는 값과 식</th></tr>
+      <tr><td>Frequency</td><td>Temperature, Frequency, Note Name</td><td>음속 c = 331.3 + 0.606 × 온도, Period = 1000 ÷ f (ms), 파장 λ = c ÷ f, 1/4 파장 = λ ÷ 4, 가장 가까운 음이름(A4 = 440 Hz 평균율)과 센트 차이</td></tr>
+      <tr><td>Band</td><td>중심 주파수 F0, 대역폭(1/1·1/3·1/6·1/12 옥타브) 또는 Q 직접 입력</td><td>F1(하한), F2(상한), 대역폭, Q. 옥타브 N폭의 Q = 1 ÷ (2^(1/2N) − 2^(−1/2N))</td></tr>
+      <tr><td>Delay</td><td>Temperature, Distance, Delay Time</td><td>시간 = 거리 ÷ 음속 × 1000, 거리 = 시간 ÷ 1000 × 음속. 둘 중 하나를 바꾸면 다른 쪽이 계산됨</td></tr>
+      <tr><td>Volume</td><td>음원 종류(점·선·면), 기준 SPL, 기준 거리, 목표 거리. 아래 패널은 스피커 센시티비티, 거리, 목표 SPL</td><td>목표 SPL과 감쇠량. 필요 출력(W)</td></tr>
+      <tr><td>Room Modes</td><td>방의 가로(L), 세로(W), 높이(H)</td><td>축모드 1~4차, 접선모드·경사모드(300 Hz 이하) 목록, 저역 모드 분포 그래프</td></tr>
+      <tr><td>Reverb (RT60)</td><td>방 치수, 표면 처리(α 프리셋 또는 직접 입력), 스피커 지향성 Q</td><td>부피, 표면적, 총 흡음력, RT60, 임계거리</td></tr>
+    </table>
+    <h3>Volume 탭의 세 가지 음원</h3>
+    <p>점음원은 거리가 2배가 될 때마다 SPL이 20·log₁₀(거리비)만큼 줄어드는 역제곱 법칙(2배마다 약 6 dB)을, 선음원은 10·log₁₀(거리비)(2배마다 약 3 dB)를 적용합니다. 면음원은 근접장 근사로 감쇠를 0으로 둡니다. 반사가 없는 자유음장을 가정한 이상적인 근사이므로 실내에서는 실제와 다릅니다. 아래 Required Power 패널은 목표 SPL = 센시티비티 − 20·log₁₀(거리) + 10·log₁₀(P) 식을 P에 대해 풀어 필요 와트를 구합니다.</p>
+    <h3>Room Modes 탭의 모드 종류</h3>
+    <p>축모드는 한 방향 벽 사이의 공진으로 f = c × n ÷ (2 × 치수) 입니다. 접선모드와 경사모드는 f = (c ÷ 2) × √((nx/L)² + (ny/W)² + (nz/H)²) 식으로 구하며, 두 방향이 함께 작용하는 것이 접선, 세 방향이 모두 작용하는 것이 경사입니다. 접선과 경사는 낮은 주파수 순으로 10개까지 표에 나옵니다. 1차 축모드끼리 5 Hz 안에서 겹치면 경고 문구가 나타납니다.</p>
+    <h3>Reverb 탭의 식</h3>
+    <p>RT60 = 0.161 × V ÷ A (Sabine 식)이며, V는 방의 부피, A는 표면적 S × 평균 흡음계수 α입니다. S는 직육면체의 여섯 면 넓이의 합입니다. 임계거리는 Dc = 0.057 × √(Q × V ÷ RT60)로 계산합니다. 프리셋 α는 0.05, 0.15, 0.35이며 직접 입력도 가능합니다.</p>
+
+    <h2>숫자로 따라 해 보기</h2>
+    <p>아래 값은 기본 온도 15 °C(음속 340.39 m/s)에서 위의 식으로 계산한 것입니다.</p>
+    <table>
+      <tr><th>입력</th><th>결과</th></tr>
+      <tr><td>Frequency 1,000 Hz</td><td>Period 1.00 ms, λ 0.34039 m, 1/4 파장 0.08510 m, 가장 가까운 음 B5 (+21c)</td></tr>
+      <tr><td>Frequency 100 Hz</td><td>Period 10.00 ms, λ 3.40390 m, 1/4 파장 0.85098 m, 음 G2 (+35c)</td></tr>
+      <tr><td>Note Name C5 / C4</td><td>523.25 Hz / 261.63 Hz</td></tr>
+      <tr><td>Band 1,000 Hz, 1/3 Oct</td><td>Q 4.32, F1 약 890.9 Hz, F2 약 1,122.5 Hz, 대역폭 약 231.6 Hz</td></tr>
+      <tr><td>Band 1,000 Hz, 1/1 Oct</td><td>Q 1.41, F1 약 707.1 Hz, F2 약 1,414.2 Hz</td></tr>
+      <tr><td>Band 1,000 Hz, Q 4 직접 입력</td><td>F1 약 882.8 Hz, F2 약 1,132.8 Hz, 대역폭 250.0 Hz</td></tr>
+      <tr><td>Delay 거리 10 m</td><td>약 29.38 ms (시간 20 ms를 넣으면 약 6.808 m)</td></tr>
+      <tr><td>Volume 기준 100 dB @1 m → 10 m</td><td>점음원 80.0 dB(감쇠 −20.0 dB), 선음원 90.0 dB(−10.0 dB), 면음원 100.0 dB</td></tr>
+      <tr><td>필요 출력: 센시티비티 98 dB, 10 m, 목표 100 dB</td><td>10^2.2 ≈ 158 W</td></tr>
+      <tr><td>필요 출력: 센시티비티 95 dB, 4 m, 목표 100 dB</td><td>약 50.6 W</td></tr>
+      <tr><td>Room Modes 6 × 4 × 2.7 m</td><td>Length 28.4 / 56.7 / 85.1 / 113.5 Hz, Width 42.5 / 85.1 / 127.6 / 170.2 Hz, Height 63.0 / 126.1 / 189.1 / 252.1 Hz</td></tr>
+      <tr><td>같은 방의 접선모드 (1,1,0) (1,0,1) (0,1,1)</td><td>약 51.1 Hz, 69.1 Hz, 76.1 Hz</td></tr>
+      <tr><td>RT60 6 × 4 × 2.7 m, α 0.15</td><td>V 64.8 m³, S 102.0 m², A 15.30, RT60 0.68초, Q 2의 임계거리 약 0.79 m</td></tr>
+      <tr><td>같은 방, α 0.05 / 0.35</td><td>RT60 2.05초 / 0.29초</td></tr>
+    </table>
+    <p>Room Modes 예에서 Length의 3차(85.1 Hz)와 Width의 2차(85.1 Hz)가 같은 주파수에서 겹칩니다. 서로 다른 방향의 모드가 겹치는 주파수는 에너지가 몰리기 쉬워 저역이 부밍하는 원인으로 자주 지목됩니다. 방 치수를 바꿔 가며 겹침이 줄어드는 비율을 찾아볼 수 있습니다. 관련 원리는 <a href="/guides/rt60-reverberation-time.html">RT60 잔향시간 가이드</a>와 <a href="/guides/frequency-and-wavelength.html">주파수와 파장 계산</a>에 정리해 두었습니다.</p>
+
+    <h2>현장에서 쓰는 순서</h2>
+    <ol>
+      <li><strong>룸 점검.</strong> Room Modes 탭에 방 치수를 넣어 100 Hz 이하에서 모드가 겹치는 지점을 확인합니다. 그 주파수 대역에서 소리가 뭉치거나 빠지는지 핑크 노이즈와 RTA로 대조합니다.</li>
+      <li><strong>잔향 예측.</strong> Reverb 탭에서 표면 처리를 바꿔 가며 RT60이 어떻게 변하는지 봅니다. 흡음재를 더한 뒤의 값은 평균 α를 올려서 어림할 수 있습니다.</li>
+      <li><strong>음량 계획.</strong> Volume 탭의 Required Power로 스피커 센시티비티와 거리, 목표 SPL에서 필요한 앰프 출력을 가늠합니다. 피크 헤드룸은 따로 더해 생각합니다.</li>
+      <li><strong>EQ와 필터.</strong> Band 탭으로 1/3 옥타브 폭이나 특정 Q의 상·하한을 확인합니다. 하울링 대응에서 Q를 정할 때 참고하세요. 배경은 <a href="/guides/eq-types-and-q.html">EQ 종류와 Q값</a> 가이드에 있습니다.</li>
+      <li><strong>거리와 거리감.</strong> Delay 탭으로 거리와 시간을 오가며 변환합니다. 거리에 따른 SPL 변화의 배경은 <a href="/guides/spl-inverse-square-law.html">SPL 역제곱 법칙</a> 가이드를 참고하세요.</li>
+    </ol>
+
+    <h2>흔한 실수와 한계</h2>
+    <ul>
+      <li><strong>실내에서도 역제곱 법칙이 맞는다고 본다.</strong> Volume 탭은 자유음장 근사입니다. 반사와 잔향이 있는 방에서는 임계거리 밖에서 감쇠가 훨씬 느려집니다.</li>
+      <li><strong>축모드만으로 방을 평가한다.</strong> 축모드는 가장 강한 모드이지만, 접선·경사 모드와 방의 경계 조건, 가구와 흡음재의 영향은 단순 계산으로 알 수 없습니다.</li>
+      <li><strong>Sabine 식을 어떤 방에나 쓴다.</strong> 흡음이 매우 크거나 한쪽에만 몰린 방, 매우 작은 방에서는 오차가 커집니다. 결과는 어림값입니다.</li>
+      <li><strong>평균 α를 정확한 값으로 여긴다.</strong> 프리셋 세 가지는 대략적인 분류입니다. 실제 재료의 흡음계수는 주파수마다 다르며 이 도구는 한 값만 씁니다.</li>
+      <li><strong>필요 출력을 평균값으로 읽는다.</strong> Required Power는 센시티비티와 거리 식에서 나온 값으로, 음악 신호의 피크 여유와 스피커 파워 압축은 반영하지 않습니다.</li>
+      <li><strong>입력 범위를 확인하지 않는다.</strong> 방 치수가 0 이하이면 결과가 비어 있거나 갱신되지 않을 수 있고, 흡음계수는 0.001~1 범위로 제한되어 계산됩니다.</li>
+    </ul>
+
+    <h2>자주 묻는 질문</h2>
+    <h3>Delay 탭의 온도와 Frequency 탭의 온도가 왜 같아요?</h3>
+    <p>두 탭이 서로 다른 음속을 쓰면 혼란스럽기 때문에 입력칸을 연동해 두었습니다. 한쪽을 바꾸면 다른 쪽도 같은 값으로 바뀝니다.</p>
+    <h3>Room Modes 결과가 왜 4차까지만 나오나요?</h3>
+    <p>저역에서 문제가 되는 낮은 차수를 보기 위해서입니다. 차수가 높아질수록 모드가 촘촘해져 개별 모드의 영향이 줄어듭니다.</p>
+    <h3>Q 값을 직접 입력하면 옥타브 버튼은 어떻게 되나요?</h3>
+    <p>프리셋 버튼의 선택 표시가 해제되고, 입력한 Q 기준으로 F1·F2가 다시 계산됩니다. "≈ 몇 옥타브"는 입력한 Q에서 역산해 보여 줍니다.</p>
+    <h3>음이름 입력은 어떤 형식이 되나요?</h3>
+    <p>A4, C#3, Bb2처럼 알파벳, 선택 사항인 샵 또는 플랫, 옥타브 번호 순으로 적습니다. 적용을 누르면 위 Frequency 값이 그 음의 주파수로 바뀝니다.</p>
   </div>
 
   <div class="tool-links">

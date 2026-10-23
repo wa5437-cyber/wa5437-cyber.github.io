@@ -150,6 +150,11 @@
   }
   .startbtn.stop{ color:#fff; background:linear-gradient(160deg, var(--red), #8f2c22); }
 
+  .explain{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:22px 22px 20px; }
+  .explain h2{ font-size:17px; margin:0 0 10px; } .explain h2:not(:first-child){ margin-top:26px; } .explain h3{ font-size:15px; margin:18px 0 6px; }
+  .explain p,.explain ul,.explain ol{ font-size:14.5px; line-height:1.75; color:var(--text-secondary); margin:0 0 12px; } .explain ul,.explain ol{ padding-left:22px; } .explain li{ margin-bottom:5px; }
+  .explain table{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4px; } .explain th,.explain td{ text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); }
+  .explain th{ color:var(--text-tertiary); font-size:12px; } .explain a{ color:var(--teal); font-weight:600; }
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:2px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
@@ -411,6 +416,79 @@
   </div>
 
   <button id="startBtn" class="startbtn" data-i18n="btn_quiz_start">▸ 계산 문제 시작</button>
+
+  <div class="explain">
+    <h2>화면 구성과 사용 순서</h2>
+    <p>맨 위의 두 버튼으로 자유 계산과 계산 문제를 오갑니다. 자유 계산에서는 그 아래 탭 6개(Ohm's Law, Power, Impedance, dB ↔ Power, AC Waveform, Cable/Voltage Drop) 중 하나를 고르고 값을 입력하면 결과가 바로 갱신됩니다. 계산 문제는 같은 내용을 4지선다로 연습하는 모드입니다.</p>
+    <ol>
+      <li>필요한 탭을 고릅니다. 스피커를 묶을 때는 Impedance, 앰프 출력과 전압을 따질 때는 Power와 AC Waveform, 케이블을 고를 때는 Cable/Voltage Drop을 씁니다.</li>
+      <li>입력칸에 값을 넣습니다. Ohm's Law와 Power 탭에서는 숫자가 아닌 값이나 계산이 불가능한 값(0으로 나누기 등)이면 결과 칸에 "--"가 표시됩니다.</li>
+      <li>결과 단위를 확인합니다. 단위(V, A, Ω, W, dB)는 입력칸 옆에 고정되어 있어, 밀리암페어나 킬로옴은 직접 환산해서 넣어야 합니다.</li>
+    </ol>
+
+    <h2>탭별 입력 항목과 계산 방식</h2>
+    <table>
+      <tr><th>탭</th><th>입력과 선택</th><th>사용하는 식</th></tr>
+      <tr><td>Ohm's Law</td><td>V 구하기 / I 구하기 / R 구하기 중 선택, 나머지 두 값 입력</td><td>V = I × R, I = V ÷ R, R = V ÷ I (소수 셋째 자리까지 표시)</td></tr>
+      <tr><td>Power</td><td>P = V×I, P = I²R, P = V²/R 중 선택</td><td>선택한 식 그대로 (소수 둘째 자리까지 표시)</td></tr>
+      <tr><td>Impedance</td><td>직렬/병렬 선택, 스피커 임피던스(Ω) 입력, + 스피커 추가(최대 8개)와 ✕ 삭제</td><td>직렬: 합, 병렬: 1 ÷ (1/Z₁ + 1/Z₂ + …)</td></tr>
+      <tr><td>dB ↔ Power</td><td>dB와 배수 중 아무 칸이나 입력</td><td>전력비 dB = 10·log₁₀(P₂/P₁), 전압비 dB = 20·log₁₀(V₂/V₁)</td></tr>
+      <tr><td>dBu/dBV, dBm/dBW</td><td>전압(V) 또는 전력(W), dBV·dBu, dBW·dBm 중 아무 칸이나 입력</td><td>dBV는 1 V 기준, dBu는 0.775 V(√0.6 V) 기준, dBW는 1 W 기준, dBm은 1 mW 기준 (dBW = dBm − 30)</td></tr>
+      <tr><td>AC Waveform</td><td>RMS, Peak, Peak-to-Peak 중 아무 칸이나 입력</td><td>정현파 기준 Peak = RMS × √2, P-P = 2 × Peak</td></tr>
+      <tr><td>Cable/Voltage Drop</td><td>AWG(18·16·14·12·10), 편도 길이(m), 부하 전류(A)</td><td>왕복 저항 = Ω/km × (편도 길이 × 2) ÷ 1000, 전압 강하 = I × R, 손실 전력 = I² × R</td></tr>
+    </table>
+    <p>Ohm's Law 탭에서는 구하려는 값의 입력칸이 잠기고 그 자리에 결과가 채워집니다. Impedance 탭의 병렬 계산은 0 Ω으로 입력한 칸을 건너뛰고 계산하므로, 값이 안 맞으면 0이 들어 있지 않은지 확인합니다. 케이블 탭의 Ω/km 값은 구리 도체 20 °C 기준 표 값(18 AWG 20.95, 16 AWG 13.17, 14 AWG 8.286, 12 AWG 5.211, 10 AWG 3.277)을 쓰며, 전압 강하가 0.5 V를 넘으면 경고 문구가 나타납니다.</p>
+
+    <h2>숫자로 따라 해 보기</h2>
+    <p>아래 값은 모두 위의 식으로 계산한 결과입니다.</p>
+    <table>
+      <tr><th>입력</th><th>결과</th></tr>
+      <tr><td>Ohm: 12 V, 6 Ω, I 구하기</td><td>2.000 A (거꾸로 12 V·2 A → R은 6.000 Ω)</td></tr>
+      <tr><td>Power: 12 V·2 A / 2 A·8 Ω / 12 V·8 Ω</td><td>24.00 W / 32.00 W / 18.00 W</td></tr>
+      <tr><td>Impedance: 8 Ω 두 개</td><td>직렬 16 Ω, 병렬 4 Ω</td></tr>
+      <tr><td>Impedance: 4·8·16 Ω 병렬</td><td>2.29 Ω (직렬이면 28 Ω)</td></tr>
+      <tr><td>dB: 3 dB (전력비) / 배수 2</td><td>1.9953배 / 3.010 dB</td></tr>
+      <tr><td>dB: 전압비 2배</td><td>6.021 dB (전력비 2배는 3.010 dB)</td></tr>
+      <tr><td>전압 1 V</td><td>0 dBV, 약 2.218 dBu</td></tr>
+      <tr><td>dBu 4</td><td>약 1.2277 V, 약 1.782 dBV</td></tr>
+      <tr><td>전력 1 W</td><td>0 dBW, 30 dBm</td></tr>
+      <tr><td>AC: RMS 120 V</td><td>Peak 169.7056 V, P-P 339.4113 V</td></tr>
+      <tr><td>케이블: 14 AWG, 15 m, 2 A</td><td>저항 0.249 Ω, 전압 강하 0.497 V, 손실 0.99 W (경고 없음)</td></tr>
+      <tr><td>케이블: 12 AWG, 20 m, 4 A</td><td>저항 0.208 Ω, 전압 강하 0.834 V, 손실 3.34 W (경고 표시)</td></tr>
+    </table>
+    <p>마지막 케이블 예에서 부하를 8 Ω으로 가정하면 케이블이 차지하는 저항은 전체의 약 2.5%이고 레벨은 약 0.22 dB 줄어듭니다. 크게 들릴 변화는 아니지만, 손실이 열로 사라지고 앰프가 스피커를 제어하는 힘(댐핑 팩터)도 약해집니다. 이 도구는 부하 임피던스를 따로 입력받지 않으므로, 이 비교는 직접 계산해 보아야 합니다.</p>
+    <p>dB의 개념은 <a href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위 가이드</a>에, 스피커 연결은 <a href="/guides/speaker-impedance-matching.html">스피커 임피던스 매칭</a>에, 옴의 법칙은 <a href="/guides/ohms-law-for-audio.html">오디오를 위한 옴의 법칙</a>에 정리해 두었습니다.</p>
+
+    <h2>현장에서 쓰는 순서</h2>
+    <ol>
+      <li><strong>스피커 연결 확인.</strong> Impedance 탭에 연결할 스피커의 임피던스를 모두 넣고 직렬/병렬을 맞춰 합성값을 봅니다. 그 값이 앰프가 허용하는 최소 부하 이상인지 앰프 사양서와 대조합니다.</li>
+      <li><strong>출력 확인.</strong> Power 탭에서 전압과 임피던스(P = V²/R)로 전력을 계산합니다. 전압이 RMS인지 Peak인지는 AC Waveform 탭에서 맞춥니다.</li>
+      <li><strong>케이블 선택.</strong> Cable 탭에서 길이와 전류를 넣고 AWG를 바꿔 가며 전압 강하와 손실을 비교합니다. 경고가 뜨면 더 굵은 케이블이나 더 짧은 경로를 검토합니다.</li>
+      <li><strong>레벨 환산.</strong> 장비 사이의 규격 차이는 dBu/dBV 패널에서 전압으로 바꿔 비교합니다.</li>
+    </ol>
+    <p>계산 문제 모드는 한 판이 10문제입니다. 문제는 옴의 법칙, 전력, 임피던스, 전력비 dB, 전압비 dB, dBu·dBV·dBm, 교류 파형, 케이블 중에서 무작위로 나오고, 보기 4개 중 하나를 고르면 정답 여부가 표시되고 1.6초 뒤 다음 문제로 넘어갑니다. 점수판에는 진행 라운드(ROUND), 맞힌 수(HIT), 정답률(ACC)이 나오며, 도중에 정지 버튼으로 끝낼 수 있습니다.</p>
+
+    <h2>흔한 실수와 한계</h2>
+    <ul>
+      <li><strong>RMS와 Peak를 섞는다.</strong> P = V²/R에는 RMS 전압을 넣어야 평균 전력이 나옵니다. Peak 값을 그대로 넣으면 2배 큰 값이 됩니다.</li>
+      <li><strong>전력비와 전압비 dB를 혼동한다.</strong> 같은 2배라도 전력비는 약 3 dB, 전압비는 약 6 dB입니다. 어느 패널에 넣는지 확인합니다.</li>
+      <li><strong>케이블 길이를 왕복으로 넣는다.</strong> 입력은 편도 길이이며 왕복은 도구가 2배로 계산합니다. 이중으로 넣으면 저항이 2배로 나옵니다.</li>
+      <li><strong>병렬로 연결한 합성 임피던스를 직렬로 읽는다.</strong> 같은 스피커도 연결 방식에 따라 4배(8 Ω 두 개: 16 Ω 대 4 Ω) 차이가 납니다.</li>
+      <li><strong>교류 환산은 정현파 기준이다.</strong> 음악 신호처럼 파형이 복잡하면 RMS와 Peak의 비율(√2)이 맞지 않습니다.</li>
+      <li><strong>스피커의 임피던스는 주파수에 따라 변한다.</strong> 이 도구는 입력한 하나의 값을 순수 저항처럼 계산합니다. 케이블 저항도 직류 저항만 고려하고 인덕턴스는 다루지 않습니다.</li>
+      <li><strong>안전 판단용이 아니다.</strong> 전원이나 배선의 안전 기준은 이 계산기로 정하지 말고 장비 사양과 전기 시공 기준을 따릅니다.</li>
+    </ul>
+
+    <h2>자주 묻는 질문</h2>
+    <h3>Ohm's Law 탭에서 값이 계속 바뀌어요.</h3>
+    <p>구하려는 칸이 잠기고 결과로 채워지는 방식이기 때문입니다. 입력값을 바꾸려면 다른 두 칸을 수정하거나 구하려는 값을 바꾸세요.</p>
+    <h3>dB 칸에 음수를 넣어도 되나요?</h3>
+    <p>됩니다. −3 dB 전력비는 약 0.5배입니다. 반대로 배수 칸에는 0보다 큰 값만 의미가 있고, 0 이하는 무시됩니다.</p>
+    <h3>0 dBu가 정확히 얼마인가요?</h3>
+    <p>이 도구는 √0.6 V, 약 0.7746 V를 기준으로 계산합니다. 화면에 쓰인 0.775 V는 같은 값을 반올림한 것입니다.</p>
+    <h3>스피커를 9개 이상 묶을 수 있나요?</h3>
+    <p>스피커 추가 버튼은 8개까지만 늘어납니다. 그 이상은 묶음별로 나눠 계산하세요.</p>
+  </div>
 
   <div class="tool-links">
     <a href="trainer.html">🎧 Ear Trainer</a>

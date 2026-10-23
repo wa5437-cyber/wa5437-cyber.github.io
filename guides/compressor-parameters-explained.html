@@ -88,6 +88,75 @@
   <h2>Makeup Gain — 줄어든 만큼 다시 올리기</h2>
   <p>압축으로 전체 레벨이 내려간 만큼 보충해서 원래 음량과 비슷하게 맞추는 단계입니다. 이 단계를 빼먹고 "컴프레서 걸었더니 더 안 좋아졌다"고 느끼는 경우가 많은데, 실제로는 대부분 <strong>레벨이 작아져서 상대적으로 덜 좋게 들리는 것</strong>입니다(같은 소리도 더 크면 더 좋게 들리는 라우드니스 편향 때문). Bypass와 비교할 땐 반드시 두 상태의 레벨을 맞춘 뒤 들어야 합니다.</p>
 
+  <h2>계산 예제 더 보기</h2>
+  <p>하드 니(Hard Knee) 기준으로, Threshold(T)를 넘은 신호의 출력은 다음 식으로 정리됩니다. 입력이 T 이하이면 그대로 통과합니다.</p>
+  <div class="formula">출력 = T + (입력 − T) ÷ Ratio &nbsp;(입력 &gt; T일 때)<br>게인 리덕션(GR) = (입력 − T) × (1 − 1 ÷ Ratio)</div>
+  <div class="example">
+    <h3>예제 1 — T = −20 dB, Ratio 4:1</h3>
+    <p>입력이 −8 dB이면 초과분은 12 dB이고, 출력은 −20 + 12 ÷ 4 = <strong>−17 dB</strong>입니다. 줄어든 양(GR)은 −8 − (−17) = <strong>9 dB</strong>입니다.</p>
+    <p>입력이 −14 dB이면 초과분 6 dB, 출력 −18.5 dB, GR 4.5 dB입니다. −20 dB 이하 신호는 GR이 0 dB이라 손대지 않습니다. 컴프레서의 GR 미터가 소리가 커질 때만 움직이는 이유입니다.</p>
+  </div>
+  <div class="example">
+    <h3>예제 2 — 같은 12 dB 초과분, Ratio만 바꾸기</h3>
+    <p>GR은 Ratio 2:1에서 6 dB, 4:1에서 9 dB, 8:1에서 10.5 dB, 10:1에서 10.8 dB입니다. 상한은 초과분 12 dB(∞:1)입니다. Ratio를 4에서 8로 두 배 올려도 GR은 1.5 dB만 늘어납니다. 그래서 Ratio가 높은 구간에서는 Ratio보다 Threshold를 움직이는 쪽이 압축량에 더 크게 영향을 줍니다.</p>
+  </div>
+  <div class="example">
+    <h3>예제 3 — Makeup Gain과 헤드룸</h3>
+    <p>피크가 −3 dBFS인 보컬에 T = −18 dB, Ratio 3:1을 걸면 초과분 15 dB, 출력은 −18 + 15 ÷ 3 = −13 dBFS, 피크의 GR은 10 dB입니다. 여기에 Makeup을 6 dB 올리면 피크는 −7 dBFS가 되어 아직 7 dB의 여유가 남습니다.</p>
+    <p>다만 Makeup은 피크가 아니라 평균 레벨의 감소를 보충하는 용도로 맞추는 것이 일반적입니다. 피크를 기준으로 올리면 작은 소리가 충분히 올라오지 않을 수 있으므로, Bypass와 레벨을 맞춰 귀로 비교합니다.</p>
+  </div>
+  <div class="example">
+    <h3>예제 4 — 소프트 니의 영향</h3>
+    <p>소프트 니의 곡선 식은 제품마다 다릅니다. 널리 알려진 2차 곡선 방식으로 T = −20 dB, 니 폭 6 dB, Ratio 4:1을 계산하면, 입력이 T와 같은 −20 dB일 때 이미 약 0.56 dB가 줄어들고 니 위쪽 끝(−17 dB)에서 하드 니와 같은 곡선에 합류합니다. 하드 니라면 −20 dB에서 GR은 0입니다. 니 폭이 넓을수록 Threshold 근처에서 압축이 천천히 시작됩니다.</p>
+  </div>
+
+  <h2>Attack·Release를 시간으로 가늠하기</h2>
+  <p>밀리초 값이 감이 안 올 때는 파형의 주기와 곡의 박자로 환산하면 도움이 됩니다.</p>
+  <ul>
+    <li><strong>주기와 Attack.</strong> 주기(ms) = 1,000 ÷ 주파수(Hz)입니다. 100 Hz는 한 주기가 10 ms, 1 kHz는 1 ms입니다. 저음 소스에 1~2 ms 같은 매우 빠른 Attack을 쓰면 한 주기 안에서 게인이 움직여 파형이 변형될 수 있는 것이 일반적인 경향입니다. 저음 악기는 Attack을 조금 느리게 시작해 보는 편이 안전합니다.</li>
+    <li><strong>템포와 Release.</strong> 120 BPM에서 4분음표는 500 ms, 8분음표 250 ms, 16분음표 125 ms입니다. 100 BPM이라면 각각 600, 300, 150 ms입니다. 다음 박이 오기 전에 게인이 회복되도록 Release를 한 박 이내로 잡는 것이 출발점입니다.</li>
+  </ul>
+  <p>음표 길이를 더 빠르게 구하고 싶다면 <a class="inline" href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기</a>를 참고하세요.</p>
+
+  <h2>현장 상황별 점검 표</h2>
+  <p>아래 해결 방향은 일반적인 경향이며, 소스와 설정에 따라 다를 수 있습니다.</p>
+  <table class="data">
+<tr><th>증상</th><th>의심할 파라미터</th><th>해 볼 것</th></tr>
+<tr><td>압축을 걸었더니 답답하고 힘이 없다</td><td>Attack이 너무 빠름</td><td>Attack을 늘려 트랜지언트를 통과시킨다</td></tr>
+<tr><td>소리가 숨쉬듯 커졌다 작아진다(펌핑)</td><td>Release가 너무 짧거나 GR이 과함</td><td>Release를 늘리고 Ratio·Threshold를 완화한다</td></tr>
+<tr><td>걸었는데 변화가 거의 없다</td><td>Threshold가 신호보다 높음</td><td>GR 미터가 움직이는 지점까지 Threshold를 내린다</td></tr>
+<tr><td>눌렸는데도 작은 소리가 안 들린다</td><td>Makeup 부족</td><td>평균 레벨을 Bypass와 맞춘다</td></tr>
+<tr><td>치찰음이 오히려 더 튄다</td><td>Attack이 너무 느리거나 EQ 문제</td><td>Attack을 줄이거나 디에서를 쓴다</td></tr>
+<tr><td>소리가 부자연스럽게 덩어리진다</td><td>Ratio 과다, 하드 니</td><td>Ratio를 낮추고 소프트 니를 고려한다</td></tr>
+</table>
+
+  <h2>세팅 순서 제안</h2>
+  <ol>
+    <li><strong>Ratio, Attack, Release를 중간값(예: 3:1, 10~20 ms, 100 ms 안팎)에 둡니다.</strong> 처음부터 극단값에서 시작하지 않습니다.</li>
+    <li><strong>Threshold를 내려 GR 미터가 소리에 따라 움직이게 합니다.</strong> 가장 센 부분에서 3~6 dB 정도 줄어드는 지점이 보컬의 일반적인 출발점입니다.</li>
+    <li><strong>Attack을 조절해 앞부분의 펀치를 정합니다.</strong> 길게 두면 어택이 살고, 짧게 두면 눌립니다.</li>
+    <li><strong>Release를 곡의 박자에 맞춰 조절합니다.</strong> 펌핑이 거슬리면 늘립니다.</li>
+    <li><strong>Makeup으로 Bypass와 음량을 맞춘 뒤 껐다 켜며 비교합니다.</strong> 좋아졌는지 크기만 커진 건지 구분하기 위해서입니다.</li>
+  </ol>
+
+  <h2>흔한 오해</h2>
+  <ul>
+    <li><strong>"Ratio가 높을수록 좋은 컴프레서다."</strong> Ratio는 성격을 정하는 값일 뿐 품질이 아닙니다. 자연스럽게 정리하는 용도라면 낮은 Ratio가 더 적합한 경우가 많습니다.</li>
+    <li><strong>"GR 미터가 클수록 압축이 잘 된 것이다."</strong> GR이 클수록 소리가 더 눌린다는 뜻일 뿐입니다. 소스 하나당 눌리는 정도는 목적에 따라 몇 dB에서 10 dB 이상까지 다양합니다.</li>
+    <li><strong>"Makeup 없이 소리가 작아졌으니 나빠졌다."</strong> 같은 레벨로 맞추기 전까지는 비교가 공정하지 않습니다.</li>
+    <li><strong>"컴프레서는 항상 트랙마다 걸어야 한다."</strong> 필요 없는 트랙에까지 걸면 다이나믹이 없는 믹스가 되기 쉽습니다. 문제가 들릴 때 건다고 생각하는 편이 안전합니다.</li>
+  </ul>
+
+  <h2>자주 묻는 질문</h2>
+  <h3>Attack과 Release 중 무엇부터 만져야 하나요?</h3>
+  <p>트랜지언트의 느낌을 정하는 Attack을 먼저, 그다음 박자에 맞는 Release를 잡는 순서가 일반적입니다. 둘은 서로 영향을 주므로 번갈아 조금씩 조절합니다.</p>
+  <h3>Threshold 숫자가 같으면 어느 컴프레서든 같은 결과인가요?</h3>
+  <p>그렇지 않습니다. 입력 레벨, 검출 방식(피크/RMS), 니의 정의가 다르면 같은 숫자라도 눌리는 양이 달라집니다. GR 미터로 실제 줄어든 양을 보고 판단합니다.</p>
+  <h3>게인 스테이징과는 어떻게 이어지나요?</h3>
+  <p>컴프레서의 입력 레벨이 달라지면 같은 Threshold에서도 GR이 바뀝니다. 앞단의 레벨을 먼저 정리해야 하며, 자세한 내용은 <a class="inline" href="/guides/gain-staging-basics.html">게인 스테이징 기본</a>을 참고하세요.</p>
+  <h3>최종 음량은 어떻게 확인하나요?</h3>
+  <p>컴프레션 뒤에는 라우드니스를 측정해 확인합니다. <a class="inline" href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법</a>이 도움이 됩니다.</p>
+
   <div class="callout">
     <div class="ico">🎚️</div>
     <div class="body">

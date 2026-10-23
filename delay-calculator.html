@@ -145,6 +145,11 @@
   }
 
 
+  .explain{ border-radius:16px; border:1px solid var(--line); background:linear-gradient(180deg, var(--bg-panel), #ffffff); padding:22px 22px 20px; }
+  .explain h2{ font-size:17px; margin:0 0 10px; } .explain h2:not(:first-child){ margin-top:26px; } .explain h3{ font-size:15px; margin:18px 0 6px; }
+  .explain p,.explain ul,.explain ol{ font-size:14.5px; line-height:1.75; color:var(--text-secondary); margin:0 0 12px; } .explain ul,.explain ol{ padding-left:22px; } .explain li{ margin-bottom:5px; }
+  .explain table{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:4px; } .explain th,.explain td{ text-align:left; padding:7px 8px; border-bottom:1px solid var(--line); }
+  .explain th{ color:var(--text-tertiary); font-size:12px; } .explain a{ color:var(--teal); font-weight:600; }
   .tool-links{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .tool-links a{
     font-size:12px; font-weight:600; color:var(--text-secondary); text-decoration:none;
@@ -323,6 +328,84 @@
       값이 음수로 나오면 딜레이 스피커가 메인보다 기준 지점에서 더 멀다는 뜻이라 딜레이가 필요 없을 수 있습니다(0으로 처리하는 걸 권장).
       프리시던스 오프셋(보통 10~20ms)은 딜레이 스피커 소리가 메인보다 살짝 늦게 도달하게 해, 청취자가 소리의 위치를 무대(메인 스피커) 쪽으로 인지하게 하는 하스 효과(Haas Effect) 보정값입니다.
     </div>
+  </div>
+
+  <div class="explain">
+    <h2>화면 구성과 사용 순서</h2>
+    <p>이 계산기는 위에서 아래로 다섯 개 패널로 이루어져 있습니다. 맨 위 Global Settings에는 Temperature(기본 15 °C)와 거리 단위(Meters/Feet) 스위치가 있고, 현재 온도 기준 음속이 바로 아래에 표시됩니다. 이어서 Time ↔ Distance ↔ Phase, Haas Effect 참고표, Tempo ↔ Delay, Reverb Time, Speaker Delay 패널이 차례로 나옵니다. 모든 계산은 브라우저 안에서만 이루어지고, 입력값을 바꾸면 곧바로 결과가 갱신됩니다.</p>
+    <ol>
+      <li>현장의 기온을 Temperature에 넣고 거리 단위를 고릅니다. 단위를 바꾸면 이미 입력해 둔 거리 값도 새 단위로 환산되어 표시됩니다.</li>
+      <li>시간·거리·위상을 알고 싶으면 Time ↔ Distance ↔ Phase 패널을, 곡 박자에 맞는 딜레이 값이 필요하면 BPM 입력칸을, 타워 스피커 딜레이를 구하려면 맨 아래 Speaker Delay 패널을 씁니다.</li>
+      <li>결과 값은 화면에 보이는 대로 장비의 딜레이 설정에 옮깁니다. 이 도구는 값을 계산해 줄 뿐 장비를 직접 제어하지는 않습니다.</li>
+    </ol>
+
+    <h2>입력 항목의 뜻과 계산 방식</h2>
+    <h3>음속 — Temperature</h3>
+    <p>음속은 331.3 + 0.606 × 온도(°C) m/s 식으로 계산합니다. 0 °C는 331.3 m/s, 15 °C는 약 340.4 m/s, 20 °C는 약 343.4 m/s, 30 °C는 약 349.5 m/s입니다. 습도와 고도의 영향은 반영하지 않는 근사식이므로, 일반적인 현장 정렬 용도로는 충분하지만 정밀 측정용은 아닙니다. 야외 공연에서는 온도에 따라 10 m당 약 1.5 ms(0 °C와 30 °C의 차이)까지 값이 달라지므로 기온을 실제와 비슷하게 넣어 두는 편이 좋습니다.</p>
+    <h3>Time ↔ Distance ↔ Phase</h3>
+    <p>네 칸(Time ms, Distance, Frequency Hz, Phase °) 중 하나를 고치면 나머지가 연동됩니다. 사용하는 식은 다음과 같습니다.</p>
+    <table>
+      <tr><th>바꾼 칸</th><th>함께 계산되는 값</th></tr>
+      <tr><td>Time</td><td>거리 = 시간 × 음속, 위상 = 시간 × 주파수 × 360°</td></tr>
+      <tr><td>Distance</td><td>시간 = 거리 ÷ 음속, 그 시간으로 위상 계산</td></tr>
+      <tr><td>Frequency</td><td>시간은 그대로 두고 위상만 다시 계산</td></tr>
+      <tr><td>Phase</td><td>시간 = 위상 ÷ 360 ÷ 주파수, 그 시간으로 거리 계산</td></tr>
+    </table>
+    <p>위상 칸에는 항상 0~360°로 감긴 값만 표시되고, 여러 바퀴 돈 경우는 파형 범례 옆에 "총 ○사이클 + ○°" 형태로 알려 줍니다. 예를 들어 4.5 ms, 1,000 Hz는 1,620°이므로 180°로 표시되며 총 4사이클이 붙습니다. 화면의 가로 게이지와 파형 그림은 감긴 위상을 보여 주는 것이고, 실선이 원음, 점선이 딜레이된 신호입니다.</p>
+    <h3>Haas Effect 참고표</h3>
+    <p>Time 칸의 값(절대값)이 0~1 ms, 1~5 ms, 5~30 ms, 30 ms 이상 중 어느 구간인지를 표에서 강조해 줍니다. 일반적인 경향을 정리한 참고표이며, 청취 환경과 소스에 따라 체감 경계는 달라질 수 있습니다.</p>
+    <h3>Tempo ↔ Delay</h3>
+    <p>BPM 입력칸의 값으로 4분음표 길이(60,000 ÷ BPM ms)를 구하고, 1/1부터 1/32까지의 음표를 일반·붙임(×1.5)·셋잇단(×2/3) 세 열로 보여 줍니다. 1초 이상은 초 단위로 표시됩니다.</p>
+    <h3>Reverb Time</h3>
+    <p>같은 BPM으로 4/4박자 한 마디 길이(4분음표 × 4)를 구합니다. Hall은 2마디, Big Room은 1마디, Small Room은 1/2마디, Tight Ambience는 1/4마디를 프리딜레이와 디케이의 합(Total Reverb)으로 잡습니다. 프리딜레이는 각 프리셋 총 길이의 1/64이고 나머지가 디케이 타임입니다. 출발점으로 쓰는 값이며 곡에 따라 귀로 조정합니다.</p>
+    <h3>Speaker Delay</h3>
+    <p>딜레이 시간 = (딜레이 스피커에서 기준 지점까지 거리 − 메인 스피커에서 기준 지점까지 거리) ÷ 음속 + Precedence Offset 입니다. 결과는 소수 첫째 자리까지 ms로 표시됩니다. 결과가 0보다 작으면 0.0 ms로 표시하고 "딜레이 불필요"라고 알려 줍니다. + 존 추가로 구역을 늘리고 ✕로 지울 수 있으며, 존 이름도 직접 고칠 수 있습니다. 기본으로 Delay Tower 1(45), Delay Tower 2(65)가 들어 있습니다.</p>
+
+    <h2>숫자로 따라 해 보기</h2>
+    <p>아래 값은 모두 계산 식으로 검산한 것입니다.</p>
+    <table>
+      <tr><th>입력</th><th>결과</th></tr>
+      <tr><td>15 °C, 메인 30 m, 타워 45 m, Offset 0</td><td>15 ÷ 340.39 × 1000 ≈ <b>44.1 ms</b></td></tr>
+      <tr><td>같은 조건, 타워 65 m</td><td>35 ÷ 340.39 × 1000 ≈ <b>102.8 ms</b></td></tr>
+      <tr><td>같은 조건, Offset 10 ms (타워 45 m)</td><td>44.07 + 10 ≈ <b>54.1 ms</b></td></tr>
+      <tr><td>타워 25 m (메인 30 m보다 가까움), Offset 0</td><td>−14.7 ms → <b>0.0 ms, 딜레이 불필요</b></td></tr>
+      <tr><td>Time 1 ms, 1,000 Hz, 15 °C</td><td>거리 ≈ 0.34 m, 위상 360° → 0°로 표시</td></tr>
+      <tr><td>Time 0.5 ms, 1,000 Hz</td><td>위상 180°</td></tr>
+      <tr><td>Phase 90°, 250 Hz</td><td>시간 1 ms, 거리 약 0.34 m</td></tr>
+      <tr><td>120 BPM 1/8음표 / 붙임 / 셋잇단</td><td>250 ms / 375 ms / 167 ms</td></tr>
+      <tr><td>120 BPM 1/1 음표</td><td>2.00s</td></tr>
+      <tr><td>120 BPM Big Room</td><td>총 2.00s, 프리딜레이 31 ms, 디케이 1.97s</td></tr>
+    </table>
+    <p>위상 180°는 같은 크기의 두 신호를 더할 때 그 주파수가 상쇄되는 조건입니다. 1 ms 차이라면 500 Hz, 1,500 Hz, 2,500 Hz처럼 1,000 ÷ (2 × 시간 ms) Hz의 홀수 배에서 골이 생기는 콤필터가 됩니다. 원리는 <a href="/guides/phase-interference-comb-filter.html">위상 간섭과 콤필터 가이드</a>에 정리해 두었습니다.</p>
+
+    <h2>현장에서 쓰는 순서</h2>
+    <ol>
+      <li>기준 지점을 먼저 정합니다. 메인 스피커 위치를 기준으로 삼는다면 "메인 스피커 → 기준 지점 거리"를 0으로 두고, 각 존에는 메인에서 그 타워까지의 직선 거리를 넣습니다. 그러면 (거리 ÷ 음속 + Offset)이 되어 <a href="/guides/delay-tower-alignment.html">딜레이 타워 정렬 가이드</a>의 계산과 같은 결과가 나옵니다. 다른 지점을 기준으로 삼는다면 두 거리를 모두 그 지점에서 재야 합니다.</li>
+      <li>그날의 기온을 Temperature에 넣습니다.</li>
+      <li>거리를 줄자나 레이저 거리계로 재서 입력하고 딜레이 값을 확인합니다. Precedence Offset은 처음에는 0으로 두고 값을 본 뒤, 소리가 타워 쪽에서 나는 것처럼 느껴지면 몇 ms씩 올려 봅니다.</li>
+      <li>장비에 값을 넣고 귀와 측정으로 마무리합니다. 계산값은 출발점이며, 실제 정렬은 현장에서 확인해야 합니다. </li>
+    </ol>
+    <p>리듬에 맞는 딜레이 이펙트나 리버브 타임을 정할 때는 Tempo 표의 값을 이펙트에 그대로 입력합니다. 계산 배경은 <a href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기</a>에 있습니다.</p>
+
+    <h2>흔한 실수와 한계</h2>
+    <ul>
+      <li><strong>기준 지점이 섞인다.</strong> 두 거리를 서로 다른 지점에서 재면 결과가 틀어집니다. 식은 두 거리의 차이만 사용합니다.</li>
+      <li><strong>단위를 헷갈린다.</strong> Feet로 바꾼 뒤 미터 값을 그대로 입력하면 약 3.3배 틀립니다. 현재 단위는 입력칸 옆에 표시됩니다.</li>
+      <li><strong>Offset 없이 정확히 맞춘다.</strong> 계산값 그대로면 두 소리가 거의 동시에 도착해 콤필터가 두드러질 수 있습니다. 반대로 Offset이 너무 크면 에코로 들릴 수 있으니 Haas 표의 구간을 참고합니다.</li>
+      <li><strong>음속 근사식의 한계.</strong> 습도, 바람, 온도 분포에 따른 변화는 반영하지 않습니다.</li>
+      <li><strong>장비의 지연은 별도다.</strong> 디지털 프로세서, 컨버터 자체의 지연은 포함하지 않으며 신호 체인 전체에서 따로 확인해야 합니다.</li>
+      <li><strong>위상은 한 주파수 기준이다.</strong> 패널은 입력한 주파수 하나의 위상만 보여 줍니다. 전 대역의 정렬은 측정 도구로 확인합니다.</li>
+    </ul>
+
+    <h2>자주 묻는 질문</h2>
+    <h3>값이 음수로 나오면 어떻게 하나요?</h3>
+    <p>"딜레이 스피커 쪽 거리"가 "메인 쪽 거리"보다 작게 입력된 경우입니다. 식이 두 거리의 차이만 보기 때문에, 이때는 0.0 ms로 표시하고 "딜레이 불필요"라고 알려 줍니다. 기준 지점과 입력한 거리의 의미가 맞는지 확인하세요.</p>
+    <h3>Time 칸에 숫자를 넣었는데 위상이 0°로 나와요.</h3>
+    <p>시간이 주기의 정수 배일 때입니다. 1 ms와 1,000 Hz는 정확히 한 주기라서 감긴 위상이 0°입니다. 주파수를 바꾸면 값이 달라집니다.</p>
+    <h3>BPM을 비우면 어떻게 되나요?</h3>
+    <p>숫자가 아니거나 0이면 120 BPM으로 계산합니다.</p>
+    <h3>휴대폰에서도 쓸 수 있나요?</h3>
+    <p>예, 브라우저에서 열면 됩니다. 입력칸이 작으므로 값을 확인하며 천천히 입력하세요.</p>
   </div>
 
   <div class="tool-links">
