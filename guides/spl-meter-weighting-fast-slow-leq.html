@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPL 미터 설정 읽는 법 — A·C·Z 가중치, Fast·Slow, Leq | ML Music Studio</title>
+<meta name="description" content="SPL 미터의 A·C·Z 가중치, Fast·Slow 시간 상수, Leq 등가소음도가 각각 무엇인지 계산 예시와 함께 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html">
+<meta property="og:title" content="SPL 미터 설정 읽는 법 — A·C·Z 가중치, Fast·Slow, Leq">
+<meta property="og:description" content="SPL 미터의 A·C·Z 가중치, Fast·Slow 시간 상수, Leq 등가소음도가 각각 무엇인지 계산 예시와 함께 정리했습니다.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "SPL 미터 설정 읽는 법 — A·C·Z 가중치, Fast·Slow, Leq",
+  "description": "SPL 미터의 A·C·Z 가중치, Fast·Slow 시간 상수, Leq 등가소음도가 각각 무엇인지 계산 예시와 함께 정리했습니다.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-10-23",
+  "dateModified": "2026-10-23",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 도구 가이드</div>
+  <h1>SPL 미터 설정 읽는 법 — A·C·Z 가중치, Fast·Slow, Leq</h1>
+  <div class="meta">도구 가이드 · 약 5분</div>
+
+  <p class="lede">SPL 미터에는 A·C·Z, Fast·Slow, Leq처럼 낯선 설정이 붙어 있습니다. 각 설정이 숫자를 어떻게 바꾸는지만 알면, 어떤 숫자를 어떤 상황에서 읽어야 하는지가 정리됩니다.</p>
+
+  <h2>가중치: 주파수별로 다르게 세는 필터</h2>
+  <p>Z는 필터가 없는 값, A는 사람 귀가 저음에 둔감한 점을 반영해 저음을 크게 줄인 값, C는 저음을 거의 줄이지 않은 값입니다. 소음 규제와 환경 소음은 보통 dB(A)로 말하고, 저음 에너지를 볼 때는 dB(C)를 함께 봅니다.</p>
+  <table class="data">
+    <tr><th>주파수</th><th>A 가중</th><th>C 가중</th></tr>
+    <tr><td>1kHz</td><td>0dB</td><td>0dB</td></tr>
+    <tr><td>100Hz</td><td>약 −19.1dB</td><td>약 −0.3dB</td></tr>
+    <tr><td>63Hz</td><td>약 −26.2dB</td><td>약 −0.8dB</td></tr>
+    <tr><td>31.5Hz</td><td>약 −39dB</td><td>약 −3dB</td></tr>
+  </table>
+  <div class="note">같은 자리에서 dB(C)가 dB(A)보다 훨씬 크게 나오면 저역 에너지가 많다는 신호입니다. 이때 RTA로 63~125Hz 부근 밴드를 확인해 보세요.</div>
+
+  <h2>Fast와 Slow: 시간 상수</h2>
+  <p>미터는 순간값을 그대로 보이지 않고 시간 상수로 평활합니다. Fast는 0.125초, Slow는 1초이며 국제 규격(IEC 61672-1)이 정한 값입니다. 계속 변하는 음악은 Slow가 읽기 편하고, 짧은 충격음의 크기는 Fast가 더 잘 따라갑니다. 기준서에 "A 가중, Slow"처럼 조건이 있으면 그대로 맞춥니다.</p>
+
+  <h2>Leq: 에너지로 평균 내기</h2>
+  <p>Leq(등가소음도)는 dB를 에너지로 바꿔 평균한 뒤 다시 dB로 돌린 값입니다.</p>
+  <div class="formula">Leq = 10 × log10( 평균( 10^(L/10) ) )</div>
+  <div class="example">
+    <h3>계산 예시</h3>
+    <p>10분 중 1분은 90dB, 9분은 70dB라면 Leq = 10×log10((1×10^9 + 9×10^7)/10) ≈ <strong>80.4dB</strong>입니다. 산술평균 72dB보다 훨씬 높습니다. 같은 시간씩 90dB와 70dB가 나오면 80dB가 아니라 약 <strong>87.0dB</strong>입니다. 큰 소리가 에너지를 지배하기 때문입니다.</p>
+  </div>
+
+  <h2>마이크 교정</h2>
+  <p>SPL 숫자는 마이크 감도에 그대로 좌우됩니다. 94dB, 1kHz를 내는 교정기를 마이크에 물려 표시값을 94에 맞추는 것이 기본 방법이고, 교정기가 없으면 교정된 전용 미터와 나란히 재서 차이만큼 오프셋을 줍니다. 교정 전의 스마트폰 숫자는 참고값으로만 쓰세요.</p>
+
+  <div class="callout">
+    <div class="ico">📟</div>
+    <div class="body">
+      <b>AudioEngineerKit: SPL &amp; RTA (iPhone·iPad·Mac)</b>
+      <p>A·C·Z 가중치 SPL 미터, 31밴드 RTA, 마이크 교정을 무료 기능으로 제공합니다. 화면 설정 이름이 위 설명과 그대로 대응합니다.</p>
+      <a href="https://apps.apple.com/app/audioengineerkit-spl-rta/id6801498086?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">▸ App Store에서 받기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 — 룸 모드와 하울링 포인트 <span>· 도구 가이드</span></a>
+    <a href="/guides/spl-inverse-square-law.html">SPL과 역제곱 법칙 — 거리별 음압 감쇠 계산 <span>· 도구 가이드</span></a>
+    <a href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위 총정리 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-10-23</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+
+</body>
+</html>
