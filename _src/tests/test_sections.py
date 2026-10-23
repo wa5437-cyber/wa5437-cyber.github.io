@@ -108,7 +108,7 @@ class PluginsPageTests(unittest.TestCase):
     def test_about_html_is_a_stub_pointing_to_new_about(self):
         text = (pages.ROOT / "about.html").read_text(encoding="utf-8")
         self.assertIn('rel="canonical" href="https://mlmusicstudio.co.kr/about/"', text)
-        self.assertIn('http-equiv="refresh"', text)
+        self.assertNotIn('http-equiv="refresh"', text)     # 자동 이동은 구글이 '리디렉션 오류'로 보고해서 쓰지 않는다(10/23)
         self.assertIn('href="/about/"', text)
         self.assertNotIn("adsbygoogle", text)       # 넘기기만 하는 페이지에는 광고를 넣지 않는다
         self.assertNotIn("noindex", text)           # 옛 주소의 색인을 새 주소로 넘기려면 noindex 가 없어야 한다
