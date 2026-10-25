@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>레트로룸 — 개인정보처리방침 · 이용약관 | ML Music Studio</title>
+<meta name="description" content="레트로룸(Retro Room) 레트로 음악 플레이어의 개인정보처리방침과 이용약관. 계정·광고·분석 없음, Apple Music·인터넷 라디오·내 파일·내 사진을 기기 안에서 다룹니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/retroroom_legal.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* 사이트(index.html)와 같은 색·폰트를 쓴다 — 따로 떠 있는 페이지처럼
+     보이면 사용자가 여기가 같은 곳인지 알 수 없다. */
+  :root{
+    --bg:#faf8f3;
+    --bg-alt:#f1ede3;
+    --panel:#ffffff;
+    --line: rgba(30,26,20,0.11);
+    --line-strong: rgba(30,26,20,0.22);
+    --teal:#2f6d4c;
+    --blue:#33587a;
+    --amber:#9c6b17;
+    --text-primary:#221f1a;
+    --text-secondary:#5c574c;
+    --text-tertiary:#8c8677;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.7;
+  }
+  h1,h2,h3,h4{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; letter-spacing:-0.01em; }
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:0 28px; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  nav{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+    background:rgba(250,248,243,0.86); border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:var(--text-primary); }
+  .brand .mark{
+    width:28px; height:28px; border-radius:8px; background:var(--panel);
+    border:1px solid var(--line-strong); display:flex; align-items:center;
+    justify-content:center; gap:2px;
+  }
+  .brand .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); }
+  .brand .mark span:nth-child(1){ height:9px; }
+  .brand .mark span:nth-child(2){ height:15px; }
+  .brand .mark span:nth-child(3){ height:6px; }
+  nav .links{ display:flex; gap:22px; font-size:13.5px; color:var(--text-secondary); }
+  nav .links a{ color:var(--text-secondary); }
+  nav .links a:hover{ color:var(--text-primary); text-decoration:none; }
+  @media (max-width:720px){ nav .links a.hide-sm{ display:none; } }
+
+  header.hero{ padding:64px 0 28px; }
+  .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber); margin-bottom:12px;
+  }
+  header.hero h1{ font-size:36px; margin-bottom:12px; }
+  header.hero p{ color:var(--text-secondary); font-size:16px; max-width:70ch; margin:0; }
+  .jump{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:24px;
+  }
+  .jump a{
+    font-size:13px; padding:8px 14px; border-radius:100px;
+    border:1px solid var(--line-strong); color:var(--text-secondary); background:var(--panel);
+  }
+  .jump a:hover{ color:var(--text-primary); text-decoration:none; background:var(--bg-alt); }
+
+  main{ padding:24px 0 96px; }
+  section{ margin-bottom:72px; scroll-margin-top:84px; }
+  section > h2{ font-size:26px; margin-bottom:8px; }
+  section > .lede{ color:var(--text-secondary); margin:0 0 28px; max-width:74ch; }
+
+  .step{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:24px; margin-bottom:20px;
+  }
+  .step h3{ font-size:18px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .step h3 .num{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    width:26px; height:26px; border-radius:8px; background:var(--bg-alt);
+    color:var(--amber); display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+  }
+  .step p{ color:var(--text-secondary); margin:0 0 10px; }
+  .step ul{ color:var(--text-secondary); margin:10px 0 0; padding-left:20px; }
+  .step li{ margin-bottom:6px; }
+  .step img{
+    display:block; width:100%; height:auto; margin-top:16px;
+    border-radius:12px; border:1px solid var(--line);
+  }
+  .step img.phone{ max-width:300px; }
+  .tip{
+    margin-top:14px; padding:12px 14px; border-radius:10px;
+    background:var(--bg-alt); border:1px solid var(--line);
+    font-size:14px; color:var(--text-secondary);
+  }
+  .tip b{ color:var(--text-primary); }
+  kbd{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    padding:2px 7px; border-radius:6px; background:var(--panel);
+    border:1px solid var(--line-strong); box-shadow:0 1px 0 var(--line-strong);
+    color:var(--text-primary);
+  }
+
+  .faq{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:6px 24px; }
+  .faq details{ border-bottom:1px solid var(--line); padding:18px 0; }
+  .faq details:last-child{ border-bottom:none; }
+  .faq summary{
+    cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;
+    display:flex; justify-content:space-between; gap:16px; align-items:flex-start;
+  }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:"+"; color:var(--text-tertiary); font-family:'IBM Plex Mono',monospace; }
+  .faq details[open] summary::after{ content:"−"; }
+  .faq details p{ color:var(--text-secondary); margin:10px 0 0; font-size:15px; }
+
+  .policy h3{ font-size:17px; margin:28px 0 8px; }
+  .policy p{ color:var(--text-secondary); margin:0 0 10px; }
+  .policy ul{ color:var(--text-secondary); padding-left:20px; margin:8px 0 14px; }
+
+  .contact{
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:16px;
+    padding:24px; text-align:center; margin-top:28px;
+  }
+  .contact p{ margin:0 0 10px; color:var(--text-secondary); }
+  .contact a{ font-weight:600; font-size:16px; }
+
+  footer{ border-top:1px solid var(--line); padding:28px 0; color:var(--text-tertiary); font-size:13px; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; }
+
+  /* ---------- 언어 스위처 (사이트와 같은 모양) ---------- */
+  .lang-switch{ position:relative; }
+  .lang-switch-btn{
+    display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:var(--text-secondary); background:var(--panel); border:1px solid var(--line);
+    border-radius:100px; padding:8px 14px; cursor:pointer;
+  }
+  .lang-switch-btn:hover{ color:var(--text-primary); background:var(--bg-alt); }
+  .lang-switch-menu{
+    position:absolute; top:calc(100% + 8px); right:0; min-width:160px;
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:12px;
+    box-shadow:0 12px 30px rgba(30,26,20,0.14); padding:6px; z-index:60;
+    opacity:0; transform:scale(0.95) translateY(-4px); pointer-events:none; visibility:hidden;
+    transition:opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 160ms;
+  }
+  .lang-switch-menu.open{ opacity:1; transform:scale(1) translateY(0); pointer-events:auto; visibility:visible; }
+  .lang-switch-menu button{
+    display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    font-size:13.5px; color:var(--text-secondary); padding:9px 12px; border-radius:8px;
+    font-family:inherit;
+  }
+  .lang-switch-menu button:hover{ background:var(--bg-alt); color:var(--text-primary); }
+  .lang-switch-menu button.active{ color:var(--text-primary); font-weight:600; }
+
+  .shots{ display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; margin-top:16px; }
+  .shots figure{ margin:0; flex:1 1 320px; min-width:0; }
+  .shots figure.narrow{ flex:0 1 220px; }
+  .shots img{ margin-top:0; }
+  .shots figcaption{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--text-tertiary); margin-top:8px;
+  }
+  .acc{ width:100%; border-collapse:collapse; font-size:14.5px; }
+  .acc th,.acc td{ text-align:left; vertical-align:top; padding:12px 10px; border-bottom:1px solid var(--line); }
+  .acc th{ width:32%; color:var(--text-primary); font-weight:600; }
+  .acc td{ color:var(--text-secondary); }
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><span class="mark"><span></span><span></span><span></span></span>ML MUSIC STUDIO</a>
+    <div class="links">
+      <a href="/apps/">Apps</a>
+      <a href="/privacy/" class="hide-sm" data-i18n="nav_policy">전체 방침</a>
+      <a href="https://apps.apple.com/app/id6826748341?pt=129167489&amp;ct=homepage&amp;mt=8" target="_blank" rel="noopener">App Store</a>
+    </div>
+    <div class="lang-switch" id="langSwitch">
+      <button class="lang-switch-btn" id="langSwitchBtn" type="button" aria-haspopup="true" aria-expanded="false">🌐 <span id="langSwitchLabel">한국어</span> ▾</button>
+      <div class="lang-switch-menu" id="langSwitchMenu">
+        <button type="button" data-lang-btn="ko">🇰🇷 한국어</button><button type="button" data-lang-btn="en">🇺🇸 English</button><button type="button" data-lang-btn="ja">🇯🇵 日本語</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">레트로룸 (Retro Room)</div>
+    <h1 data-i18n="hero_title">개인정보처리방침 · 이용약관</h1>
+    <p data-i18n="hero_desc">LP·카세트·CD·진공관 라디오를 화면 속 기기로 직접 만지며 듣는 레트로 음악 플레이어입니다. Apple Music 보관함, 인터넷 라디오, 내 파일을 들을 수 있습니다. iPhone · iPad · Mac.</p>
+    <div class="jump">
+      <a href="#privacy" data-i18n="jump_privacy">개인정보처리방침</a><a href="#terms" data-i18n="jump_terms">이용약관</a><a href="#contact" data-i18n="jump_contact">문의</a>
+    </div>
+  </div>
+</header>
+<main><div class="wrap">
+<section id="privacy" class="policy">
+  <h2 data-i18n="privacy_h2">개인정보처리방침</h2>
+  <p class="lede mono" style="font-size:13px;" data-i18n="privacy_updated">최종 수정일: 2026년 10월 26일</p>
+  <h3 data-i18n="p_scope_h">적용 범위</h3>
+  <p data-i18n="p_scope_p" data-i18n-html="true">이 방침은 iOS·iPadOS·macOS 앱 <strong>레트로룸(Retro Room)</strong>과 그 홈 화면·잠금 화면 위젯에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트에 대한 방침은 <a href="/privacy/">사이트 개인정보처리방침</a>을 보세요.</p>
+  <h3 data-i18n="p_collect_h">수집하는 정보</h3>
+  <p data-i18n="p_collect_p" data-i18n-html="true">앱은 이름·이메일·위치 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 분석(Analytics) 도구·광고·추적 SDK 를 쓰지 않으며, 저희 서버로 사용 기록을 보내지 않습니다.</p>
+  <h3 data-i18n="p_music_h">Apple Music</h3>
+  <p data-i18n="p_music_p" data-i18n-html="true">Apple Music 접근을 허락하면 앱은 Apple 의 MusicKit 으로 <strong>기기 안에서</strong> 보관함의 앨범·플레이리스트를 읽고 재생합니다. 이 정보는 기기 밖으로 보내지 않습니다. 곡 검색·차트·앨범 표지는 Apple 서버에서 직접 받아 오며, 그 과정은 <a href="https://www.apple.com/kr/legal/privacy/" target="_blank" rel="noopener">Apple 개인정보 처리방침</a>을 따릅니다.</p>
+  <h3 data-i18n="p_radio_h">인터넷 라디오</h3>
+  <p data-i18n="p_radio_p" data-i18n-html="true">라디오는 공개 방송 목록 서비스인 Radio Browser(radio-browser.info)에서 방송을 찾고, 고른 방송국의 스트림 서버에 직접 연결해 소리를 받습니다. 이때 일반적인 인터넷 연결처럼 그 서버들에 기기의 IP 주소가 전달됩니다. 검색어와 듣는 방송은 저희에게 전송되지 않습니다. 앱은 막아야 할 방송 목록을 저희 홈페이지에서 가끔 내려받는데, 이때도 개인 정보는 보내지 않습니다.</p>
+  <h3 data-i18n="p_files_h">내 파일 · 내 사진</h3>
+  <p data-i18n="p_files_p" data-i18n-html="true">가져온 음악 파일과 "내 사진"으로 고른 사진은 <strong>기기 안</strong>에만 보관되며 외부로 전송되지 않습니다. 사진은 사용자가 고른 사진만 앱이 받습니다(사진 보관함 전체에 접근하지 않습니다). 앱을 지우면 함께 지워집니다.</p>
+  <h3 data-i18n="p_share_h">영상 만들기 · 공유</h3>
+  <p data-i18n="p_share_p" data-i18n-html="true">공유 영상(릴스)은 기기 안에서 만들어지고, 사용자가 저장을 누를 때만 사진 앱에 추가됩니다(추가 권한만 사용). 공유는 사용자가 고른 앱으로만 나갑니다.</p>
+  <h3 data-i18n="p_widget_h">위젯</h3>
+  <p data-i18n="p_widget_p" data-i18n-html="true">위젯에 보이는 지금 곡 정보와 앨범 표지는 앱과 위젯이 함께 쓰는 기기 안 저장 공간에만 둡니다.</p>
+  <h3 data-i18n="p_pay_h">결제</h3>
+  <p data-i18n="p_pay_p" data-i18n-html="true">평생권(비소모성 인앱 구입)과 스킨 팩 결제는 Apple 의 App Store 를 통해서만 이루어집니다. 저희는 결제 수단·카드 정보를 <strong>전혀 받지 않습니다.</strong> 구매 복원도 Apple ID 로 처리됩니다.</p>
+  <h3 data-i18n="p_third_h">제3자 공유</h3>
+  <p data-i18n="p_third_p" data-i18n-html="true">제3자에게 개인정보를 제공하거나 판매하지 않습니다. 앱 안에 광고가 없습니다.</p>
+  <h3 data-i18n="p_kids_h">어린이</h3>
+  <p data-i18n="p_kids_p" data-i18n-html="true">이 앱은 어린이를 대상으로 하지 않으며 어린이의 정보를 수집하지 않습니다. 인터넷 라디오 방송 내용은 각 방송국이 정하며 저희가 미리 걸러 낼 수 없습니다.</p>
+  <h3 data-i18n="p_change_h">변경 사항</h3>
+  <p data-i18n="p_change_p" data-i18n-html="true">방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.</p>
+</section>
+<section id="terms" class="policy">
+  <h2 data-i18n="terms_h2">이용약관</h2>
+  <h3 data-i18n="t_eula_h">기본 약관</h3>
+  <p data-i18n="t_eula_p" data-i18n-html="true">이 앱의 사용에는 <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" target="_blank" rel="noopener">Apple 표준 최종 사용자 사용권 계약(EULA)</a>이 적용되며, 아래 내용은 그에 더하는 안내입니다.</p>
+  <h3 data-i18n="t_music_h">음악과 방송</h3>
+  <p data-i18n="t_music_p" data-i18n-html="true">Apple Music 재생에는 사용자의 Apple Music 구독이 필요하며, Apple Music 기능은 앱 결제와 관계없이 쓸 수 있습니다. 인터넷 라디오는 각 방송국이 제공하는 공개 스트림으로, 방송 내용과 재생 가능 여부는 방송국에 달려 있습니다. 앱은 녹음·다운로드 기능을 제공하지 않습니다.</p>
+  <h3 data-i18n="t_purchase_h">평생권 · 환불</h3>
+  <p data-i18n="t_purchase_p" data-i18n-html="true">평생권은 한 번 구매로 같은 Apple ID 의 iPhone·iPad·Mac 에서 쓸 수 있고, 앞으로 나오는 스킨 팩도 포함됩니다. 가족 공유는 지원하지 않습니다. 환불은 Apple 이 처리하며 <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> 에서 신청할 수 있습니다.</p>
+  <h3 data-i18n="t_marks_h">상표</h3>
+  <p data-i18n="t_marks_p" data-i18n-html="true">Apple Music 은 Apple Inc. 의 상표입니다. 앱 속 기기 그림은 실제 제품·상표를 나타내지 않는 창작 디자인입니다.</p>
+</section>
+<section id="contact">
+  <h2 data-i18n="contact_h2">문의</h2>
+  <div class="contact"><p data-i18n="contact_p">버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 화면이었는지 적어 주시면 빠르게 답합니다.</p><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></div>
+</section>
+</div></main>
+<footer><div class="wrap"><span>© 2026 ML Music Studio</span><span><a href="/">mlmusicstudio.co.kr</a> · <a href="/privacy/" data-i18n="footer_policy">사이트 개인정보처리방침</a></span></div></footer>
+
+<script>
+  const I18N = {"nav_policy": {"ko": "사이트 방침", "en": "Site policy", "ja": "サイトの方針"}, "hero_title": {"ko": "개인정보처리방침 · 이용약관", "en": "Privacy Policy · Terms of Use", "ja": "プライバシーポリシー · 利用規約"}, "hero_desc": {"ko": "LP·카세트·CD·진공관 라디오를 화면 속 기기로 직접 만지며 듣는 레트로 음악 플레이어입니다. Apple Music 보관함, 인터넷 라디오, 내 파일을 들을 수 있습니다. iPhone · iPad · Mac.", "en": "A retro music player where you play LPs, cassettes, CDs and a tube radio by touching the device on screen. Listen to your Apple Music library, internet radio and your own files. iPhone · iPad · Mac.", "ja": "LP・カセット・CD・真空管ラジオを画面の中の機器に直接触れて聴くレトロな音楽プレーヤーです。Apple Music ライブラリ、インターネットラジオ、自分のファイルを聴けます。iPhone · iPad · Mac。"}, "jump_privacy": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー"}, "jump_terms": {"ko": "이용약관", "en": "Terms of use", "ja": "利用規約"}, "jump_contact": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ"}, "privacy_h2": {"ko": "개인정보처리방침", "en": "Privacy Policy", "ja": "プライバシーポリシー"}, "privacy_updated": {"ko": "최종 수정일: 2026년 10월 26일", "en": "Last updated: October 26, 2026", "ja": "最終更新日: 2026年10月26日"}, "p_scope_h": {"ko": "적용 범위", "en": "Scope", "ja": "適用範囲"}, "p_scope_p": {"ko": "이 방침은 iOS·iPadOS·macOS 앱 <strong>레트로룸(Retro Room)</strong>과 그 홈 화면·잠금 화면 위젯에 적용됩니다. ML Music Studio 의 다른 앱과 웹사이트에 대한 방침은 <a href=\"/privacy/\">사이트 개인정보처리방침</a>을 보세요.", "en": "This policy applies to the iOS, iPadOS and macOS app <strong>Retro Room</strong> and its Home Screen and Lock Screen widgets. For other ML Music Studio apps and the website see the <a href=\"/privacy/\">site privacy policy</a>.", "ja": "本ポリシーは iOS・iPadOS・macOS アプリ <strong>レトロルーム（Retro Room）</strong>とそのホーム画面・ロック画面ウィジェットに適用されます。ML Music Studio の他のアプリとウェブサイトについては<a href=\"/privacy/\">サイトのプライバシーポリシー</a>をご覧ください。"}, "p_collect_h": {"ko": "수집하는 정보", "en": "Information we collect", "ja": "収集する情報"}, "p_collect_p": {"ko": "앱은 이름·이메일·위치 같은 <strong>개인을 식별할 수 있는 정보를 수집하지 않습니다.</strong> 계정 가입이 없고, 분석(Analytics) 도구·광고·추적 SDK 를 쓰지 않으며, 저희 서버로 사용 기록을 보내지 않습니다.", "en": "The app <strong>does not collect personally identifiable information</strong> such as your name, email or location. There is no account, no analytics, advertising or tracking SDK, and no usage data is sent to our servers.", "ja": "アプリは氏名・メール・位置情報など<strong>個人を特定できる情報を収集しません。</strong>アカウント登録はなく、分析・広告・トラッキングの SDK も使わず、利用履歴を私たちのサーバーに送りません。"}, "p_music_h": {"ko": "Apple Music", "en": "Apple Music", "ja": "Apple Music"}, "p_music_p": {"ko": "Apple Music 접근을 허락하면 앱은 Apple 의 MusicKit 으로 <strong>기기 안에서</strong> 보관함의 앨범·플레이리스트를 읽고 재생합니다. 이 정보는 기기 밖으로 보내지 않습니다. 곡 검색·차트·앨범 표지는 Apple 서버에서 직접 받아 오며, 그 과정은 <a href=\"https://www.apple.com/kr/legal/privacy/\" target=\"_blank\" rel=\"noopener\">Apple 개인정보 처리방침</a>을 따릅니다.", "en": "If you allow Apple Music access, the app uses Apple's MusicKit to read and play your library's albums and playlists <strong>on the device</strong>. This information never leaves the device. Search, charts and album artwork come directly from Apple's servers under <a href=\"https://www.apple.com/legal/privacy/\" target=\"_blank\" rel=\"noopener\">Apple's Privacy Policy</a>.", "ja": "Apple Music へのアクセスを許可すると、アプリは Apple の MusicKit で<strong>端末内で</strong>ライブラリのアルバム・プレイリストを読み込んで再生します。この情報は端末の外に送りません。検索・チャート・アルバムアートは Apple のサーバーから直接取得し、<a href=\"https://www.apple.com/jp/legal/privacy/\" target=\"_blank\" rel=\"noopener\">Apple のプライバシーポリシー</a>に従います。"}, "p_radio_h": {"ko": "인터넷 라디오", "en": "Internet radio", "ja": "インターネットラジオ"}, "p_radio_p": {"ko": "라디오는 공개 방송 목록 서비스인 Radio Browser(radio-browser.info)에서 방송을 찾고, 고른 방송국의 스트림 서버에 직접 연결해 소리를 받습니다. 이때 일반적인 인터넷 연결처럼 그 서버들에 기기의 IP 주소가 전달됩니다. 검색어와 듣는 방송은 저희에게 전송되지 않습니다. 앱은 막아야 할 방송 목록을 저희 홈페이지에서 가끔 내려받는데, 이때도 개인 정보는 보내지 않습니다.", "en": "The radio finds stations through the public directory Radio Browser (radio-browser.info) and connects directly to the chosen station's stream server. As with any internet connection, those servers receive your device's IP address. Your searches and the stations you play are not sent to us. The app occasionally downloads a list of blocked stations from our website; no personal information is sent with it.", "ja": "ラジオは公開の放送局一覧サービス Radio Browser（radio-browser.info）で放送局を探し、選んだ局のストリームサーバーに直接接続します。通常のインターネット接続と同じく、それらのサーバーには端末の IP アドレスが伝わります。検索語や聴いている局は私たちに送られません。アプリは除外する放送局の一覧を時々私たちのサイトから取得しますが、その際も個人情報は送りません。"}, "p_files_h": {"ko": "내 파일 · 내 사진", "en": "Your files · Your photos", "ja": "自分のファイル · 自分の写真"}, "p_files_p": {"ko": "가져온 음악 파일과 \"내 사진\"으로 고른 사진은 <strong>기기 안</strong>에만 보관되며 외부로 전송되지 않습니다. 사진은 사용자가 고른 사진만 앱이 받습니다(사진 보관함 전체에 접근하지 않습니다). 앱을 지우면 함께 지워집니다.", "en": "Music files you import and photos you pick for \"My Photos\" are stored <strong>on the device only</strong> and never transmitted. The app receives only the photos you choose; it does not access your whole photo library. They are removed when you delete the app.", "ja": "取り込んだ音楽ファイルと「自分の写真」で選んだ写真は<strong>端末内</strong>にのみ保存され、外部に送信されません。写真はご自身が選んだものだけをアプリが受け取ります（写真ライブラリ全体にはアクセスしません）。アプリを削除すると一緒に消えます。"}, "p_share_h": {"ko": "영상 만들기 · 공유", "en": "Videos · Sharing", "ja": "動画作成 · 共有"}, "p_share_p": {"ko": "공유 영상(릴스)은 기기 안에서 만들어지고, 사용자가 저장을 누를 때만 사진 앱에 추가됩니다(추가 권한만 사용). 공유는 사용자가 고른 앱으로만 나갑니다.", "en": "Share videos (Reels) are made on the device and are added to Photos only when you tap Save (add-only permission). Sharing goes only to the app you choose.", "ja": "共有動画（リール）は端末内で作られ、保存を押したときだけ写真アプリに追加されます（追加のみの権限）。共有はご自身が選んだアプリにだけ送られます。"}, "p_widget_h": {"ko": "위젯", "en": "Widgets", "ja": "ウィジェット"}, "p_widget_p": {"ko": "위젯에 보이는 지금 곡 정보와 앨범 표지는 앱과 위젯이 함께 쓰는 기기 안 저장 공간에만 둡니다.", "en": "The now-playing details and artwork shown in widgets are kept only in on-device storage shared between the app and its widgets.", "ja": "ウィジェットに表示される再生中の曲情報とアルバムアートは、アプリとウィジェットが共有する端末内の保存領域にのみ置きます。"}, "p_pay_h": {"ko": "결제", "en": "Payments", "ja": "決済"}, "p_pay_p": {"ko": "평생권(비소모성 인앱 구입)과 스킨 팩 결제는 Apple 의 App Store 를 통해서만 이루어집니다. 저희는 결제 수단·카드 정보를 <strong>전혀 받지 않습니다.</strong> 구매 복원도 Apple ID 로 처리됩니다.", "en": "The Lifetime pass (non-consumable in-app purchase) and skin packs are paid only through Apple's App Store. We <strong>never receive payment or card details.</strong> Restoring purchases is handled by your Apple ID.", "ja": "買い切りパス（非消耗型アプリ内課金）とスキンパックの決済は Apple の App Store のみで行われます。私たちは決済手段やカード情報を<strong>一切受け取りません。</strong>購入の復元も Apple ID で処理されます。"}, "p_third_h": {"ko": "제3자 공유", "en": "Third parties", "ja": "第三者提供"}, "p_third_p": {"ko": "제3자에게 개인정보를 제공하거나 판매하지 않습니다. 앱 안에 광고가 없습니다.", "en": "We do not provide or sell personal data to third parties. The app contains no ads.", "ja": "第三者に個人情報を提供・販売しません。アプリ内に広告はありません。"}, "p_kids_h": {"ko": "어린이", "en": "Children", "ja": "子ども"}, "p_kids_p": {"ko": "이 앱은 어린이를 대상으로 하지 않으며 어린이의 정보를 수집하지 않습니다. 인터넷 라디오 방송 내용은 각 방송국이 정하며 저희가 미리 걸러 낼 수 없습니다.", "en": "The app is not directed at children and collects no information from them. Internet radio content is chosen by each station and cannot be screened by us in advance.", "ja": "本アプリは子どもを対象とせず、子どもの情報を収集しません。インターネットラジオの内容は各放送局が決めるもので、私たちが事前に確認することはできません。"}, "p_change_h": {"ko": "변경 사항", "en": "Changes", "ja": "変更"}, "p_change_p": {"ko": "방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.", "en": "If this policy changes, this page is updated and the date above is revised.", "ja": "ポリシーが変わればこのページに反映し、上の最終更新日を更新します。"}, "t_eula_h": {"ko": "기본 약관", "en": "Base terms", "ja": "基本規約"}, "t_eula_p": {"ko": "이 앱의 사용에는 <a href=\"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\" target=\"_blank\" rel=\"noopener\">Apple 표준 최종 사용자 사용권 계약(EULA)</a>이 적용되며, 아래 내용은 그에 더하는 안내입니다.", "en": "Use of this app is governed by <a href=\"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\" target=\"_blank\" rel=\"noopener\">Apple's Standard End User License Agreement (EULA)</a>; the points below supplement it.", "ja": "本アプリの利用には <a href=\"https://www.apple.com/legal/internet-services/itunes/dev/stdeula/\" target=\"_blank\" rel=\"noopener\">Apple 標準エンドユーザ使用許諾契約（EULA）</a>が適用され、以下はそれに追加する案内です。"}, "t_music_h": {"ko": "음악과 방송", "en": "Music and broadcasts", "ja": "音楽と放送"}, "t_music_p": {"ko": "Apple Music 재생에는 사용자의 Apple Music 구독이 필요하며, Apple Music 기능은 앱 결제와 관계없이 쓸 수 있습니다. 인터넷 라디오는 각 방송국이 제공하는 공개 스트림으로, 방송 내용과 재생 가능 여부는 방송국에 달려 있습니다. 앱은 녹음·다운로드 기능을 제공하지 않습니다.", "en": "Playing Apple Music requires your own Apple Music subscription, and Apple Music features work regardless of in-app purchases. Internet radio uses public streams provided by each station; their content and availability are up to the station. The app offers no recording or download feature.", "ja": "Apple Music の再生にはご自身の Apple Music サブスクリプションが必要で、Apple Music の機能はアプリ内課金に関係なく使えます。インターネットラジオは各放送局が提供する公開ストリームで、内容と再生可否は放送局によります。アプリは録音・ダウンロード機能を提供しません。"}, "t_purchase_h": {"ko": "평생권 · 환불", "en": "Lifetime pass · Refunds", "ja": "買い切りパス · 返金"}, "t_purchase_p": {"ko": "평생권은 한 번 구매로 같은 Apple ID 의 iPhone·iPad·Mac 에서 쓸 수 있고, 앞으로 나오는 스킨 팩도 포함됩니다. 가족 공유는 지원하지 않습니다. 환불은 Apple 이 처리하며 <a href=\"https://reportaproblem.apple.com\" target=\"_blank\" rel=\"noopener\">reportaproblem.apple.com</a> 에서 신청할 수 있습니다.", "en": "The Lifetime pass is a one-time purchase usable on iPhone, iPad and Mac with the same Apple ID and includes future skin packs. Family Sharing is not supported. Refunds are handled by Apple at <a href=\"https://reportaproblem.apple.com\" target=\"_blank\" rel=\"noopener\">reportaproblem.apple.com</a>.", "ja": "買い切りパスは一度の購入で同じ Apple ID の iPhone・iPad・Mac で使え、今後のスキンパックも含まれます。ファミリー共有には対応していません。返金は Apple が処理し、<a href=\"https://reportaproblem.apple.com\" target=\"_blank\" rel=\"noopener\">reportaproblem.apple.com</a> から申請できます。"}, "t_marks_h": {"ko": "상표", "en": "Trademarks", "ja": "商標"}, "t_marks_p": {"ko": "Apple Music 은 Apple Inc. 의 상표입니다. 앱 속 기기 그림은 실제 제품·상표를 나타내지 않는 창작 디자인입니다.", "en": "Apple Music is a trademark of Apple Inc. The devices drawn in the app are original designs and do not represent real products or brands.", "ja": "Apple Music は Apple Inc. の商標です。アプリ内の機器の絵は実在の製品・商標を表さない創作デザインです。"}, "terms_h2": {"ko": "이용약관", "en": "Terms of Use", "ja": "利用規約"}, "contact_h2": {"ko": "문의", "en": "Contact", "ja": "お問い合わせ"}, "contact_p": {"ko": "버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드/맥)에서 어떤 화면이었는지 적어 주시면 빠르게 답합니다.", "en": "Bugs, feature requests and refund questions are all welcome. Tell us the device (iPhone/iPad/Mac) and the screen so we can answer quickly.", "ja": "バグ・機能のご提案・返金のご相談はどれも歓迎です。機種（iPhone/iPad/Mac）と画面を書き添えていただけると早くお答えできます。"}, "footer_policy": {"ko": "사이트 개인정보처리방침", "en": "Site privacy policy", "ja": "サイトのプライバシーポリシー"}};
+
+  const SUPPORTED_LANGS = ["ko","en","ja"];
+  const LANG_LABELS = {ko:"한국어", en:"English", ja:"日本語", de:"Deutsch", pt:"Português", es:"Español", zh:"简体中文"};
+
+  function applyLang(lang){
+    if (!SUPPORTED_LANGS.includes(lang)) lang = "ko";
+    document.documentElement.lang = (lang === "zh" ? "zh-Hans" : lang);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const entry = I18N[el.getAttribute('data-i18n')];
+      if (!entry) return;
+      const val = entry[lang] || entry.ko;
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+    });
+    document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang);
+    });
+    const label = document.getElementById('langSwitchLabel');
+    if (label) label.textContent = LANG_LABELS[lang];
+    // 사이트와 같은 열쇠를 쓴다 — 여기서 고른 언어가 홈에서도 이어진다.
+    try { localStorage.setItem('siteLang', lang); } catch(e) {}
+  }
+
+  function detectLang(){
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
+    } catch(e) {}
+    const nav = ((navigator.language || 'ko') + '').toLowerCase();
+    for (const code of ['ko','ja','en']) {
+      if (nav.indexOf(code) === 0) return code;
+    }
+    return 'ko';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('langSwitchBtn');
+    const menu = document.getElementById('langSwitchMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function(e){
+        if (!menu.contains(e.target) && e.target !== btn) {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+        b.addEventListener('click', function(){
+          applyLang(b.getAttribute('data-lang-btn'));
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+    applyLang(detectLang());
+  });
+</script>
+</body>
+</html>
