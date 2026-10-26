@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사이드체인 컴프레션과 더킹 — 키 신호·게인 리덕션·Release 설정 | ML Music Studio</title>
+<meta name="description" content="사이드체인 컴프레서가 일반 컴프레서와 무엇이 다른지, 게인 리덕션 계산과 템포별 Release, BGM 더킹 설정을 수치 예시로 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/sidechain-compression-ducking.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/sidechain-compression-ducking.html">
+<meta property="og:title" content="사이드체인 컴프레션과 더킹 — 키 신호·게인 리덕션·Release 설정">
+<meta property="og:description" content="키 신호를 듣고 다른 소리를 줄이는 사이드체인. GR 계산, Release 템포 맞추기, BGM 더킹까지.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "사이드체인 컴프레션과 더킹 — 키 신호·게인 리덕션·Release 설정",
+  "description": "키 신호를 듣고 다른 소리를 줄이는 사이드체인. GR 계산, Release 템포 맞추기, BGM 더킹까지.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-10-26",
+  "dateModified": "2026-10-26",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/sidechain-compression-ducking.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>사이드체인 컴프레션과 더킹</h1>
+  <div class="meta">믹싱·측정 · 약 6분</div>
+
+  <p class="lede">킥이 울릴 때마다 베이스가 눌렸다 올라오는 펌핑, 진행자가 말하면 배경음악이 작아지는 효과는 모두 같은 구조입니다. <strong>컴프레서가 자기 입력이 아니라 다른 트랙의 소리(키 신호)를 듣고, 그 크기에 따라 지정한 트랙을 줄이는 것</strong>이 사이드체인 컴프레션이고, 이 용도를 더킹이라고 부릅니다.</p>
+
+  <h2>무엇이 일반 컴프레서와 다른가</h2>
+  <p>일반 컴프레서는 검출부와 처리부가 같은 신호를 봅니다. 사이드체인을 켜면 검출부가 외부 입력으로 바뀝니다. 그래서 "무엇을 들을지(키)"와 "무엇을 줄일지(대상)"를 따로 정할 수 있습니다. 메뉴 이름은 DAW와 장비마다 달라서 Side Chain, Key 같은 입력 선택 항목을 찾으면 됩니다.</p>
+  <ul>
+    <li><strong>킥 → 베이스·패드</strong> — 킥이 나오는 순간만 저음 공간을 비워 준다.</li>
+    <li><strong>MC 마이크 → BGM</strong> — 말이 시작되면 배경음악이 자동으로 내려간다.</li>
+  </ul>
+
+  <h2>줄어드는 양 계산하기</h2>
+  <div class="formula">GR(dB) = (키 레벨 − Threshold) × (1 − 1/Ratio)</div>
+  <div class="example">
+    <b>예시</b> Threshold −30dB, 킥 레벨 −10dB, Ratio 4:1 →
+    기준을 넘은 양 20dB, GR = 20 × (1 − 1/4) = <strong>15dB</strong>. 대상 트랙이 −6dB였다면 킥이 울리는 동안 −21dB가 됩니다. 15dB는 진폭으로 약 0.18배입니다.
+  </div>
+  <table class="data">
+<tr><th>Ratio</th><th>GR (넘은 양 20dB 기준)</th></tr>
+<tr><td>2:1</td><td>10dB</td></tr>
+<tr><td>4:1</td><td>15dB</td></tr>
+<tr><td>10:1</td><td>18dB</td></tr>
+<tr><td>∞:1</td><td>20dB</td></tr>
+</table>
+  <p class="note">GR은 키 신호가 Threshold를 넘은 양을 넘을 수 없습니다. 숫자는 컴프레서마다 니(Knee) 정의에 따라 조금 달라질 수 있으니 GR 미터로 실제 값을 확인하세요.</p>
+
+  <h2>Release는 박자에 맞춘다</h2>
+  <p>1박의 길이는 60,000 ÷ BPM(ms)입니다. 120 BPM은 500ms, 128 BPM은 약 468.8ms이고, 16분음표는 각각 125ms, 약 117.2ms입니다. 킥이 매 박에 나오는 곡에서 Release가 1박보다 길면 대상 트랙이 다 올라오기 전에 다음 킥이 도착해 계속 눌린 채로 남습니다. 너무 짧으면 킥 끝에서 대상이 튀어 오르듯 들립니다. Attack은 짧게(0~10ms 부근) 두는 경우가 많습니다. BPM별 길이는 <a class="inline" href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기</a>의 표와 같은 방식입니다.</p>
+
+  <h2>BGM 더킹 시작점</h2>
+  <p>MC 마이크를 키로 쓰고 BGM을 −10dB 정도 내리는 설정이 흔한 출발점입니다. −10dB는 진폭 약 0.32배, 전력 1/10입니다. 말이 끝난 뒤 1~2초에 걸쳐 돌아오게 하면 부자연스러운 튐이 줄어듭니다.</p>
+
+  <h2>자주 겪는 문제</h2>
+  <ul>
+    <li><strong>하이햇에도 반응한다</strong> — 키 신호에 하이패스·로우패스를 걸어 킥 대역(대략 100Hz 아래)만 듣게 한다.</li>
+    <li><strong>펌핑이 너무 눈에 띈다</strong> — GR을 줄이거나 Release를 늘린다.</li>
+    <li><strong>아무 변화가 없다</strong> — 사이드체인 입력이 올바른 트랙에 연결됐는지, Threshold가 키 레벨보다 높지 않은지 확인한다.</li>
+  </ul>
+
+  <h2>자주 묻는 질문</h2>
+  <h3>사이드체인과 볼륨 오토메이션은 무엇이 다른가요?</h3>
+  <p>오토메이션은 시간에 따라 손으로 그린 변화이고, 사이드체인은 키 신호가 실제로 울린 때에만 자동으로 반응합니다. 템포나 연주가 바뀌어도 따라가는 것이 장점입니다.</p>
+  <h3>컴프레서 기본 설정부터 알고 싶어요.</h3>
+  <p><a class="inline" href="/guides/compressor-parameters-explained.html">컴프레서 파라미터 제대로 이해하기</a>에서 Threshold·Ratio·Attack·Release를 먼저 정리해 두었습니다.</p>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/compressor-parameters-explained.html">컴프레서 파라미터 제대로 이해하기 <span>· 믹싱·측정</span></a>
+    <a href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기 <span>· 믹싱·측정</span></a>
+    <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-10-26 · 최종 수정 2026-10-26</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p></div></footer>
+
+</body>
+</html>
