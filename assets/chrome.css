@@ -72,3 +72,5 @@ html{scroll-padding-top:80px}
 .site-header .nav a,.site-header .lang a{min-height:44px;display:flex;align-items:center}
 .site-footer .foot-links{gap:0}
 .site-footer .foot-links a{display:flex;align-items:center;min-height:44px;padding-block:8px}
+.site-footer .biz{margin:8px 0 0;font-size:12px;line-height:1.7;color:var(--ink2);word-break:keep-all}
+.site-footer .biz a{color:inherit;text-decoration:underline}

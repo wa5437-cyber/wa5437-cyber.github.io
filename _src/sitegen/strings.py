@@ -18,6 +18,13 @@ S = {
     "footer_products": {"ko": "제품", "en": "Products"},
     "footer_support": {"ko": "문의", "en": "Contact"},
     "footer_map": {"ko": "오시는 길", "en": "Directions"},
+    "biz_name": {"ko": "상호", "en": "Business"},
+    "biz_owner": {"ko": "대표", "en": "Owner"},
+    "biz_reg": {"ko": "사업자등록번호", "en": "Business registration no."},
+    "biz_check": {"ko": "사업자정보 확인", "en": "Verify"},
+    "biz_mail_order": {"ko": "통신판매업 신고", "en": "Mail-order business no."},
+    "biz_address": {"ko": "주소", "en": "Address"},
+    "biz_email": {"ko": "이메일", "en": "Email"},
     "chat": {"ko": "카카오톡으로 문의", "en": "Contact on KakaoTalk"},
     "mail": {"ko": "이메일 보내기", "en": "Send an email"},
 }

@@ -17,5 +17,24 @@
     "<meta name=\"google-site-verification\" content=\"nFELUuaO_o0ygCybO6nD3mEM6w6qoJ_7bWdH3Yt6dew\" />",
     "<meta name=\"google-site-verification\" content=\"O-f5-T_yerPKwXIlQD-qd9mcoOO_0Ba7DrMiWOqUU8Y\" />",
     "<meta name=\"naver-site-verification\" content=\"47461b4d6caa40f7468eb8d719005d01d284c880\" />"
-  ]
+  ],
+  "business": {
+    "name": {
+      "ko": "엠엘뮤직스튜디오(ML Music Studio)",
+      "en": "ML Music Studio"
+    },
+    "owner": {
+      "ko": "이효섭",
+      "en": "Hyoseop Lee"
+    },
+    "reg_no": "163-05-01983",
+    "mail_order": {
+      "ko": "제2026-안양동안-1060호",
+      "en": "2026-Anyang Dongan-1060"
+    },
+    "address": {
+      "ko": "경기도 안양시 동안구",
+      "en": "Dongan-gu, Anyang-si, Gyeonggi-do, Korea"
+    }
+  }
 }

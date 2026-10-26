@@ -129,10 +129,18 @@ def footer(lang):
     )
     cols = "".join(f'<div class="foot-col"><p class="foot-h">{esc(t(g, k))}</p><ul class="foot-links">{links(items)}</ul></div>'
                    for g, items in groups)
+    # 전자상거래법 사업자 정보: 상호·대표자·사업자등록번호(공정위 확인)·통신판매업 신고번호·주소·이메일
+    b = SITE["business"]
+    check = f'https://www.ftc.go.kr/bizCommPop.do?wrkr_no={b["reg_no"].replace("-", "")}'
+    biz = " · ".join(esc(s) for s in (
+        f'{t("biz_name", k)} {b["name"][k]}', f'{t("biz_owner", k)} {b["owner"][k]}', f'{t("biz_reg", k)} {b["reg_no"]}'))
+    biz += (f' <a href="{esc(check)}" rel="noopener">[{esc(t("biz_check", k))}]</a> · '
+            + " · ".join(esc(s) for s in (f'{t("biz_mail_order", k)} {b["mail_order"][k]}',
+                                           f'{t("biz_address", k)} {b["address"][k]}', f'{t("biz_email", k)} {c["email"]}')))
     return (f'<footer class="site-footer"{chrome_lang_attr(lang)}><div class="wrap foot-grid">'
             f'<div class="foot-brand"><a class="brand" href="{esc(url(k, "/"))}">{esc(SITE["brand"])}</a>'
             f'<p class="foot-tag">{esc(t("footer_tag", k))}</p></div>{cols}</div>'
-            f'<div class="wrap"><p class="copy">© 2026 {esc(SITE["brand"])}</p></div></footer>')
+            f'<div class="wrap"><p class="copy">© 2026 {esc(SITE["brand"])}</p><p class="biz">{biz}</p></div></footer>')
 
 
 def img_size(rel_path):
