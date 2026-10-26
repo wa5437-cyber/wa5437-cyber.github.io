@@ -315,6 +315,7 @@ a.card .more{color:var(--accent-ink)}
 .alt{display:grid;gap:28px;align-items:center;padding:32px 0}
 .alt+.alt{border-top:1px solid var(--line)}
 @media(min-width:800px){.alt{grid-template-columns:1fr 1fr;gap:56px}.alt.rev .alt-img{order:2}}
+@media(min-width:800px){.alt.alt-solo{grid-template-columns:1fr}}
 .alt-text p{color:var(--ink2);max-width:32em}
 .alt-text h2{font-size:clamp(1.25rem,1.1rem + .6vw,1.5rem);font-weight:600;line-height:1.35;letter-spacing:-.01em;text-wrap:wrap}
 .steps{counter-reset:s;display:grid;gap:16px;padding:0;margin:0;list-style:none}

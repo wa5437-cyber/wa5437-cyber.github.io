@@ -531,9 +531,12 @@ def _app_page_full(lang, app, det, slug):
     facts = "".join(f"<li>{esc(f)}</li>" for f in det["facts"][lang])
     blocks = ""
     for i, b in enumerate(det["blocks"]):
+        text = f'<div class="alt-text"><h2>{esc(b["title"][lang])}</h2><p>{esc(b["text"][lang])}</p></div>'
+        if not b.get("img"):                    # 화면 캡처가 아직 없는 기능 카드: 글만
+            blocks += f'<div class="alt alt-solo">{text}</div>'
+            continue
         blocks += (f'<div class="alt{" rev" if i % 2 else ""}"><div class="alt-img">'
-                   f'{shot_img(img_dir + pick_img(b["img"], lang), b["alt"][lang], "shot")}</div>'
-                   f'<div class="alt-text"><h2>{esc(b["title"][lang])}</h2><p>{esc(b["text"][lang])}</p></div></div>')
+                   f'{shot_img(img_dir + pick_img(b["img"], lang), b["alt"][lang], "shot")}</div>{text}</div>')
     steps = "".join(f'<li><strong>{esc(s["t"])}</strong><br>{esc(s["d"])}</li>' for s in det["steps"][lang])
     guides = ""
     for g in det.get("related", []):
@@ -564,7 +567,7 @@ def _app_page_store(lang, app, det, s, slug):
     """앱스토어 문구만으로 만든 상세(그 밖의 언어): 이름·부제·스토어 버튼 -> 화면 3장 -> 설명 -> 개인정보."""
     img_dir = f"/img/apps/{slug}/"
     name = s["name"]
-    shots = "".join(shot_img(img_dir + pick_img(b["img"], lang), name, "shot") for b in det["blocks"][:3])
+    shots = "".join(shot_img(img_dir + pick_img(b["img"], lang), name, "shot") for b in [b for b in det["blocks"] if b.get("img")][:3])
     body = (
         f'<section class="hero app-hero"><div class="wrap"><div class="grid"><div>'
         f'<h1>{esc_mixed(name)}</h1><p class="sub">{esc_mixed(s.get("subtitle", ""))}</p>'
