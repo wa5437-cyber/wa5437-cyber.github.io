@@ -259,7 +259,8 @@ class PageLangTests(unittest.TestCase):
         _, en = pages.app_page("en", "stage-sound")
         self.assertIn("사용법", ko)
         self.assertIn("How to use", en)
-        self.assertIn("Privacy policy (Korean)", en)
+        self.assertIn(">Privacy policy</a>", en)
+        self.assertNotIn("Privacy policy (Korean)", en)
 
     def test_build_all_writes_only_ready_language_pages(self):
         root = pathlib.Path(self.tmp.name)
@@ -507,9 +508,11 @@ class ImgAndLegalTests(unittest.TestCase):
 
     def test_privacy_link_falls_back_to_policy_page(self):
         self._with_legal(None)
-        for lang in ("ko", "en", "ja"):
+        _, ko = pages.app_page("ko", "stage-sound")
+        self.assertIn('href="/policy.html#policy"', ko)
+        for lang in ("en", "ja"):                       # 한국어 밖은 영어판 방침
             _, html = pages.app_page(lang, "stage-sound")
-            self.assertIn('href="/policy.html#policy"', html, lang)
+            self.assertIn('href="/en/policy.html#policy"', html, lang)
 
 
 class PrepShotTests(unittest.TestCase):

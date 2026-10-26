@@ -64,14 +64,14 @@
   },
   "bullets": {
    "ko": [
-    "핑크노이즈 위의 10밴드 EQ 부스트·컷을 귀로 맞히는 주파수 훈련",
+    "핑크노이즈 위의 EQ 부스트·컷을 귀로 맞히는 주파수 훈련: 무료 10밴드(옥타브), Pro 31밴드(1/3옥타브)",
     "노이즈 종류 구분 훈련. Pro에서는 험 주파수(50·60Hz)와 노이즈 플로어 구분도 가능",
     "이펙트 청음: 리버브·딜레이·코러스 맞히기. Pro는 7종 이펙트와 강도 A/B 비교",
     "10문제 모의고사로 S~D 등급과 카테고리별 정답률 확인",
     "광고·로그인 없이 인터넷 연결 없이도 사용"
    ],
    "en": [
-    "Frequency training: spot 10-band EQ boosts and cuts on pink noise",
+    "Frequency training: spot EQ boosts and cuts on pink noise — 10 octave bands free, 31 third-octave bands with Pro",
     "Noise training: identify noise types; Pro adds hum frequency (50 or 60 Hz) and noise floor",
     "Effects training: identify reverb, delay and chorus; Pro adds 4 more effects (7 total) and A/B intensity comparison",
     "A 10-question mock exam gives an S to D grade and per-category accuracy",

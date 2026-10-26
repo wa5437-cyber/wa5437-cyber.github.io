@@ -518,8 +518,9 @@ def app_ld(lang, slug, app):
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
 
-def privacy_href(app):
-    return app.get("legal") or "/policy.html#policy"
+def privacy_href(app, lang="ko"):
+    """앱 전용 방침이 있으면 그 쪽, 없으면 공통 방침(한국어 쪽은 /policy.html, 그 밖의 언어는 영어판 /en/policy.html)."""
+    return app.get("legal") or ("/policy.html#policy" if lang == "ko" else "/en/policy.html#policy")
 
 
 def _app_page_full(lang, app, det, slug):
@@ -541,7 +542,7 @@ def _app_page_full(lang, app, det, slug):
             guides += f'<li><a href="/guides/{esc(g)}.html" lang="ko">{esc(info[0])}</a></li>'
     rel = (f'<section class="band"><div class="wrap"><h2>{esc(ui["related"][lang])}</h2>'
            f'<ul class="bullets">{guides}</ul></div></section>') if guides else ""
-    privacy = f'<p><a href="{esc(privacy_href(app))}">{esc(ui["privacy"][lang])}</a></p>'
+    privacy = f'<p><a href="{esc(privacy_href(app, lang))}">{esc(ui["privacy"][lang])}</a></p>'
     price = (det.get("price") or {}).get(lang)
     price_pill = f'<span class="pill" style="align-self:center">{esc(price)}</span>' if price else ""
     body = (
@@ -573,7 +574,7 @@ def _app_page_store(lang, app, det, s, slug):
         f'<section class="band"><div class="wrap"><h2>{esc(strings.APP_UI["screens"][lang])}</h2>'
         f'<div class="shots">{shots}</div></div></section>'
         f'<section class="band"><div class="wrap store-copy">{render_store_text(s["description"])}'
-        f'<p><a href="{esc(privacy_href(app))}">{esc(strings.APP_UI["privacy"][lang])}</a></p></div></section>')
+        f'<p><a href="{esc(privacy_href(app, lang))}">{esc(strings.APP_UI["privacy"][lang])}</a></p></div></section>')
     title = f'{name} | ML Music Studio'
     lead = " — ".join(x for x in (s.get("subtitle", ""), s["description"]) if x)   # 홍보 문구(기간 한정)는 쓰지 않는다
     return title, short(lead, 150), body, app_ld(lang, slug, dict(app, name={lang: name}))

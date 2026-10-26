@@ -35,7 +35,7 @@ LANG_SHORT = {"ko": "KO", "en": "EN", "ja": "JA", "zh-Hans": "简体", "es": "ES
 APP_UI = {
     "howto":   {"ko": "사용법", "en": "How to use", "ja": "使い方", "zh-Hans": "使用方法", "es": "Cómo usarla", "de": "So funktioniert’s", "fr": "Mode d’emploi", "pt-BR": "Como usar"},
     "screens": {"ko": "화면", "en": "Screenshots", "ja": "スクリーンショット", "zh-Hans": "截图", "es": "Capturas de pantalla", "de": "Screenshots", "fr": "Captures d’écran", "pt-BR": "Capturas de tela"},
-    "privacy": {"ko": "개인정보처리방침", "en": "Privacy policy (Korean)", "ja": "プライバシーポリシー(韓国語)", "zh-Hans": "隐私政策(韩语)", "es": "Política de privacidad (en coreano)", "de": "Datenschutzerklärung (auf Koreanisch)", "fr": "Politique de confidentialité (en coréen)", "pt-BR": "Política de privacidade (em coreano)"},
+    "privacy": {"ko": "개인정보처리방침", "en": "Privacy policy", "ja": "プライバシーポリシー", "zh-Hans": "隐私政策", "es": "Política de privacidad", "de": "Datenschutzerklärung", "fr": "Politique de confidentialité", "pt-BR": "Política de privacidade"},
     "related": {"ko": "관련 가이드", "en": "Related guides (Korean)"},
     "details": {"ko": "자세히 보기", "en": "Details"},
 }

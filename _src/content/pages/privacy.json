@@ -89,9 +89,9 @@
          "Person responsible for personal information: Hyoseop Lee, via the contact methods below."]},
       {"type": "prose", "title": "Privacy policies for the apps",
        "paragraphs": [
-         "What the apps handle is documented separately from the site. The full privacy policy, and the policies of the apps that have their own policy page, are available below. The apps' privacy policy (policy.html and the per-app pages) is a separate document with its own date."],
+         "What the apps handle is documented separately from the site. The full privacy policy, and the policies of the apps that have their own policy page, are available below. The apps' privacy policy (this full policy and the per-app pages) is a separate document with its own date."],
        "links": [
-         {"text": "Full privacy policy (apps and web tools)", "href": "/policy.html#policy"},
+         {"text": "Full privacy policy (apps and web tools)", "href": "/en/policy.html#policy"},
          {"text": "Patch & I/O privacy policy", "href": "/patchio_legal.html"},
          {"text": "NORA privacy policy", "href": "/nora_legal.html"},
          {"text": "Yul privacy policy", "href": "/yul_legal.html"},

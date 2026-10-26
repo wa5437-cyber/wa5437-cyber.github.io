@@ -30,6 +30,8 @@ class Document(HTMLParser):
 def reviewed_files():
     for f in ROOT.rglob('*.html'):
         rel = f.relative_to(ROOT).as_posix()
+        if rel in check.PLAIN_LINK_FILES and rel not in chrome_tools.FILES:   # policy.html 과 그 영어판(옛 모양 그대로)
+            continue
         if rel.startswith(check.GENERATED_PREFIXES + ('guides/',)) or rel in chrome_tools.FILES:
             yield f
 
