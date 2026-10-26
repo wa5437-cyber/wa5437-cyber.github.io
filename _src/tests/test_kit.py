@@ -111,7 +111,7 @@ class KitTests(unittest.TestCase):
         # 전자상거래법: 상호·대표자·사업자등록번호·통신판매업 신고번호·주소·연락처 표시
         ko = kit.footer("ko")
         for s in ("엠엘뮤직스튜디오", "이효섭", "163-05-01983", "제2026-안양동안-1060호",
-                  "https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983", kit.SITE["business"]["address"]["ko"]):
+                  "https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983", "wa547@hanmail.net", "wa5437@gmail.com", kit.SITE["business"]["address"]["ko"]):
             self.assertIn(s, ko)
         en = kit.footer("en")
         for s in ("ML Music Studio", "Hyoseop Lee", "163-05-01983", "2026-Anyang Dongan-1060",

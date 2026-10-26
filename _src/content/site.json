@@ -35,6 +35,10 @@
     "address": {
       "ko": "경기도 안양시 동안구",
       "en": "Dongan-gu, Anyang-si, Gyeonggi-do, Korea"
-    }
+    },
+    "emails": [
+      "wa547@hanmail.net",
+      "wa5437@gmail.com"
+    ]
   }
 }
