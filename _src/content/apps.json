@@ -47,8 +47,8 @@
         "en": "Ear training for audio engineers: EQ frequencies (31 bands on pink noise or a sine), noise (type, hum, noise floor) and effects (Reverb, Delay, Chorus and more). Train each ear separately, compare effect intensity A/B, and take a 10-question mock test graded S–D. Train with your own music, too. 8 languages (German, Portuguese and French from 1.1.1)."
       },
       "badge": {
-        "ko": "iOS · iPadOS · macOS",
-        "en": "iOS · iPadOS · macOS"
+        "ko": "iOS · iPadOS · macOS · iPhone Duo 대응",
+        "en": "iOS · iPadOS · macOS · iPhone Duo support"
       },
       "appstore": "https://apps.apple.com/app/audioengineer-ear-trainer/id6801893036",
       "play": null,
