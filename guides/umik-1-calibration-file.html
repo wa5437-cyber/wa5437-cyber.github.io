@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UMIK-1 보정 파일 사용법 — 측정 마이크 편차·0°/90°·SPL 환산 | ML Music Studio</title>
+<meta name="description" content="측정 마이크 보정 파일이 무엇을 바로잡는지, 시리얼 번호로 받는 법과 0°/90° 파일 차이, 감도로 SPL을 환산하는 식을 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html">
+<meta property="og:title" content="UMIK-1 보정 파일 사용법 — 측정 마이크 편차·0°/90°·SPL 환산">
+<meta property="og:description" content="보정 파일은 마이크의 주파수별 편차 기록. 받는 법, 0°/90° 선택, SPL 환산까지.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "UMIK-1 보정 파일 사용법 — 측정 마이크 편차·0°/90°·SPL 환산",
+  "description": "보정 파일은 마이크의 주파수별 편차 기록. 받는 법, 0°/90° 선택, SPL 환산까지.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-10-30",
+  "dateModified": "2026-10-30",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>UMIK-1 보정 파일 사용법</h1>
+  <div class="meta">믹싱·측정 · 약 5분</div>
+
+  <p class="lede">완전히 평평한 마이크는 없습니다. 측정용 USB 마이크 miniDSP UMIK-1은 <strong>개체마다 측정한 주파수별 편차를 보정 파일로 제공</strong>하고, 측정 소프트웨어가 이 값을 반영해 마이크가 만든 오차를 걷어 냅니다. 그래프에 남는 것이 스피커와 방의 특성이 되도록 하는 장치입니다.</p>
+
+  <h2>보정 파일이 하는 일</h2>
+  <p>파일에는 주파수별 편차(dB)가 줄줄이 적혀 있습니다. 예를 들어 8kHz가 +2dB라면 그 마이크가 8kHz를 2dB 크게 듣는다는 뜻이고, 소프트웨어가 그만큼을 빼서 보여 줍니다. 2dB는 진폭으로 약 1.26배 차이로, EQ 판단에는 충분히 의미 있는 크기입니다.</p>
+
+  <h2>파일 받기</h2>
+  <ul>
+    <li>마이크 본체에 적힌 <strong>7자리 시리얼 번호</strong>를 확인합니다.</li>
+    <li>miniDSP 홈페이지의 UMIK-1 보정 파일 페이지에 번호를 입력합니다.</li>
+    <li>파일이 두 개 내려옵니다. 시리얼 번호 이름의 txt가 기본(0°) 파일이고 다른 하나가 90° 파일입니다.</li>
+  </ul>
+  <p class="note">파일은 마이크마다 다릅니다. 다른 사람의 파일을 쓰면 맞지 않으니 내 번호로 받은 파일을 따로 보관하세요.</p>
+
+  <h2>0° 파일과 90° 파일</h2>
+  <table class="data">
+<tr><th>파일</th><th>마이크 방향</th><th>쓰는 경우</th></tr>
+<tr><td>0°</td><td>끝이 소리 쪽(스피커)을 향함</td><td>스피커 한 대·스테레오 페어 측정</td></tr>
+<tr><td>90°</td><td>마이크를 세워 소리가 옆에서 들어옴</td><td>서라운드처럼 여러 방향에서 소리가 오는 환경</td></tr>
+</table>
+
+  <h2>소프트웨어에 적용하기</h2>
+  <p>REW 같은 측정 프로그램에는 보정 파일을 불러오는 항목이 있습니다. 입력 장치로 UMIK-1을 고르고 파일을 지정하세요. 파일을 바꿨다면 이전 측정값은 보정이 달랐던 것이므로 다시 측정합니다.</p>
+
+  <h2>감도로 SPL 환산하기</h2>
+  <p>파일 상단에는 마이크 감도(dBFS/Pa) 정보도 들어 있습니다. 1Pa가 94dB SPL이라는 기준으로 소프트웨어가 디지털 레벨을 음압으로 바꿉니다.</p>
+  <div class="formula">SPL = 94 + (입력 dBFS − 감도 dBFS/Pa)</div>
+  <div class="example">
+    <b>예시 (감도 −20 dBFS/Pa라고 가정)</b> 입력 −20 dBFS → <strong>94dB SPL</strong>, −26 dBFS → <strong>88dB SPL</strong>, −40 dBFS → <strong>74dB SPL</strong>. 실제 감도는 내 파일에서 확인하세요.
+  </div>
+  <p class="note">입력 게인을 바꾸면 이 대응이 틀어지므로, SPL로 읽을 때는 보정 때와 같은 설정을 유지합니다. 보정 파일은 마이크의 주파수 특성만 바로잡으며 방 자체의 문제를 고치지는 않습니다.</p>
+
+  <h2>자주 묻는 질문</h2>
+  <h3>보정을 켜면 소리가 달라지나요?</h3>
+  <p>듣는 소리는 그대로이고 그래프 표시만 바뀝니다. 마이크의 편차가 그래프에서 빠질 뿐입니다.</p>
+  <h3>측정 결과 읽는 법은요?</h3>
+  <p><a class="inline" href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법</a>에서 룸 모드와 하울링 포인트 보는 법을 정리해 두었습니다.</p>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/reading-31-band-rta.html">31밴드 RTA 읽는 법 <span>· 믹싱·측정</span></a>
+    <a href="/guides/spl-meter-weighting-fast-slow-leq.html">SPL 미터 설정 읽는 법 <span>· 믹싱·측정</span></a>
+    <a href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위 총정리 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-10-30</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p><p class="biz">상호 엠엘뮤직스튜디오(ML Music Studio) · 대표 이효섭 · 사업자등록번호 163-05-01983 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983" rel="noopener">[사업자정보 확인]</a> · 통신판매업 신고 제2026-안양동안-1060호 · 주소 경기도 안양시 동안구 · 이메일 wa547@hanmail.net, wa5437@gmail.com</p></div></footer>
+
+</body>
+</html>
