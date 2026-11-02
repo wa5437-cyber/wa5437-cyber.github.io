@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>리미터 vs 컴프레서 — 차이·Ceiling·룩어헤드·트루 피크 | ML Music Studio</title>
+<meta name="description" content="리미터와 컴프레서가 무엇이 다른지 Ratio별 남는 양, 반응 속도와 룩어헤드, 마스터링 천장과 트루 피크, 공연장 스피커 보호 리미터까지 수치 예시로 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html">
+<meta property="og:title" content="리미터 vs 컴프레서 — 차이·Ceiling·룩어헤드·트루 피크">
+<meta property="og:description" content="Ratio만 다른 게 아니다. 남는 양·속도·쓰는 목적으로 본 리미터와 컴프레서의 차이.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "리미터 vs 컴프레서 — 차이·Ceiling·룩어헤드·트루 피크",
+  "description": "Ratio만 다른 게 아니다. 남는 양·속도·쓰는 목적으로 본 리미터와 컴프레서의 차이.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-11-02",
+  "dateModified": "2026-11-02",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>리미터 vs 컴프레서</h1>
+  <div class="meta">믹싱·측정 · 약 6분</div>
+
+  <p class="lede">컴프레서와 리미터는 둘 다 기준보다 큰 신호를 줄이는 다이내믹 프로세서입니다. 차이는 목적에서 나옵니다. <strong>컴프레서는 기준을 넘은 부분의 일부를 남겨 크고 작음의 폭을 좁히고, 리미터는 정해 둔 천장을 넘는 신호를 남기지 않도록 막습니다.</strong> 그래서 Ratio뿐 아니라 반응 속도, 설정 이름, 놓이는 위치까지 달라집니다.</p>
+
+  <h2>초과분이 얼마나 남는가</h2>
+  <div class="formula">남는 양(dB) = 초과분 ÷ Ratio &nbsp;·&nbsp; GR(dB) = 초과분 × (1 − 1/Ratio)</div>
+  <p>기준을 12dB 넘은 피크를 Ratio별로 계산하면 다음과 같습니다.</p>
+  <table class="data">
+<tr><th>Ratio</th><th>GR</th><th>기준 위로 남는 양</th></tr>
+<tr><td>4:1</td><td>9dB</td><td>3dB</td></tr>
+<tr><td>10:1</td><td>10.8dB</td><td>1.2dB</td></tr>
+<tr><td>20:1</td><td>11.4dB</td><td>0.6dB</td></tr>
+<tr><td>∞:1 (브릭월)</td><td>12dB</td><td>0dB</td></tr>
+</table>
+  <p class="note">어느 Ratio부터 리미터라고 부르는지는 자료마다 다르며, 일반적으로 10:1 이상을 리미팅 영역으로 봅니다. 리미터 제품은 기준을 Threshold 대신 Ceiling이나 Output으로 표시하는 경우가 많습니다.</p>
+
+  <h2>반응 속도와 룩어헤드</h2>
+  <p>높은 Ratio의 컴프레서가 곧바로 리미터가 되지는 않습니다. 컴프레서는 Attack을 수 ms 이상으로 두어 타악기의 첫 타격음을 통과시키는 용도가 흔하지만, 리미터는 피크를 하나도 넘기지 않는 것이 목표라 매우 빠르게 반응하도록 설계됩니다. 많은 리미터는 신호를 조금 늦게 내보내고 그동안 다가오는 피크를 미리 읽는 룩어헤드를 씁니다.</p>
+  <div class="example">
+    <b>예시</b> 룩어헤드 5ms, 샘플레이트 48kHz → 0.005 × 48,000 = <strong>240샘플</strong>의 지연. DAW는 플러그인 지연 보정으로 맞춰 주지만, 실시간 모니터링 경로에서는 이 지연이 그대로 더해집니다.
+  </div>
+
+  <h2>마스터링: 천장과 트루 피크</h2>
+  <p>마스터링 리미터는 Threshold를 내린 만큼 신호를 키우고 출력은 Ceiling에서 막는 구조가 흔합니다. Ceiling −1dB, Threshold −6dB라면 신호가 5dB(진폭 약 1.78배) 올라가는 효과를 내면서 피크는 −1dB에 머뭅니다. Threshold를 깊게 내릴수록 깎이는 피크가 많아져 타격감이 줄고 왜곡이 늘어나므로, 앞단의 컴프레서로 다이내믹을 먼저 조금 다듬는 순서를 많이 씁니다.</p>
+  <p>샘플값이 천장 아래여도 D/A 변환 뒤의 실제 파형은 샘플 사이에서 더 높이 솟을 수 있고(인터샘플 피크), 손실 압축 인코딩 과정에서도 피크가 늘 수 있습니다. 트루 피크 검출 리미터와 −1dBTP 안팎의 여유가 일반적으로 권장되는 이유입니다. 측정은 <a class="inline" href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법</a>에서 다룬 True Peak 값으로 확인합니다.</p>
+
+  <h2>공연장: 스피커를 지키는 리미터</h2>
+  <p>스피커 프로세서와 앰프에 들어 있는 리미터는 음량을 키우는 도구가 아니라 하울링, 떨어진 마이크의 충격음 같은 돌발 피크로부터 드라이버를 보호하는 장치입니다. 앰프 최대 출력이 스피커 정격보다 크다면 그 비율만큼 아래에서 리미터가 동작하도록 시작점을 잡습니다.</p>
+  <div class="example">
+    <b>예시</b> 앰프 1,000W, 스피커 정격 500W → 10 × log(500 ÷ 1,000) ≈ <strong>−3dB</strong>. 전력 비율이므로 10log를 씁니다. 실제 값은 제조사 프리셋과 권장 설정을 우선합니다.
+  </div>
+  <p class="note">전력과 전압의 dB 계산 차이는 <a class="inline" href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위 총정리</a>, 앰프와 스피커 부하는 <a class="inline" href="/guides/speaker-impedance-matching.html">스피커 임피던스</a>를 참고하세요.</p>
+
+  <h2>자주 묻는 질문</h2>
+  <h3>컴프레서 없이 리미터만 써도 되나요?</h3>
+  <p>가능하지만 리미터 하나로 많은 양을 줄이면 피크가 납작해지는 소리가 쉽게 드러납니다. 몇 dB씩 나눠 맡기는 편이 자연스럽습니다.</p>
+  <h3>컴프레서 기본 설정은 어디서 보나요?</h3>
+  <p><a class="inline" href="/guides/compressor-parameters-explained.html">컴프레서 파라미터 제대로 이해하기</a>에 Threshold·Ratio·Knee·Attack·Release를 수치 예시와 함께 정리해 두었습니다.</p>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/compressor-parameters-explained.html">컴프레서 파라미터 제대로 이해하기 <span>· 믹싱·측정</span></a>
+    <a href="/guides/sidechain-compression-ducking.html">사이드체인 컴프레션과 더킹 <span>· 믹싱·측정</span></a>
+    <a href="/guides/reading-lufs-loudness.html">LUFS·라우드니스 미터 읽는 법 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-11-02</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p><p class="biz">상호 엠엘뮤직스튜디오(ML Music Studio) · 대표 이효섭 · 사업자등록번호 163-05-01983 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983" rel="noopener">[사업자정보 확인]</a> · 통신판매업 신고 제2026-안양동안-1060호 · 주소 경기도 안양시 동안구 · 이메일 wa547@hanmail.net, wa5437@gmail.com</p></div></footer>
+
+</body>
+</html>
