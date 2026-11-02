@@ -209,8 +209,8 @@
         "en": "Detects tempo and key live from the microphone, and tempo, key, and chord progressions from audio files. It also works out the delay and reverb times that match the detected BPM. Chord detection is a reference aid: it is less accurate than tempo and key, and often goes wrong on ballads with dense harmony. All analysis runs on your device — no internet needed. Live microphone detection and the metronome are free; full-song analysis, saved records, and setlists are a one-time lifetime purchase. It also includes a metronome with drum patterns. From 1.4, Record to MIDI (iPhone and iPad, reference only) turns drums or a single instrument recorded to the click into MIDI — recording and viewing the result are free, exporting the MIDI file is part of the lifetime purchase. Available in Korean, English, Japanese, Spanish, Chinese, German, Portuguese and French (French from 1.4)."
       },
       "badge": {
-        "ko": "출시 · iOS · iPadOS",
-        "en": "Live · iOS · iPadOS"
+        "ko": "출시 · iOS · iPadOS · macOS · iPhone Duo 대응",
+        "en": "Live · iOS · iPadOS · macOS · iPhone Duo support"
       },
       "appstore": "https://apps.apple.com/kr/app/temposcope/id6808620681",
       "play": null,

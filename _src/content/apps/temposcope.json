@@ -59,8 +59,8 @@
    "en": "A tempo tool that finds tempo and key in real time from the microphone, with a full metronome and delay and reverb time calculation in one app."
   },
   "platforms": {
-   "ko": "iPhone · iPad",
-   "en": "iPhone · iPad"
+   "ko": "iPhone · iPad · Mac · iPhone Duo 대응",
+   "en": "iPhone · iPad · Mac · iPhone Duo support"
   },
   "bullets": {
    "ko": [
