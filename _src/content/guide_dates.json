@@ -51,6 +51,10 @@
   "modified": "2026-10-16",
   "published": "2026-10-02"
  },
+ "limiter-vs-compressor": {
+  "modified": "2026-11-02",
+  "published": "2026-11-02"
+ },
  "line-array-basics": {
   "modified": "2026-10-17",
   "published": "2026-10-01"
@@ -122,5 +126,9 @@
  "stage-sound-exam-scoring": {
   "modified": "2026-10-02",
   "published": "2026-10-02"
+ },
+ "umik-1-calibration-file": {
+  "modified": "2026-10-30",
+  "published": "2026-10-23"
  }
 }
