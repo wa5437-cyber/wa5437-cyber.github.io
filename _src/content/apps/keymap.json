@@ -59,8 +59,8 @@
    "en": "An app to search, translate and drill keyboard shortcuts across six DAWs: Pro Tools, Logic Pro, Ableton Live, FL Studio, Studio One and Cubase."
   },
   "platforms": {
-   "ko": "iPhone · iPad",
-   "en": "iPhone · iPad"
+   "ko": "iPhone · iPad · Mac",
+   "en": "iPhone · iPad · Mac"
   },
   "bullets": {
    "ko": [
@@ -80,13 +80,13 @@
   },
   "facts": {
    "ko": [
-    "iPhone · iPad",
+    "iPhone · iPad · Mac",
     "6개 DAW 단축키",
     "8개 언어 검색",
     "완전 오프라인 · 계정 불필요"
    ],
    "en": [
-    "iPhone · iPad",
+    "iPhone · iPad · Mac",
     "Shortcuts for 6 DAWs",
     "Search in 8 languages",
     "Fully offline · no account"

@@ -119,8 +119,8 @@
         "en": "Every keyboard shortcut for six DAWs — Pro Tools, Logic, Ableton, FL Studio, Studio One, Cubase — searchable in one place. Translate shortcuts across DAWs and drill them with spaced repetition. Search in English, Korean, Japanese, German, Portuguese, Spanish, French and Chinese (French and Chinese from 1.1.2)."
       },
       "badge": {
-        "ko": "출시 · iOS · iPadOS",
-        "en": "Live · iOS · iPadOS"
+        "ko": "출시 · iOS · iPadOS · macOS",
+        "en": "Live · iOS · iPadOS · macOS"
       },
       "appstore": "https://apps.apple.com/kr/app/daw-%EB%8B%A8%EC%B6%95%ED%82%A4-%ED%82%A4%EB%A7%B5/id6806570824",
       "play": null,
