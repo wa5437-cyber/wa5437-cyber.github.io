@@ -51,8 +51,8 @@
  },
  "detail": {
   "price": {
-   "ko": "무료로 시작 · Pro 는 한 번 구매하는 평생 이용권(구독 아님)",
-   "en": "Free to start · Pro is a one-time lifetime purchase (not a subscription)"
+   "ko": "무료로 시작 · Pro 는 평생 이용권 한 번 — 구독·광고·마디/악기 제한 없음, 사진·PDF 읽기 포함",
+   "en": "Free to start · Pro is one lifetime purchase: no subscription, no ads, no bar or instrument limits, photo and PDF reading included"
   },
   "lead": {
    "ko": "악보 PDF·사진을 편집할 수 있는 악보로, 미디 파일을 악보로 바꿔 주는 앱입니다. 인식 결과는 초안이므로 편집 화면에서 확인하고 고쳐 씁니다.",
