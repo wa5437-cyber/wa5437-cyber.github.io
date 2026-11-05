@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>무대음향 3급 기출 풀이 2026년 제28회 — 전공 25문제 해설 | ML Music Studio</title>
+<meta name="description" content="2026년 제28회 무대예술전문인 무대음향 3급 전공 1~25번의 정답과 풀이. 양이 효과, 거리 계수, 에일리어싱, dB 단위, 접지, 단테, 안테나 편파까지 왜 그 답인지 계산과 함께 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/stage-sound-exam-2026-28th-grade3.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/stage-sound-exam-2026-28th-grade3.html">
+<meta property="og:title" content="무대음향 3급 기출 풀이 2026년 제28회 — 전공 25문제 해설">
+<meta property="og:description" content="2026년 제28회 무대음향 3급 전공 25문제를 왜 그 답인지 계산과 함께 풀이했습니다.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "무대음향 3급 기출 풀이 2026년 제28회 — 전공 25문제 해설",
+  "description": "2026년 제28회 무대음향 3급 전공 25문제를 왜 그 답인지 계산과 함께 풀이했습니다.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-11-05",
+  "dateModified": "2026-11-05",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/stage-sound-exam-2026-28th-grade3.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 무대음향 기출 풀이</div>
+  <h1>무대음향 3급 기출 풀이 2026년 제28회</h1>
+  <div class="meta">무대음향 기출 풀이 · 약 15분</div>
+
+  <p class="lede">2026년 제28회 무대예술전문인 자격검정 필기 <strong>무대음향 3급 전공 25문제</strong>를 왜 그 답인지 중심으로 풀이했습니다. 문제 문장은 뜻만 줄여 적었고, 정답 옆에 핵심을 한 줄로 달았습니다.</p>
+  <p class="note">정답은 공개된 가답안 기준이며 최종 확정답안과 다를 수 있습니다. 풀이는 공식 해설이 아니라 글쓴이가 표준 교재와 계산으로 확인해 정리한 내용입니다. 출처: 무대예술전문인 자격검정위원회.</p>
+
+  <h2>정답 한눈에</h2>
+  <div class="formula">1④ 2④ 3② 4③ 5③ 6① 7④ 8③ 9③ 10③ 11③ 12① 13① 14② 15① 16④ 17① 18③ 19④ 20④ 21② 22② 23① 24② 25②</div>
+
+  <h2>음향 심리와 기초</h2>
+  <h3>1번 · 양이 효과로 방향을 찾는 원리로 옳은 것</h3>
+  <div class="example"><b>정답 ④</b> 정중앙 음원은 머리전달함수로 지각</div>
+  <p>주파수에 따라 단서가 갈립니다. 파장이 긴 저역은 머리를 돌아가므로 양쪽 귀의 크기 차이가 거의 없어 도달 시간 차이를 쓰고, 파장이 짧은 고역은 머리가 그늘을 만들어 레벨 차이를 씁니다. 보기 ①과 ②는 이 짝을 맞바꾼 것입니다. 좌우 정중앙에서는 두 단서가 모두 사라지므로 귓바퀴와 머리가 바꾸어 놓는 주파수 특성, 즉 머리전달함수에 의존합니다. 귀가 좌우에 있으니 판별력도 상하보다 좌우가 좋습니다.</p>
+  <h3>2번 · 진동과 파동 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ④</b> 왕복 운동을 주파수라 부른 문장</div>
+  <p>일정하게 오가는 움직임 자체는 진동이고, 주파수는 그 왕복이 1초에 몇 번 일어나는지를 세는 값(Hz)입니다. 현상의 이름과 그 현상을 재는 단위를 바꿔 놓은 유형입니다.</p>
+  <h3>3번 · 베버-페히너 법칙과 맞지 않는 것</h3>
+  <div class="example"><b>정답 ②</b> 크기와 높이를 선형으로 인식한다는 문장</div>
+  <p>이 법칙은 감각이 자극의 로그에 비례한다는 내용입니다. 음량을 데시벨로, 음정을 주파수 2배인 옥타브로 다루는 이유이기도 합니다. 처음 자극이 약하면 작은 변화도 느끼고 강하면 큰 변화라야 느낀다는 ③, ④는 같은 내용을 풀어 쓴 것입니다.</p>
+  <h3>4번 · 직사각형 공간의 6면 모두로 생기는 정재파</h3>
+  <div class="example"><b>정답 ③</b> 경사파</div>
+  <p>룸 모드는 관여하는 면의 수로 나눕니다. 마주 보는 2면은 축파, 4면은 접선파, 6면 전부는 경사파입니다. 진행파는 정재파의 종류가 아닙니다. 축파의 첫 공진은 음속 ÷ (2 × 거리)이므로 길이 5m면 343 ÷ 10 ≈ 34Hz입니다.</p>
+  <h3>5번 · 논리 IP 주소를 다루는 계층</h3>
+  <div class="example"><b>정답 ③</b> 네트워크 계층</div>
+  <p>OSI 3계층의 일입니다. 2계층은 하드웨어 주소(MAC), 4계층은 포트 번호와 전달 신뢰성을 담당하니 주소의 종류로 구분하면 빠릅니다.</p>
+
+  <h2>마이크·전기·네트워크</h2>
+  <h3>6번 · 거리 계수가 큰 순서</h3>
+  <div class="example"><b>정답 ①</b> 초지향성 > 단일지향성 > 무지향성</div>
+  <p>거리 계수는 무지향성을 1로 두고, 같은 직접음 대 잔향 비율을 유지하며 얼마나 더 멀리 둘 수 있는지 나타냅니다. 표준 교재의 값은 카디오이드 1.7, 슈퍼 1.9, 하이퍼 2.0으로 픽업이 좁아질수록 커집니다.</p>
+  <h3>7번 · 다이내믹 마이크의 과도 특성이 낮은 이유</h3>
+  <div class="example"><b>정답 ④</b> 진동판과 코일의 무게</div>
+  <p>갑작스러운 음압 변화를 따라가려면 움직이는 부분이 가벼워야 합니다. 코일까지 붙은 다이내믹의 진동계는 콘덴서의 얇은 막보다 무거워 그만큼 늦습니다. 전원이나 증폭 회로의 유무는 기계적 응답과 관계가 없습니다.</p>
+  <h3>8번 · 코일과 콘덴서 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ③</b> 코일이 고음을 통과시킨다는 문장</div>
+  <p>유도성 리액턴스 XL = 2πfL은 주파수에 비례합니다. 1mH 코일은 100Hz에서 약 0.63Ω이지만 10kHz에서는 약 63Ω이어서 고역을 막습니다. 콘덴서는 Xc = 1/(2πfC)로 반대입니다.</p>
+  <h3>9번 · 네트워크 토폴로지 설명 중 옳은 것</h3>
+  <div class="example"><b>정답 ③</b> 스타, LAN의 기본이며 단테가 사용</div>
+  <p>스위치를 중심에 둔 구성입니다. 표준 교재는 AES50을 P2P 포맷으로 분류하므로 ②가 빠지고, 이더사운드는 P2P 전용이 아니어서 ①도 맞지 않습니다. 링은 한 구간이 끊겨도 반대 방향으로 신호를 보낼 수 있어 ④의 설명과 반대입니다.</p>
+  <h3>10번 · 소리 특성 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ③</b> 확산 음장에서 거리 2배 −6dB</div>
+  <p>역제곱 법칙은 반사가 없는 자유 음장의 규칙입니다. 반사음이 고르게 퍼진 확산 음장에서는 거리가 달라져도 레벨이 크게 변하지 않습니다.</p>
+
+  <h2>디지털·레벨·마이킹</h2>
+  <h3>11번 · A/D 변환에서 없던 주파수가 나타나는 현상</h3>
+  <div class="example"><b>정답 ③</b> 에일리어싱</div>
+  <p>샘플링 주파수의 절반(나이퀴스트)을 넘는 성분은 낮은 주파수로 접혀 나타납니다. 48kHz에 30kHz가 들어오면 48 − 30 = 18kHz로 들립니다. 그래서 변환 앞단에 안티 에일리어싱 필터를 둡니다.</p>
+  <h3>12번 · 게인 스트럭처 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ①</b> 노이즈 플로어를 일치시킨다는 문장</div>
+  <p>표준 교재는 콘솔부터 앰프까지 최대 레벨, 즉 클리핑 지점을 맞추는 방법을 제시합니다. 전체 다이내믹 레인지는 가장 좁은 기기를 넘을 수 없다는 ④도 함께 기억해 둘 만합니다. 자세한 내용은 <a class="inline" href="/guides/gain-staging-basics.html">게인 스테이징 기본</a>에 있습니다.</p>
+  <h3>13번 · 무지향성 두 대를 쓰는 스테레오 방식</h3>
+  <div class="example"><b>정답 ①</b> AB</div>
+  <p>AB는 간격을 두어 시간 차로 스테레오를 만들기 때문에 방향성이 필요 없습니다. XY, ORTF(110°·17cm), NOS(90°·30cm)는 각도로 레벨 차를 만들어야 하므로 단일지향성을 씁니다.</p>
+  <h3>14번 · 가장 큰 레벨</h3>
+  <div class="example"><b>정답 ②</b> 0 dBV</div>
+  <p>기준 전압을 비교합니다. 0 dBV는 1V, 0 dBu와 옛 표기 0 dBv는 0.775V, 0 dBm(600Ω)은 √(0.001 × 600) ≈ 0.775V입니다. 차이는 20log(1/0.775) ≈ 2.2dB입니다. 단위 정리는 <a class="inline" href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위 총정리</a>를 참고하세요.</p>
+  <h3>15번 · 톤 제너레이터의 용도가 아닌 것</h3>
+  <div class="example"><b>정답 ①</b> 음압 레벨 증폭</div>
+  <p>시험 신호를 내보내는 기능일 뿐 증폭기가 아닙니다. 기준 레벨 설정, 신호 경로 점검, 스피커 튜닝이 실제 쓰임입니다.</p>
+
+  <h2>현장 장비와 음원</h2>
+  <h3>16번 · 파워콘 커넥터의 특징</h3>
+  <div class="example"><b>정답 ④</b> 잠금장치</div>
+  <p>돌려서 잠그는 구조가 핵심입니다. 전원 전용이라 오디오는 함께 보내지 않고, NEMA L6-20과는 다른 규격입니다.</p>
+  <h3>17번 · 무선 안테나 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ①</b> 반사파에 의한 스퀠치 문제</div>
+  <p>표준 교재에서 지향성 안테나가 줄이는 것은 반사파에 의한 다중 경로 페이딩입니다. 스퀠치는 원하는 신호가 없을 때 출력을 막는 수신기 기능이므로 문제를 잘못 짝지은 문장입니다.</p>
+  <h3>18번 · 딜레이와 관계 없는 것</h3>
+  <div class="example"><b>정답 ③</b> 확산</div>
+  <p>딜레이는 시간(템포), 레벨(게인), 반복(피드백)으로 조절합니다. 확산은 잔향 밀도를 정하는 리버브 파라미터입니다. 곡 템포에 맞추는 방법은 <a class="inline" href="/guides/bpm-to-delay-time.html">BPM으로 딜레이 타임 계산하기</a>에 있습니다.</p>
+  <h3>19번 · 접지 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ④</b> 실드선 접지를 기기 접지라 부른 문장</div>
+  <p>실드선으로 기기 사이의 기준을 잇는 것은 신호 접지입니다. 기기 접지는 금속 외함(섀시)을 접지하는 것이고, 벽 콘센트로 이어지는 것이 대지 접지입니다.</p>
+  <h3>20번 · 음원 종류 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ④</b> 점음원 −3dB</div>
+  <p>거리 2배에서 점음원의 표면적은 4배이므로 10log(1/4) ≈ −6dB입니다. −3dB는 표면적이 2배인 선음원 값이고, 이상적인 면음원은 거의 줄지 않습니다. 계산 예시는 <a class="inline" href="/guides/spl-inverse-square-law.html">SPL과 역제곱 법칙</a>에 있습니다.</p>
+
+  <h2>네트워크 오디오와 무대 시스템</h2>
+  <h3>21번 · 단테 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ②</b> 레이어2 방식이라는 문장</div>
+  <p>IP 주소로 동작하는 단테는 OSI 3계층 방식입니다. 문장 안에서 "레이어2"와 "IP 주소"가 서로 맞지 않습니다.</p>
+  <h3>22번 · 그림의 디지털 멀티 미터로 잴 수 없는 것</h3>
+  <div class="example"><b>정답 ②</b> 전류</div>
+  <p>표준 교재는 멀티 미터의 측정 대상을 전압, 저항, 도통으로 들고 전류는 클램프 미터로 설명합니다. 그림의 기기도 전류용 단자가 없습니다. 전류 단자가 있는 제품도 시중에 많으니 교재와 그림을 기준으로 답하는 문제입니다.</p>
+  <h3>23번 · 3.5mm TRS → XLR 2개 스테레오 Y 케이블 결선</h3>
+  <div class="example"><b>정답 ①</b> XLR 2번에 신호, 1·3번을 묶어 슬리브로</div>
+  <p>노트북 출력은 Tip이 왼쪽, Ring이 오른쪽, Sleeve가 공통인 언밸런스드입니다. 밸런스드 입력에 넣을 때는 2번(Hot)에 신호를 넣고 1번과 3번을 묶어 슬리브로 연결합니다. <a class="inline" href="/guides/balanced-vs-unbalanced-cables.html">XLR·TRS·TS와 밸런스드 신호</a>에서 핀 구조를 볼 수 있습니다.</p>
+  <h3>24번 · 무대 모니터 설명 중 틀린 것</h3>
+  <div class="example"><b>정답 ②</b> 인이어는 1:1만 가능하다는 문장</div>
+  <p>송신기 한 대의 주파수에 수신기 여러 대를 맞추면 같은 믹스를 함께 들을 수 있습니다.</p>
+  <h3>25번 · 편파 손실을 최소화하는 수신 안테나 설치</h3>
+  <div class="example"><b>정답 ②</b> 바깥으로 45°씩 벌린 V자</div>
+  <p>송수신 안테나의 편파가 어긋날수록 효율이 떨어지는데 마이크 각도는 고정되지 않습니다. 표준 교재는 두 안테나를 315°와 45°에 두어 90° 벌리면 어긋남이 45°를 넘지 않고 이론적 최대 손실이 약 3dB 이하라고 설명합니다.</p>
+
+  <h2>직접 풀어 보기</h2>
+  <p>읽은 내용은 <a class="inline" href="/stage-sound-quiz.html">3급 문제풀이</a>에서 바로 풀어 볼 수 있습니다. 시험 범위와 출제 비중은 <a class="inline" href="/guides/grade3-exam-scope-by-topic.html">3급 시험범위</a>, 합격선은 <a class="inline" href="/guides/stage-sound-exam-scoring.html">배점·과락 계산</a>에 정리했습니다.</p>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/grade3-exam-scope-by-topic.html">3급 시험범위 <span>· 자격증·학습</span></a>
+    <a href="/guides/stage-sound-cert-study-plan.html">3급 필기 3주 플랜 <span>· 자격증·학습</span></a>
+    <a href="/guides/decibel-formulas-and-units.html">데시벨 공식과 단위 총정리 <span>· 믹싱·측정</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-11-05</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p><p class="biz">상호 엠엘뮤직스튜디오(ML Music Studio) · 대표 이효섭 · 사업자등록번호 163-05-01983 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983" rel="noopener">[사업자정보 확인]</a> · 통신판매업 신고 제2026-안양동안-1060호 · 주소 경기도 안양시 동안구 · 이메일 wa547@hanmail.net, wa5437@gmail.com</p></div></footer>
+
+</body>
+</html>
