@@ -59,7 +59,7 @@
    "en": "A field app for building an input list, signal flow diagram, patchbay sheet and stage plot in one place, then exporting them as PDF."
   },
   "platforms": {
-   "ko": "iPhone · iPad · Mac",
+   "ko": "iPhone · iPad · Mac · iPhone Duo 대응",
    "en": "iPhone · iPad · Mac"
   },
   "bullets": {
@@ -68,7 +68,8 @@
     "팬텀 전원 누락·채널 번호 중복·커넥터 불일치 짚어 주기",
     "리스트에서 자동으로 그려지는 신호 도면",
     "24·48·96열 패치베이와 실물 크기 라벨 띠 인쇄(평생이용권)",
-    "무대 배치도, PDF 내보내기, 커넥터 9종 학습(무료)"
+    "무대 배치도, PDF 내보내기, 커넥터 9종 학습(무료)",
+    "iPhone Duo 대응: 펼친 화면에서 패치베이 그림과 편집기를 접히는 선 기준으로 반씩 나눔(책·탁자 자세)"
    ],
    "en": [
     "I/O list with CH, SOURCE, PICK UP, STAND and REMARKS, separate live and recording types",
@@ -80,7 +81,7 @@
   },
   "facts": {
    "ko": [
-    "iPhone · iPad · Mac",
+    "iPhone · iPad · Mac · iPhone Duo 대응",
     "한국어 외 7개 언어",
     "iCloud 동기화 무료",
     "평생이용권 · 구독 아님"
