@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PocketDesk:Mac Remote — 사용법 · 지원 · 개인정보처리방침 | ML Music Studio</title>
+<meta name="description" content="PocketDesk(포켓데스크) — iPhone·iPad로 내 Mac을 원격으로 쓰는 앱. 사용법, 무료·Pro 안내, 자주 묻는 질문, 개인정보처리방침.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/pocketdesk_legal.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* 사이트(index.html)와 같은 색·폰트를 쓴다 — 따로 떠 있는 페이지처럼
+     보이면 사용자가 여기가 같은 곳인지 알 수 없다. */
+  :root{
+    --bg:#faf8f3;
+    --bg-alt:#f1ede3;
+    --panel:#ffffff;
+    --line: rgba(30,26,20,0.11);
+    --line-strong: rgba(30,26,20,0.22);
+    --teal:#2f6d4c;
+    --blue:#33587a;
+    --amber:#9c6b17;
+    --text-primary:#221f1a;
+    --text-secondary:#5c574c;
+    --text-tertiary:#8c8677;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0; background:var(--bg); color:var(--text-primary);
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    -webkit-font-smoothing:antialiased; line-height:1.7;
+  }
+  h1,h2,h3,h4{ font-family:'Space Grotesk','Inter',sans-serif; margin:0; letter-spacing:-0.01em; }
+  a{ color:var(--blue); text-decoration:none; }
+  a:hover{ text-decoration:underline; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:0 28px; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  nav{
+    position:sticky; top:0; z-index:50; backdrop-filter:blur(14px);
+    background:rgba(250,248,243,0.86); border-bottom:1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; gap:16px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; color:var(--text-primary); }
+  .brand .mark{
+    width:28px; height:28px; border-radius:8px; background:var(--panel);
+    border:1px solid var(--line-strong); display:flex; align-items:center;
+    justify-content:center; gap:2px;
+  }
+  .brand .mark span{ width:3px; border-radius:2px; background:linear-gradient(180deg, var(--teal), var(--blue)); }
+  .brand .mark span:nth-child(1){ height:9px; }
+  .brand .mark span:nth-child(2){ height:15px; }
+  .brand .mark span:nth-child(3){ height:6px; }
+  nav .links{ display:flex; gap:22px; font-size:13.5px; color:var(--text-secondary); }
+  nav .links a{ color:var(--text-secondary); }
+  nav .links a:hover{ color:var(--text-primary); text-decoration:none; }
+  @media (max-width:720px){ nav .links a.hide-sm{ display:none; } }
+
+  header.hero{ padding:64px 0 28px; }
+  .kicker{
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--amber); margin-bottom:12px;
+  }
+  header.hero h1{ font-size:36px; margin-bottom:12px; }
+  header.hero p{ color:var(--text-secondary); font-size:16px; max-width:70ch; margin:0; }
+  .jump{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:24px;
+  }
+  .jump a{
+    font-size:13px; padding:8px 14px; border-radius:100px;
+    border:1px solid var(--line-strong); color:var(--text-secondary); background:var(--panel);
+  }
+  .jump a:hover{ color:var(--text-primary); text-decoration:none; background:var(--bg-alt); }
+
+  main{ padding:24px 0 96px; }
+  section{ margin-bottom:72px; scroll-margin-top:84px; }
+  section > h2{ font-size:26px; margin-bottom:8px; }
+  section > .lede{ color:var(--text-secondary); margin:0 0 28px; max-width:74ch; }
+
+  .step{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    padding:24px; margin-bottom:20px;
+  }
+  .step h3{ font-size:18px; margin-bottom:8px; display:flex; align-items:center; gap:10px; }
+  .step h3 .num{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    width:26px; height:26px; border-radius:8px; background:var(--bg-alt);
+    color:var(--amber); display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line);
+  }
+  .step p{ color:var(--text-secondary); margin:0 0 10px; }
+  .step ul{ color:var(--text-secondary); margin:10px 0 0; padding-left:20px; }
+  .step li{ margin-bottom:6px; }
+  .step img{
+    display:block; width:100%; height:auto; margin-top:16px;
+    border-radius:12px; border:1px solid var(--line);
+  }
+  .step img.phone{ max-width:300px; }
+  .tip{
+    margin-top:14px; padding:12px 14px; border-radius:10px;
+    background:var(--bg-alt); border:1px solid var(--line);
+    font-size:14px; color:var(--text-secondary);
+  }
+  .tip b{ color:var(--text-primary); }
+  kbd{
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    padding:2px 7px; border-radius:6px; background:var(--panel);
+    border:1px solid var(--line-strong); box-shadow:0 1px 0 var(--line-strong);
+    color:var(--text-primary);
+  }
+
+  .faq{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:6px 24px; }
+  .faq details{ border-bottom:1px solid var(--line); padding:18px 0; }
+  .faq details:last-child{ border-bottom:none; }
+  .faq summary{
+    cursor:pointer; font-weight:600; font-size:15.5px; list-style:none;
+    display:flex; justify-content:space-between; gap:16px; align-items:flex-start;
+  }
+  .faq summary::-webkit-details-marker{ display:none; }
+  .faq summary::after{ content:"+"; color:var(--text-tertiary); font-family:'IBM Plex Mono',monospace; }
+  .faq details[open] summary::after{ content:"−"; }
+  .faq details p{ color:var(--text-secondary); margin:10px 0 0; font-size:15px; }
+
+  .policy h3{ font-size:17px; margin:28px 0 8px; }
+  .policy p{ color:var(--text-secondary); margin:0 0 10px; }
+  .policy ul{ color:var(--text-secondary); padding-left:20px; margin:8px 0 14px; }
+
+  .contact{
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:16px;
+    padding:24px; text-align:center; margin-top:28px;
+  }
+  .contact p{ margin:0 0 10px; color:var(--text-secondary); }
+  .contact a{ font-weight:600; font-size:16px; }
+
+  footer{ border-top:1px solid var(--line); padding:28px 0; color:var(--text-tertiary); font-size:13px; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; }
+
+  /* ---------- 언어 스위처 (사이트와 같은 모양) ---------- */
+  .lang-switch{ position:relative; }
+  .lang-switch-btn{
+    display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+    color:var(--text-secondary); background:var(--panel); border:1px solid var(--line);
+    border-radius:100px; padding:8px 14px; cursor:pointer;
+  }
+  .lang-switch-btn:hover{ color:var(--text-primary); background:var(--bg-alt); }
+  .lang-switch-menu{
+    position:absolute; top:calc(100% + 8px); right:0; min-width:160px;
+    background:var(--panel); border:1px solid var(--line-strong); border-radius:12px;
+    box-shadow:0 12px 30px rgba(30,26,20,0.14); padding:6px; z-index:60;
+    opacity:0; transform:scale(0.95) translateY(-4px); pointer-events:none; visibility:hidden;
+    transition:opacity 160ms var(--ease-out), transform 160ms var(--ease-out), visibility 160ms;
+  }
+  .lang-switch-menu.open{ opacity:1; transform:scale(1) translateY(0); pointer-events:auto; visibility:visible; }
+  .lang-switch-menu button{
+    display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+    font-size:13.5px; color:var(--text-secondary); padding:9px 12px; border-radius:8px;
+    font-family:inherit;
+  }
+  .lang-switch-menu button:hover{ background:var(--bg-alt); color:var(--text-primary); }
+  .lang-switch-menu button.active{ color:var(--text-primary); font-weight:600; }
+
+  .shots{ display:flex; gap:14px; align-items:flex-start; flex-wrap:wrap; margin-top:16px; }
+  .shots figure{ margin:0; flex:1 1 320px; min-width:0; }
+  .shots figure.narrow{ flex:0 1 220px; }
+  .shots img{ margin-top:0; }
+  .shots figcaption{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--text-tertiary); margin-top:8px;
+  }
+  .acc{ width:100%; border-collapse:collapse; font-size:14.5px; }
+  .acc th,.acc td{ text-align:left; vertical-align:top; padding:12px 10px; border-bottom:1px solid var(--line); }
+  .acc th{ width:32%; color:var(--text-primary); font-weight:600; }
+  .acc td{ color:var(--text-secondary); }
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+<a class="brand" href="/"><span class="mark"><span></span><span></span><span></span></span>ML MUSIC STUDIO</a>
+<div class="links"><a href="/apps/">Apps</a> <a href="/policy.html#policy" class="hide-sm" data-i18n="nav_policy">전체 방침</a></div>
+<div class="lang-switch" id="langSwitch"><button class="lang-switch-btn" id="langSwitchBtn" type="button" aria-haspopup="true" aria-expanded="false">🌐 <span id="langSwitchLabel">한국어</span> ▾</button>
+<div class="lang-switch-menu" id="langSwitchMenu"><button type="button" data-lang-btn="ko">🇰🇷 한국어</button><button type="button" data-lang-btn="en">🇺🇸 English</button></div></div>
+</div></nav>
+<header class="hero"><div class="wrap">
+<div class="kicker">PocketDesk:Mac Remote</div>
+<h1 data-i18n="hero_title">사용법 · 지원</h1>
+<p data-i18n="hero_desc">iPhone·iPad로 내 Mac을 그대로 쓰는 원격 제어 앱입니다. Mac의 화면과 소리를 손안으로 가져와 손가락, Apple Pencil, 키보드로 직접 조작합니다. 같은 네트워크 안에서 기기끼리 직접 연결하고, 구독 없이 한 번 결제로 끝납니다. 곧 출시됩니다.</p>
+<div class="jump"><a href="#start" data-i18n="jump_start">시작하기</a><a href="#pricing" data-i18n="jump_pricing">무료 · Pro</a><a href="#use" data-i18n="jump_use">쓰는 법</a><a href="#faq" data-i18n="jump_faq">자주 묻는 질문</a><a href="#privacy" data-i18n="jump_privacy">개인정보처리방침</a><a href="#contact" data-i18n="jump_contact">문의</a></div>
+</div></header>
+<main><div class="wrap">
+<section id="start"><h2 data-i18n="start_h2">시작하기 (5분)</h2>
+<p class="lede" data-i18n="start_lede">Mac에 무료 도우미를 깔고, 폰에서 Mac을 등록하면 끝입니다. 두 기기는 같은 Wi-Fi(같은 네트워크)에 있어야 합니다.</p>
+<div class="step"><h3><span class="num">1</span><span data-i18n="s1_h">Mac에 도우미 설치</span></h3><p data-i18n="s1_p" data-i18n-html="true"><b>PocketDesk 도우미</b>를 내려받아 응용 프로그램 폴더로 옮기고 엽니다. 내려받기 주소는 출시와 함께 이 페이지에 올라옵니다. (Apple의 공증을 받은 파일입니다.)</p></div>
+<div class="step"><h3><span class="num">2</span><span data-i18n="s2_h">권한 두 가지 허용 (처음 한 번)</span></h3><p data-i18n="s2_p" data-i18n-html="true">도우미가 안내 창을 띄웁니다. 시스템 설정 > 개인정보 보호 및 보안에서 <b>화면 및 시스템 오디오 녹음</b>(Mac 화면과 소리를 폰으로 보내기 위해)과 <b>손쉬운 사용</b>(폰의 터치·키 입력을 Mac에서 실행하기 위해)을 켭니다. 한 번에 하나씩 안내하고, 켜면 저절로 다음으로 넘어갑니다.</p></div>
+<div class="step"><h3><span class="num">3</span><span data-i18n="s3_h">폰에 PocketDesk 설치</span></h3><p data-i18n="s3_p" data-i18n-html="true">App Store에서 PocketDesk를 받습니다. 곧 출시됩니다. iPhone·iPad는 iOS/iPadOS 17 이상, Mac은 macOS 15 이상이 필요합니다.</p></div>
+<div class="step"><h3><span class="num">4</span><span data-i18n="s4_h">기기 등록</span></h3><p data-i18n="s4_p" data-i18n-html="true">폰 앱에서 <b>Mac 추가</b>를 누르고, Mac 도우미 메뉴의 <b>기기 등록</b>에 나온 QR 코드를 비춥니다. QR이 어려우면 화면에 나온 번호를 입력해도 됩니다. 등록은 Mac 앞에서만 할 수 있습니다.</p></div>
+<div class="step"><h3><span class="num">5</span><span data-i18n="s5_h">연결</span></h3><p data-i18n="s5_p" data-i18n-html="true">앱에서 내 Mac을 누르면 연결됩니다. 이제 화면이 나타납니다.</p></div>
+</section>
+<section id="pricing"><h2 data-i18n="pr_h2">무료 · Pro</h2>
+<p class="lede" data-i18n="pr_lede" data-i18n-html="true">기본 기능은 무료(Lite)입니다. 소리와 정밀 조작은 <b>Pro 평생권(₩9,900, 한국 기준)</b>입니다. 한 번 결제하면 계속 쓰며 구독이 없습니다. 가격은 나라마다 App Store에서 환율에 맞게 정해집니다.</p>
+<table class="acc"><tr><th data-i18n="pr_f_h">Lite (무료)</th><td data-i18n="pr_f_d">화면 보기, 한 손가락 조준·클릭·드래그, 두 손가락 스크롤·우클릭(톡 탭), 최대 720p, 확대 1.5배, 글자·숫자·기호 입력과 Return·Tab·삭제·Esc·방향키(화면 키보드와 블루투스·Apple 키보드)</td></tr>
+<tr><th data-i18n="pr_p_h">Pro (평생권)</th><td data-i18n="pr_p_d">Mac 소리를 폰으로, Apple Pencil 필압과 정밀 조작, ⌘ ⌥ ⌃ ⇧ 단축키 줄과 F1~F12, 트랙패드 모드와 가까운 클릭 대상에 붙기, 최대 8배 확대, 최대 4K(Mac 해상도까지)</td></tr></table>
+</section>
+<section id="use"><h2 data-i18n="use_h2">쓰는 법</h2>
+<div class="step"><ul>
+<li data-i18n="u1" data-i18n-html="true"><b>한 손가락:</b> 누른 채 움직여 조준하고, 떼면 그 자리를 클릭합니다. 반 초 이상 누른 채 움직이면 드래그입니다.</li>
+<li data-i18n="u2" data-i18n-html="true"><b>두 손가락:</b> 위아래로 밀면 스크롤, 벌리면 확대, 톡 탭하면 우클릭입니다.</li>
+<li data-i18n="u3" data-i18n-html="true"><b>세 손가락:</b> 확대한 화면을 이동합니다.</li>
+<li data-i18n="u4" data-i18n-html="true"><b>화면 채우기:</b> 검은 띠 없이 화면 가득 보입니다. 폰은 가로로 돌려 보여 줍니다.</li>
+<li data-i18n="u5" data-i18n-html="true"><b>키보드:</b> 화면 키보드를 올려도 방금 누른 입력칸이 보이도록 화면이 저절로 올라갑니다. 블루투스·Apple 키보드를 연결하면 바로 입력됩니다.</li>
+<li data-i18n="u6" data-i18n-html="true"><b>다른 기기로 바꾸기:</b> 아이패드로 연결하면 아이폰 연결은 자동으로 끊기고 "다른 기기가 연결했어요"가 뜹니다. 다시 연결하려면 단추를 누릅니다.</li>
+</ul></div></section>
+<section id="faq"><h2 data-i18n="faq_h2">자주 묻는 질문</h2>
+<div class="faq">
+<details><summary data-i18n="q1_q">밖에서도 쓸 수 있나요?</summary><p data-i18n="q1_a">현재는 같은 네트워크 안에서만 연결됩니다.</p></details>
+<details><summary data-i18n="q2_q">Mac이 잠들면요?</summary><p data-i18n="q2_a">연결되어 있는 동안에는 Mac이 잠자기에 들어가지 않도록 합니다. 연결을 끊으면 평소대로 돌아갑니다.</p></details>
+<details><summary data-i18n="q3_q">Windows도 되나요?</summary><p data-i18n="q3_a">아직 Mac만 지원합니다.</p></details>
+<details><summary data-i18n="q4_q">환불은 어떻게 하나요?</summary><p data-i18n="q4_a" data-i18n-html="true">인앱 구입은 Apple이 처리합니다. <a href='https://reportaproblem.apple.com' target='_blank' rel='noopener'>reportaproblem.apple.com</a> 에서 신청하거나, 아래 메일로 알려 주세요.</p></details>
+<details><summary data-i18n="q5_q">다른 기기에서도 Pro를 쓰나요?</summary><p data-i18n="q5_a">같은 Apple 계정이면 “구매 복원”으로 다른 iPhone·iPad에서도 Pro를 켤 수 있습니다.</p></details>
+</div></section>
+<section id="privacy" class="policy"><h2 data-i18n="pv_h2">개인정보처리방침</h2>
+<p class="lede mono" style="font-size:13px;" data-i18n="pv_date">최종 수정일: 2026년 11월 7일</p>
+<h3 data-i18n="pv_s_h">적용 범위</h3>
+<p data-i18n="pv_s_p" data-i18n-html="true">이 방침은 iPhone·iPad 앱 <strong>PocketDesk:Mac Remote</strong>(홈 화면 이름 PocketDesk)와 Mac용 <strong>PocketDesk 도우미</strong>에 적용됩니다. ML Music Studio의 다른 앱과 웹사이트 도구는 <a href="/policy.html#policy">사이트의 전체 개인정보처리방침</a>을 보세요.</p>
+<h3 data-i18n="pv_c_h">수집하는 정보</h3>
+<p data-i18n="pv_c_p" data-i18n-html="true"><strong>운영자는 PocketDesk를 통해 어떤 개인정보도 수집·저장하지 않으며, 운영자의 서버로 보내지도 않습니다.</strong> 회원가입·로그인이 없고, 분석 도구, 광고, 추적 기능이 없습니다.</p>
+<h3 data-i18n="pv_w_h">화면·소리·입력은 어디로 가나요</h3>
+<p data-i18n="pv_w_p" data-i18n-html="true">Mac의 화면, 소리, 그리고 폰에서 보내는 터치·키보드 입력은 <strong>같은 네트워크 안에서 폰과 Mac 사이에만</strong> 오갑니다. 운영자나 제3자의 서버를 거치지 않습니다. 연결은 암호화되어 있고, 사용자가 Mac 앞에서 직접 등록한 기기만 접속할 수 있습니다. 도우미는 연결되어 있는 동안에만 화면과 소리를 읽으며, 화면·소리·입력 내용을 저장하거나 기록하지 않습니다.</p>
+<h3 data-i18n="pv_d_h">기기에 저장되는 것</h3>
+<p data-i18n="pv_d_p" data-i18n-html="true"><strong>폰:</strong> 등록한 Mac의 이름과 연결 확인용 키(iOS 키체인), 앱 설정. <strong>Mac:</strong> 등록한 기기 목록과 연결 확인용 키(macOS 키체인). 이 정보는 기기 안에만 있고, 도우미 안의 "등록한 기기"에서 언제든 해제할 수 있습니다. 앱·도우미를 지우면 함께 지워집니다.</p>
+<h3 data-i18n="pv_p_h">요청하는 권한</h3>
+<p data-i18n="pv_p_p" data-i18n-html="true"><strong>로컬 네트워크(폰):</strong> 같은 네트워크의 내 Mac을 찾아 연결하기 위해서입니다. <strong>카메라(폰):</strong> Mac 화면의 등록용 QR 코드를 읽을 때만 사용하며 사진·영상을 저장하지 않습니다. <strong>화면 및 시스템 오디오 녹음, 손쉬운 사용(Mac):</strong> 화면과 소리를 폰으로 보내고 폰의 터치·키 입력을 Mac에서 실행하기 위해서이며, 연결 중에만 사용합니다.</p>
+<h3 data-i18n="pv_b_h">결제</h3>
+<p data-i18n="pv_b_p">Pro 평생권은 Apple의 인앱결제로 처리됩니다. 카드 정보 등 결제 정보는 Apple이 처리하며 운영자는 받지 않습니다. 폰은 Apple이 서명한 구매 증명을 연결된 Mac 도우미에 전달하고, 도우미는 이를 확인해 Pro 기능을 켜는 데에만 쓰며 저장하지 않습니다.</p>
+<h3 data-i18n="pv_h2h">도우미 내려받기</h3>
+<p data-i18n="pv_h2p">도우미 파일은 별도의 내려받기 페이지(출시와 함께 안내)에서 받습니다. 그 사이트의 호스팅 업체(GitHub 등)는 접속 기록(IP 주소 등)을 보관할 수 있습니다. 앱과 도우미를 쓰는 동안에는 이런 기록이 생기지 않습니다.</p>
+<h3 data-i18n="pv_t_h">제3자 공유</h3>
+<p data-i18n="pv_t_p">운영자가 수집하는 정보가 없으므로 제3자에게 제공하거나 공유하는 정보도 없고, 앱 안에 광고나 제휴 링크가 없습니다.</p>
+<h3 data-i18n="pv_k_h">어린이</h3>
+<p data-i18n="pv_k_p">PocketDesk는 어린이를 대상으로 하지 않으며, 어린이의 정보를 따로 수집하지 않습니다.</p>
+<h3 data-i18n="pv_x_h">변경 사항</h3>
+<p data-i18n="pv_x_p">방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.</p>
+</section>
+<section id="contact"><h2 data-i18n="ct_h2">문의</h2>
+<div class="contact"><p data-i18n="ct_p">버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드)와 어떤 Mac(기종·macOS 버전)이었는지 적어 주시면 빠르게 답합니다.</p><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></div>
+</section>
+</div></main>
+<footer><div class="wrap"><span>© 2026 ML Music Studio</span><span><a href="/">mlmusicstudio.co.kr</a> · <a href="/policy.html#policy" data-i18n="footer_policy">전체 개인정보처리방침</a></span></div></footer>
+<script>
+  const I18N = {"nav_policy": {"ko": "전체 방침", "en": "Site policy"}, "hero_title": {"ko": "사용법 · 지원", "en": "How to use · Support"}, "hero_desc": {"ko": "iPhone·iPad로 내 Mac을 그대로 쓰는 원격 제어 앱입니다. Mac의 화면과 소리를 손안으로 가져와 손가락, Apple Pencil, 키보드로 직접 조작합니다. 같은 네트워크 안에서 기기끼리 직접 연결하고, 구독 없이 한 번 결제로 끝납니다. 곧 출시됩니다.", "en": "A remote-control app that lets you use your Mac from your iPhone or iPad as if you were sitting at it. See the screen and hear the sound, and control it with touch, Apple Pencil or a keyboard. Devices connect directly on your network, and there is no subscription: one purchase. Coming soon."}, "jump_start": {"ko": "시작하기", "en": "Get started"}, "jump_pricing": {"ko": "무료 · Pro", "en": "Free · Pro"}, "jump_use": {"ko": "쓰는 법", "en": "How to use"}, "jump_faq": {"ko": "자주 묻는 질문", "en": "FAQ"}, "jump_privacy": {"ko": "개인정보처리방침", "en": "Privacy policy"}, "jump_contact": {"ko": "문의", "en": "Contact"}, "start_h2": {"ko": "시작하기 (5분)", "en": "Get started (5 minutes)"}, "start_lede": {"ko": "Mac에 무료 도우미를 깔고, 폰에서 Mac을 등록하면 끝입니다. 두 기기는 같은 Wi-Fi(같은 네트워크)에 있어야 합니다.", "en": "Install the free helper on your Mac, then register the Mac from your phone. Both devices must be on the same Wi-Fi network."}, "s1_h": {"ko": "Mac에 도우미 설치", "en": "Install the helper on your Mac"}, "s1_p": {"ko": "<b>PocketDesk 도우미</b>를 내려받아 응용 프로그램 폴더로 옮기고 엽니다. 내려받기 주소는 출시와 함께 이 페이지에 올라옵니다. (Apple의 공증을 받은 파일입니다.)", "en": "Download the <b>PocketDesk Helper</b>, move it to Applications and open it. The download link will be posted on this page at launch. (It is notarized by Apple.)"}, "s2_h": {"ko": "권한 두 가지 허용 (처음 한 번)", "en": "Allow two permissions (first run only)"}, "s2_p": {"ko": "도우미가 안내 창을 띄웁니다. 시스템 설정 > 개인정보 보호 및 보안에서 <b>화면 및 시스템 오디오 녹음</b>(Mac 화면과 소리를 폰으로 보내기 위해)과 <b>손쉬운 사용</b>(폰의 터치·키 입력을 Mac에서 실행하기 위해)을 켭니다. 한 번에 하나씩 안내하고, 켜면 저절로 다음으로 넘어갑니다.", "en": "The helper shows a guide. In System Settings > Privacy &amp; Security turn on <b>Screen &amp; System Audio Recording</b> (to send the screen and sound to your phone) and <b>Accessibility</b> (to carry out your touches and key presses on the Mac). It guides you one step at a time and moves on by itself once a switch is on."}, "s3_h": {"ko": "폰에 PocketDesk 설치", "en": "Install PocketDesk on your phone"}, "s3_p": {"ko": "App Store에서 PocketDesk를 받습니다. 곧 출시됩니다. iPhone·iPad는 iOS/iPadOS 17 이상, Mac은 macOS 15 이상이 필요합니다.", "en": "Get PocketDesk from the App Store. Coming soon. You need iOS/iPadOS 17 or later on the phone and macOS 15 or later on the Mac."}, "s4_h": {"ko": "기기 등록", "en": "Register the device"}, "s4_p": {"ko": "폰 앱에서 <b>Mac 추가</b>를 누르고, Mac 도우미 메뉴의 <b>기기 등록</b>에 나온 QR 코드를 비춥니다. QR이 어려우면 화면에 나온 번호를 입력해도 됩니다. 등록은 Mac 앞에서만 할 수 있습니다.", "en": "In the app tap <b>Add Mac</b>, then scan the QR code shown by <b>Register device</b> in the helper's menu. If scanning is hard, type the number shown instead. Registering is only possible at the Mac."}, "s5_h": {"ko": "연결", "en": "Connect"}, "s5_p": {"ko": "앱에서 내 Mac을 누르면 연결됩니다. 이제 화면이 나타납니다.", "en": "Tap your Mac in the app. The screen appears."}, "pr_h2": {"ko": "무료 · Pro", "en": "Free · Pro"}, "pr_lede": {"ko": "기본 기능은 무료(Lite)입니다. 소리와 정밀 조작은 <b>Pro 평생권(₩9,900, 한국 기준)</b>입니다. 한 번 결제하면 계속 쓰며 구독이 없습니다. 가격은 나라마다 App Store에서 환율에 맞게 정해집니다.", "en": "The basics are free (Lite). Sound and precise control come with the <b>Pro lifetime purchase (₩9,900 in Korea)</b>: pay once, keep it, no subscription. Prices in other countries are set by the App Store."}, "pr_f_h": {"ko": "Lite (무료)", "en": "Lite (free)"}, "pr_f_d": {"ko": "화면 보기, 한 손가락 조준·클릭·드래그, 두 손가락 스크롤·우클릭(톡 탭), 최대 720p, 확대 1.5배, 글자·숫자·기호 입력과 Return·Tab·삭제·Esc·방향키(화면 키보드와 블루투스·Apple 키보드)", "en": "View the screen; one finger to aim, click and drag; two fingers to scroll and right-click (quick tap); up to 720p; 1.5× zoom; typing letters, numbers and symbols plus Return, Tab, Delete, Esc and arrows (on-screen, Bluetooth or Apple keyboard)"}, "pr_p_h": {"ko": "Pro (평생권)", "en": "Pro (lifetime)"}, "pr_p_d": {"ko": "Mac 소리를 폰으로, Apple Pencil 필압과 정밀 조작, ⌘ ⌥ ⌃ ⇧ 단축키 줄과 F1~F12, 트랙패드 모드와 가까운 클릭 대상에 붙기, 최대 8배 확대, 최대 4K(Mac 해상도까지)", "en": "Mac sound on your phone; Apple Pencil pressure and precise control; ⌘ ⌥ ⌃ ⇧ shortcut row and F1–F12; trackpad mode and snap to the nearest click target; up to 8× zoom; up to 4K (your Mac's resolution)"}, "use_h2": {"ko": "쓰는 법", "en": "How to use"}, "u1": {"ko": "<b>한 손가락:</b> 누른 채 움직여 조준하고, 떼면 그 자리를 클릭합니다. 반 초 이상 누른 채 움직이면 드래그입니다.", "en": "<b>One finger:</b> press and move to aim, lift to click there. Hold half a second and move to drag."}, "u2": {"ko": "<b>두 손가락:</b> 위아래로 밀면 스크롤, 벌리면 확대, 톡 탭하면 우클릭입니다.", "en": "<b>Two fingers:</b> drag to scroll, spread to zoom, tap quickly to right-click."}, "u3": {"ko": "<b>세 손가락:</b> 확대한 화면을 이동합니다.", "en": "<b>Three fingers:</b> move the zoomed picture."}, "u4": {"ko": "<b>화면 채우기:</b> 검은 띠 없이 화면 가득 보입니다. 폰은 가로로 돌려 보여 줍니다.", "en": "<b>Fill screen:</b> no black bars. On iPhone the picture turns to landscape."}, "u5": {"ko": "<b>키보드:</b> 화면 키보드를 올려도 방금 누른 입력칸이 보이도록 화면이 저절로 올라갑니다. 블루투스·Apple 키보드를 연결하면 바로 입력됩니다.", "en": "<b>Keyboard:</b> when the on-screen keyboard comes up the picture rises so the field you tapped stays visible. A Bluetooth or Apple keyboard just works."}, "u6": {"ko": "<b>다른 기기로 바꾸기:</b> 아이패드로 연결하면 아이폰 연결은 자동으로 끊기고 &quot;다른 기기가 연결했어요&quot;가 뜹니다. 다시 연결하려면 단추를 누릅니다.", "en": "<b>Switching devices:</b> connect from your iPad and the iPhone is disconnected with &quot;Another device connected&quot;. Tap to take it back."}, "faq_h2": {"ko": "자주 묻는 질문", "en": "FAQ"}, "q1_q": {"ko": "밖에서도 쓸 수 있나요?", "en": "Can I use it away from home?"}, "q1_a": {"ko": "현재는 같은 네트워크 안에서만 연결됩니다.", "en": "For now it connects within the same network only."}, "q2_q": {"ko": "Mac이 잠들면요?", "en": "What if the Mac wants to sleep?"}, "q2_a": {"ko": "연결되어 있는 동안에는 Mac이 잠자기에 들어가지 않도록 합니다. 연결을 끊으면 평소대로 돌아갑니다.", "en": "While connected, the Mac is kept from sleeping. When you disconnect, it goes back to normal."}, "q3_q": {"ko": "Windows도 되나요?", "en": "Windows?"}, "q3_a": {"ko": "아직 Mac만 지원합니다.", "en": "Mac only for now."}, "q4_q": {"ko": "환불은 어떻게 하나요?", "en": "How do I get a refund?"}, "q4_a": {"ko": "인앱 구입은 Apple이 처리합니다. <a href='https://reportaproblem.apple.com' target='_blank' rel='noopener'>reportaproblem.apple.com</a> 에서 신청하거나, 아래 메일로 알려 주세요.", "en": "In-app purchases are handled by Apple. Request a refund at <a href='https://reportaproblem.apple.com' target='_blank' rel='noopener'>reportaproblem.apple.com</a>, or write to the address below."}, "q5_q": {"ko": "다른 기기에서도 Pro를 쓰나요?", "en": "Does Pro work on my other devices?"}, "q5_a": {"ko": "같은 Apple 계정이면 “구매 복원”으로 다른 iPhone·iPad에서도 Pro를 켤 수 있습니다.", "en": "With the same Apple Account, use “Restore Purchase” to turn Pro on in your other iPhones and iPads."}, "pv_h2": {"ko": "개인정보처리방침", "en": "Privacy policy"}, "pv_date": {"ko": "최종 수정일: 2026년 11월 7일", "en": "Last updated: November 7, 2026"}, "pv_s_h": {"ko": "적용 범위", "en": "Scope"}, "pv_s_p": {"ko": "이 방침은 iPhone·iPad 앱 <strong>PocketDesk:Mac Remote</strong>(홈 화면 이름 PocketDesk)와 Mac용 <strong>PocketDesk 도우미</strong>에 적용됩니다. ML Music Studio의 다른 앱과 웹사이트 도구는 <a href='/policy.html#policy'>사이트의 전체 개인정보처리방침</a>을 보세요.", "en": "This policy covers the iPhone/iPad app <strong>PocketDesk:Mac Remote</strong> (home-screen name PocketDesk) and the Mac <strong>PocketDesk Helper</strong>. For ML Music Studio's other apps and the website tools, see the <a href='/en/policy.html#policy'>site-wide privacy policy</a>."}, "pv_c_h": {"ko": "수집하는 정보", "en": "What we collect"}, "pv_c_p": {"ko": "<strong>운영자는 PocketDesk를 통해 어떤 개인정보도 수집·저장하지 않으며, 운영자의 서버로 보내지도 않습니다.</strong> 회원가입·로그인이 없고, 분석 도구, 광고, 추적 기능이 없습니다.", "en": "<strong>We do not collect or store any personal information through PocketDesk, and we do not send anything to our own servers.</strong> There is no sign-up or login, and no analytics, advertising or tracking."}, "pv_w_h": {"ko": "화면·소리·입력은 어디로 가나요", "en": "Where your screen, sound and input go"}, "pv_w_p": {"ko": "Mac의 화면, 소리, 그리고 폰에서 보내는 터치·키보드 입력은 <strong>같은 네트워크 안에서 폰과 Mac 사이에만</strong> 오갑니다. 운영자나 제3자의 서버를 거치지 않습니다. 연결은 암호화되어 있고, 사용자가 Mac 앞에서 직접 등록한 기기만 접속할 수 있습니다. 도우미는 연결되어 있는 동안에만 화면과 소리를 읽으며, 화면·소리·입력 내용을 저장하거나 기록하지 않습니다.", "en": "Your Mac's screen and sound, and the touches and keystrokes you send from your phone, travel <strong>only between your phone and your Mac on the same network</strong>. They do not pass through our servers or anyone else's. The connection is encrypted, and only devices you registered yourself at the Mac can connect. The helper reads the screen and sound only while a device is connected, and does not save or record the screen, sound or input."}, "pv_d_h": {"ko": "기기에 저장되는 것", "en": "What is stored on your devices"}, "pv_d_p": {"ko": "<strong>폰:</strong> 등록한 Mac의 이름과 연결 확인용 키(iOS 키체인), 앱 설정. <strong>Mac:</strong> 등록한 기기 목록과 연결 확인용 키(macOS 키체인). 이 정보는 기기 안에만 있고, 도우미 안의 &quot;등록한 기기&quot;에서 언제든 해제할 수 있습니다. 앱·도우미를 지우면 함께 지워집니다.", "en": "<strong>Phone:</strong> the names of the Macs you registered and the keys used to recognise them (iOS Keychain), plus app settings. <strong>Mac:</strong> the list of devices you registered and their keys (macOS Keychain). This stays on the device, and you can remove a registered device in the helper at any time. Deleting the app or helper deletes it too."}, "pv_p_h": {"ko": "요청하는 권한", "en": "Permissions"}, "pv_p_p": {"ko": "<strong>로컬 네트워크(폰):</strong> 같은 네트워크의 내 Mac을 찾아 연결하기 위해서입니다. <strong>카메라(폰):</strong> Mac 화면의 등록용 QR 코드를 읽을 때만 사용하며 사진·영상을 저장하지 않습니다. <strong>화면 및 시스템 오디오 녹음, 손쉬운 사용(Mac):</strong> 화면과 소리를 폰으로 보내고 폰의 터치·키 입력을 Mac에서 실행하기 위해서이며, 연결 중에만 사용합니다.", "en": "<strong>Local network (phone):</strong> to find and connect to your Mac on the same network. <strong>Camera (phone):</strong> only to scan the registration QR code on your Mac's screen; no photo or video is saved. <strong>Screen &amp; System Audio Recording, Accessibility (Mac):</strong> to send the screen and sound to your phone and carry out your touches and key presses on the Mac; used only while connected."}, "pv_b_h": {"ko": "결제", "en": "Purchases"}, "pv_b_p": {"ko": "Pro 평생권은 Apple의 인앱결제로 처리됩니다. 카드 정보 등 결제 정보는 Apple이 처리하며 운영자는 받지 않습니다. 폰은 Apple이 서명한 구매 증명을 연결된 Mac 도우미에 전달하고, 도우미는 이를 확인해 Pro 기능을 켜는 데에만 쓰며 저장하지 않습니다.", "en": "The Pro lifetime purchase is handled by Apple's In-App Purchase. Apple processes payment details; we never receive them. Your phone passes Apple's signed proof of purchase to the connected Mac helper, which only checks it to turn Pro features on and does not store it."}, "pv_h2h": {"ko": "도우미 내려받기", "en": "Downloading the helper"}, "pv_h2p": {"ko": "도우미 파일은 별도의 내려받기 페이지(출시와 함께 안내)에서 받습니다. 그 사이트의 호스팅 업체(GitHub 등)는 접속 기록(IP 주소 등)을 보관할 수 있습니다. 앱과 도우미를 쓰는 동안에는 이런 기록이 생기지 않습니다.", "en": "You download the helper file from a separate download page (announced at launch). Its hosting provider (such as GitHub) may keep access logs (such as IP addresses). No such logs are created while you use the app and helper."}, "pv_t_h": {"ko": "제3자 공유", "en": "Sharing with third parties"}, "pv_t_p": {"ko": "운영자가 수집하는 정보가 없으므로 제3자에게 제공하거나 공유하는 정보도 없고, 앱 안에 광고나 제휴 링크가 없습니다.", "en": "We collect no information, so we share none, and there are no ads or affiliate links in the app."}, "pv_k_h": {"ko": "어린이", "en": "Children"}, "pv_k_p": {"ko": "PocketDesk는 어린이를 대상으로 하지 않으며, 어린이의 정보를 따로 수집하지 않습니다.", "en": "PocketDesk is not directed at children and does not separately collect children's information."}, "pv_x_h": {"ko": "변경 사항", "en": "Changes"}, "pv_x_p": {"ko": "방침이 바뀌면 이 페이지에 반영하고 위의 최종 수정일을 갱신합니다.", "en": "If this policy changes, the new version and its last-updated date will be published on this page."}, "ct_h2": {"ko": "문의", "en": "Contact"}, "ct_p": {"ko": "버그·기능 제안·환불 문의 모두 환영합니다. 어떤 기기(아이폰/아이패드)와 어떤 Mac(기종·macOS 버전)이었는지 적어 주시면 빠르게 답합니다.", "en": "Bug reports, feature ideas and refund questions are all welcome. Tell us which device (iPhone/iPad) and which Mac (model and macOS version) and we will reply quickly."}, "footer_policy": {"ko": "전체 개인정보처리방침", "en": "Site-wide privacy policy"}};
+  const SUPPORTED_LANGS = ["ko","en"];
+  const LANG_LABELS = {ko:"한국어", en:"English", ja:"日本語", de:"Deutsch", pt:"Português", es:"Español", zh:"简体中文"};
+
+  function applyLang(lang){
+    if (!SUPPORTED_LANGS.includes(lang)) lang = "ko";
+    document.documentElement.lang = (lang === "zh" ? "zh-Hans" : lang);
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      const entry = I18N[el.getAttribute('data-i18n')];
+      if (!entry) return;
+      const val = entry[lang] || entry.ko;
+      if (val == null) return;
+      if (el.hasAttribute('data-i18n-html')) el.innerHTML = val; else el.textContent = val;
+    });
+    document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-lang-btn') === lang);
+    });
+    const label = document.getElementById('langSwitchLabel');
+    if (label) label.textContent = LANG_LABELS[lang];
+    // 사이트와 같은 열쇠를 쓴다 — 여기서 고른 언어가 홈에서도 이어진다.
+    try { localStorage.setItem('siteLang', lang); } catch(e) {}
+  }
+
+  function detectLang(){
+    try {
+      const saved = localStorage.getItem('siteLang');
+      if (saved && SUPPORTED_LANGS.includes(saved)) return saved;
+    } catch(e) {}
+    const nav = ((navigator.language || 'ko') + '').toLowerCase();
+    for (const code of ['ko','ja','en']) {
+      if (nav.indexOf(code) === 0) return code;
+    }
+    return 'ko';
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    const btn = document.getElementById('langSwitchBtn');
+    const menu = document.getElementById('langSwitchMenu');
+    if (btn && menu) {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        const open = menu.classList.toggle('open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function(e){
+        if (!menu.contains(e.target) && e.target !== btn) {
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.querySelectorAll('[data-lang-btn]').forEach(function(b){
+        b.addEventListener('click', function(){
+          applyLang(b.getAttribute('data-lang-btn'));
+          menu.classList.remove('open');
+          btn.setAttribute('aria-expanded', 'false');
+        });
+      });
+    }
+    applyLang(detectLang());
+  });
+</script>
+</body>
+</html>
