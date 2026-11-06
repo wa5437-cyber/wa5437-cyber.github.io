@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>스테레오 이미징과 미드 사이드(M/S) — 폭 조절과 모노 호환 계산 | ML Music Studio</title>
+<meta name="description" content="L·R을 M·S로 바꾸는 공식, 폭을 키울 때 값이 어떻게 변하는지, 모노로 합칠 때 S가 사라지는 이유, 하스 효과의 콤필터, M/S 마이킹 결선과 공연장 점검 순서를 계산 예시로 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/stereo-imaging-mid-side.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/stereo-imaging-mid-side.html">
+<meta property="og:title" content="스테레오 이미징과 미드 사이드(M/S) — 폭 조절과 모노 호환 계산">
+<meta property="og:description" content="M/S 변환 공식, 폭 조절 계산, 모노 호환 점검, 하스 효과 콤필터, M/S 마이킹 결선.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "스테레오 이미징과 미드 사이드(M/S) — 폭 조절과 모노 호환 계산",
+  "description": "L·R과 M·S 변환 공식, 폭 조절과 모노 호환, 하스 효과의 콤필터, M/S 마이킹 결선.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-11-06",
+  "dateModified": "2026-11-06",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/stereo-imaging-mid-side.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>스테레오 이미징과 미드 사이드(M/S) — 폭 조절과 모노 호환 계산</h1>
+  <div class="meta">믹싱·측정 · 약 6분</div>
+
+  <p class="lede">스테레오 폭 조절 플러그인이 실제로 바꾸는 값은 두 채널의 <strong>차이</strong>입니다. 좌우 신호를 합과 차로 나누어 보면 폭을 넓힐 때 무엇이 변하고, 모노 재생에서 무엇이 남는지 계산으로 확인할 수 있습니다.</p>
+
+  <h2>L·R과 M·S는 같은 신호의 다른 표현</h2>
+  <p>두 채널을 합과 차로 바꾸어도 정보는 줄지 않고, 언제든 원래대로 되돌릴 수 있습니다.</p>
+  <div class="formula">M = (L + R) ÷ 2 &nbsp; S = (L − R) ÷ 2<br>L = M + S &nbsp; R = M − S</div>
+  <table class="data">
+<tr><th>L</th><th>R</th><th>M</th><th>S</th><th>들리는 위치</th></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>0</td><td>정중앙</td></tr>
+<tr><td>0.8</td><td>0.4</td><td>0.6</td><td>0.2</td><td>왼쪽으로 치우침</td></tr>
+<tr><td>1</td><td>0</td><td>0.5</td><td>0.5</td><td>왼쪽 끝</td></tr>
+<tr><td>1</td><td>−1</td><td>0</td><td>1</td><td>위치가 흐릿하고 모노에서 사라짐</td></tr>
+</table>
+  <p>표의 값은 한 순간의 샘플을 단순화한 것입니다. 실제 음악에서는 주파수와 시간에 따라 비율이 계속 바뀝니다.</p>
+
+  <div class="example">
+    <h3>계산 예시 — S를 3 dB 올릴 때</h3>
+    <p>L 0.8, R 0.4에서 S 0.2에 1.41배(약 +3 dB)를 곱하면 0.282입니다. 다시 풀면 L = 0.6 + 0.282 = <strong>0.882</strong>, R = 0.6 − 0.282 = <strong>0.318</strong>입니다. 좌우 차이는 0.4에서 0.564로 벌어지지만, 두 값을 더해 2로 나눈 모노 값은 앞뒤 모두 <strong>0.6</strong>으로 같습니다.</p>
+  </div>
+
+  <h2>모노 호환을 판단하는 법</h2>
+  <p>모노 합에는 M만 남습니다. 따라서 폭을 키워도 모노 음량이 늘지 않고, S 쪽에 많이 실린 소리는 스테레오와 모노의 차이가 커집니다. 한쪽 채널의 극성만 뒤집은 소리처럼 M이 0에 가까운 소재는 모노에서 거의 들리지 않습니다.</p>
+  <ul>
+    <li><strong>귀로 비교.</strong> 모노 버튼을 눌렀다 떼며 음량 변화보다 사라지는 악기를 먼저 찾습니다.</li>
+    <li><strong>상관 미터.</strong> +1은 좌우 동일, 0은 무관, −1은 정반대입니다. 음수 구간이 길면 원인이 되는 트랙을 솔로로 확인합니다.</li>
+    <li><strong>저역 폭.</strong> 킥과 베이스는 일반적으로 가운데에 모읍니다. 특정 주파수 아래만 폭을 줄이는 기능이 있으면 먼저 시도합니다.</li>
+  </ul>
+
+  <h2>시간차 와이드닝의 비용</h2>
+  <p>한쪽을 수 ms 늦추면 먼저 도착한 쪽으로 위치가 느껴지면서 넓어 보입니다(선행음 효과). 하지만 모노로 합치면 같은 신호가 시간차로 더해져 콤필터가 됩니다.</p>
+  <table class="data">
+<tr><th>지연</th><th>첫 번째 골</th><th>골 간격</th></tr>
+<tr><td>10 ms</td><td>50 Hz</td><td>100 Hz</td></tr>
+<tr><td>15 ms</td><td>약 33 Hz</td><td>약 67 Hz</td></tr>
+<tr><td>20 ms</td><td>25 Hz</td><td>50 Hz</td></tr>
+</table>
+  <p>공식과 줄이는 방법은 <a class="inline" href="/guides/phase-interference-comb-filter.html">위상 간섭과 콤필터</a>에 정리해 두었습니다.</p>
+
+  <h2>M/S 마이킹 결선</h2>
+  <p>녹음 단계에서도 같은 수식을 씁니다. 표준 교재 기준으로 정면에 단일지향성 또는 무지향성 M, 측면에 양지향성 S를 두고 왼쪽을 M + S, 오른쪽을 M − S로 만듭니다. 전용 매트릭스가 없으면 믹서에서 다음처럼 구성합니다.</p>
+  <table class="data">
+<tr><th>채널</th><th>입력</th><th>팬</th><th>극성</th></tr>
+<tr><td>1</td><td>M</td><td>중앙</td><td>정상</td></tr>
+<tr><td>2</td><td>S</td><td>왼쪽 끝</td><td>정상</td></tr>
+<tr><td>3</td><td>S (같은 신호)</td><td>오른쪽 끝</td><td>반전</td></tr>
+</table>
+  <p>2·3번 페이더를 함께 올리면 넓어지고 내리면 좁아집니다. 모노로 합치면 2·3번이 서로 지워져 M만 남으므로, 교재는 이 방식을 스테레오 마이킹 중 모노 호환성이 가장 좋은 방식으로 소개합니다. 마이크 특성은 <a class="inline" href="/guides/microphone-polar-patterns.html">지향성 패턴 가이드</a>를 참고하세요.</p>
+
+  <h2>객석에서는 왜 다르게 들리나</h2>
+  <p>좌우 스피커까지의 거리가 다른 좌석에서는 도착 시간이 달라집니다.</p>
+  <div class="example">
+    <h3>계산 예시 — 거리 차이별 도착 시간</h3>
+    <p>음속 343 m/s에서 거리 차이 5 m는 약 <strong>14.6 ms</strong>, 10 m는 약 <strong>29.2 ms</strong>입니다. 이런 좌석에서는 가까운 스피커 쪽으로 음상이 쏠리기 쉬워, 믹스 위치에서 들리는 좌우 균형이 객석 전체에 그대로 전달되지 않습니다.</p>
+  </div>
+  <p>그래서 라이브에서는 일반적으로 다음을 먼저 점검합니다.</p>
+  <ul>
+    <li>보컬·킥·베이스처럼 빠지면 안 되는 소리는 중앙에 둔다.</li>
+    <li>한쪽 끝으로 보낸 소리는 반대편 객석에서 약해진다는 전제로 쓴다.</li>
+    <li>공연 전에 모노 합으로 들어 사라지는 소재를 확인한다.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="ico">🎧</div>
+    <div class="body">
+      <b>이펙트 듣기</b>
+      <p>Auto-Pan으로 소리가 좌우로 오가는 느낌을 스테레오 스피커나 헤드폰에서 바로 들어 볼 수 있습니다.</p>
+      <a href="/effects-listening.html">▸ 이펙트 듣기 열기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/phase-interference-comb-filter.html">위상 간섭과 콤필터 — 시간차가 만드는 빗살 모양 주파수 특성 <span>· 도구 가이드</span></a>
+    <a href="/guides/microphone-polar-patterns.html">마이크 지향성 패턴 이해 — 카디오이드·양지향성·무지향 <span>· 도구 가이드</span></a>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-11-06</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p><p class="biz">상호 엠엘뮤직스튜디오(ML Music Studio) · 대표 이효섭 · 사업자등록번호 163-05-01983 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983" rel="noopener">[사업자정보 확인]</a> · 통신판매업 신고 제2026-안양동안-1060호 · 주소 경기도 안양시 동안구 · 이메일 wa547@hanmail.net, wa5437@gmail.com</p></div></footer>
+
+</body>
+</html>
