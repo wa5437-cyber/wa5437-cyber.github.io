@@ -1,0 +1,24 @@
+.wrap.wide{max-width:960px}
+.note{font-size:14px;color:var(--text-secondary);background:var(--soft);border-radius:8px;padding:12px 14px;margin:0 0 24px;line-height:1.6}
+.makers{list-style:none;padding:0;margin:24px 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.makers a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.makers a:hover{border-color:var(--teal)}
+.makers strong{display:block;font-size:1.05rem;margin-bottom:6px}
+.makers span{font-size:14px;color:var(--text-secondary)}
+.article .toc{list-style:none;padding:0;margin-left:0;margin:0 0 28px;display:flex;flex-wrap:wrap;gap:8px}
+.toc a{display:block;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--teal)}
+.mic{padding:28px 0;border-top:1px solid var(--line)}
+.mic h2{font-size:1.35rem;margin-bottom:14px;scroll-margin-top:16px}
+.mic-grid{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:20px;align-items:start}
+.mic-spec{min-width:0}
+.mic-spec table.data{width:100%}
+.mic-spec th{width:7.5em;text-align:left;vertical-align:top;white-space:nowrap}
+.mic-polar{margin:0;text-align:center}
+.mic-polar svg{width:200px;max-width:100%;height:auto}
+.mic-polar figcaption{font-size:13px;color:var(--text-tertiary)}
+.leg{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 12px;font-size:12px;color:var(--text-secondary);margin-top:4px}
+.leg i{display:inline-block;width:14px;height:3px;margin-right:4px;vertical-align:middle}
+.mic-links{margin:14px 0 0}
+.mic-links a{color:var(--teal);font-weight:500}
+.mic-links a:hover{text-decoration:underline}
+@media(max-width:640px){.mic-grid{grid-template-columns:1fr}.mic-polar{order:-1}}
