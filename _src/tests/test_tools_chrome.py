@@ -38,6 +38,9 @@ def unchrome(text):
     for rx in BLOCKS:
         text = rx.sub("", text)
     text = chrome_tools.I18N_PAIR_RE.sub("", text)             # i18n 쌍은 위치만 바뀌므로 양쪽에서 뺀다
+    # 검색용 제목·설명은 chrome_tools.SEO 표가 바꾼다(og·JSON-LD 는 표시 블록 안이라 위에서 이미 빠진다)
+    text = re.sub(r"<title>.*?</title>", "<title></title>", text, flags=re.S)
+    text = re.sub(r'<meta name="description" content="[^"]*">', "<!-- desc -->", text)
     text = chrome_tools.STYLE_BLOCK_RE.sub("<style></style>", text)
     # Ignore only the reviewed accessibility attributes/tag changes; preserve
     # all original content, control values/IDs and every script byte.
@@ -66,7 +69,7 @@ class ToolsChromeTests(unittest.TestCase):
     def test_scripts_are_byte_identical(self):
         # 순서는 i18n 쌍을 본 스크립트 앞으로 옮기느라 바뀐다. 내용 묶음(다중집합)은 한 글자도 같아야 한다.
         for name in chrome_tools.FILES:
-            before, after = SCRIPT.findall(original(name)), SCRIPT.findall(disk(name))
+            before, after = SCRIPT.findall(original(name)), SCRIPT.findall(chrome_tools.HEAD_RE.sub("", disk(name)))   # 표시 블록 안 JSON-LD 는 제외
             self.assertEqual(sorted(after), sorted(before), name)
             if name not in chrome_tools.NO_I18N:                   # 문제풀이는 언어 전환이 없다
                 self.assertIn('<script src="i18n-core.js"></script>', disk(name))

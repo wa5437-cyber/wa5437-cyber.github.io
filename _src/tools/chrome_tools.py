@@ -17,6 +17,7 @@
 - 확대 제한을 없애고 본문 랜드마크·제목·정적 입력 라벨을 보완한다. 스크립트로 만드는 입력은 건드리지 않는다.
 바꿀 자리가 없으면 ValueError(템플릿에서 벗어난 파일을 알아채려고).
 """
+import json
 import pathlib
 import re
 import sys
@@ -70,7 +71,7 @@ TOOL_TOP_RE = re.compile(r'(<div class="topbar">.*?<a class="home-link"[^>]*>.*?
 NO_I18N = ("stage-sound-quiz.html",)
 I18N_PAIR_RE = re.compile(r'^<script>window\.I18N_DATA = [^\n]*</script>\n<script src="i18n-core\.js"></script>\n', re.M)
 ADSENSE_RE = re.compile(r'<script async src="https://pagead2\.googlesyndication\.com/[^"]*"[^>]*></script>')
-INLINE_SCRIPT_RE = re.compile(r"<script(?![^>]*\bsrc=)[^>]*>")
+INLINE_SCRIPT_RE = re.compile(r"<script(?![^>]*\bsrc=)(?![^>]*ld\+json)[^>]*>")   # JSON-LD 는 본 스크립트가 아니다
 
 def _fail(msg):
     raise ValueError(msg)
@@ -85,19 +86,69 @@ def _retheme_style(html):
     return out
 
 
+# 검색 결과용 머리 정보(제목·설명·og·구조화 데이터). 이 표에 있는 파일만 제목·설명을 이 값으로 바꾸고,
+# og·twitter·JSON-LD(WebApplication+BreadcrumbList)를 표시 블록 안에 넣는다. 설명에는 쪽에 실제로 있는 기능만 쓴다.
+SEO = {
+    "rta.html": ("실시간 RTA 분석기 — 마이크로 31밴드 스펙트럼 보기 | ML Music Studio", "RTA 실시간 분석기",
+                 "기기 마이크로 들어오는 소리를 31밴드(ISO 266) 스펙트럼으로 실시간 표시합니다. 룸 특성 확인, 하울링 후보 찾기, 보정 사용법을 함께 정리했습니다."),
+    "generator.html": ("신호 발생기 — 핑크·화이트 노이즈, 사인·사각·삼각파 | ML Music Studio", "신호 발생기",
+                       "핑크·화이트 노이즈, 사인·사각·삼각파, 험·버즈·히스 신호를 내서 스피커와 신호 체인을 점검합니다. 신호별 듣는 법과 현장 점검 순서, 귀를 지키는 법을 안내합니다."),
+    "electrical-calculator.html": ("전기 계산기 — 옴의 법칙·전력·임피던스·dB 환산 | ML Music Studio", "전기 계산기",
+                                   "옴의 법칙, 전력, 임피던스, dB와 전력 환산, 케이블 전압 강하를 계산합니다. 탭별 입력 항목과 계산 방식, 숫자 예시, 흔한 실수를 함께 정리했습니다."),
+    "acoustics-calculator.html": ("음향 계산기 — 주파수·파장·룸 모드·잔향(RT60) | ML Music Studio", "음향 계산기",
+                                  "주파수·파장·주기와 음정, 룸 모드, 잔향(RT60)을 계산합니다. 탭별 계산 방식과 숫자 예시, 현장에서 쓰는 순서, 한계까지 설명합니다."),
+    "delay-calculator.html": ("딜레이 계산기 — 시간·거리·위상·스피커 정렬 | ML Music Studio", "딜레이 계산기",
+                              "딜레이 시간·거리·주파수·위상을 서로 환산하고 스피커 정렬을 점검합니다. 음속(온도), Haas 효과 참고표, 템포-딜레이 환산, 리버브 타임을 함께 봅니다."),
+    "effects-listening.html": ("이펙트 듣기 훈련 — 리버브·딜레이·컴프레서 비교 청음 | ML Music Studio", "이펙트 듣기 훈련",
+                               "Reverb·Delay·Chorus 등 이펙트 10종과 컴프레서·게이트·더킹을 켜고 끄며 비교해 듣습니다. 자유 청음, 청음 문제, 다이나믹스 모드로 귀를 훈련합니다."),
+    "tempo-pitch-calculator.html": ("템포·피치 계산기 — 탭 템포·음표 길이·속도와 피치 | ML Music Studio", "템포·피치 계산기",
+                                    "탭 템포, BPM별 음표 길이, 속도↔피치 환산, 루프 BPM 찾기, 마디 길이, 타임 스트레치, 샘플레이트까지 한 화면에서 계산합니다. 계산 문제 모드로 연습도 할 수 있는 무료 웹 도구입니다."),
+}
+
+
+def _seo_head(html, name):
+    """SEO 표에 있는 파일의 제목·설명을 바꾸고, 표시 블록에 넣을 og·twitter·JSON-LD 를 돌려준다(없으면 빈 문자열)."""
+    seo = SEO.get(name)
+    if not seo:
+        return html, ""
+    title, short, desc = seo
+    url = "%s/%s" % (kit.BASE, name)
+    html, n1 = re.subn(r"<title>.*?</title>", lambda m: "<title>%s</title>" % kit.esc(title), html, count=1, flags=re.S)
+    if n1 != 1:
+        _fail("<title> 이 없음")
+    html = re.sub(r'<meta name="description" content="[^"]*">\n?', "", html)   # 설명은 표시 블록 안에서 다시 넣는다
+    ld = [{"@context": "https://schema.org", "@type": "WebApplication", "name": short, "description": desc,
+           "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any",
+           "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "inLanguage": "ko", "url": url},
+          {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "ML Music Studio", "item": kit.BASE + "/"},
+              {"@type": "ListItem", "position": 2, "name": "도구", "item": kit.BASE + "/tools/"},
+              {"@type": "ListItem", "position": 3, "name": short, "item": url}]}]
+    ld_text = json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")
+    extra = ('<meta name="description" content="%s">\n' % kit.esc(desc)
+             + '<meta property="og:type" content="website"><meta property="og:site_name" content="ML Music Studio">\n'
+             '<meta property="og:title" content="%s"><meta property="og:description" content="%s">\n'
+             '<meta property="og:url" content="%s"><meta property="og:image" content="%s/og-image.png"><meta property="og:locale" content="ko_KR">\n'
+             '<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="%s"><meta name="twitter:description" content="%s">\n'
+             '<script type="application/ld+json">%s</script>\n'
+             % (kit.esc(title), kit.esc(desc), url, kit.BASE, kit.esc(title), kit.esc(desc), ld_text))
+    return html, extra
+
+
 def _head(html, name):
     html, n = FONT_LINK_RE.subn('<link href="%s" rel="stylesheet">' % FONTS, html)
     if n != 1:
         _fail("Google Fonts <link> 가 정확히 하나여야 함(%d개)" % n)
     html = HEAD_RE.sub("", html)
+    html, seo_extra = _seo_head(html, name)
     if html.count("</head>") != 1:
         _fail("</head> 가 정확히 하나여야 함")
     item = _tool_items()["ko"]["/" + name]
     description = (f'<meta name="description" content="{kit.esc(item["text"])}">\n'
-                   if not re.search(r'<meta\b[^>]*name="description"', html) else "")
+                   if name not in SEO and not re.search(r'<meta\b[^>]*name="description"', html) else "")
     canonical = (f'<link rel="canonical" href="{kit.BASE}/{name}">\n'
                  if not re.search(r'<link\b[^>]*rel="canonical"', html) else "")
-    block = ("<!-- site-chrome:head -->\n" + description + canonical +
+    block = ("<!-- site-chrome:head -->\n" + description + canonical + seo_extra +
              '<meta name="theme-color" content="%s">\n'
              '<link rel="stylesheet" href="/assets/tools.css">\n'
              "<!-- /site-chrome:head -->\n" % kit.THEME_COLOR)
