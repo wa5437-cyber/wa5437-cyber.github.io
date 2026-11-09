@@ -1,132 +1,132 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 사이트 기준 URL: https://mlmusicstudio.co.kr (GitHub Pages). 커스텀 도메인 연결 시 교체. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mlmusicstudio.co.kr/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/yul_legal.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/</loc><lastmod>2026-10-26</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/yul_legal.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
-  <url><loc>https://mlmusicstudio.co.kr/guides/</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/delay-tower-alignment.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/speaker-impedance-matching.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/reading-31-band-rta.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/rt60-reverberation-time.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/ohms-law-for-audio.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/reading-lufs-loudness.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/bpm-to-delay-time.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/frequency-and-wavelength.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/phase-interference-comb-filter.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/reverb-delay-chorus-explained.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/daw-shortcuts-concepts.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/pro-tools-to-logic-migration.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/pink-noise-eq-ear-training.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/gain-staging-basics.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/microphone-polar-patterns.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-cert-study-plan.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/sidechain-compression-ducking.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/stereo-imaging-mid-side.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-exam-2026-28th-grade3.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/ableton-fl-studio-workflow.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/grade3-exam-scope-by-topic.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-exam-scoring.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/eq-types-and-q.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/31-band-eq-standard-frequencies.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/decibel-formulas-and-units.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/line-array-basics.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/condenser-vs-dynamic-mic.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/delay-tower-alignment.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/speaker-impedance-matching.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/reading-31-band-rta.html</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/rt60-reverberation-time.html</loc><lastmod>2026-08-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/ohms-law-for-audio.html</loc><lastmod>2026-08-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/reading-lufs-loudness.html</loc><lastmod>2026-08-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/bpm-to-delay-time.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/frequency-and-wavelength.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/phase-interference-comb-filter.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/reverb-delay-chorus-explained.html</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/daw-shortcuts-concepts.html</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/pro-tools-to-logic-migration.html</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/pink-noise-eq-ear-training.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/gain-staging-basics.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/microphone-polar-patterns.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-cert-study-plan.html</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/sidechain-compression-ducking.html</loc><lastmod>2026-10-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/stereo-imaging-mid-side.html</loc><lastmod>2026-11-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html</loc><lastmod>2026-11-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-exam-2026-28th-grade3.html</loc><lastmod>2026-11-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/ableton-fl-studio-workflow.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html</loc><lastmod>2026-09-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/grade3-exam-scope-by-topic.html</loc><lastmod>2026-10-16</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-exam-scoring.html</loc><lastmod>2026-10-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/eq-types-and-q.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/31-band-eq-standard-frequencies.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/decibel-formulas-and-units.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/line-array-basics.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/condenser-vs-dynamic-mic.html</loc><lastmod>2026-09-28</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
-  <url><loc>https://mlmusicstudio.co.kr/trainer.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/generator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/rta.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/delay-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/acoustics-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/electrical-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/tempo-pitch-calculator.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/effects-listening.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/stage-sound-quiz.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/sheetscope_legal.html</loc><lastmod>2026-09-28</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-<url><loc>https://mlmusicstudio.co.kr/tools/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/stage-sound/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/tools/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/stage-sound/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/ear-trainer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/ear-trainer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/toolkit/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/toolkit/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/aet-quiz/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/aet-quiz/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/spl-rta/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/spl-rta/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/yul/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/yul/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/nora/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/nora/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/keymap/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/keymap/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/patchio/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/patchio/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/sheetscope/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/sheetscope/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/temposcope/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/temposcope/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/studio/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/studio/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/about/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/about/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/contact/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/contact/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/privacy/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/privacy/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/work/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/work/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/ja/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/zh-Hans/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/es/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/de/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/fr/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/pt-BR/timer/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/ja/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/zh-Hans/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/es/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/de/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/fr/metronome/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/pt-BR/metronome/</loc></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/metronome-practice-guide.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mixing-session-break-timer.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-<url><loc>https://mlmusicstudio.co.kr/apps/retroroom/</loc></url>
-<url><loc>https://mlmusicstudio.co.kr/en/apps/retroroom/</loc></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/aea.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/akg.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/audio-technica.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/audix.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/beyerdynamic.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/coles.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/dpa.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/earthworks.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/electro-voice.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/josephson-engineering.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/microtech-gefell.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/neumann.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/rode.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/royer.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/schoeps.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/sennheiser.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/shure.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/slate-digital.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/sony.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/telefunken.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/universal-audio.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/warm-audio.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/trainer.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/generator.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/rta.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/delay-calculator.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/acoustics-calculator.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/electrical-calculator.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/tempo-pitch-calculator.html</loc><lastmod>2026-10-16</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/effects-listening.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/stage-sound-quiz.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/sheetscope_legal.html</loc><lastmod>2026-10-12</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+<url><loc>https://mlmusicstudio.co.kr/tools/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/stage-sound/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/</loc><lastmod>2026-10-26</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/tools/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/stage-sound/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/ear-trainer/</loc><lastmod>2026-10-30</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/ear-trainer/</loc><lastmod>2026-10-30</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/toolkit/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/toolkit/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/aet-quiz/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/aet-quiz/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/spl-rta/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/spl-rta/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/yul/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/yul/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/nora/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/nora/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/keymap/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/keymap/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/patchio/</loc><lastmod>2026-11-03</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/patchio/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/sheetscope/</loc><lastmod>2026-11-05</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/sheetscope/</loc><lastmod>2026-11-05</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/temposcope/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/temposcope/</loc><lastmod>2026-11-02</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/studio/</loc><lastmod>2026-10-19</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/studio/</loc><lastmod>2026-10-19</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/about/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/about/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/contact/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/contact/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/privacy/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/privacy/</loc><lastmod>2026-10-12</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/work/</loc><lastmod>2026-10-16</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/work/</loc><lastmod>2026-10-16</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/ja/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/zh-Hans/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/es/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/de/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/fr/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/pt-BR/timer/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/ja/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/zh-Hans/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/es/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/de/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/fr/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/pt-BR/metronome/</loc><lastmod>2026-10-17</lastmod></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/metronome-practice-guide.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mixing-session-break-timer.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+<url><loc>https://mlmusicstudio.co.kr/apps/retroroom/</loc><lastmod>2026-10-26</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/apps/retroroom/</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/aea.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/akg.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/audio-technica.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/audix.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/beyerdynamic.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/coles.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/dpa.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/earthworks.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/electro-voice.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/josephson-engineering.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/microtech-gefell.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/neumann.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/rode.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/royer.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/schoeps.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/sennheiser.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/shure.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/slate-digital.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/sony.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/telefunken.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/universal-audio.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/mic-catalog/warm-audio.html</loc><lastmod>2026-11-08</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>

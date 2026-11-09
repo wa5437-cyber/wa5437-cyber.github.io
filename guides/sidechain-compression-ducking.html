@@ -75,6 +75,26 @@
   <h2>Release는 박자에 맞춘다</h2>
   <p>1박의 길이는 60,000 ÷ BPM(ms)입니다. 120 BPM은 500ms, 128 BPM은 약 468.8ms이고, 16분음표는 각각 125ms, 약 117.2ms입니다. 킥이 매 박에 나오는 곡에서 Release가 1박보다 길면 대상 트랙이 다 올라오기 전에 다음 킥이 도착해 계속 눌린 채로 남습니다. 너무 짧으면 킥 끝에서 대상이 튀어 오르듯 들립니다. Attack은 짧게(0~10ms 부근) 두는 경우가 많습니다. BPM별 길이는 <a class="inline" href="/guides/bpm-to-delay-time.html">BPM으로 딜레이·리버브 타임 계산하기</a>의 표와 같은 방식입니다.</p>
 
+  <h2>Attack과 Release, 킥 펌핑에서 실제로 하는 일</h2>
+  <p>Attack은 키 신호가 Threshold를 넘은 뒤 게인이 내려가기까지 걸리는 시간이고, Release는 키 신호가 사라진 뒤 원래 게인으로 돌아오기까지 걸리는 시간입니다. 사이드체인에서는 이 둘이 곧 "눌림의 모양"입니다.</p>
+  <table class="data">
+<tr><th>상황</th><th>Attack</th><th>Release</th><th>듣는 느낌</th></tr>
+<tr><td>킥 앞에서 베이스를 깔끔하게 비우기</td><td>0~5ms</td><td>1/8~1/16음표 길이</td><td>킥이 또렷하고 베이스는 박자 사이에 올라온다</td></tr>
+<tr><td>EDM식 펌핑 효과</td><td>0~5ms</td><td>거의 1박 길이</td><td>눌렸다 숨 쉬듯 올라오는 움직임이 일부러 들린다</td></tr>
+<tr><td>MC 멘트 중 BGM 더킹</td><td>10~50ms</td><td>500ms~2초</td><td>말 시작에 부드럽게 내려가고 끝난 뒤 천천히 복귀</td></tr>
+</table>
+  <p class="note">위 값은 출발점일 뿐입니다. 곡의 템포와 대상 소리의 길이에 따라 달라지므로 귀로 맞춰야 합니다. 킥 펌핑은 Attack이 너무 느리면 킥의 앞부분이 베이스와 겹쳐서 어택감이 뭉개집니다.</p>
+
+  <h2>DAW별 사이드체인 연결 순서</h2>
+  <p>용어와 위치는 DAW마다 다르지만 순서는 같습니다. <strong>① 키가 될 트랙의 신호를 보내고 ② 대상 트랙의 컴프레서가 그 신호를 받게 하고 ③ 키 듣기로 확인</strong>합니다.</p>
+  <ul>
+    <li><strong>Pro Tools</strong> — 킥 트랙에서 센드를 하나 만들어 빈 버스(예: Bus 1)로 보냅니다. 대상 트랙의 컴프레서(예: Dyn3 Compressor/Limiter)에서 플러그인 창 머리의 <b>Key Input</b> 메뉴를 같은 버스로 고르고, 컴프레서의 외부 키(External Key) 스위치를 켜면 그 신호를 듣습니다. 스위치 이름과 위치는 플러그인과 버전마다 조금 다릅니다.</li>
+    <li><strong>Logic Pro</strong> — 대상 트랙의 Compressor 창 오른쪽 위 <b>Side Chain</b> 메뉴에서 킥 트랙을 고릅니다. 별도 버스 설정이 필요 없습니다.</li>
+    <li><strong>Ableton Live</strong> — 대상 트랙의 Compressor에서 <b>Sidechain</b> 섹션을 펼치고 <b>Audio From</b>에 킥 트랙을 고릅니다. 이때 <b>Post FX/Pre FX/Post Mixer</b> 위치 선택이 결과를 바꿉니다.</li>
+    <li><strong>REAPER</strong> — 킥 트랙에서 대상 트랙으로 센드를 만들고 센드의 채널을 <b>3/4</b>로 지정합니다. 대상 트랙은 채널 수를 4 이상으로 올리고 ReaComp의 <b>Detector input</b>을 <b>Auxiliary inputs 3+4</b>로 바꿉니다.</li>
+  </ul>
+  <p>연결한 뒤에는 컴프레서의 <b>키 듣기(Key Listen)</b> 버튼을 눌러 키 신호가 의도한 소리인지 먼저 들어 보세요. 킥만 들려야 하는데 하이햇이나 보컬이 섞여 들리면 키 필터를 먼저 손봐야 합니다.</p>
+
   <h2>BGM 더킹 시작점</h2>
   <p>MC 마이크를 키로 쓰고 BGM을 −10dB 정도 내리는 설정이 흔한 출발점입니다. −10dB는 진폭 약 0.32배, 전력 1/10입니다. 말이 끝난 뒤 1~2초에 걸쳐 돌아오게 하면 부자연스러운 튐이 줄어듭니다.</p>
 
