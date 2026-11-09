@@ -75,7 +75,7 @@ def json_ld(lang):
     data = [
         {"@context": "https://schema.org", "@type": "Organization", "name": kit.SITE["brand"],
          "alternateName": ["엠엘뮤직스튜디오", "MLMusicStudio"], "url": kit.BASE + "/", "logo": kit.BASE + "/og-image.png",
-         "sameAs": [kit.SITE["contact"]["instagram"]],
+         "sameAs": [kit.SITE["contact"]["instagram"], kit.SITE["contact"]["naver_blog"]],
          "description": ORG_DESC[lang],
          "address": {"@type": "PostalAddress", "streetAddress": kit.SITE["contact"]["address"][lang],
                      "addressLocality": "Yongsan-gu, Seoul", "addressCountry": "KR"}},
