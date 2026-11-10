@@ -329,6 +329,20 @@ def profile_ld(lang, profile):
     return '<script type="application/ld+json">' + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>"
 
 
+def studio_ld(lang, data):
+    """녹음실 페이지의 LocalBusiness 구조화 데이터. 쪽에 실제로 적힌 사실(이름·주소·사진·계정)만 쓰고, 금액·전화·영업시간은 넣지 않는다."""
+    c = kit.SITE["contact"]
+    biz = {"@context": "https://schema.org", "@type": "LocalBusiness", "name": kit.SITE["brand"],
+           "alternateName": ["엠엘뮤직스튜디오", "MLMusicStudio"], "url": kit.BASE + url(lang, "/studio/"),
+           "description": data[lang]["description"],
+           "address": {"@type": "PostalAddress", "streetAddress": c["address"][lang],
+                       "addressLocality": "Yongsan-gu, Seoul", "addressCountry": "KR"},
+           "sameAs": [c["instagram"], c["naver_blog"]]}
+    if data.get("hero_img"):
+        biz["image"] = kit.BASE + data["hero_img"]
+    return '<script type="application/ld+json">' + json.dumps(biz, ensure_ascii=False).replace("</", "<\\/") + "</script>"
+
+
 def is_noindex(name):
     """페이지 JSON 최상위 "noindex": true -> 색인 제외(meta robots)·광고 없음·사이트맵에서 뺀다. 내용이 채워지면 지운다."""
     d = load_page(name)
@@ -361,6 +375,8 @@ def simple_page(lang, name):
     body = page_hero(data, c, lang) + sections.render(c["sections"], lang, section_ctx())
     path = url(lang, f"/{name}/")
     ld = profile_ld(lang, data["profile"]) if data.get("profile") else ""
+    if name == "studio":
+        ld = studio_ld(lang, data)
     return path, kit.page(lang, path, c["title"], c["description"], body, alts_for(f"/{name}/"),
                           extra_head=ld, noindex=bool(data.get("noindex")))
 
