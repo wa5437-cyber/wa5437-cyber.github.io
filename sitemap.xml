@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 사이트 기준 URL: https://mlmusicstudio.co.kr (GitHub Pages). 커스텀 도메인 연결 시 교체. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mlmusicstudio.co.kr/</loc><lastmod>2026-10-26</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/</loc><lastmod>2026-11-09</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/yul_legal.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <url><loc>https://mlmusicstudio.co.kr/guides/</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -14,7 +14,7 @@
   <url><loc>https://mlmusicstudio.co.kr/guides/bpm-to-delay-time.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/frequency-and-wavelength.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/phase-interference-comb-filter.html</loc><lastmod>2026-10-19</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/spl-meter-weighting-fast-slow-leq.html</loc><lastmod>2026-11-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/reverb-delay-chorus-explained.html</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/daw-shortcuts-concepts.html</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/pro-tools-to-logic-migration.html</loc><lastmod>2026-09-01</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -22,12 +22,12 @@
   <url><loc>https://mlmusicstudio.co.kr/guides/gain-staging-basics.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/microphone-polar-patterns.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/spl-inverse-square-law.html</loc><lastmod>2026-10-17</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-cert-study-plan.html</loc><lastmod>2026-08-29</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-cert-study-plan.html</loc><lastmod>2026-11-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/sidechain-compression-ducking.html</loc><lastmod>2026-11-09</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/stereo-imaging-mid-side.html</loc><lastmod>2026-11-06</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html</loc><lastmod>2026-11-02</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/limiter-vs-compressor.html</loc><lastmod>2026-11-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/stage-sound-exam-2026-28th-grade3.html</loc><lastmod>2026-11-05</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/guides/umik-1-calibration-file.html</loc><lastmod>2026-11-10</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/compressor-parameters-explained.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/ableton-fl-studio-workflow.html</loc><lastmod>2026-10-23</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/guides/balanced-vs-unbalanced-cables.html</loc><lastmod>2026-09-30</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -52,7 +52,7 @@
 <url><loc>https://mlmusicstudio.co.kr/tools/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/apps/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/apps/stage-sound/</loc><lastmod>2026-10-12</lastmod></url>
-<url><loc>https://mlmusicstudio.co.kr/en/</loc><lastmod>2026-10-26</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/</loc><lastmod>2026-11-09</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/tools/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/apps/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/apps/stage-sound/</loc><lastmod>2026-10-12</lastmod></url>

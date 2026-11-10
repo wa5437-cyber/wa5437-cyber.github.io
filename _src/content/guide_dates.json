@@ -52,7 +52,7 @@
   "published": "2026-10-02"
  },
  "limiter-vs-compressor": {
-  "modified": "2026-11-02",
+  "modified": "2026-11-10",
   "published": "2026-11-02"
  },
  "line-array-basics": {
@@ -116,11 +116,11 @@
   "published": "2026-09-28"
  },
  "spl-meter-weighting-fast-slow-leq": {
-  "modified": "2026-10-23",
+  "modified": "2026-11-10",
   "published": "2026-10-23"
  },
  "stage-sound-cert-study-plan": {
-  "modified": "2026-08-29",
+  "modified": "2026-11-10",
   "published": "2026-08-29"
  },
  "stage-sound-exam-2026-28th-grade3": {
@@ -136,7 +136,7 @@
   "published": "2026-11-06"
  },
  "umik-1-calibration-file": {
-  "modified": "2026-10-30",
+  "modified": "2026-11-10",
   "published": "2026-10-23"
  }
 }
