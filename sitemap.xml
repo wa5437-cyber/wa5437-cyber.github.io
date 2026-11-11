@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 사이트 기준 URL: https://mlmusicstudio.co.kr (GitHub Pages). 커스텀 도메인 연결 시 교체. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://mlmusicstudio.co.kr/</loc><lastmod>2026-11-09</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mlmusicstudio.co.kr/</loc><lastmod>2026-11-12</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>https://mlmusicstudio.co.kr/yul_legal.html</loc><lastmod>2026-10-30</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 
   <url><loc>https://mlmusicstudio.co.kr/guides/</loc><lastmod>2026-11-06</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -52,7 +52,7 @@
 <url><loc>https://mlmusicstudio.co.kr/tools/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/apps/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/apps/stage-sound/</loc><lastmod>2026-10-12</lastmod></url>
-<url><loc>https://mlmusicstudio.co.kr/en/</loc><lastmod>2026-11-09</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/</loc><lastmod>2026-11-12</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/tools/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/apps/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/apps/stage-sound/</loc><lastmod>2026-10-12</lastmod></url>
@@ -76,8 +76,8 @@
 <url><loc>https://mlmusicstudio.co.kr/en/apps/sheetscope/</loc><lastmod>2026-11-05</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/apps/temposcope/</loc><lastmod>2026-11-02</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/apps/temposcope/</loc><lastmod>2026-11-02</lastmod></url>
-<url><loc>https://mlmusicstudio.co.kr/studio/</loc><lastmod>2026-10-19</lastmod></url>
-<url><loc>https://mlmusicstudio.co.kr/en/studio/</loc><lastmod>2026-10-19</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/studio/</loc><lastmod>2026-11-10</lastmod></url>
+<url><loc>https://mlmusicstudio.co.kr/en/studio/</loc><lastmod>2026-11-10</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/about/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/en/about/</loc><lastmod>2026-10-12</lastmod></url>
 <url><loc>https://mlmusicstudio.co.kr/contact/</loc><lastmod>2026-10-12</lastmod></url>
