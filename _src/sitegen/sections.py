@@ -51,7 +51,11 @@ def _list(sec, lang, ctx):
 
 def _cards(sec, lang, ctx):
     def card(i):
-        inner = f'<h3>{esc(i["title"])}</h3><p>{esc(i["text"])}</p>'
+        img = ""
+        if i.get("img"):    # 제품 화면: 크기를 적어 레이아웃이 밀리지 않게 하고 늦게 불러온다
+            img = (f'<img class="card-img" src="{esc(i["img"])}" alt="{esc(i.get("alt", ""))}" '
+                   f'width="{int(i["w"])}" height="{int(i["h"])}" loading="lazy" decoding="async">')
+        inner = f'{img}<h3>{esc(i["title"])}</h3><p>{esc(i["text"])}</p>'
         if i.get("href"):
             return f'<a class="card" href="{esc(i["href"])}">{inner}</a>'
         return f'<div class="card">{inner}</div>'

@@ -30,12 +30,20 @@
           {
             "title": "OneKnob Saturator",
             "text": "튜브, 트랜스, 트랜지스터, 테이프를 고르고 DRIVE 하나로 맞추는 Mac용 세츄레이션 플러그인입니다. AU·VST3.",
-            "href": "https://software.mlmusicstudio.co.kr/ko/oneknob/"
+            "href": "https://software.mlmusicstudio.co.kr/ko/oneknob/",
+            "img": "/img/products/oks.jpg",
+            "w": 1120,
+            "h": 700,
+            "alt": "OneKnob Saturator 실제 화면. 슬롯 A에 튜브, 슬롯 B에 다이오드를 병렬로 건 모습"
           },
           {
             "title": "PlugSpot",
             "text": "\"보컬에 프로큐4\"라고 치면 보컬 트랙에 꽂힙니다. Pro Tools, Logic, REAPER, Ableton Live를 위한 Mac 앱입니다.",
-            "href": "https://software.mlmusicstudio.co.kr/ko/plugspot/"
+            "href": "https://software.mlmusicstudio.co.kr/ko/plugspot/",
+            "img": "/img/products/plugspot.jpg",
+            "w": 1120,
+            "h": 720,
+            "alt": "PlugSpot 실제 화면. 플러그인이 그림 카드로 정리되어 있다"
           }
         ]
       },
@@ -46,12 +54,20 @@
           {
             "title": "MixTalk",
             "text": "개발 중입니다. \"킥 3 dB 올려\"처럼 말하거나 치거나 손으로, 라이브 콘솔을 iPad와 Mac에서 다룹니다.",
-            "href": "https://software.mlmusicstudio.co.kr/ko/mixtalk/"
+            "href": "https://software.mlmusicstudio.co.kr/ko/mixtalk/",
+            "img": "/img/products/mixtalk.jpg",
+            "w": 1120,
+            "h": 579,
+            "alt": "개발 중인 MixTalk의 데모 모드 채널 화면. 채널 12개와 메인 페이더, 아래에 명령 입력 줄"
           },
           {
             "title": "SessionBridge",
             "text": "개발 중입니다. DAW 세션을 다른 DAW로 옮기고, 무엇이 옮겨지고 무엇을 다시 해야 하는지 보고서로 알려 주는 Mac 앱입니다.",
-            "href": "https://software.mlmusicstudio.co.kr/ko/sessionbridge/"
+            "href": "https://software.mlmusicstudio.co.kr/ko/sessionbridge/",
+            "img": "/img/products/sessionbridge.jpg",
+            "w": 1120,
+            "h": 724,
+            "alt": "개발 중인 SessionBridge의 변환 화면. 왼쪽에 REAPER 세션, 가운데에 변환할 DAW, 오른쪽에 옮겨지는 것 목록"
           }
         ]
       },
@@ -99,12 +115,20 @@
           {
             "title": "OneKnob Saturator",
             "text": "A saturation plug-in for Mac. Pick tubes, iron, transistors or tape, then set it with one DRIVE knob. AU and VST3.",
-            "href": "https://software.mlmusicstudio.co.kr/oneknob/"
+            "href": "https://software.mlmusicstudio.co.kr/oneknob/",
+            "img": "/img/products/oks.jpg",
+            "w": 1120,
+            "h": 700,
+            "alt": "The real OneKnob Saturator screen, with a tube in slot A and a diode in slot B in parallel"
           },
           {
             "title": "PlugSpot",
             "text": "Type a track and a plug-in, and it lands on that track. A Mac app for Pro Tools, Logic, REAPER and Ableton Live.",
-            "href": "https://software.mlmusicstudio.co.kr/plugspot/"
+            "href": "https://software.mlmusicstudio.co.kr/plugspot/",
+            "img": "/img/products/plugspot.jpg",
+            "w": 1120,
+            "h": 720,
+            "alt": "The real PlugSpot screen, shown in Korean, with plug-ins laid out as picture cards"
           }
         ]
       },
@@ -115,12 +139,20 @@
           {
             "title": "MixTalk",
             "text": "In development. Say it, type it or touch it (\"kick up 3 dB\") and your live console follows, on iPad and Mac.",
-            "href": "https://software.mlmusicstudio.co.kr/mixtalk/"
+            "href": "https://software.mlmusicstudio.co.kr/mixtalk/",
+            "img": "/img/products/mixtalk.jpg",
+            "w": 1120,
+            "h": 579,
+            "alt": "MixTalk's channel screen in demo mode, in development, with twelve channels, the main fader and a command line below"
           },
           {
             "title": "SessionBridge",
             "text": "In development. A Mac app that moves a DAW session to another DAW and gives you a report of what carried over and what you need to redo.",
-            "href": "https://software.mlmusicstudio.co.kr/sessionbridge/"
+            "href": "https://software.mlmusicstudio.co.kr/sessionbridge/",
+            "img": "/img/products/sessionbridge.jpg",
+            "w": 1120,
+            "h": 724,
+            "alt": "SessionBridge's convert screen in development, shown in Korean: a REAPER session on the left, target DAWs in the middle, and what carries over on the right"
           }
         ]
       },

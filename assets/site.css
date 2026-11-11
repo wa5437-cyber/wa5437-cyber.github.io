@@ -54,6 +54,7 @@ small,.note,.copy{font-size:clamp(.875rem,.84rem + .15vw,.9375rem);line-height:1
 .card h3{margin:0}
 .card p{margin:0;color:var(--ink2)}
 .card .more{margin-top:auto}
+.card .card-img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line);margin-bottom:4px}
 .card:focus-within{border-color:var(--accent)}
 a.card{text-decoration:none;color:inherit}
 a.card:hover{border-color:var(--control)}
