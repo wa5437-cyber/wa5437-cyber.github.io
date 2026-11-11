@@ -70,6 +70,10 @@ ORG_DESC = {"ko": "서울 용산의 녹음·믹싱·마스터링 스튜디오이
             "en": "ML Music Studio (엠엘뮤직스튜디오) is a recording, mixing and mastering studio in Yongsan, Seoul, and the maker of apps and web tools for sound engineers."}
 
 
+# 홈 플러그인 칸의 제품 화면(장식: 옆 글 링크와 같은 곳으로 가므로 alt 없음). 원본은 img/products/ 의 oks.jpg·plugspot.jpg 를 560px 로 줄인 것
+PLUGIN_STRIP_PICS = (("/img/products/oks-s.jpg", 560, 350), ("/img/products/plugspot-s.jpg", 560, 360))
+
+
 def json_ld(lang):
     """홈의 구조화 데이터(Organization + WebSite). 값은 json.dumps 로만 만든다."""
     data = [
@@ -210,8 +214,12 @@ def home(lang):
                  f'<a class="more" href="{esc(url(lang, "/apps/"))}">{esc(c["apps_more"].format(n=len(all_apps)))} →</a></div>'
                  f'<ul class="app-row">{row}</ul></div></section>')
     # 6) 플러그인(얇은 띠)
+    pics = "".join(f'<a href="{esc(url(lang, "/plugins/"))}" tabindex="-1" aria-hidden="true">'
+                   f'<img src="{src}" alt="" width="{w}" height="{h}" loading="lazy" decoding="async"></a>'
+                   for src, w, h in PLUGIN_STRIP_PICS)
     plugins = (f'<section class="strip"><div class="wrap strip-row"><span class="kicker">{esc(c["plugins_label"])}</span>'
-               f'<a href="{esc(url(lang, "/plugins/"))}">{esc(c["plugins_text"])} →</a></div></section>')
+               f'<a href="{esc(url(lang, "/plugins/"))}">{esc(c["plugins_text"])} →</a></div>'
+               f'<div class="wrap strip-pics">{pics}</div></section>')
     # 7) 웹 도구(이름만) + 최신 가이드(제목 + 한 줄)
     names = {it["href"]: it["name"] for g in load("tools.json")[lang]["groups"] for it in g["items"]}
     tools = "".join(f'<li><a href="{esc(href)}">{esc(names[href])}</a></li>' for href in h["featured_tools"] if href in names)

@@ -293,6 +293,10 @@ a.card .more{color:var(--accent-ink)}
 .strip .kicker{margin:0}
 .strip a{font-weight:600;text-decoration:none;color:var(--ink)}
 .strip a:hover{color:var(--accent-ink)}
+.strip-pics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-bottom:20px}
+.strip-pics a{display:block}
+.strip-pics img{display:block;width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+@media(min-width:640px){.strip-pics{max-width:600px;gap:16px}}
 
 /* compact link lists (home tools / guides) */
 .link-list{list-style:none;margin:0 0 20px;padding:0;border-top:1px solid var(--line)}
