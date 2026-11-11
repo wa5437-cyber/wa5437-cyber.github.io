@@ -3,34 +3,140 @@
   "hero_tone": "dark",
   "ko": {
     "title": "플러그인 | ML Music Studio",
-    "description": "데스크톱 DAW용 VST3·AU 플러그인을 준비하고 있습니다. 출시 소식은 카카오톡 오픈채팅이나 이메일로 받을 수 있습니다.",
+    "description": "Mac용 음악 작업 도구 OneKnob Saturator(AU·VST3 세츄레이션 플러그인)와 PlugSpot을 곧 판매합니다. 자세한 소개는 제품 사이트에서 볼 수 있습니다.",
     "kicker": "VST3 · AU",
     "h1": "플러그인",
-    "pill": "개발 중",
-    "sub": "데스크톱 DAW에서 쓰는 VST3·AU 플러그인을 개발하고 있습니다. 출시 소식은 카카오톡이나 이메일로 물어봐 주세요.",
-    "cta": [{"text": "카카오톡으로 문의", "href": "kakao"}, {"text": "이메일 보내기", "href": "mail"}],
+    "pill": "곧 판매",
+    "sub": "데스크톱 DAW에서 쓰는 Mac용 도구입니다. OneKnob Saturator와 PlugSpot은 곧 판매를 시작합니다. 소개와 화면은 제품 사이트에서 볼 수 있습니다.",
+    "cta": [
+      {
+        "text": "제품 사이트 보기",
+        "href": "https://software.mlmusicstudio.co.kr/ko/"
+      },
+      {
+        "text": "카카오톡으로 문의",
+        "href": "kakao"
+      },
+      {
+        "text": "이메일 보내기",
+        "href": "mail"
+      }
+    ],
     "sections": [
-      {"type": "prose", "title": "준비 중입니다",
-       "paragraphs": [
-         "지금 출시되어 있는 것은 앱입니다. 데스크톱 DAW에서 쓰는 VST3·AU 플러그인은 개발 중입니다.",
-         "출시 소식은 카카오톡 오픈채팅이나 이메일로 문의해 주세요."],
-       "links": [{"text": "출시된 앱 둘러보기 →", "href": "/apps/"}]}
+      {
+        "type": "cards",
+        "title": "곧 판매",
+        "items": [
+          {
+            "title": "OneKnob Saturator",
+            "text": "튜브, 트랜스, 트랜지스터, 테이프를 고르고 DRIVE 하나로 맞추는 Mac용 세츄레이션 플러그인입니다. AU·VST3.",
+            "href": "https://software.mlmusicstudio.co.kr/ko/oneknob/"
+          },
+          {
+            "title": "PlugSpot",
+            "text": "\"보컬에 프로큐4\"라고 치면 보컬 트랙에 꽂힙니다. Pro Tools, Logic, REAPER, Ableton Live를 위한 Mac 앱입니다.",
+            "href": "https://software.mlmusicstudio.co.kr/ko/plugspot/"
+          }
+        ]
+      },
+      {
+        "type": "cards",
+        "title": "만들고 있는 것",
+        "items": [
+          {
+            "title": "MixTalk",
+            "text": "개발 중입니다. \"킥 3 dB 올려\"처럼 말하거나 치거나 손으로, 라이브 콘솔을 iPad와 Mac에서 다룹니다.",
+            "href": "https://software.mlmusicstudio.co.kr/ko/mixtalk/"
+          },
+          {
+            "title": "SessionBridge",
+            "text": "개발 중입니다. DAW 세션을 다른 DAW로 옮기고, 무엇이 옮겨지고 무엇을 다시 해야 하는지 보고서로 알려 주는 Mac 앱입니다.",
+            "href": "https://software.mlmusicstudio.co.kr/ko/sessionbridge/"
+          }
+        ]
+      },
+      {
+        "type": "prose",
+        "title": "출시 소식",
+        "paragraphs": [
+          "판매가 시작되면 구매와 내려받기는 제품 사이트에서 할 수 있습니다. 출시 소식은 카카오톡 오픈채팅이나 이메일로도 문의해 주세요."
+        ],
+        "links": [
+          {
+            "text": "출시된 앱 둘러보기 →",
+            "href": "/apps/"
+          }
+        ]
+      }
     ]
   },
   "en": {
     "title": "Plug-ins | ML Music Studio",
-    "description": "We are preparing VST3 and AU plug-ins for desktop DAWs. News is available through the KakaoTalk open chat or by email.",
+    "description": "OneKnob Saturator (an AU and VST3 saturation plug-in) and PlugSpot, tools for Mac, go on sale soon. See the product site for details.",
     "kicker": "VST3 · AU",
     "h1": "Plug-ins",
-    "pill": "In development",
-    "sub": "We are developing VST3 and AU plug-ins for desktop DAWs. For release news, ask us on KakaoTalk or by email.",
-    "cta": [{"text": "Contact on KakaoTalk", "href": "kakao"}, {"text": "Send an email", "href": "mail"}],
+    "pill": "On sale soon",
+    "sub": "Tools for Mac that work with your desktop DAW. OneKnob Saturator and PlugSpot go on sale soon. See the product site for details and screens.",
+    "cta": [
+      {
+        "text": "Visit the product site",
+        "href": "https://software.mlmusicstudio.co.kr/"
+      },
+      {
+        "text": "Contact on KakaoTalk",
+        "href": "kakao"
+      },
+      {
+        "text": "Send an email",
+        "href": "mail"
+      }
+    ],
     "sections": [
-      {"type": "prose", "title": "Coming soon",
-       "paragraphs": [
-         "What is released today are the apps. The VST3 and AU plug-ins for desktop DAWs are in development.",
-         "For release news, please ask through the KakaoTalk open chat or by email."],
-       "links": [{"text": "Explore the released apps →", "href": "/en/apps/"}]}
+      {
+        "type": "cards",
+        "title": "On sale soon",
+        "items": [
+          {
+            "title": "OneKnob Saturator",
+            "text": "A saturation plug-in for Mac. Pick tubes, iron, transistors or tape, then set it with one DRIVE knob. AU and VST3.",
+            "href": "https://software.mlmusicstudio.co.kr/oneknob/"
+          },
+          {
+            "title": "PlugSpot",
+            "text": "Type a track and a plug-in, and it lands on that track. A Mac app for Pro Tools, Logic, REAPER and Ableton Live.",
+            "href": "https://software.mlmusicstudio.co.kr/plugspot/"
+          }
+        ]
+      },
+      {
+        "type": "cards",
+        "title": "In development",
+        "items": [
+          {
+            "title": "MixTalk",
+            "text": "In development. Say it, type it or touch it (\"kick up 3 dB\") and your live console follows, on iPad and Mac.",
+            "href": "https://software.mlmusicstudio.co.kr/mixtalk/"
+          },
+          {
+            "title": "SessionBridge",
+            "text": "In development. A Mac app that moves a DAW session to another DAW and gives you a report of what carried over and what you need to redo.",
+            "href": "https://software.mlmusicstudio.co.kr/sessionbridge/"
+          }
+        ]
+      },
+      {
+        "type": "prose",
+        "title": "Release news",
+        "paragraphs": [
+          "Once sales start, you can buy and download on the product site. For release news, you can also ask through the KakaoTalk open chat or by email."
+        ],
+        "links": [
+          {
+            "text": "Explore the released apps →",
+            "href": "/en/apps/"
+          }
+        ]
+      }
     ]
   }
 }

@@ -246,7 +246,7 @@ class HomeLayoutTests(unittest.TestCase):
         _, html = pages.home("ko")
         strip = re.search(r'<section class="strip">(.*?)</section>', html, re.S).group(1)
         self.assertIn('href="/plugins/"', strip)
-        self.assertIn("VST3 · AU 개발 중", strip)
+        self.assertIn("OneKnob Saturator · PlugSpot 곧 판매", strip)
         tools = re.search(r'<ul class="link-list">(.*?)</ul>', html, re.S).group(1)
         hrefs = re.findall(r'href="([^"]+)"', tools)
         self.assertTrue(3 <= len(hrefs) <= 4)
