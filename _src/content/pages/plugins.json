@@ -3,8 +3,8 @@
   "hero_tone": "dark",
   "ko": {
     "title": "플러그인 | ML Music Studio",
-    "description": "Mac용 음악 작업 도구 OneKnob Saturator(AU·VST3 세츄레이션 플러그인)와 PlugSpot을 곧 판매합니다. 자세한 소개는 제품 사이트에서 볼 수 있습니다.",
-    "kicker": "VST3 · AU",
+    "description": "Mac용 음악 작업 도구 OneKnob Saturator(AU·VST3·AAX 세츄레이션 플러그인)와 PlugSpot을 곧 판매합니다. 자세한 소개는 제품 사이트에서 볼 수 있습니다.",
+    "kicker": "VST3 · AU · AAX",
     "h1": "플러그인",
     "pill": "곧 판매",
     "sub": "데스크톱 DAW에서 쓰는 Mac용 도구입니다. OneKnob Saturator와 PlugSpot은 곧 판매를 시작합니다. 소개와 화면은 제품 사이트에서 볼 수 있습니다.",
@@ -29,7 +29,7 @@
         "items": [
           {
             "title": "OneKnob Saturator",
-            "text": "튜브, 트랜스, 트랜지스터, 테이프를 고르고 DRIVE 하나로 맞추는 Mac용 세츄레이션 플러그인입니다. AU·VST3.",
+            "text": "튜브, 트랜스, 트랜지스터, 테이프를 고르고 DRIVE 하나로 맞추는 Mac용 세츄레이션 플러그인입니다. AU·VST3·AAX.",
             "href": "https://software.mlmusicstudio.co.kr/ko/oneknob/",
             "img": "/img/products/oks.jpg",
             "w": 1120,
@@ -88,8 +88,8 @@
   },
   "en": {
     "title": "Plug-ins | ML Music Studio",
-    "description": "OneKnob Saturator (an AU and VST3 saturation plug-in) and PlugSpot, tools for Mac, go on sale soon. See the product site for details.",
-    "kicker": "VST3 · AU",
+    "description": "OneKnob Saturator (an AU, VST3 and AAX saturation plug-in) and PlugSpot, tools for Mac, go on sale soon. See the product site for details.",
+    "kicker": "VST3 · AU · AAX",
     "h1": "Plug-ins",
     "pill": "On sale soon",
     "sub": "Tools for Mac that work with your desktop DAW. OneKnob Saturator and PlugSpot go on sale soon. See the product site for details and screens.",
@@ -114,7 +114,7 @@
         "items": [
           {
             "title": "OneKnob Saturator",
-            "text": "A saturation plug-in for Mac. Pick tubes, iron, transistors or tape, then set it with one DRIVE knob. AU and VST3.",
+            "text": "A saturation plug-in for Mac. Pick tubes, iron, transistors or tape, then set it with one DRIVE knob. AU, VST3 and AAX.",
             "href": "https://software.mlmusicstudio.co.kr/oneknob/",
             "img": "/img/products/oks.jpg",
             "w": 1120,
