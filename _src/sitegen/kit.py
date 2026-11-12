@@ -110,6 +110,10 @@ def header(lang, alts, current=None):
             f'<ul class="nav nav-wide">{nav}</ul></nav>{lang_menu(lang, alts)}</div></header>')
 
 
+# 판매용 제품 사이트(Cloudflare Pages). 구매·내려받기는 여기서만 한다. 홈페이지 첫 화면은 녹음실 그대로 두고 푸터에서만 잇는다.
+SOFTWARE_SITE = {"ko": "https://software.mlmusicstudio.co.kr/ko/", "en": "https://software.mlmusicstudio.co.kr/"}
+
+
 def footer(lang):
     """푸터: 작업 / 스튜디오 / 제품 / 문의 네 묶음."""
     c = SITE["contact"]
@@ -120,7 +124,8 @@ def footer(lang):
         ("footer_work", [(url(k, "/work/"), t("nav_work", k), ""), (url(k, "/about/"), t("footer_about", k), "")]),
         ("footer_studio", [(url(k, "/studio/"), t("nav_studio", k), ""), (c["map"], t("footer_map", k), ' rel="noopener"')]),
         ("footer_products", [(url(k, "/apps/"), t("nav_apps", k), ""), (url(k, "/tools/"), t("nav_tools", k), ""),
-                             (url(k, "/plugins/"), t("nav_plugins", k), ""), ("/guides/", t("nav_guides", k), "")]),
+                             (url(k, "/plugins/"), t("nav_plugins", k), ""), ("/guides/", t("nav_guides", k), ""),
+                             (SOFTWARE_SITE[k], t("footer_software", k), ' rel="noopener"')]),
         ("footer_support", [(url(k, "/contact/"), t("footer_contact", k), ""),
                             (c["kakao"], t("chat", k), ' rel="noopener"'),
                             (f'mailto:{c["email"]}', c["email"], ""),

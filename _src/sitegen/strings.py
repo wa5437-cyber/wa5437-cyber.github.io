@@ -16,6 +16,7 @@ S = {
     "footer_work": {"ko": "작업", "en": "Work"},
     "footer_studio": {"ko": "스튜디오", "en": "Studio"},
     "footer_products": {"ko": "제품", "en": "Products"},
+    "footer_software": {"ko": "제품 사이트(플러그인·구매)", "en": "Product site (plug-ins, purchase)"},
     "footer_support": {"ko": "문의", "en": "Contact"},
     "footer_map": {"ko": "오시는 길", "en": "Directions"},
     "biz_name": {"ko": "상호", "en": "Business"},
