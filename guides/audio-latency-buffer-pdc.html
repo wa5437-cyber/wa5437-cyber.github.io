@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="naver-site-verification" content="47461b4d6caa40f7468eb8d719005d01d284c880">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오디오 레이턴시와 버퍼·PDC — 버퍼별 지연 계산과 줄이는 순서 | ML Music Studio</title>
+<meta name="description" content="버퍼 크기와 샘플레이트로 지연(ms)을 계산하는 식, 녹음 왕복 지연, 소리 속도로 바꾼 거리, PDC가 맞춰 주는 것과 못 맞추는 것, 지연을 줄이는 순서를 정리했습니다.">
+<link rel="canonical" href="https://mlmusicstudio.co.kr/guides/audio-latency-buffer-pdc.html">
+<meta name="theme-color" content="#f4f5f3">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ML Music Studio">
+<meta property="og:url" content="https://mlmusicstudio.co.kr/guides/audio-latency-buffer-pdc.html">
+<meta property="og:title" content="오디오 레이턴시와 버퍼·PDC — 버퍼별 지연 계산과 줄이는 순서">
+<meta property="og:description" content="버퍼별 지연 계산, 녹음 왕복 지연, PDC, 지연을 줄이는 순서.">
+<meta property="og:image" content="https://mlmusicstudio.co.kr/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/guide.css">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2274337627237362" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "오디오 레이턴시와 버퍼·PDC — 버퍼별 지연 계산과 줄이는 순서",
+  "description": "버퍼·샘플레이트로 계산하는 지연, 녹음 왕복 지연, PDC, 줄이는 순서.",
+  "inLanguage": "ko",
+  "image": "https://mlmusicstudio.co.kr/og-image.png",
+  "datePublished": "2026-11-13",
+  "dateModified": "2026-11-13",
+  "author": { "@type": "Person", "name": "이효섭", "url": "https://mlmusicstudio.co.kr/about/" },
+  "publisher": { "@type": "Organization", "name": "ML Music Studio", "logo": { "@type": "ImageObject", "url": "https://mlmusicstudio.co.kr/og-image.png" } },
+  "mainEntityOfPage": "https://mlmusicstudio.co.kr/guides/audio-latency-buffer-pdc.html"
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<header class="site-header"><div class="wrap bar"><a class="brand" href="/">ML Music Studio</a><nav class="site-nav" aria-label="주 메뉴"><details class="menu"><summary>메뉴</summary><ul class="nav"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></details><ul class="nav nav-wide"><li><a href="/work/">작업</a></li><li><a href="/studio/">녹음실</a></li><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/" aria-current="page">가이드</a></li></ul></nav></div></header>
+
+<main class="wrap" id="main" tabindex="-1">
+<article class="article">
+  <div class="crumb"><a href="/guides/">가이드</a> / 믹싱·측정</div>
+  <h1>오디오 레이턴시와 버퍼·PDC — 버퍼별 지연 계산과 줄이는 순서</h1>
+  <div class="meta">믹싱·측정 · 약 5분</div>
+
+  <p class="lede">녹음 중 헤드폰 소리가 늦게 들리는 현상은 버퍼 크기와 샘플레이트로 계산할 수 있습니다. 한 방향 지연은 <strong>버퍼 ÷ 샘플레이트</strong>이고, 플러그인이 만드는 지연은 PDC가 재생 쪽에서 맞춰 줍니다.</p>
+
+  <h2>버퍼별 지연 표</h2>
+  <div class="formula">지연(ms) = 버퍼 샘플 수 ÷ 샘플레이트 × 1000</div>
+  <table class="data">
+<tr><th>버퍼</th><th>44.1 kHz</th><th>48 kHz</th><th>96 kHz</th></tr>
+<tr><td>64</td><td>1.45 ms</td><td>1.33 ms</td><td>0.67 ms</td></tr>
+<tr><td>128</td><td>2.90 ms</td><td>2.67 ms</td><td>1.33 ms</td></tr>
+<tr><td>256</td><td>5.80 ms</td><td>5.33 ms</td><td>2.67 ms</td></tr>
+<tr><td>512</td><td>11.61 ms</td><td>10.67 ms</td><td>5.33 ms</td></tr>
+<tr><td>1024</td><td>23.22 ms</td><td>21.33 ms</td><td>10.67 ms</td></tr>
+</table>
+  <p>같은 버퍼에서 샘플레이트를 두 배로 올리면 지연은 절반이 됩니다. 대신 처리할 샘플이 늘어 CPU 부담이 커집니다.</p>
+
+  <h2>녹음에서는 입력과 출력을 모두 겪는다</h2>
+  <p>입력 쪽과 출력 쪽에 각각 버퍼가 걸리므로 체감 지연은 대략 버퍼의 두 배에 인터페이스·드라이버 자체 지연을 더한 값입니다. 자체 지연은 기종마다 달라, 정확한 값은 DAW 오디오 설정에 표시되는 왕복 지연을 기준으로 삼습니다.</p>
+  <div class="example">
+    <h3>계산 예시 — 48 kHz, 버퍼 128</h3>
+    <p>한 방향 128 ÷ 48000 × 1000 = <strong>2.67 ms</strong>, 왕복 약 <strong>5.33 ms</strong>에 장치 자체 지연이 더해집니다.</p>
+  </div>
+  <p>거슬리기 시작하는 기준은 사람과 악기에 따라 다릅니다. 보컬은 일반적으로 10 ms 안쪽이면 편하고, 건반·드럼처럼 치는 악기는 더 민감하게 느끼는 편입니다.</p>
+
+  <h2>지연을 거리로 바꾸면</h2>
+  <p>음속 343 m/s에서 1 ms는 약 34.3 cm입니다.</p>
+  <table class="data">
+<tr><th>지연</th><th>같은 시간에 소리가 가는 거리</th></tr>
+<tr><td>2.9 ms</td><td>약 1 m</td></tr>
+<tr><td>5.33 ms</td><td>약 1.83 m</td></tr>
+<tr><td>10 ms</td><td>약 3.43 m</td></tr>
+</table>
+  <p>스피커 거리와 딜레이 타임의 관계와 같은 원리입니다. <a class="inline" href="/guides/delay-tower-alignment.html">딜레이 타워 가이드</a>에서 현장 계산을 볼 수 있습니다.</p>
+
+  <h2>PDC가 하는 일</h2>
+  <p>룩어헤드 리미터나 리니어 페이즈 EQ는 신호를 미리 내다보기 위해 지연을 만듭니다. 이 지연을 샘플로 바꾸면 다음과 같습니다.</p>
+  <div class="example">
+    <h3>계산 예시 — 룩어헤드 5 ms, 48 kHz</h3>
+    <p>5 ÷ 1000 × 48000 = <strong>240샘플</strong>입니다. 이 트랙만 늦으면 다른 트랙과 박자가 어긋나므로, PDC가 켜져 있으면 DAW가 나머지 트랙을 같은 만큼 늦춰 정렬합니다.</p>
+  </div>
+  <ul>
+    <li><strong>맞춰 주는 것.</strong> 재생되는 트랙과 버스 사이의 플러그인 지연 차이.</li>
+    <li><strong>못 맞추는 것.</strong> 녹음하면서 듣는 입력 모니터링 경로에 걸린 플러그인 지연. 녹음 중에는 해당 플러그인을 빼는 편이 안전합니다.</li>
+    <li><strong>대가.</strong> 보정하는 만큼 전체 지연이 커져 조작 반응이 둔해질 수 있습니다.</li>
+  </ul>
+
+  <h2>지연을 줄이는 순서</h2>
+  <ol>
+    <li>버퍼를 줄입니다. 소리가 끊기거나 깨지면 한 단계 올립니다.</li>
+    <li>녹음 중에는 지연이 큰 플러그인(리니어 페이즈 EQ, 룩어헤드 리미터)을 끕니다.</li>
+    <li>인터페이스의 다이렉트 모니터링으로 입력을 바로 헤드폰에 보냅니다. 컴퓨터를 거치지 않아 지연이 거의 없습니다.</li>
+    <li>샘플레이트를 올려 같은 버퍼의 지연을 줄입니다. CPU 여유를 확인합니다.</li>
+  </ol>
+  <p>일반적으로 녹음은 64~128샘플, 믹싱은 512~1024샘플로 나누어 쓰지만, 컴퓨터와 인터페이스 성능에 따라 달라집니다.</p>
+
+  <div class="callout">
+    <div class="ico">🧮</div>
+    <div class="body">
+      <b>딜레이 계산기</b>
+      <p>거리와 지연 시간을 서로 바꿔 계산해 볼 수 있습니다.</p>
+      <a href="/delay-calculator.html">▸ 딜레이 계산기 열기</a>
+    </div>
+  </div>
+
+  <div class="related">
+    <h2>이어서 읽기</h2>
+    <a href="/guides/delay-tower-alignment.html">딜레이 타워, 거리로 딜레이 타임 계산하는 법 <span>· 도구 가이드</span></a>
+    <a href="/guides/limiter-vs-compressor.html">리미터 vs 컴프레서 — 룩어헤드·Ceiling·트루 피크 <span>· 도구 가이드</span></a>
+    <a href="/guides/gain-staging-basics.html">게인 스테이징 기본 — 헤드룸과 노이즈 플로어 사이 <span>· 도구 가이드</span></a>
+    <a href="/guides/">가이드 전체 보기 <span>· ML Music Studio</span></a>
+  </div>
+
+  <!-- author-box -->
+  <aside class="author-box" aria-label="글쓴이">
+    <div class="who"><strong>이효섭</strong> · 사운드 엔지니어</div>
+    <p>ML Music Studio를 운영하며, 현장에서 쓰는 앱과 웹 도구를 만듭니다.</p>
+    <p class="meta"><a href="/about/">글쓴이 소개</a> · 게시 2026-11-13</p>
+  </aside>
+  <!-- /author-box -->
+</article>
+</main>
+
+<footer class="site-footer"><div class="wrap foot-grid"><div class="foot-brand"><a class="brand" href="/">ML Music Studio</a><p class="foot-tag">서울 용산의 녹음·믹싱·마스터링 스튜디오입니다. 현장에서 쓰는 앱과 웹 도구도 만듭니다.</p></div><div class="foot-col"><p class="foot-h">작업</p><ul class="foot-links"><li><a href="/work/">작업</a></li><li><a href="/about/">소개</a></li></ul></div><div class="foot-col"><p class="foot-h">스튜디오</p><ul class="foot-links"><li><a href="/studio/">녹음실</a></li><li><a href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9B%90%ED%9A%A8%EB%A1%9C4%EA%B0%80%20120-3" rel="noopener">오시는 길</a></li></ul></div><div class="foot-col"><p class="foot-h">제품</p><ul class="foot-links"><li><a href="/apps/">앱</a></li><li><a href="/tools/">웹 도구</a></li><li><a href="/plugins/">플러그인</a></li><li><a href="/guides/">가이드</a></li><li><a href="https://software.mlmusicstudio.co.kr/ko/" rel="noopener">제품 사이트(플러그인·구매)</a></li></ul></div><div class="foot-col"><p class="foot-h">문의</p><ul class="foot-links"><li><a href="/contact/">문의 안내</a></li><li><a href="https://open.kakao.com/o/sQhjCeZb" rel="noopener">카카오톡으로 문의</a></li><li><a href="mailto:wa547@hanmail.net">wa547@hanmail.net</a></li><li><a href="https://www.instagram.com/mlmusic_studio/" rel="noopener">Instagram</a></li><li><a href="/privacy/">개인정보처리방침</a></li></ul></div></div><div class="wrap"><p class="copy">© 2026 ML Music Studio</p><p class="biz">상호 엠엘뮤직스튜디오(ML Music Studio) · 대표 이효섭 · 사업자등록번호 163-05-01983 <a href="https://www.ftc.go.kr/bizCommPop.do?wrkr_no=1630501983" rel="noopener">[사업자정보 확인]</a> · 통신판매업 신고 제2026-안양동안-1060호 · 주소 경기도 안양시 동안구 · 이메일 wa547@hanmail.net, wa5437@gmail.com</p></div></footer>
+
+</body>
+</html>
