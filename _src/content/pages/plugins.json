@@ -59,15 +59,6 @@
             "w": 1120,
             "h": 579,
             "alt": "개발 중인 MixTalk의 데모 모드 채널 화면. 채널 12개와 메인 페이더, 아래에 명령 입력 줄"
-          },
-          {
-            "title": "SessionBridge",
-            "text": "개발 중입니다. DAW 세션을 다른 DAW로 옮기고, 무엇이 옮겨지고 무엇을 다시 해야 하는지 보고서로 알려 주는 Mac 앱입니다.",
-            "href": "https://software.mlmusicstudio.co.kr/ko/sessionbridge/",
-            "img": "/img/products/sessionbridge.jpg",
-            "w": 1120,
-            "h": 724,
-            "alt": "개발 중인 SessionBridge의 변환 화면. 왼쪽에 REAPER 세션, 가운데에 변환할 DAW, 오른쪽에 옮겨지는 것 목록"
           }
         ]
       },
@@ -144,15 +135,6 @@
             "w": 1120,
             "h": 579,
             "alt": "MixTalk's channel screen in demo mode, in development, with twelve channels, the main fader and a command line below"
-          },
-          {
-            "title": "SessionBridge",
-            "text": "In development. A Mac app that moves a DAW session to another DAW and gives you a report of what carried over and what you need to redo.",
-            "href": "https://software.mlmusicstudio.co.kr/sessionbridge/",
-            "img": "/img/products/sessionbridge.jpg",
-            "w": 1120,
-            "h": 724,
-            "alt": "SessionBridge's convert screen in development, shown in Korean: a REAPER session on the left, target DAWs in the middle, and what carries over on the right"
           }
         ]
       },
