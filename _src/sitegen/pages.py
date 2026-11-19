@@ -408,6 +408,9 @@ def store_buttons(app, lang):
     out = [f'<a class="btn primary" href="{esc(app["appstore"])}{CAMPAIGN}" target="_blank" rel="noopener">App Store</a>']
     if app.get("play"):
         out.append(f'<a class="btn" href="{esc(app["play"])}" target="_blank" rel="noopener">Google Play</a>')
+    for x in app.get("extra_links") or []:   # 예: PocketDesk Mac 도우미 받기. 언어별 값이 없으면 en
+        url, label = x["url"].get(lang) or x["url"]["en"], x["label"].get(lang) or x["label"]["en"]
+        out.append(f'<a class="btn" href="{esc(url)}" target="_blank" rel="noopener">{esc(label)}</a>')
     return "".join(out)
 
 

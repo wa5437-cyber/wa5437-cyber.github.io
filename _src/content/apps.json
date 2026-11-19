@@ -16,7 +16,19 @@
       },
       "appstore": "https://apps.apple.com/app/id6831644329",
       "play": null,
-      "legal": "/pocketdesk_legal.html"
+      "legal": "/pocketdesk_legal.html",
+      "extra_links": [
+        {
+          "url": {
+            "ko": "https://software.mlmusicstudio.co.kr/ko/pocketdesk/download/",
+            "en": "https://software.mlmusicstudio.co.kr/pocketdesk/download/"
+          },
+          "label": {
+            "ko": "Mac 도우미 받기(무료)",
+            "en": "Get the Mac helper (free)"
+          }
+        }
+      ]
     },
     {
       "slug": "retroroom",
