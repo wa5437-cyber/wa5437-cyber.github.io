@@ -1,0 +1,195 @@
+{
+  "store": {
+    "ko": {
+      "name": "PocketDesk: Mac Remote",
+      "subtitle": "아이폰·아이패드로 내 Mac 조작",
+      "promo": "같은 Wi-Fi에서 내 Mac 화면을 아이폰·아이패드로 보고 조작합니다. 계정도 서버도 필요 없어요. 무료로 쓰고, Pro 로 소리·Apple Pencil·트랙패드 모드를 더하세요.",
+      "description": "같은 Wi-Fi 안에서 아이폰·아이패드로 내 Mac을 조작하세요.\n\nPocketDesk 는 Mac 화면을 폰이나 아이패드에 보여 주고, 클릭·스크롤·드래그·타자 입력을 할 수 있게 해 줍니다. 기기끼리 내 네트워크에서 직접 연결하므로 만들 계정이 없고, 우리 서버를 거치지도 않습니다.\n\n사용 방법\n1. Mac 에 무료 PocketDesk 도우미를 설치합니다(내려받기: https://software.mlmusicstudio.co.kr/ko/pocketdesk/download/ , Apple 공증 파일).\n2. 도우미 안내가 물을 때 화면 기록과 손쉬운 사용을 한 번 허용합니다.\n3. 도우미에서 폰이나 아이패드를 등록합니다(QR 을 비추거나 번호 입력). 등록은 Mac 앞에서만 할 수 있어요.\n4. PocketDesk 를 열고 내 Mac 을 누릅니다.\n\n무료(Lite)\n• Mac 화면 보기(최대 720p)\n• 조준하고 누르면 클릭, 드래그, 우클릭, 두 손가락 스크롤\n• 글자·숫자·기호, Return·Tab·삭제·Esc·방향키 입력\n• 최대 1.5배 확대\n• Mac 한 대에 기기 1대 등록\n\nPro — 한 번 결제, 구독 없음\n• Mac 소리를 기기에서 듣기\n• Apple Pencil 정밀 조작\n• 단축키 줄(⌘ ⌥ ⌃ ⇧)과 F1~F12\n• 우클릭이 되는 트랙패드 모드, 가까운 클릭 대상에 붙기\n• 최대 8배 확대, Mac 해상도까지(최대 4K) 화질\n• Mac 한 대에 기기 3대까지 등록\nPro 는 이 앱에서 삽니다(원격 화면 위쪽의 Lite 표시를 누르면 결제가 열려요). 새로 설치했을 때는 \"구매 복원\"으로 되살립니다.\n\n개인정보\n• 기기끼리 Wi-Fi 에서 직접 연결하고, 연결은 암호화되며 등록한 기기만 접속할 수 있어요.\n• 도우미는 기기가 연결된 동안에만 화면과 소리를 읽습니다.\n• 등록한 기기는 도우미에서 언제든 지울 수 있어요.\n\n필요한 것\n• iOS/iPadOS 17 이상의 아이폰·아이패드\n• macOS 15 이상 Mac 과 무료 PocketDesk 도우미\n• 같은 Wi-Fi\n\n내 Mac 을 위한 앱입니다. 소리는 조금 늦게 들리므로 음악 감상용이고, 영상과 맞추는 용도는 아닙니다."
+    },
+    "zh-Hans": {
+      "name": "PocketDesk: Mac 遥控",
+      "subtitle": "用 iPhone 和 iPad 操控 Mac",
+      "promo": "在你自己的 Wi-Fi 下,用 iPhone 或 iPad 查看并操控 Mac。无需账号,没有服务器。免费使用;Pro 增加声音、Apple Pencil、触控板模式等功能。",
+      "description": "在你自己的 Wi-Fi 下,用 iPhone 或 iPad 操控你的 Mac。\n\nPocketDesk 会把 Mac 的屏幕显示在手机或 iPad 上,让你点按、滚动、拖移和输入文字。你的设备在自己的网络中直接互相连接:无需注册账号,中间也没有我们的服务器。\n\n使用方法\n1. 在 Mac 上安装免费的 PocketDesk Helper(下载:https://software.mlmusicstudio.co.kr/pocketdesk/download/ ,已通过 Apple 公证)。\n2. 按照 Helper 的引导,一次性允许“屏幕与系统音频录制”和“辅助功能”。\n3. 在 Helper 中注册你的手机或 iPad(扫描二维码或输入数字)。注册时你需要在 Mac 旁边。\n4. 打开 PocketDesk,点按你的 Mac。\n\n免费版(Lite)\n• 查看 Mac 屏幕(最高 720p)\n• 瞄准、轻点点按、拖移、右键点按、双指滚动\n• 输入字母、数字、符号,以及 Return、Tab、Delete、Esc 和方向键\n• 最高 1.5 倍缩放\n• 每台 Mac 可注册 1 台设备\n\nPRO — 一次付费,没有订阅\n• 在你的设备上收听 Mac 的声音\n• Apple Pencil 与精准控制\n• 快捷键行(⌘ ⌥ ⌃ ⇧)和 F1–F12\n• 带右键功能的触控板模式,并可吸附到最近的点按目标\n• 最高 8 倍缩放,画质最高可达 Mac 的分辨率(最高 4K)\n• 每台 Mac 最多注册 3 台设备\nPro 在本 App 内购买(点按遥控画面顶部的 Lite 标记即可打开购买页)。重新安装后,可用“恢复购买”找回。\n\n隐私\n• 设备之间在你的 Wi-Fi 上直接连接;连接经过加密,只有你注册过的设备才能连接。\n• 只有在设备连接期间,Helper 才会读取你的屏幕和声音。\n• 你可以随时在 Helper 中移除已注册的设备。\n\n系统要求\n• 运行 iOS/iPadOS 17 或更高版本的 iPhone 或 iPad\n• 运行 macOS 15 或更高版本、并已安装免费 PocketDesk Helper 的 Mac\n• 两者连接同一个 Wi-Fi 网络\n\nPocketDesk 适用于你自己的 Mac。声音会有一点延迟,适合听音乐和收听,不适合与视频同步。"
+    },
+    "es": {
+      "name": "PocketDesk: Control del Mac",
+      "subtitle": "Tu Mac desde iPhone y iPad",
+      "promo": "Mira el Mac en el iPhone o el iPad con tu propia red Wi-Fi. Sin cuenta ni servidor. Uso gratuito; Pro añade sonido, Apple Pencil, modo trackpad y más.",
+      "description": "Controla tu Mac desde el iPhone o el iPad, a través de tu propia red Wi-Fi.\n\nPocketDesk muestra la pantalla del Mac en el iPhone o el iPad y permite hacer clic, desplazar, arrastrar y escribir. Los dispositivos se comunican directamente en tu red: no hay que crear ninguna cuenta y no pasa por ningún servidor nuestro.\n\nCÓMO FUNCIONA\n1. Instala PocketDesk Helper, gratuito, en el Mac (descarga: https://software.mlmusicstudio.co.kr/pocketdesk/download/ ; notarizado por Apple).\n2. Permite «Grabación de pantalla y audio del sistema» y «Accesibilidad» una sola vez, cuando la guía del helper lo pida.\n3. Registra el iPhone o el iPad desde PocketDesk Helper (escaneando un código QR o escribiendo un número). Para registrar hay que estar delante del Mac.\n4. Abre PocketDesk y toca tu Mac.\n\nGRATIS (LITE)\n• Ver la pantalla del Mac (hasta 720p)\n• Apuntar, tocar para hacer clic, arrastrar, clic derecho y desplazamiento con dos dedos\n• Escribir letras, números, símbolos y las teclas Return, Tab, Borrar, Esc y flechas\n• Zoom de hasta 1,5×\n• 1 dispositivo registrado por Mac\n\nPRO: un solo pago, sin suscripción\n• Escuchar el sonido del Mac en el dispositivo\n• Apple Pencil y control preciso\n• Fila de atajos (⌘ ⌥ ⌃ ⇧) y teclas F1–F12\n• Modo trackpad con clic derecho y ajuste al elemento más cercano donde hacer clic\n• Zoom de hasta 8× y calidad de imagen de hasta la resolución del Mac (hasta 4K)\n• Hasta 3 dispositivos registrados por Mac\nPro se compra dentro de esta app (la insignia Lite de la parte superior de la pantalla remota abre la compra). «Restaurar compra» la recupera en una instalación nueva.\n\nPRIVACIDAD\n• Los dispositivos se conectan directamente por tu Wi-Fi; la conexión está cifrada y solo pueden conectarse los dispositivos que hayas registrado.\n• El helper lee la pantalla y el sonido únicamente mientras hay un dispositivo conectado.\n• Puedes eliminar un dispositivo registrado desde el helper en cualquier momento.\n\nREQUISITOS\n• iPhone o iPad con iOS/iPadOS 17 o posterior\n• Un Mac con macOS 15 o posterior en el que se ejecute PocketDesk Helper, gratuito\n• Ambos en la misma red Wi-Fi\n\nPocketDesk está pensado para tu propio Mac. El sonido llega con un pequeño retraso, así que sirve para escuchar música, no para sincronizarlo con vídeo."
+    },
+    "de": {
+      "name": "PocketDesk: Mac-Fernsteuerung",
+      "subtitle": "Mac steuern per iPhone & iPad",
+      "promo": "Sieh deinen Mac auf iPhone oder iPad – über dein eigenes WLAN. Ohne Konto, ohne Server. Kostenlos nutzbar; Pro bringt Ton, Apple Pencil, Trackpad-Modus und mehr.",
+      "description": "Steuere deinen Mac vom iPhone oder iPad aus – direkt über dein eigenes WLAN.\n\nPocketDesk zeigt den Bildschirm deines Macs auf dem iPhone oder iPad und lässt dich klicken, scrollen, ziehen und tippen. Deine Geräte sprechen direkt in deinem Netzwerk miteinander: Du musst kein Konto anlegen, und es ist kein Server von uns dazwischengeschaltet.\n\nSO FUNKTIONIERT'S\n1. Installiere den kostenlosen PocketDesk Helper auf deinem Mac (Download: https://software.mlmusicstudio.co.kr/pocketdesk/download/ ; von Apple notarisiert).\n2. Erlaube einmalig Bildschirmaufnahme und Bedienungshilfen, wenn die Anleitung des Helpers danach fragt.\n3. Registriere dein iPhone oder iPad im Helper (QR-Code scannen oder Nummer eingeben). Dafür musst du am Mac sitzen.\n4. Öffne PocketDesk und tippe auf deinen Mac.\n\nKOSTENLOS (LITE)\n• Bildschirm deines Macs ansehen (bis zu 720p)\n• Zielen, tippen zum Klicken, Ziehen, Rechtsklick, Scrollen mit zwei Fingern\n• Buchstaben, Ziffern, Symbole sowie Return, Tab, Entf, Esc und Pfeiltasten eingeben\n• Zoom bis 1,5×\n• 1 registriertes Gerät pro Mac\n\nPRO – einmal zahlen, kein Abo\n• Den Ton deines Macs auf deinem Gerät hören\n• Apple Pencil mit präziser Steuerung\n• Kurzbefehlzeile (⌘ ⌥ ⌃ ⇧) und F1–F12\n• Trackpad-Modus mit Rechtsklick und Einrasten am nächsten Klickziel\n• Zoom bis 8× und Bildqualität bis zur Auflösung deines Macs (bis 4K)\n• Bis zu 3 registrierte Geräte pro Mac\nPro kaufst du direkt in dieser App (die Lite-Anzeige oben im Fernsteuerungsbildschirm öffnet den Kauf). Mit „Kauf wiederherstellen“ bekommst du Pro nach einer Neuinstallation zurück.\n\nDATENSCHUTZ\n• Die Geräte verbinden sich direkt in deinem WLAN; die Verbindung ist verschlüsselt, und nur von dir registrierte Geräte können sich verbinden.\n• Der Helper liest Bildschirm und Ton nur, solange ein Gerät verbunden ist.\n• Registrierte Geräte kannst du im Helper jederzeit entfernen.\n\nVORAUSSETZUNGEN\n• iPhone oder iPad mit iOS/iPadOS 17 oder neuer\n• Ein Mac mit macOS 15 oder neuer, auf dem der kostenlose PocketDesk Helper läuft\n• Beide Geräte im selben WLAN\n\nPocketDesk ist für deinen eigenen Mac gedacht. Der Ton kommt einen Moment verzögert an – er eignet sich daher zum Musikhören, nicht zum Abgleich mit Video."
+    },
+    "pt-BR": {
+      "name": "PocketDesk: Controle do Mac",
+      "subtitle": "Seu Mac no iPhone e no iPad",
+      "promo": "Veja o Mac no iPhone ou iPad pelo seu próprio Wi-Fi. Sem conta, sem servidor. Uso gratuito; o Pro inclui som, Apple Pencil, modo trackpad e mais.",
+      "description": "Controle o Mac pelo iPhone ou iPad, direto no seu próprio Wi-Fi.\n\nO PocketDesk mostra a tela do Mac no iPhone ou iPad e permite clicar, rolar, arrastar e digitar. Seus dispositivos se comunicam diretamente na sua rede: não há conta para criar nem servidor nosso no meio do caminho.\n\nCOMO FUNCIONA\n1. Instale o PocketDesk Helper gratuito no Mac (download: https://software.mlmusicstudio.co.kr/pocketdesk/download/ ; notarizado pela Apple).\n2. Permita a Gravação de Tela e a Acessibilidade uma única vez, quando o guia do Helper pedir.\n3. Registre o iPhone ou iPad pelo Helper (leia um QR code ou digite um número). Para registrar, você precisa estar diante do Mac.\n4. Abra o PocketDesk e toque no seu Mac.\n\nGRATUITO (LITE)\n• Veja a tela do Mac (até 720p)\n• Mire, toque para clicar, arraste, clique com o botão direito e role com dois dedos\n• Digite letras, números, símbolos, Return, Tab, Delete, Esc e setas\n• Zoom de até 1,5×\n• 1 dispositivo registrado por Mac\n\nPRO — um único pagamento, sem assinatura\n• Ouça o som do Mac no seu dispositivo\n• Apple Pencil e controle preciso\n• Linha de atalhos (⌘ ⌥ ⌃ ⇧) e F1–F12\n• Modo trackpad com clique direito e encaixe no alvo de clique mais próximo\n• Zoom de até 8× e qualidade de imagem até a resolução do Mac (até 4K)\n• Até 3 dispositivos registrados por Mac\nVocê compra o Pro dentro do app (o selo Lite, no alto da tela remota, abre a compra). Restaurar Compra recupera o Pro em uma nova instalação.\n\nPRIVACIDADE\n• Os dispositivos se conectam diretamente no seu Wi-Fi; a conexão é criptografada e só dispositivos registrados por você podem se conectar.\n• O Helper só lê a tela e o som enquanto um dispositivo está conectado.\n• Você pode remover um dispositivo registrado pelo Helper quando quiser.\n\nREQUISITOS\n• iPhone ou iPad com iOS/iPadOS 17 ou posterior\n• Um Mac com macOS 15 ou posterior, com o PocketDesk Helper gratuito\n• Os dois na mesma rede Wi-Fi\n\nO PocketDesk foi feito para o seu próprio Mac. O som chega com um pequeno atraso, então serve para ouvir música, não para sincronizar com vídeo."
+    },
+    "en": {
+      "name": "PocketDesk: Mac Remote",
+      "subtitle": "Mac remote for iPhone & iPad",
+      "promo": "See your Mac on your iPhone or iPad over your own Wi-Fi. No account, no server. Free to use; Pro adds sound, Apple Pencil, trackpad mode and more.",
+      "description": "Control your Mac from your iPhone or iPad, right on your own Wi-Fi.\n\nPocketDesk shows your Mac's screen on your phone or iPad and lets you click, scroll, drag and type. Your devices talk to each other directly on your network: there is no account to create and no server of ours in between.\n\nHOW IT WORKS\n1. Install the free PocketDesk Helper on your Mac (download: https://software.mlmusicstudio.co.kr/pocketdesk/download/ ; it is notarized by Apple).\n2. Allow Screen Recording and Accessibility once, when the helper's guide asks.\n3. Register your phone or iPad from the helper (scan a QR code or type a number). Registering needs you to be at the Mac.\n4. Open PocketDesk and tap your Mac.\n\nFREE (LITE)\n• View your Mac's screen (up to 720p)\n• Aim, tap to click, drag, right click, two-finger scroll\n• Type letters, numbers, symbols, Return, Tab, Delete, Esc and arrow keys\n• Zoom up to 1.5×\n• 1 registered device per Mac\n\nPRO — one payment, no subscription\n• Hear your Mac's sound on your device\n• Apple Pencil precise control\n• Shortcut row (⌘ ⌥ ⌃ ⇧) and F1–F12\n• Trackpad mode with right click, and snapping to the nearest click target\n• Zoom up to 8× and picture quality up to your Mac's resolution (up to 4K)\n• Up to 3 registered devices per Mac\nYou buy Pro in this app (the Lite badge at the top of the remote screen opens the purchase). Restore Purchase brings it back on a new install.\n\nPRIVACY\n• Devices connect directly on your Wi-Fi; the connection is encrypted and only devices you registered can connect.\n• The helper reads your screen and sound only while a device is connected.\n• You can remove a registered device in the helper at any time.\n\nREQUIREMENTS\n• iPhone or iPad with iOS/iPadOS 17 or later\n• A Mac with macOS 15 or later running the free PocketDesk Helper\n• Both on the same Wi-Fi network\n\nPocketDesk is meant for your own Mac. Sound is delayed by a moment, so it suits music and listening, not syncing with video."
+    },
+    "fr": {
+      "name": "PocketDesk : Mac à distance",
+      "subtitle": "Votre Mac sur iPhone et iPad",
+      "promo": "Voyez votre Mac sur iPhone ou iPad via votre propre Wi-Fi. Sans compte ni serveur. Gratuit ; Pro ajoute le son, l’Apple Pencil, le mode trackpad et plus encore.",
+      "description": "Contrôlez votre Mac depuis votre iPhone ou votre iPad, directement sur votre propre réseau Wi-Fi.\n\nPocketDesk affiche l’écran de votre Mac sur votre téléphone ou votre iPad et vous permet de cliquer, de faire défiler, de glisser et de saisir du texte. Vos appareils communiquent directement entre eux sur votre réseau : aucun compte à créer et aucun serveur de notre part entre les deux.\n\nCOMMENT ÇA MARCHE\n1. Installez PocketDesk Helper, gratuit, sur votre Mac (téléchargement : https://software.mlmusicstudio.co.kr/pocketdesk/download/ ; notarisé par Apple).\n2. Autorisez une seule fois « Enregistrement de l’écran et de l’audio système » et « Accessibilité », lorsque l’assistant du Helper vous le demande.\n3. Enregistrez votre téléphone ou votre iPad depuis le Helper (scannez un QR code ou saisissez un numéro). L’enregistrement exige d’être devant le Mac.\n4. Ouvrez PocketDesk et touchez votre Mac.\n\nGRATUIT (LITE)\n• Affichage de l’écran de votre Mac (jusqu’en 720p)\n• Viser, toucher pour cliquer, glisser, clic droit, défilement à deux doigts\n• Saisie des lettres, chiffres, symboles, Retour, Tab, Supprimer, Échap et touches fléchées\n• Zoom jusqu’à 1,5×\n• 1 appareil enregistré par Mac\n\nPRO — un seul paiement, sans abonnement\n• Écoutez le son de votre Mac sur votre appareil\n• Apple Pencil et contrôle précis\n• Rangée de raccourcis (⌘ ⌥ ⌃ ⇧) et touches F1–F12\n• Mode trackpad avec clic droit, et accrochage à la cible de clic la plus proche\n• Zoom jusqu’à 8× et qualité d’image jusqu’à la résolution de votre Mac (jusqu’en 4K)\n• Jusqu’à 3 appareils enregistrés par Mac\nVous achetez Pro dans cette app (le badge Lite en haut de l’écran de contrôle ouvre l’achat). « Restaurer l’achat » le récupère après une nouvelle installation.\n\nCONFIDENTIALITÉ\n• Les appareils se connectent directement sur votre Wi-Fi ; la connexion est chiffrée et seuls les appareils que vous avez enregistrés peuvent se connecter.\n• Le Helper ne lit votre écran et votre son que lorsqu’un appareil est connecté.\n• Vous pouvez supprimer un appareil enregistré dans le Helper à tout moment.\n\nCONFIG REQUISE\n• iPhone ou iPad sous iOS/iPadOS 17 ou version ultérieure\n• Un Mac sous macOS 15 ou version ultérieure, avec PocketDesk Helper (gratuit)\n• Les deux appareils sur le même réseau Wi-Fi\n\nPocketDesk est conçu pour votre propre Mac. Le son est retardé d’un court instant : il convient à la musique et à l’écoute, pas à la synchronisation avec la vidéo."
+    },
+    "ja": {
+      "name": "PocketDesk: Macリモート",
+      "subtitle": "iPhone・iPadからMacを操作",
+      "promo": "同じWi-FiでMacの画面をiPhoneやiPadに表示して操作できます。アカウントもサーバーも不要です。無料で使えて、Proならサウンド、Apple Pencil、トラックパッドモードなどが加わります。",
+      "description": "iPhoneやiPadから、同じWi-FiにあるMacを操作できます。\n\nPocketDeskは、Macの画面をiPhoneやiPadに表示し、クリック、スクロール、ドラッグ、文字入力ができるアプリです。デバイス同士はお使いのネットワーク上で直接つながるため、アカウントの作成は不要で、当社のサーバーも経由しません。\n\n使い方\n1. Macに無料のPocketDesk Helperをインストールします（ダウンロード: https://software.mlmusicstudio.co.kr/pocketdesk/download/ 、Appleの公証済みです）。\n2. ヘルパーのガイドが表示されたら、「画面とシステムオーディオの録音」と「アクセシビリティ」を一度だけ許可します。\n3. ヘルパーからiPhoneやiPadを登録します（QRコードをスキャン、または番号を入力）。登録はMacの前で行う必要があります。\n4. PocketDeskを開いて、お使いのMacをタップします。\n\n無料（Lite）\n• Macの画面を表示（最大720p）\n• ポインタで狙ってタップでクリック、ドラッグ、右クリック、2本指スクロール\n• 英数字、記号、Return、Tab、Delete、Esc、矢印キーの入力\n• 最大1.5倍のズーム\n• Mac 1台につき、登録できるデバイスは1台\n\nPRO — 1回のお支払いで、サブスクリプションなし\n• Macのサウンドをデバイスで聞く\n• Apple Pencilでの精密な操作\n• ショートカット行（⌘ ⌥ ⌃ ⇧）とF1～F12\n• 右クリックできるトラックパッドモード、最も近いクリック対象への吸着\n• 最大8倍のズームと、Macの解像度までの画質（最大4K）\n• Mac 1台につき、最大3台のデバイスを登録\nProはこのアプリ内で購入します（リモート画面上部のLiteバッジをタップすると購入画面が開きます）。新しくインストールした場合は「購入を復元」で元に戻せます。\n\nプライバシー\n• デバイス同士はWi-Fi上で直接接続され、接続は暗号化されます。接続できるのは登録したデバイスだけです。\n• ヘルパーが画面とサウンドを読み取るのは、デバイスが接続されている間だけです。\n• 登録したデバイスは、ヘルパーからいつでも削除できます。\n\n動作環境\n• iOS/iPadOS 17以降のiPhoneまたはiPad\n• macOS 15以降のMacと、無料のPocketDesk Helper\n• 両方が同じWi-Fiネットワークに接続していること\n\nPocketDeskは、ご自身のMacで使うためのアプリです。サウンドは少し遅れて聞こえるため、音楽を聴く用途に向いており、映像と合わせる用途には向きません。"
+    }
+  },
+  "detail": {
+    "price": {
+      "ko": "Pro는 한 번 결제(구독 아님) · 무료(Lite)로 먼저 사용",
+      "en": "Pro is a one-time purchase (no subscription) · free to start with Lite"
+    },
+    "lead": {
+      "ko": "같은 Wi-Fi 안에서 Mac 화면을 아이폰·아이패드에 띄우고 클릭·스크롤·타자를 하는 원격 앱입니다. 기기끼리 직접 연결하므로 계정도 서버도 없습니다.",
+      "en": "A remote app that shows your Mac screen on your iPhone or iPad over the same Wi-Fi, so you can click, scroll and type. Devices connect directly, with no account and no server."
+    },
+    "platforms": {
+      "ko": "iPhone · iPad · Mac 도우미(macOS 15 이상)",
+      "en": "iPhone · iPad · Mac helper (macOS 15 or later)"
+    },
+    "bullets": {
+      "ko": [
+        "조준하고 누르면 클릭, 드래그·우클릭, 두 손가락 스크롤",
+        "글자·숫자·기호와 Return·Tab·Esc·방향키 입력",
+        "기기끼리 내 Wi-Fi에서 직접 연결, 연결은 암호화되고 등록한 기기만 접속",
+        "Pro: Mac 소리 듣기, Apple Pencil, 단축키 줄(⌘⌥⌃⇧)과 F1~F12",
+        "Pro: 트랙패드 모드, 최대 8배 확대, Mac 해상도(최대 4K) 화질"
+      ],
+      "en": [
+        "Aim and tap to click, drag, right-click and two-finger scroll",
+        "Type letters, numbers and symbols plus Return, Tab, Esc and arrow keys",
+        "Devices connect directly on your Wi-Fi, encrypted, and only registered devices can join",
+        "Pro: hear your Mac's sound, Apple Pencil, modifier keys (⌘⌥⌃⇧) and F1–F12",
+        "Pro: trackpad mode, up to 8x zoom, and up to your Mac's resolution (4K max)"
+      ]
+    },
+    "facts": {
+      "ko": [
+        "iOS·iPadOS 17 이상",
+        "Mac 무료 도우미(Apple 공증)",
+        "계정·서버 없음",
+        "Pro 한 번 결제 · 구독 아님"
+      ],
+      "en": [
+        "iOS and iPadOS 17 or later",
+        "Free Mac helper (notarized by Apple)",
+        "No account, no server",
+        "Pro is one-time, not a subscription"
+      ]
+    },
+    "hero_img": {
+      "ko": "01_ipad_remote_ko.jpg",
+      "en": "01_ipad_remote_en.jpg"
+    },
+    "blocks": [
+      {
+        "img": {
+          "ko": "02_welcome_ko.jpg",
+          "en": "02_welcome_en.jpg"
+        },
+        "alt": {
+          "ko": "PocketDesk 첫 화면",
+          "en": "PocketDesk welcome screen"
+        },
+        "title": {
+          "ko": "내 Wi-Fi 안에서만 연결",
+          "en": "Stays on your own Wi-Fi"
+        },
+        "text": {
+          "ko": "Mac 도우미와 기기가 같은 네트워크에서 직접 이어집니다. 만들 계정이 없고 우리 서버를 거치지 않습니다.",
+          "en": "The Mac helper and your device connect directly on the same network. There is no account to create and nothing passes through our servers."
+        }
+      },
+      {
+        "img": {
+          "ko": "03_maclist_ko.jpg",
+          "en": "03_maclist_en.jpg"
+        },
+        "alt": {
+          "ko": "등록한 Mac 목록 화면",
+          "en": "List of registered Macs"
+        },
+        "title": {
+          "ko": "Mac을 고르면 바로 연결",
+          "en": "Pick a Mac to connect"
+        },
+        "text": {
+          "ko": "등록은 Mac 앞에서 QR이나 번호로 한 번만 합니다. 등록한 기기는 도우미에서 언제든 지울 수 있습니다.",
+          "en": "Register once at the Mac with a QR code or a number. You can remove registered devices from the helper at any time."
+        }
+      },
+      {
+        "img": {
+          "ko": "04_remote_ko.jpg",
+          "en": "04_remote_en.jpg"
+        },
+        "alt": {
+          "ko": "가로 화면에서 Mac을 조작하는 화면",
+          "en": "Controlling a Mac in landscape"
+        },
+        "title": {
+          "ko": "보고, 누르고, 타자까지",
+          "en": "See, tap and type"
+        },
+        "text": {
+          "ko": "가로로 돌려 넓게 보고, 화면 키보드나 블루투스 키보드로 입력합니다. 소리는 조금 늦게 들려 음악 감상용입니다.",
+          "en": "Turn sideways for a wider view and type with the on-screen or a Bluetooth keyboard. Sound arrives slightly late, so it suits listening, not syncing to video."
+        }
+      }
+    ],
+    "steps": {
+      "ko": [
+        {
+          "t": "Mac에 도우미를 설치합니다",
+          "d": "software.mlmusicstudio.co.kr/ko/pocketdesk/download/ 에서 무료 도우미(Apple 공증)를 받습니다."
+        },
+        {
+          "t": "권한을 한 번 허용합니다",
+          "d": "도우미가 물을 때 화면 기록과 손쉬운 사용을 허용합니다."
+        },
+        {
+          "t": "기기를 등록합니다",
+          "d": "도우미에서 QR을 비추거나 번호를 넣어 아이폰·아이패드를 등록합니다."
+        },
+        {
+          "t": "앱에서 Mac을 누릅니다",
+          "d": "PocketDesk를 열고 내 Mac을 고르면 바로 연결됩니다."
+        }
+      ],
+      "en": [
+        {
+          "t": "Install the helper on your Mac",
+          "d": "Get the free, notarized helper at software.mlmusicstudio.co.kr/pocketdesk/download/."
+        },
+        {
+          "t": "Allow permissions once",
+          "d": "When the helper asks, allow Screen Recording and Accessibility."
+        },
+        {
+          "t": "Register your device",
+          "d": "Scan the QR code or enter the number shown by the helper."
+        },
+        {
+          "t": "Tap your Mac in the app",
+          "d": "Open PocketDesk and choose your Mac to connect."
+        }
+      ]
+    },
+    "related": []
+  }
+}

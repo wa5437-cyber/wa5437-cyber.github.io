@@ -1,6 +1,24 @@
 {
   "apps": [
     {
+      "slug": "pocketdesk",
+      "name": {
+        "ko": "PocketDesk — 아이폰·아이패드로 내 Mac을",
+        "en": "PocketDesk — Your Mac, from your iPhone or iPad"
+      },
+      "tagline": {
+        "ko": "같은 Wi-Fi 안에서 Mac 화면을 아이폰·아이패드에 띄우고 클릭·스크롤·타자까지. 기기끼리 내 네트워크 안에서 바로 연결되어 계정도 서버도 없습니다. Lite 무료로 시작하고, Pro(고화질·Mac 소리·Apple Pencil·단축키 줄)는 구독 없는 한 번 결제. Mac에는 무료 도우미(공증됨)를 설치합니다.",
+        "en": "See and control your Mac from your iPhone or iPad over your own Wi-Fi: click, scroll and type. Devices connect directly on your network, with no account and no server. Start free with Lite; Pro (full resolution, Mac sound, Apple Pencil, modifier and function keys) is a one-time purchase, no subscription. Install the free, notarized helper on your Mac."
+      },
+      "badge": {
+        "ko": "출시 · iOS · iPadOS · Mac 도우미",
+        "en": "Live · iOS · iPadOS · Mac helper"
+      },
+      "appstore": "https://apps.apple.com/app/id6831644329",
+      "play": null,
+      "legal": "/pocketdesk_legal.html"
+    },
+    {
       "slug": "retroroom",
       "name": {
         "ko": "레트로룸 — 레트로 음악 플레이어",
