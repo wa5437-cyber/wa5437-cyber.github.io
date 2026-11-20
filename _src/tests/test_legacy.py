@@ -266,7 +266,12 @@ EXPANDED_GUIDES = {"eq-types-and-q.html", "line-array-basics.html", "speaker-imp
                    "31-band-eq-standard-frequencies.html", "delay-tower-alignment.html",
                    "pink-noise-eq-ear-training.html", "bpm-to-delay-time.html", "frequency-and-wavelength.html",
                    "microphone-polar-patterns.html", "gain-staging-basics.html",
-                   "compressor-parameters-explained.html", "ableton-fl-studio-workflow.html"}
+                   "compressor-parameters-explained.html", "ableton-fl-studio-workflow.html",
+                   # 11/10 SEO 보강(55f9723): SPL 가중치·UMIK-1·리미터, 학습 플랜 합격 조건 정정
+                   "limiter-vs-compressor.html", "spl-meter-weighting-fast-slow-leq.html",
+                   "stage-sound-cert-study-plan.html", "umik-1-calibration-file.html",
+                   # 11/12 시험 가이드 통계 기준 명시(5f9b736)
+                   "stage-sound-exam-scoring.html"}
 
 
 class BodyAndDatesTests(unittest.TestCase):
@@ -292,10 +297,14 @@ class BodyAndDatesTests(unittest.TestCase):
                 continue  # 10/17 본문을 일부러 보강한 글은 변환 전 본문과 달라진다
             now = strip_chrome(src(name))
             if name == "index.html":  # 변환 뒤에 추가된 가이드의 목록 항목은 비교에서 뺀다
-                for slug in re.findall(r'<a href="/guides/([^"/]+)\.html">', now):
-                    if subprocess.run(["git", "cat-file", "-e", "09605f1~1:guides/%s.html" % slug],
+                # 가이드는 /guides/<slug>.html 또는 폴더형 /guides/<slug>/ (11/8 마이크 도감) 두 꼴이 있다
+                for slug, tail in re.findall(r'<a href="/guides/([^"/]+)(\.html|/)">', now):
+                    path = "guides/%s.html" % slug if tail == ".html" else "guides/%s" % slug
+                    if subprocess.run(["git", "cat-file", "-e", "09605f1~1:" + path],
                                       cwd=str(ROOT), capture_output=True).returncode != 0:
-                        now = re.sub(r'      <a href="/guides/%s\.html">.*?</a>\n' % re.escape(slug), "", now, flags=re.S)
+                        now = re.sub(r'      <a href="/guides/%s%s">.*?</a>\n' % (re.escape(slug), re.escape(tail)), "", now, flags=re.S)
+                # 변환 뒤 항목만 있던 칸(11/5 "무대음향 기출 풀이")은 항목을 빼면 빈 칸이 되므로 칸째 뺀다
+                now = re.sub(r'  <section class="guide-group">\n    <h2>[^<]*</h2>\n    <div class="guide-list">\n    </div>\n  </section>\n\n', "", now)
             before = strip_chrome(r.stdout)
             if name == "index.html":  # 목록 페이지는 광고를 뺐다(읽을거리 페이지에만 광고)
                 before = re.sub(r'<script async src="https://pagead2\.googlesyndication\.com/[^"]*"[^>]*></script>\n?', "", before)
